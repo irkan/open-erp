@@ -1,0 +1,46 @@
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%@include file="include/header.jsp" %>
+</head>
+<body style="background-image: url(<c:url value="/assets/media/demos/demo4/header.jpg" />); background-position: center top; background-size: 100% 300px;"
+      class="kt-page--loading-enabled kt-page--loading kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header--minimize-menu kt-header-mobile--fixed kt-subheader--enabled kt-subheader--transparent kt-page--loading">
+<div id="kt_header_mobile" class="kt-header-mobile  kt-header-mobile--fixed ">
+    <div class="kt-header-mobile__logo">
+        <a href="№">
+            <img alt="Logo" src="<c:url value="/assets/media/logos/logo-sual-32.png" />" />
+        </a>
+    </div>
+    <div class="kt-header-mobile__toolbar">
+
+        <button class="kt-header-mobile__toolbar-toggler" id="kt_header_mobile_toggler"><span></span></button>
+        <button class="kt-header-mobile__toolbar-topbar-toggler" id="kt_header_mobile_topbar_toggler"><i
+                class="flaticon-more-1"></i></button>
+    </div>
+</div>
+<div class="kt-grid kt-grid--hor kt-grid--root">
+    <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--ver kt-page">
+        <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-wrapper" id="kt_wrapper">
+
+            <%@include file="include/menu.jsp" %>
+
+            <%@include file="include/js.jsp" %>
+
+            <%@include file="include/body.jsp" %>
+
+            <%@include file="include/footer.jsp" %>
+        </div>
+    </div>
+</div>
+
+<div id="kt_scrolltop" class="kt-scrolltop">
+    <i class="fa fa-arrow-up"></i>
+</div>
+
+
+</body>
+</html>
