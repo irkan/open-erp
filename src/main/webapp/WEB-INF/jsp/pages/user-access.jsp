@@ -9,7 +9,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="uj" uri="/WEB-INF/tld/UtilJson.tld"%>
+<%@ taglib prefix="ua" uri="/WEB-INF/tld/UserAccess.tld"%>
 <div class="kt-container  kt-grid__item kt-grid__item--fluid">
     <div class="row">
         <div class="col-lg-12">
@@ -31,32 +31,51 @@
                             </div>
                         </div>
                         <hr style="width: 100%"/>
-<c:choose>
-    <c:when test="${not empty list}">
-<table class="table table-striped- table-bordered table-hover table-checkable">
-    <tbody>
-    <c:forEach var="t" items="${list}" varStatus="loop">
-        <tr>
-            <td>${loop.index + 1}</td>
-            <td><c:out value="${t.module.name}" /></td>
-            <c:forEach var="p" items="${t.module.moduleOperations}" varStatus="loop">
-                <td>
-                    <form:label path="id">
-                        <c:out value="${p.operation.name}" />
-                        <form:checkbox path="id" value="${t.id}"/>
-                    </form:label>
 
-                </td>
-            </c:forEach>
-        </tr>
-    </c:forEach>
-    </tbody>
-</table>
-    </c:when>
-    <c:otherwise>
-        Məlumat yoxdur
-    </c:otherwise>
-</c:choose>
+                        <c:choose>
+                            <c:when test="${not empty list}">
+                                <table class="table table-striped- table-bordered table-hover table-checkable" id="module_operation_table">
+                                    <thead>
+                                        <tr>
+                                            <td style="width: 15px;"></td>
+                                            <td style="width: 25%"></td>
+                                            <td></td>
+                                            <c:forEach var="t" items="${operations}" varStatus="loop">
+                                                <td class="text-center" style="width: ${75/operations.size()}%">
+                                                    <c:out value="${t.name}" />
+                                                </td>
+                                            </c:forEach>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <c:forEach var="m" items="${modules}" varStatus="loop">
+                                        <c:choose>
+                                        <c:when test="${not empty m.module}">
+                                        <tr>
+                                            <td>${loop.index + 1}</td>
+                                            <td class="text-right"><c:out value="${m.name}" /></td>
+                                            <td><c:out value="${m.module.name}" /></td>
+                                            <c:forEach var="o" items="${operations}" varStatus="loop">
+                                                <td class="text-center">
+                                                    <c:set var="moduleOperationId" value="${ua:checkAccess(list, m.id, o.id)}"/>
+                                                    <c:choose>
+                                                        <c:when test="${moduleOperationId ne 0}">
+                                                            <form:checkbox path="id" value="${moduleOperationId}"/>
+                                                        </c:when>
+                                                    </c:choose>
+                                                </td>
+                                            </c:forEach>
+                                        </tr>
+                                        </c:when>
+                                        </c:choose>
+                                    </c:forEach>
+                                    </tbody>
+                                </table>
+                            </c:when>
+                            <c:otherwise>
+                                Məlumat yoxdur
+                            </c:otherwise>
+                        </c:choose>
                     </form:form>
                 </div>
             </div>
@@ -64,5 +83,7 @@
 
     </div>
 </div>
+
+<script src="<c:url value="/assets/js/demo4/pages/crud/datatables/advanced/row-grouping.js" />" type="text/javascript"></script>
 
 

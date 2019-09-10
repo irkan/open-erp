@@ -63,9 +63,10 @@ public class AdministratorController extends SkeletonController {
             model.addAttribute(Constants.FORM, new ModuleOperation());
         } else if (page.equalsIgnoreCase(Constants.ROUTE.USER_ACCESS)){
             model.addAttribute(Constants.USERS, userRepository.findAll());
-            model.addAttribute(Constants.MODULES, moduleRepository.findAll());
-            model.addAttribute(Constants.OPERATIONS, operationRepository.findAll());
-            model.addAttribute(Constants.LIST, moduleOperationRepository.findAll());
+            List<ModuleOperation>  list = moduleOperationRepository.findAll();
+            model.addAttribute(Constants.MODULES, Util.removeDuplicateModules(list));
+            model.addAttribute(Constants.OPERATIONS, Util.removeDuplicateOperations(list));
+            model.addAttribute(Constants.LIST, list);
             model.addAttribute(Constants.FORM, new UserModuleOperation());
         }
         return "layout";

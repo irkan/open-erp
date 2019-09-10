@@ -244,9 +244,12 @@ public class DBConfiguration {
             operations.add(delete);
             Operation export = new Operation("İxrac", "export", laUser, null);
             operations.add(export);
+            Operation approve = new Operation("Təsdiq", "approve", laUser, null);
+            operations.add(approve);
 
 
             List<ModuleOperation> moduleOperations = new ArrayList<>();
+
             ModuleOperation moduleOperation1 = new ModuleOperation(module, null, null);
             moduleOperations.add(moduleOperation1);
             ModuleOperation moduleOperation2 = new ModuleOperation(subModule1, create, null);
@@ -315,27 +318,28 @@ public class DBConfiguration {
             User user = new User(defaultAdminUsername, DigestUtils.md5DigestAsHex("admin".getBytes()), employee);
             UserDetail userDetail = new UserDetail(user);
             List<UserModuleOperation> userModuleOperations = new ArrayList<>();
-            UserModuleOperation userModuleOperation1 = new UserModuleOperation(user, moduleOperations.get(0));
+
+            UserModuleOperation userModuleOperation1 = new UserModuleOperation(user, moduleOperation1);
             userModuleOperations.add(userModuleOperation1);
-            UserModuleOperation userModuleOperation2 = new UserModuleOperation(user, moduleOperations.get(1));
+            UserModuleOperation userModuleOperation2 = new UserModuleOperation(user, moduleOperation2);
             userModuleOperations.add(userModuleOperation2);
-            UserModuleOperation userModuleOperation3 = new UserModuleOperation(user, moduleOperations.get(2));
+            UserModuleOperation userModuleOperation3 = new UserModuleOperation(user, moduleOperation3);
             userModuleOperations.add(userModuleOperation3);
-            UserModuleOperation userModuleOperation4 = new UserModuleOperation(user, moduleOperations.get(3));
+            UserModuleOperation userModuleOperation4 = new UserModuleOperation(user, moduleOperation4);
             userModuleOperations.add(userModuleOperation4);
-            UserModuleOperation userModuleOperation5 = new UserModuleOperation(user, moduleOperations.get(4));
+            UserModuleOperation userModuleOperation5 = new UserModuleOperation(user, moduleOperation5);
             userModuleOperations.add(userModuleOperation5);
-            UserModuleOperation userModuleOperation6 = new UserModuleOperation(user, moduleOperations.get(5));
+            UserModuleOperation userModuleOperation6 = new UserModuleOperation(user, moduleOperation6);
             userModuleOperations.add(userModuleOperation6);
-            UserModuleOperation userModuleOperation7 = new UserModuleOperation(user, moduleOperations.get(6));
+            UserModuleOperation userModuleOperation7 = new UserModuleOperation(user, moduleOperation7);
             userModuleOperations.add(userModuleOperation7);
-            UserModuleOperation userModuleOperation8 = new UserModuleOperation(user, moduleOperations.get(7));
+            UserModuleOperation userModuleOperation8 = new UserModuleOperation(user, moduleOperation8);
             userModuleOperations.add(userModuleOperation8);
-            UserModuleOperation userModuleOperation9 = new UserModuleOperation(user, moduleOperations.get(8));
+            UserModuleOperation userModuleOperation9 = new UserModuleOperation(user, moduleOperation9);
             userModuleOperations.add(userModuleOperation9);
-            UserModuleOperation userModuleOperation10 = new UserModuleOperation(user, moduleOperations.get(9));
+            UserModuleOperation userModuleOperation10 = new UserModuleOperation(user, moduleOperation10);
             userModuleOperations.add(userModuleOperation10);
-            UserModuleOperation userModuleOperation11 = new UserModuleOperation(user, moduleOperations.get(10));
+            UserModuleOperation userModuleOperation11 = new UserModuleOperation(user, moduleOperation11);
             userModuleOperations.add(userModuleOperation11);
 
             userRepository.save(user);
