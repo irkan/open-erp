@@ -12,8 +12,8 @@
 	<artifactId>su-filter</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>su-filter</name>
-	<description>Su Filter Business Process Management</description>
+	<name>open-erp</name>
+	<description>Open ERP Business Process Management</description>
 
 	<properties>
 		<endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
