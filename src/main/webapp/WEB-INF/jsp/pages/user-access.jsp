@@ -25,7 +25,7 @@
                                         </form:select>
                                     </div>
                                     <div class="col-3">
-
+                                        <form:button class="btn btn-brand">Axtar</form:button>
                                     </div>
                                 </div>
                             </div>
@@ -34,51 +34,22 @@
 <c:choose>
     <c:when test="${not empty list}">
 <table class="table table-striped- table-bordered table-hover table-checkable">
-    <thead>
-    <tr>
-        <th>№</th>
-        <c:forEach var="t" items="${operations}" varStatus="loop">
-            <th><c:out value="${t.name}" /></th>
-        </c:forEach>
-    </tr>
-    </thead>
     <tbody>
-    <%--<c:forEach var="t" items="${list}" varStatus="loop">
+    <c:forEach var="t" items="${list}" varStatus="loop">
         <tr>
             <td>${loop.index + 1}</td>
-            <td><c:out value="${t.id}" /> &lt;%&ndash;${uj:toJson(t)}&ndash;%&gt;</td>
-            <td><c:out value="${t.name}" /></td>
-            <td><c:out value="${t.attr1}" /></td>
-            <td><c:out value="${t.attr2}" /></td>
-            <c:choose>
-                <c:when test="${t.active}">
-                    <td>
-                        <span class="kt-badge kt-badge--success kt-badge--inline kt-badge--pill">Aktivdir</span>
-                    </td>
-                </c:when>
-                <c:otherwise>
-                    <td>
-                        <span class="kt-badge kt-badge--danger kt-badge--inline kt-badge--pill">Aktiv deyil</span>
-                    </td>
-                </c:otherwise>
-            </c:choose>
-            <td nowrap>
-                <span class="dropdown">
-                    <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
-                      <i class="la la-ellipsis-h"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <a class="dropdown-item" href="#"><i class="la la-edit"></i> Edit Details</a>
-                        <a class="dropdown-item" href="#"><i class="la la-leaf"></i> Update Status</a>
-                        <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a>
-                    </div>
-                </span>
-                <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">
-                    <i class="la la-edit"></i>
-                </a>
-            </td>
+            <td><c:out value="${t.module.name}" /></td>
+            <c:forEach var="p" items="${t.module.moduleOperations}" varStatus="loop">
+                <td>
+                    <form:label path="id">
+                        <c:out value="${p.operation.name}" />
+                        <form:checkbox path="id" value="${t.id}"/>
+                    </form:label>
+
+                </td>
+            </c:forEach>
         </tr>
-    </c:forEach>--%>
+    </c:forEach>
     </tbody>
 </table>
     </c:when>

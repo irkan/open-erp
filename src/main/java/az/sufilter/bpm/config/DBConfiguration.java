@@ -240,6 +240,8 @@ public class DBConfiguration {
             operations.add(create);
             Operation edit = new Operation("Redaktə", "edit", laUser, null);
             operations.add(edit);
+            Operation delete = new Operation("Sil", "delete", laUser, null);
+            operations.add(delete);
             Operation export = new Operation("İxrac", "export", laUser, null);
             operations.add(export);
 
