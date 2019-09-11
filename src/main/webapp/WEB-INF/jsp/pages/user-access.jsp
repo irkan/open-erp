@@ -21,7 +21,7 @@
                                 <div class="row">
                                     <div class="col-9">
                                         <form:select  path="user" cssClass="custom-select form-control">
-                                            <form:options items="${users}" itemLabel="employee.person.fullName" itemValue="id" />
+                                            <form:options items="${users}" itemLabel="employee.person.fullName" itemValue="id"  />
                                         </form:select>
                                     </div>
                                     <div class="col-3">

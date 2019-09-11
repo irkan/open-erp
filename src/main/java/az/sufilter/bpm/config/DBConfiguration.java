@@ -162,9 +162,9 @@ public class DBConfiguration {
             dictionaries.add(khirdalan);
             Dictionary position1 = new Dictionary("Sistem inzibatçısı", "Administrator", null, positionType);
             dictionaries.add(position1);
-            Dictionary position2 = new Dictionary("Satış təmsilçisi", "Sales  person", null, positionType);
+            Dictionary position2 = new Dictionary("Satış təmsilçisi", "Sales person", null, positionType);
             dictionaries.add(position2);
-            Dictionary position3 = new Dictionary("Satış meneceri", "Sales  manager", null, positionType);
+            Dictionary position3 = new Dictionary("Satış meneceri", "Sales manager", null, positionType);
             dictionaries.add(position3);
             Dictionary position4 = new Dictionary("Mühasib", "Accauntant", null, positionType);
             dictionaries.add(position4);
