@@ -136,6 +136,25 @@ public class AdministratorController extends SkeletonController {
         return "layout";
     }
 
+    @PostMapping(value = "/user-access")
+    public String postUserAccess(Model model, @ModelAttribute(Constants.FORM) @Validated UserModuleOperation userModuleOperation, BindingResult binding) throws Exception {
+        if(!binding.hasErrors()){
+            //userModuleOperationRepository.deleteInBatch(userModuleOperation);
+            userModuleOperationRepository.save(userModuleOperation);
+            model.addAttribute(Constants.FORM, new UserModuleOperation());
+        } else {
+            model.addAttribute(Constants.FORM, userModuleOperation);
+        }
+        model.addAttribute(Constants.USERS, userRepository.findAll());
+        List<ModuleOperation>  list = moduleOperationRepository.findAll();
+        model.addAttribute(Constants.MODULES, Util.removeDuplicateModules(list));
+        model.addAttribute(Constants.OPERATIONS, Util.removeDuplicateOperations(list));
+        model.addAttribute(Constants.LIST, list);
+        model.addAttribute(Constants.USER_MODULE_OPERATIONS, userModuleOperationRepository.findAllByUser_Id(userModuleOperation.getUser().getId()));
+        model.addAttribute(Constants.FORM, new UserModuleOperation());
+        return "layout";
+    }
+
     @ResponseBody
     @PostMapping(value = "/employee/get/{organizationId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Employee> getEmployees(@PathVariable("organizationId") int organizationId) {

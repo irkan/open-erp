@@ -21,6 +21,7 @@ public class Constants {
     public static final String OPERATIONS = "operations";
     public static final String MODULE_OPERATIONS = "module_operations";
     public static final String USERS = "users";
+    public static final String USER_MODULE_OPERATIONS = "user_module_operations";
 
     public static final class ROUTE{
         public static final String MODULE = "module";
