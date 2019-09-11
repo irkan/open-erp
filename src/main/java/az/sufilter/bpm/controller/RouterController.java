@@ -23,7 +23,9 @@ public class RouterController extends SkeletonController {
         for(UserModuleOperation umo: user.getUserModuleOperations()){
             Module parent = umo.getModuleOperation().getModule().getModule();
             if(parent!=null && parent.getPath().equalsIgnoreCase(path)){
-                modules.add(umo.getModuleOperation().getModule());
+                if (!modules.contains(umo.getModuleOperation().getModule())) {
+                    modules.add(umo.getModuleOperation().getModule());
+                }
             }
         }
         session.setAttribute(Constants.MODULES, modules);

@@ -33,14 +33,18 @@
         <div class="kt-header-menu-wrapper kt-grid__item kt-grid__item--fluid" id="kt_header_menu_wrapper">
             <div id="kt_header_menu" class="kt-header-menu kt-header-menu-mobile ">
                 <ul class="kt-menu__nav ">
-<c:forEach var="t" items="${sessionScope.modules}" varStatus="loop">
-    <li class="kt-menu__item kt-menu__item--here kt-menu__item--rel" <%--kt-menu__item--here--%>>
-        <a href="/<c:out value="${t.module.path}" />/<c:out value="${t.path}" />" class="kt-menu__link">
-            <i class="la <c:out value="${t.icon.name}" />" style="color: #d6d6d6;margin-right: 10px;font-size: 16px;"></i>
-            <span class="kt-menu__link-text"><c:out value="${t.name}" /></span>
-        </a>
-    </li>
-</c:forEach>
+
+
+                    <c:forEach var="t" items="${sessionScope.modules}" varStatus="loop">
+                        <li class="kt-menu__item kt-menu__item--here kt-menu__item--rel" <%--kt-menu__item--here--%>>
+                            <a href="/<c:out value="${t.module.path}" />/<c:out value="${t.path}" />" class="kt-menu__link">
+                                <i class="la <c:out value="${t.icon.name}" />" style="color: #d6d6d6;margin-right: 10px;font-size: 16px;"></i>
+                                <span class="kt-menu__link-text"><c:out value="${t.name}" /></span>
+                            </a>
+                        </li>
+                    </c:forEach>
+
+
                 </ul>
             </div>
         </div>
@@ -124,58 +128,8 @@
                                  role="tabpanel">
                                 <div class="kt-notification kt-margin-t-10 kt-margin-b-10 kt-scroll"
                                      data-scroll="true" data-height="300" data-mobile-height="200">
-                                    <a href="#" class="kt-notification__item">
-                                        <div class="kt-notification__item-icon">
-                                            <i class="flaticon2-line-chart kt-font-success"></i>
-                                        </div>
-                                        <div class="kt-notification__item-details">
-                                            <div class="kt-notification__item-title">
-                                                New order has been received
-                                            </div>
-                                            <div class="kt-notification__item-time">
-                                                2 hrs ago
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a href="#" class="kt-notification__item">
-                                        <div class="kt-notification__item-icon">
-                                            <i class="flaticon2-box-1 kt-font-brand"></i>
-                                        </div>
-                                        <div class="kt-notification__item-details">
-                                            <div class="kt-notification__item-title">
-                                                New customer is registered
-                                            </div>
-                                            <div class="kt-notification__item-time">
-                                                3 hrs ago
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a href="#" class="kt-notification__item">
-                                        <div class="kt-notification__item-icon">
-                                            <i class="flaticon2-chart2 kt-font-danger"></i>
-                                        </div>
-                                        <div class="kt-notification__item-details">
-                                            <div class="kt-notification__item-title">
-                                                Application has been approved
-                                            </div>
-                                            <div class="kt-notification__item-time">
-                                                3 hrs ago
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a href="#" class="kt-notification__item">
-                                        <div class="kt-notification__item-icon">
-                                            <i class="flaticon2-pie-chart kt-font-success"></i>
-                                        </div>
-                                        <div class="kt-notification__item-details">
-                                            <div class="kt-notification__item-title">
-                                                New customer is registered
-                                            </div>
-                                            <div class="kt-notification__item-time">
-                                                3 days ago
-                                            </div>
-                                        </div>
-                                    </a>
+
+
                                 </div>
                             </div>
                             <div class="tab-pane" id="topbar_notifications_logs" role="tabpanel">
