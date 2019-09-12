@@ -187,6 +187,7 @@ public class AdministratorController extends SkeletonController {
         model.addAttribute(Constants.MODULES, Util.removeDuplicateModules(list));
         model.addAttribute(Constants.OPERATIONS, Util.removeDuplicateOperations(list));
         model.addAttribute(Constants.LIST, list);
+        model.addAttribute(Constants.TEMPLATES, dictionaryRepository.getDictionariesByDictionaryType_Attr1("template"));
         model.addAttribute(Constants.TEMPLATE_MODULE_OPERATIONS, templateModuleOperations);
         return "layout";
     }
