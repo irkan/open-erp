@@ -49,6 +49,9 @@ public class SkeletonController {
     ModuleOperationRepository moduleOperationRepository;
 
     @Autowired
+    TemplateModuleOperationRepository templateModuleOperationRepository;
+
+    @Autowired
     HttpServletRequest request;
 
     @Autowired

@@ -22,6 +22,8 @@ public class Constants {
     public static final String MODULE_OPERATIONS = "module_operations";
     public static final String USERS = "users";
     public static final String USER_MODULE_OPERATIONS = "user_module_operations";
+    public static final String TEMPLATES = "templates";
+    public static final String TEMPLATE_MODULE_OPERATIONS = "template_module_operations";
 
     public static final class ROUTE{
         public static final String MODULE = "module";
@@ -32,6 +34,7 @@ public class Constants {
         public static final String MODULE_OPERATION = "module-operation";
         public static final String ORGANIZATION = "organization";
         public static final String EMPLOYEE = "employee";
-        public static final String USER_ACCESS = "user-access";
+        public static final String TEMPLATE_MODULE_OPERATION = "template-module-operation";
+        public static final String USER_MODULE_OPERATION = "user-module-operation";
     }
 }

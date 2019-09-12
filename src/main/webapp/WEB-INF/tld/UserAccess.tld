@@ -10,7 +10,7 @@
         <name>checkAccess</name>
         <function-class>az.sufilter.bpm.util.UserAccess</function-class>
         <function-signature>
-            int checkAccess(java.lang.Object,int,int)
+            az.sufilter.bpm.domain.Status checkAccess(java.lang.Object,java.lang.Object,java.lang.Object,int,int)
         </function-signature>
     </function>
 </taglib>

@@ -11779,9 +11779,9 @@ code {
 .kt-container.kt-container--fit-right {
   padding-right: 0 !important; }
 
-@media (min-width: 1439px) {
+@media (min-width: 1668px) {
   .kt-container {
-    width: 1380px;
+    width: 1600px;
     margin: 0 auto; }
     .kt-container.kt-container--fluid {
       width: 100%;

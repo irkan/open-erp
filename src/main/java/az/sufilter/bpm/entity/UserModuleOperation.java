@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "admin_user_module_operation")
@@ -23,8 +24,11 @@ public class UserModuleOperation {
     private User user;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_module_operation_id")
     private ModuleOperation moduleOperation;
+
+    @OneToMany(fetch=FetchType.LAZY )
+    @JoinColumn(name = "admin_module_operation_id")
+    private List<ModuleOperation> moduleOperations;
 
     public UserModuleOperation(User user, ModuleOperation moduleOperation) {
         this.user = user;

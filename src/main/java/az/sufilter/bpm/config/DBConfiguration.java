@@ -134,6 +134,8 @@ public class DBConfiguration {
             types.add(nationalityType);
             DictionaryType documentType = new DictionaryType("Sənəd tipi", "document-type", null);
             types.add(documentType);
+            DictionaryType templateType = new DictionaryType("İcazə şablonu", "template", null);
+            types.add(templateType);
 
             List<Dictionary> dictionaries = new ArrayList<>();
             Dictionary male = new Dictionary("Kişi", "Male", null, genderType);
@@ -202,6 +204,14 @@ public class DBConfiguration {
             dictionaries.add(birthLicense);
             Dictionary driverLicense = new Dictionary("Sürücülük vəsiqəsi", "driver license", null, documentType);
             dictionaries.add(driverLicense);
+            Dictionary template1 = new Dictionary("Şablon №1", "template 1", null, templateType);
+            dictionaries.add(template1);
+            Dictionary template2 = new Dictionary("Şablon №2", "template 2", null, templateType);
+            dictionaries.add(template2);
+            Dictionary template3 = new Dictionary("Şablon №3", "template 3", null, templateType);
+            dictionaries.add(template3);
+            Dictionary template4 = new Dictionary("Şablon №4", "template 4", null, templateType);
+            dictionaries.add(template4);
 
 
             dictionaryTypeRepository.saveAll(types);
@@ -230,8 +240,10 @@ public class DBConfiguration {
             modules.add(subModule7);
             Module subModule8 = new Module("Modul və Əməliyyat", "Modul və Əməliyyat", "module-operation", laUser, null, module);
             modules.add(subModule8);
-            Module subModule9 = new Module("İstifadəçi icazəsi", "İstifadəçi icazəsi", "user-access", laUser, null, module);
+            Module subModule9 = new Module("İstifadəçi icazəsi", "İstifadəçi icazəsi", "user-module-operation", laUser, null, module);
             modules.add(subModule9);
+            Module subModule10 = new Module("İcazə şablonu", "İcazə şablonu", "template-module-operation", laUser, null, module);
+            modules.add(subModule10);
 
             List<Operation> operations = new ArrayList<>();
             Operation view = new Operation("Baxış", "view", laUser, null);
@@ -290,6 +302,8 @@ public class DBConfiguration {
             moduleOperations.add(editModuleOperation8);
             ModuleOperation editModuleOperation9 = new ModuleOperation(subModule9, edit, null);
             moduleOperations.add(editModuleOperation9);
+            ModuleOperation editModuleOperation10 = new ModuleOperation(subModule10, edit, null);
+            moduleOperations.add(editModuleOperation10);
 
             ModuleOperation deleteModuleOperation1 = new ModuleOperation(subModule1, delete, null);
             moduleOperations.add(deleteModuleOperation1);
@@ -343,6 +357,8 @@ public class DBConfiguration {
             moduleOperations.add(exportModuleOperation8);
             ModuleOperation exportModuleOperation9 = new ModuleOperation(subModule9, export, null);
             moduleOperations.add(exportModuleOperation9);
+            ModuleOperation exportModuleOperation10 = new ModuleOperation(subModule10, export, null);
+            moduleOperations.add(exportModuleOperation10);
 
 
 
@@ -412,6 +428,8 @@ public class DBConfiguration {
             userModuleOperations.add(userModuleOperation10);
             UserModuleOperation userModuleOperation11 = new UserModuleOperation(user, editModuleOperation9);
             userModuleOperations.add(userModuleOperation11);
+            UserModuleOperation userModuleOperation12 = new UserModuleOperation(user, editModuleOperation10);
+            userModuleOperations.add(userModuleOperation12);
 
             userRepository.save(user);
             userDetailRepository.save(userDetail);

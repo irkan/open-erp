@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "admin_template_module_operation")
@@ -18,11 +19,15 @@ public class TemplateModuleOperation {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "admin_dictionary_template_id")
+    private Dictionary template;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_module_operation_id")
     private ModuleOperation moduleOperation;
+
+    @OneToMany(fetch=FetchType.LAZY )
+    @JoinColumn(name = "admin_module_operation_id")
+    private List<ModuleOperation> moduleOperations;
 
 }

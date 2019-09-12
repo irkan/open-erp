@@ -61,13 +61,20 @@ public class AdministratorController extends SkeletonController {
             model.addAttribute(Constants.OPERATIONS, operationRepository.findAll());
             model.addAttribute(Constants.LIST, moduleOperationRepository.findAll());
             model.addAttribute(Constants.FORM, new ModuleOperation());
-        } else if (page.equalsIgnoreCase(Constants.ROUTE.USER_ACCESS)){
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.USER_MODULE_OPERATION)){
             model.addAttribute(Constants.USERS, userRepository.findAll());
             List<ModuleOperation>  list = moduleOperationRepository.findAll();
             model.addAttribute(Constants.MODULES, Util.removeDuplicateModules(list));
             model.addAttribute(Constants.OPERATIONS, Util.removeDuplicateOperations(list));
             model.addAttribute(Constants.LIST, list);
             model.addAttribute(Constants.FORM, new UserModuleOperation());
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.TEMPLATE_MODULE_OPERATION)){
+            List<ModuleOperation>  list = moduleOperationRepository.findAll();
+            model.addAttribute(Constants.TEMPLATES, dictionaryRepository.getDictionariesByDictionaryType_Attr1("template"));
+            model.addAttribute(Constants.MODULES, Util.removeDuplicateModules(list));
+            model.addAttribute(Constants.OPERATIONS, Util.removeDuplicateOperations(list));
+            model.addAttribute(Constants.LIST, list);
+            model.addAttribute(Constants.FORM, new TemplateModuleOperation());
         }
         return "layout";
     }
@@ -136,22 +143,51 @@ public class AdministratorController extends SkeletonController {
         return "layout";
     }
 
-    @PostMapping(value = "/user-access")
+    @PostMapping(value = "/user-module-operation")
     public String postUserAccess(Model model, @ModelAttribute(Constants.FORM) @Validated UserModuleOperation userModuleOperation, BindingResult binding) throws Exception {
-        if(!binding.hasErrors()){
-            //userModuleOperationRepository.deleteInBatch(userModuleOperation);
-            userModuleOperationRepository.save(userModuleOperation);
+        List<UserModuleOperation> userModuleOperations = userModuleOperationRepository.findAllByUser_Id(userModuleOperation.getUser().getId());
+        /*if(!binding.hasErrors()){
+            userModuleOperationRepository.deleteInBatch(userModuleOperations);
+            for (ModuleOperation mo: userModuleOperation.getModuleOperations()){
+                mo.setModuleOperations(null);
+                userModuleOperationRepository.save(new UserModuleOperation(userModuleOperation.getUser(), mo));
+            }
             model.addAttribute(Constants.FORM, new UserModuleOperation());
         } else {
             model.addAttribute(Constants.FORM, userModuleOperation);
-        }
+        }*/
+
+        model.addAttribute(Constants.FORM, userModuleOperation);
         model.addAttribute(Constants.USERS, userRepository.findAll());
         List<ModuleOperation>  list = moduleOperationRepository.findAll();
         model.addAttribute(Constants.MODULES, Util.removeDuplicateModules(list));
         model.addAttribute(Constants.OPERATIONS, Util.removeDuplicateOperations(list));
         model.addAttribute(Constants.LIST, list);
-        model.addAttribute(Constants.USER_MODULE_OPERATIONS, userModuleOperationRepository.findAllByUser_Id(userModuleOperation.getUser().getId()));
-        model.addAttribute(Constants.FORM, new UserModuleOperation());
+        model.addAttribute(Constants.USER_MODULE_OPERATIONS, userModuleOperations);
+        return "layout";
+    }
+
+    @PostMapping(value = "/template-module-operation")
+    public String postTemplateModuleOperation(Model model, @ModelAttribute(Constants.FORM) @Validated TemplateModuleOperation templateModuleOperation, BindingResult binding) throws Exception {
+        List<TemplateModuleOperation> templateModuleOperations = templateModuleOperationRepository.findAllByTemplate_Id(templateModuleOperation.getTemplate().getId());
+        /*if(!binding.hasErrors()){
+            userModuleOperationRepository.deleteInBatch(userModuleOperations);
+            for (ModuleOperation mo: userModuleOperation.getModuleOperations()){
+                mo.setModuleOperations(null);
+                userModuleOperationRepository.save(new UserModuleOperation(userModuleOperation.getUser(), mo));
+            }
+            model.addAttribute(Constants.FORM, new UserModuleOperation());
+        } else {
+            model.addAttribute(Constants.FORM, userModuleOperation);
+        }*/
+
+        model.addAttribute(Constants.FORM, templateModuleOperation);
+        model.addAttribute(Constants.USERS, userRepository.findAll());
+        List<ModuleOperation>  list = moduleOperationRepository.findAll();
+        model.addAttribute(Constants.MODULES, Util.removeDuplicateModules(list));
+        model.addAttribute(Constants.OPERATIONS, Util.removeDuplicateOperations(list));
+        model.addAttribute(Constants.LIST, list);
+        model.addAttribute(Constants.TEMPLATE_MODULE_OPERATIONS, templateModuleOperations);
         return "layout";
     }
 
