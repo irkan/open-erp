@@ -8,9 +8,9 @@
 
     <function>
         <name>checkAccess</name>
-        <function-class>az.sufilter.bpm.util.UserAccess</function-class>
+        <function-class>com.openerp.util.UserAccess</function-class>
         <function-signature>
-            az.sufilter.bpm.domain.Status checkAccess(java.lang.Object,java.lang.Object,java.lang.Object,int,int)
+            com.openerp.domain.Status checkAccess(java.lang.Object,java.lang.Object,java.lang.Object,int,int)
         </function-signature>
     </function>
 </taglib>

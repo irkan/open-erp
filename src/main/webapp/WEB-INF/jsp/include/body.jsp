@@ -1,4 +1,4 @@
-<%-- 
+<%@ page import="com.openerp.util.Constants" %><%--
     Document   : footer
     Created on : Sep 3, 2019, 11:19:03 AM
     Author     : iahmadov

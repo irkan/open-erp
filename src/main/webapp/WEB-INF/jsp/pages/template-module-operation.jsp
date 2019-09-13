@@ -1,4 +1,4 @@
-<%@ page import="az.sufilter.bpm.entity.DictionaryType" %><%--
+<%--
   Created by IntelliJ IDEA.
   User: irkan.ahmadov
   Date: 01.09.2019
@@ -15,13 +15,16 @@
         <div class="col-lg-12">
             <div class="kt-portlet kt-portlet--mobile">
                 <div class="kt-portlet__body">
-                    <form:form modelAttribute="form" method="post" action="/admin/template-module-operation" cssClass="form-group">
+                    <form:form modelAttribute="form" id="form" method="post" action="/admin/get-template" cssClass="form-group">
                         <div class="row">
                             <div class="col-md-4 offset-md-4">
                                 <form:select  path="template" cssClass="custom-select form-control" onchange="this.form.submit()">
                                     <form:option value="0" label="Şablonu seçin"/>
                                     <form:options items="${templates}" itemLabel="name" itemValue="id"  />
                                 </form:select>
+                            </div>
+                            <div class="col-md-2 offset-md-2 text-right">
+                                <button onclick="save()" class="btn btn-primary">Yadda saxla</button>
                             </div>
                         </div>
                         <hr style="width: 100%"/>
@@ -99,5 +102,10 @@
                 $(chk).removeAttr('checked', 'checked');
             });
         }
+    }
+    
+    function save() {
+        $("#form").attr("action", "/admin/template-module-operation");
+        $("#form").submit();
     }
 </script>

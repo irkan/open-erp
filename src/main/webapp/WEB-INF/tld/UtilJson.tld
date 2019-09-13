@@ -8,9 +8,9 @@
 
     <function>
         <name>toJson</name>
-        <function-class>az.sufilter.bpm.util.UtilJson</function-class>
+        <function-class>com.openerp.util.UtilJson</function-class>
         <function-signature>
-            String toJson(java.lang.Object)
+            java.lang.String toJson(java.lang.Object)
         </function-signature>
     </function>
 </taglib>

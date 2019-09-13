@@ -6,19 +6,19 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.1.7.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
-	<groupId>az.sufilter.bpm</groupId>
-	<artifactId>su-filter</artifactId>
+	<groupId>com.openerp</groupId>
+	<artifactId>open-erp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>open-erp</name>
-	<description>Open ERP Business Process Management</description>
+	<description>Open ERP Web Application</description>
 
 	<properties>
 		<endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<start-class>az.sufilter.bpm.config.SuFilterApplication</start-class>
+		<start-class>com.openerp.config.OpenERPApplication</start-class>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

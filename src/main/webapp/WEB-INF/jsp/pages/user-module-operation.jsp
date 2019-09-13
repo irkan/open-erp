@@ -1,4 +1,4 @@
-<%@ page import="az.sufilter.bpm.entity.DictionaryType" %><%--
+<%--
   Created by IntelliJ IDEA.
   User: irkan.ahmadov
   Date: 01.09.2019
@@ -15,13 +15,32 @@
         <div class="col-lg-12">
             <div class="kt-portlet kt-portlet--mobile">
                 <div class="kt-portlet__body">
-                    <form:form modelAttribute="form" method="post" action="/admin/user-access" cssClass="form-group">
+                    <form:form modelAttribute="form" id="form" method="post" action="/admin/get-user-template" cssClass="form-group">
                         <div class="row">
-                            <div class="col-md-4 offset-md-4">
+                            <div class="col-md-3 offset-md-3">
+                                <select class="custom-select form-control" name="template" id="template" onchange="this.form.submit()">
+                                    <option value="0">Şablondan seçin</option>
+                                <c:forEach var="t" items="${templates}" varStatus="loop">
+                                    <c:choose>
+                                        <c:when test="${template_id==t.id}">
+                                            <option value="${t.id}" selected>${t.name}</option>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <option value="${t.id}">${t.name}</option>
+                                        </c:otherwise>
+                                    </c:choose>
+
+                                </c:forEach>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
                                 <form:select  path="user" cssClass="custom-select form-control" onchange="this.form.submit()">
                                     <form:option value="0" label="İstifadəçini seçin"/>
                                     <form:options items="${users}" itemLabel="employee.person.fullName" itemValue="id"  />
                                 </form:select>
+                            </div>
+                            <div class="col-md-2 offset-md-1 text-right">
+                                <button onclick="save()" class="btn btn-primary">Yadda saxla</button>
                             </div>
                         </div>
                         <hr style="width: 100%"/>
@@ -99,5 +118,10 @@
                 $(chk).removeAttr('checked', 'checked');
             });
         }
+    }
+
+    function save() {
+        $("#form").attr("action", "/admin/user-module-operation");
+        $("#form").submit();
     }
 </script>

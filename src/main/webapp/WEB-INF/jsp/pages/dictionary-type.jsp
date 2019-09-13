@@ -1,4 +1,4 @@
-<%@ page import="az.sufilter.bpm.entity.DictionaryType" %><%--
+<%--
   Created by IntelliJ IDEA.
   User: irkan.ahmadov
   Date: 01.09.2019

@@ -1,2 +1,2 @@
 Manifest-Version: 1.0
-Main-Class: az.sufilter.bpm.config.SuFilterApplication
+Main-Class: com.openerp.config.OpenERPApplication

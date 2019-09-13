@@ -1,6 +1,6 @@
-<%@ page import="az.sufilter.bpm.util.Constants" %>
-<%@ page import="az.sufilter.bpm.entity.User" %>
-<%@ page import="az.sufilter.bpm.entity.Person" %><%--
+<%@ page import="com.openerp.util.Constants" %>
+<%@ page import="com.openerp.entity.User" %>
+<%@ page import="com.openerp.entity.Person" %><%--
     Document   : menu
     Created on : Sep 3, 2019, 4:08:35 PM
     Author     : iahmadov
@@ -9,14 +9,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-
-<%--<% User user = (User) session.getAttribute("user");
-    user.getUserModuleOperations().get(0).getModuleOperation().getModule().getModules().size();
-    user.getUserModuleOperations().get(1).getModuleOperation().getModule().getModules().size();
-
-%>
-<%=user.getUserModuleOperations().get(0).getModuleOperation().getModule().getModules().size()%>
-<%=user.getUserModuleOperations().get(1).getModuleOperation().getModule().getModules().size()%>--%>
 
 <div id="kt_header" class="kt-header  kt-header--fixed " data-ktheader-minimize="on">
     <div class="kt-container ">
@@ -33,8 +25,6 @@
         <div class="kt-header-menu-wrapper kt-grid__item kt-grid__item--fluid" id="kt_header_menu_wrapper">
             <div id="kt_header_menu" class="kt-header-menu kt-header-menu-mobile ">
                 <ul class="kt-menu__nav ">
-
-
                     <c:forEach var="t" items="${sessionScope.modules}" varStatus="loop">
                         <li class="kt-menu__item kt-menu__item--here kt-menu__item--rel" <%--kt-menu__item--here--%>>
                             <a href="/<c:out value="${t.module.path}" />/<c:out value="${t.path}" />" class="kt-menu__link">
@@ -43,8 +33,6 @@
                             </a>
                         </li>
                     </c:forEach>
-
-
                 </ul>
             </div>
         </div>
@@ -146,6 +134,8 @@
                     </form>
                 </div>
             </div>
+            <c:choose>
+                <c:when test="${sessionScope.parent_modules.size()>1}">
             <div class="kt-header__topbar-item dropdown">
                 <div class="kt-header__topbar-wrapper" data-toggle="dropdown" data-offset="10px,0px">
 			<span class="kt-header__topbar-icon">
@@ -160,6 +150,7 @@
 </svg>
 							</span>
                 </div>
+
             <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim dropdown-menu-xl">
                 <div class="kt-head kt-head--skin-dark"
                      style="background-image: url(<c:url value="/assets/media/misc/bg-1.jpg"/>)">
@@ -169,8 +160,17 @@
                 </div>
                 <div class="kt-grid-nav kt-grid-nav--skin-light">
                     <div class="kt-grid-nav__row">
-<c:forEach var="t" items="${sessionScope.user.userModuleOperations}" varStatus="loop">
-    <c:choose>
+<c:forEach var="t" items="${sessionScope.parent_modules}" varStatus="loop">
+
+    <a href="/route/<c:out value="${t.path}" />" class="kt-grid-nav__item">
+                            <span class="kt-grid-nav__icon">
+                                <i class="la <c:out value="${t.icon.name}" />"></i>
+                            </span>
+        <span class="kt-grid-nav__title"><c:out value="${t.name}" /></span>
+        <span class="kt-grid-nav__desc"><c:out value="${t.description}" /></span>
+    </a>
+
+    <%--<c:choose>
         <c:when test="${t.moduleOperation.module.module eq null}">
 
                 <a href="/route/<c:out value="${t.moduleOperation.module.path}" />" class="kt-grid-nav__item">
@@ -182,12 +182,15 @@
                 </a>
 
         </c:when>
-    </c:choose>
+    </c:choose>--%>
 </c:forEach>
                     </div>
                 </div>
             </div>
+
             </div>
+            </c:when>
+            </c:choose>
             <div class="kt-header__topbar-item kt-header__topbar-item--langs">
                 <div class="kt-header__topbar-wrapper" data-toggle="dropdown" data-offset="10px,0px">
 			<span class="kt-header__topbar-icon">
