@@ -26,6 +26,9 @@ public class Constants {
     public static final String TEMPLATE_MODULE_OPERATIONS = "template_module_operations";
     public static final String TEMPLATE_ID = "template_id";
     public static final String PARENT_MODULES = "parent_modules";
+    public static final String ERROR = "error";
+    public static final String MESSAGE = "message";
+    public static final String PROFILE_SUB_PAGE = "profile_sub_page";
 
     public static final class ROUTE{
         public static final String MODULE = "module";
@@ -38,5 +41,7 @@ public class Constants {
         public static final String EMPLOYEE = "employee";
         public static final String TEMPLATE_MODULE_OPERATION = "template-module-operation";
         public static final String USER_MODULE_OPERATION = "user-module-operation";
+        public static final Object PROFILE = "profile";
+        public static final String CHANGE_PASSWORD = "change-password";
     }
 }

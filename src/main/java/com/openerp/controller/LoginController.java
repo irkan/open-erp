@@ -39,19 +39,25 @@ public class LoginController extends SkeletonController {
                                 @RequestParam(name="password") String password) throws Exception {
         User user = userRepository.findByUsernameAndPasswordAndActiveTrue(username, DigestUtils.md5DigestAsHex(password.getBytes()));
         if(user==null){
-            model.addAttribute("error", "true");
+            model.addAttribute(Constants.ERROR, "true");
+            model.addAttribute(Constants.MESSAGE, "İstifadəçi adı və ya şifrəniz yanlışdır!");
             return "login";
         }
-        session.setAttribute(Constants.USER, user);
-
         List<Module> parentModules = new ArrayList<>();
         for(UserModuleOperation umo: user.getUserModuleOperations()){
             if (!parentModules.contains(umo.getModuleOperation().getModule().getModule())) {
                 parentModules.add(umo.getModuleOperation().getModule().getModule());
             }
         }
-        session.setAttribute(Constants.PAGE, "module");
-        session.setAttribute(Constants.PARENT_MODULES, parentModules);
-        return "redirect:/route/admin";
+        if(parentModules.size()>0){
+            String page = user.getUserModuleOperations().get(0).getModuleOperation().getModule().getPath();
+            session.setAttribute(Constants.USER, user);
+            session.setAttribute(Constants.PAGE, "module");
+            session.setAttribute(Constants.PARENT_MODULES, parentModules);
+            return "redirect:/route/"+parentModules.get(0).getPath();
+        }
+        model.addAttribute(Constants.ERROR, "true");
+        model.addAttribute(Constants.MESSAGE, "Sistemdən istifadə icazələri ilə təmin edilməmisiniz!");
+        return "login";
     }
 }

@@ -1,4 +1,4 @@
-<%@ page import="com.openerp.util.Constants" %><%--
+<%--
     Document   : footer
     Created on : Sep 3, 2019, 11:19:03 AM
     Author     : iahmadov
@@ -70,11 +70,6 @@
                 </div>
             </div>
         </div>
-
-        <% String p = (String) session.getAttribute(Constants.PAGE);
-            String pagePath = "pages/" + p + ".jsp";
-        %>
-
-        <jsp:include page="<%= pagePath %>" ></jsp:include>
+        <jsp:include page="pages/${sessionScope.page}.jsp" ></jsp:include>
     </div>
 </div>

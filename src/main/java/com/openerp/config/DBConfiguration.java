@@ -259,13 +259,7 @@ public class DBConfiguration {
             Operation approve = new Operation("Təsdiq", "approve", laUser, null);
             operations.add(approve);
 
-
             List<ModuleOperation> moduleOperations = new ArrayList<>();
-
-            ModuleOperation moduleOperation1 = new ModuleOperation(module, null, null);
-            moduleOperations.add(moduleOperation1);
-            ModuleOperation moduleOperation7 = new ModuleOperation(module1, null, null);
-            moduleOperations.add(moduleOperation7);
 
             ModuleOperation createModuleOperation1 = new ModuleOperation(subModule1, create, null);
             moduleOperations.add(createModuleOperation1);
@@ -402,8 +396,6 @@ public class DBConfiguration {
             UserDetail userDetail = new UserDetail(user);
             List<UserModuleOperation> userModuleOperations = new ArrayList<>();
 
-            UserModuleOperation userModuleOperation1 = new UserModuleOperation(user, moduleOperation1);
-            userModuleOperations.add(userModuleOperation1);
             UserModuleOperation userModuleOperation2 = new UserModuleOperation(user, createModuleOperation1);
             userModuleOperations.add(userModuleOperation2);
             UserModuleOperation userModuleOperation3 = new UserModuleOperation(user, createModuleOperation2);
@@ -414,8 +406,6 @@ public class DBConfiguration {
             userModuleOperations.add(userModuleOperation5);
             UserModuleOperation userModuleOperation6 = new UserModuleOperation(user, createModuleOperation5);
             userModuleOperations.add(userModuleOperation6);
-            UserModuleOperation userModuleOperation7 = new UserModuleOperation(user, moduleOperation7);
-            userModuleOperations.add(userModuleOperation7);
             UserModuleOperation userModuleOperation8 = new UserModuleOperation(user, createModuleOperation6);
             userModuleOperations.add(userModuleOperation8);
             UserModuleOperation userModuleOperation9 = new UserModuleOperation(user, createModuleOperation7);

@@ -44,9 +44,9 @@ public class Organization implements Serializable {
     @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="organization")
     private List<Organization> children;
 
-    @JsonIgnore
+   /* @JsonIgnore
     @OneToOne(mappedBy = "organization")
-    private Employee employee;
+    private Employee employee;*/
 
     @JsonIgnore
     @OneToOne(mappedBy = "organization", cascade=CascadeType.ALL)

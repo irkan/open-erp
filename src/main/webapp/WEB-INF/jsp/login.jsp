@@ -93,7 +93,7 @@
                             <c:if test="${error eq 'true'}">
                                 <div class="kt-alert kt-alert--outline alert alert-danger alert-dismissible" role="alert">
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><i class="flaticon2-delete" style="font-size: 12px;"></i></button>
-                                    <span style="font-size: 16px">İstifadəçi adı və ya şifrəniz yanlışdır!</span>
+                                    <span style="font-size: 16px"><c:out value="${message}"/></span>
                                 </div>
                             </c:if>
                             <div class="input-group">

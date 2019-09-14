@@ -6,6 +6,7 @@ import com.openerp.util.Util;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.DigestUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -114,6 +115,7 @@ public class AdministratorController extends SkeletonController {
     @PostMapping(value = "/user")
     public String postUser(Model model, @ModelAttribute(Constants.FORM) @Validated User user, BindingResult binding) throws Exception {
         if(!binding.hasErrors()){
+            user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
             userRepository.save(user);
             model.addAttribute(Constants.FORM, new User());
         } else {
@@ -144,11 +146,10 @@ public class AdministratorController extends SkeletonController {
                                  @RequestParam(name="template", required = false, defaultValue = "0") int templateId, BindingResult binding) throws Exception {
         model.addAttribute(Constants.FORM, userModuleOperation);
         model.addAttribute(Constants.TEMPLATE_ID, templateId);
-        List<UserModuleOperation> userModuleOperations = userModuleOperationRepository.findAllByUser_Id(userModuleOperation.getUser().getId());
-        if(!binding.hasErrors()){
+        if(!binding.hasErrors() && userModuleOperation.getUser()!=null){
+            List<UserModuleOperation> userModuleOperations = userModuleOperationRepository.findAllByUser_Id(userModuleOperation.getUser().getId());
             userModuleOperationRepository.deleteInBatch(userModuleOperations);
             for (ModuleOperation mo: userModuleOperation.getModuleOperations()){
-                List<UserModuleOperation> umos = mo.getModuleOperations();
                 mo.setModuleOperations(null);
                 userModuleOperationRepository.save(new UserModuleOperation(userModuleOperation.getUser(), mo));
             }
@@ -174,7 +175,8 @@ public class AdministratorController extends SkeletonController {
         model.addAttribute(Constants.OPERATIONS, Util.removeDuplicateOperations(list));
         model.addAttribute(Constants.LIST, list);
         model.addAttribute(Constants.TEMPLATES, dictionaryRepository.getDictionariesByDictionaryType_Attr1("template"));
-        model.addAttribute(Constants.TEMPLATE_MODULE_OPERATIONS, templateModuleOperationRepository.findAllByTemplate_Id(templateModuleOperation.getTemplate().getId()));
+        Dictionary template = templateModuleOperation.getTemplate();
+        model.addAttribute(Constants.TEMPLATE_MODULE_OPERATIONS, templateModuleOperationRepository.findAllByTemplate_Id(template!=null?template.getId():0));
         return "layout";
     }
 
@@ -198,8 +200,9 @@ public class AdministratorController extends SkeletonController {
     @PostMapping(value = "/template-module-operation")
     public String postTemplateModuleOperation(Model model, @ModelAttribute(Constants.FORM) @Validated TemplateModuleOperation templateModuleOperation, BindingResult binding) throws Exception {
         model.addAttribute(Constants.FORM, templateModuleOperation);
-        List<TemplateModuleOperation> templateModuleOperations = templateModuleOperationRepository.findAllByTemplate_Id(templateModuleOperation.getTemplate().getId());
-        if(!binding.hasErrors()){
+        Dictionary template = templateModuleOperation.getTemplate();
+        List<TemplateModuleOperation> templateModuleOperations = templateModuleOperationRepository.findAllByTemplate_Id(template!=null?template.getId():0);
+        if(!binding.hasErrors() && template!=null){
             templateModuleOperationRepository.deleteInBatch(templateModuleOperations);
             for (ModuleOperation mo: templateModuleOperation.getModuleOperations()){
                 mo.setModuleOperations(null);
