@@ -8,11 +8,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class Status {
-    private int moduleOperationId;
-    private boolean checked;
+    private Object object;
+    private boolean status;
 
-    public Status(int moduleOperationId, boolean checked) {
-        this.moduleOperationId = moduleOperationId;
-        this.checked = checked;
+    public Status(Object object, boolean status) {
+        this.object = object;
+        this.status = status;
     }
 }

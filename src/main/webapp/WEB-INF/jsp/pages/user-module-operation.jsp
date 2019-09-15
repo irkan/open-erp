@@ -73,13 +73,13 @@
                                                         <td class="text-center">
                                                             <c:set var="status" value="${ua:checkAccess(list, user_module_operations, template_module_operations, m.id, o.id)}"/>
                                                             <c:choose>
-                                                                <c:when test="${status.moduleOperationId ne 0}">
+                                                                <c:when test="${status.object ne 0 && not empty status.object}">
                                                                     <c:choose>
-                                                                        <c:when test="${status.checked}">
-                                                                            <form:checkbox path="moduleOperations" value="${status.moduleOperationId}" checked="checked"/>
+                                                                        <c:when test="${status.status}">
+                                                                            <form:checkbox path="moduleOperations" value="${status.object}" checked="checked"/>
                                                                         </c:when>
                                                                         <c:otherwise>
-                                                                            <form:checkbox path="moduleOperations" value="${status.moduleOperationId}"/>
+                                                                            <form:checkbox path="moduleOperations" value="${status.object}"/>
                                                                         </c:otherwise>
                                                                     </c:choose>
                                                                 </c:when>

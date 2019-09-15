@@ -12,7 +12,7 @@ import java.util.List;
 
 public class UserAccess {
 
-    public static Status checkAccess(Object moduleOperationObject, Object userModuleOperationObject, Object templateModuleOperationObject, int moduleId, int operationId) throws JsonGenerationException, JsonMappingException, IOException {
+    public static Status checkAccess(Object moduleOperationObject, Object userModuleOperationObject, Object templateModuleOperationObject, int moduleId, int operationId) throws Exception {
         List<UserModuleOperation> userModuleOperations = (List<UserModuleOperation>) userModuleOperationObject;
         List<TemplateModuleOperation> templateModuleOperations = (List<TemplateModuleOperation>) templateModuleOperationObject;
         List<ModuleOperation> moduleOperations = (List<ModuleOperation>) moduleOperationObject;
@@ -36,5 +36,18 @@ public class UserAccess {
             }
         }
         return new Status(0, false);
+    }
+
+    public static Status checkOperation(Object object, String module, String operation) throws Exception {
+        List<UserModuleOperation> userModuleOperations = (List<UserModuleOperation>) object;
+        for(UserModuleOperation mo: userModuleOperations){
+            if(mo!=null && mo.getModuleOperation()!=null &&
+                    mo.getModuleOperation().getModule()!=null && mo.getModuleOperation().getOperation()!=null &&
+                    mo.getModuleOperation().getModule().getPath().equalsIgnoreCase(module) &&
+                    mo.getModuleOperation().getOperation().getPath().equalsIgnoreCase(operation)){
+                return new Status(mo.getModuleOperation().getOperation(), true);
+            }
+        }
+        return new Status(null, false);
     }
 }
