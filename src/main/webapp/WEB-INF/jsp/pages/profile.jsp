@@ -40,11 +40,11 @@
                             <div class="kt-widget__content">
                                 <div class="kt-widget__info">
                                     <span class="kt-widget__label">Email:</span>
-                                    <a href="#" class="kt-widget__data"><c:out value="${sessionScope.user.employee.person.personContact.email}"/></a>
+                                    <a href="#" class="kt-widget__data"><c:out value="${sessionScope.user.employee.person.contact.email}"/></a>
                                 </div>
                                 <div class="kt-widget__info">
                                     <span class="kt-widget__label">Telefon:</span>
-                                    <a href="#" class="kt-widget__data"><c:out value="${sessionScope.user.employee.person.personContact.mobilePhone}"/></a>
+                                    <a href="#" class="kt-widget__data"><c:out value="${sessionScope.user.employee.person.contact.mobilePhone}"/></a>
                                 </div>
                                 <div class="kt-widget__info">
                                     <span class="kt-widget__label">İş yeri:</span>

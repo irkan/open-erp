@@ -23,25 +23,25 @@
                                     <ul>
                                         <c:forEach var="t" items="${list}" varStatus="loop">
                                             <li data-jstree='{ "opened" : true }'>
-                                                <a href="javascript:show('dataaaa');"><c:out value="${t.name}" /> <%--${uj:toJson(t)}--%></a>
+                                                <a href="javascript:show('<c:out value="${uj:toJson(t)}" />');"><c:out value="${t.name}" /></a>
                                                 <c:choose>
                                                     <c:when test="${not empty t.children}">
                                                     <ul>
                                                         <c:forEach var="p" items="${t.children}" varStatus="loop">
                                                             <li data-jstree='{ "opened" : true }'>
-                                                                <c:out value="${p.name}" />
+                                                                <a href="javascript:show('<c:out value="${uj:toJson(p)}" />');"><c:out value="${p.name}" /></a>
                                                                 <c:choose>
                                                                     <c:when test="${not empty p.children}">
                                                                         <ul>
                                                                             <c:forEach var="f" items="${p.children}" varStatus="loop">
                                                                                 <li data-jstree='{ "opened" : true }'>
-                                                                                    <c:out value="${f.name}" />
+                                                                                    <a href="javascript:show('<c:out value="${uj:toJson(f)}" />');"><c:out value="${f.name}" /></a>
                                                                                     <c:choose>
                                                                                         <c:when test="${not empty f.children}">
                                                                                             <ul>
                                                                                                 <c:forEach var="m" items="${f.children}" varStatus="loop">
                                                                                                     <li data-jstree='{ "opened" : true }'>
-                                                                                                        <c:out value="${m.name}" />
+                                                                                                        <a href="javascript:show('<c:out value="${uj:toJson(m)}" />');"><c:out value="${m.name}" /></a>
                                                                                                     </li>
                                                                                                 </c:forEach>
                                                                                             </ul>
@@ -109,41 +109,41 @@
                     </div>
                     <hr width="100%" />
                     <div class="form-group">
-                        <form:label path="organizationContact.email">Email</form:label>
-                        <form:input path="organizationContact.email" cssClass="form-control" placeholder="example@example.com"/>
-                        <form:errors path="organizationContact.email" cssClass="control-label alert alert-danger" />
+                        <form:label path="contact.email">Email</form:label>
+                        <form:input path="contact.email" cssClass="form-control" placeholder="example@example.com"/>
+                        <form:errors path="contact.email" cssClass="control-label alert alert-danger" />
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <form:label path="organizationContact.mobilePhone">Mobil nömrə</form:label>
-                                <form:input path="organizationContact.mobilePhone" cssClass="form-control" placeholder="505505050"/>
-                                <form:errors path="organizationContact.mobilePhone" cssClass="control-label alert alert-danger" />
+                                <form:label path="contact.mobilePhone">Mobil nömrə</form:label>
+                                <form:input path="contact.mobilePhone" cssClass="form-control" placeholder="505505050"/>
+                                <form:errors path="contact.mobilePhone" cssClass="control-label alert alert-danger" />
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <form:label path="organizationContact.homePhone">Şəhər nömrəsi</form:label>
-                                <form:input path="organizationContact.homePhone" cssClass="form-control" placeholder="125505050"/>
-                                <form:errors path="organizationContact.homePhone" cssClass="control-label alert alert-danger" />
+                                <form:label path="contact.homePhone">Şəhər nömrəsi</form:label>
+                                <form:input path="contact.homePhone" cssClass="form-control" placeholder="125505050"/>
+                                <form:errors path="contact.homePhone" cssClass="control-label alert alert-danger" />
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <form:label path="organizationContact.city">Şəhər/Rayon</form:label>
-                                <form:select  path="organizationContact.city" cssClass="custom-select form-control">
+                                <form:label path="contact.city">Şəhər/Rayon</form:label>
+                                <form:select  path="contact.city" cssClass="custom-select form-control">
                                     <form:options items="${cities}" itemLabel="name" itemValue="id" />
                                 </form:select>
-                                <form:errors path="organizationContact.city" cssClass="control-label alert alert-danger" />
+                                <form:errors path="contact.city" cssClass="control-label alert alert-danger" />
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <form:label path="organizationContact.address">Ünvan</form:label>
-                                <form:input path="organizationContact.address" cssClass="form-control" placeholder="Küçə adı, ev nömrəsi və s."/>
-                                <form:errors path="organizationContact.address" cssClass="control-label alert alert-danger" />
+                                <form:label path="contact.address">Ünvan</form:label>
+                                <form:input path="contact.address" cssClass="form-control" placeholder="Küçə adı, ev nömrəsi və s."/>
+                                <form:errors path="contact.address" cssClass="control-label alert alert-danger" />
                             </div>
                         </div>
                     </div>
@@ -161,8 +161,8 @@
 <script src="<c:url value="/assets/js/demo4/pages/components/extended/treeview.js" />" type="text/javascript"></script>
 <script>
     function show(data){
-        var json = {"id":3,"name":"Baş ofis","description":"Baş ofis","createdDate":1567875963000,"active":true};
-        var d = JSON.stringify(json, null, 2)
+        let json = data;
+        let d = JSON.stringify(json, null, 2);
         alert(data);
         alert(d);
         console.log(d);

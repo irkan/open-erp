@@ -29,6 +29,7 @@ public class Constants {
     public static final String ERROR = "error";
     public static final String MESSAGE = "message";
     public static final String PROFILE_SUB_PAGE = "profile_sub_page";
+    public static final String ERRORS = "errors";
 
     public static final class ROUTE{
         public static final String MODULE = "module";

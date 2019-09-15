@@ -43,20 +43,27 @@
                             <div class="form-group row">
                                 <form:label path="oldPassword" cssClass="col-xl-3 col-lg-3 col-form-label">Hazırkı şifrə</form:label>
                                 <div class="col-lg-9 col-xl-6">
-                                    <form:input path="oldPassword" cssClass="form-control" placeholder="Hazırki şifrənizi daxil edin" />
-                                    <a href="#" class="kt-link kt-font-sm kt-font-bold kt-margin-t-5">Şifrəni unutmusunuzsa adminstratora müraciət edin</a>
+                                    <form:password path="oldPassword" cssClass="form-control" placeholder="Hazırki şifrənizi daxil edin" />
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                             <form:errors path="oldPassword" cssClass="control-label alert-danger"/>
+                                        </div>
+                                        <div class="col-md-6 text-right">
+                                            <a href="#" class="kt-link kt-font-sm kt-font-bold kt-margin-t-5">Şifrəni unutmusunuzsa adminstratora müraciət edin</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <form:label path="newPassword" cssClass="col-xl-3 col-lg-3 col-form-label">Yeni şifrə</form:label>
                                 <div class="col-lg-9 col-xl-6">
-                                    <form:input path="newPassword" cssClass="form-control" value="" placeholder="Yeni şifrənizi daxil edin"/>
+                                    <form:password path="newPassword" cssClass="form-control" value="" placeholder="Yeni şifrənizi daxil edin"/>
                                 </div>
                             </div>
                             <div class="form-group form-group-last row">
                                 <form:label path="verifyPassword" cssClass="col-xl-3 col-lg-3 col-form-label">Şifrənin təkrarı</form:label>
                                 <div class="col-lg-9 col-xl-6">
-                                    <form:input path="verifyPassword" cssClass="form-control" value="" placeholder="Yeni şifrənizi təkrar daxil edin"/>
+                                    <form:password path="verifyPassword" cssClass="form-control" value="" placeholder="Yeni şifrənizi təkrar daxil edin"/>
                                 </div>
                             </div>
                         </div>

@@ -8,21 +8,17 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 
 @Entity
-@Table(name = "hr_person_contact")
+@Table(name = "common_contact")
 @Getter
 @Setter
 @NoArgsConstructor
-public class PersonContact {
+public class Contact {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "hr_sequence")
-    @SequenceGenerator(sequenceName = "aa_hr_sequence", allocationSize = 1, name = "hr_sequence")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "common_sequence")
+    @SequenceGenerator(sequenceName = "aa_common_sequence", allocationSize = 1, name = "common_sequence")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
-
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_person_id")
-    private Person person;
 
     @Column(name = "mobile_phone")
     private String mobilePhone;
@@ -41,8 +37,7 @@ public class PersonContact {
     @JoinColumn(name = "admin_dictionary_city_id")
     private Dictionary city;
 
-    public PersonContact(Person person, String mobilePhone, String homePhone, String email, String address, Dictionary city) {
-        this.person = person;
+    public Contact(String mobilePhone, String homePhone, String email, String address, Dictionary city) {
         this.mobilePhone = mobilePhone;
         this.homePhone = homePhone;
         this.email = email;

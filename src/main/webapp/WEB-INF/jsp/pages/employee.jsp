@@ -212,68 +212,68 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <form:label path="person.personContact.email">Email</form:label>
+                                <form:label path="person.contact.email">Email</form:label>
                                 <div class="input-group" >
-                                    <form:input path="person.personContact.email" cssClass="form-control" placeholder="example@example.com"/>
+                                    <form:input path="person.contact.email" cssClass="form-control" placeholder="example@example.com"/>
                                     <div class="input-group-append">
                                         <span class="input-group-text">
                                             <i class="la la-at"></i>
                                         </span>
                                     </div>
                                 </div>
-                                <form:errors path="person.personContact.email" cssClass="control-label alert-danger" />
+                                <form:errors path="person.contact.email" cssClass="control-label alert-danger" />
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <form:label path="person.personContact.mobilePhone">Mobil nömrə</form:label>
+                                <form:label path="person.contact.mobilePhone">Mobil nömrə</form:label>
                                 <div class="input-group" >
-                                    <form:input path="person.personContact.mobilePhone" cssClass="form-control" placeholder="505505550"/>
+                                    <form:input path="person.contact.mobilePhone" cssClass="form-control" placeholder="505505550"/>
                                     <div class="input-group-append">
                                         <span class="input-group-text">
                                             <i class="la la-phone"></i>
                                         </span>
                                     </div>
                                 </div>
-                                <form:errors path="person.personContact.mobilePhone" cssClass="control-label alert-danger" />
+                                <form:errors path="person.contact.mobilePhone" cssClass="control-label alert-danger" />
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <form:label path="person.personContact.homePhone">Şəhər nömrəsi</form:label>
+                                <form:label path="person.contact.homePhone">Şəhər nömrəsi</form:label>
                                 <div class="input-group" >
-                                    <form:input path="person.personContact.homePhone" cssClass="form-control" placeholder="124555050"/>
+                                    <form:input path="person.contact.homePhone" cssClass="form-control" placeholder="124555050"/>
                                     <div class="input-group-append">
                                         <span class="input-group-text">
                                             <i class="la la-phone"></i>
                                         </span>
                                     </div>
                                 </div>
-                                <form:errors path="person.personContact.homePhone" cssClass="control-label alert-danger" />
+                                <form:errors path="person.contact.homePhone" cssClass="control-label alert-danger" />
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <form:label path="person.personContact.city">Şəhər</form:label>
-                                <form:select  path="person.personContact.city" cssClass="custom-select form-control">
+                                <form:label path="person.contact.city">Şəhər</form:label>
+                                <form:select  path="person.contact.city" cssClass="custom-select form-control">
                                     <form:options items="${cities}" itemLabel="name" itemValue="id" />
                                 </form:select>
                             </div>
                         </div>
                         <div class="col-md-8">
                             <div class="form-group">
-                                <form:label path="person.personContact.address">Ünvan</form:label>
+                                <form:label path="person.contact.address">Ünvan</form:label>
                                 <div class="input-group" >
                                     <div class="input-group-append">
                                         <span class="input-group-text">
                                             <i class="la la-street-view"></i>
                                         </span>
                                     </div>
-                                    <form:input path="person.personContact.address" cssClass="form-control" placeholder="Küçə adı, ev nömrəsi və s."/>
+                                    <form:input path="person.contact.address" cssClass="form-control" placeholder="Küçə adı, ev nömrəsi və s."/>
                                 </div>
-                                <form:errors path="person.personContact.address" cssClass="control-label alert-danger" />
+                                <form:errors path="person.contact.address" cssClass="control-label alert-danger" />
                             </div>
                         </div>
                     </div>

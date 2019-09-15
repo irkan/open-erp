@@ -64,8 +64,9 @@ public class Person {
     @OneToOne(mappedBy = "person", cascade=CascadeType.ALL)
     private Employee employee;
 
-    @OneToOne(mappedBy = "person", cascade=CascadeType.ALL)
-    private PersonContact personContact;
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "common_contact_id")
+    private Contact contact;
 
     @JsonIgnore
     @OneToMany(mappedBy = "person")
@@ -75,7 +76,8 @@ public class Person {
         return firstName+" "+lastName+" "+fatherName;
     }
 
-    public Person(String firstName, String lastName, String fatherName, Date birthday, Dictionary gender, Dictionary nationality, String idCardPinCode, User createdUser) {
+    public Person(Contact contact, String firstName, String lastName, String fatherName, Date birthday, Dictionary gender, Dictionary nationality, String idCardPinCode, User createdUser) {
+        this.contact = contact;
         this.firstName = firstName;
         this.lastName = lastName;
         this.fatherName = fatherName;

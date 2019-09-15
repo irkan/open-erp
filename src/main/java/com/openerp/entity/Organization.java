@@ -1,6 +1,8 @@
 package com.openerp.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -44,15 +46,12 @@ public class Organization implements Serializable {
     @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="organization")
     private List<Organization> children;
 
-   /* @JsonIgnore
-    @OneToOne(mappedBy = "organization")
-    private Employee employee;*/
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "common_contact_id")
+    private Contact contact;
 
-    @JsonIgnore
-    @OneToOne(mappedBy = "organization", cascade=CascadeType.ALL)
-    private OrganizationContact organizationContact;
-
-    public Organization(String name, String description, Organization organization) {
+    public Organization(Contact contact, String name, String description, Organization organization) {
+        this.contact = contact;
         this.name = name;
         this.description = description;
         this.organization = organization;

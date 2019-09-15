@@ -47,10 +47,7 @@ public class HRController extends SkeletonController {
     @PostMapping(value = "/organization")
     public String postUser(Model model, @ModelAttribute(Constants.FORM) @Validated Organization organization, BindingResult binding) throws Exception {
         if(!binding.hasErrors()){
-            OrganizationContact organizationContact = organization.getOrganizationContact();
             organizationRepository.save(organization);
-            organizationContact.setOrganization(organization);
-            organizationContactRepository.save(organizationContact);
             model.addAttribute(Constants.FORM, new Organization());
         } else {
             model.addAttribute(Constants.FORM, organization);
@@ -66,9 +63,6 @@ public class HRController extends SkeletonController {
         if(!binding.hasErrors()){
             Person person = employee.getPerson();
             personRepository.save(person);
-            PersonContact personContact = person.getPersonContact();
-            personContact.setPerson(person);
-            personContactRepository.save(personContact);
             employee.setPerson(person);
             employeeRepository.save(employee);
             model.addAttribute(Constants.FORM, new Employee());

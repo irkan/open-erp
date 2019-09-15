@@ -13,6 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class ProfileController extends SkeletonController {
     }
 
     @PostMapping(value = "/change-password")
-    public String postChangePassword(Model model, @ModelAttribute(Constants.FORM) @Validated ChangePassword changePassword,
+    public String postChangePassword(Model model, @ModelAttribute(Constants.FORM) @Valid ChangePassword changePassword,
                                     BindingResult binding) throws Exception {
         if(!binding.hasErrors()){
             User user = getSessionUser();
@@ -47,11 +48,10 @@ public class ProfileController extends SkeletonController {
                 user.setPassword(DigestUtils.md5DigestAsHex(changePassword.getNewPassword().getBytes()));
                 userRepository.save(user);
                 model.addAttribute(Constants.FORM, new ChangePassword());
+                return "layout";
             }
-        } else {
-            model.addAttribute(Constants.FORM, changePassword);
         }
-
+        model.addAttribute(Constants.FORM, changePassword);
         return "layout";
     }
 }

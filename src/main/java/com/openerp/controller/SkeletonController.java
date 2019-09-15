@@ -33,13 +33,10 @@ public class SkeletonController {
     PersonRepository personRepository;
 
     @Autowired
-    PersonContactRepository personContactRepository;
+    ContactRepository contactRepository;
 
     @Autowired
     OrganizationRepository organizationRepository;
-
-    @Autowired
-    OrganizationContactRepository organizationContactRepository;
 
     @Autowired
     UserModuleOperationRepository userModuleOperationRepository;
