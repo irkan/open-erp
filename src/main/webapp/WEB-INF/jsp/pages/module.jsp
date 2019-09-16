@@ -10,7 +10,7 @@
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="ua" uri="/WEB-INF/tld/UserAccess.tld"%>
-
+<%@ taglib prefix="uj" uri="/WEB-INF/tld/UtilJson.tld"%>
 <div class="kt-container  kt-grid__item kt-grid__item--fluid">
     <div class="kt-portlet kt-portlet--mobile">
         <div class="kt-portlet__body">
@@ -39,7 +39,7 @@
             <td><c:out value="${t.path}" /></td>
             <c:choose>
                 <c:when test="${not empty t.icon}">
-                    <td><c:out value="${t.icon.name}" /></td>
+                    <td><i class="<c:out value="${t.icon.name}"/>"></i> <c:out value="${t.icon.name}" /></td>
                 </c:when>
                 <c:otherwise>
                     <td></td>
@@ -67,7 +67,7 @@
                 <c:set var="edit" value="${ua:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
                 <c:choose>
                     <c:when test="${edit.status}">
-                        <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                        <a href="javascript:console.log('<c:out value="${uj:toJson(t)}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
                             <i class="la <c:out value="${edit.object.icon.name}"/>"></i>
                         </a>
                     </c:when>
@@ -80,20 +80,6 @@
                         </a>
                     </c:when>
                 </c:choose>
-                <%--<c:choose>
-                    <c:when test="${ua:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}">
-                        <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Redaktə">
-                            <i class="la la-edit"></i>
-                        </a>
-                    </c:when>
-                </c:choose>
-                <c:choose>
-                    <c:when test="${ua:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}">
-                        <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Silmək">
-                            <i class="la la-trash"></i>
-                        </a>
-                    </c:when>
-                </c:choose>--%>
             </td>
         </tr>
     </c:forEach>
@@ -109,7 +95,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="modal-create-new" tabindex="-1" role="dialog">
+<div class="modal fade" id="modal-operation" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -120,6 +106,13 @@
             </div>
             <div class="modal-body">
                 <form:form modelAttribute="form" method="post" action="/admin/module" cssClass="form-group">
+                    <div class="form-group">
+                        <form:label path="module">Üst modul</form:label>
+                        <form:select  path="module" cssClass="custom-select form-control">
+                            <form:option value=""/>
+                            <form:options items="${parents}" itemLabel="name" itemValue="id" />
+                        </form:select>
+                    </div>
                     <div class="form-group">
                         <form:label path="name">Ad</form:label>
                         <form:input path="name" type="text" cssClass="form-control" placeholder="Modulun adını daxil edin" />
@@ -138,14 +131,7 @@
                             <form:options items="${icons}" itemLabel="name" itemValue="id" />
                         </form:select>
                     </div>
-                    <div class="form-group">
-                        <form:label path="module">Ana modul</form:label>
-                        <form:select  path="module" cssClass="custom-select form-control">
-                            <form:options items="${parents}" itemLabel="name" itemValue="id" />
-                        </form:select>
-                    </div>
                 </form:form>
-
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" onclick="$('#form').submit()">Yadda saxla</button>

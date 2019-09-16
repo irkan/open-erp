@@ -1,5 +1,7 @@
 package com.openerp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,42 +32,6 @@ public class Dictionary {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="admin_dictionary_type_id", nullable = false)
     private DictionaryType dictionaryType;
-
-    /*@JsonIgnore
-    @OneToOne(mappedBy = "gender")
-    private Person gender;
-
-    @JsonIgnore
-    @OneToOne(mappedBy = "nationality")
-    private Person nationality;
-
-    @JsonIgnore
-    @OneToOne(mappedBy = "city")
-    private PersonContact city1;
-
-    @JsonIgnore
-    @OneToOne(mappedBy = "documentType")
-    private PersonDocument documentType;
-
-    @JsonIgnore
-    @OneToOne(mappedBy = "city")
-    private OrganizationContact city2;
-
-    @JsonIgnore
-    @OneToOne(mappedBy = "icon")
-    private Module icon1;
-
-    @JsonIgnore
-    @OneToOne(mappedBy = "icon")
-    private Operation icon2;
-
-    @JsonIgnore
-    @OneToOne(mappedBy = "icon")
-    private Organization icon3;
-
-    @JsonIgnore
-    @OneToOne(mappedBy = "position")
-    private Employee position;*/
 
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;

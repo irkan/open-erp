@@ -9,6 +9,8 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="uj" uri="/WEB-INF/tld/UtilJson.tld"%>
+<%@ taglib prefix="ua" uri="/WEB-INF/tld/UserAccess.tld"%>
 <div class="kt-container  kt-grid__item kt-grid__item--fluid">
     <div class="row">
 
@@ -51,20 +53,31 @@
                                                 </td>
                                             </c:otherwise>
                                         </c:choose>
-                                        <td nowrap>
-                <span class="dropdown">
-                    <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
-                      <i class="la la-ellipsis-h"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <a class="dropdown-item" href="#"><i class="la la-edit"></i> Edit Details</a>
-                        <a class="dropdown-item" href="#"><i class="la la-leaf"></i> Update Status</a>
-                        <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a>
-                    </div>
-                </span>
-                                            <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">
-                                                <i class="la la-edit"></i>
-                                            </a>
+                                        <td nowrap class="text-center">
+                                            <c:set var="view" value="${ua:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
+                                            <c:choose>
+                                                <c:when test="${view.status}">
+                                                    <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
+                                                        <i class="la <c:out value="${view.object.icon.name}"/>"></i>
+                                                    </a>
+                                                </c:when>
+                                            </c:choose>
+                                            <c:set var="edit" value="${ua:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
+                                            <c:choose>
+                                                <c:when test="${edit.status}">
+                                                    <a href="javascript:edit($('#form'), '<c:out value="${uj:toJson(t)}" />', 'modal-operation');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                                                        <i class="la <c:out value="${edit.object.icon.name}"/>"></i>
+                                                    </a>
+                                                </c:when>
+                                            </c:choose>
+                                            <c:set var="delete" value="${ua:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
+                                            <c:choose>
+                                                <c:when test="${delete.status}">
+                                                    <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
+                                                        <i class="la <c:out value="${delete.object.icon.name}"/>"></i>
+                                                    </a>
+                                                </c:when>
+                                            </c:choose>
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -82,7 +95,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="modal-create-new" tabindex="-1" role="dialog">
+<div class="modal fade" id="modal-operation" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -122,5 +135,7 @@
         </div>
     </div>
 </div>
+
+
 
 

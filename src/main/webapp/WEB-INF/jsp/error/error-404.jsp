@@ -26,10 +26,10 @@
          style="background-image: url(<c:url value="/assets/media/error/bg6.jpg" />);">
         <div class="kt-error_container">
             <div class="kt-error_subtitle kt-font-light">
-                <h1>Xəta baş verdi...</h1>
+                <h1>Səhifə tapılmadı...</h1>
             </div>
             <p class="kt-error_description kt-font-light">
-                Məlumat tapılmadı
+                Sistem inzibatçısı ilə əlaqə saxlayın!
             </p>
         </div>
     </div>

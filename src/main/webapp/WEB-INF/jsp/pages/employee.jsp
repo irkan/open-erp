@@ -10,6 +10,7 @@
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="uj" uri="/WEB-INF/tld/UtilJson.tld"%>
+<%@ taglib prefix="ua" uri="/WEB-INF/tld/UserAccess.tld"%>
 <div class="kt-container  kt-grid__item kt-grid__item--fluid">
     <div class="row">
         <div class="col-lg-12">
@@ -54,11 +55,28 @@
                     </td>
                 </c:otherwise>
             </c:choose>
-            <td nowrap>
+            <td nowrap class="text-center">
+                <c:set var="view" value="${ua:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
                 <c:choose>
-                    <c:when test="${ua:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}">
-                        <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Redaktə">
-                            <i class="la la-edit"></i>
+                    <c:when test="${view.status}">
+                        <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
+                            <i class="la <c:out value="${view.object.icon.name}"/>"></i>
+                        </a>
+                    </c:when>
+                </c:choose>
+                <c:set var="edit" value="${ua:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
+                <c:choose>
+                    <c:when test="${edit.status}">
+                        <a href="javascript:edit($('#form'), '<c:out value="${uj:toJson(t)}" />', 'modal-operation');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                            <i class="la <c:out value="${edit.object.icon.name}"/>"></i>
+                        </a>
+                    </c:when>
+                </c:choose>
+                <c:set var="delete" value="${ua:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
+                <c:choose>
+                    <c:when test="${delete.status}">
+                        <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
+                            <i class="la <c:out value="${delete.object.icon.name}"/>"></i>
                         </a>
                     </c:when>
                 </c:choose>
@@ -80,7 +98,7 @@
 </div>
 
 
-<div class="modal fade" id="modal-create-new" tabindex="-1" role="dialog">
+<div class="modal fade" id="modal-operation" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">

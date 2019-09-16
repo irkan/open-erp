@@ -41,6 +41,23 @@
     <i class="fa fa-arrow-up"></i>
 </div>
 
+<script>
+    function edit(form, data, modal){
+        var obj = jQuery.parseJSON(data);
+        $.each( $(form).find("input,select,textarea"), function( key, element ) {
+            let tagName = $(element).prop("tagName");
+            let name = $(element).attr("name");
+            console.log( key + " : " + $(element).attr("name") + " : " + $(element).attr("type") + " : " + $(element).prop("tagName"));
+            if(tagName.toLowerCase()==="input" && $(element).attr("type")!=="checkbox" && $(element).attr("type")!=="radio"){
+                $(element).val(obj[name]);
+            } else if(tagName.toLowerCase()==="select"){
+                $("#"+$(element).attr("id")+" option[value="+obj[name]['id']+"]").attr("selected", "selected");
+            }
+        });
+        $('#' + modal).modal('toggle');
+    }
+</script>
+
 
 </body>
 </html>

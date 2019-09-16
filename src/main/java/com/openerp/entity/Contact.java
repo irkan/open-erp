@@ -1,5 +1,6 @@
 package com.openerp.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,22 +18,28 @@ public class Contact {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "common_sequence")
     @SequenceGenerator(sequenceName = "aa_common_sequence", allocationSize = 1, name = "common_sequence")
+    @JsonProperty("id_input")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
+    @JsonProperty("mobilePhone_input")
     @Column(name = "mobile_phone")
     private String mobilePhone;
 
+    @JsonProperty("homePhone_input")
     @Column(name = "home_phone")
     private String homePhone;
 
     @Email(message = "Doğru email ünvan daxil edin")
+    @JsonProperty("email_input")
     @Column(name = "email")
     private String email;
 
+    @JsonProperty("address_input")
     @Column(name = "address")
     private String address;
 
+    @JsonProperty("city_select")
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "admin_dictionary_city_id")
     private Dictionary city;
