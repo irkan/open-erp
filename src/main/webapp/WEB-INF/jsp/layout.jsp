@@ -43,6 +43,7 @@
 
 <script>
     function edit(form, data, modal){
+        console.log(data);
         var obj = jQuery.parseJSON(data);
         $.each( $(form).find("input,select,textarea"), function( key, element ) {
             let tagName = $(element).prop("tagName");
