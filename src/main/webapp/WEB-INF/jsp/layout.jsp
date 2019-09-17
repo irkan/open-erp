@@ -43,16 +43,34 @@
 
 <script>
     function edit(form, data, modal){
-        console.log(data);
         var obj = jQuery.parseJSON(data);
         $.each( $(form).find("input,select,textarea"), function( key, element ) {
             let tagName = $(element).prop("tagName");
-            let name = $(element).attr("name");
+            let name = $(element).attr("name").split(".");
+            let value;
+            if(name.length===1){
+                value = obj[name[0]];
+            } else if(name.length===2){
+                value = obj[name[0]][name[1]];
+            } else if(name.length===3){
+                value = obj[name[0]][name[1]][name[2]];
+            } else if(name.length===4){
+                value = obj[name[0]][name[1]][name[2]][name[3]];
+            }
+
             console.log( key + " : " + $(element).attr("name") + " : " + $(element).attr("type") + " : " + $(element).prop("tagName"));
-            if(tagName.toLowerCase()==="input" && $(element).attr("type")!=="checkbox" && $(element).attr("type")!=="radio"){
-                $(element).val(obj[name]);
+            if(tagName.toLowerCase()==="input"){
+                if($(element).attr("type")==="checkbox"){
+
+                } else if($(element).attr("type")==="radio"){
+
+                } else {
+                    $(element).val(value);
+                }
+            } else if(tagName.toLowerCase()==="textarea"){
+                    $(element).val(value);
             } else if(tagName.toLowerCase()==="select"){
-                $("#"+$(element).attr("id")+" option[value="+obj[name]['id']+"]").attr("selected", "selected");
+                $("#"+$(element).attr("id")+" option[value="+value.id+"]").attr("selected", "selected");
             }
         });
         $('#' + modal).modal('toggle');
