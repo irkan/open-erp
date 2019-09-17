@@ -52,7 +52,7 @@
             let name = $(element).attr("name").split(".");
             let value;
             if(name.length===1){
-                value = obj[$(element).attr("name")];
+                value = obj[name[0]];
             } else if(name.length===2){
                 value = obj[name[0]][name[1]];
             } else if(name.length===3){
