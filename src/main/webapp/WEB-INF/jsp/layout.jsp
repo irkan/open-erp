@@ -44,6 +44,11 @@
     <i class="fa fa-arrow-up"></i>
 </div>
 
+<form id="delete-form" method="delete">
+    <input type="hidden" name="deletedId" id="deletedId">
+    <input type="hidden" name="returnPage" id="returnPage">
+</form>
+
 <script>
     function edit(form, data, modal, modal_title){
         var obj = jQuery.parseJSON(data);
@@ -76,6 +81,28 @@
         });
         $('#' + modal).find(".modal-title").html(modal_title);
         $('#' + modal).modal('toggle');
+    }
+
+    function deleteData(id){
+        $("#deletedId").val(id);
+        $("#returnPage").val('<c:out value="${page}"/>');
+
+        swal({
+            title: "Are you sure?",
+            text: "Once deleted, you will not be able to recover this imaginary file!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    swal("Poof! Your imaginary file has been deleted!", {
+                        icon: "success",
+                    });
+                } else {
+                    swal("Your imaginary file is safe!");
+                }
+            });
     }
 </script>
 
