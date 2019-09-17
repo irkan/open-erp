@@ -51,11 +51,8 @@
             let tagName = $(element).prop("tagName");
             let name = $(element).attr("name").split(".");
             let value;
-            console.log(obj[name[0]])
-            console.log(obj[name[0]][name[1]])
-
             if(name.length===1){
-                value = obj[name[0]];
+                value = obj[$(element).attr("name")];
             } else if(name.length===2){
                 value = obj[name[0]][name[1]];
             } else if(name.length===3){
