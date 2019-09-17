@@ -10,6 +10,8 @@
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="uj" uri="/WEB-INF/tld/UtilJson.tld"%>
+<%@ taglib prefix="ua" uri="/WEB-INF/tld/UserAccess.tld"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <link href="<c:url value="/assets/vendors/custom/jstree/jstree.bundle.css" />" rel="stylesheet" type="text/css" />
 <div class="kt-container  kt-grid__item kt-grid__item--fluid">
     <div class="row">

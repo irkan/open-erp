@@ -9,8 +9,9 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="ua" uri="/WEB-INF/tld/UserAccess.tld"%>
 <%@ taglib prefix="uj" uri="/WEB-INF/tld/UtilJson.tld"%>
+<%@ taglib prefix="ua" uri="/WEB-INF/tld/UserAccess.tld"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <div class="kt-container  kt-grid__item kt-grid__item--fluid">
     <div class="kt-portlet kt-portlet--mobile">
         <div class="kt-portlet__body">
@@ -54,7 +55,7 @@
                 <c:set var="edit" value="${ua:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
                 <c:choose>
                     <c:when test="${edit.status}">
-                        <a href="javascript:console.log('<c:out value="${uj:toJson(t)}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                        <a href="javascript:edit($('#form'), '<c:out value="${uj:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
                             <i class="la <c:out value="${edit.object.icon.name}"/>"></i>
                         </a>
                     </c:when>
@@ -92,7 +93,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form:form modelAttribute="form" method="post" action="/admin/operation" cssClass="form-group">
+                <form:form modelAttribute="form" method="post" id="form" action="/admin/operation" cssClass="form-group">
                     <div class="form-group">
                         <form:label path="name">Ad</form:label>
                         <form:input path="name" type="text" cssClass="form-control" placeholder="Modulun adını daxil edin" />

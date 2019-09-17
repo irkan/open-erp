@@ -22,24 +22,19 @@ public class Organization implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO, generator = "hr_sequence")
     @SequenceGenerator(sequenceName = "aa_hr_sequence", allocationSize = 1, name = "hr_sequence")
-    @JsonProperty("id_input")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
-    @JsonProperty("name_input")
     @Column(name = "name", nullable = false)
     private String name;
 
-    @JsonProperty("description_input")
     @Column(name = "description")
     private String description;
 
-    @JsonProperty("createdDate_input")
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_date", nullable = false)
     private Date createdDate = new Date();
 
-    @JsonProperty("active_input")
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;
 

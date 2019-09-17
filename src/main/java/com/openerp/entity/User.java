@@ -1,5 +1,6 @@
 package com.openerp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -48,10 +49,12 @@ public class User {
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<UserModuleOperation> userModuleOperations;
 
-    @OneToOne(mappedBy = "user", cascade=CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "admin_user_detail_id")
     private UserDetail userDetail;
 
     //@UniqueElements(message = "Bu istifadəçi adı mövcuddur")
@@ -60,12 +63,10 @@ public class User {
     @JoinColumn(name = "hr_employee_id", unique = true, nullable = false)
     private Employee employee;
 
-    @OneToOne(mappedBy = "createdUser")
-    private Person createdUser;
-
-    public User(String username, String password, Employee employee) {
+    public User(String username, String password, Employee employee, UserDetail userDetail) {
         this.username = username;
         this.password = password;
         this.employee = employee;
+        this.userDetail = userDetail;
     }
 }

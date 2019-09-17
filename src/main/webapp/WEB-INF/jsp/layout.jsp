@@ -1,7 +1,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<%@ taglib prefix="uj" uri="/WEB-INF/tld/UtilJson.tld"%>
+<%@ taglib prefix="ua" uri="/WEB-INF/tld/UserAccess.tld"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -42,12 +45,15 @@
 </div>
 
 <script>
-    function edit(form, data, modal){
+    function edit(form, data, modal, modal_title){
         var obj = jQuery.parseJSON(data);
         $.each( $(form).find("input,select,textarea"), function( key, element ) {
             let tagName = $(element).prop("tagName");
             let name = $(element).attr("name").split(".");
             let value;
+            console.log(obj[name[0]])
+            console.log(obj[name[0]][name[1]])
+
             if(name.length===1){
                 value = obj[name[0]];
             } else if(name.length===2){
@@ -57,22 +63,21 @@
             } else if(name.length===4){
                 value = obj[name[0]][name[1]][name[2]][name[3]];
             }
-
-            console.log( key + " : " + $(element).attr("name") + " : " + $(element).attr("type") + " : " + $(element).prop("tagName"));
             if(tagName.toLowerCase()==="input"){
                 if($(element).attr("type")==="checkbox"){
 
                 } else if($(element).attr("type")==="radio"){
-
+                    $("input[name='"+$(element).attr("name")+"'][value='"+value.id+"']").prop('checked', true);
                 } else {
                     $(element).val(value);
                 }
             } else if(tagName.toLowerCase()==="textarea"){
-                    $(element).val(value);
+                $(element).val(value);
             } else if(tagName.toLowerCase()==="select"){
                 $("#"+$(element).attr("id")+" option[value="+value.id+"]").attr("selected", "selected");
             }
         });
+        $('#' + modal).find(".modal-title").html(modal_title);
         $('#' + modal).modal('toggle');
     }
 </script>

@@ -256,6 +256,8 @@ public class DBConfiguration {
             Module subModule10 = new Module("İcazə şablonu", "İcazə şablonu", "template-module-operation", laUser, module);
             modules.add(subModule10);
 
+            moduleRepository.saveAll(modules);
+
             List<Operation> operations = new ArrayList<>();
             Operation view = new Operation("Baxış", "view", laEye);
             operations.add(view);
@@ -269,6 +271,8 @@ public class DBConfiguration {
             operations.add(export);
             Operation approve = new Operation("Təsdiq", "approve", laArchive);
             operations.add(approve);
+
+            operationRepository.saveAll(operations);
 
             List<ModuleOperation> moduleOperations = new ArrayList<>();
 
@@ -297,8 +301,6 @@ public class DBConfiguration {
             moduleOperations.add(editModuleOperation3);
             ModuleOperation editModuleOperation4 = new ModuleOperation(subModule4, edit, null);
             moduleOperations.add(editModuleOperation4);
-            ModuleOperation editModuleOperation5 = new ModuleOperation(subModule5, edit, null);
-            moduleOperations.add(editModuleOperation5);
             ModuleOperation editModuleOperation6 = new ModuleOperation(subModule6, edit, null);
             moduleOperations.add(editModuleOperation6);
             ModuleOperation editModuleOperation7 = new ModuleOperation(subModule7, edit, null);
@@ -361,6 +363,8 @@ public class DBConfiguration {
             ModuleOperation exportModuleOperation8 = new ModuleOperation(subModule8, export, null);
             moduleOperations.add(exportModuleOperation8);
 
+            moduleOperationRepository.saveAll(moduleOperations);
+
             Contact contact1 = new Contact("502535110", null, "irkan.ehmedov@gmail.com", "Ü.Hacıbəyov 195A", baku);
             Person person = new Person(contact1, "İrkan", "Əhmədov", "Əflatun", DateUtility.getUtilDate("25.09.1989"), male, azerbaijanNationality, "4HWL0AM", null);
             personRepository.save(person);
@@ -390,8 +394,10 @@ public class DBConfiguration {
             Employee employee = new Employee(person, position1, new Date(), null, (double) 0, headBranch);
             employeeRepository.save(employee);
 
-            User user = new User(defaultAdminUsername, DigestUtils.md5DigestAsHex("admin".getBytes()), employee);
-            UserDetail userDetail = new UserDetail(user);
+            User user = new User(defaultAdminUsername, DigestUtils.md5DigestAsHex("admin".getBytes()), employee, new UserDetail());
+
+            userRepository.save(user);
+
             List<UserModuleOperation> userModuleOperations = new ArrayList<>();
 
             UserModuleOperation userCreateModuleOperation1 = new UserModuleOperation(user, createModuleOperation1);
@@ -419,8 +425,6 @@ public class DBConfiguration {
             userModuleOperations.add(userEditModuleOperation3);
             UserModuleOperation userEditModuleOperation4 = new UserModuleOperation(user, editModuleOperation4);
             userModuleOperations.add(userEditModuleOperation4);
-            UserModuleOperation userEditModuleOperation5 = new UserModuleOperation(user, editModuleOperation5);
-            userModuleOperations.add(userEditModuleOperation5);
             UserModuleOperation userEditModuleOperation6 = new UserModuleOperation(user, editModuleOperation6);
             userModuleOperations.add(userEditModuleOperation6);
             UserModuleOperation userEditModuleOperation7 = new UserModuleOperation(user, editModuleOperation7);
@@ -483,11 +487,6 @@ public class DBConfiguration {
             UserModuleOperation viewUserModuleOperation10 = new UserModuleOperation(user, viewModuleOperation10);
             userModuleOperations.add(viewUserModuleOperation10);
 
-            userRepository.save(user);
-            userDetailRepository.save(userDetail);
-            moduleRepository.saveAll(modules);
-            operationRepository.saveAll(operations);
-            moduleOperationRepository.saveAll(moduleOperations);
             userModuleOperationRepository.saveAll(userModuleOperations);
         } catch (Exception e){
             log.error(e);

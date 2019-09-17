@@ -9,8 +9,9 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="ua" uri="/WEB-INF/tld/UserAccess.tld"%>
 <%@ taglib prefix="uj" uri="/WEB-INF/tld/UtilJson.tld"%>
+<%@ taglib prefix="ua" uri="/WEB-INF/tld/UserAccess.tld"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <div class="kt-container  kt-grid__item kt-grid__item--fluid">
     <div class="kt-portlet kt-portlet--mobile">
         <div class="kt-portlet__body">
@@ -67,7 +68,7 @@
                 <c:set var="edit" value="${ua:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
                 <c:choose>
                     <c:when test="${edit.status}">
-                        <a href="javascript:console.log('<c:out value="${uj:toJson(t)}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                        <a href="javascript:edit($('#form'), '<c:out value="${uj:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
                             <i class="la <c:out value="${edit.object.icon.name}"/>"></i>
                         </a>
                     </c:when>
@@ -99,13 +100,13 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Yeni modul yarat</h5>
+                <h5 class="modal-title"></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form:form modelAttribute="form" method="post" action="/admin/module" cssClass="form-group">
+                <form:form modelAttribute="form" id="form" method="post" action="/admin/module" cssClass="form-group">
                     <div class="form-group">
                         <form:label path="module">Üst modul</form:label>
                         <form:select  path="module" cssClass="custom-select form-control">
@@ -119,11 +120,11 @@
                     </div>
                     <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>
-                        <form:input path="description" type="text" cssClass="form-control" placeholder="Modul açıqlamasını daxil edin"></form:input>
+                        <form:input path="description" type="text" cssClass="form-control" placeholder="Modul açıqlamasını daxil edin" />
                     </div>
                     <div class="form-group">
                         <form:label path="path">URL Path</form:label>
-                        <form:input path="path" type="text" cssClass="form-control" placeholder="Modul path daxil edin"></form:input>
+                        <form:input path="path" type="text" cssClass="form-control" placeholder="Modul path daxil edin" />
                     </div>
                     <div class="form-group">
                         <form:label path="icon">İkon</form:label>

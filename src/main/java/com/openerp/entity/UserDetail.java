@@ -25,16 +25,9 @@ public class UserDetail {
     @Column(name = "sms_notification", nullable = false, columnDefinition="boolean default true")
     private Boolean smsNotification = false;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_user_id")
-    private User user;
 
     public UserDetail(Boolean emailNotification, Boolean smsNotification) {
         this.emailNotification = emailNotification;
         this.smsNotification = smsNotification;
-    }
-
-    public UserDetail(User user) {
-        this.user = user;
     }
 }

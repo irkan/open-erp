@@ -11,6 +11,7 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="uj" uri="/WEB-INF/tld/UtilJson.tld"%>
 <%@ taglib prefix="ua" uri="/WEB-INF/tld/UserAccess.tld"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <div class="kt-container  kt-grid__item kt-grid__item--fluid">
     <div class="row">
         <div class="col-lg-12">
@@ -67,7 +68,7 @@
                 <c:set var="edit" value="${ua:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
                 <c:choose>
                     <c:when test="${edit.status}">
-                        <a href="javascript:edit($('#form'), '<c:out value="${uj:toJson(t)}" />', 'modal-operation');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                        <a href="javascript:edit($('#form'), '<c:out value="${uj:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
                             <i class="la <c:out value="${edit.object.icon.name}"/>"></i>
                         </a>
                     </c:when>
@@ -102,13 +103,13 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Yeni əməkdaş yarat</h5>
+                <h5 class="modal-title"></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form:form modelAttribute="form" method="post" action="/hr/employee" cssClass="form-group">
+                <form:form modelAttribute="form" id="form" method="post" action="/hr/employee" cssClass="form-group">
                     <form:input path="id" type="hidden"/>
                     <div class="row">
                         <div class="col-md-4">
@@ -149,17 +150,9 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <form:label path="person.gender">Cins</form:label>
-                                <div class="row" style="margin-top: 8px;">
-                                    <c:forEach var="t" items="${genders}" varStatus="loop">
-                                        <div class="col-md-6">
-                                            <label class="kt-radio kt-radio--brand">
-                                                <form:radiobutton path="person.gender"/> <c:out value="${t.name}" />
-                                                <span></span>
-                                            </label>
-                                        </div>
-                                    </c:forEach>
-                                </div>
+                                <fmt:parseNumber var = "grid" integerOnly = "true" type = "number" value = "${12/genders.size()}" />
+                                <form:label path="person.gender">Cins</form:label><br/>
+                                <form:radiobuttons items="${genders}" path="person.gender" itemLabel="name" itemValue="id"/>
                             </div>
                         </div>
                         <div class="col-md-4">

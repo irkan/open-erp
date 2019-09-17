@@ -45,4 +45,5 @@
 <link href="<c:url value="/assets/vendors/custom/vendors/flaticon2/flaticon.css" />" rel="stylesheet" type="text/css"/>
 <link href="<c:url value="/assets/vendors/general/@fortawesome/fontawesome-free/css/all.min.css" />" rel="stylesheet" type="text/css"/>
 <link href="<c:url value="/assets/css/demo4/style.bundle.css" />" rel="stylesheet" type="text/css"/>
+<link href="<c:url value="/assets/css/custom.css" />" rel="stylesheet" type="text/css"/>
 <link rel="shortcut icon" href="<c:url value="/assets/media/logos/logo_sual_32_T28_icon.ico" />"/>

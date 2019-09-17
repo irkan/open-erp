@@ -11,6 +11,7 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="uj" uri="/WEB-INF/tld/UtilJson.tld"%>
 <%@ taglib prefix="ua" uri="/WEB-INF/tld/UserAccess.tld"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <div class="kt-container  kt-grid__item kt-grid__item--fluid">
     <div class="row">
 
@@ -65,7 +66,7 @@
                                             <c:set var="edit" value="${ua:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
                                             <c:choose>
                                                 <c:when test="${edit.status}">
-                                                    <a href="javascript:edit($('#form'), '<c:out value="${uj:toJson(t)}" />', 'modal-operation');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                                                    <a href="javascript:edit($('#form'), '<c:out value="${uj:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
                                                         <i class="la <c:out value="${edit.object.icon.name}"/>"></i>
                                                     </a>
                                                 </c:when>
@@ -105,7 +106,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form:form modelAttribute="form" method="post" action="/admin/dictionary" cssClass="form-group">
+                <form:form modelAttribute="form" id="form" method="post" action="/admin/dictionary" cssClass="form-group">
                     <form:input type="hidden" path="id"/>
                     <form:input type="hidden" path="active" value="1"/>
                     <div class="form-group">

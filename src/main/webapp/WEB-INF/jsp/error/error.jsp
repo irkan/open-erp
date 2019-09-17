@@ -26,7 +26,7 @@
          style="background-image: url(<c:url value="/assets/media/error/bg6.jpg" />);">
         <div class="kt-error_container">
             <div class="kt-error_subtitle kt-font-light">
-                <h1>Xəta baş verdi...</h1>
+                <div style="font-size: 80px; font-weight: bold">Xəta baş verdi...</div>
             </div>
             <p class="kt-error_description kt-font-light">
                 Məlumat tapılmadı
