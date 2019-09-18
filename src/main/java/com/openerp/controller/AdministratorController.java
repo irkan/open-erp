@@ -32,12 +32,12 @@ public class AdministratorController extends SkeletonController {
         session.setAttribute(Constants.MODULE_DESCRIPTION, description);
 
         if (page.equalsIgnoreCase(Constants.ROUTE.MODULE)) {
-            model.addAttribute(Constants.ICONS, dictionaryRepository.getDictionariesByDictionaryType_Attr1("icon"));
+            model.addAttribute(Constants.ICONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("icon"));
             model.addAttribute(Constants.PARENTS, moduleRepository.findAllByModuleIsNull());
             model.addAttribute(Constants.LIST, moduleRepository.findAll());
             model.addAttribute(Constants.FORM, new Module());
         } else if (page.equalsIgnoreCase(Constants.ROUTE.OPERATION)){
-            model.addAttribute(Constants.ICONS, dictionaryRepository.getDictionariesByDictionaryType_Attr1("icon"));
+            model.addAttribute(Constants.ICONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("icon"));
             model.addAttribute(Constants.LIST, operationRepository.findAll());
             model.addAttribute(Constants.FORM, new Operation());
         } else if (page.equalsIgnoreCase(Constants.ROUTE.DICTIONARY)){
@@ -63,11 +63,11 @@ public class AdministratorController extends SkeletonController {
             model.addAttribute(Constants.MODULES, Util.removeDuplicateModules(list));
             model.addAttribute(Constants.OPERATIONS, Util.removeDuplicateOperations(list));
             model.addAttribute(Constants.LIST, list);
-            model.addAttribute(Constants.TEMPLATES, dictionaryRepository.getDictionariesByDictionaryType_Attr1("template"));
+            model.addAttribute(Constants.TEMPLATES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("template"));
             model.addAttribute(Constants.FORM, new UserModuleOperation());
         } else if (page.equalsIgnoreCase(Constants.ROUTE.TEMPLATE_MODULE_OPERATION)){
             List<ModuleOperation>  list = moduleOperationRepository.findAll();
-            model.addAttribute(Constants.TEMPLATES, dictionaryRepository.getDictionariesByDictionaryType_Attr1("template"));
+            model.addAttribute(Constants.TEMPLATES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("template"));
             model.addAttribute(Constants.MODULES, Util.removeDuplicateModules(list));
             model.addAttribute(Constants.OPERATIONS, Util.removeDuplicateOperations(list));
             model.addAttribute(Constants.LIST, list);
@@ -100,7 +100,7 @@ public class AdministratorController extends SkeletonController {
         } else {
             model.addAttribute(Constants.FORM, module);
         }
-        model.addAttribute(Constants.ICONS, dictionaryRepository.getDictionariesByDictionaryType_Attr1("icon"));
+        model.addAttribute(Constants.ICONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("icon"));
         model.addAttribute(Constants.PARENTS, moduleRepository.findAllByModuleIsNull());
         model.addAttribute(Constants.LIST, moduleRepository.findAll());
         return "layout";
@@ -161,7 +161,7 @@ public class AdministratorController extends SkeletonController {
         model.addAttribute(Constants.MODULES, Util.removeDuplicateModules(list));
         model.addAttribute(Constants.OPERATIONS, Util.removeDuplicateOperations(list));
         model.addAttribute(Constants.LIST, list);
-        model.addAttribute(Constants.TEMPLATES, dictionaryRepository.getDictionariesByDictionaryType_Attr1("template"));
+        model.addAttribute(Constants.TEMPLATES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("template"));
         model.addAttribute(Constants.TEMPLATE_MODULE_OPERATIONS, templateModuleOperationRepository.findAllByTemplate_Id(templateId));
         return "layout";
     }
@@ -174,7 +174,7 @@ public class AdministratorController extends SkeletonController {
         model.addAttribute(Constants.MODULES, Util.removeDuplicateModules(list));
         model.addAttribute(Constants.OPERATIONS, Util.removeDuplicateOperations(list));
         model.addAttribute(Constants.LIST, list);
-        model.addAttribute(Constants.TEMPLATES, dictionaryRepository.getDictionariesByDictionaryType_Attr1("template"));
+        model.addAttribute(Constants.TEMPLATES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("template"));
         Dictionary template = templateModuleOperation.getTemplate();
         model.addAttribute(Constants.TEMPLATE_MODULE_OPERATIONS, templateModuleOperationRepository.findAllByTemplate_Id(template!=null?template.getId():0));
         return "layout";
@@ -191,7 +191,7 @@ public class AdministratorController extends SkeletonController {
         model.addAttribute(Constants.OPERATIONS, Util.removeDuplicateOperations(list));
         model.addAttribute(Constants.LIST, list);
         model.addAttribute(Constants.TEMPLATE_ID, templateId);
-        model.addAttribute(Constants.TEMPLATES, dictionaryRepository.getDictionariesByDictionaryType_Attr1("template"));
+        model.addAttribute(Constants.TEMPLATES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("template"));
         model.addAttribute(Constants.TEMPLATE_MODULE_OPERATIONS, templateModuleOperationRepository.findAllByTemplate_Id(templateId));
         model.addAttribute(Constants.USER_MODULE_OPERATIONS,  userModuleOperationRepository.findAllByUser_Id(userId));
         return "layout";
@@ -215,7 +215,7 @@ public class AdministratorController extends SkeletonController {
         model.addAttribute(Constants.MODULES, Util.removeDuplicateModules(list));
         model.addAttribute(Constants.OPERATIONS, Util.removeDuplicateOperations(list));
         model.addAttribute(Constants.LIST, list);
-        model.addAttribute(Constants.TEMPLATES, dictionaryRepository.getDictionariesByDictionaryType_Attr1("template"));
+        model.addAttribute(Constants.TEMPLATES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("template"));
         model.addAttribute(Constants.TEMPLATE_MODULE_OPERATIONS, templateModuleOperations);
         return "layout";
     }

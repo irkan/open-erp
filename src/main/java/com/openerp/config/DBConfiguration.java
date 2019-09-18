@@ -117,7 +117,6 @@ public class DBConfiguration {
     @PostConstruct
     public void run() {
         try{
-
             List<DictionaryType> types = new ArrayList<>();
             DictionaryType genderType = new DictionaryType("Cins", "gender", null);
             types.add(genderType);
@@ -325,22 +324,10 @@ public class DBConfiguration {
             ModuleOperation deleteModuleOperation8 = new ModuleOperation(subModule8, delete, null);
             moduleOperations.add(deleteModuleOperation8);
 
-            ModuleOperation viewModuleOperation1 = new ModuleOperation(subModule1, view, null);
-            moduleOperations.add(viewModuleOperation1);
-            ModuleOperation viewModuleOperation2 = new ModuleOperation(subModule2, view, null);
-            moduleOperations.add(viewModuleOperation2);
-            ModuleOperation viewModuleOperation3 = new ModuleOperation(subModule3, view, null);
-            moduleOperations.add(viewModuleOperation3);
-            ModuleOperation viewModuleOperation4 = new ModuleOperation(subModule4, view, null);
-            moduleOperations.add(viewModuleOperation4);
-            ModuleOperation viewModuleOperation5 = new ModuleOperation(subModule5, view, null);
-            moduleOperations.add(viewModuleOperation5);
             ModuleOperation viewModuleOperation6 = new ModuleOperation(subModule6, view, null);
             moduleOperations.add(viewModuleOperation6);
             ModuleOperation viewModuleOperation7 = new ModuleOperation(subModule7, view, null);
             moduleOperations.add(viewModuleOperation7);
-            ModuleOperation viewModuleOperation8 = new ModuleOperation(subModule8, view, null);
-            moduleOperations.add(viewModuleOperation8);
             ModuleOperation viewModuleOperation9 = new ModuleOperation(subModule9, view, null);
             moduleOperations.add(viewModuleOperation9);
             ModuleOperation viewModuleOperation10 = new ModuleOperation(subModule10, view, null);
@@ -466,22 +453,10 @@ public class DBConfiguration {
             UserModuleOperation userExportModuleOperation8 = new UserModuleOperation(user, exportModuleOperation8);
             userModuleOperations.add(userExportModuleOperation8);
 
-            UserModuleOperation userViewModuleOperation1 = new UserModuleOperation(user, viewModuleOperation1);
-            userModuleOperations.add(userViewModuleOperation1);
-            UserModuleOperation userViewModuleOperation2 = new UserModuleOperation(user, viewModuleOperation2);
-            userModuleOperations.add(userViewModuleOperation2);
-            UserModuleOperation userViewModuleOperation3 = new UserModuleOperation(user, viewModuleOperation3);
-            userModuleOperations.add(userViewModuleOperation3);
-            UserModuleOperation userViewModuleOperation4 = new UserModuleOperation(user, viewModuleOperation4);
-            userModuleOperations.add(userViewModuleOperation4);
-            UserModuleOperation userViewModuleOperation5 = new UserModuleOperation(user, viewModuleOperation5);
-            userModuleOperations.add(userViewModuleOperation5);
             UserModuleOperation userViewModuleOperation6 = new UserModuleOperation(user, viewModuleOperation6);
             userModuleOperations.add(userViewModuleOperation6);
             UserModuleOperation userViewModuleOperation7 = new UserModuleOperation(user, viewModuleOperation7);
             userModuleOperations.add(userViewModuleOperation7);
-            UserModuleOperation userViewModuleOperation8 = new UserModuleOperation(user, viewModuleOperation8);
-            userModuleOperations.add(userViewModuleOperation8);
             UserModuleOperation viewUserModuleOperation9 = new UserModuleOperation(user, viewModuleOperation9);
             userModuleOperations.add(viewUserModuleOperation9);
             UserModuleOperation viewUserModuleOperation10 = new UserModuleOperation(user, viewModuleOperation10);

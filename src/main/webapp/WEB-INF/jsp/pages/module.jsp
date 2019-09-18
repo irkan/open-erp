@@ -76,7 +76,7 @@
                 <c:set var="delete" value="${ua:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
                 <c:choose>
                     <c:when test="${delete.status}">
-                        <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
+                        <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
                             <i class="la <c:out value="${delete.object.icon.name}"/>"></i>
                         </a>
                     </c:when>

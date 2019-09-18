@@ -44,9 +44,8 @@
     <i class="fa fa-arrow-up"></i>
 </div>
 
-<form id="delete-form" method="delete">
+<form id="delete-form" method="post" action="/delete/<c:out value="${page}"/>">
     <input type="hidden" name="deletedId" id="deletedId">
-    <input type="hidden" name="returnPage" id="returnPage">
 </form>
 
 <script>
@@ -83,26 +82,33 @@
         $('#' + modal).modal('toggle');
     }
 
-    function deleteData(id){
+    function deleteData(id, info){
         $("#deletedId").val(id);
-        $("#returnPage").val('<c:out value="${page}"/>');
-
-        swal({
-            title: "Are you sure?",
-            text: "Once deleted, you will not be able to recover this imaginary file!",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
+        swal.fire({
+            title: 'Əminsinizmi?',
+            html: info + "<br\><br\>Məlumatı geri qaytara bilməyəcəksiniz!",
+            type: 'error',
+            allowEnterKey: true,
+            showCancelButton: true,
+            buttonsStyling: false,
+            cancelButtonText: 'İmtina et',
+            cancelButtonColor: '#d1d5cf',
+            cancelButtonClass: 'btn btn-default',
+            confirmButtonText: 'Bəli, silinsin!',
+            confirmButtonColor: '#c40000',
+            confirmButtonClass: 'btn btn-danger',
+            footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+        }).then(function(result) {
+            if (result.value) {
+                swal.fire({
+                    text: 'Proses davam edir...',
+                    onOpen: function() {
+                        swal.showLoading();
+                        $("#delete-form").submit();
+                    }
+                })
+            }
         })
-            .then((willDelete) => {
-                if (willDelete) {
-                    swal("Poof! Your imaginary file has been deleted!", {
-                        icon: "success",
-                    });
-                } else {
-                    swal("Your imaginary file is safe!");
-                }
-            });
     }
 </script>
 
