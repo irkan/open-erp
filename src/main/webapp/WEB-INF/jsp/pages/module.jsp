@@ -117,6 +117,7 @@
                     <div class="form-group">
                         <form:label path="name">Ad</form:label>
                         <form:input path="name" type="text" cssClass="form-control" placeholder="Modulun adını daxil edin" />
+                        <form:errors path="name" cssClass="alert-danger control-label"/>
                     </div>
                     <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>

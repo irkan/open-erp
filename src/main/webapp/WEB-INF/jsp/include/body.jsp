@@ -64,7 +64,7 @@
                         <c:set var="create" value="${ua:checkOperation(sessionScope.user.userModuleOperations, page, 'create')}"/>
                         <c:choose>
                             <c:when test="${create.status}">
-                                <a href="#" class="btn btn-danger" data-toggle="modal" data-target="#modal-operation" data-title="<c:out value="${create.object.name}" />">
+                                <a href="javascript:create($('#form'), 'modal-operation', '<c:out value="${create.object.name}" />');" class="btn btn-danger">
                                     <i class="la <c:out value="${create.object.icon.name}"/>"></i>
                                     <c:out value="${create.object.name}"/>
                                 </a>

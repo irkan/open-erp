@@ -98,12 +98,12 @@
                     <div class="form-group">
                         <form:label path="name">Ad</form:label>
                         <form:input path="name" cssClass="form-control" placeholder="Adı daxil edin"/>
-                        <form:errors path="name" cssClass="alert alert-danger control-label"/>
+                        <form:errors path="name" cssClass="alert-danger control-label"/>
                     </div>
                     <div class="form-group">
                         <form:label path="attr1">Atribut#1</form:label>
                         <form:input path="attr1" cssClass="form-control" placeholder="Atributu daxil edin" />
-                        <form:errors path="attr1" cssClass="alert alert-danger"/>
+                        <form:errors path="attr1" cssClass="alert-danger"/>
                     </div>
                     <div class="form-group">
                         <form:label path="attr2">Atribut#2</form:label>

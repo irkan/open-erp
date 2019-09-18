@@ -49,6 +49,11 @@
 </form>
 
 <script>
+    function create(form, modal, modal_title){
+        $('#' + modal).find(".modal-title").html(modal_title);
+        $('#' + modal).modal('toggle');
+    }
+
     function edit(form, data, modal, modal_title){
         var obj = jQuery.parseJSON(data);
         $.each( $(form).find("input,select,textarea"), function( key, element ) {

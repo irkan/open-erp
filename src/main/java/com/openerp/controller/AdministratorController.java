@@ -10,7 +10,9 @@ import org.springframework.util.DigestUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,9 +37,7 @@ public class AdministratorController extends SkeletonController {
             model.addAttribute(Constants.ICONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("icon"));
             model.addAttribute(Constants.PARENTS, moduleRepository.findAllByModuleIsNullAndActiveTrue());
             model.addAttribute(Constants.LIST, moduleRepository.getModulesByActiveTrue());
-            if (session.getAttribute(Constants.FORM) != null) {
-                model.addAttribute(Constants.FORM, session.getAttribute(Constants.FORM));
-            } else {
+            if(session.getAttribute(Constants.BINDING)==null){
                 model.addAttribute(Constants.FORM, new Module());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.OPERATION)){
@@ -100,21 +100,20 @@ public class AdministratorController extends SkeletonController {
         }
         model.addAttribute(Constants.LIST, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Active(true));
         model.addAttribute(Constants.DICTIONARY_TYPES, dictionaryTypeRepository.findAll());
-        return "redirect:/admin/page/dictionary";
+        return "redirect:/admin/dictionary";
     }
 
     @PostMapping(value = "/module")
-    public String postModule(Model model, @ModelAttribute(Constants.FORM) @Validated Module module, BindingResult binding) throws Exception {
-        session.removeAttribute(Constants.FORM);
+    public String postModule(@ModelAttribute(Constants.FORM) @Validated Module module, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        session.removeAttribute(Constants.BINDING);
         if(!binding.hasErrors()){
             moduleRepository.save(module);
         } else {
-            session.setAttribute(Constants.FORM, module);
+            session.setAttribute(Constants.BINDING, binding);
         }
-/*        model.addAttribute(Constants.ICONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("icon"));
-        model.addAttribute(Constants.PARENTS, moduleRepository.findAllByModuleIsNullAndActiveTrue());
-        model.addAttribute(Constants.LIST, moduleRepository.getModulesByActiveTrue());*/
-        return "redirect:/admin/module";
+        redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.form", binding);
+        redirectAttributes.addFlashAttribute("form", module);
+        return "redirect:"+request.getRequestURI();
     }
 
     @PostMapping(value = "/operation")
