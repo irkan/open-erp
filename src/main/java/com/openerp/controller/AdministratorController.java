@@ -35,10 +35,11 @@ public class AdministratorController extends SkeletonController {
             model.addAttribute(Constants.ICONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("icon"));
             model.addAttribute(Constants.PARENTS, moduleRepository.findAllByModuleIsNullAndActiveTrue());
             model.addAttribute(Constants.LIST, moduleRepository.getModulesByActiveTrue());
-            if(!model.containsAttribute(Constants.FORM)){
+            if (session.getAttribute(Constants.FORM) != null) {
+                model.addAttribute(Constants.FORM, session.getAttribute(Constants.FORM));
+            } else {
                 model.addAttribute(Constants.FORM, new Module());
             }
-
         } else if (page.equalsIgnoreCase(Constants.ROUTE.OPERATION)){
             model.addAttribute(Constants.ICONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("icon"));
             model.addAttribute(Constants.LIST, operationRepository.getOperationsByActiveTrue());
@@ -104,16 +105,16 @@ public class AdministratorController extends SkeletonController {
 
     @PostMapping(value = "/module")
     public String postModule(Model model, @ModelAttribute(Constants.FORM) @Validated Module module, BindingResult binding) throws Exception {
+        session.removeAttribute(Constants.FORM);
         if(!binding.hasErrors()){
             moduleRepository.save(module);
-            model.addAttribute(Constants.FORM, new Module());
         } else {
-            model.addAttribute(Constants.FORM, module);
+            session.setAttribute(Constants.FORM, module);
         }
-        model.addAttribute(Constants.ICONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("icon"));
+/*        model.addAttribute(Constants.ICONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("icon"));
         model.addAttribute(Constants.PARENTS, moduleRepository.findAllByModuleIsNullAndActiveTrue());
-        model.addAttribute(Constants.LIST, moduleRepository.getModulesByActiveTrue());
-        return "layout";
+        model.addAttribute(Constants.LIST, moduleRepository.getModulesByActiveTrue());*/
+        return "redirect:/admin/module";
     }
 
     @PostMapping(value = "/operation")
