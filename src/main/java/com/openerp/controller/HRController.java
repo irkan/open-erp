@@ -29,15 +29,15 @@ public class HRController extends SkeletonController {
 
         if (page.equalsIgnoreCase(Constants.ROUTE.ORGANIZATION)){
             model.addAttribute(Constants.CITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("city"));
-            model.addAttribute(Constants.ORGANIZATIONS, organizationRepository.findAll());
-            model.addAttribute(Constants.LIST, organizationRepository.findOrganizationsByOrganizationIsNull());
+            model.addAttribute(Constants.ORGANIZATIONS, organizationRepository.getOrganizationsByActiveTrue());
+            model.addAttribute(Constants.LIST, organizationRepository.findOrganizationsByOrganizationIsNullAndActiveTrue());
             model.addAttribute(Constants.FORM, new Organization());
         } else if (page.equalsIgnoreCase(Constants.ROUTE.EMPLOYEE)){
             model.addAttribute(Constants.CITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("city"));
             model.addAttribute(Constants.POSITIONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position"));
             model.addAttribute(Constants.NATIONALITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("nationality"));
             model.addAttribute(Constants.GENDERS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("gender"));
-            model.addAttribute(Constants.ORGANIZATIONS, organizationRepository.findAll());
+            model.addAttribute(Constants.ORGANIZATIONS, organizationRepository.getOrganizationsByActiveTrue());
             model.addAttribute(Constants.LIST, employeeRepository.findAll());
             model.addAttribute(Constants.FORM, new Employee());
         }
@@ -53,8 +53,8 @@ public class HRController extends SkeletonController {
             model.addAttribute(Constants.FORM, organization);
         }
         model.addAttribute(Constants.CITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("city"));
-        model.addAttribute(Constants.ORGANIZATIONS, organizationRepository.findAll());
-        model.addAttribute(Constants.LIST, organizationRepository.findOrganizationsByOrganizationIsNull());
+        model.addAttribute(Constants.ORGANIZATIONS, organizationRepository.getOrganizationsByActiveTrue());
+        model.addAttribute(Constants.LIST, organizationRepository.findOrganizationsByOrganizationIsNullAndActiveTrue());
         return "layout";
     }
 
@@ -73,7 +73,7 @@ public class HRController extends SkeletonController {
         model.addAttribute(Constants.POSITIONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position"));
         model.addAttribute(Constants.NATIONALITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("nationality"));
         model.addAttribute(Constants.GENDERS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("gender"));
-        model.addAttribute(Constants.ORGANIZATIONS, organizationRepository.findAll());
+        model.addAttribute(Constants.ORGANIZATIONS, organizationRepository.getOrganizationsByActiveTrue());
         model.addAttribute(Constants.LIST, employeeRepository.findAll());
         return "layout";
     }

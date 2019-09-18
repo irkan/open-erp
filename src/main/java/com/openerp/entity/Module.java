@@ -43,6 +43,9 @@ public class Module {
     @JoinColumn(name = "module_id", referencedColumnName = "id")
     private Module module;
 
+    @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
+    private Boolean active = true;
+
     @JsonIgnore
     @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="module")
     private List<Module> children;

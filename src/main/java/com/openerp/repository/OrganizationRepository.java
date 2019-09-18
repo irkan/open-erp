@@ -8,5 +8,6 @@ import java.util.List;
 
 @Transactional
 public interface OrganizationRepository extends JpaRepository<Organization, Integer> {
-    List<Organization> findOrganizationsByOrganizationIsNull();
+    List<Organization> findOrganizationsByOrganizationIsNullAndActiveTrue();
+    List<Organization> getOrganizationsByActiveTrue();
 }

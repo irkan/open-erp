@@ -101,7 +101,7 @@
                                        autocomplete="off" style="background: rgba(67, 34, 167, 0.7); color: white; font-size: 16px;" />
                             </div>
                             <div class="input-group">
-                                <input type="text" class="form-control" type="password" placeholder="Şifrə" name="password"
+                                <input class="form-control" type="password" placeholder="Şifrə" name="password"
                                        style="background: rgba(67, 34, 167, 0.7); color: white; font-size: 16px;">
                             </div>
                             <div class="kt-login__actions input-group">

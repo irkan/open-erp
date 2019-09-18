@@ -29,7 +29,6 @@
                                     <th>Atribut#1</th>
                                     <th>Atribut#2</th>
                                     <th>Tipi</th>
-                                    <th>Aktiv</th>
                                     <th>Əməliyyat</th>
                                 </tr>
                                 </thead>
@@ -42,18 +41,6 @@
                                         <td><c:out value="${t.attr1}" /></td>
                                         <td><c:out value="${t.attr2}" /></td>
                                         <td><c:out value="${t.dictionaryType.name}" /></td>
-                                        <c:choose>
-                                            <c:when test="${t.active}">
-                                                <td>
-                                                    <span class="kt-badge kt-badge--success kt-badge--inline kt-badge--pill">Aktivdir</span>
-                                                </td>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <td>
-                                                    <span class="kt-badge kt-badge--danger kt-badge--inline kt-badge--pill">Aktiv deyil</span>
-                                                </td>
-                                            </c:otherwise>
-                                        </c:choose>
                                         <td nowrap class="text-center">
                                             <c:set var="view" value="${ua:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
                                             <c:choose>

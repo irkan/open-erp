@@ -1,9 +1,6 @@
 package com.openerp.controller;
 
-import com.openerp.entity.Dictionary;
-import com.openerp.entity.Module;
-import com.openerp.entity.User;
-import com.openerp.entity.UserModuleOperation;
+import com.openerp.entity.*;
 import com.openerp.util.Constants;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -28,17 +25,42 @@ public class DeleteController extends SkeletonController {
 
         }
         if(path.equalsIgnoreCase("dictionary-type")){
-            dictionaryTypeRepository.deleteById(id);
+            DictionaryType dictionaryType = dictionaryTypeRepository.getDictionaryTypeById(id);
+            dictionaryType.setActive(false);
+            dictionaryTypeRepository.save(dictionaryType);
+            if(dictionaryType!=null){
+                for(Dictionary dictionary: dictionaryRepository.getDictionariesByDictionaryType_Id(dictionaryType.getId())){
+                    dictionary.setActive(false);
+                    dictionaryRepository.save(dictionary);
+                }
+            }
         } else if(path.equalsIgnoreCase("dictionary")){
-            dictionaryRepository.deleteById(id);
+            Dictionary dictionary = dictionaryRepository.getDictionaryById(id);
+            dictionary.setActive(false);
+            dictionaryRepository.save(dictionary);
         } else if(path.equalsIgnoreCase("module")){
-            moduleRepository.deleteById(id);
+            Module module = moduleRepository.getModuleById(id);
+            module.setActive(false);
+            moduleRepository.save(module);
+            for(ModuleOperation moduleOperation: moduleOperationRepository.getModuleOperationsByModule_Active(false)){
+                userModuleOperationRepository.deleteInBatch(userModuleOperationRepository.getUserModuleOperationsByModuleOperation_Id(moduleOperation.getId()));
+                moduleOperationRepository.deleteById(moduleOperation.getId());
+            }
         } else if(path.equalsIgnoreCase("operation")){
-            moduleRepository.deleteById(id);
+            Operation operation = operationRepository.getOperationById(id);
+            operation.setActive(false);
+            operationRepository.save(operation);
+            for(ModuleOperation moduleOperation: moduleOperationRepository.getModuleOperationsByOperation_Active(false)){
+                userModuleOperationRepository.deleteInBatch(userModuleOperationRepository.getUserModuleOperationsByModuleOperation_Id(moduleOperation.getId()));
+                moduleOperationRepository.deleteById(moduleOperation.getId());
+            }
         } else if(path.equalsIgnoreCase("module-operation")){
             moduleOperationRepository.deleteById(id);
         } else if(path.equalsIgnoreCase("user")){
-            userRepository.deleteById(id);
+            User userObject = userRepository.getUserByActiveTrueAndId(id);
+            userRepository.save(userObject);
+            List<UserModuleOperation> userModuleOperations = userModuleOperationRepository.findAllByUser_Id(user.getId());
+            userModuleOperationRepository.deleteInBatch(userModuleOperations);
         } else if(path.equalsIgnoreCase("employee")){
             employeeRepository.deleteById(id);
         } else if(path.equalsIgnoreCase("organization")){

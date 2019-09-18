@@ -33,19 +33,22 @@ public class AdministratorController extends SkeletonController {
 
         if (page.equalsIgnoreCase(Constants.ROUTE.MODULE)) {
             model.addAttribute(Constants.ICONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("icon"));
-            model.addAttribute(Constants.PARENTS, moduleRepository.findAllByModuleIsNull());
-            model.addAttribute(Constants.LIST, moduleRepository.findAll());
-            model.addAttribute(Constants.FORM, new Module());
+            model.addAttribute(Constants.PARENTS, moduleRepository.findAllByModuleIsNullAndActiveTrue());
+            model.addAttribute(Constants.LIST, moduleRepository.getModulesByActiveTrue());
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new Module());
+            }
+
         } else if (page.equalsIgnoreCase(Constants.ROUTE.OPERATION)){
             model.addAttribute(Constants.ICONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("icon"));
-            model.addAttribute(Constants.LIST, operationRepository.findAll());
+            model.addAttribute(Constants.LIST, operationRepository.getOperationsByActiveTrue());
             model.addAttribute(Constants.FORM, new Operation());
         } else if (page.equalsIgnoreCase(Constants.ROUTE.DICTIONARY)){
-            model.addAttribute(Constants.LIST, dictionaryRepository.findAll());
+            model.addAttribute(Constants.LIST, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Active(true));
             model.addAttribute(Constants.FORM, new Dictionary());
             model.addAttribute(Constants.DICTIONARY_TYPES, dictionaryTypeRepository.findAll());
         } else if (page.equalsIgnoreCase(Constants.ROUTE.DICTIONARY_TYPE)){
-            model.addAttribute(Constants.LIST, dictionaryTypeRepository.findAll());
+            model.addAttribute(Constants.LIST, dictionaryTypeRepository.getDictionaryTypesByActiveTrue());
             model.addAttribute(Constants.FORM, new DictionaryType());
         } else if (page.equalsIgnoreCase(Constants.ROUTE.USER)){
             model.addAttribute(Constants.ORGANIZATIONS, organizationRepository.findAll());
@@ -53,12 +56,12 @@ public class AdministratorController extends SkeletonController {
             model.addAttribute(Constants.LIST, userRepository.findAll());
             model.addAttribute(Constants.FORM, new User());
         } else if (page.equalsIgnoreCase(Constants.ROUTE.MODULE_OPERATION)){
-            model.addAttribute(Constants.MODULES, moduleRepository.findAll());
-            model.addAttribute(Constants.OPERATIONS, operationRepository.findAll());
+            model.addAttribute(Constants.MODULES, moduleRepository.getModulesByActiveTrue());
+            model.addAttribute(Constants.OPERATIONS, operationRepository.getOperationsByActiveTrue());
             model.addAttribute(Constants.LIST, moduleOperationRepository.findAll());
             model.addAttribute(Constants.FORM, new ModuleOperation());
         } else if (page.equalsIgnoreCase(Constants.ROUTE.USER_MODULE_OPERATION)){
-            model.addAttribute(Constants.USERS, userRepository.findAll());
+            model.addAttribute(Constants.USERS, userRepository.getUsersByActiveTrue());
             List<ModuleOperation>  list = moduleOperationRepository.findAll();
             model.addAttribute(Constants.MODULES, Util.removeDuplicateModules(list));
             model.addAttribute(Constants.OPERATIONS, Util.removeDuplicateOperations(list));
@@ -78,17 +81,24 @@ public class AdministratorController extends SkeletonController {
 
     @PostMapping(value = "/dictionary-type")
     public String postDictionaryType(Model model, @ModelAttribute(Constants.FORM) @Validated DictionaryType dictionaryType, BindingResult binding) throws Exception {
+        model.addAttribute(Constants.FORM, dictionaryType);
         if(!binding.hasErrors()){
             dictionaryTypeRepository.save(dictionaryType);
+            model.addAttribute(Constants.FORM, new DictionaryType());
         }
-        model.addAttribute(Constants.FORM, dictionaryType);
-        model.addAttribute(Constants.LIST, dictionaryTypeRepository.findAll());
+        model.addAttribute(Constants.LIST, dictionaryTypeRepository.getDictionaryTypesByActiveTrue());
         return "layout";
     }
 
     @PostMapping(value = "/dictionary")
     public String postDictionary(Model model, @ModelAttribute(Constants.FORM) @Validated Dictionary dictionary, BindingResult binding) throws Exception {
-        dictionaryRepository.save(dictionary);
+        model.addAttribute(Constants.FORM, dictionary);
+        if(!binding.hasErrors()){
+            dictionaryRepository.save(dictionary);
+            model.addAttribute(Constants.FORM, new Dictionary());
+        }
+        model.addAttribute(Constants.LIST, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Active(true));
+        model.addAttribute(Constants.DICTIONARY_TYPES, dictionaryTypeRepository.findAll());
         return "redirect:/admin/page/dictionary";
     }
 
@@ -101,13 +111,20 @@ public class AdministratorController extends SkeletonController {
             model.addAttribute(Constants.FORM, module);
         }
         model.addAttribute(Constants.ICONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("icon"));
-        model.addAttribute(Constants.PARENTS, moduleRepository.findAllByModuleIsNull());
-        model.addAttribute(Constants.LIST, moduleRepository.findAll());
+        model.addAttribute(Constants.PARENTS, moduleRepository.findAllByModuleIsNullAndActiveTrue());
+        model.addAttribute(Constants.LIST, moduleRepository.getModulesByActiveTrue());
         return "layout";
     }
 
     @PostMapping(value = "/operation")
     public String postOperation(Model model, @ModelAttribute(Constants.FORM) @Validated Operation operation, BindingResult binding) throws Exception {
+        model.addAttribute(Constants.FORM, operation);
+        if(!binding.hasErrors()){
+            operationRepository.save(operation);
+            model.addAttribute(Constants.FORM, new Operation());
+        }
+        model.addAttribute(Constants.ICONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("icon"));
+        model.addAttribute(Constants.LIST, operationRepository.getOperationsByActiveTrue());
         operationRepository.save(operation);
         return "layout";
     }
@@ -135,8 +152,8 @@ public class AdministratorController extends SkeletonController {
         } else {
             model.addAttribute(Constants.FORM, moduleOperation);
         }
-        model.addAttribute(Constants.MODULES, moduleRepository.findAll());
-        model.addAttribute(Constants.OPERATIONS, operationRepository.findAll());
+        model.addAttribute(Constants.MODULES, moduleRepository.getModulesByActiveTrue());
+        model.addAttribute(Constants.OPERATIONS, operationRepository.getOperationsByActiveTrue());
         model.addAttribute(Constants.LIST, moduleOperationRepository.findAll());
         return "layout";
     }

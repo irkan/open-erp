@@ -34,6 +34,9 @@ public class Operation {
     @JoinColumn(name = "admin_dictionary_icon_id")
     private Dictionary icon;
 
+    @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
+    private Boolean active = true;
+
     @JsonIgnore
     @OneToMany(mappedBy = "operation")
     private List<ModuleOperation> moduleOperations;
