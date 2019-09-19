@@ -43,14 +43,20 @@ public class AdministratorController extends SkeletonController {
         } else if (page.equalsIgnoreCase(Constants.ROUTE.OPERATION)){
             model.addAttribute(Constants.ICONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("icon"));
             model.addAttribute(Constants.LIST, operationRepository.getOperationsByActiveTrue());
-            model.addAttribute(Constants.FORM, new Operation());
+            if(session.getAttribute(Constants.BINDING)==null){
+                model.addAttribute(Constants.FORM, new Operation());
+            }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.DICTIONARY)){
             model.addAttribute(Constants.LIST, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Active(true));
-            model.addAttribute(Constants.FORM, new Dictionary());
-            model.addAttribute(Constants.DICTIONARY_TYPES, dictionaryTypeRepository.findAll());
+            model.addAttribute(Constants.DICTIONARY_TYPES, dictionaryTypeRepository.getDictionaryTypesByActiveTrue());
+            if(session.getAttribute(Constants.BINDING)==null){
+                model.addAttribute(Constants.FORM, new Dictionary());
+            }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.DICTIONARY_TYPE)){
             model.addAttribute(Constants.LIST, dictionaryTypeRepository.getDictionaryTypesByActiveTrue());
-            model.addAttribute(Constants.FORM, new DictionaryType());
+            if(session.getAttribute(Constants.BINDING)==null){
+                model.addAttribute(Constants.FORM, new DictionaryType());
+            }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.USER)){
             model.addAttribute(Constants.ORGANIZATIONS, organizationRepository.findAll());
             model.addAttribute(Constants.EMPLOYEES, employeeRepository.findAll());
@@ -80,82 +86,53 @@ public class AdministratorController extends SkeletonController {
         return "layout";
     }
 
-    @PostMapping(value = "/dictionary-type")
-    public String postDictionaryType(Model model, @ModelAttribute(Constants.FORM) @Validated DictionaryType dictionaryType, BindingResult binding) throws Exception {
-        model.addAttribute(Constants.FORM, dictionaryType);
-        if(!binding.hasErrors()){
-            dictionaryTypeRepository.save(dictionaryType);
-            model.addAttribute(Constants.FORM, new DictionaryType());
-        }
-        model.addAttribute(Constants.LIST, dictionaryTypeRepository.getDictionaryTypesByActiveTrue());
-        return "layout";
-    }
-
-    @PostMapping(value = "/dictionary")
-    public String postDictionary(Model model, @ModelAttribute(Constants.FORM) @Validated Dictionary dictionary, BindingResult binding) throws Exception {
-        model.addAttribute(Constants.FORM, dictionary);
-        if(!binding.hasErrors()){
-            dictionaryRepository.save(dictionary);
-            model.addAttribute(Constants.FORM, new Dictionary());
-        }
-        model.addAttribute(Constants.LIST, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Active(true));
-        model.addAttribute(Constants.DICTIONARY_TYPES, dictionaryTypeRepository.findAll());
-        return "redirect:/admin/dictionary";
-    }
-
     @PostMapping(value = "/module")
     public String postModule(@ModelAttribute(Constants.FORM) @Validated Module module, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
-        session.removeAttribute(Constants.BINDING);
         if(!binding.hasErrors()){
             moduleRepository.save(module);
-        } else {
-            session.setAttribute(Constants.BINDING, binding);
         }
-        redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.form", binding);
-        redirectAttributes.addFlashAttribute("form", module);
-        return "redirect:"+request.getRequestURI();
+        return mapPost(module, binding, redirectAttributes);
     }
 
     @PostMapping(value = "/operation")
-    public String postOperation(Model model, @ModelAttribute(Constants.FORM) @Validated Operation operation, BindingResult binding) throws Exception {
-        model.addAttribute(Constants.FORM, operation);
+    public String postOperation(@ModelAttribute(Constants.FORM) @Validated Operation operation, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         if(!binding.hasErrors()){
             operationRepository.save(operation);
-            model.addAttribute(Constants.FORM, new Operation());
         }
-        model.addAttribute(Constants.ICONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("icon"));
-        model.addAttribute(Constants.LIST, operationRepository.getOperationsByActiveTrue());
-        operationRepository.save(operation);
-        return "layout";
+        return mapPost(operation, binding, redirectAttributes);
+    }
+
+    @PostMapping(value = "/dictionary-type")
+    public String postDictionaryType(@ModelAttribute(Constants.FORM) @Validated DictionaryType dictionaryType, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        if(!binding.hasErrors()){
+            dictionaryTypeRepository.save(dictionaryType);
+        }
+        return mapPost(dictionaryType, binding, redirectAttributes);
+    }
+
+    @PostMapping(value = "/dictionary")
+    public String postDictionary(@ModelAttribute(Constants.FORM) @Validated Dictionary dictionary, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        if(!binding.hasErrors()){
+            dictionaryRepository.save(dictionary);
+        }
+        return mapPost(dictionary, binding, redirectAttributes);
     }
 
     @PostMapping(value = "/user")
-    public String postUser(Model model, @ModelAttribute(Constants.FORM) @Validated User user, BindingResult binding) throws Exception {
+    public String postUser(@ModelAttribute(Constants.FORM) @Validated User user, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         if(!binding.hasErrors()){
             user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
             userRepository.save(user);
-            model.addAttribute(Constants.FORM, new User());
-        } else {
-            model.addAttribute(Constants.FORM, user);
         }
-        model.addAttribute(Constants.ORGANIZATIONS, organizationRepository.findAll());
-        model.addAttribute(Constants.EMPLOYEES, employeeRepository.findAll());
-        model.addAttribute(Constants.LIST, userRepository.findAll());
-        return "layout";
+        return mapPost(user, binding, redirectAttributes);
     }
 
     @PostMapping(value = "/module-operation")
-    public String postModuleOperation(Model model, @ModelAttribute(Constants.FORM) @Validated ModuleOperation moduleOperation, BindingResult binding) throws Exception {
+    public String postModuleOperation(@ModelAttribute(Constants.FORM) @Validated ModuleOperation moduleOperation, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         if(!binding.hasErrors()){
             moduleOperationRepository.save(moduleOperation);
-            model.addAttribute(Constants.FORM, new ModuleOperation());
-        } else {
-            model.addAttribute(Constants.FORM, moduleOperation);
         }
-        model.addAttribute(Constants.MODULES, moduleRepository.getModulesByActiveTrue());
-        model.addAttribute(Constants.OPERATIONS, operationRepository.getOperationsByActiveTrue());
-        model.addAttribute(Constants.LIST, moduleOperationRepository.findAll());
-        return "layout";
+        return mapPost(moduleOperation, binding, redirectAttributes);
     }
 
     @PostMapping(value = "/user-module-operation")

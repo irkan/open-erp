@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 import java.util.List;
 
 @Entity
@@ -17,19 +18,16 @@ public class Operation {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO, generator = "admin_sequence")
     @SequenceGenerator(sequenceName = "aa_admin_sequence", allocationSize = 1, name = "admin_sequence")
-    @JsonProperty("id_input")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
-    @JsonProperty("name_input")
+    @Pattern(regexp=".{2,50}",message="Minimum 2 maksimum 50 simvol ola bilər")
     @Column(name = "name", unique = true, nullable = false)
     private String name;
 
-    @JsonProperty("path_input")
     @Column(name = "path")
     private String path;
 
-    @JsonProperty("icon_select")
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "admin_dictionary_icon_id")
     private Dictionary icon;
