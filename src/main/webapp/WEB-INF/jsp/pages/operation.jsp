@@ -56,7 +56,7 @@
                 <c:choose>
                     <c:when test="${edit.status}">
                         <a href="javascript:edit($('#form'), '<c:out value="${uj:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
-                            <i class="la <c:out value="${edit.object.icon.name}"/>"></i>
+                            <i class="<c:out value="${edit.object.icon}"/>"></i>
                         </a>
                     </c:when>
                 </c:choose>
@@ -64,7 +64,7 @@
                 <c:choose>
                     <c:when test="${delete.status}">
                         <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
-                            <i class="la <c:out value="${delete.object.icon.name}"/>"></i>
+                            <i class="<c:out value="${delete.object.icon}"/>"></i>
                         </a>
                     </c:when>
                 </c:choose>

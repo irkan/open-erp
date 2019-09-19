@@ -13,11 +13,8 @@
 <%@ taglib prefix="ua" uri="/WEB-INF/tld/UserAccess.tld"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <div class="kt-container  kt-grid__item kt-grid__item--fluid">
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="kt-portlet kt-portlet--mobile">
-                <div class="kt-portlet__body">
-
+    <div class="kt-portlet kt-portlet--mobile">
+        <div class="kt-portlet__body">
 <c:choose>
     <c:when test="${not empty list}">
 <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
@@ -26,8 +23,10 @@
         <th>№</th>
         <th>ID</th>
         <th>Ad</th>
-        <th>Atribut#1</th>
-        <th>Atribut#2</th>
+        <th>Açıqlama</th>
+        <th>URL path</th>
+        <th>İkon</th>
+        <th>Üst modul</th>
         <th>Əməliyyat</th>
     </tr>
     </thead>
@@ -35,10 +34,28 @@
     <c:forEach var="t" items="${list}" varStatus="loop">
         <tr>
             <td>${loop.index + 1}</td>
-            <td><c:out value="${t.id}" /> <%--${uj:toJson(t)}--%></td>
+            <td><c:out value="${t.id}" /></td>
             <td><c:out value="${t.name}" /></td>
-            <td><c:out value="${t.attr1}" /></td>
-            <td><c:out value="${t.attr2}" /></td>
+            <td><c:out value="${t.description}" /></td>
+            <td><c:out value="${t.path}" /></td>
+            <c:choose>
+                <c:when test="${not empty t.icon}">
+                    <td><i class="<c:out value="${t.icon.name}"/>"></i> <c:out value="${t.icon.name}" /></td>
+                </c:when>
+                <c:otherwise>
+                    <td></td>
+                </c:otherwise>
+            </c:choose>
+            <c:choose>
+                <c:when test="${not empty t.module}">
+                    <td>
+                        <span class="kt-badge kt-badge--danger kt-badge--inline kt-badge--pill"><c:out value="${t.module.name}" /></span>
+                    </td>
+                </c:when>
+                <c:otherwise>
+                    <td></td>
+                </c:otherwise>
+            </c:choose>
             <td nowrap class="text-center">
                 <c:set var="view" value="${ua:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
                 <c:choose>
@@ -74,13 +91,10 @@
         Məlumat yoxdur
     </c:otherwise>
 </c:choose>
-                </div>
-            </div>
-        </div>
 
+        </div>
     </div>
 </div>
-
 
 <div class="modal fade" id="modal-operation" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -92,23 +106,31 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form:form modelAttribute="form" id="form" method="post" action="/admin/dictionary-type" cssClass="form-group">
-                    <form:input type="hidden" name="id" path="id"/>
-                    <form:input type="hidden" name="active" path="active" value="1"/>
+                <form:form modelAttribute="form" id="form" method="post" action="/admin/module" cssClass="form-group">
+                    <div class="form-group">
+                        <form:label path="module">Üst modul</form:label>
+                        <form:select  path="module" cssClass="custom-select form-control">
+                            <form:options items="${list}" itemLabel="name" itemValue="id" />
+                        </form:select>
+                    </div>
                     <div class="form-group">
                         <form:label path="name">Ad</form:label>
-                        <form:input path="name" cssClass="form-control" placeholder="Adı daxil edin"/>
+                        <form:input path="name" type="text" cssClass="form-control" placeholder="Modulun adını daxil edin" />
                         <form:errors path="name" cssClass="alert-danger control-label"/>
                     </div>
                     <div class="form-group">
-                        <form:label path="attr1">Atribut#1</form:label>
-                        <form:input path="attr1" cssClass="form-control" placeholder="Atributu daxil edin" />
-                        <form:errors path="attr1" cssClass="alert-danger"/>
+                        <form:label path="description">Açıqlama</form:label>
+                        <form:input path="description" type="text" cssClass="form-control" placeholder="Modul açıqlamasını daxil edin" />
                     </div>
                     <div class="form-group">
-                        <form:label path="attr2">Atribut#2</form:label>
-                        <form:input path="attr2" cssClass="form-control" placeholder="Atributu daxil edin" />
-                        <form:errors path="attr2" cssClass="alert alert-danger"/>
+                        <form:label path="path">URL Path</form:label>
+                        <form:input path="path" type="text" cssClass="form-control" placeholder="Modul path daxil edin" />
+                    </div>
+                    <div class="form-group">
+                        <form:label path="icon">İkon</form:label>
+                        <form:select  path="icon" cssClass="custom-select form-control">
+                            <form:options items="${icons}" itemLabel="name" itemValue="id" />
+                        </form:select>
                     </div>
                 </form:form>
             </div>

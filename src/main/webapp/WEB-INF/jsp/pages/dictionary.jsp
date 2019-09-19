@@ -54,7 +54,7 @@
                                             <c:choose>
                                                 <c:when test="${edit.status}">
                                                     <a href="javascript:edit($('#form'), '<c:out value="${uj:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
-                                                        <i class="la <c:out value="${edit.object.icon.name}"/>"></i>
+                                                        <i class="<c:out value="${edit.object.icon}"/>"></i>
                                                     </a>
                                                 </c:when>
                                             </c:choose>
@@ -62,7 +62,7 @@
                                             <c:choose>
                                                 <c:when test="${delete.status}">
                                                     <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
-                                                        <i class="la <c:out value="${delete.object.icon.name}"/>"></i>
+                                                        <i class="<c:out value="${delete.object.icon}"/>"></i>
                                                     </a>
                                                 </c:when>
                                             </c:choose>
@@ -98,21 +98,25 @@
                     <form:input type="hidden" path="active" value="1"/>
                     <div class="form-group">
                         <form:label path="name">Ad</form:label>
-                        <td><form:input type="text" path="name" cssClass="form-control" placeholder="Adı daxil edin"/>
+                        <form:input path="name" cssClass="form-control" placeholder="Adı daxil edin"/>
+                        <form:errors path="name" cssClass="alert-danger control-label"/>
                     </div>
                     <div class="form-group">
                         <form:label path="attr1">Atribut#1</form:label>
-                        <form:input type="text" path="attr1" cssClass="form-control" placeholder="Atributu daxil edin" />
+                        <form:input path="attr1" cssClass="form-control" placeholder="Atributu daxil edin" />
+                        <form:errors path="attr1" cssClass="alert-danger control-label"/>
                     </div>
                     <div class="form-group">
                         <form:label path="attr2">Atribut#2</form:label>
-                        <form:input type="text" path="attr2" cssClass="form-control" placeholder="Atributu daxil edin" />
+                        <form:input path="attr2" cssClass="form-control" placeholder="Atributu daxil edin" />
+                        <form:errors path="attr2" cssClass="alert-danger control-label"/>
                     </div>
                     <div class="form-group">
                         <form:label path="dictionaryType">Tip</form:label>
                         <form:select  path="dictionaryType" cssClass="custom-select form-control">
                             <form:options items="${dictionary_types}" itemLabel="name" itemValue="id" />
                         </form:select>
+                        <form:errors path="dictionaryType" cssClass="alert-danger control-label"/>
                     </div>
                 </form:form>
             </div>

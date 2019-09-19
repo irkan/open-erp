@@ -28,9 +28,8 @@ public class Operation {
     @Column(name = "path")
     private String path;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_dictionary_icon_id")
-    private Dictionary icon;
+    @Column(name = "icon")
+    private String icon;
 
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;
@@ -39,7 +38,7 @@ public class Operation {
     @OneToMany(mappedBy = "operation")
     private List<ModuleOperation> moduleOperations;
 
-    public Operation(String name, String path, Dictionary icon) {
+    public Operation(String name, String path, String icon) {
         this.name = name;
         this.path = path;
         this.icon = icon;

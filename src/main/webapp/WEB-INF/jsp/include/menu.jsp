@@ -14,7 +14,7 @@
 <%@ taglib prefix="ua" uri="/WEB-INF/tld/UserAccess.tld"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<div id="kt_header" class="kt-header  kt-header--fixed " data-ktheader-minimize="on">
+<div id="kt_header" class="kt-header  kt-header--fixed " data-ktheader-minimize="on" style="opacity: 0.95; border-bottom: 0.1px solid #228b84">
     <div class="kt-container ">
         <div class="kt-header__brand   kt-grid__item" id="kt_header_brand">
             <a class="kt-header__brand-logo" href="#">
@@ -30,9 +30,9 @@
             <div id="kt_header_menu" class="kt-header-menu kt-header-menu-mobile ">
                 <ul class="kt-menu__nav ">
                     <c:forEach var="t" items="${sessionScope.modules}" varStatus="loop">
-                        <li class="kt-menu__item kt-menu__item--here kt-menu__item--rel" <%--kt-menu__item--here--%>>
+                        <li class="kt-menu__item <c:out value="${t.path==page ? 'kt-menu__item--here' : ' '}"/> kt-menu__item--rel" <%--kt-menu__item--here--%>>
                             <a href="/<c:out value="${t.module.path}" />/<c:out value="${t.path}" />" class="kt-menu__link">
-                                <i class="la <c:out value="${t.icon.name}" />" style="color: #d6d6d6;margin-right: 10px;font-size: 16px;"></i>
+                                <i class="la <c:out value="${t.icon}" />" style="color: #d6d6d6;margin-right: 10px;font-size: 16px;"></i>
                                 <span class="kt-menu__link-text"><c:out value="${t.name}" /></span>
                             </a>
                         </li>
@@ -168,7 +168,7 @@
 
     <a href="/route/<c:out value="${t.path}" />" class="kt-grid-nav__item">
                             <span class="kt-grid-nav__icon">
-                                <i class="la <c:out value="${t.icon.name}" />"></i>
+                                <i class="<c:out value="${t.icon}" />"></i>
                             </span>
         <span class="kt-grid-nav__title"><c:out value="${t.name}" /></span>
         <span class="kt-grid-nav__desc"><c:out value="${t.description}" /></span>

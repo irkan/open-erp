@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "admin_dictionary")
@@ -20,9 +21,11 @@ public class Dictionary {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
+    @Pattern(regexp=".{2,50}",message="Minimum 2 maksimum 50 simvol ola bilər")
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Pattern(regexp=".{2,50}",message="Minimum 2 maksimum 50 simvol ola bilər")
     @Column(name = "attr1")
     private String attr1;
 

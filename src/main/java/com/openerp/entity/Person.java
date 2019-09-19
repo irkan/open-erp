@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 import java.util.Date;
 import java.util.List;
 
@@ -23,9 +24,11 @@ public class Person {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
+    @Pattern(regexp=".{2,20}",message="Minimum 2 maksimum 20 simvol ola bilər")
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
+    @Pattern(regexp=".{2,20}",message="Minimum 2 maksimum 20 simvol ola bilər")
     @Column(name = "last_name", nullable = false)
     private String lastName;
 

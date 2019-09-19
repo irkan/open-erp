@@ -120,8 +120,6 @@ public class DBConfiguration {
             List<DictionaryType> types = new ArrayList<>();
             DictionaryType genderType = new DictionaryType("Cins", "gender", null);
             types.add(genderType);
-            DictionaryType iconType = new DictionaryType("İkon", "icon", null);
-            types.add(iconType);
             DictionaryType cityType = new DictionaryType("Şəhər", "city", null);
             types.add(cityType);
             DictionaryType positionType = new DictionaryType("Vəzifə", "position", null);
@@ -138,24 +136,6 @@ public class DBConfiguration {
             dictionaries.add(male);
             Dictionary female = new Dictionary("Qadın", "Female", null, genderType);
             dictionaries.add(female);
-            Dictionary laUser = new Dictionary("la la-user", "la la-user", null, iconType);
-            dictionaries.add(laUser);
-            Dictionary laRing = new Dictionary("la la-ring", "la la-ring", null, iconType);
-            dictionaries.add(laRing);
-            Dictionary laEdit = new Dictionary("la la-edit", "la la-edit", null, iconType);
-            dictionaries.add(laEdit);
-            Dictionary laTrash = new Dictionary("la la-trash", "la la-trash", null, iconType);
-            dictionaries.add(laTrash);
-            Dictionary laEye = new Dictionary("la la-eye", "la la-eye", null, iconType);
-            dictionaries.add(laEye);
-            Dictionary laPlus = new Dictionary("la la-plus", "la la-plus", null, iconType);
-            dictionaries.add(laPlus);
-            Dictionary laFileExcelO = new Dictionary("la la-file-excel-o", "la la-file-excel-o", null, iconType);
-            dictionaries.add(laFileExcelO);
-            Dictionary laArchive = new Dictionary("la la-archive", "la la-archive", null, iconType);
-            dictionaries.add(laArchive);
-            Dictionary laPrint = new Dictionary("la la-print", "la la-print", null, iconType);
-            dictionaries.add(laPrint);
             Dictionary baku = new Dictionary("Bakı", "Baku", null, cityType);
             dictionaries.add(baku);
             Dictionary sumgait = new Dictionary("Sumqayıt", "Sumgait", null, cityType);
@@ -230,45 +210,51 @@ public class DBConfiguration {
 
 
             List<Module> modules = new ArrayList<>();
-            Module module = new Module(defaultAdminModuleName, defaultAdminModuleDescription, defaultAdminModulePath, laUser, null);
+            Module module = new Module(defaultAdminModuleName, defaultAdminModuleDescription, defaultAdminModulePath, "la la-user", null);
             modules.add(module);
-            Module subModule1 = new Module(defaultAdminSub1ModuleName, defaultAdminSub1ModuleDescription, defaultAdminSub1ModulePath, laUser, module);
+            Module subModule1 = new Module(defaultAdminSub1ModuleName, defaultAdminSub1ModuleDescription, defaultAdminSub1ModulePath, "la la-user", module);
             modules.add(subModule1);
-            Module subModule2 = new Module(defaultAdminSub2ModuleName, defaultAdminSub2ModuleDescription, defaultAdminSub2ModulePath, laUser, module);
+            Module subModule2 = new Module(defaultAdminSub2ModuleName, defaultAdminSub2ModuleDescription, defaultAdminSub2ModulePath, "la la-user", module);
             modules.add(subModule2);
-            Module subModule3 = new Module(defaultAdminSub3ModuleName, defaultAdminSub3ModuleDescription, defaultAdminSub3ModulePath, laUser, module);
+            Module subModule3 = new Module(defaultAdminSub3ModuleName, defaultAdminSub3ModuleDescription, defaultAdminSub3ModulePath, "la la-user", module);
             modules.add(subModule3);
-            Module subModule4 = new Module(defaultAdminSub4ModuleName, defaultAdminSub4ModuleDescription, defaultAdminSub4ModulePath, laUser, module);
+            Module subModule4 = new Module(defaultAdminSub4ModuleName, defaultAdminSub4ModuleDescription, defaultAdminSub4ModulePath, "la la-user", module);
             modules.add(subModule4);
-            Module subModule5 = new Module(defaultAdminSub5ModuleName, defaultAdminSub5ModuleDescription, defaultAdminSub5ModulePath, laUser, module);
+            Module subModule5 = new Module(defaultAdminSub5ModuleName, defaultAdminSub5ModuleDescription, defaultAdminSub5ModulePath, "la la-user", module);
             modules.add(subModule5);
-            Module module1 = new Module("İnsan Resursu", "İnsan Resursu", "hr", laUser, null);
+            Module module1 = new Module("İnsan Resursu", "İnsan Resursu", "hr", "la la-user", null);
             modules.add(module1);
-            Module subModule6 = new Module("Struktur", "Struktur", "organization", laUser, module1);
+            Module subModule6 = new Module("Struktur", "Struktur", "organization", "la la-user", module1);
             modules.add(subModule6);
-            Module subModule7 = new Module("Əməkdaş", "Əməkdaş", "employee", laUser, module1);
+            Module subModule7 = new Module("Əməkdaş", "Əməkdaş", "employee", "la la-user", module1);
             modules.add(subModule7);
-            Module subModule8 = new Module("Modul və Əməliyyat", "Modul və Əməliyyat", "module-operation", laUser, module);
+            Module subModule8 = new Module("Modul və Əməliyyat", "Modul və Əməliyyat", "module-operation", "la la-user", module);
             modules.add(subModule8);
-            Module subModule9 = new Module("İstifadəçi icazəsi", "İstifadəçi icazəsi", "user-module-operation", laUser, module);
+            Module subModule9 = new Module("İstifadəçi icazəsi", "İstifadəçi icazəsi", "user-module-operation", "la la-user", module);
             modules.add(subModule9);
-            Module subModule10 = new Module("İcazə şablonu", "İcazə şablonu", "template-module-operation", laUser, module);
+            Module subModule10 = new Module("İcazə şablonu", "İcazə şablonu", "template-module-operation", "la la-user", module);
             modules.add(subModule10);
+            Module subModule11 = new Module("İkon", "İkon", "flat-icon", "la la-user", module);
+            modules.add(subModule11);
+            Module subModule12 = new Module("Flat ikon", "Flat ikon", "flat-icon", "la la-user", subModule11);
+            modules.add(subModule12);
+            Module subModule13 = new Module("Lineawesome ikon", "Lineawesome ikon", "line-awesome-icon", "la la-user", subModule11);
+            modules.add(subModule13);
 
             moduleRepository.saveAll(modules);
 
             List<Operation> operations = new ArrayList<>();
-            Operation view = new Operation("Baxış", "view", laEye);
+            Operation view = new Operation("Baxış", "view", "la la-eye");
             operations.add(view);
-            Operation create = new Operation("Yarat", "create", laPlus);
+            Operation create = new Operation("Yarat", "create", "la la-plus");
             operations.add(create);
-            Operation edit = new Operation("Redaktə", "edit", laEdit);
+            Operation edit = new Operation("Redaktə", "edit", "la la-edit");
             operations.add(edit);
-            Operation delete = new Operation("Sil", "delete", laTrash);
+            Operation delete = new Operation("Sil", "delete", "la la-trash");
             operations.add(delete);
-            Operation export = new Operation("İxrac", "export", laPrint);
+            Operation export = new Operation("İxrac", "export", "la la-print");
             operations.add(export);
-            Operation approve = new Operation("Təsdiq", "approve", laArchive);
+            Operation approve = new Operation("Təsdiq", "approve", "la la-archive");
             operations.add(approve);
 
             operationRepository.saveAll(operations);
@@ -332,6 +318,12 @@ public class DBConfiguration {
             moduleOperations.add(viewModuleOperation9);
             ModuleOperation viewModuleOperation10 = new ModuleOperation(subModule10, view, null);
             moduleOperations.add(viewModuleOperation10);
+            ModuleOperation viewModuleOperation11 = new ModuleOperation(subModule11, view, null);
+            moduleOperations.add(viewModuleOperation11);
+            ModuleOperation viewModuleOperation12 = new ModuleOperation(subModule12, view, null);
+            moduleOperations.add(viewModuleOperation12);
+            ModuleOperation viewModuleOperation13 = new ModuleOperation(subModule13, view, null);
+            moduleOperations.add(viewModuleOperation13);
 
             ModuleOperation exportModuleOperation1 = new ModuleOperation(subModule1, export, null);
             moduleOperations.add(exportModuleOperation1);
@@ -461,9 +453,16 @@ public class DBConfiguration {
             userModuleOperations.add(viewUserModuleOperation9);
             UserModuleOperation viewUserModuleOperation10 = new UserModuleOperation(user, viewModuleOperation10);
             userModuleOperations.add(viewUserModuleOperation10);
+            UserModuleOperation viewUserModuleOperation11 = new UserModuleOperation(user, viewModuleOperation11);
+            userModuleOperations.add(viewUserModuleOperation11);
+            UserModuleOperation viewUserModuleOperation12 = new UserModuleOperation(user, viewModuleOperation12);
+            userModuleOperations.add(viewUserModuleOperation12);
+            UserModuleOperation viewUserModuleOperation13 = new UserModuleOperation(user, viewModuleOperation13);
+            userModuleOperations.add(viewUserModuleOperation13);
 
             userModuleOperationRepository.saveAll(userModuleOperations);
         } catch (Exception e){
+            e.printStackTrace();
             log.error(e);
         } finally {
             log.info("System was running!");

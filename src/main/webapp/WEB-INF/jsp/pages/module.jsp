@@ -12,87 +12,26 @@
 <%@ taglib prefix="uj" uri="/WEB-INF/tld/UtilJson.tld"%>
 <%@ taglib prefix="ua" uri="/WEB-INF/tld/UserAccess.tld"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<link href="<c:url value="/assets/vendors/custom/jstree/jstree.bundle.css" />" rel="stylesheet" type="text/css" />
 <div class="kt-container  kt-grid__item kt-grid__item--fluid">
-    <div class="kt-portlet kt-portlet--mobile">
-        <div class="kt-portlet__body">
-<c:choose>
-    <c:when test="${not empty list}">
-<table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
-    <thead>
-    <tr>
-        <th>№</th>
-        <th>ID</th>
-        <th>Ad</th>
-        <th>Açıqlama</th>
-        <th>URL path</th>
-        <th>İkon</th>
-        <th>Üst modul</th>
-        <th>Əməliyyat</th>
-    </tr>
-    </thead>
-    <tbody>
-    <c:forEach var="t" items="${list}" varStatus="loop">
-        <tr>
-            <td>${loop.index + 1}</td>
-            <td><c:out value="${t.id}" /></td>
-            <td><c:out value="${t.name}" /></td>
-            <td><c:out value="${t.description}" /></td>
-            <td><c:out value="${t.path}" /></td>
-            <c:choose>
-                <c:when test="${not empty t.icon}">
-                    <td><i class="<c:out value="${t.icon.name}"/>"></i> <c:out value="${t.icon.name}" /></td>
-                </c:when>
-                <c:otherwise>
-                    <td></td>
-                </c:otherwise>
-            </c:choose>
-            <c:choose>
-                <c:when test="${not empty t.module}">
-                    <td>
-                        <span class="kt-badge kt-badge--danger kt-badge--inline kt-badge--pill"><c:out value="${t.module.name}" /></span>
-                    </td>
-                </c:when>
-                <c:otherwise>
-                    <td></td>
-                </c:otherwise>
-            </c:choose>
-            <td nowrap class="text-center">
-                <c:set var="view" value="${ua:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
-                <c:choose>
-                    <c:when test="${view.status}">
-                        <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
-                            <i class="la <c:out value="${view.object.icon.name}"/>"></i>
-                        </a>
-                    </c:when>
-                </c:choose>
-                <c:set var="edit" value="${ua:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
-                <c:choose>
-                    <c:when test="${edit.status}">
-                        <a href="javascript:edit($('#form'), '<c:out value="${uj:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
-                            <i class="la <c:out value="${edit.object.icon.name}"/>"></i>
-                        </a>
-                    </c:when>
-                </c:choose>
-                <c:set var="delete" value="${ua:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
-                <c:choose>
-                    <c:when test="${delete.status}">
-                        <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
-                            <i class="la <c:out value="${delete.object.icon.name}"/>"></i>
-                        </a>
-                    </c:when>
-                </c:choose>
-            </td>
-        </tr>
-    </c:forEach>
-    </tbody>
-</table>
-    </c:when>
-    <c:otherwise>
-        Məlumat yoxdur
-    </c:otherwise>
-</c:choose>
+    <div class="row">
 
+        <div class="col-lg-6">
+            <div class="kt-portlet kt-portlet--mobile">
+                <div class="kt-portlet__body">
+                    <div id="kt_tree_5" class="tree-demo">
+                    </div>
+                </div>
+            </div>
         </div>
+        <div class="col-lg-6">
+            <div class="kt-portlet kt-portlet--mobile">
+                <div class="kt-portlet__body">
+                    Menyunun yer alacağı kontent: Menyuya baxış
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -110,8 +49,7 @@
                     <div class="form-group">
                         <form:label path="module">Üst modul</form:label>
                         <form:select  path="module" cssClass="custom-select form-control">
-                            <form:option value=""/>
-                            <form:options items="${parents}" itemLabel="name" itemValue="id" />
+                            <form:options items="${list}" itemLabel="name" itemValue="id" />
                         </form:select>
                     </div>
                     <div class="form-group">
@@ -129,9 +67,8 @@
                     </div>
                     <div class="form-group">
                         <form:label path="icon">İkon</form:label>
-                        <form:select  path="icon" cssClass="custom-select form-control">
-                            <form:options items="${icons}" itemLabel="name" itemValue="id" />
-                        </form:select>
+                        <form:input path="icon" type="text" cssClass="form-control" placeholder="İkon adını daxil edin" />
+                        <form:errors path="icon" cssClass="alert-danger control-label"/>
                     </div>
                 </form:form>
             </div>
@@ -143,4 +80,91 @@
     </div>
 </div>
 
+<script src="<c:url value="/assets/vendors/custom/jstree/jstree.bundle.js" />" type="text/javascript"></script>
+<script>
+    function show(data){
+        let json = data;
+        let d = JSON.stringify(json, null, 2);
+        alert(data);
+        alert(d);
+        console.log(d);
+    }
+
+    $(function(){
+        var KTTreeview = function () {
+            var demo5 = function() {
+                $("#kt_tree_5").jstree({
+                    "core" : {
+                        "themes" : {
+                            "responsive": false
+                        },
+                        // so that create works
+                        "check_callback" : true,
+                        'data': [{
+                            "text": "Parent Node",
+                            "children": [{
+                                "text": "Initially selected",
+                                "state": {
+                                    "selected": true
+                                }
+                            }, {
+                                "text": "Custom Icon",
+                                "icon": "fa fa-warning kt-font-danger"
+                            }, {
+                                "text": "Initially open",
+                                "icon" : "fa fa-folder kt-font-success",
+                                "state": {
+                                    "opened": true
+                                },
+                                "children": [
+                                    {"text": "Another node", "icon" : "fa fa-file kt-font-waring"}
+                                ]
+                            }, {
+                                "text": "Another Custom Icon",
+                                "icon": "fa fa-warning kt-font-waring"
+                            }, {
+                                "text": "Disabled Node",
+                                "icon": "fa fa-check kt-font-success",
+                                "state": {
+                                    "disabled": true
+                                }
+                            }, {
+                                "text": "Sub Nodes",
+                                "icon": "fa fa-folder kt-font-danger",
+                                "children": [
+                                    {"text": "Item 1", "icon" : "fa fa-file kt-font-waring"},
+                                    {"text": "Item 2", "icon" : "fa fa-file kt-font-success"},
+                                    {"text": "Item 3", "icon" : "fa fa-file kt-font-default"},
+                                    {"text": "Item 4", "icon" : "fa fa-file kt-font-danger"},
+                                    {"text": "Item 5", "icon" : "fa fa-file kt-font-info"}
+                                ]
+                            }]
+                        },
+                            "Another Node"
+                        ]
+                    },
+                    "types" : {
+                        "default" : {
+                            "icon" : "fa fa-folder kt-font-success"
+                        },
+                        "file" : {
+                            "icon" : "fa fa-file  kt-font-success"
+                        }
+                    },
+                    "state" : { "key" : "demo2" },
+                    "plugins" : [ "dnd", "state", "types" ]
+                });
+            };
+            return {
+                init: function () {
+                    demo5();
+                }
+            };
+        }();
+
+        KTTreeview.init();
+    })
+
+
+</script>
 

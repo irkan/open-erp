@@ -25,7 +25,7 @@
                             <c:when test="${export.status}">
                                 <div class="dropdown dropdown-inline">
                                     <button type="button" style="color: white" class="btn btn-default btn-font-light btn-icon-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="la <c:out value="${export.object.icon.name}"/>"></i> <c:out value="${export.object.name}"/>
+                                        <i class="la <c:out value="${export.object.icon}"/>"></i> <c:out value="${export.object.name}"/>
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <ul class="kt-nav">
@@ -65,7 +65,7 @@
                         <c:choose>
                             <c:when test="${create.status}">
                                 <a href="javascript:create($('#form'), 'modal-operation', '<c:out value="${create.object.name}" />');" class="btn btn-danger">
-                                    <i class="la <c:out value="${create.object.icon.name}"/>"></i>
+                                    <i class="la <c:out value="${create.object.icon}"/>"></i>
                                     <c:out value="${create.object.name}"/>
                                 </a>
                             </c:when>

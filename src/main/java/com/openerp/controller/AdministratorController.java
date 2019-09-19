@@ -21,7 +21,7 @@ import java.util.List;
 public class AdministratorController extends SkeletonController {
 
     @GetMapping(value = "/{page}")
-    public String route(Model model, @PathVariable("page") String page) throws Exception {
+    public String route(Model model, @PathVariable("page") String page, RedirectAttributes redirectAttributes) throws Exception {
         session.setAttribute(Constants.PAGE, page);
         String description = "";
         List<Module> moduleList = (List<Module>) session.getAttribute(Constants.MODULES);
@@ -34,34 +34,34 @@ public class AdministratorController extends SkeletonController {
         session.setAttribute(Constants.MODULE_DESCRIPTION, description);
 
         if (page.equalsIgnoreCase(Constants.ROUTE.MODULE)) {
-            model.addAttribute(Constants.ICONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("icon"));
             model.addAttribute(Constants.PARENTS, moduleRepository.findAllByModuleIsNullAndActiveTrue());
             model.addAttribute(Constants.LIST, moduleRepository.getModulesByActiveTrue());
-            if(session.getAttribute(Constants.BINDING)==null){
+            if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Module());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.OPERATION)){
-            model.addAttribute(Constants.ICONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("icon"));
             model.addAttribute(Constants.LIST, operationRepository.getOperationsByActiveTrue());
-            if(session.getAttribute(Constants.BINDING)==null){
+            if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Operation());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.DICTIONARY)){
             model.addAttribute(Constants.LIST, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Active(true));
             model.addAttribute(Constants.DICTIONARY_TYPES, dictionaryTypeRepository.getDictionaryTypesByActiveTrue());
-            if(session.getAttribute(Constants.BINDING)==null){
+            if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Dictionary());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.DICTIONARY_TYPE)){
             model.addAttribute(Constants.LIST, dictionaryTypeRepository.getDictionaryTypesByActiveTrue());
-            if(session.getAttribute(Constants.BINDING)==null){
+            if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new DictionaryType());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.USER)){
             model.addAttribute(Constants.ORGANIZATIONS, organizationRepository.findAll());
             model.addAttribute(Constants.EMPLOYEES, employeeRepository.findAll());
             model.addAttribute(Constants.LIST, userRepository.findAll());
-            model.addAttribute(Constants.FORM, new User());
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new User());
+            }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.MODULE_OPERATION)){
             model.addAttribute(Constants.MODULES, moduleRepository.getModulesByActiveTrue());
             model.addAttribute(Constants.OPERATIONS, operationRepository.getOperationsByActiveTrue());
@@ -161,7 +161,7 @@ public class AdministratorController extends SkeletonController {
     }
 
     @PostMapping(value = "/get-template")
-    public String postGetTemplate(Model model, @ModelAttribute(Constants.FORM) @Validated TemplateModuleOperation templateModuleOperation, BindingResult binding) throws Exception {
+    public String postGetTemplate(Model model, @ModelAttribute(Constants.FORM) @Validated TemplateModuleOperation templateModuleOperation) throws Exception {
         model.addAttribute(Constants.FORM, templateModuleOperation);
         model.addAttribute(Constants.USERS, userRepository.findAll());
         List<ModuleOperation>  list = moduleOperationRepository.findAll();
@@ -177,7 +177,7 @@ public class AdministratorController extends SkeletonController {
     @PostMapping(value = "/get-user-template")
     public String postGetUserTemplate(Model model, @ModelAttribute(Constants.FORM) @Validated UserModuleOperation userModuleOperation,
                                       @RequestParam(name="template", required = false, defaultValue = "0") int templateId,
-                                      @RequestParam(name="user", required = false, defaultValue = "0") int userId,BindingResult binding) throws Exception {
+                                      @RequestParam(name="user", required = false, defaultValue = "0") int userId) throws Exception {
         model.addAttribute(Constants.FORM, userModuleOperation);
         model.addAttribute(Constants.USERS, userRepository.findAll());
         List<ModuleOperation>  list = moduleOperationRepository.findAll();

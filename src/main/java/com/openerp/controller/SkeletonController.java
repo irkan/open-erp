@@ -68,12 +68,11 @@ public class SkeletonController {
     }
 
     String mapPost(Object object, BindingResult binding, RedirectAttributes redirectAttributes){
-        session.setAttribute(Constants.BINDING, binding);
-        if(!binding.hasErrors()){
-            session.removeAttribute(Constants.BINDING);
-        }
         redirectAttributes.addFlashAttribute(Constants.FORM_RESULT_BINDING, binding);
         redirectAttributes.addFlashAttribute(Constants.FORM, object);
+        if(!binding.hasErrors()){
+            redirectAttributes.getFlashAttributes().remove(Constants.FORM);
+        }
         return "redirect:"+request.getRequestURI();
     }
 

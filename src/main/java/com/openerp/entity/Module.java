@@ -33,9 +33,8 @@ public class Module {
     @Column(name = "path")
     private String path;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_dictionary_icon_id")
-    private Dictionary icon;
+    @Column(name = "icon")
+    private String icon;
 
     @JsonIgnore
     @OneToMany(mappedBy = "module")
@@ -52,7 +51,7 @@ public class Module {
     @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="module")
     private List<Module> children;
 
-    public Module(String name, String description, String path, Dictionary icon, Module module) {
+    public Module(String name, String description, String path, String icon, Module module) {
         this.name = name;
         this.description = description;
         this.path = path;
