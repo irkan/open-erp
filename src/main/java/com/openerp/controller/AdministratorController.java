@@ -40,11 +40,6 @@ public class AdministratorController extends SkeletonController {
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Module());
             }
-            request.getContextPath();
-            request.getPathInfo();
-            request.getServletPath();
-            request.getRealPath("/WEB-INF/jsp/pages/");
-            request.getPathTranslated();
         } else if (page.equalsIgnoreCase(Constants.ROUTE.OPERATION)){
             model.addAttribute(Constants.LIST, operationRepository.getOperationsByActiveTrue());
             if(!model.containsAttribute(Constants.FORM)){
