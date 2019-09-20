@@ -48,7 +48,7 @@ public class Module {
     private Boolean active = true;
 
     @JsonIgnore
-    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="module")
+    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="module")
     private List<Module> children;
 
     public Module(String name, String description, String path, String icon, Module module) {

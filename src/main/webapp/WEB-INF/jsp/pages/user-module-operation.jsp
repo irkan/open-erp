@@ -57,7 +57,7 @@
                                         <td></td>
                                         <c:forEach var="t" items="${operations}" varStatus="loop">
                                             <td class="text-center" style="width: ${75/operations.size()}%">
-                                                <c:out value="${t.name}" />
+                                                <span><c:out value="${t.name}" /></span><i class="icon-custom <c:out value="${t.icon}" />"></i>
                                             </td>
                                         </c:forEach>
                                     </tr>
@@ -68,7 +68,7 @@
                                             <c:when test="${not empty m.module}">
                                                 <tr>
                                                     <td>${loop.index + 1}</td>
-                                                    <td class="text-right"><c:out value="${m.name}" /></td>
+                                                    <td class="text-right"><span><c:out value="${m.name}" /></span><i class="icon-custom <c:out value="${m.icon}" />"></i></td>
                                                     <td><c:out value="${m.module.name}" /></td>
                                                     <td class="text-center" style="width: 8px; background-color: #f7f8fa"><input type="checkbox" onclick="checkedRow(this)"></td>
                                                     <c:forEach var="o" items="${operations}" varStatus="loop">

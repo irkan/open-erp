@@ -18,7 +18,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="<c:url value="/assets/css/demo4/pages/error/error-6.css" />" rel="stylesheet" type="text/css"/>
     <link href="<c:url value="/assets/css/demo4/style.bundle.css" />" rel="stylesheet" type="text/css"/>
-    <link rel="shortcut icon" href="<c:url value="/assets/media/logos/favicon.ico" />"/>
+    <link rel="shortcut icon" href="<c:url value="/assets/media/logos/logo_sual_32_T28_icon.ico" />"/>
 </head>
 <body class="kt-page--loading-enabled kt-page--loading kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header--minimize-menu kt-header-mobile--fixed kt-subheader--enabled kt-subheader--transparent kt-page--loading">
 <div class="kt-grid kt-grid--ver kt-grid--root kt-page">

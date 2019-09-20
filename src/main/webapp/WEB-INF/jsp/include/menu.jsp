@@ -32,9 +32,26 @@
                     <c:forEach var="t" items="${sessionScope.modules}" varStatus="loop">
                         <li class="kt-menu__item <c:out value="${t.path==page ? 'kt-menu__item--here' : ' '}"/> kt-menu__item--rel" <%--kt-menu__item--here--%>>
                             <a href="/<c:out value="${t.module.path}" />/<c:out value="${t.path}" />" class="kt-menu__link">
-                                <i class="la <c:out value="${t.icon}" />" style="color: #d6d6d6;margin-right: 10px;font-size: 16px;"></i>
+                                <i class="<c:out value="${t.icon}" />" style="color: #d6d6d6;margin-right: 10px;font-size: 16px;"></i>
                                 <span class="kt-menu__link-text"><c:out value="${t.name}" /></span>
+                                <c:if test="${t.children.size()>0}">
+                                    <i class="kt-menu__hor-arrow la la-angle-down"></i>
+                                </c:if>
                             </a>
+                            <c:if test="${t.children.size()>0}">
+                            <div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--left">
+                                <ul class="kt-menu__subnav">
+                                    <c:forEach var="p" items="${t.children}" varStatus="loop">
+                                        <li class="kt-menu__item  kt-menu__item--submenu"  data-ktmenu-submenu-toggle="hover" aria-haspopup="true">
+                                            <a href="/<c:out value="${p.module.path}" />/<c:out value="${p.path}" />" class="kt-menu__link">
+                                                <i class="<c:out value="${p.icon}" />" style="color: #d6d6d6;margin-right: 10px;font-size: 16px;"></i>
+                                                <span class="kt-menu__link-text"><c:out value="${p.name}" /></span>
+                                            </a>
+                                        </li>
+                                    </c:forEach>
+                                </ul>
+                            </div>
+                            </c:if>
                         </li>
                     </c:forEach>
                 </ul>

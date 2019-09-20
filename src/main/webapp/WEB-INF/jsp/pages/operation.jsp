@@ -35,14 +35,7 @@
             <td><c:out value="${t.id}" /></td>
             <td><c:out value="${t.name}" /></td>
             <td><c:out value="${t.path}" /></td>
-            <c:choose>
-                <c:when test="${not empty t.icon}">
-                    <td><i class="<c:out value="${t.icon.name}"/>"></i> <c:out value="${t.icon.name}" /></td>
-                </c:when>
-                <c:otherwise>
-                    <td></td>
-                </c:otherwise>
-            </c:choose>
+            <td><i class="<c:out value="${t.icon}"/>"></i> <c:out value="${t.icon}" /></td>
             <td nowrap class="text-center">
                 <c:set var="view" value="${ua:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
                 <c:choose>
