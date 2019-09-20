@@ -462,7 +462,6 @@ public class DBConfiguration {
 
             userModuleOperationRepository.saveAll(userModuleOperations);
         } catch (Exception e){
-            e.printStackTrace();
             log.error(e);
         } finally {
             log.info("System was running!");

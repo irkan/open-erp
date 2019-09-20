@@ -91,6 +91,8 @@
     }
 
     $(function(){
+
+        console.log('<c:out value="${uj:toJson(parents)}" />');
         var KTTreeview = function () {
             var demo5 = function() {
                 $("#kt_tree_5").jstree({
@@ -100,47 +102,43 @@
                         },
                         // so that create works
                         "check_callback" : true,
-                        'data': [{
-                            "text": "Parent Node",
-                            "children": [{
-                                "text": "Initially selected",
-                                "state": {
-                                    "selected": true
-                                }
-                            }, {
-                                "text": "Custom Icon",
-                                "icon": "fa fa-warning kt-font-danger"
-                            }, {
-                                "text": "Initially open",
-                                "icon" : "fa fa-folder kt-font-success",
+                        'data': [
+                            <c:forEach var="t" items="${parents}" varStatus="loop">
+                            {
+                                "text": "<c:out value="${t.name}"/>",
+                                "icon" : "<c:out value="${t.icon}"/>",
                                 "state": {
                                     "opened": true
-                                },
-                                "children": [
-                                    {"text": "Another node", "icon" : "fa fa-file kt-font-waring"}
-                                ]
-                            }, {
-                                "text": "Another Custom Icon",
-                                "icon": "fa fa-warning kt-font-waring"
-                            }, {
-                                "text": "Disabled Node",
-                                "icon": "fa fa-check kt-font-success",
-                                "state": {
-                                    "disabled": true
                                 }
-                            }, {
-                                "text": "Sub Nodes",
-                                "icon": "fa fa-folder kt-font-danger",
-                                "children": [
-                                    {"text": "Item 1", "icon" : "fa fa-file kt-font-waring"},
-                                    {"text": "Item 2", "icon" : "fa fa-file kt-font-success"},
-                                    {"text": "Item 3", "icon" : "fa fa-file kt-font-default"},
-                                    {"text": "Item 4", "icon" : "fa fa-file kt-font-danger"},
-                                    {"text": "Item 5", "icon" : "fa fa-file kt-font-info"}
+                                <c:if test="${t.children.size()>0}">
+                                ,"children": [
+                                    <c:forEach var="p" items="${t.children}" varStatus="loop">
+                                    {
+                                        "text": "<c:out value="${p.name}"/>",
+                                        "icon" : "<c:out value="${p.icon}"/>",
+                                        "state": {
+                                            "opened": true
+                                        }
+                                        <c:if test="${p.children.size()>0}">
+                                        ,"children": [
+                                            <c:forEach var="f" items="${p.children}" varStatus="loop">
+                                            {
+                                                "text": "<c:out value="${f.name}"/>",
+                                                "icon" : "<c:out value="${f.icon}"/>",
+                                                "state": {
+                                                    "opened": true
+                                                }
+                                            },
+                                            </c:forEach>
+                                        ]
+                                        </c:if>
+                                    },
+                                    </c:forEach>
                                 ]
-                            }]
-                        },
-                            "Another Node"
+                                </c:if>
+
+                            },
+                            </c:forEach>
                         ]
                     },
                     "types" : {

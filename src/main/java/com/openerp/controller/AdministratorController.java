@@ -12,7 +12,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
+import java.io.File;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +40,11 @@ public class AdministratorController extends SkeletonController {
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Module());
             }
+            request.getContextPath();
+            request.getPathInfo();
+            request.getServletPath();
+            request.getRealPath("/WEB-INF/jsp/pages/");
+            request.getPathTranslated();
         } else if (page.equalsIgnoreCase(Constants.ROUTE.OPERATION)){
             model.addAttribute(Constants.LIST, operationRepository.getOperationsByActiveTrue());
             if(!model.containsAttribute(Constants.FORM)){
@@ -90,6 +96,9 @@ public class AdministratorController extends SkeletonController {
     public String postModule(@ModelAttribute(Constants.FORM) @Validated Module module, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         if(!binding.hasErrors()){
             moduleRepository.save(module);
+            File source = new File(request.getRealPath("/WEB-INF/jsp/pages/empty.jsp"));
+            File dest = new File(request.getRealPath("/WEB-INF/jsp/pages/"+module.getPath()+".jsp"));
+            Files.copy(source.toPath(), dest.toPath());
         }
         return mapPost(module, binding, redirectAttributes);
     }
