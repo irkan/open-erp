@@ -73,13 +73,18 @@
                 </form:form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="$('#form').submit()">Yadda saxla</button>
+                <button type="button" class="btn btn-primary" onclick="submit($('#form'));">Yadda saxla</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
             </div>
         </div>
     </div>
 </div>
 
+<form style="display: none" action="/admin/module/move" method="post" id="module-move-form">
+    <input type="hidden" name="parent-id" id="parent-id">
+    <input type="hidden" name="sub-id" id="sub-id">
+</form>
+<%--<c:out value="${uj:toJson(parents)}" />--%>
 <script src="<c:url value="/assets/vendors/custom/jstree/jstree.bundle.js" />" type="text/javascript"></script>
 <script>
     function show(data){
@@ -91,8 +96,6 @@
     }
 
     $(function(){
-
-        console.log('<c:out value="${uj:toJson(parents)}" />');
         var KTTreeview = function () {
             var demo5 = function() {
                 $("#kt_tree_5").jstree({
@@ -107,6 +110,7 @@
                             {
                                 "text": "<c:out value="${t.name}"/>",
                                 "icon" : "<c:out value="${t.icon}"/>",
+                                "li_attr" : { "unique" : "<c:out value="${t.id}"/>" },
                                 "state": {
                                     "opened": true
                                 }
@@ -116,6 +120,7 @@
                                     {
                                         "text": "<c:out value="${p.name}"/>",
                                         "icon" : "<c:out value="${p.icon}"/>",
+                                        "li_attr" : { "unique" : "<c:out value="${p.id}"/>" },
                                         "state": {
                                             "opened": true
                                         }
@@ -125,9 +130,52 @@
                                             {
                                                 "text": "<c:out value="${f.name}"/>",
                                                 "icon" : "<c:out value="${f.icon}"/>",
+                                                "li_attr" : { "unique" : "<c:out value="${f.id}"/>" },
                                                 "state": {
                                                     "opened": true
                                                 }
+                                                <c:if test="${f.children.size()>0}">
+                                                ,"children": [
+                                                    <c:forEach var="m" items="${f.children}" varStatus="loop">
+                                                    {
+                                                        "text": "<c:out value="${m.name}"/>",
+                                                        "icon" : "<c:out value="${m.icon}"/>",
+                                                        "li_attr" : { "unique" : "<c:out value="${m.id}"/>" },
+                                                        "state": {
+                                                            "opened": true
+                                                        }
+                                                        <c:if test="${m.children.size()>0}">
+                                                        ,"children": [
+                                                            <c:forEach var="n" items="${m.children}" varStatus="loop">
+                                                            {
+                                                                "text": "<c:out value="${n.name}"/>",
+                                                                "icon" : "<c:out value="${n.icon}"/>",
+                                                                "li_attr" : { "unique" : "<c:out value="${n.id}"/>" },
+                                                                "state": {
+                                                                    "opened": true
+                                                                }
+                                                                <c:if test="${n.children.size()>0}">
+                                                                ,"children": [
+                                                                    <c:forEach var="o" items="${n.children}" varStatus="loop">
+                                                                    {
+                                                                        "text": "<c:out value="${o.name}"/>",
+                                                                        "icon" : "<c:out value="${o.icon}"/>",
+                                                                        "li_attr" : { "unique" : "<c:out value="${o.id}"/>" },
+                                                                        "state": {
+                                                                            "opened": true
+                                                                        }
+                                                                    },
+                                                                    </c:forEach>
+                                                                ]
+                                                                </c:if>
+                                                            },
+                                                            </c:forEach>
+                                                        ]
+                                                        </c:if>
+                                                    },
+                                                    </c:forEach>
+                                                ]
+                                                </c:if>
                                             },
                                             </c:forEach>
                                         ]
@@ -136,7 +184,6 @@
                                     </c:forEach>
                                 ]
                                 </c:if>
-
                             },
                             </c:forEach>
                         ]
@@ -151,6 +198,12 @@
                     },
                     "state" : { "key" : "demo2" },
                     "plugins" : [ "dnd", "state", "types" ]
+                });
+
+                $('#kt_tree_5').on("move_node.jstree", function (e, data) {
+                    $("#sub-id").val($("#"+data.parent).attr("unique"));
+                    $("#parent-id").val($("#"+data.node.id).attr("unique"));
+                    submit($("#module-move-form"));
                 });
             };
             return {

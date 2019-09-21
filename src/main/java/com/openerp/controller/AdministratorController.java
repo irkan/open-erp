@@ -98,6 +98,16 @@ public class AdministratorController extends SkeletonController {
         return mapPost(module, binding, redirectAttributes);
     }
 
+    @PostMapping(value = "/module/move")
+    public String postModuleMove(@RequestParam(name="parent-id", defaultValue = "0") int parentId,
+                                 @RequestParam(name="sub-id", defaultValue = "0") int subId) throws Exception {
+        Module parent = moduleRepository.getModuleById(parentId);
+        Module sub = moduleRepository.getModuleById(subId);
+        parent.setModule(sub);
+        moduleRepository.save(parent);
+        return "redirect:/admin/module";
+    }
+
     @PostMapping(value = "/operation")
     public String postOperation(@ModelAttribute(Constants.FORM) @Validated Operation operation, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         if(!binding.hasErrors()){

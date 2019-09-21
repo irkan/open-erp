@@ -49,6 +49,15 @@
 </form>
 
 <script>
+    function submit(form){
+        swal.fire({
+            text: 'Proses davam edir...',
+            onOpen: function() {
+                swal.showLoading();
+                $(form).submit();
+            }
+        });
+    }
     function create(form, modal, modal_title){
         $('#' + modal).find(".modal-title").html(modal_title);
         $('#' + modal).modal('toggle');

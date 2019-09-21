@@ -60,60 +60,6 @@ public class DBConfiguration {
     @Value("${default.admin.password}")
     private String defaultAdminPassword;
 
-    @Value("${default.admin.module.name}")
-    private String defaultAdminModuleName;
-
-    @Value("${default.admin.module.description}")
-    private String defaultAdminModuleDescription;
-
-    @Value("${default.admin.module.path}")
-    private String defaultAdminModulePath;
-
-    @Value("${default.admin.sub1.module.name}")
-    private String defaultAdminSub1ModuleName;
-
-    @Value("${default.admin.sub1.module.description}")
-    private String defaultAdminSub1ModuleDescription;
-
-    @Value("${default.admin.sub1.module.path}")
-    private String defaultAdminSub1ModulePath;
-
-    @Value("${default.admin.sub2.module.name}")
-    private String defaultAdminSub2ModuleName;
-
-    @Value("${default.admin.sub2.module.description}")
-    private String defaultAdminSub2ModuleDescription;
-
-    @Value("${default.admin.sub2.module.path}")
-    private String defaultAdminSub2ModulePath;
-
-    @Value("${default.admin.sub3.module.name}")
-    private String defaultAdminSub3ModuleName;
-
-    @Value("${default.admin.sub3.module.description}")
-    private String defaultAdminSub3ModuleDescription;
-
-    @Value("${default.admin.sub3.module.path}")
-    private String defaultAdminSub3ModulePath;
-
-    @Value("${default.admin.sub4.module.name}")
-    private String defaultAdminSub4ModuleName;
-
-    @Value("${default.admin.sub4.module.description}")
-    private String defaultAdminSub4ModuleDescription;
-
-    @Value("${default.admin.sub4.module.path}")
-    private String defaultAdminSub4ModulePath;
-
-    @Value("${default.admin.sub5.module.name}")
-    private String defaultAdminSub5ModuleName;
-
-    @Value("${default.admin.sub5.module.description}")
-    private String defaultAdminSub5ModuleDescription;
-
-    @Value("${default.admin.sub5.module.path}")
-    private String defaultAdminSub5ModulePath;
-
     @PostConstruct
     public void run() {
         try{
@@ -210,51 +156,51 @@ public class DBConfiguration {
 
 
             List<Module> modules = new ArrayList<>();
-            Module module = new Module(defaultAdminModuleName, defaultAdminModuleDescription, defaultAdminModulePath, "la la-user", null);
+            Module module = new Module("İnzibatçı", "Sistemə nəzarət", "admin", "flaticon-settings-1", null);
             modules.add(module);
-            Module subModule1 = new Module(defaultAdminSub1ModuleName, defaultAdminSub1ModuleDescription, defaultAdminSub1ModulePath, "la la-user", module);
-            modules.add(subModule1);
-            Module subModule2 = new Module(defaultAdminSub2ModuleName, defaultAdminSub2ModuleDescription, defaultAdminSub2ModulePath, "la la-user", module);
-            modules.add(subModule2);
-            Module subModule3 = new Module(defaultAdminSub3ModuleName, defaultAdminSub3ModuleDescription, defaultAdminSub3ModulePath, "la la-user", module);
-            modules.add(subModule3);
-            Module subModule4 = new Module(defaultAdminSub4ModuleName, defaultAdminSub4ModuleDescription, defaultAdminSub4ModulePath, "la la-user", module);
-            modules.add(subModule4);
-            Module subModule5 = new Module(defaultAdminSub5ModuleName, defaultAdminSub5ModuleDescription, defaultAdminSub5ModulePath, "la la-user", module);
-            modules.add(subModule5);
-            Module module1 = new Module("İnsan Resursu", "İnsan Resursu", "hr", "la la-user", null);
-            modules.add(module1);
-            Module subModule6 = new Module("Struktur", "Struktur", "organization", "la la-user", module1);
-            modules.add(subModule6);
-            Module subModule7 = new Module("Əməkdaş", "Əməkdaş", "employee", "la la-user", module1);
-            modules.add(subModule7);
-            Module subModule8 = new Module("Modul və Əməliyyat", "Modul və Əməliyyat", "module-operation", "la la-user", module);
+            Module subModule8 = new Module("Modul və Əməliyyat", "Modul və Əməliyyat", "module-operation", "flaticon-interface-10", module);
             modules.add(subModule8);
-            Module subModule9 = new Module("İstifadəçi icazəsi", "İstifadəçi icazəsi", "user-module-operation", "la la-user", module);
+            Module subModule1 = new Module("Modul", "Modul", "module", "flaticon-menu-button", subModule8);
+            modules.add(subModule1);
+            Module subModule4 = new Module("Əməliyyat", "Əməliyyat", "operation", "flaticon-interface-7", subModule8);
+            modules.add(subModule4);
+            Module subModule2 = new Module("Sorğu", "Sorğu", "dictionary", "flaticon-folder-1", module);
+            modules.add(subModule2);
+            Module subModule3 = new Module("Sorğu tipi", "Sorğu tipi", "dictionary-type", "flaticon-layers", subModule2);
+            modules.add(subModule3);
+            Module subModule5 = new Module("İstifadəçi", "İstifadəçi", "user", "flaticon-users", module);
+            modules.add(subModule5);
+            Module subModule9 = new Module("İstifadəçi icazəsi", "İstifadəçi icazəsi", "user-module-operation", "flaticon-clipboard", subModule5);
             modules.add(subModule9);
-            Module subModule10 = new Module("İcazə şablonu", "İcazə şablonu", "template-module-operation", "la la-user", module);
+            Module subModule10 = new Module("İcazə şablonu", "İcazə şablonu", "template-module-operation", "flaticon-squares-3", module);
             modules.add(subModule10);
-            Module subModule11 = new Module("İkon", "İkon", "flat-icon", "la la-user", module);
+            Module module1 = new Module("İnsan Resursu", "İnsan Resursu", "hr", "flaticon-profile-1", null);
+            modules.add(module1);
+            Module subModule6 = new Module("Struktur", "Struktur", "organization", "flaticon-map", module1);
+            modules.add(subModule6);
+            Module subModule7 = new Module("Əməkdaş", "Əməkdaş", "employee", "flaticon-users", module1);
+            modules.add(subModule7);
+            Module subModule11 = new Module("İkon", "İkon", "flat-icon", "flaticon-paper-plane-1", module);
             modules.add(subModule11);
-            Module subModule12 = new Module("Flat ikon", "Flat ikon", "flat-icon", "la la-user", subModule11);
+            Module subModule12 = new Module("Flat ikon", "Flat ikon", "flat-icon", null, subModule11);
             modules.add(subModule12);
-            Module subModule13 = new Module("Lineawesome ikon", "Lineawesome ikon", "line-awesome-icon", "la la-user", subModule11);
+            Module subModule13 = new Module("LineAwesome ikon", "LineAwesome ikon", "line-awesome-icon", null, subModule11);
             modules.add(subModule13);
 
             moduleRepository.saveAll(modules);
 
             List<Operation> operations = new ArrayList<>();
-            Operation view = new Operation("Baxış", "view", "la la-eye");
+            Operation view = new Operation("Baxış", "view", "flaticon-medical");
             operations.add(view);
-            Operation create = new Operation("Yarat", "create", "la la-plus");
+            Operation create = new Operation("Yarat", "create", "flaticon-plus");
             operations.add(create);
-            Operation edit = new Operation("Redaktə", "edit", "la la-edit");
+            Operation edit = new Operation("Redaktə", "edit", "flaticon-edit-1");
             operations.add(edit);
-            Operation delete = new Operation("Sil", "delete", "la la-trash");
+            Operation delete = new Operation("Sil", "delete", "flaticon-delete");
             operations.add(delete);
-            Operation export = new Operation("İxrac", "export", "la la-print");
+            Operation export = new Operation("İxrac", "export", "flaticon2-print");
             operations.add(export);
-            Operation approve = new Operation("Təsdiq", "approve", "la la-archive");
+            Operation approve = new Operation("Təsdiq", "approve", "flaticon-signs");
             operations.add(approve);
 
             operationRepository.saveAll(operations);

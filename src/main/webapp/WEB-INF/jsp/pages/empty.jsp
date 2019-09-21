@@ -38,7 +38,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="$('#form').submit()">Yadda saxla</button>
+                <button type="button" class="btn btn-primary" onclick="submit($('#form'));">Yadda saxla</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
             </div>
         </div>

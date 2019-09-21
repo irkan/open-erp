@@ -14,7 +14,7 @@
 <%@ taglib prefix="ua" uri="/WEB-INF/tld/UserAccess.tld"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<div id="kt_header" class="kt-header  kt-header--fixed " data-ktheader-minimize="on" style="opacity: 0.95; border-bottom: 0.1px solid #228b84">
+<div id="kt_header" class="kt-header  kt-header--fixed " data-ktheader-minimize="on" style="opacity: 0.98; z-index: 10">
     <div class="kt-container ">
         <div class="kt-header__brand   kt-grid__item" id="kt_header_brand">
             <a class="kt-header__brand-logo" href="#">
@@ -30,29 +30,36 @@
             <div id="kt_header_menu" class="kt-header-menu kt-header-menu-mobile ">
                 <ul class="kt-menu__nav ">
                     <c:forEach var="t" items="${sessionScope.modules}" varStatus="loop">
-                        <li class="kt-menu__item <c:out value="${t.path==page ? 'kt-menu__item--here' : ' '}"/> kt-menu__item--rel" <%--kt-menu__item--here--%>>
-                            <a href="/<c:out value="${t.module.path}" />/<c:out value="${t.path}" />" class="kt-menu__link">
-                                <i class="<c:out value="${t.icon}" />" style="color: #d6d6d6;margin-right: 10px;font-size: 16px;"></i>
-                                <span class="kt-menu__link-text"><c:out value="${t.name}" /></span>
+                            <li class="kt-menu__item <c:out value="${t.children.size()>0 ? ' kt-menu__item--submenu ' : ' '}"/> <c:out value="${t.path==page ? 'kt-menu__item--here' : ' '}"/> kt-menu__item--rel" data-ktmenu-submenu-toggle="click" aria-haspopup="true">
+                                <a href="${t.children.size()>0?'javascript:;':t.path}" class="kt-menu__link <c:out value="${t.children.size()>0 ? ' kt-menu__toggle ' : ' '}"/>">
+                                    <i class="<c:out value="${t.icon}" />" style="color: #d6d6d6;margin-right: 10px;font-size: 18px;"></i>
+                                    <span class="kt-menu__link-text"><c:out value="${t.name}" /></span>
+                                    <c:if test="${t.children.size()>0}">
+                                        <i class="kt-menu__hor-arrow la la-angle-down"></i>
+                                    </c:if>
+                                </a>
                                 <c:if test="${t.children.size()>0}">
-                                    <i class="kt-menu__hor-arrow la la-angle-down"></i>
-                                </c:if>
-                            </a>
-                            <c:if test="${t.children.size()>0}">
-                            <div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--left">
-                                <ul class="kt-menu__subnav">
-                                    <c:forEach var="p" items="${t.children}" varStatus="loop">
+                                <div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--left">
+                                    <ul class="kt-menu__subnav">
                                         <li class="kt-menu__item  kt-menu__item--submenu"  data-ktmenu-submenu-toggle="hover" aria-haspopup="true">
-                                            <a href="/<c:out value="${p.module.path}" />/<c:out value="${p.path}" />" class="kt-menu__link">
-                                                <i class="<c:out value="${p.icon}" />" style="color: #d6d6d6;margin-right: 10px;font-size: 16px;"></i>
-                                                <span class="kt-menu__link-text"><c:out value="${p.name}" /></span>
+                                            <a href="/<c:out value="${sessionScope.parent.path}" />/<c:out value="${t.path}" />" class="kt-menu__link">
+                                                <i class="<c:out value="${t.icon}" />" style="color: #d6d6d6;margin-right: 10px;font-size: 16px;"></i>
+                                                <span class="kt-menu__link-text"><c:out value="${t.name}" /></span>
                                             </a>
                                         </li>
-                                    </c:forEach>
-                                </ul>
-                            </div>
-                            </c:if>
-                        </li>
+                                        <c:forEach var="p" items="${t.children}" varStatus="loop">
+                                            <li class="kt-menu__item  kt-menu__item--submenu"  data-ktmenu-submenu-toggle="hover" aria-haspopup="true">
+                                                <a href="/<c:out value="${sessionScope.parent.path}" />/<c:out value="${p.path}" />" class="kt-menu__link">
+                                                    <i class="<c:out value="${p.icon}" />" style="color: #d6d6d6;margin-right: 10px;font-size: 16px;"></i>
+                                                    <span class="kt-menu__link-text"><c:out value="${p.name}" /></span>
+                                                </a>
+                                            </li>
+                                        </c:forEach>
+                                    </ul>
+                                </div>
+                                </c:if>
+                            </li>
+
                     </c:forEach>
                 </ul>
             </div>

@@ -26,6 +26,7 @@ public class Constants {
     public static final String MESSAGE = "message";
     public static final String PROFILE_SUB_PAGE = "profile_sub_page";
     public static final String FORM_RESULT_BINDING = "org.springframework.validation.BindingResult.form";
+    public static final String PARENT = "parent";
 
     public static final class ROUTE{
         public static final String MODULE = "module";

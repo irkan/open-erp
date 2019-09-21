@@ -18,14 +18,22 @@ public class RouterController extends SkeletonController {
     public String getSubModules(@PathVariable("path") String path) throws Exception {
         User user = getSessionUser();
         List<Module> modules = new ArrayList<>();
+        Module parent = null;
         for(UserModuleOperation umo: user.getUserModuleOperations()){
-            Module parent = umo.getModuleOperation().getModule().getModule();
+            if(umo.getModuleOperation().getModule().getModule().getModule()==null){
+                parent = umo.getModuleOperation().getModule().getModule();
+            } else if (umo.getModuleOperation().getModule().getModule().getModule().getModule()==null){
+                parent = umo.getModuleOperation().getModule().getModule().getModule();
+            } else if (umo.getModuleOperation().getModule().getModule().getModule().getModule().getModule()==null){
+                parent = umo.getModuleOperation().getModule().getModule().getModule().getModule();
+            }
             if(parent!=null && parent.getPath().equalsIgnoreCase(path)){
-                if (!modules.contains(umo.getModuleOperation().getModule())) {
+                if (umo.getModuleOperation().getModule().getModule().getModule()==null && !modules.contains(umo.getModuleOperation().getModule())) {
                     modules.add(umo.getModuleOperation().getModule());
                 }
             }
         }
+        session.setAttribute(Constants.PARENT, parent);
         session.setAttribute(Constants.MODULES, modules);
         return "redirect:/"+path+"/"+modules.get(0).getPath();
     }

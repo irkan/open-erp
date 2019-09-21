@@ -61,7 +61,7 @@
                 <c:choose>
                     <c:when test="${view.status}">
                         <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
-                            <i class="la <c:out value="${view.object.icon.name}"/>"></i>
+                            <i class="la <c:out value="${view.object.icon}"/>"></i>
                         </a>
                     </c:when>
                 </c:choose>
@@ -285,7 +285,7 @@
                 </form:form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="$('#form').submit()">Yadda saxla</button>
+                <button type="button" class="btn btn-primary" onclick="submit($('#form'));">Yadda saxla</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
             </div>
         </div>
