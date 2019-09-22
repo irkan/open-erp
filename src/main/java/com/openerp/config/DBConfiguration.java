@@ -186,6 +186,10 @@ public class DBConfiguration {
             modules.add(subModule12);
             Module subModule13 = new Module("LineAwesome ikon", "LineAwesome ikon", "line-awesome-icon", null, subModule11);
             modules.add(subModule13);
+            Module warehouse = new Module("Anbar", "İnventarın idarə edilməsi", "warehouse", "flaticon-home-2", null);
+            modules.add(warehouse);
+            Module dashboard = new Module("Panel", "Qrafik status", "dashboard", "flaticon-analytics", null);
+            modules.add(dashboard);
 
             moduleRepository.saveAll(modules);
 

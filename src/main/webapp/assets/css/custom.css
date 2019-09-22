@@ -16,3 +16,13 @@ input[type="checkbox"]{
     font-size: 18px;
     margin-left: 5px;
 }
+
+.view-label-1{
+    font-size: 18px;
+    margin-left: 5px;
+    font-weight: bolder;
+}
+.view-label-2{
+    font-size: 15px;
+    margin-left: 5px;
+}

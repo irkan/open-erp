@@ -20,30 +20,32 @@
             <div class="kt-portlet kt-portlet--mobile">
                 <div class="kt-portlet__body">
                     <div id="kt_tree_2" class="tree-demo">
-                            <c:choose>
+                        <c:set var="edit" value="${ua:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
+                        <c:set var="delete" value="${ua:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
+                        <c:choose>
                                 <c:when test="${not empty list}">
                                     <ul>
                                         <c:forEach var="t" items="${list}" varStatus="loop">
                                             <li data-jstree='{ "opened" : true }'>
-                                                <a href="javascript:show('<c:out value="${uj:toJson(t)}" />');"><c:out value="${t.name}" /></a>
+                                                <a href="javascript:showOrganization('<c:out value="${uj:toJson(t)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');"><c:out value="${t.name}" /></a>
                                                 <c:choose>
                                                     <c:when test="${not empty t.children}">
                                                     <ul>
                                                         <c:forEach var="p" items="${t.children}" varStatus="loop">
                                                             <li data-jstree='{ "opened" : true }'>
-                                                                <a href="javascript:show('<c:out value="${uj:toJson(p)}" />');"><c:out value="${p.name}" /></a>
+                                                                <a href="javascript:showOrganization('<c:out value="${uj:toJson(p)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');"><c:out value="${p.name}" /></a>
                                                                 <c:choose>
                                                                     <c:when test="${not empty p.children}">
                                                                         <ul>
                                                                             <c:forEach var="f" items="${p.children}" varStatus="loop">
                                                                                 <li data-jstree='{ "opened" : true }'>
-                                                                                    <a href="javascript:show('<c:out value="${uj:toJson(f)}" />');"><c:out value="${f.name}" /></a>
+                                                                                    <a href="javascript:showOrganization('<c:out value="${uj:toJson(f)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');"><c:out value="${f.name}" /></a>
                                                                                     <c:choose>
                                                                                         <c:when test="${not empty f.children}">
                                                                                             <ul>
                                                                                                 <c:forEach var="m" items="${f.children}" varStatus="loop">
                                                                                                     <li data-jstree='{ "opened" : true }'>
-                                                                                                        <a href="javascript:show('<c:out value="${uj:toJson(m)}" />');"><c:out value="${m.name}" /></a>
+                                                                                                        <a href="javascript:showOrganization('<c:out value="${uj:toJson(m)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');"><c:out value="${m.name}" /></a>
                                                                                                     </li>
                                                                                                 </c:forEach>
                                                                                             </ul>
@@ -75,7 +77,9 @@
         <div class="col-lg-6">
             <div class="kt-portlet kt-portlet--mobile">
                 <div class="kt-portlet__body">
-                    Struktur mlumatlarının yer alacağı kontent: Struktura baxış
+                    <div id="organization-view-content">
+                        Heç bir struktur seçilməyib...
+                    </div>
                 </div>
             </div>
         </div>
@@ -162,12 +166,38 @@
 <script src="<c:url value="/assets/vendors/custom/jstree/jstree.bundle.js" />" type="text/javascript"></script>
 <script src="<c:url value="/assets/js/demo4/pages/components/extended/treeview.js" />" type="text/javascript"></script>
 <script>
-    function show(data){
-        let json = data;
-        let d = JSON.stringify(json, null, 2);
-        alert(data);
-        alert(d);
-        console.log(d);
+    function showOrganization(data, edit_status, edit_icon, delete_status, delete_icon){
+        let obj = jQuery.parseJSON(data.replace(/\&#034;/g, '"'));
+        let content = '<div class="row">' +
+            '<div class="col-sm-8">' +
+            '<label class="view-label-1">'+obj.name+'</label><br/>' +
+            '<label class="view-label-2">'+obj.description+'</label><br/>' +
+            '<label class="view-label-2">'+obj.contact.mobilePhone+'</label><br/>' +
+            '<label class="view-label-2">'+obj.contact.homePhone+'</label><br/>' +
+            '<label class="view-label-2">'+obj.contact.email+'</label><br/>' +
+            '<label class="view-label-2">'+obj.contact.address+'</label><br/>' +
+            '<label class="view-label-2">'+obj.contact.city.name+'</label>' +
+            '</div>';
+
+        if(edit_status){
+            content+='<div class="col-sm-2 text-center">'+
+                '<a href="javascript:edit($(\'#form\'), \''+data+'\', \'modal-operation\', \'Redaktə\')"  class="btn btn-sm btn-clean btn-icon btn-icon-md" >' +
+                '<i class="'+edit_icon+'" style="font-size: 24px;"></i>' +
+                '</a> ' +
+                '</div>';
+        }
+
+        if(delete_status){
+            content+='<div class="col-sm-2 text-center">' +
+                '<a href="javascript:deleteData('+obj.id+', \''+obj.name+'\')"  class="btn btn-sm btn-clean btn-icon btn-icon-md" >' +
+                '<i class="'+delete_icon+'" style="font-size: 24px;"></i>' +
+                '</a> ' +
+                '</div>'
+        }
+
+        content+='</div>';
+
+        $("#organization-view-content").html(content);
     }
 </script>
 

@@ -10,8 +10,8 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="uj" uri="/WEB-INF/tld/UtilJson.tld"%>
-<%@ taglib prefix="ua" uri="/WEB-INF/tld/UserAccess.tld"%>
+<%@ taglib prefix="uj" uri="/WEB-INF/tld/UtilJson.tld" %>
+<%@ taglib prefix="ua" uri="/WEB-INF/tld/UserAccess.tld" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <div id="kt_header" class="kt-header  kt-header--fixed " data-ktheader-minimize="on" style="opacity: 0.98; z-index: 10">
@@ -24,41 +24,50 @@
                      class="kt-header__brand-logo-sticky"/>
             </a>
         </div>
-        <button class="kt-header-menu-wrapper-close" id="kt_header_menu_mobile_close_btn"><i
-                class="la la-close"></i></button>
+        <button class="kt-header-menu-wrapper-close" id="kt_header_menu_mobile_close_btn"><i class="la la-close"></i>
+        </button>
         <div class="kt-header-menu-wrapper kt-grid__item kt-grid__item--fluid" id="kt_header_menu_wrapper">
             <div id="kt_header_menu" class="kt-header-menu kt-header-menu-mobile ">
                 <ul class="kt-menu__nav ">
                     <c:forEach var="t" items="${sessionScope.modules}" varStatus="loop">
-                            <li class="kt-menu__item <c:out value="${t.children.size()>0 ? ' kt-menu__item--submenu ' : ' '}"/> <c:out value="${t.path==page ? 'kt-menu__item--here' : ' '}"/> kt-menu__item--rel" data-ktmenu-submenu-toggle="click" aria-haspopup="true">
-                                <a href="${t.children.size()>0?'javascript:;':t.path}" class="kt-menu__link <c:out value="${t.children.size()>0 ? ' kt-menu__toggle ' : ' '}"/>">
-                                    <i class="<c:out value="${t.icon}" />" style="color: #d6d6d6;margin-right: 10px;font-size: 18px;"></i>
-                                    <span class="kt-menu__link-text"><c:out value="${t.name}" /></span>
-                                    <c:if test="${t.children.size()>0}">
-                                        <i class="kt-menu__hor-arrow la la-angle-down"></i>
-                                    </c:if>
-                                </a>
+                        <li class="kt-menu__item <c:out value="${t.children.size()>0 ? ' kt-menu__item--submenu ' : ' '}"/> <c:out value="${t.path==page ? 'kt-menu__item--here' : ' '}"/> kt-menu__item--rel"
+                            data-ktmenu-submenu-toggle="click" aria-haspopup="true">
+                            <a href="${t.children.size()>0?'javascript:;':t.path}"
+                               class="kt-menu__link <c:out value="${t.children.size()>0 ? ' kt-menu__toggle ' : ' '}"/>">
+                                <i class="<c:out value="${t.icon}" />"
+                                   style="color: #d6d6d6;margin-right: 10px;font-size: 18px;"></i>
+                                <span class="kt-menu__link-text"><c:out value="${t.name}"/></span>
                                 <c:if test="${t.children.size()>0}">
+                                    <i class="kt-menu__hor-arrow la la-angle-down"></i>
+                                </c:if>
+                            </a>
+                            <c:if test="${t.children.size()>0}">
                                 <div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--left">
                                     <ul class="kt-menu__subnav">
-                                        <li class="kt-menu__item  kt-menu__item--submenu"  data-ktmenu-submenu-toggle="hover" aria-haspopup="true">
-                                            <a href="/<c:out value="${sessionScope.parent.path}" />/<c:out value="${t.path}" />" class="kt-menu__link">
-                                                <i class="<c:out value="${t.icon}" />" style="color: #d6d6d6;margin-right: 10px;font-size: 16px;"></i>
-                                                <span class="kt-menu__link-text"><c:out value="${t.name}" /></span>
+                                        <li class="kt-menu__item  kt-menu__item--submenu"
+                                            data-ktmenu-submenu-toggle="hover" aria-haspopup="true">
+                                            <a href="/<c:out value="${sessionScope.parent.path}" />/<c:out value="${t.path}" />"
+                                               class="kt-menu__link">
+                                                <i class="<c:out value="${t.icon}" />"
+                                                   style="color: #d6d6d6;margin-right: 10px;font-size: 16px;"></i>
+                                                <span class="kt-menu__link-text"><c:out value="${t.name}"/></span>
                                             </a>
                                         </li>
                                         <c:forEach var="p" items="${t.children}" varStatus="loop">
-                                            <li class="kt-menu__item  kt-menu__item--submenu"  data-ktmenu-submenu-toggle="hover" aria-haspopup="true">
-                                                <a href="/<c:out value="${sessionScope.parent.path}" />/<c:out value="${p.path}" />" class="kt-menu__link">
-                                                    <i class="<c:out value="${p.icon}" />" style="color: #d6d6d6;margin-right: 10px;font-size: 16px;"></i>
-                                                    <span class="kt-menu__link-text"><c:out value="${p.name}" /></span>
+                                            <li class="kt-menu__item  kt-menu__item--submenu"
+                                                data-ktmenu-submenu-toggle="hover" aria-haspopup="true">
+                                                <a href="/<c:out value="${sessionScope.parent.path}" />/<c:out value="${p.path}" />"
+                                                   class="kt-menu__link">
+                                                    <i class="<c:out value="${p.icon}" />"
+                                                       style="color: #d6d6d6;margin-right: 10px;font-size: 16px;"></i>
+                                                    <span class="kt-menu__link-text"><c:out value="${p.name}"/></span>
                                                 </a>
                                             </li>
                                         </c:forEach>
                                     </ul>
                                 </div>
-                                </c:if>
-                            </li>
+                            </c:if>
+                        </li>
 
                     </c:forEach>
                 </ul>
@@ -163,7 +172,7 @@
                 </div>
             </div>
             <c:choose>
-                <c:when test="${sessionScope.parent_modules.size()>1}">
+            <c:when test="${sessionScope.parent_modules.size()>1}">
             <div class="kt-header__topbar-item dropdown">
                 <div class="kt-header__topbar-wrapper" data-toggle="dropdown" data-offset="10px,0px">
 			<span class="kt-header__topbar-icon">
@@ -179,119 +188,107 @@
 							</span>
                 </div>
 
-            <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim dropdown-menu-xl">
-                <div class="kt-head kt-head--skin-dark"
-                     style="background-image: url(<c:url value="/assets/media/misc/bg-1.jpg"/>)">
-                    <h3 class="kt-head__title">
-                        Funksionallıqlar
-                    </h3>
-                </div>
-                <div class="kt-grid-nav kt-grid-nav--skin-light">
-                    <div class="kt-grid-nav__row">
-<c:forEach var="t" items="${sessionScope.parent_modules}" varStatus="loop">
-
-    <a href="/route/<c:out value="${t.path}" />" class="kt-grid-nav__item">
-                            <span class="kt-grid-nav__icon">
-                                <i class="<c:out value="${t.icon}" />"></i>
-                            </span>
-        <span class="kt-grid-nav__title"><c:out value="${t.name}" /></span>
-        <span class="kt-grid-nav__desc"><c:out value="${t.description}" /></span>
-    </a>
-
-    <%--<c:choose>
-        <c:when test="${t.moduleOperation.module.module eq null}">
-
-                <a href="/route/<c:out value="${t.moduleOperation.module.path}" />" class="kt-grid-nav__item">
-                            <span class="kt-grid-nav__icon">
-                                <i class="la <c:out value="${t.moduleOperation.module.icon.name}" />"></i>
-                            </span>
-                    <span class="kt-grid-nav__title"><c:out value="${t.moduleOperation.module.name}" /></span>
-                    <span class="kt-grid-nav__desc"><c:out value="${t.moduleOperation.module.description}" /></span>
-                </a>
-
-        </c:when>
-    </c:choose>--%>
-</c:forEach>
+                <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim dropdown-menu-xl">
+                    <div class="kt-head kt-head--skin-dark"
+                         style="background-image: url(<c:url value="/assets/media/misc/bg-1.jpg"/>)">
+                        <h3 class="kt-head__title">
+                            Funksionallıqlar
+                        </h3>
+                    </div>
+                    <div class="kt-grid-nav kt-grid-nav--skin-light">
+                        <c:forEach var="t" items="${sessionScope.parent_modules}" varStatus="loop">
+                            <c:if test="${(loop.index+0) % 3 == 0}">
+                                <div class="kt-grid-nav__row">
+                            </c:if>
+                            <a href="/route/<c:out value="${t.path}" />" class="kt-grid-nav__item">
+                                <span class="kt-grid-nav__icon"><i class="<c:out value="${t.icon}" />"></i></span>
+                                <span class="kt-grid-nav__title"><c:out value="${t.name}"/></span>
+                                <span class="kt-grid-nav__desc"><c:out value="${t.description}"/></span>
+                            </a>
+                            <c:if test="${(loop.index+1) % 3 == 0}">
+                                </div>
+                            </c:if>
+                        </c:forEach>
                     </div>
                 </div>
             </div>
 
-            </div>
-            </c:when>
-            </c:choose>
-            <div class="kt-header__topbar-item kt-header__topbar-item--langs">
-                <div class="kt-header__topbar-wrapper" data-toggle="dropdown" data-offset="10px,0px">
+        </div>
+        </c:when>
+        </c:choose>
+        <div class="kt-header__topbar-item kt-header__topbar-item--langs">
+            <div class="kt-header__topbar-wrapper" data-toggle="dropdown" data-offset="10px,0px">
 			<span class="kt-header__topbar-icon">
 				<img class="" src="<c:url value="/assets/media/flags/021-azerbaijan.png" />" alt=""/>
 			</span>
-                </div>
-                <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim">
-                    <ul class="kt-nav kt-margin-t-10 kt-margin-b-10">
-                        <li class="kt-nav__item kt-nav__item--active">
-                            <a href="#" class="kt-nav__link">
+            </div>
+            <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim">
+                <ul class="kt-nav kt-margin-t-10 kt-margin-b-10">
+                    <li class="kt-nav__item kt-nav__item--active">
+                        <a href="#" class="kt-nav__link">
                                             <span class="kt-nav__link-icon"><img
                                                     src="<c:url value="/assets/media/flags/021-azerbaijan.png" />"
                                                     alt=""/></span>
-                                <span class="kt-nav__link-text">Azərbaycan</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <!--end: Language bar -->
-
-            <!--begin: User bar -->
-            <div class="kt-header__topbar-item kt-header__topbar-item--user">
-                <div class="kt-header__topbar-wrapper" data-toggle="dropdown" data-offset="10px,0px">
-                    <span class="kt-header__topbar-welcome">Salam,</span>
-                    <span class="kt-header__topbar-username"> <c:out
-                            value="${sessionScope.user.employee.person.firstName}"/> </span>
-
-                    <span class="kt-header__topbar-icon"><b><c:out
-                            value="${fn:substring(sessionScope.user.employee.person.firstName, 0,1)}"/></b></span>
-                    <img alt="Pic" src="<c:url value="/assets/media/users/300_21.jpg" />" class="kt-hidden"/>
-                </div>
-                <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim dropdown-menu-xl">
-                    <div class="kt-user-card kt-user-card--skin-dark kt-notification-item-padding-x"
-                         style="background-image: url(<c:url value="/assets/media/misc/bg-1.jpg"/>)">
-                        <div class="kt-user-card__avatar">
-                            <img class="kt-hidden" alt="Pic" src="<c:url value="/assets/media/users/300_25.jpg" />"/>
-                            <span class="kt-badge kt-badge--lg kt-badge--rounded kt-badge--bold kt-font-success"><c:out
-                                    value="${fn:substring(sessionScope.user.employee.person.firstName, 0,1)}"/></span>
-                        </div>
-                        <div class="kt-user-card__name">
-                            <c:out value="${sessionScope.user.employee.person.firstName}"/>&nbsp;<c:out
-                                value="${sessionScope.user.employee.person.lastName}"/>
-                        </div>
-                        <div class="kt-user-card__badge">
-                            <span class="btn btn-success btn-sm btn-bold btn-font-md">23 mesaj</span>
-                        </div>
-                    </div>
-                    <!--end: Head -->
-
-                    <!--begin: Navigation -->
-                    <div class="kt-notification">
-                        <a href="/profile"
-                           class="kt-notification__item">
-                            <div class="kt-notification__item-icon">
-                                <i class="flaticon2-calendar-3 kt-font-success"></i>
-                            </div>
-                            <div class="kt-notification__item-details">
-                                <div class="kt-notification__item-title kt-font-bold">
-                                    Mənim profilim
-                                </div>
-                                <div class="kt-notification__item-time">
-                                    Hesab məlumatları və sazlamaları
-                                </div>
-                            </div>
+                            <span class="kt-nav__link-text">Azərbaycan</span>
                         </a>
-                        <div class="kt-notification__custom kt-space-between">
-                            <a href="/logout"
-                               class="btn btn-label btn-label-brand btn-sm btn-bold">Çıxış</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--end: Language bar -->
+
+        <!--begin: User bar -->
+        <div class="kt-header__topbar-item kt-header__topbar-item--user">
+            <div class="kt-header__topbar-wrapper" data-toggle="dropdown" data-offset="10px,0px">
+                <span class="kt-header__topbar-welcome">Salam,</span>
+                <span class="kt-header__topbar-username"> <c:out
+                        value="${sessionScope.user.employee.person.firstName}"/> </span>
+
+                <span class="kt-header__topbar-icon"><b><c:out
+                        value="${fn:substring(sessionScope.user.employee.person.firstName, 0,1)}"/></b></span>
+                <img alt="Pic" src="<c:url value="/assets/media/users/300_21.jpg" />" class="kt-hidden"/>
+            </div>
+            <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim dropdown-menu-xl">
+                <div class="kt-user-card kt-user-card--skin-dark kt-notification-item-padding-x"
+                     style="background-image: url(<c:url value="/assets/media/misc/bg-1.jpg"/>)">
+                    <div class="kt-user-card__avatar">
+                        <img class="kt-hidden" alt="Pic" src="<c:url value="/assets/media/users/300_25.jpg" />"/>
+                        <span class="kt-badge kt-badge--lg kt-badge--rounded kt-badge--bold kt-font-success"><c:out
+                                value="${fn:substring(sessionScope.user.employee.person.firstName, 0,1)}"/></span>
+                    </div>
+                    <div class="kt-user-card__name">
+                        <c:out value="${sessionScope.user.employee.person.firstName}"/>&nbsp;<c:out
+                            value="${sessionScope.user.employee.person.lastName}"/>
+                    </div>
+                    <div class="kt-user-card__badge">
+                        <span class="btn btn-success btn-sm btn-bold btn-font-md">23 mesaj</span>
+                    </div>
+                </div>
+                <!--end: Head -->
+
+                <!--begin: Navigation -->
+                <div class="kt-notification">
+                    <a href="/profile"
+                       class="kt-notification__item">
+                        <div class="kt-notification__item-icon">
+                            <i class="flaticon2-calendar-3 kt-font-success"></i>
                         </div>
+                        <div class="kt-notification__item-details">
+                            <div class="kt-notification__item-title kt-font-bold">
+                                Mənim profilim
+                            </div>
+                            <div class="kt-notification__item-time">
+                                Hesab məlumatları və sazlamaları
+                            </div>
+                        </div>
+                    </a>
+                    <div class="kt-notification__custom kt-space-between">
+                        <a href="/logout"
+                           class="btn btn-label btn-label-brand btn-sm btn-bold">Çıxış</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>

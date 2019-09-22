@@ -27,7 +27,9 @@
         <div class="col-lg-6">
             <div class="kt-portlet kt-portlet--mobile">
                 <div class="kt-portlet__body">
-                    Menyunun yer alacağı kontent: Menyuya baxış
+                    <div id="module-view-content">
+                        Heç bir menyu seçilməyib...
+                    </div>
                 </div>
             </div>
         </div>
@@ -69,6 +71,9 @@
                         <form:label path="icon">İkon</form:label>
                         <form:input path="icon" type="text" cssClass="form-control" placeholder="İkon adını daxil edin" />
                         <form:errors path="icon" cssClass="alert-danger control-label"/>
+                        <div class="text-right" style="width: 100%">
+                            <a href="/admin/flat-icon" target="_blank" class="kt-link kt-font-sm kt-font-bold kt-margin-t-5">Flat ikonlardan ikon seçin</a>
+                        </div>
                     </div>
                 </form:form>
             </div>
@@ -87,14 +92,6 @@
 <%--<c:out value="${uj:toJson(parents)}" />--%>
 <script src="<c:url value="/assets/vendors/custom/jstree/jstree.bundle.js" />" type="text/javascript"></script>
 <script>
-    function show(data){
-        let json = data;
-        let d = JSON.stringify(json, null, 2);
-        alert(data);
-        alert(d);
-        console.log(d);
-    }
-
     $(function(){
         var KTTreeview = function () {
             var demo5 = function() {
@@ -103,14 +100,16 @@
                         "themes" : {
                             "responsive": false
                         },
-                        // so that create works
                         "check_callback" : true,
                         'data': [
+                            <c:set var="edit" value="${ua:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
+                            <c:set var="delete" value="${ua:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
                             <c:forEach var="t" items="${parents}" varStatus="loop">
                             {
                                 "text": "<c:out value="${t.name}"/>",
                                 "icon" : "<c:out value="${t.icon}"/>",
                                 "li_attr" : { "unique" : "<c:out value="${t.id}"/>" },
+                                "a_attr" : { "href" : "javascript:;", "onclick" : "showModule('<c:out value="${uj:toJson(t)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');" },
                                 "state": {
                                     "opened": true
                                 }
@@ -121,6 +120,7 @@
                                         "text": "<c:out value="${p.name}"/>",
                                         "icon" : "<c:out value="${p.icon}"/>",
                                         "li_attr" : { "unique" : "<c:out value="${p.id}"/>" },
+                                        "a_attr" : { "href" : "javascript:;", "onclick" : "showModule('<c:out value="${uj:toJson(p)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');" },
                                         "state": {
                                             "opened": true
                                         }
@@ -131,6 +131,7 @@
                                                 "text": "<c:out value="${f.name}"/>",
                                                 "icon" : "<c:out value="${f.icon}"/>",
                                                 "li_attr" : { "unique" : "<c:out value="${f.id}"/>" },
+                                                "a_attr" : { "href" : "javascript:;", "onclick" : "showModule('<c:out value="${uj:toJson(f)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');" },
                                                 "state": {
                                                     "opened": true
                                                 }
@@ -141,6 +142,7 @@
                                                         "text": "<c:out value="${m.name}"/>",
                                                         "icon" : "<c:out value="${m.icon}"/>",
                                                         "li_attr" : { "unique" : "<c:out value="${m.id}"/>" },
+                                                        "a_attr" : { "href" : "javascript:;", "onclick" : "showModule('<c:out value="${uj:toJson(m)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');" },
                                                         "state": {
                                                             "opened": true
                                                         }
@@ -151,6 +153,7 @@
                                                                 "text": "<c:out value="${n.name}"/>",
                                                                 "icon" : "<c:out value="${n.icon}"/>",
                                                                 "li_attr" : { "unique" : "<c:out value="${n.id}"/>" },
+                                                                "a_attr" : { "href" : "javascript:;", "onclick" : "showModule('<c:out value="${uj:toJson(n)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');" },
                                                                 "state": {
                                                                     "opened": true
                                                                 }
@@ -161,6 +164,7 @@
                                                                         "text": "<c:out value="${o.name}"/>",
                                                                         "icon" : "<c:out value="${o.icon}"/>",
                                                                         "li_attr" : { "unique" : "<c:out value="${o.id}"/>" },
+                                                                        "a_attr" : { "href" : "javascript:;", "onclick" : "showModule('<c:out value="${uj:toJson(o)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');" },
                                                                         "state": {
                                                                             "opened": true
                                                                         }
@@ -216,6 +220,37 @@
         KTTreeview.init();
     })
 
+    function showModule(data, edit_status, edit_icon, delete_status, delete_icon){
+        let obj = jQuery.parseJSON(data.replace(/\&#034;/g, '"'));
+        let content = '<div class="row">' +
+        '<div class="col-sm-2">' +
+        '<i class="'+obj.icon+'" style="font-size: 48px;"></i>' +
+        '</div>' +
+        '<div class="col-sm-6">' +
+            '<label class="view-label-1">'+obj.name+'</label><br/>' +
+            '<label class="view-label-2">'+obj.description+'</label><br/>' +
+            '<label class="view-label-2">/'+obj.path+'</label><br/>' +
+            '<label class="view-label-2">'+obj.icon+'</label>' +
+        '</div>';
 
+        if(edit_status){
+            content+='<div class="col-sm-2 text-center">'+
+                '<a href="javascript:edit($(\'#form\'), \''+data+'\', \'modal-operation\', \'Redaktə\')"  class="btn btn-sm btn-clean btn-icon btn-icon-md" >' +
+                '<i class="'+edit_icon+'" style="font-size: 24px;"></i>' +
+                '</a> ' +
+                '</div>';
+        }
+
+        if(delete_status){
+            content+='<div class="col-sm-2 text-center">' +
+            '<a href="javascript:deleteData('+obj.id+', \''+obj.name+'\')"  class="btn btn-sm btn-clean btn-icon btn-icon-md" >' +
+            '<i class="'+delete_icon+'" style="font-size: 24px;"></i>' +
+            '</a> ' +
+            '</div>'
+        }
+
+        content+='</div>';
+
+        $("#module-view-content").html(content);
+    }
 </script>
-

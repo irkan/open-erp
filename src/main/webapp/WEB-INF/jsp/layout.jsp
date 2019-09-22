@@ -64,7 +64,8 @@
     }
 
     function edit(form, data, modal, modal_title){
-        var obj = jQuery.parseJSON(data);
+        data = data.replace(/\&#034;/g, '"');
+        let obj = jQuery.parseJSON(data);
         $.each( $(form).find("input,select,textarea"), function( key, element ) {
             let tagName = $(element).prop("tagName");
             let name = $(element).attr("name").split(".");
@@ -89,7 +90,9 @@
             } else if(tagName.toLowerCase()==="textarea"){
                 $(element).val(value);
             } else if(tagName.toLowerCase()==="select"){
-                $("#"+$(element).attr("id")+" option[value="+value.id+"]").attr("selected", "selected");
+                if(value!=null){
+                    $("#"+$(element).attr("id")+" option[value="+value.id+"]").attr("selected", "selected");
+                }
             }
         });
         $('#' + modal).find(".modal-title").html(modal_title);

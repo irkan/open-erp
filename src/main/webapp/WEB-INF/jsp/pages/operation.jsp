@@ -89,17 +89,19 @@
                 <form:form modelAttribute="form" method="post" id="form" action="/admin/operation" cssClass="form-group">
                     <div class="form-group">
                         <form:label path="name">Ad</form:label>
-                        <form:input path="name" type="text" cssClass="form-control" placeholder="Modulun adını daxil edin" />
+                        <form:input path="name" cssClass="form-control" placeholder="Modulun adını daxil edin" />
                     </div>
                     <div class="form-group">
                         <form:label path="path">URL Path</form:label>
-                        <form:input path="path" type="text" cssClass="form-control" placeholder="Modul path daxil edin"></form:input>
+                        <form:input path="path" cssClass="form-control" placeholder="Modul path daxil edin"/>
                     </div>
                     <div class="form-group">
                         <form:label path="icon">İkon</form:label>
-                        <form:select  path="icon" cssClass="custom-select  form-control">
-                            <form:options items="${icons}" itemLabel="name" itemValue="id" />
-                        </form:select>
+                        <form:input path="icon" cssClass="form-control" placeholder="İkon adını daxil edin" />
+                        <form:errors path="icon" cssClass="alert-danger control-label"/>
+                        <div class="text-right" style="width: 100%">
+                            <a href="/admin/flat-icon" target="_blank" class="kt-link kt-font-sm kt-font-bold kt-margin-t-5">Flat ikonlardan ikon seçin</a>
+                        </div>
                     </div>
                 </form:form>
             </div>
