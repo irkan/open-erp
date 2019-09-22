@@ -1171,3 +1171,8 @@
         </div>
     </div>
 </div>
+
+<script src="<c:url value="/assets/vendors/general/morris.js/morris.js" />" type="text/javascript"></script>
+<script src="<c:url value="/assets/vendors/general/chart.js/dist/Chart.bundle.js" />" type="text/javascript"></script>
+<script src="<c:url value="/assets/js/demo4/pages/dashboard.js" />" type="text/javascript"></script>
+<script src="<c:url value="/assets/js/demo4/pages/custom/user/profile.js" />" type="text/javascript"></script>

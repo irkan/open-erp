@@ -53,6 +53,7 @@
                                     <span class="kt-widget__data"><c:out value="${sessionScope.user.employee.organization.name}"/></span>
                                 </div>
                             </div>
+                            <div class="kt-separator kt-separator--border-dashed"></div>
                             <div class="kt-widget__items">
                                 <a href="/profile/overview" class="kt-widget__item <c:out default="None" escapeXml="true" value="${sessionScope.profile_sub_page eq 'profile/overview' ? ' kt-widget__item--active' : ''}" />">
                         <span class="kt-widget__section">

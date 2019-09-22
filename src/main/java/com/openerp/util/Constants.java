@@ -27,6 +27,7 @@ public class Constants {
     public static final String PROFILE_SUB_PAGE = "profile_sub_page";
     public static final String FORM_RESULT_BINDING = "org.springframework.validation.BindingResult.form";
     public static final String PARENT = "parent";
+    public static final String LANGUAGES = "languages";
 
     public static final class ROUTE{
         public static final String MODULE = "module";
@@ -41,5 +42,7 @@ public class Constants {
         public static final String USER_MODULE_OPERATION = "user-module-operation";
         public static final Object PROFILE = "profile";
         public static final String CHANGE_PASSWORD = "change-password";
+        public static final String PERSONAL_INFORMATION = "personal-information";
+        public static final String ACCOUNT_INFORMATION = "account-information";
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.util.DigestUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
@@ -35,6 +36,11 @@ public class ProfileController extends SkeletonController {
 
         if (page.equalsIgnoreCase(Constants.ROUTE.CHANGE_PASSWORD)) {
             model.addAttribute(Constants.FORM, new ChangePassword());
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.PERSONAL_INFORMATION)) {
+            model.addAttribute(Constants.FORM, getSessionUser().getEmployee().getPerson().getContact());
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.ACCOUNT_INFORMATION)) {
+            model.addAttribute(Constants.LANGUAGES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("language"));
+            model.addAttribute(Constants.FORM, getSessionUser().getUserDetail());
         }
         return "layout";
     }
@@ -53,5 +59,18 @@ public class ProfileController extends SkeletonController {
         }
         model.addAttribute(Constants.FORM, changePassword);
         return "layout";
+    }
+
+    @PostMapping(value = "/personal-information")
+    public String postPersonalInformation(@ModelAttribute(Constants.FORM) @Validated Contact contact,
+                                     BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        if(!binding.hasErrors()){
+            contactRepository.save(contact);
+            User user = getSessionUser();
+            Person person = user.getEmployee().getPerson();
+            person.setContact(contact);
+            session.setAttribute(Constants.USER, user);
+        }
+        return mapPost(contact, binding, redirectAttributes);
     }
 }

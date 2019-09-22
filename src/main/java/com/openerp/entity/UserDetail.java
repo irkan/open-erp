@@ -25,9 +25,16 @@ public class UserDetail {
     @Column(name = "sms_notification", nullable = false, columnDefinition="boolean default true")
     private Boolean smsNotification = false;
 
+    @Column(name = "language")
+    private String language;
 
-    public UserDetail(Boolean emailNotification, Boolean smsNotification) {
+    public UserDetail(String language) {
+        this.language = language;
+    }
+
+    public UserDetail(Boolean emailNotification, Boolean smsNotification, String language) {
         this.emailNotification = emailNotification;
         this.smsNotification = smsNotification;
+        this.language = language;
     }
 }

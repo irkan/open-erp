@@ -10770,7 +10770,7 @@ code {
   box-shadow: none !important; }
 
 .form-control[readonly] {
-  background-color: #ffffff; }
+  background-color: #fbfcfe; }
 
 .form-control.form-control-pill {
   border-radius: 50px; }

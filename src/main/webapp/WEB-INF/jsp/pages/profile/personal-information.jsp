@@ -15,7 +15,7 @@
         <div class="kt-portlet">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
-                    <h3 class="kt-portlet__head-title">Personal Information <small>update your personal informaiton</small></h3>
+                    <h3 class="kt-portlet__head-title">Şəxsi məlumat <small>əlaqə məlumatınızı yeniləyə bilərsiniz</small></h3>
                 </div>
                 <div class="kt-portlet__head-toolbar">
                     <div class="kt-portlet__head-wrapper">
@@ -25,37 +25,10 @@
                             </button>
                             <div class="dropdown-menu dropdown-menu-right">
                                 <ul class="kt-nav">
-                                    <li class="kt-nav__section kt-nav__section--first">
-                                        <span class="kt-nav__section-text">Export Tools</span>
-                                    </li>
                                     <li class="kt-nav__item">
                                         <a href="#" class="kt-nav__link">
                                             <i class="kt-nav__link-icon la la-print"></i>
-                                            <span class="kt-nav__link-text">Print</span>
-                                        </a>
-                                    </li>
-                                    <li class="kt-nav__item">
-                                        <a href="#" class="kt-nav__link">
-                                            <i class="kt-nav__link-icon la la-copy"></i>
-                                            <span class="kt-nav__link-text">Copy</span>
-                                        </a>
-                                    </li>
-                                    <li class="kt-nav__item">
-                                        <a href="#" class="kt-nav__link">
-                                            <i class="kt-nav__link-icon la la-file-excel-o"></i>
-                                            <span class="kt-nav__link-text">Excel</span>
-                                        </a>
-                                    </li>
-                                    <li class="kt-nav__item">
-                                        <a href="#" class="kt-nav__link">
-                                            <i class="kt-nav__link-icon la la-file-text-o"></i>
-                                            <span class="kt-nav__link-text">CSV</span>
-                                        </a>
-                                    </li>
-                                    <li class="kt-nav__item">
-                                        <a href="#" class="kt-nav__link">
-                                            <i class="kt-nav__link-icon la la-file-pdf-o"></i>
-                                            <span class="kt-nav__link-text">PDF</span>
+                                            <span class="kt-nav__link-text">Çap edin</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -65,86 +38,106 @@
                 </div>
             </div>
 
-            <form class="kt-form kt-form--label-right">
                 <div class="kt-portlet__body">
                     <div class="kt-section kt-section--first">
                         <div class="kt-section__body">
                             <div class="row">
                                 <label class="col-xl-3"></label>
                                 <div class="col-lg-9 col-xl-6">
-                                    <h3 class="kt-section__title kt-section__title-sm">Customer Info:</h3>
+                                    <h3 class="kt-section__title kt-section__title-sm">Şəxsi məlumat:</h3>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-xl-3 col-lg-3 col-form-label">Avatar</label>
-                                <div class="col-lg-9 col-xl-6">
+                                <div class="col-lg-2">
                                     <div class="kt-avatar kt-avatar--outline" id="kt_user_avatar">
-                                        <div class="kt-avatar__holder" style="background-image: url(&quot;http://keenthemes.com/metronic/preview/default/custom/user/assets/media/users/100_1.jpg&quot;);"></div>
+                                        <div class="kt-avatar__holder" style="background-image: url('<c:url value="/assets/media/users/default.jpg" />');"></div>
                                         <label class="kt-avatar__upload" data-toggle="kt-tooltip" title="" data-original-title="Change avatar">
                                             <i class="fa fa-pen"></i>
                                             <input type="file" name="profile_avatar" accept=".png, .jpg, .jpeg">
                                         </label>
-                                        <span class="kt-avatar__cancel" data-toggle="kt-tooltip" title="" data-original-title="Cancel avatar">
+                                        <span class="kt-avatar__cancel" data-toggle="kt-tooltip" title="" data-original-title="İmnina et - avatar">
                                                     <i class="fa fa-times"></i>
                                                 </span>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label class="col-xl-3 col-lg-3 col-form-label">First Name</label>
-                                <div class="col-lg-9 col-xl-6">
-                                    <input class="form-control" type="text" value="Nick">
+                                <div class="col-lg-10">
+                                    <div class="form-group row">
+                                        <label class="col-xl-2 col-lg-2 col-form-label text-right">Ad</label>
+                                        <div class="col-lg-4 col-xl-4">
+                                            <input class="form-control" type="text" value="<c:out value="${sessionScope.user.employee.person.firstName}"/>" aria-describedby="basic-addon1" readonly>
+                                        </div>
+                                        <label class="col-xl-2 col-lg-2 col-form-label text-right">Soyad</label>
+                                        <div class="col-lg-4 col-xl-4">
+                                            <input class="form-control" type="text" value="<c:out value="${sessionScope.user.employee.person.lastName}"/>" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-xl-2 col-lg-2 col-form-label text-right">Struktur</label>
+                                        <div class="col-lg-4 col-xl-4">
+                                            <input class="form-control" type="text" value="<c:out value="${sessionScope.user.employee.organization.name}"/>" readonly>
+                                        </div>
+                                        <c:if test="${sessionScope.user.employee.person.fatherName!=null}">
+                                            <label class="col-xl-2 col-lg-2 col-form-label text-right">Ata adı</label>
+                                            <div class="col-lg-4 col-xl-4">
+                                                <input class="form-control" type="text" value="${sessionScope.user.employee.person.fatherName}" readonly>
+                                            </div>
+                                        </c:if>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <label class="col-xl-3 col-lg-3 col-form-label">Last Name</label>
-                                <div class="col-lg-9 col-xl-6">
-                                    <input class="form-control" type="text" value="Bold">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-xl-3 col-lg-3 col-form-label">Company Name</label>
-                                <div class="col-lg-9 col-xl-6">
-                                    <input class="form-control" type="text" value="Loop Inc.">
-                                    <span class="form-text text-muted">If you want your invoices addressed to a company. Leave blank to use your full name.</span>
-                                </div>
-                            </div>
-
                             <div class="row">
                                 <label class="col-xl-3"></label>
                                 <div class="col-lg-9 col-xl-6">
-                                    <h3 class="kt-section__title kt-section__title-sm">Contact Info:</h3>
+                                    <h3 class="kt-section__title kt-section__title-sm">Əlaqə vasitələri:</h3>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <label class="col-xl-3 col-lg-3 col-form-label">Contact Phone</label>
-                                <div class="col-lg-9 col-xl-6">
-                                    <div class="input-group">
-                                        <div class="input-group-prepend"><span class="input-group-text"><i class="la la-phone"></i></span></div>
-                                        <input type="text" class="form-control" value="+35278953712" placeholder="Phone" aria-describedby="basic-addon1">
+                            <form:form modelAttribute="form" id="form" method="post" action="/profile/personal-information" cssClass="kt-form kt-form--label-right">
+                                <form:hidden path="id"/>
+                                <div class="form-group row">
+                                    <form:label path="mobilePhone" cssClass="col-xl-2 col-lg-2 col-form-label">Mobil nömrə</form:label>
+                                    <div class="col-lg-4 col-xl-4">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-phone"></i></span></div>
+                                            <form:input path="mobilePhone" cssClass="form-control" placeholder="505505050" aria-describedby="basic-addon1" />
+                                        </div>
+                                        <form:errors path="mobilePhone" cssClass="control-label alert-danger"/>
                                     </div>
-                                    <span class="form-text text-muted">We'll never share your email with anyone else.</span>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-xl-3 col-lg-3 col-form-label">Email Address</label>
-                                <div class="col-lg-9 col-xl-6">
-                                    <div class="input-group">
-                                        <div class="input-group-prepend"><span class="input-group-text"><i class="la la-at"></i></span></div>
-                                        <input type="text" class="form-control" value="nick.bold@loop.com" placeholder="Email" aria-describedby="basic-addon1">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group form-group-last row">
-                                <label class="col-xl-3 col-lg-3 col-form-label">Company Site</label>
-                                <div class="col-lg-9 col-xl-6">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="Username" value="loop">
-                                        <div class="input-group-append"><span class="input-group-text">.com</span></div>
+                                    <form:label path="homePhone" cssClass="col-xl-2 col-lg-2 col-form-label">Şəhər nömrəsi</form:label>
+                                    <div class="col-lg-4 col-xl-4">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-phone"></i></span></div>
+                                            <form:input path="homePhone" cssClass="form-control" placeholder="125505050" aria-describedby="basic-addon1" />
+                                        </div>
+                                        <form:errors path="homePhone" cssClass="control-label alert-danger"/>
                                     </div>
                                 </div>
-                            </div>
+                                <div class="form-group row">
+                                    <form:label path="email" cssClass="col-xl-2 col-lg-2 col-form-label">Email</form:label>
+                                    <div class="col-lg-10 col-xl-10">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-at"></i></span></div>
+                                            <form:input path="email" cssClass="form-control" placeholder="example@example.com" aria-describedby="basic-addon1" />
+                                        </div>
+                                        <form:errors path="email" cssClass="control-label alert-danger"/>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <form:label path="email" cssClass="col-xl-2 col-lg-2 col-form-label">Ünvan</form:label>
+                                    <div class="col-lg-7 col-xl-7">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-map-marker"></i></span></div>
+                                            <form:input path="address" cssClass="form-control" placeholder="" aria-describedby="basic-addon1" readonly="true" />
+                                        </div>
+                                        <form:errors path="address" cssClass="control-label alert-danger"/>
+                                    </div>
+                                    <div class="col-lg-3 col-xl-3">
+                                        <div class="input-group">
+                                            <form:input path="city.name" cssClass="form-control" aria-describedby="basic-addon1" readonly="true" />
+                                            <form:hidden path="city.id" cssClass="form-control" aria-describedby="basic-addon1" readonly="true" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </form:form>
                         </div>
                     </div>
 
@@ -155,13 +148,11 @@
                             <div class="col-lg-3 col-xl-3">
                             </div>
                             <div class="col-lg-9 col-xl-9">
-                                <button type="reset" class="btn btn-success">Submit</button>&nbsp;
-                                <button type="reset" class="btn btn-secondary">Cancel</button>
+                                <button type="reset" class="btn btn-success" onclick="submit($('#form'))">Yadda saxla</button>
                             </div>
                         </div>
                     </div>
                 </div>
-            </form>
         </div>
     </div>
 </div>

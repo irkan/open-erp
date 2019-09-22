@@ -76,6 +76,8 @@ public class DBConfiguration {
             types.add(documentType);
             DictionaryType templateType = new DictionaryType("İcazə şablonu", "template", null);
             types.add(templateType);
+            DictionaryType systemLanguage = new DictionaryType("Sistemin dili", "language", null);
+            types.add(systemLanguage);
 
             List<Dictionary> dictionaries = new ArrayList<>();
             Dictionary male = new Dictionary("Kişi", "Male", null, genderType);
@@ -148,6 +150,12 @@ public class DBConfiguration {
             dictionaries.add(template3);
             Dictionary template4 = new Dictionary("Şablon №4", "template 4", null, templateType);
             dictionaries.add(template4);
+            Dictionary azerbaijanLanguage = new Dictionary("Azərbaycan", "az", "021-azerbaijan.png", systemLanguage);
+            dictionaries.add(azerbaijanLanguage);
+            Dictionary russianLanguage = new Dictionary("Русский", "ru", "013-russia.svg", systemLanguage);
+            dictionaries.add(russianLanguage);
+            Dictionary englishLanguage = new Dictionary("English", "en", "020-flag.svg", systemLanguage);
+            dictionaries.add(englishLanguage);
 
 
             dictionaryTypeRepository.saveAll(types);
@@ -323,7 +331,7 @@ public class DBConfiguration {
             Employee employee = new Employee(person, position1, new Date(), null, (double) 0, headBranch);
             employeeRepository.save(employee);
 
-            User user = new User(defaultAdminUsername, DigestUtils.md5DigestAsHex("admin".getBytes()), employee, new UserDetail());
+            User user = new User(defaultAdminUsername, DigestUtils.md5DigestAsHex("admin".getBytes()), employee, new UserDetail("az"));
 
             userRepository.save(user);
 
