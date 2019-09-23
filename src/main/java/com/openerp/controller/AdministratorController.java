@@ -57,6 +57,7 @@ public class AdministratorController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new DictionaryType());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.USER)){
+            model.addAttribute(Constants.LANGUAGES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("language"));
             model.addAttribute(Constants.ORGANIZATIONS, organizationRepository.findAll());
             model.addAttribute(Constants.EMPLOYEES, employeeRepository.findAll());
             model.addAttribute(Constants.LIST, userRepository.findAll());

@@ -171,6 +171,22 @@
                             </div>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <form:label path="userDetail.language">Sistemin dili</form:label>
+                        <div>
+                            <select name="userDetail.language" id="userDetail.language" class="selectpicker form-control" data-width="fit">
+                                <c:forEach var="t" items="${languages}" varStatus="loop">
+                                    <option value="<c:out value="${t.attr1}"/>"
+                                            data-content='<span class="flag-icon kt-header__topbar-icon">
+                                        <img style="height:20px;" src="<c:out value="/assets/media/flags/${t.attr2}" />"
+                                        alt="<c:out value="${t.attr1}"/>"></span> <c:out value="${t.name}"/>'>
+                                        <c:out value="${t.name}"/>
+                                    </option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                        <form:errors path="userDetail.language" cssClass="control-label alert alert-danger" />
+                    </div>
                 </form:form>
             </div>
             <div class="modal-footer">
@@ -208,4 +224,9 @@
             }
         });
     }
+
+    $(function(){
+        $('.selectpicker').selectpicker();
+    });
 </script>
+

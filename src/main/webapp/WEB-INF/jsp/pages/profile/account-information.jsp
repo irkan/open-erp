@@ -64,10 +64,11 @@
                     </div>
                 </div>
             </div>
-            <form class="kt-form kt-form--label-right">
                 <div class="kt-portlet__body">
                     <div class="kt-section kt-section--first">
-                        <div class="kt-section__body">
+                        <form:form modelAttribute="form" id="form" method="post" action="/profile/account-information" cssClass="kt-form kt-form--label-right">
+                            <form:hidden path="id"/>
+                            <div class="kt-section__body">
                             <div class="row">
                                 <label class="col-xl-3"></label>
                                 <div class="col-lg-9 col-xl-6">
@@ -87,31 +88,32 @@
                                 <div class="col-lg-9 col-xl-6">
                                     <select name="language" class="selectpicker form-control" data-width="fit">
                                         <c:forEach var="t" items="${languages}" varStatus="loop">
-                                            <option value="<c:out value="${t.attr1}"/>" data-content='<span class="flag-icon kt-header__topbar-icon"><img style="height:20px;" src="<c:out value="/assets/media/flags/${t.attr2}" />" alt="<c:out value="${t.attr1}"/>"></span> <c:out value="${t.name}"/>'><c:out value="${t.name}"/></option>
+                                            <c:set var="selected" value="${t.attr1==sessionScope.user.userDetail.language?'selected':''}"/>
+                                            <option value="<c:out value="${t.attr1}"/>" <c:out value="${selected}"/>
+                                                    data-content='<span class="flag-icon kt-header__topbar-icon"><img style="height:20px;" src="<c:out value="/assets/media/flags/${t.attr2}" />" alt="<c:out value="${t.attr1}"/>"></span> <c:out value="${t.name}"/>'>
+                                                <c:out value="${t.name}"/>
+                                            </option>
                                         </c:forEach>
                                     </select>
                                 </div>
                             </div>
                             <div class="form-group form-group-last row">
-                                <label class="col-xl-3 col-lg-3 col-form-label">Communication</label>
+                                <label class="col-xl-3 col-lg-3 col-form-label">Xəbərdarlıqlar</label>
                                 <div class="col-lg-9 col-xl-6">
                                     <div class="kt-checkbox-inline">
-                                        <label class="kt-checkbox">
-                                            <input type="checkbox" checked=""> Email
+                                        <label class="kt-checkbox kt-checkbox--brand">
+                                            <form:checkbox path="emailNotification"/> Email xəbərdarlıq
                                             <span></span>
                                         </label>
-                                        <label class="kt-checkbox">
-                                            <input type="checkbox" checked=""> SMS
-                                            <span></span>
-                                        </label>
-                                        <label class="kt-checkbox">
-                                            <input type="checkbox"> Phone
+                                        <label class="kt-checkbox kt-checkbox--brand">
+                                            <form:checkbox path="smsNotification"/> Sms xəbərdarlıq
                                             <span></span>
                                         </label>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        </form:form>
                     </div>
                 </div>
                 <div class="kt-portlet__foot">
@@ -120,12 +122,12 @@
                             <div class="col-lg-3 col-xl-3">
                             </div>
                             <div class="col-lg-9 col-xl-9">
-                                <button type="reset" class="btn btn-success">Yadda saxla</button>
+                                <button type="reset" class="btn btn-success" onclick="submit($('#form'))">Yadda saxla</button>
                             </div>
                         </div>
                     </div>
                 </div>
-            </form>
+
         </div>
     </div>
 </div>

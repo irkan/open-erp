@@ -18,6 +18,9 @@ public class SkeletonController {
     UserRepository userRepository;
 
     @Autowired
+    UserDetailRepository userDetailRepository;
+
+    @Autowired
     ModuleRepository moduleRepository;
 
     @Autowired

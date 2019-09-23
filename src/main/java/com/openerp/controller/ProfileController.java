@@ -73,4 +73,16 @@ public class ProfileController extends SkeletonController {
         }
         return mapPost(contact, binding, redirectAttributes);
     }
+
+    @PostMapping(value = "/account-information")
+    public String postAccountInformation(@ModelAttribute(Constants.FORM) @Validated UserDetail userDetail,
+                                          BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        if(!binding.hasErrors()){
+            userDetailRepository.save(userDetail);
+            User user = getSessionUser();
+            user.setUserDetail(userDetail);
+            session.setAttribute(Constants.USER, user);
+        }
+        return mapPost(userDetail, binding, redirectAttributes);
+    }
 }
