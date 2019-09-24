@@ -27,7 +27,7 @@
                     </div>
                 </div>
             </div>
-            <form:form modelAttribute="form" method="post" action="/profile/change-password" cssClass="kt-form kt-form--label-right form-group">
+            <form:form modelAttribute="form" id="form" method="post" action="/profile/change-password" cssClass="kt-form kt-form--label-right form-group">
                 <div class="kt-portlet__body">
                     <div class="kt-section kt-section--first">
                         <div class="kt-section__body">
@@ -75,8 +75,8 @@
                             <div class="col-lg-3 col-xl-3">
                             </div>
                             <div class="col-lg-9 col-xl-9">
-                                <button type="submit" class="btn btn-brand btn-bold">Şifrəni dəyişdir</button>&nbsp;
-                                <button type="reset" class="btn btn-secondary">İmtina et</button>
+                                <button type="submit" class="btn btn-brand btn-bold" onclick="submit($('#form'))">Şifrəni dəyişdir</button>&nbsp;
+                                <button type="reset" class="btn btn-secondary" onclick="$('#form').reset();">Təmizlə</button>
                             </div>
                         </div>
                     </div>

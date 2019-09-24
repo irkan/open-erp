@@ -17,52 +17,6 @@
                 <div class="kt-portlet__head-label">
                     <h3 class="kt-portlet__head-title">Hesab məlumatı <small>hesab sazlamalarını dəyişdirə bilərsiniz</small></h3>
                 </div>
-                <div class="kt-portlet__head-toolbar">
-                    <div class="kt-portlet__head-wrapper">
-                        <div class="dropdown dropdown-inline">
-                            <button type="button" class="btn btn-label-brand btn-sm btn-icon btn-icon-md" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="flaticon2-console"></i>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <ul class="kt-nav">
-                                    <li class="kt-nav__section kt-nav__section--first">
-                                        <span class="kt-nav__section-text">Export Tools</span>
-                                    </li>
-                                    <li class="kt-nav__item">
-                                        <a href="#" class="kt-nav__link">
-                                            <i class="kt-nav__link-icon la la-print"></i>
-                                            <span class="kt-nav__link-text">Print</span>
-                                        </a>
-                                    </li>
-                                    <li class="kt-nav__item">
-                                        <a href="#" class="kt-nav__link">
-                                            <i class="kt-nav__link-icon la la-copy"></i>
-                                            <span class="kt-nav__link-text">Copy</span>
-                                        </a>
-                                    </li>
-                                    <li class="kt-nav__item">
-                                        <a href="#" class="kt-nav__link">
-                                            <i class="kt-nav__link-icon la la-file-excel-o"></i>
-                                            <span class="kt-nav__link-text">Excel</span>
-                                        </a>
-                                    </li>
-                                    <li class="kt-nav__item">
-                                        <a href="#" class="kt-nav__link">
-                                            <i class="kt-nav__link-icon la la-file-text-o"></i>
-                                            <span class="kt-nav__link-text">CSV</span>
-                                        </a>
-                                    </li>
-                                    <li class="kt-nav__item">
-                                        <a href="#" class="kt-nav__link">
-                                            <i class="kt-nav__link-icon la la-file-pdf-o"></i>
-                                            <span class="kt-nav__link-text">PDF</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
                 <div class="kt-portlet__body">
                     <div class="kt-section kt-section--first">

@@ -78,6 +78,8 @@ public class DBConfiguration {
             types.add(templateType);
             DictionaryType systemLanguage = new DictionaryType("Sistemin dili", "language", null);
             types.add(systemLanguage);
+            DictionaryType organizationType = new DictionaryType("Struktur tipi", "organization-type", null);
+            types.add(organizationType);
 
             List<Dictionary> dictionaries = new ArrayList<>();
             Dictionary male = new Dictionary("Kişi", "Male", null, genderType);
@@ -156,7 +158,14 @@ public class DBConfiguration {
             dictionaries.add(russianLanguage);
             Dictionary englishLanguage = new Dictionary("English", "en", "020-flag.svg", systemLanguage);
             dictionaries.add(englishLanguage);
-
+            Dictionary branchOrganization = new Dictionary("Flial", "branch", "flaticon-edit", organizationType);
+            dictionaries.add(branchOrganization);
+            Dictionary warehouseOrganization = new Dictionary("Anbar", "warehouse", "flaticon-plus", organizationType);
+            dictionaries.add(warehouseOrganization);
+            Dictionary departmentOrganization = new Dictionary("Departament", "department", "flaticon-plus", organizationType);
+            dictionaries.add(departmentOrganization);
+            Dictionary unitOrganization = new Dictionary("Şöbə", "unit", "flaticon-plus", organizationType);
+            dictionaries.add(unitOrganization);
 
             dictionaryTypeRepository.saveAll(types);
             dictionaryRepository.saveAll(dictionaries);
@@ -196,6 +205,8 @@ public class DBConfiguration {
             modules.add(subModule13);
             Module warehouse = new Module("Anbar", "İnventarın idarə edilməsi", "warehouse", "flaticon-home-2", null);
             modules.add(warehouse);
+            Module inventory = new Module("İnventar", "İnventar", "inventory", "flaticon-tool", warehouse);
+            modules.add(inventory);
             Module dashboard = new Module("Panel", "Qrafik status", "dashboard", "flaticon-analytics", null);
             modules.add(dashboard);
 
@@ -235,6 +246,8 @@ public class DBConfiguration {
             moduleOperations.add(createModuleOperation7);
             ModuleOperation createModuleOperation8 = new ModuleOperation(subModule8, create, null);
             moduleOperations.add(createModuleOperation8);
+            ModuleOperation createModuleOperation9 = new ModuleOperation(inventory, create, null);
+            moduleOperations.add(createModuleOperation9);
 
             ModuleOperation editModuleOperation1 = new ModuleOperation(subModule1, edit, null);
             moduleOperations.add(editModuleOperation1);
@@ -250,6 +263,8 @@ public class DBConfiguration {
             moduleOperations.add(editModuleOperation7);
             ModuleOperation editModuleOperation8 = new ModuleOperation(subModule8, edit, null);
             moduleOperations.add(editModuleOperation8);
+            ModuleOperation editModuleOperation9 = new ModuleOperation(inventory, edit, null);
+            moduleOperations.add(editModuleOperation9);
 
             ModuleOperation deleteModuleOperation1 = new ModuleOperation(subModule1, delete, null);
             moduleOperations.add(deleteModuleOperation1);
@@ -267,6 +282,8 @@ public class DBConfiguration {
             moduleOperations.add(deleteModuleOperation7);
             ModuleOperation deleteModuleOperation8 = new ModuleOperation(subModule8, delete, null);
             moduleOperations.add(deleteModuleOperation8);
+            ModuleOperation deleteModuleOperation9 = new ModuleOperation(inventory, delete, null);
+            moduleOperations.add(deleteModuleOperation9);
 
             ModuleOperation viewModuleOperation6 = new ModuleOperation(subModule6, view, null);
             moduleOperations.add(viewModuleOperation6);
@@ -282,6 +299,8 @@ public class DBConfiguration {
             moduleOperations.add(viewModuleOperation12);
             ModuleOperation viewModuleOperation13 = new ModuleOperation(subModule13, view, null);
             moduleOperations.add(viewModuleOperation13);
+            ModuleOperation viewModuleOperation14 = new ModuleOperation(inventory, view, null);
+            moduleOperations.add(viewModuleOperation14);
 
             ModuleOperation exportModuleOperation1 = new ModuleOperation(subModule1, export, null);
             moduleOperations.add(exportModuleOperation1);
@@ -299,6 +318,8 @@ public class DBConfiguration {
             moduleOperations.add(exportModuleOperation7);
             ModuleOperation exportModuleOperation8 = new ModuleOperation(subModule8, export, null);
             moduleOperations.add(exportModuleOperation8);
+            ModuleOperation exportModuleOperation9 = new ModuleOperation(inventory, export, null);
+            moduleOperations.add(exportModuleOperation9);
 
             moduleOperationRepository.saveAll(moduleOperations);
 
@@ -307,24 +328,48 @@ public class DBConfiguration {
             personRepository.save(person);
 
             List<Organization> organizations = new ArrayList<>();
+
             Contact headBranchContact = new Contact("503442323", "125656776", "head.office@sual.az", "M.Xiyəbani 194A", baku);
-            Organization headBranch = new Organization(headBranchContact,"Baş ofis", "Baş ofis", null);
+            Organization headBranch = new Organization(headBranchContact,"Baş ofis", "Baş ofis", null, branchOrganization);
             organizations.add(headBranch);
+            Contact headBranchWarehouseContact = new Contact("503442323", "125656776", "head.office@sual.az", null, baku);
+            Organization headBranchWarehouse = new Organization(headBranchWarehouseContact,"Mərkəzi anbar", "Mərkəzi anbar", headBranch, warehouseOrganization);
+            organizations.add(headBranchWarehouse);
+
             Contact khirdalanBranchContact = new Contact("503442323", "125656776", "khirdalan.office@sual.az", "A.Şaiq 33", khirdalan);
-            Organization khirdalanBranch = new Organization(khirdalanBranchContact, "Xırdalan flialı", "Xırdalan flialı", headBranch);
+            Organization khirdalanBranch = new Organization(khirdalanBranchContact, "Xırdalan flialı", "Xırdalan flialı", headBranch, branchOrganization);
             organizations.add(khirdalanBranch);
+            Contact khirdalanBranchWarehouseContact = new Contact("503442323", "125656776", "head.office@sual.az", null, khirdalan);
+            Organization khirdalanBranchWarehouse = new Organization(khirdalanBranchWarehouseContact,"Xırdalan anbarı", "Xırdalan anbarı", khirdalanBranch, warehouseOrganization);
+            organizations.add(khirdalanBranchWarehouse);
+
             Contact lankaranBranchContact = new Contact("503442323", "125656776", "lankaran.office@sual.az", "X.Natəvan 24B", lankaran);
-            Organization lankaranBranch = new Organization(lankaranBranchContact, "Lənkəran flialı", "Lənkəran flialı", headBranch);
+            Organization lankaranBranch = new Organization(lankaranBranchContact, "Lənkəran flialı", "Lənkəran flialı", headBranch, branchOrganization);
             organizations.add(lankaranBranch);
+            Contact lankaranBranchWarehouseContact = new Contact("503442323", "125656776", "lankaran.office@sual.az", null, lankaran);
+            Organization lankaranBranchWarehouse = new Organization(lankaranBranchWarehouseContact, "Lənkəran anbarı", "Lənkəran anbarı", lankaranBranch, warehouseOrganization);
+            organizations.add(lankaranBranchWarehouse);
+
             Contact ganjaBranchContact = new Contact("503442323", "125656776", "ganja.office@sual.az", "S.Rüstəm 144", ganja);
-            Organization ganjaBranch = new Organization(ganjaBranchContact, "Gəncə flialı", "Gəncə flialı", headBranch);
+            Organization ganjaBranch = new Organization(ganjaBranchContact, "Gəncə flialı", "Gəncə flialı", headBranch, branchOrganization);
             organizations.add(ganjaBranch);
+            Contact ganjaBranchWarehouseContact = new Contact("503442323", "125656776", "ganja.office@sual.az", null, ganja);
+            Organization ganjaBranchWarehouse = new Organization(ganjaBranchWarehouseContact, "Gəncə anbarı", "Gəncə anbarı", ganjaBranch, warehouseOrganization);
+            organizations.add(ganjaBranchWarehouse);
+
             Contact khachmazBranchContact = new Contact("503442323", "125656776", "khachmaz.office@sual.az", "M.F.Axundov 32", khachmaz);
-            Organization khachmazBranch = new Organization(khachmazBranchContact,"Xaçmaz flialı", "Xaçmaz flialı", headBranch);
+            Organization khachmazBranch = new Organization(khachmazBranchContact,"Xaçmaz flialı", "Xaçmaz flialı", headBranch, branchOrganization);
             organizations.add(khachmazBranch);
+            Contact khachmazBranchWarehouseContact = new Contact("503442323", "125656776", "khachmaz.office@sual.az", null, khachmaz);
+            Organization khachmazBranchWarehouse = new Organization(khachmazBranchWarehouseContact,"Xaçmaz anbarı", "Xaçmaz anbarı", khachmazBranch, warehouseOrganization);
+            organizations.add(khachmazBranchWarehouse);
+
             Contact yevlakhBranchContact = new Contact("503442323", "125656776", "yevlakh.office@sual.az", "T.Rəcəbli 784D", yevlakh);
-            Organization yevlakhBranch = new Organization(yevlakhBranchContact,"Yevlax flialı", "Yevlax flialı", headBranch);
+            Organization yevlakhBranch = new Organization(yevlakhBranchContact,"Yevlax flialı", "Yevlax flialı", headBranch, branchOrganization);
             organizations.add(yevlakhBranch);
+            Contact yevlakhBranchWarehouseContact = new Contact("503442323", "125656776", "yevlakh.office@sual.az", null, yevlakh);
+            Organization yevlakhBranchWarehouse = new Organization(yevlakhBranchWarehouseContact,"Yevlax anbarı", "Yevlax anbarı", yevlakhBranch, warehouseOrganization);
+            organizations.add(yevlakhBranchWarehouse);
 
             organizationRepository.saveAll(organizations);
 
@@ -353,6 +398,8 @@ public class DBConfiguration {
             userModuleOperations.add(userCreateModuleOperation7);
             UserModuleOperation userCreateModuleOperation8 = new UserModuleOperation(user, createModuleOperation8);
             userModuleOperations.add(userCreateModuleOperation8);
+            UserModuleOperation userCreateModuleOperation9 = new UserModuleOperation(user, createModuleOperation9);
+            userModuleOperations.add(userCreateModuleOperation9);
 
             UserModuleOperation userEditModuleOperation1 = new UserModuleOperation(user, editModuleOperation1);
             userModuleOperations.add(userEditModuleOperation1);
@@ -368,6 +415,8 @@ public class DBConfiguration {
             userModuleOperations.add(userEditModuleOperation7);
             UserModuleOperation userEditModuleOperation8 = new UserModuleOperation(user, editModuleOperation8);
             userModuleOperations.add(userEditModuleOperation8);
+            UserModuleOperation userEditModuleOperation9 = new UserModuleOperation(user, editModuleOperation9);
+            userModuleOperations.add(userEditModuleOperation9);
 
             UserModuleOperation userDeleteModuleOperation1 = new UserModuleOperation(user, deleteModuleOperation1);
             userModuleOperations.add(userDeleteModuleOperation1);
@@ -385,6 +434,8 @@ public class DBConfiguration {
             userModuleOperations.add(userDeleteModuleOperation7);
             UserModuleOperation userDeleteModuleOperation8 = new UserModuleOperation(user, deleteModuleOperation8);
             userModuleOperations.add(userDeleteModuleOperation8);
+            UserModuleOperation userDeleteModuleOperation9 = new UserModuleOperation(user, deleteModuleOperation9);
+            userModuleOperations.add(userDeleteModuleOperation9);
 
             UserModuleOperation userExportModuleOperation1 = new UserModuleOperation(user, exportModuleOperation1);
             userModuleOperations.add(userExportModuleOperation1);
@@ -402,6 +453,8 @@ public class DBConfiguration {
             userModuleOperations.add(userExportModuleOperation7);
             UserModuleOperation userExportModuleOperation8 = new UserModuleOperation(user, exportModuleOperation8);
             userModuleOperations.add(userExportModuleOperation8);
+            UserModuleOperation userExportModuleOperation9 = new UserModuleOperation(user, exportModuleOperation9);
+            userModuleOperations.add(userExportModuleOperation9);
 
             UserModuleOperation userViewModuleOperation6 = new UserModuleOperation(user, viewModuleOperation6);
             userModuleOperations.add(userViewModuleOperation6);
@@ -417,6 +470,8 @@ public class DBConfiguration {
             userModuleOperations.add(viewUserModuleOperation12);
             UserModuleOperation viewUserModuleOperation13 = new UserModuleOperation(user, viewModuleOperation13);
             userModuleOperations.add(viewUserModuleOperation13);
+            UserModuleOperation viewUserModuleOperation14 = new UserModuleOperation(user, viewModuleOperation14);
+            userModuleOperations.add(viewUserModuleOperation14);
 
             userModuleOperationRepository.saveAll(userModuleOperations);
         } catch (Exception e){

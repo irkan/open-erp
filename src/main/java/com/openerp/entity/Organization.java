@@ -47,14 +47,19 @@ public class Organization implements Serializable {
     @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="organization")
     private List<Organization> children;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "admin_dictionary_org_type_id")
+    private Dictionary organizationType;
+
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "common_contact_id")
     private Contact contact;
 
-    public Organization(Contact contact, String name, String description, Organization organization) {
+    public Organization(Contact contact, String name, String description, Organization organization, Dictionary organizationType) {
         this.contact = contact;
         this.name = name;
         this.description = description;
         this.organization = organization;
+        this.organizationType = organizationType;
     }
 }

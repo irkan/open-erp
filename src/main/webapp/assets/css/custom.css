@@ -26,3 +26,6 @@ input[type="checkbox"]{
     font-size: 15px;
     margin-left: 5px;
 }
+#form{
+    margin-bottom: 0;
+}

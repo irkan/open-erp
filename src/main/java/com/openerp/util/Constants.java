@@ -28,6 +28,7 @@ public class Constants {
     public static final String FORM_RESULT_BINDING = "org.springframework.validation.BindingResult.form";
     public static final String PARENT = "parent";
     public static final String LANGUAGES = "languages";
+    public static final String ORGANIZATION_TYPES = "organization_types";
 
     public static final class ROUTE{
         public static final String MODULE = "module";
@@ -44,5 +45,6 @@ public class Constants {
         public static final String CHANGE_PASSWORD = "change-password";
         public static final String PERSONAL_INFORMATION = "personal-information";
         public static final String ACCOUNT_INFORMATION = "account-information";
+        public static final String INVENTORY = "inventory";
     }
 }

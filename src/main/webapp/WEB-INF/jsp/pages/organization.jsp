@@ -88,7 +88,7 @@
 </div>
 
 <div class="modal fade" id="modal-operation" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Yeni struktur yarat</h5>
@@ -99,57 +99,108 @@
             <div class="modal-body">
                 <form:form modelAttribute="form" method="post" action="/hr/organization" cssClass="form-group">
                     <form:hidden path="id"/>
-                    <div class="form-group">
-                        <form:label path="organization">Yuxarı struktur</form:label>
-                        <form:select  path="organization" cssClass="custom-select form-control">
-                            <form:options items="${organizations}" itemLabel="name" itemValue="id" />
-                        </form:select>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <form:label path="organization">Yuxarı struktur</form:label>
+                                <form:select  path="organization" cssClass="custom-select form-control">
+                                    <form:options items="${organizations}" itemLabel="name" itemValue="id" />
+                                </form:select>
+                                <form:errors path="organization" cssClass="control-label alert-danger" />
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <form:label path="name">Ad</form:label>
+                                <form:input path="name" cssClass="form-control" placeholder="Adı daxil edin"/>
+                                <form:errors path="name" cssClass="control-label alert-danger" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <form:label path="organizationType">Strukturun tipi</form:label>
+                                <form:select  path="organizationType" cssClass="custom-select form-control">
+                                    <form:options items="${organization_types}" itemLabel="name" itemValue="id" />
+                                </form:select>
+                                <form:errors path="organizationType" cssClass="control-label alert-danger" />
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <form:label path="name">Ad</form:label>
-                        <form:input path="name" cssClass="form-control" placeholder="Adı daxil edin"/>
-                    </div>
-                    <div class="form-group">
-                        <form:label path="description">Açıqlama</form:label>
-                        <form:input path="description" cssClass="form-control" placeholder="Açıqlama daxil edin" />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <form:label path="description">Açıqlama</form:label>
+                                <form:input path="description" cssClass="form-control" placeholder="Açıqlama daxil edin" />
+                                <form:errors path="description" cssClass="control-label alert-danger" />
+                            </div>
+                        </div>
                     </div>
                     <hr width="100%" />
-                    <div class="form-group">
-                        <form:label path="contact.email">Email</form:label>
-                        <form:input path="contact.email" cssClass="form-control" placeholder="example@example.com"/>
-                        <form:errors path="contact.email" cssClass="control-label alert alert-danger" />
-                    </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <form:label path="contact.email">Email</form:label>
+                                <div class="input-group" >
+                                    <form:input path="contact.email" cssClass="form-control" placeholder="example@example.com"/>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-at"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <form:errors path="contact.email" cssClass="control-label alert-danger" />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <form:label path="contact.mobilePhone">Mobil nömrə</form:label>
-                                <form:input path="contact.mobilePhone" cssClass="form-control" placeholder="505505050"/>
-                                <form:errors path="contact.mobilePhone" cssClass="control-label alert alert-danger" />
+                                <div class="input-group" >
+                                    <form:input path="contact.mobilePhone" cssClass="form-control" placeholder="505505550"/>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-phone"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <form:errors path="contact.mobilePhone" cssClass="control-label alert-danger" />
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <form:label path="contact.homePhone">Şəhər nömrəsi</form:label>
-                                <form:input path="contact.homePhone" cssClass="form-control" placeholder="125505050"/>
-                                <form:errors path="contact.homePhone" cssClass="control-label alert alert-danger" />
+                                <div class="input-group" >
+                                    <form:input path="contact.homePhone" cssClass="form-control" placeholder="124555050"/>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-phone"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <form:errors path="contact.homePhone" cssClass="control-label alert-danger" />
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
-                                <form:label path="contact.city">Şəhər/Rayon</form:label>
+                                <form:label path="contact.city">Şəhər</form:label>
                                 <form:select  path="contact.city" cssClass="custom-select form-control">
                                     <form:options items="${cities}" itemLabel="name" itemValue="id" />
                                 </form:select>
-                                <form:errors path="contact.city" cssClass="control-label alert alert-danger" />
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-8">
                             <div class="form-group">
                                 <form:label path="contact.address">Ünvan</form:label>
-                                <form:input path="contact.address" cssClass="form-control" placeholder="Küçə adı, ev nömrəsi və s."/>
-                                <form:errors path="contact.address" cssClass="control-label alert alert-danger" />
+                                <div class="input-group" >
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-street-view"></i>
+                                        </span>
+                                    </div>
+                                    <form:input path="contact.address" cssClass="form-control" placeholder="Küçə adı, ev nömrəsi və s."/>
+                                </div>
+                                <form:errors path="contact.address" cssClass="control-label alert-danger" />
                             </div>
                         </div>
                     </div>
@@ -170,14 +221,29 @@
         let obj = jQuery.parseJSON(data.replace(/\&#034;/g, '"'));
         let content = '<div class="row">' +
             '<div class="col-sm-8">' +
-            '<label class="view-label-1">'+obj.name+'</label><br/>' +
-            '<label class="view-label-2">'+obj.description+'</label><br/>' +
-            '<label class="view-label-2">'+obj.contact.mobilePhone+'</label><br/>' +
-            '<label class="view-label-2">'+obj.contact.homePhone+'</label><br/>' +
-            '<label class="view-label-2">'+obj.contact.email+'</label><br/>' +
-            '<label class="view-label-2">'+obj.contact.address+'</label><br/>' +
-            '<label class="view-label-2">'+obj.contact.city.name+'</label>' +
-            '</div>';
+            '<label class="view-label-1">'+obj.name+'</label><br/>';
+        if(obj.organizationType.name!=null){
+            content += '<label class="view-label-2">'+obj.organizationType.name+'</label><br/>';
+        }
+        if(obj.description!=null){
+            content += '<label class="view-label-2">'+obj.description+'</label><br/>';
+        }
+        if(obj.contact.mobilePhone!=null){
+            content += '<label class="view-label-2">'+obj.contact.mobilePhone+'</label><br/>';
+        }
+        if(obj.contact.homePhone!=null){
+            content += '<label class="view-label-2">'+obj.contact.homePhone+'</label><br/>';
+        }
+        if(obj.contact.email!=null){
+            content += '<label class="view-label-2">'+obj.contact.email+'</label><br/>';
+        }
+        if(obj.contact.address!=null){
+            content += '<label class="view-label-2">'+obj.contact.address+'</label><br/>';
+        }
+        if(obj.contact.city.name!=null){
+            content += '<label class="view-label-2">'+obj.contact.city.name+'</label>';
+        }
+        content += '</div>';
 
         if(edit_status){
             content+='<div class="col-sm-2 text-center">'+

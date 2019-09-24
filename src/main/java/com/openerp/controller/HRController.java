@@ -30,6 +30,7 @@ public class HRController extends SkeletonController {
 
         if (page.equalsIgnoreCase(Constants.ROUTE.ORGANIZATION)){
             model.addAttribute(Constants.CITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("city"));
+            model.addAttribute(Constants.ORGANIZATION_TYPES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("organization-type"));
             model.addAttribute(Constants.ORGANIZATIONS, organizationRepository.getOrganizationsByActiveTrue());
             model.addAttribute(Constants.LIST, organizationRepository.findOrganizationsByOrganizationIsNullAndActiveTrue());
             if(!model.containsAttribute(Constants.FORM)){
