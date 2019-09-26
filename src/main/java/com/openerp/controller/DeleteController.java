@@ -24,7 +24,7 @@ public class DeleteController extends SkeletonController {
             }
 
         }
-        if(path.equalsIgnoreCase("dictionary-type")){
+        if(path.equalsIgnoreCase(Constants.ROUTE.DICTIONARY_TYPE)){
             DictionaryType dictionaryType = dictionaryTypeRepository.getDictionaryTypeById(id);
             dictionaryType.setActive(false);
             dictionaryTypeRepository.save(dictionaryType);
@@ -34,11 +34,11 @@ public class DeleteController extends SkeletonController {
                     dictionaryRepository.save(dictionary);
                 }
             }
-        } else if(path.equalsIgnoreCase("dictionary")){
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.DICTIONARY)){
             Dictionary dictionary = dictionaryRepository.getDictionaryById(id);
             dictionary.setActive(false);
             dictionaryRepository.save(dictionary);
-        } else if(path.equalsIgnoreCase("module")){
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.MODULE)){
             Module module = moduleRepository.getModuleById(id);
             module.setActive(false);
             moduleRepository.save(module);
@@ -46,7 +46,7 @@ public class DeleteController extends SkeletonController {
                 userModuleOperationRepository.deleteInBatch(userModuleOperationRepository.getUserModuleOperationsByModuleOperation_Id(moduleOperation.getId()));
                 moduleOperationRepository.deleteById(moduleOperation.getId());
             }
-        } else if(path.equalsIgnoreCase("operation")){
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.OPERATION)){
             Operation operation = operationRepository.getOperationById(id);
             operation.setActive(false);
             operationRepository.save(operation);
@@ -54,17 +54,21 @@ public class DeleteController extends SkeletonController {
                 userModuleOperationRepository.deleteInBatch(userModuleOperationRepository.getUserModuleOperationsByModuleOperation_Id(moduleOperation.getId()));
                 moduleOperationRepository.deleteById(moduleOperation.getId());
             }
-        } else if(path.equalsIgnoreCase("module-operation")){
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.MODULE_OPERATION)){
             moduleOperationRepository.deleteById(id);
-        } else if(path.equalsIgnoreCase("user")){
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.USER_MODULE_OPERATION)){
             User userObject = userRepository.getUserByActiveTrueAndId(id);
             userRepository.save(userObject);
             List<UserModuleOperation> userModuleOperations = userModuleOperationRepository.findAllByUser_Id(user.getId());
             userModuleOperationRepository.deleteInBatch(userModuleOperations);
-        } else if(path.equalsIgnoreCase("employee")){
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.EMPLOYEE)){
             employeeRepository.deleteById(id);
-        } else if(path.equalsIgnoreCase("organization")){
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.ORGANIZATION)){
             organizationRepository.deleteById(id);
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.SUPPLIER)){
+            Supplier supplier = supplierRepository.getSuppliersById(id);
+            supplier.setActive(false);
+            supplierRepository.save(supplier);
         }
         return "redirect:/"+parent+"/"+path;
     }

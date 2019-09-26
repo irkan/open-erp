@@ -10,8 +10,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="uj" uri="/WEB-INF/tld/UtilJson.tld" %>
-<%@ taglib prefix="ua" uri="/WEB-INF/tld/UserAccess.tld" %>
+<%@ taglib prefix="utl" uri="/WEB-INF/tld/Util.tld" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <div id="kt_header" class="kt-header  kt-header--fixed " data-ktheader-minimize="on" style="opacity: 0.98; z-index: 10">
@@ -46,7 +45,7 @@
                                     <ul class="kt-menu__subnav">
                                         <li class="kt-menu__item  kt-menu__item--submenu"
                                             data-ktmenu-submenu-toggle="hover" aria-haspopup="true">
-                                            <a href="/<c:out value="${sessionScope.parent.path}" />/<c:out value="${t.path}" />"
+                                            <a href="<c:out value="${t.path}" />"
                                                class="kt-menu__link">
                                                 <i class="<c:out value="${t.icon}" />"
                                                    style="color: #d6d6d6;margin-right: 10px;font-size: 16px;"></i>
@@ -56,7 +55,7 @@
                                         <c:forEach var="p" items="${t.children}" varStatus="loop">
                                             <li class="kt-menu__item  kt-menu__item--submenu"
                                                 data-ktmenu-submenu-toggle="hover" aria-haspopup="true">
-                                                <a href="/<c:out value="${sessionScope.parent.path}" />/<c:out value="${p.path}" />"
+                                                <a href="<c:out value="${p.path}" />"
                                                    class="kt-menu__link">
                                                     <i class="<c:out value="${p.icon}" />"
                                                        style="color: #d6d6d6;margin-right: 10px;font-size: 16px;"></i>

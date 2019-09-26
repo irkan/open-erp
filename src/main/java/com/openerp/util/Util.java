@@ -1,6 +1,8 @@
 package com.openerp.util;
 
+import com.openerp.entity.Action;
 import com.openerp.entity.ModuleOperation;
+import com.openerp.entity.Organization;
 
 import java.util.*;
 
@@ -13,6 +15,23 @@ public class Util {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static Organization findWarehouse(List<Organization> organizations){
+        for(Organization organization: organizations){
+            if(organization.getOrganizationType().getAttr1().equalsIgnoreCase("warehouse")){
+                return organization;
+            }
+        }
+        return null;
+    }
+
+    public static int calculateInventoryAmount(List<Action> actions){
+        int amount = 0;
+        for(Action action: actions){
+            amount+=action.getAmount();
+        }
+        return amount;
     }
 
     public static <Operation> ArrayList<Operation> removeDuplicateOperations(List<ModuleOperation> list) {

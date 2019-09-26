@@ -10,4 +10,5 @@ import java.util.List;
 public interface OrganizationRepository extends JpaRepository<Organization, Integer> {
     List<Organization> findOrganizationsByOrganizationIsNullAndActiveTrue();
     List<Organization> getOrganizationsByActiveTrue();
+    List<Organization> getOrganizationsByActiveTrueAndOrganization(Organization organization);
 }

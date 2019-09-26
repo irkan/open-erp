@@ -9,8 +9,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="uj" uri="/WEB-INF/tld/UtilJson.tld"%>
-<%@ taglib prefix="ua" uri="/WEB-INF/tld/UserAccess.tld"%>
+<%@ taglib prefix="utl" uri="/WEB-INF/tld/Util.tld"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <div class="kt-container  kt-grid__item kt-grid__item--fluid">
     <div class="row">
@@ -57,7 +56,7 @@
                                                     <td class="text-center" style="width: 8px; background-color: #f7f8fa"><input type="checkbox" onclick="checkedRow(this)"></td>
                                                     <c:forEach var="o" items="${operations}" varStatus="loop">
                                                         <td class="text-center">
-                                                            <c:set var="status" value="${ua:checkAccess(list, user_module_operations, template_module_operations, m.id, o.id)}"/>
+                                                            <c:set var="status" value="${utl:checkAccess(list, user_module_operations, template_module_operations, m.id, o.id)}"/>
                                                             <c:choose>
                                                                 <c:when test="${status.object ne 0 && not empty status.object}">
                                                                     <c:choose>

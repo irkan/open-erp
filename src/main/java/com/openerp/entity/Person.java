@@ -67,6 +67,10 @@ public class Person {
     @OneToOne(mappedBy = "person", cascade=CascadeType.ALL)
     private Employee employee;
 
+    @JsonIgnore
+    @OneToOne(mappedBy = "person", cascade=CascadeType.ALL)
+    private Supplier supplier;
+
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "common_contact_id")
     private Contact contact;

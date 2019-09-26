@@ -9,8 +9,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="uj" uri="/WEB-INF/tld/UtilJson.tld"%>
-<%@ taglib prefix="ua" uri="/WEB-INF/tld/UserAccess.tld"%>
+<%@ taglib prefix="utl" uri="/WEB-INF/tld/Util.tld"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <link href="<c:url value="/assets/vendors/custom/jstree/jstree.bundle.css" />" rel="stylesheet" type="text/css" />
 <div class="kt-container  kt-grid__item kt-grid__item--fluid">
@@ -20,32 +19,32 @@
             <div class="kt-portlet kt-portlet--mobile">
                 <div class="kt-portlet__body">
                     <div id="kt_tree_2" class="tree-demo">
-                        <c:set var="edit" value="${ua:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
-                        <c:set var="delete" value="${ua:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
+                        <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
+                        <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
                         <c:choose>
                                 <c:when test="${not empty list}">
                                     <ul>
                                         <c:forEach var="t" items="${list}" varStatus="loop">
                                             <li data-jstree='{ "opened" : true }'>
-                                                <a href="javascript:showOrganization('<c:out value="${uj:toJson(t)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');"><c:out value="${t.name}" /></a>
+                                                <a href="javascript:showOrganization('<c:out value="${utl:toJson(t)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');"><c:out value="${t.name}" /></a>
                                                 <c:choose>
                                                     <c:when test="${not empty t.children}">
                                                     <ul>
                                                         <c:forEach var="p" items="${t.children}" varStatus="loop">
                                                             <li data-jstree='{ "opened" : true }'>
-                                                                <a href="javascript:showOrganization('<c:out value="${uj:toJson(p)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');"><c:out value="${p.name}" /></a>
+                                                                <a href="javascript:showOrganization('<c:out value="${utl:toJson(p)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');"><c:out value="${p.name}" /></a>
                                                                 <c:choose>
                                                                     <c:when test="${not empty p.children}">
                                                                         <ul>
                                                                             <c:forEach var="f" items="${p.children}" varStatus="loop">
                                                                                 <li data-jstree='{ "opened" : true }'>
-                                                                                    <a href="javascript:showOrganization('<c:out value="${uj:toJson(f)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');"><c:out value="${f.name}" /></a>
+                                                                                    <a href="javascript:showOrganization('<c:out value="${utl:toJson(f)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');"><c:out value="${f.name}" /></a>
                                                                                     <c:choose>
                                                                                         <c:when test="${not empty f.children}">
                                                                                             <ul>
                                                                                                 <c:forEach var="m" items="${f.children}" varStatus="loop">
                                                                                                     <li data-jstree='{ "opened" : true }'>
-                                                                                                        <a href="javascript:showOrganization('<c:out value="${uj:toJson(m)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');"><c:out value="${m.name}" /></a>
+                                                                                                        <a href="javascript:showOrganization('<c:out value="${utl:toJson(m)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');"><c:out value="${m.name}" /></a>
                                                                                                     </li>
                                                                                                 </c:forEach>
                                                                                             </ul>

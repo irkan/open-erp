@@ -54,6 +54,15 @@ public class SkeletonController {
     TemplateModuleOperationRepository templateModuleOperationRepository;
 
     @Autowired
+    InventoryRepository inventoryRepository;
+
+    @Autowired
+    ActionRepository actionRepository;
+
+    @Autowired
+    SupplierRepository supplierRepository;
+
+    @Autowired
     HttpServletRequest request;
 
     @Autowired

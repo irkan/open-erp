@@ -2,8 +2,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="uj" uri="/WEB-INF/tld/UtilJson.tld"%>
-<%@ taglib prefix="ua" uri="/WEB-INF/tld/UserAccess.tld"%>
+<%@ taglib prefix="utl" uri="/WEB-INF/tld/Util.tld"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -66,6 +65,7 @@
     function edit(form, data, modal, modal_title){
         data = data.replace(/\&#034;/g, '"');
         let obj = jQuery.parseJSON(data);
+        console.log(obj);
         $.each( $(form).find("input,select,textarea"), function( key, element ) {
             let tagName = $(element).prop("tagName");
             let name = $(element).attr("name").split(".");

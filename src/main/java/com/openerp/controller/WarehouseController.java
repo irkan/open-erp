@@ -35,9 +35,38 @@ public class WarehouseController extends SkeletonController {
         session.setAttribute(Constants.MODULE_DESCRIPTION, description);
 
         if (page.equalsIgnoreCase(Constants.ROUTE.INVENTORY)) {
-
+            model.addAttribute(Constants.LIST, inventoryRepository.findAll());
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.SUPPLIERS, supplierRepository.findAll());
+                model.addAttribute(Constants.FORM, new Action(dictionaryRepository.getDictionaryByAttr1AndActiveTrue("buy"),
+                        Util.findWarehouse(organizationRepository.getOrganizationsByActiveTrueAndOrganization(getSessionUser().getEmployee().getOrganization()))));
+            }
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.SUPPLIER)) {
+            model.addAttribute(Constants.CITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("city"));
+            model.addAttribute(Constants.NATIONALITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("nationality"));
+            model.addAttribute(Constants.GENDERS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("gender"));
+            model.addAttribute(Constants.LIST, supplierRepository.getSuppliersByActiveTrue());
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new Supplier());
+            }
         }
 
         return "layout";
+    }
+
+    @PostMapping(value = "/inventory")
+    public String postInventory(@ModelAttribute(Constants.FORM) @Validated Action action, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        if(!binding.hasErrors()){
+            actionRepository.save(action);
+        }
+        return mapPost(action, binding, redirectAttributes);
+    }
+
+    @PostMapping(value = "/supplier")
+    public String postSupplier(@ModelAttribute(Constants.FORM) @Validated Supplier supplier, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        if(!binding.hasErrors()){
+            supplierRepository.save(supplier);
+        }
+        return mapPost(supplier, binding, redirectAttributes);
     }
 }

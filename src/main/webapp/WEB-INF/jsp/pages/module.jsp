@@ -9,8 +9,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="uj" uri="/WEB-INF/tld/UtilJson.tld"%>
-<%@ taglib prefix="ua" uri="/WEB-INF/tld/UserAccess.tld"%>
+<%@ taglib prefix="utl" uri="/WEB-INF/tld/Util.tld"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <link href="<c:url value="/assets/vendors/custom/jstree/jstree.bundle.css" />" rel="stylesheet" type="text/css" />
 <div class="kt-container  kt-grid__item kt-grid__item--fluid">
@@ -62,17 +61,25 @@
                     <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>
                         <form:input path="description" type="text" cssClass="form-control" placeholder="Modul açıqlamasını daxil edin" />
+                        <form:errors path="description" cssClass="alert-danger control-label"/>
                     </div>
-                    <div class="form-group">
-                        <form:label path="path">URL Path</form:label>
-                        <form:input path="path" type="text" cssClass="form-control" placeholder="Modul path daxil edin" />
-                    </div>
-                    <div class="form-group">
-                        <form:label path="icon">İkon</form:label>
-                        <form:input path="icon" type="text" cssClass="form-control" placeholder="İkon adını daxil edin" />
-                        <form:errors path="icon" cssClass="alert-danger control-label"/>
-                        <div class="text-right" style="width: 100%">
-                            <a href="/admin/flat-icon" target="_blank" class="kt-link kt-font-sm kt-font-bold kt-margin-t-5">Flat ikonlardan ikon seçin</a>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <form:label path="path">URL Path</form:label>
+                                <form:input path="path" type="text" cssClass="form-control" placeholder="Modul path daxil edin" />
+                                <form:errors path="path" cssClass="alert-danger control-label"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <form:label path="icon">İkon</form:label>
+                                <form:input path="icon" type="text" cssClass="form-control" placeholder="İkon adını daxil edin" />
+                                <form:errors path="icon" cssClass="alert-danger control-label"/>
+                                <div class="text-right" style="width: 100%">
+                                    <a href="/admin/flat-icon" target="_blank" class="kt-link kt-font-sm kt-font-bold kt-margin-t-5">Flat ikonlardan ikon seçin</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </form:form>
@@ -89,7 +96,7 @@
     <input type="hidden" name="parent-id" id="parent-id">
     <input type="hidden" name="sub-id" id="sub-id">
 </form>
-<%--<c:out value="${uj:toJson(parents)}" />--%>
+<%--<c:out value="${utl:toJson(parents)}" />--%>
 <script src="<c:url value="/assets/vendors/custom/jstree/jstree.bundle.js" />" type="text/javascript"></script>
 <script>
     $(function(){
@@ -102,14 +109,14 @@
                         },
                         "check_callback" : true,
                         'data': [
-                            <c:set var="edit" value="${ua:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
-                            <c:set var="delete" value="${ua:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
+                            <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
+                            <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
                             <c:forEach var="t" items="${parents}" varStatus="loop">
                             {
                                 "text": "<c:out value="${t.name}"/>",
                                 "icon" : "<c:out value="${t.icon}"/>",
                                 "li_attr" : { "unique" : "<c:out value="${t.id}"/>" },
-                                "a_attr" : { "href" : "javascript:;", "onclick" : "showModule('<c:out value="${uj:toJson(t)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');" },
+                                "a_attr" : { "href" : "javascript:;", "onclick" : "showModule('<c:out value="${utl:toJson(t)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');" },
                                 "state": {
                                     "opened": true
                                 }
@@ -120,7 +127,7 @@
                                         "text": "<c:out value="${p.name}"/>",
                                         "icon" : "<c:out value="${p.icon}"/>",
                                         "li_attr" : { "unique" : "<c:out value="${p.id}"/>" },
-                                        "a_attr" : { "href" : "javascript:;", "onclick" : "showModule('<c:out value="${uj:toJson(p)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');" },
+                                        "a_attr" : { "href" : "javascript:;", "onclick" : "showModule('<c:out value="${utl:toJson(p)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');" },
                                         "state": {
                                             "opened": true
                                         }
@@ -131,7 +138,7 @@
                                                 "text": "<c:out value="${f.name}"/>",
                                                 "icon" : "<c:out value="${f.icon}"/>",
                                                 "li_attr" : { "unique" : "<c:out value="${f.id}"/>" },
-                                                "a_attr" : { "href" : "javascript:;", "onclick" : "showModule('<c:out value="${uj:toJson(f)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');" },
+                                                "a_attr" : { "href" : "javascript:;", "onclick" : "showModule('<c:out value="${utl:toJson(f)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');" },
                                                 "state": {
                                                     "opened": true
                                                 }
@@ -142,7 +149,7 @@
                                                         "text": "<c:out value="${m.name}"/>",
                                                         "icon" : "<c:out value="${m.icon}"/>",
                                                         "li_attr" : { "unique" : "<c:out value="${m.id}"/>" },
-                                                        "a_attr" : { "href" : "javascript:;", "onclick" : "showModule('<c:out value="${uj:toJson(m)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');" },
+                                                        "a_attr" : { "href" : "javascript:;", "onclick" : "showModule('<c:out value="${utl:toJson(m)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');" },
                                                         "state": {
                                                             "opened": true
                                                         }
@@ -153,7 +160,7 @@
                                                                 "text": "<c:out value="${n.name}"/>",
                                                                 "icon" : "<c:out value="${n.icon}"/>",
                                                                 "li_attr" : { "unique" : "<c:out value="${n.id}"/>" },
-                                                                "a_attr" : { "href" : "javascript:;", "onclick" : "showModule('<c:out value="${uj:toJson(n)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');" },
+                                                                "a_attr" : { "href" : "javascript:;", "onclick" : "showModule('<c:out value="${utl:toJson(n)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');" },
                                                                 "state": {
                                                                     "opened": true
                                                                 }
@@ -164,7 +171,7 @@
                                                                         "text": "<c:out value="${o.name}"/>",
                                                                         "icon" : "<c:out value="${o.icon}"/>",
                                                                         "li_attr" : { "unique" : "<c:out value="${o.id}"/>" },
-                                                                        "a_attr" : { "href" : "javascript:;", "onclick" : "showModule('<c:out value="${uj:toJson(o)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');" },
+                                                                        "a_attr" : { "href" : "javascript:;", "onclick" : "showModule('<c:out value="${utl:toJson(o)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');" },
                                                                         "state": {
                                                                             "opened": true
                                                                         }

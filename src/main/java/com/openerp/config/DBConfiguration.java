@@ -54,6 +54,9 @@ public class DBConfiguration {
     @Autowired
     OrganizationRepository organizationRepository;
 
+    @Autowired
+    SupplierRepository supplierRepository;
+
     @Value("${default.admin.username}")
     private String defaultAdminUsername;
 
@@ -80,6 +83,10 @@ public class DBConfiguration {
             types.add(systemLanguage);
             DictionaryType organizationType = new DictionaryType("Struktur tipi", "organization-type", null);
             types.add(organizationType);
+            DictionaryType actionType = new DictionaryType("Hərəkət", "action", null);
+            types.add(actionType);
+            DictionaryType reasonType = new DictionaryType("Səbəb", "reason", null);
+            types.add(reasonType);
 
             List<Dictionary> dictionaries = new ArrayList<>();
             Dictionary male = new Dictionary("Kişi", "Male", null, genderType);
@@ -166,6 +173,18 @@ public class DBConfiguration {
             dictionaries.add(departmentOrganization);
             Dictionary unitOrganization = new Dictionary("Şöbə", "unit", "flaticon-plus", organizationType);
             dictionaries.add(unitOrganization);
+            Dictionary moveAction = new Dictionary("Göndərilmə", "transfer", null, actionType);
+            dictionaries.add(moveAction);
+            Dictionary buyAction = new Dictionary("Alış", "buy", null, actionType);
+            dictionaries.add(buyAction);
+            Dictionary returnAction = new Dictionary("Qaytarılma", "return", null, actionType);
+            dictionaries.add(returnAction);
+            Dictionary deletionAction = new Dictionary("Silinmə", "deletion", null, actionType);
+            dictionaries.add(deletionAction);
+            Dictionary cancellationAction = new Dictionary("Ləğv edilmə", "cancellation", null, actionType);
+            dictionaries.add(cancellationAction);
+            Dictionary reason1 = new Dictionary("Xarabdır", "break", null, reasonType);
+            dictionaries.add(reason1);
 
             dictionaryTypeRepository.saveAll(types);
             dictionaryRepository.saveAll(dictionaries);
@@ -207,6 +226,8 @@ public class DBConfiguration {
             modules.add(warehouse);
             Module inventory = new Module("İnventar", "İnventar", "inventory", "flaticon-tool", warehouse);
             modules.add(inventory);
+            Module supplier = new Module("Tədarükçü", "Tədarükçü", "supplier", "flaticon-network", warehouse);
+            modules.add(supplier);
             Module dashboard = new Module("Panel", "Qrafik status", "dashboard", "flaticon-analytics", null);
             modules.add(dashboard);
 
@@ -248,6 +269,9 @@ public class DBConfiguration {
             moduleOperations.add(createModuleOperation8);
             ModuleOperation createModuleOperation9 = new ModuleOperation(inventory, create, null);
             moduleOperations.add(createModuleOperation9);
+            ModuleOperation createModuleOperation10 = new ModuleOperation(supplier, create, null);
+            moduleOperations.add(createModuleOperation10);
+
 
             ModuleOperation editModuleOperation1 = new ModuleOperation(subModule1, edit, null);
             moduleOperations.add(editModuleOperation1);
@@ -265,6 +289,8 @@ public class DBConfiguration {
             moduleOperations.add(editModuleOperation8);
             ModuleOperation editModuleOperation9 = new ModuleOperation(inventory, edit, null);
             moduleOperations.add(editModuleOperation9);
+            ModuleOperation editModuleOperation10 = new ModuleOperation(supplier, edit, null);
+            moduleOperations.add(editModuleOperation10);
 
             ModuleOperation deleteModuleOperation1 = new ModuleOperation(subModule1, delete, null);
             moduleOperations.add(deleteModuleOperation1);
@@ -284,6 +310,8 @@ public class DBConfiguration {
             moduleOperations.add(deleteModuleOperation8);
             ModuleOperation deleteModuleOperation9 = new ModuleOperation(inventory, delete, null);
             moduleOperations.add(deleteModuleOperation9);
+            ModuleOperation deleteModuleOperation10 = new ModuleOperation(supplier, delete, null);
+            moduleOperations.add(deleteModuleOperation10);
 
             ModuleOperation viewModuleOperation6 = new ModuleOperation(subModule6, view, null);
             moduleOperations.add(viewModuleOperation6);
@@ -320,6 +348,8 @@ public class DBConfiguration {
             moduleOperations.add(exportModuleOperation8);
             ModuleOperation exportModuleOperation9 = new ModuleOperation(inventory, export, null);
             moduleOperations.add(exportModuleOperation9);
+            ModuleOperation exportModuleOperation10 = new ModuleOperation(supplier, export, null);
+            moduleOperations.add(exportModuleOperation10);
 
             moduleOperationRepository.saveAll(moduleOperations);
 
@@ -400,6 +430,8 @@ public class DBConfiguration {
             userModuleOperations.add(userCreateModuleOperation8);
             UserModuleOperation userCreateModuleOperation9 = new UserModuleOperation(user, createModuleOperation9);
             userModuleOperations.add(userCreateModuleOperation9);
+            UserModuleOperation userCreateModuleOperation10 = new UserModuleOperation(user, createModuleOperation10);
+            userModuleOperations.add(userCreateModuleOperation10);
 
             UserModuleOperation userEditModuleOperation1 = new UserModuleOperation(user, editModuleOperation1);
             userModuleOperations.add(userEditModuleOperation1);
@@ -417,6 +449,8 @@ public class DBConfiguration {
             userModuleOperations.add(userEditModuleOperation8);
             UserModuleOperation userEditModuleOperation9 = new UserModuleOperation(user, editModuleOperation9);
             userModuleOperations.add(userEditModuleOperation9);
+            UserModuleOperation userEditModuleOperation10 = new UserModuleOperation(user, editModuleOperation10);
+            userModuleOperations.add(userEditModuleOperation10);
 
             UserModuleOperation userDeleteModuleOperation1 = new UserModuleOperation(user, deleteModuleOperation1);
             userModuleOperations.add(userDeleteModuleOperation1);
@@ -436,6 +470,8 @@ public class DBConfiguration {
             userModuleOperations.add(userDeleteModuleOperation8);
             UserModuleOperation userDeleteModuleOperation9 = new UserModuleOperation(user, deleteModuleOperation9);
             userModuleOperations.add(userDeleteModuleOperation9);
+            UserModuleOperation userDeleteModuleOperation10 = new UserModuleOperation(user, deleteModuleOperation10);
+            userModuleOperations.add(userDeleteModuleOperation10);
 
             UserModuleOperation userExportModuleOperation1 = new UserModuleOperation(user, exportModuleOperation1);
             userModuleOperations.add(userExportModuleOperation1);
@@ -455,6 +491,8 @@ public class DBConfiguration {
             userModuleOperations.add(userExportModuleOperation8);
             UserModuleOperation userExportModuleOperation9 = new UserModuleOperation(user, exportModuleOperation9);
             userModuleOperations.add(userExportModuleOperation9);
+            UserModuleOperation userExportModuleOperation10 = new UserModuleOperation(user, exportModuleOperation10);
+            userModuleOperations.add(userExportModuleOperation10);
 
             UserModuleOperation userViewModuleOperation6 = new UserModuleOperation(user, viewModuleOperation6);
             userModuleOperations.add(userViewModuleOperation6);
@@ -474,7 +512,40 @@ public class DBConfiguration {
             userModuleOperations.add(viewUserModuleOperation14);
 
             userModuleOperationRepository.saveAll(userModuleOperations);
+
+            List<Supplier> suppliers = new ArrayList<>();
+
+            Contact supplier1Contact = new Contact("702046451", null, "aqualine.az@gmail.com", "Keşlə bazarı", baku);
+            Person supplier1Person = new Person(supplier1Contact, "Əli", "Vəliyev", null, null, male, azerbaijanNationality, null, null);
+            Supplier supplier1 = new Supplier("Aqualine MMC", "Sintra təminatçısı", supplier1Person);
+            suppliers.add(supplier1);
+
+            Contact supplier2Contact = new Contact("553128122", null, "samir.bagirov@gmail.com", "Tonqal restoranının yanı", baku);
+            Person supplier2Person = new Person(supplier2Contact, "Samir", "Bağırov", null, null, male, azerbaijanNationality, null, null);
+            Supplier supplier2 = new Supplier("Techflow MMC", "Təminatçı", supplier2Person);
+            suppliers.add(supplier2);
+
+            Contact supplier3Contact = new Contact("552263010", null, "sintra.az@gmail.com", "Binəqədi rayonu", baku);
+            Person supplier3Person = new Person(supplier3Contact, "Elmar", "Məmmədov", null, null, male, azerbaijanNationality, null, null);
+            Supplier supplier3 = new Supplier("Sintra MMC", "Təminatçı", supplier3Person);
+            suppliers.add(supplier3);
+
+            Contact supplier4Contact = new Contact(null, null, "sadarak@gmail.com", null, baku);
+            Person supplier4Person = new Person(supplier4Contact, "Sədərək", "Ticarət mərkəzi", null, null, male, azerbaijanNationality, null, null);
+            Supplier supplier4 = new Supplier("Sədərək", "Təminatçı", supplier4Person);
+            suppliers.add(supplier4);
+
+            Contact supplier5Contact = new Contact(null, null, "other.supplier@gmail.com", null, baku);
+            Person supplier5Person = new Person(supplier5Contact, "Digər", "Təminatçı", null, null, male, azerbaijanNationality, null, null);
+            Supplier supplier5 = new Supplier("Digər", "Təminatçı", supplier5Person);
+            suppliers.add(supplier5);
+
+            supplierRepository.saveAll(suppliers);
+
+
+
         } catch (Exception e){
+            e.printStackTrace();
             log.error(e);
         } finally {
             log.info("System was running!");

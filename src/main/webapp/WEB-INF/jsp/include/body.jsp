@@ -6,7 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="ua" uri="/WEB-INF/tld/UserAccess.tld"%>
+<%@ taglib prefix="utl" uri="/WEB-INF/tld/Util.tld"%>
 <div class="kt-body kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-grid--stretch" id="kt_body">
     <div class="kt-content kt-content--fit-top  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" id="kt_content">
 
@@ -20,7 +20,7 @@
                 </div>
                 <div class="kt-subheader__toolbar">
                     <div class="kt-subheader__wrapper">
-                        <c:set var="export" value="${ua:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
+                        <c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
                         <c:choose>
                             <c:when test="${export.status}">
                                 <div class="dropdown dropdown-inline">
@@ -61,7 +61,7 @@
                                 </div>
                             </c:when>
                         </c:choose>
-                        <c:set var="create" value="${ua:checkOperation(sessionScope.user.userModuleOperations, page, 'create')}"/>
+                        <c:set var="create" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'create')}"/>
                         <c:choose>
                             <c:when test="${create.status}">
                                 <a href="javascript:create($('#form'), 'modal-operation', '<c:out value="${create.object.name}" />');" class="btn btn-danger">

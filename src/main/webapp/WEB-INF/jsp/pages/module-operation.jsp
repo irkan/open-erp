@@ -9,8 +9,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="uj" uri="/WEB-INF/tld/UtilJson.tld"%>
-<%@ taglib prefix="ua" uri="/WEB-INF/tld/UserAccess.tld"%>
+<%@ taglib prefix="utl" uri="/WEB-INF/tld/Util.tld"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <div class="kt-container  kt-grid__item kt-grid__item--fluid">
     <div class="row">
@@ -37,12 +36,12 @@
             <c:when test="${not empty t.module.module}">
                 <tr>
                     <td>${loop.index + 1}</td>
-                    <td><c:out value="${t.id}" /> <%--${uj:toJson(t)}--%></td>
+                    <td><c:out value="${t.id}" /> <%--${utl:toJson(t)}--%></td>
                     <td><c:out value="${t.module.module.name}" /></td>
                     <td><c:out value="${t.module.name}" /></td>
                     <td><c:out value="${t.operation.name}" /></td>>
                     <td nowrap class="text-center">
-                        <c:set var="view" value="${ua:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
+                        <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
                         <c:choose>
                             <c:when test="${view.status}">
                                 <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
@@ -50,15 +49,15 @@
                                 </a>
                             </c:when>
                         </c:choose>
-                        <c:set var="edit" value="${ua:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
+                        <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
                         <c:choose>
                             <c:when test="${edit.status}">
-                                <a href="javascript:edit($('#form'), '<c:out value="${uj:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                                <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
                                     <i class="<c:out value="${edit.object.icon}"/>"></i>
                                 </a>
                             </c:when>
                         </c:choose>
-                        <c:set var="delete" value="${ua:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
+                        <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
                         <c:choose>
                             <c:when test="${delete.status}">
                                 <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.module.name}" /> - <c:out value="${t.operation.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
