@@ -22,6 +22,10 @@ public class Inventory {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "admin_dictionary_inventory_group_id")
+    private Dictionary group;
+
     @Pattern(regexp=".{2,50}",message="Minimum 2 maksimum 50 simvol ola bilər")
     @Column(name = "name", unique = true, nullable = false)
     private String name;
@@ -29,10 +33,6 @@ public class Inventory {
     @Pattern(regexp=".{0,250}",message="Maksimum 250 simvol ola bilər")
     @Column(name = "description")
     private String description;
-
-    //@Pattern(regexp="\\d+",message="Məbələği daxil edin")
-    @Column(name = "price")
-    private double price;
 
     @Pattern(regexp=".{0,50}",message="Maksimum 50 simvol ola bilər")
     @Column(name = "barcode")
@@ -51,4 +51,12 @@ public class Inventory {
 
     @OneToMany(mappedBy = "inventory")
     private List<Action> actions;
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "inventory", cascade = CascadeType.ALL)
+    private Action action;
+
+    public Inventory(Action action) {
+        this.action = action;
+    }
 }

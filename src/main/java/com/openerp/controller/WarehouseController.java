@@ -37,9 +37,11 @@ public class WarehouseController extends SkeletonController {
         if (page.equalsIgnoreCase(Constants.ROUTE.INVENTORY)) {
             model.addAttribute(Constants.LIST, inventoryRepository.findAll());
             if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.SUPPLIERS, supplierRepository.findAll());
-                model.addAttribute(Constants.FORM, new Action(dictionaryRepository.getDictionaryByAttr1AndActiveTrue("buy"),
-                        Util.findWarehouse(organizationRepository.getOrganizationsByActiveTrueAndOrganization(getSessionUser().getEmployee().getOrganization()))));
+                model.addAttribute(Constants.SUPPLIERS, supplierRepository.getSuppliersByActiveTrue());
+                model.addAttribute(Constants.INVENTORY_GROUPS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("inventory-group"));
+                model.addAttribute(Constants.FORM, new Inventory());
+                model.addAttribute(Constants.FORM, new Inventory(new Action(dictionaryRepository.getDictionaryByAttr1AndActiveTrue("buy"),
+                        Util.findWarehouse(organizationRepository.getOrganizationsByActiveTrueAndOrganization(getSessionUser().getEmployee().getOrganization())))));
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.SUPPLIER)) {
             model.addAttribute(Constants.CITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("city"));
@@ -55,11 +57,14 @@ public class WarehouseController extends SkeletonController {
     }
 
     @PostMapping(value = "/inventory")
-    public String postInventory(@ModelAttribute(Constants.FORM) @Validated Action action, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+    public String postInventory(@ModelAttribute(Constants.FORM) @Validated Inventory inventory, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         if(!binding.hasErrors()){
+            inventoryRepository.save(inventory);
+            Action action = inventory.getAction();
+            action.setInventory(inventory);
             actionRepository.save(action);
         }
-        return mapPost(action, binding, redirectAttributes);
+        return mapPost(inventory, binding, redirectAttributes);
     }
 
     @PostMapping(value = "/supplier")

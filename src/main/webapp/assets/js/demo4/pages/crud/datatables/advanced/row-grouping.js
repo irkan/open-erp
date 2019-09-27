@@ -2,7 +2,7 @@
 var KTDatatablesAdvancedRowGrouping = function() {
 
 	var initTable1 = function() {
-		var table = $('#module_operation_table');
+		var table = $('#group_table');
 
 		table.DataTable({
 			responsive: true,

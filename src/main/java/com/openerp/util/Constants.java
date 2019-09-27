@@ -30,6 +30,7 @@ public class Constants {
     public static final String LANGUAGES = "languages";
     public static final String ORGANIZATION_TYPES = "organization_types";
     public static final String SUPPLIERS = "suppliers";
+    public static final String INVENTORY_GROUPS = "inventory_groups";
 
     public static final class ROUTE{
         public static final String MODULE = "module";
@@ -49,5 +50,6 @@ public class Constants {
         public static final String INVENTORY = "inventory";
         public static final String ACTION = "action";
         public static final String SUPPLIER = "supplier";
+        public static final String EXPENSE = "expense";
     }
 }

@@ -196,7 +196,7 @@
                     </div>
                     <div class="kt-grid-nav kt-grid-nav--skin-light">
                         <c:forEach var="t" items="${sessionScope.parent_modules}" varStatus="loop">
-                            <c:if test="${(loop.index+0) % 2 == 0}">
+                            <c:if test="${(loop.index+0) % 3 == 0}">
                                 <div class="kt-grid-nav__row">
                             </c:if>
                             <a href="/route/<c:out value="${t.path}" />" class="kt-grid-nav__item">
@@ -204,7 +204,7 @@
                                 <span class="kt-grid-nav__title"><c:out value="${t.name}"/></span>
                                 <span class="kt-grid-nav__desc"><c:out value="${t.description}"/></span>
                             </a>
-                            <c:if test="${(loop.index+1) % 2 == 0}">
+                            <c:if test="${(loop.index+1) % 3 == 0}">
                                 </div>
                             </c:if>
                         </c:forEach>

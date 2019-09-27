@@ -63,6 +63,9 @@ public class SkeletonController {
     SupplierRepository supplierRepository;
 
     @Autowired
+    ExpenseRepository expenseRepository;
+
+    @Autowired
     HttpServletRequest request;
 
     @Autowired

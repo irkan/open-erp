@@ -19,18 +19,19 @@
                 <div class="kt-portlet__body">
                     <c:choose>
                         <c:when test="${not empty list}">
-                            <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+                            <table class="table table-striped- table-bordered table-hover table-checkable" id="group_table">
                                 <thead>
                                 <tr>
                                     <th>№</th>
                                     <th>ID</th>
+                                    <th>Qrup</th>
                                     <th>Ad</th>
                                     <th>Açıqlama</th>
-                                    <th>Qiymət</th>
                                     <th>Barkod</th>
                                     <th>Vəziyyət</th>
                                     <th>Say</th>
                                     <th>Anbar</th>
+                                    <th>Status</th>
                                     <th>Əməliyyat</th>
                                 </tr>
                                 </thead>
@@ -39,10 +40,10 @@
                                     <tr>
                                         <td>${loop.index + 1}</td>
                                         <td><c:out value="${t.id}" /></td>
+                                        <td><c:out value="${t.group.name}" /></td>
                                         <td><c:out value="${t.name}" /></td>
                                         <td><c:out value="${t.description}" /></td>
-                                        <td><c:out value="${t.price}" /></td>
-                                        <td><c:out value="${t.barcode}" /></td>
+                                        <td><c:out value="${t.barcode}" /> <%--<c:out value="${utl:toJson(t)}" /> --%> </td>
                                         <td>
                                             <c:choose>
                                                 <c:when test="${t.old}">
@@ -56,6 +57,11 @@
                                         <td><c:out value="${utl:calculateInventoryAmount(t.actions)}"/>
                                         </td>
                                         <td><c:out value="${t.actions.get(0).warehouse.name}" /></td>
+                                        <td>
+                                            <span class="kt-badge kt-badge--success kt-badge--dot"></span>
+                                            <span class="kt-badge kt-badge--success"><i class="flaticon2-checkmark"></i></span>
+                                            <span class="kt-font-bold kt-font-danger">Təsdiqlənməyib</span>
+                                        </td>
                                         <td nowrap class="text-center">
                                             <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
                                             <c:choose>
@@ -113,75 +119,75 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <form:label path="warehouse.name">Anbar</form:label>
-                                <form:input path="warehouse.name" cssClass="form-control" readonly="true"/>
-                                <form:hidden path="warehouse.id" cssClass="form-control"/>
-                                <form:errors path="warehouse.name" cssClass="alert-danger control-label"/>
+                                <form:label path="action.warehouse.name">Anbar</form:label>
+                                <form:input path="action.warehouse.name" cssClass="form-control" readonly="true"/>
+                                <form:hidden path="action.warehouse.id" cssClass="form-control"/>
+                                <form:errors path="action.warehouse.name" cssClass="alert-danger control-label"/>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <form:label path="action.name">Əməliyyat</form:label>
-                                <form:input path="action.name" cssClass="form-control" readonly="true"/>
-                                <form:hidden path="action.id"/>
-                                <form:errors path="action.name" cssClass="alert-danger control-label"/>
+                                <form:label path="action.action.name">Əməliyyat</form:label>
+                                <form:input path="action.action.name" cssClass="form-control" readonly="true"/>
+                                <form:hidden path="action.action.id"/>
+                                <form:errors path="action.action.name" cssClass="alert-danger control-label"/>
                             </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <form:label path="supplier">Tədarükçü</form:label>
-                        <form:select  path="supplier" cssClass="custom-select form-control">
-                            <form:options items="${suppliers}" itemLabel="name" itemValue="id" />
-                        </form:select>
-                    </div>
-                    <div class="form-group">
-                        <form:label path="inventory.name">Ad</form:label>
-                        <form:input path="inventory.name" cssClass="form-control" placeholder="Adı daxil edin"/>
-                        <form:errors path="inventory.name" cssClass="alert-danger control-label"/>
-                    </div>
-                    <div class="form-group">
-                        <form:label path="inventory.description">Açıqlama</form:label>
-                        <form:input path="inventory.description" cssClass="form-control" placeholder="Açıqlamanı daxil edin" />
-                        <form:errors path="inventory.description" cssClass="alert-danger control-label"/>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <form:label path="amount">Say</form:label>
+                                <form:label path="group">Qrup</form:label>
+                                <form:select  path="group" cssClass="custom-select form-control">
+                                    <form:options items="${inventory_groups}" itemLabel="name" itemValue="id" />
+                                </form:select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <form:label path="action.supplier">Tədarükçü</form:label>
+                                <form:select  path="action.supplier" cssClass="custom-select form-control">
+                                    <form:options items="${suppliers}" itemLabel="name" itemValue="id" />
+                                </form:select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="name">Ad</form:label>
+                        <form:input path="name" cssClass="form-control" placeholder="Adı daxil edin"/>
+                        <form:errors path="name" cssClass="alert-danger control-label"/>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="description">Açıqlama</form:label>
+                        <form:textarea path="description" cssClass="form-control" placeholder="Açıqlamanı daxil edin" />
+                        <form:errors path="description" cssClass="alert-danger control-label"/>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <form:label path="action.amount">Say</form:label>
                                 <div class="input-group" >
-                                    <form:input path="amount" cssClass="form-control" placeholder="Say daxil edin"/>
+                                    <form:input path="action.amount" cssClass="form-control" placeholder="Say daxil edin"/>
                                     <div class="input-group-append">
                                         <span class="input-group-text">
                                             <i class="la la-calculator"></i>
                                         </span>
                                     </div>
                                 </div>
-                                <form:errors path="amount" cssClass="alert-danger control-label"/>
+                                <form:errors path="action.amount" cssClass="alert-danger control-label"/>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <form:label path="inventory.price">Qiymət</form:label>
-                                <div class="input-group" >
-                                    <form:input path="inventory.price" cssClass="form-control" placeholder="Məsələn 14.35 AZN"/>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-money"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                                <form:errors path="inventory.price" cssClass="alert-danger control-label"/>
+                                <form:label path="barcode">Barkod</form:label>
+                                <form:input path="barcode" cssClass="form-control" placeholder="Barkodu daxil edin" readonly="true"/>
+                                <form:errors path="barcode" cssClass="alert-danger control-label"/>
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
-                        <form:label path="inventory.barcode">Barkod</form:label>
-                        <form:input path="inventory.barcode" cssClass="form-control" placeholder="Barkodu daxil edin" readonly="true"/>
-                        <form:errors path="inventory.barcode" cssClass="alert-danger control-label"/>
-                    </div>
-                    <div class="form-group">
                         <label class="kt-checkbox kt-checkbox--brand">
-                            <form:checkbox path="inventory.old"/> İşlənmişdir
+                            <form:checkbox path="old"/> İşlənmişdir
                             <span></span>
                         </label>
                     </div>
@@ -194,6 +200,8 @@
         </div>
     </div>
 </div>
+
+<script src="<c:url value="/assets/js/demo4/pages/crud/datatables/advanced/row-grouping.js" />" type="text/javascript"></script>
 
 
 

@@ -19,7 +19,7 @@
 
 <c:choose>
     <c:when test="${not empty list}">
-<table class="table table-striped- table-bordered table-hover table-checkable" id="module_operation_table">
+<table class="table table-striped- table-bordered table-hover table-checkable" id="group_table">
     <thead>
     <tr>
         <th>№</th>
