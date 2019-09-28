@@ -16,18 +16,13 @@ import java.util.Date;
 @NoArgsConstructor
 public class Account {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "accounting_sequence")
-    @SequenceGenerator(sequenceName = "aa_accounting_sequence", allocationSize = 1, name = "accounting_sequence")
+    /*@Pattern(regexp=".{4,17}",message="Minimum 4 maksimum 17 simvol ola bilər")*/
     @Column(name = "id", unique = true, nullable = false)
-    private Integer id;
+    private String id = RandomString.getAlphaNumeric(16);
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hr_organization_id")
     private Organization organization;
-
-    @Pattern(regexp=".{4,17}",message="Minimum 4 maksimum 17 simvol ola bilər")
-    @Column(name = "account_number", unique = true, nullable = false)
-    private String accountNumber = RandomString.getAlphaNumeric(16);
 
     @Pattern(regexp=".{0,5}",message="Maksimum 5 simvol ola bilər")
     @Column(name = "currency", nullable = false)

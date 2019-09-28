@@ -101,4 +101,13 @@ public class SkeletonController {
         return "redirect:"+request.getRequestURI();
     }
 
+    String mapPost(Object object, BindingResult binding, RedirectAttributes redirectAttributes, String redirect){
+        redirectAttributes.addFlashAttribute(Constants.FORM_RESULT_BINDING, binding);
+        redirectAttributes.addFlashAttribute(Constants.FORM, object);
+        if(!binding.hasErrors()){
+            redirectAttributes.getFlashAttributes().remove(Constants.FORM);
+        }
+        return "redirect:"+redirect;
+    }
+
 }

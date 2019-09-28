@@ -13,7 +13,7 @@ import java.util.List;
 public class DeleteController extends SkeletonController {
 
     @PostMapping(value = "/{path}")
-    public String getSubModules(@PathVariable("path") String path, @RequestParam(name="deletedId", defaultValue = "0") int id) throws Exception {
+    public String getSubModules(@PathVariable("path") String path, @RequestParam(name="deletedId", defaultValue = "0") String id) throws Exception {
         User user = getSessionUser();
         String parent = "admin";
         for(UserModuleOperation umo: user.getUserModuleOperations()){
@@ -25,7 +25,7 @@ public class DeleteController extends SkeletonController {
 
         }
         if(path.equalsIgnoreCase(Constants.ROUTE.DICTIONARY_TYPE)){
-            DictionaryType dictionaryType = dictionaryTypeRepository.getDictionaryTypeById(id);
+            DictionaryType dictionaryType = dictionaryTypeRepository.getDictionaryTypeById(Integer.parseInt(id));
             dictionaryType.setActive(false);
             dictionaryTypeRepository.save(dictionaryType);
             if(dictionaryType!=null){
@@ -35,11 +35,11 @@ public class DeleteController extends SkeletonController {
                 }
             }
         } else if(path.equalsIgnoreCase(Constants.ROUTE.DICTIONARY)){
-            Dictionary dictionary = dictionaryRepository.getDictionaryById(id);
+            Dictionary dictionary = dictionaryRepository.getDictionaryById(Integer.parseInt(id));
             dictionary.setActive(false);
             dictionaryRepository.save(dictionary);
         } else if(path.equalsIgnoreCase(Constants.ROUTE.MODULE)){
-            Module module = moduleRepository.getModuleById(id);
+            Module module = moduleRepository.getModuleById(Integer.parseInt(id));
             module.setActive(false);
             moduleRepository.save(module);
             for(ModuleOperation moduleOperation: moduleOperationRepository.getModuleOperationsByModule_Active(false)){
@@ -47,7 +47,7 @@ public class DeleteController extends SkeletonController {
                 moduleOperationRepository.deleteById(moduleOperation.getId());
             }
         } else if(path.equalsIgnoreCase(Constants.ROUTE.OPERATION)){
-            Operation operation = operationRepository.getOperationById(id);
+            Operation operation = operationRepository.getOperationById(Integer.parseInt(id));
             operation.setActive(false);
             operationRepository.save(operation);
             for(ModuleOperation moduleOperation: moduleOperationRepository.getModuleOperationsByOperation_Active(false)){
@@ -55,18 +55,18 @@ public class DeleteController extends SkeletonController {
                 moduleOperationRepository.deleteById(moduleOperation.getId());
             }
         } else if(path.equalsIgnoreCase(Constants.ROUTE.MODULE_OPERATION)){
-            moduleOperationRepository.deleteById(id);
+            moduleOperationRepository.deleteById(Integer.parseInt(id));
         } else if(path.equalsIgnoreCase(Constants.ROUTE.USER_MODULE_OPERATION)){
-            User userObject = userRepository.getUserByActiveTrueAndId(id);
+            User userObject = userRepository.getUserByActiveTrueAndId(Integer.parseInt(id));
             userRepository.save(userObject);
             List<UserModuleOperation> userModuleOperations = userModuleOperationRepository.findAllByUser_Id(user.getId());
             userModuleOperationRepository.deleteInBatch(userModuleOperations);
         } else if(path.equalsIgnoreCase(Constants.ROUTE.EMPLOYEE)){
-            employeeRepository.deleteById(id);
+            employeeRepository.deleteById(Integer.parseInt(id));
         } else if(path.equalsIgnoreCase(Constants.ROUTE.ORGANIZATION)){
-            organizationRepository.deleteById(id);
+            organizationRepository.deleteById(Integer.parseInt(id));
         } else if(path.equalsIgnoreCase(Constants.ROUTE.SUPPLIER)){
-            Supplier supplier = supplierRepository.getSuppliersById(id);
+            Supplier supplier = supplierRepository.getSuppliersById(Integer.parseInt(id));
             supplier.setActive(false);
             supplierRepository.save(supplier);
         } else if(path.equalsIgnoreCase(Constants.ROUTE.ACCOUNT)){

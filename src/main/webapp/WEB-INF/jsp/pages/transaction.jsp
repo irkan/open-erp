@@ -37,7 +37,7 @@
                                     <tr>
                                         <td>${loop.index + 1}</td>
                                         <td><c:out value="${t.id}" /></td>
-                                        <td><c:out value="${t.accountNumber}" /></td>
+                                        <td><c:out value="${t.account.id}" /></td>
                                         <td><c:out value="${t.description}" /></td>
                                         <td><c:out value="${t.amount}" /></td>
                                         <td><c:out value="${t.price}" /></td>
@@ -47,7 +47,7 @@
                                             <c:choose>
                                                 <c:when test="${approve.status}">
                                                     <c:if test="${!t.approve}">
-                                                        <a href="javascript:approve($('#inventory-expense-approve-form'), $('#inventory-expense-approve-modal'), '<c:out value="${t.id}" />', '<c:out value="${t.description}" />', '<c:out value="${t.price}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${approve.object.name}"/>">
+                                                        <a href="javascript:approve($('#transaction-approve-form'), $('#transaction-approve-modal'), '<c:out value="${t.id}" />', '<c:out value="${t.description}" />', '<c:out value="${t.price}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${approve.object.name}"/>">
                                                             <i class="<c:out value="${approve.object.icon}"/>"></i>
                                                         </a>
                                                     </c:if>
@@ -104,7 +104,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form:form modelAttribute="form" id="form" method="post" action="/accounting/inventory-expense" cssClass="form-group">
+                <form:form modelAttribute="form" id="form" method="post" action="/accounting/transaction" cssClass="form-group">
                     <form:hidden path="id"/>
                     <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>
@@ -120,7 +120,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="inventory-expense-approve-modal" tabindex="-1" role="dialog">
+<div class="modal fade" id="transaction-approve-modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -133,11 +133,11 @@
                 <form:form modelAttribute="form" id="transaction-approve-form" method="post" action="/accounting/transaction-approve" cssClass="form-group">
                     <form:hidden path="id"/>
                     <div class="form-group">
-                        <form:label path="accountNumber">Hesab</form:label>
-                        <form:select  path="accountNumber" cssClass="custom-select form-control">
-                            <form:options items="${accounts}" itemLabel="accountNumber" itemValue="accountNumber" />
+                        <form:label path="account">Hesab</form:label>
+                        <form:select  path="account" cssClass="custom-select form-control">
+                            <form:options items="${accounts}" itemLabel="id" itemValue="id" />
                         </form:select>
-                        <form:errors path="accountNumber" cssClass="alert-danger control-label"/>
+                        <form:errors path="account" cssClass="alert-danger control-label"/>
                     </div>
                     <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>

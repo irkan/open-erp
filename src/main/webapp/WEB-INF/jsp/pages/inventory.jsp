@@ -31,6 +31,7 @@
                                     <th>Vəziyyət</th>
                                     <th>Say</th>
                                     <th>Anbar</th>
+                                    <th>Tədarükçü</th>
                                     <th>Status</th>
                                     <th>Əməliyyat</th>
                                 </tr>
@@ -57,6 +58,7 @@
                                         <td><c:out value="${utl:calculateInventoryAmount(t.actions)}"/>
                                         </td>
                                         <td><c:out value="${t.actions.get(0).warehouse.name}" /></td>
+                                        <td><c:out value="${t.actions.get(0).supplier.name}" /></td>
                                         <td>
                                             <span class="kt-badge kt-badge--success kt-badge--dot"></span>
                                             <span class="kt-badge kt-badge--success"><i class="flaticon2-checkmark"></i></span>

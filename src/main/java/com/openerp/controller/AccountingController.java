@@ -80,6 +80,6 @@ public class AccountingController extends SkeletonController {
             trn.setSumPrice(trn.getAmount()*transaction.getPrice());
             transactionRepository.save(trn);
         }
-        return mapPost(transaction, binding, redirectAttributes);
+        return mapPost(transaction, binding, redirectAttributes, "/accounting/transaction");
     }
 }

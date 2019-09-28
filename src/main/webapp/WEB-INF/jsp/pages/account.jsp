@@ -22,9 +22,8 @@
                                 <thead>
                                 <tr>
                                     <th>№</th>
-                                    <th>ID</th>
-                                    <th>Flial</th>
                                     <th>Hesab nömrəsi</th>
+                                    <th></th>
                                     <th>Valyuta</th>
                                     <th>Bank hesab nömrəsi</th>
                                     <th>Bank kodu</th>
@@ -38,14 +37,13 @@
                                 <c:forEach var="t" items="${list}" varStatus="loop">
                                     <tr>
                                         <td>${loop.index + 1}</td>
-                                        <td><c:out value="${t.id}" /></td>
+                                        <th><c:out value="${t.id}" /></th>
                                         <td><c:out value="${t.organization.name}"/></td>
-                                        <td><c:out value="${t.accountNumber}"/></td>
                                         <td><c:out value="${t.currency}"/></td>
                                         <td><c:out value="${t.bankAccountNumber}"/></td>
                                         <td><c:out value="${t.bankCode}"/></td>
                                         <td><c:out value="${t.bankSwiftBic}"/></td>
-                                        <td><c:out value="${t.balance}"/></td>
+                                        <th><c:out value="${t.balance}"/></th>
                                         <td><c:out value="${t.description}"/></td>
                                         <td nowrap class="text-center">
                                             <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
@@ -67,7 +65,7 @@
                                             <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
                                             <c:choose>
                                                 <c:when test="${delete.status}">
-                                                    <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.accountNumber}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
+                                                    <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.id}" /><br/><c:out value="${t.description}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
                                                         <i class="<c:out value="${delete.object.icon}"/>"></i>
                                                     </a>
                                                 </c:when>
@@ -100,7 +98,6 @@
             </div>
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form" method="post" action="/accounting/account" cssClass="form-group">
-                    <form:input type="hidden" path="id"/>
                     <div class="form-group">
                         <form:label path="organization">Flial</form:label>
                         <form:select  path="organization" cssClass="custom-select form-control">
@@ -111,9 +108,9 @@
                     <div class="row">
                         <div class="col-md-9">
                             <div class="form-group">
-                                <form:label path="accountNumber">Hesab nömrəsi</form:label>
-                                <form:input path="accountNumber" cssClass="form-control account-number" placeholder="Hesab nömrəsini daxil edin" readonly="true"/>
-                                <form:errors path="accountNumber" cssClass="alert-danger control-label"/>
+                                <form:label path="id">Hesab nömrəsi</form:label>
+                                <form:input path="id" cssClass="form-control account-number" placeholder="Hesab nömrəsini daxil edin" readonly="true"/>
+                                <form:errors path="id" cssClass="alert-danger control-label"/>
                             </div>
                         </div>
                         <div class="col-md-3">

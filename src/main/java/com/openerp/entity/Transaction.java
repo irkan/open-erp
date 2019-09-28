@@ -28,8 +28,9 @@ public class Transaction {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "account_number")
-    private String accountNumber;
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "account")
+    private Account account;
 
     @Column(name = "amount", nullable = false)
     private int amount=0;

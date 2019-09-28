@@ -10,5 +10,5 @@ import java.util.List;
 public interface AccountRepository extends JpaRepository<Account, Integer> {
     List<Account> getAccountsByActiveTrue();
     List<Account> getAccountsByActiveTrueAndOrganization(Organization branch);
-    Account getAccountById(int id);
+    Account getAccountById(String id);
 }
