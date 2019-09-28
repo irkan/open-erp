@@ -55,5 +55,8 @@ public class Constants {
         public static final String CURRENCY_RATE = "currency-rate";
         public static final String ACCOUNT = "account";
         public static final String TRANSACTION = "transaction";
+        public static final String NON_WORKING_DAY = "non-working-day";
+        public static final String SHORTENED_WORKING_DAY = "shortened-working-day";
+        public static final String WORK_ATTENDANCE = "work-attendance";
     }
 }

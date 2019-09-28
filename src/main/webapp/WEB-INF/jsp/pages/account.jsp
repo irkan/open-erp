@@ -22,9 +22,11 @@
                                 <thead>
                                 <tr>
                                     <th>№</th>
-                                    <th>Hesab nömrəsi</th>
+                                    <th>ID</th>
                                     <th></th>
+                                    <th>Hesab nömrəsi</th>
                                     <th>Valyuta</th>
+                                    <th>Bank</th>
                                     <th>Bank hesab nömrəsi</th>
                                     <th>Bank kodu</th>
                                     <th>Bank swift bik</th>
@@ -37,9 +39,11 @@
                                 <c:forEach var="t" items="${list}" varStatus="loop">
                                     <tr>
                                         <td>${loop.index + 1}</td>
-                                        <th><c:out value="${t.id}" /></th>
+                                        <td><c:out value="${t.id}" /></td>
                                         <td><c:out value="${t.organization.name}"/></td>
+                                        <th><c:out value="${t.accountNumber}"/></th>
                                         <td><c:out value="${t.currency}"/></td>
+                                        <td><c:out value="${t.bankName}"/></td>
                                         <td><c:out value="${t.bankAccountNumber}"/></td>
                                         <td><c:out value="${t.bankCode}"/></td>
                                         <td><c:out value="${t.bankSwiftBic}"/></td>
@@ -65,7 +69,7 @@
                                             <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
                                             <c:choose>
                                                 <c:when test="${delete.status}">
-                                                    <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.id}" /><br/><c:out value="${t.description}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
+                                                    <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.accountNumber}" /><br/><c:out value="${t.description}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
                                                         <i class="<c:out value="${delete.object.icon}"/>"></i>
                                                     </a>
                                                 </c:when>
@@ -108,9 +112,9 @@
                     <div class="row">
                         <div class="col-md-9">
                             <div class="form-group">
-                                <form:label path="id">Hesab nömrəsi</form:label>
-                                <form:input path="id" cssClass="form-control account-number" placeholder="Hesab nömrəsini daxil edin" readonly="true"/>
-                                <form:errors path="id" cssClass="alert-danger control-label"/>
+                                <form:label path="accountNumber">Hesab nömrəsi</form:label>
+                                <form:input path="accountNumber" cssClass="form-control account-number" placeholder="Hesab nömrəsi" readonly="true"/>
+                                <form:errors path="accountNumber" cssClass="alert-danger control-label"/>
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -139,6 +143,11 @@
                             </div>
                         </div>
                         <form:errors path="balance" cssClass="alert-danger control-label"/>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="bankName">Bank</form:label>
+                        <form:input path="bankName" cssClass="form-control" placeholder="Bankınızı daxil edin. Məs: PashaBank"/>
+                        <form:errors path="bankName" cssClass="alert-danger control-label"/>
                     </div>
                     <div class="form-group">
                         <form:label path="bankAccountNumber">Bank hesab nömrəsi</form:label>

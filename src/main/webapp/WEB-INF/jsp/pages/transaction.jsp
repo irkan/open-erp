@@ -29,6 +29,7 @@
                                     <th>Say</th>
                                     <th>Qiymət</th>
                                     <th>Ümumi qiymət</th>
+                                    <th>Balans</th>
                                     <th>Əməliyyat</th>
                                 </tr>
                                 </thead>
@@ -37,11 +38,24 @@
                                     <tr>
                                         <td>${loop.index + 1}</td>
                                         <td><c:out value="${t.id}" /></td>
-                                        <td><c:out value="${t.account.id}" /></td>
+                                        <td><c:out value="${t.account.accountNumber}" /></td>
                                         <td><c:out value="${t.description}" /></td>
                                         <td><c:out value="${t.amount}" /></td>
                                         <td><c:out value="${t.price}" /></td>
-                                        <td><c:out value="${t.sumPrice}" /></td>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${t.sumPrice>0}">
+                                                    <span class="kt-font-bold kt-font-success"><c:out value="${t.sumPrice}" /></span>
+                                                </c:when>
+                                                <c:when test="${t.sumPrice<0}">
+                                                    <span class="kt-font-bold kt-font-danger"><c:out value="${t.sumPrice}" /></span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span class="kt-font-bold"><c:out value="${t.sumPrice}" /></span>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </td>
+                                        <td><c:out value="${t.balance}" /></td>
                                         <td nowrap class="text-center">
                                             <c:set var="approve" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
                                             <c:choose>
@@ -135,7 +149,7 @@
                     <div class="form-group">
                         <form:label path="account">Hesab</form:label>
                         <form:select  path="account" cssClass="custom-select form-control">
-                            <form:options items="${accounts}" itemLabel="id" itemValue="id" />
+                            <form:options items="${accounts}" itemLabel="accountNumber" itemValue="id" />
                         </form:select>
                         <form:errors path="account" cssClass="alert-danger control-label"/>
                     </div>

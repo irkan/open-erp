@@ -46,6 +46,12 @@ public class HRController extends SkeletonController {
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Employee());
             }
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.NON_WORKING_DAY)){
+
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.SHORTENED_WORKING_DAY)){
+
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.WORK_ATTENDANCE)){
+
         }
         return "layout";
     }

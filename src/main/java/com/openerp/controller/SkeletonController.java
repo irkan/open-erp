@@ -76,6 +76,12 @@ public class SkeletonController {
     TransactionRepository transactionRepository;
 
     @Autowired
+    NonWorkingDayRepository nonWorkingDayRepository;
+
+    @Autowired
+    ShortenedWorkingDayRepository shortenedWorkingDayRepository;
+
+    @Autowired
     HttpServletRequest request;
 
     @Autowired

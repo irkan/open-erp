@@ -4,6 +4,7 @@ import com.openerp.util.RandomString;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.context.annotation.Primary;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
@@ -16,9 +17,14 @@ import java.util.Date;
 @NoArgsConstructor
 public class Account {
     @Id
-    /*@Pattern(regexp=".{4,17}",message="Minimum 4 maksimum 17 simvol ola bilər")*/
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "accounting_sequence")
+    @SequenceGenerator(sequenceName = "aa_accounting_sequence", allocationSize = 1, name = "accounting_sequence")
     @Column(name = "id", unique = true, nullable = false)
-    private String id = RandomString.getAlphaNumeric(16);
+    private Integer id;
+
+    @Pattern(regexp=".{4,17}",message="Minimum 4 maksimum 17 simvol ola bilər")
+    @Column(name = "account_number", unique = true, nullable = false)
+    private String accountNumber = RandomString.getAlphaNumeric(16);
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hr_organization_id")
@@ -27,6 +33,10 @@ public class Account {
     @Pattern(regexp=".{0,5}",message="Maksimum 5 simvol ola bilər")
     @Column(name = "currency", nullable = false)
     private String currency = "AZN";
+
+    @Pattern(regexp=".{0,50}",message="Maksimum 50 simvol ola bilər")
+    @Column(name = "bank_name")
+    private String bankName;
 
     @Pattern(regexp=".{0,50}",message="Maksimum 50 simvol ola bilər")
     @Column(name = "bank_account_number")
@@ -58,4 +68,9 @@ public class Account {
     @JoinColumn(name = "created_by_admin_user_id")
     private User createdUser;
 
+    public Account(Organization organization, @Pattern(regexp = ".{0,5}", message = "Maksimum 5 simvol ola bilər") String currency, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String description) {
+        this.organization = organization;
+        this.currency = currency;
+        this.description = description;
+    }
 }

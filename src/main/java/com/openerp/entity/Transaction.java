@@ -29,17 +29,23 @@ public class Transaction {
     private String description;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "account")
+    @JoinColumn(name = "accounting_account_id")
     private Account account;
 
     @Column(name = "amount", nullable = false)
-    private int amount=0;
+    private int amount=1;
+
+    @Column(name = "is_debt", nullable = false, columnDefinition="boolean default true")
+    private Boolean debt = false;
 
     @Column(name = "price", nullable = false, columnDefinition="double default 0")
     private double price=0d;
 
     @Column(name = "sum_price", nullable = false, columnDefinition="double default 0")
-    private double sumPrice=0d;
+    private double sumPrice=calSumPrice(this.debt, this.price, this.amount);
+
+    @Column(name = "balance", nullable = false, columnDefinition="double default 0")
+    private double balance;
 
     @Column(name = "is_approve", nullable = false, columnDefinition="boolean default true")
     private Boolean approve = true;
@@ -71,5 +77,12 @@ public class Transaction {
     public Transaction(@Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String description, Boolean approve) {
         this.description = description;
         this.approve = approve;
+    }
+
+    private double calSumPrice(boolean debt, double price, int amount){
+        if(!debt){
+            return price*amount*(-1.0d);
+        }
+        return price*amount;
     }
 }

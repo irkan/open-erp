@@ -78,6 +78,7 @@ public class AccountingController extends SkeletonController {
             trn.setApproveDate(new Date());
             trn.setPrice(transaction.getPrice());
             trn.setSumPrice(trn.getAmount()*transaction.getPrice());
+            trn.setAccount(transaction.getAccount());
             transactionRepository.save(trn);
         }
         return mapPost(transaction, binding, redirectAttributes, "/accounting/transaction");

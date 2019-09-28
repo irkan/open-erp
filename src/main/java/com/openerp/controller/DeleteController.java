@@ -70,7 +70,7 @@ public class DeleteController extends SkeletonController {
             supplier.setActive(false);
             supplierRepository.save(supplier);
         } else if(path.equalsIgnoreCase(Constants.ROUTE.ACCOUNT)){
-            Account account = accountRepository.getAccountById(id);
+            Account account = accountRepository.getAccountById(Integer.parseInt(id));
             account.setActive(false);
             accountRepository.save(account);
         }

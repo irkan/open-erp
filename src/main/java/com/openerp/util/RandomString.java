@@ -4,15 +4,20 @@ public class RandomString {
 
     public static String getAlphaNumeric(int n){
         String AlphaNumericString = "AZNUSDERGBPTL01234567890123456789";
-        String NumericString = "0123456789";
+        String NumericStringSuffix = "0123456789";
+        String NumericStringPrefix = "123456789";
         StringBuilder sb = new StringBuilder(n);
-        for (int i = 0; i < n-4; i++) {
+        for (int i = 0; i < 3; i++) {
+            int index = (int)(NumericStringPrefix.length() * Math.random());
+            sb.append(NumericStringPrefix.charAt(index));
+        }
+        for (int i = 3; i < n-4; i++) {
             int index = (int)(AlphaNumericString.length() * Math.random());
             sb.append(AlphaNumericString.charAt(index));
         }
         for (int i = n-4; i < n; i++) {
-            int index = (int)(NumericString.length() * Math.random());
-            sb.append(NumericString.charAt(index));
+            int index = (int)(NumericStringSuffix.length() * Math.random());
+            sb.append(NumericStringSuffix.charAt(index));
         }
         return sb.toString(); 
     }
