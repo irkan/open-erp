@@ -2,20 +2,27 @@ package com.openerp.controller;
 
 import com.openerp.entity.*;
 import com.openerp.util.Constants;
+import com.openerp.util.DateUtility;
 import com.openerp.util.Util;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.DigestUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("/admin")
@@ -84,6 +91,11 @@ public class AdministratorController extends SkeletonController {
             model.addAttribute(Constants.OPERATIONS, Util.removeDuplicateOperations(list));
             model.addAttribute(Constants.LIST, list);
             model.addAttribute(Constants.FORM, new TemplateModuleOperation());
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.CURRENCY_RATE)){
+            model.addAttribute(Constants.LIST, currencyRateRepository.findAll());
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new CurrencyRate());
+            }
         }
         return "layout";
     }
@@ -239,5 +251,12 @@ public class AdministratorController extends SkeletonController {
             e.printStackTrace();
         }
         return employees;
+    }
+
+    @PostMapping(value = "/currency-rate")
+    public String postCurrencyRate(@ModelAttribute(Constants.FORM) @Validated CurrencyRate currencyRate, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        currencyRateRepository.deleteAll();
+        currencyRateRepository.saveAll(Util.getCurrenciesRate(cbarCurrenciesEndpoint));
+        return mapPost(currencyRate, binding, redirectAttributes);
     }
 }

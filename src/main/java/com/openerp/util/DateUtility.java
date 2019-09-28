@@ -2,6 +2,7 @@ package com.openerp.util;
 
 import org.apache.log4j.Logger;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,5 +18,10 @@ public class DateUtility {
             log.error(e);
         }
         return utilDate;
+    }
+
+    public static String getFormattedDate(Date date) {
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        return dateFormat.format(date);
     }
 }

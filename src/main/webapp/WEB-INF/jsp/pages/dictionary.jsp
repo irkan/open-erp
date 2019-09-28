@@ -19,15 +19,15 @@
                 <div class="kt-portlet__body">
                     <c:choose>
                         <c:when test="${not empty list}">
-                            <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+                            <table class="table table-striped- table-bordered table-hover table-checkable" id="group_table">
                                 <thead>
                                 <tr>
                                     <th>№</th>
                                     <th>ID</th>
+                                    <th>Tipi</th>
                                     <th>Ad</th>
                                     <th>Atribut#1</th>
                                     <th>Atribut#2</th>
-                                    <th>Tipi</th>
                                     <th>Əməliyyat</th>
                                 </tr>
                                 </thead>
@@ -36,10 +36,10 @@
                                     <tr>
                                         <td>${loop.index + 1}</td>
                                         <td><c:out value="${t.id}" /></td>
+                                        <td><c:out value="${t.dictionaryType.name}" /></td>
                                         <td><c:out value="${t.name}" /></td>
                                         <td><c:out value="${t.attr1}" /></td>
                                         <td><c:out value="${t.attr2}" /></td>
-                                        <td><c:out value="${t.dictionaryType.name}" /></td>
                                         <td nowrap class="text-center">
                                             <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
                                             <c:choose>
@@ -126,6 +126,8 @@
         </div>
     </div>
 </div>
+
+<script src="<c:url value="/assets/js/demo4/pages/crud/datatables/advanced/row-grouping.js" />" type="text/javascript"></script>
 
 
 

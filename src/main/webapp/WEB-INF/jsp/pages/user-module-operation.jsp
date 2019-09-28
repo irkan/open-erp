@@ -123,6 +123,6 @@
 
     function save() {
         $("#form").attr("action", "/admin/user-module-operation");
-        $("#form").submit();
+        submit($("#form"));
     }
 </script>

@@ -107,6 +107,6 @@
     
     function save() {
         $("#form").attr("action", "/admin/template-module-operation");
-        $("#form").submit();
+        submit($("#form"));
     }
 </script>

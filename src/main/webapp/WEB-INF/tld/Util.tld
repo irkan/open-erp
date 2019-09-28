@@ -34,4 +34,11 @@
             int calculateInventoryAmount(java.util.List)
         </function-signature>
     </function>
+    <function>
+        <name>getFormattedDate</name>
+        <function-class>com.openerp.util.DateUtility</function-class>
+        <function-signature>
+            java.lang.String getFormattedDate(java.util.Date)
+        </function-signature>
+    </function>
 </taglib>

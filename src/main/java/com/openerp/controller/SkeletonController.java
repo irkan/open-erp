@@ -4,6 +4,7 @@ import com.openerp.entity.User;
 import com.openerp.util.Constants;
 import com.openerp.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -13,6 +14,9 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 public class SkeletonController {
+
+    @Value("${cbar.currencies.endpoint}")
+    String cbarCurrenciesEndpoint;
 
     @Autowired
     UserRepository userRepository;
@@ -63,7 +67,13 @@ public class SkeletonController {
     SupplierRepository supplierRepository;
 
     @Autowired
-    ExpenseRepository expenseRepository;
+    AccountRepository accountRepository;
+
+    @Autowired
+    CurrencyRateRepository currencyRateRepository;
+
+    @Autowired
+    TransactionRepository transactionRepository;
 
     @Autowired
     HttpServletRequest request;

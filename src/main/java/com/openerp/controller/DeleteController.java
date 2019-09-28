@@ -69,6 +69,10 @@ public class DeleteController extends SkeletonController {
             Supplier supplier = supplierRepository.getSuppliersById(id);
             supplier.setActive(false);
             supplierRepository.save(supplier);
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.ACCOUNT)){
+            Account account = accountRepository.getAccountById(id);
+            account.setActive(false);
+            accountRepository.save(account);
         }
         return "redirect:/"+parent+"/"+path;
     }

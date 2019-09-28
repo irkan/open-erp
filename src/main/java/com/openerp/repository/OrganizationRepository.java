@@ -11,4 +11,5 @@ public interface OrganizationRepository extends JpaRepository<Organization, Inte
     List<Organization> findOrganizationsByOrganizationIsNullAndActiveTrue();
     List<Organization> getOrganizationsByActiveTrue();
     List<Organization> getOrganizationsByActiveTrueAndOrganization(Organization organization);
+    List<Organization> getOrganizationsByActiveTrueAndOrganizationType_Attr1(String attr1);
 }

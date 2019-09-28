@@ -89,6 +89,8 @@ public class DBConfiguration {
             types.add(reasonType);
             DictionaryType inventoryGroupType = new DictionaryType("İnventar qrupu", "inventory-group", null);
             types.add(inventoryGroupType);
+            DictionaryType currencyType = new DictionaryType("Valyuta", "currency", null);
+            types.add(currencyType);
 
             List<Dictionary> dictionaries = new ArrayList<>();
             Dictionary male = new Dictionary("Kişi", "Male", null, genderType);
@@ -197,6 +199,18 @@ public class DBConfiguration {
             dictionaries.add(inventoryGroup4);
             Dictionary inventoryGroup5 = new Dictionary("İnventar qrup #5", "group5", null, inventoryGroupType);
             dictionaries.add(inventoryGroup5);
+            Dictionary AZN = new Dictionary("AZN", "AZN", null, currencyType);
+            dictionaries.add(AZN);
+            Dictionary USD = new Dictionary("USD", "USD", null, currencyType);
+            dictionaries.add(USD);
+            Dictionary EUR = new Dictionary("EUR", "EUR", null, currencyType);
+            dictionaries.add(EUR);
+            Dictionary GBP = new Dictionary("GBP", "GBP", null, currencyType);
+            dictionaries.add(GBP);
+            Dictionary RUB = new Dictionary("RUB", "RUB", null, currencyType);
+            dictionaries.add(RUB);
+            Dictionary TL = new Dictionary("TL", "TL", null, currencyType);
+            dictionaries.add(TL);
 
             dictionaryTypeRepository.saveAll(types);
             dictionaryRepository.saveAll(dictionaries);
@@ -234,7 +248,7 @@ public class DBConfiguration {
             modules.add(subModule12);
             Module subModule13 = new Module("LineAwesome ikon", "LineAwesome ikon", "line-awesome-icon", null, subModule11);
             modules.add(subModule13);
-            Module warehouse = new Module("Anbar", "İnventarın idarə edilməsi", "warehouse", "flaticon-home-2", null);
+            Module warehouse = new Module("Satınalma & Anbar", "İnventarın idarə edilməsi", "warehouse", "flaticon-home-2", null);
             modules.add(warehouse);
             Module inventory = new Module("İnventar", "İnventar", "inventory", "flaticon-tool", warehouse);
             modules.add(inventory);
@@ -242,10 +256,14 @@ public class DBConfiguration {
             modules.add(supplier);
             Module accounting = new Module("Mühasibatlıq", "Mühasibatlıq", "accounting", "flaticon2-line-chart", null);
             modules.add(accounting);
-            Module expense = new Module("Xərc", "Xərc", "expense", "flaticon-piggy-bank", accounting);
-            modules.add(expense);
             Module dashboard = new Module("Panel", "Qrafik status", "dashboard", "flaticon-analytics", null);
             modules.add(dashboard);
+            Module currencyRate = new Module("Valyuta kursu", "Valyuta kursu", "currency-rate", "la la-euro", module);
+            modules.add(currencyRate);
+            Module account = new Module("Hesab", "Hesab", "account", "la la-bank", accounting);
+            modules.add(account);
+            Module transaction = new Module("Tranzaksiya", "Tranzaksiya", "transaction", "la la-money", accounting);
+            modules.add(transaction);
 
             moduleRepository.saveAll(modules);
 
@@ -287,8 +305,10 @@ public class DBConfiguration {
             moduleOperations.add(createModuleOperation9);
             ModuleOperation createModuleOperation10 = new ModuleOperation(supplier, create, null);
             moduleOperations.add(createModuleOperation10);
-            ModuleOperation createModuleOperation11 = new ModuleOperation(expense, create, null);
-            moduleOperations.add(createModuleOperation11);
+            ModuleOperation createModuleOperation13 = new ModuleOperation(account, create, null);
+            moduleOperations.add(createModuleOperation13);
+            ModuleOperation createModuleOperation14 = new ModuleOperation(transaction, create, null);
+            moduleOperations.add(createModuleOperation14);
 
 
             ModuleOperation editModuleOperation1 = new ModuleOperation(subModule1, edit, null);
@@ -309,8 +329,10 @@ public class DBConfiguration {
             moduleOperations.add(editModuleOperation9);
             ModuleOperation editModuleOperation10 = new ModuleOperation(supplier, edit, null);
             moduleOperations.add(editModuleOperation10);
-            ModuleOperation editModuleOperation11 = new ModuleOperation(expense, edit, null);
-            moduleOperations.add(editModuleOperation11);
+            ModuleOperation editModuleOperation13 = new ModuleOperation(account, edit, null);
+            moduleOperations.add(editModuleOperation13);
+            ModuleOperation editModuleOperation14 = new ModuleOperation(transaction, edit, null);
+            moduleOperations.add(editModuleOperation14);
 
             ModuleOperation deleteModuleOperation1 = new ModuleOperation(subModule1, delete, null);
             moduleOperations.add(deleteModuleOperation1);
@@ -332,8 +354,10 @@ public class DBConfiguration {
             moduleOperations.add(deleteModuleOperation9);
             ModuleOperation deleteModuleOperation10 = new ModuleOperation(supplier, delete, null);
             moduleOperations.add(deleteModuleOperation10);
-            ModuleOperation deleteModuleOperation11 = new ModuleOperation(expense, delete, null);
-            moduleOperations.add(deleteModuleOperation11);
+            ModuleOperation deleteModuleOperation13 = new ModuleOperation(account, delete, null);
+            moduleOperations.add(deleteModuleOperation13);
+            ModuleOperation deleteModuleOperation14 = new ModuleOperation(transaction, delete, null);
+            moduleOperations.add(deleteModuleOperation14);
 
             ModuleOperation viewModuleOperation6 = new ModuleOperation(subModule6, view, null);
             moduleOperations.add(viewModuleOperation6);
@@ -351,6 +375,10 @@ public class DBConfiguration {
             moduleOperations.add(viewModuleOperation13);
             ModuleOperation viewModuleOperation14 = new ModuleOperation(inventory, view, null);
             moduleOperations.add(viewModuleOperation14);
+            ModuleOperation viewModuleOperation15 = new ModuleOperation(currencyRate, view, null);
+            moduleOperations.add(viewModuleOperation15);
+            ModuleOperation viewModuleOperation16 = new ModuleOperation(transaction, view, null);
+            moduleOperations.add(viewModuleOperation16);
 
             ModuleOperation exportModuleOperation1 = new ModuleOperation(subModule1, export, null);
             moduleOperations.add(exportModuleOperation1);
@@ -372,11 +400,13 @@ public class DBConfiguration {
             moduleOperations.add(exportModuleOperation9);
             ModuleOperation exportModuleOperation10 = new ModuleOperation(supplier, export, null);
             moduleOperations.add(exportModuleOperation10);
-            ModuleOperation exportModuleOperation11 = new ModuleOperation(expense, export, null);
-            moduleOperations.add(exportModuleOperation11);
+            ModuleOperation exportModuleOperation13 = new ModuleOperation(account, export, null);
+            moduleOperations.add(exportModuleOperation13);
+            ModuleOperation exportModuleOperation14 = new ModuleOperation(transaction, export, null);
+            moduleOperations.add(exportModuleOperation14);
 
-            ModuleOperation approveModuleOperation1 = new ModuleOperation(expense, approve, null);
-            moduleOperations.add(approveModuleOperation1);
+            ModuleOperation approveModuleOperation3 = new ModuleOperation(transaction, approve, null);
+            moduleOperations.add(approveModuleOperation3);
 
             moduleOperationRepository.saveAll(moduleOperations);
 
@@ -459,8 +489,10 @@ public class DBConfiguration {
             userModuleOperations.add(userCreateModuleOperation9);
             UserModuleOperation userCreateModuleOperation10 = new UserModuleOperation(user, createModuleOperation10);
             userModuleOperations.add(userCreateModuleOperation10);
-            UserModuleOperation userCreateModuleOperation11 = new UserModuleOperation(user, createModuleOperation10);
-            userModuleOperations.add(userCreateModuleOperation11);
+            UserModuleOperation userCreateModuleOperation13 = new UserModuleOperation(user, createModuleOperation13);
+            userModuleOperations.add(userCreateModuleOperation13);
+            UserModuleOperation userCreateModuleOperation14 = new UserModuleOperation(user, createModuleOperation14);
+            userModuleOperations.add(userCreateModuleOperation14);
 
             UserModuleOperation userEditModuleOperation1 = new UserModuleOperation(user, editModuleOperation1);
             userModuleOperations.add(userEditModuleOperation1);
@@ -480,8 +512,10 @@ public class DBConfiguration {
             userModuleOperations.add(userEditModuleOperation9);
             UserModuleOperation userEditModuleOperation10 = new UserModuleOperation(user, editModuleOperation10);
             userModuleOperations.add(userEditModuleOperation10);
-            UserModuleOperation userEditModuleOperation11 = new UserModuleOperation(user, editModuleOperation11);
-            userModuleOperations.add(userEditModuleOperation11);
+            UserModuleOperation userEditModuleOperation13 = new UserModuleOperation(user, editModuleOperation13);
+            userModuleOperations.add(userEditModuleOperation13);
+            UserModuleOperation userEditModuleOperation14 = new UserModuleOperation(user, editModuleOperation14);
+            userModuleOperations.add(userEditModuleOperation14);
 
             UserModuleOperation userDeleteModuleOperation1 = new UserModuleOperation(user, deleteModuleOperation1);
             userModuleOperations.add(userDeleteModuleOperation1);
@@ -503,8 +537,10 @@ public class DBConfiguration {
             userModuleOperations.add(userDeleteModuleOperation9);
             UserModuleOperation userDeleteModuleOperation10 = new UserModuleOperation(user, deleteModuleOperation10);
             userModuleOperations.add(userDeleteModuleOperation10);
-            UserModuleOperation userDeleteModuleOperation11 = new UserModuleOperation(user, deleteModuleOperation11);
-            userModuleOperations.add(userDeleteModuleOperation11);
+            UserModuleOperation userDeleteModuleOperation13 = new UserModuleOperation(user, deleteModuleOperation13);
+            userModuleOperations.add(userDeleteModuleOperation13);
+            UserModuleOperation userDeleteModuleOperation14 = new UserModuleOperation(user, deleteModuleOperation14);
+            userModuleOperations.add(userDeleteModuleOperation14);
 
             UserModuleOperation userExportModuleOperation1 = new UserModuleOperation(user, exportModuleOperation1);
             userModuleOperations.add(userExportModuleOperation1);
@@ -526,8 +562,10 @@ public class DBConfiguration {
             userModuleOperations.add(userExportModuleOperation9);
             UserModuleOperation userExportModuleOperation10 = new UserModuleOperation(user, exportModuleOperation10);
             userModuleOperations.add(userExportModuleOperation10);
-            UserModuleOperation userExportModuleOperation11 = new UserModuleOperation(user, exportModuleOperation11);
-            userModuleOperations.add(userExportModuleOperation11);
+            UserModuleOperation userExportModuleOperation13 = new UserModuleOperation(user, exportModuleOperation13);
+            userModuleOperations.add(userExportModuleOperation13);
+            UserModuleOperation userExportModuleOperation14 = new UserModuleOperation(user, exportModuleOperation14);
+            userModuleOperations.add(userExportModuleOperation14);
 
             UserModuleOperation userViewModuleOperation6 = new UserModuleOperation(user, viewModuleOperation6);
             userModuleOperations.add(userViewModuleOperation6);
@@ -545,9 +583,13 @@ public class DBConfiguration {
             userModuleOperations.add(viewUserModuleOperation13);
             UserModuleOperation viewUserModuleOperation14 = new UserModuleOperation(user, viewModuleOperation14);
             userModuleOperations.add(viewUserModuleOperation14);
+            UserModuleOperation viewUserModuleOperation15 = new UserModuleOperation(user, viewModuleOperation15);
+            userModuleOperations.add(viewUserModuleOperation15);
+            UserModuleOperation viewUserModuleOperation16 = new UserModuleOperation(user, viewModuleOperation16);
+            userModuleOperations.add(viewUserModuleOperation16);
 
-            UserModuleOperation userApproveModuleOperation1 = new UserModuleOperation(user, approveModuleOperation1);
-            userModuleOperations.add(userApproveModuleOperation1);
+            UserModuleOperation userApproveModuleOperation3 = new UserModuleOperation(user, approveModuleOperation3);
+            userModuleOperations.add(userApproveModuleOperation3);
 
             userModuleOperationRepository.saveAll(userModuleOperations);
 
