@@ -16,14 +16,6 @@
         <div class="col-lg-12">
             <div class="kt-portlet kt-portlet--mobile">
                 <div class="kt-portlet__body">
-                    <form:form modelAttribute="form" id="form" method="post" action="/admin/currency-rate" cssClass="form-group">
-                        <div class="row">
-                            <div class="col-md-2 offset-md-10 text-right">
-                                <button onclick="submit($('#form'))" class="btn btn-primary">Yenilə</button>
-                            </div>
-                        </div>
-                    </form:form>
-                        <hr style="width: 100%"/>
                     <c:choose>
                         <c:when test="${not empty list}">
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="group_table">
@@ -32,11 +24,11 @@
                                     <th>№</th>
                                     <th>ID</th>
                                     <th>Tipi</th>
-                                    <th>Tarix</th>
-                                    <th>Kod</th>
-                                    <th>Nominal</th>
                                     <th>Ad</th>
                                     <th>Dəyər</th>
+                                    <th>Nominal</th>
+                                    <th>Tarix</th>
+                                    <th>Kod</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -45,11 +37,11 @@
                                         <td>${loop.index + 1}</td>
                                         <td><c:out value="${t.id}" /></td>
                                         <td><c:out value="${t.type}"/></td>
-                                        <td><c:out value="${utl:getFormattedDate(t.rateDate)}"/></td>
-                                        <td><c:out value="${t.code}"/></td>
-                                        <td><c:out value="${t.nominal}"/></td>
                                         <td><c:out value="${t.name}"/></td>
                                         <td><c:out value="${t.value}"/></td>
+                                        <td><c:out value="${t.nominal}"/></td>
+                                        <td><c:out value="${utl:getFormattedDate(t.rateDate)}"/></td>
+                                        <td><c:out value="${t.code}"/></td>
                                     </tr>
                                 </c:forEach>
                                 </tbody>
@@ -65,4 +57,11 @@
     </div>
 </div>
 
+<form  id="reload-form" method="post" action="/admin/currency-rate" style="display: none"></form>
+
 <script src="<c:url value="/assets/js/demo4/pages/crud/datatables/advanced/row-grouping.js" />" type="text/javascript"></script>
+<script>
+    function reloadFunction(){
+        submit($('#reload-form'));
+    }
+</script>

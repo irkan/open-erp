@@ -73,6 +73,14 @@ public class DeleteController extends SkeletonController {
             Account account = accountRepository.getAccountById(Integer.parseInt(id));
             account.setActive(false);
             accountRepository.save(account);
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.NON_WORKING_DAY)){
+            NonWorkingDay nonWorkingDay = nonWorkingDayRepository.getNonWorkingDayById(Integer.parseInt(id));
+            nonWorkingDay.setActive(false);
+            nonWorkingDayRepository.save(nonWorkingDay);
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.SHORTENED_WORKING_DAY)){
+            ShortenedWorkingDay shortenedWorkingDay = shortenedWorkingDayRepository.getShortenedWorkingDayById(Integer.parseInt(id));
+            shortenedWorkingDay.setActive(false);
+            shortenedWorkingDayRepository.save(shortenedWorkingDay);
         }
         return "redirect:/"+parent+"/"+path;
     }

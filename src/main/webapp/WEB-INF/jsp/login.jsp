@@ -8,7 +8,7 @@
 
     <title>Giriş</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <%--<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700">--%>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap&subset=devanagari,latin-ext" rel="stylesheet">
     <link href="<c:url value="/assets/css/demo4/pages/login/login-2.css" />" rel="stylesheet" type="text/css"/>
     <link href="<c:url value="/assets/css/demo4/style.bundle.css" />" rel="stylesheet" type="text/css"/>
     <link href="<c:url value="/assets/vendors/custom/vendors/flaticon/flaticon.css" />" rel="stylesheet" type="text/css"/>
@@ -18,7 +18,7 @@
     <style>
         body {
             margin: 0;
-            font: normal 75% Arial, Helvetica, sans-serif;
+            font-family: 'Poppins', Verdana;
         }
 
         canvas {

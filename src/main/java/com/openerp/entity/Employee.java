@@ -30,7 +30,7 @@ public class Employee {
     @JoinColumn(name = "admin_dictionary_position_id", nullable = false)
     private Dictionary position;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @Column(name = "contract_start_date")
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date contractStartDate;

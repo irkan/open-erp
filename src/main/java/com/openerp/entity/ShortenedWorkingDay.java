@@ -3,8 +3,11 @@ package com.openerp.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
+import java.util.Date;
 
 @Entity
 @Table(name = "hr_shortened_working_day")
@@ -18,6 +21,29 @@ public class ShortenedWorkingDay {
     @SequenceGenerator(sequenceName = "aa_hr_sequence", allocationSize = 1, name = "hr_sequence")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "working_date", unique = true, nullable = false)
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    private Date workingDate;
+
+    @Pattern(regexp=".{0,250}",message="Maksimum 250 simvol ola bilər")
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "shortened_time", nullable = false)
+    private int shortenedTime=1;
+
+    @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
+    private Boolean active = true;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_date", nullable = false)
+    private Date createdDate = new Date();
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "created_by_admin_user_id")
+    private User createdUser;
 
 
 }

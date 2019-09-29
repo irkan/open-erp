@@ -3,6 +3,8 @@ package com.openerp.controller;
 import com.openerp.entity.User;
 import com.openerp.util.Constants;
 import com.openerp.repository.*;
+import com.openerp.util.StringToXML;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,7 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 public class SkeletonController {
+    protected static final Logger log = Logger.getLogger(SkeletonController.class);
 
     @Value("${cbar.currencies.endpoint}")
     String cbarCurrenciesEndpoint;
@@ -113,6 +116,11 @@ public class SkeletonController {
         if(!binding.hasErrors()){
             redirectAttributes.getFlashAttributes().remove(Constants.FORM);
         }
+        return "redirect:"+redirect;
+    }
+
+    String mapPost(RedirectAttributes redirectAttributes, String redirect){
+        redirectAttributes.getFlashAttributes().remove(Constants.FORM);
         return "redirect:"+redirect;
     }
 

@@ -95,7 +95,6 @@ public class Util {
                         Element valTypeElement = (Element) valTypeNode;
                         NodeList valuteNodeList = valTypeElement.getElementsByTagName("Valute");
                         for(int k=0; k<valuteNodeList.getLength(); k++){
-                            System.out.println(k);
                             Node valuteNode = valuteNodeList.item(k);
                             Element valuteElement = (Element) valuteNode;
                             CurrencyRate currencyRate = new CurrencyRate();

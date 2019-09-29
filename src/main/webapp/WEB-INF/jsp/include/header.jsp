@@ -12,7 +12,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <meta name="description" content="Latest updates and statistic charts">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700">
+<%--<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700">--%>
+<link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap&subset=devanagari,latin-ext" rel="stylesheet">
+<%--<%@include file="font.jsp" %>--%>
 <link href="<c:url value="/assets/vendors/custom/fullcalendar/fullcalendar.bundle.css" />" rel="stylesheet" type="text/css"/>
 <link href="<c:url value="/assets/vendors/custom/datatables/datatables.bundle.css" />" rel="stylesheet" type="text/css" />
 <link href="<c:url value="/assets/vendors/general/perfect-scrollbar/css/perfect-scrollbar.css" />" rel="stylesheet" type="text/css"/>

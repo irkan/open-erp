@@ -25,7 +25,7 @@ public class Dictionary {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Pattern(regexp=".{2,50}",message="Minimum 2 maksimum 50 simvol ola bilər")
+    @Pattern(regexp=".{1,50}",message="Minimum 1 maksimum 50 simvol ola bilər")
     @Column(name = "attr1")
     private String attr1;
 
