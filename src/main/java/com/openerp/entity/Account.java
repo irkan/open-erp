@@ -54,7 +54,7 @@ public class Account {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "price", nullable = false, columnDefinition="double default 0")
+    @Column(name = "price", nullable = false, columnDefinition="Decimal(10,2) default 0")
     private double balance=0d;
 
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")

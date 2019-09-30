@@ -17,6 +17,7 @@ import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/profile")
@@ -30,8 +31,8 @@ public class ProfileController extends SkeletonController {
         return "layout";
     }
 
-    @GetMapping(value = "/{page}")
-    public String route(Model model, @PathVariable("page") String page) throws Exception {
+    @GetMapping(value = {"/{page}", "/{page}/{data}"})
+    public String route(Model model, @PathVariable("page") String page, @PathVariable("data") Optional<String> data, RedirectAttributes redirectAttributes) throws Exception {
         session.setAttribute(Constants.PROFILE_SUB_PAGE, "profile/"+page);
 
         if (page.equalsIgnoreCase(Constants.ROUTE.CHANGE_PASSWORD)) {

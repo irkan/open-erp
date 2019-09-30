@@ -24,4 +24,9 @@ public class DateUtility {
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
         return dateFormat.format(date);
     }
+
+    public static String getFormattedDateTime(Date date) {
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy hh:mm");
+        return dateFormat.format(date);
+    }
 }

@@ -16,13 +16,14 @@ import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/warehouse")
 public class WarehouseController extends SkeletonController {
 
-    @GetMapping(value = "/{page}")
-    public String route(Model model, @PathVariable("page") String page, RedirectAttributes redirectAttributes) throws Exception {
+    @GetMapping(value = {"/{page}", "/{page}/{data}"})
+    public String route(Model model, @PathVariable("page") String page, @PathVariable("data") Optional<String> data, RedirectAttributes redirectAttributes) throws Exception {
         session.setAttribute(Constants.PAGE, page);
         String description = "";
         List<Module> moduleList = (List<Module>) session.getAttribute(Constants.MODULES);
@@ -36,12 +37,17 @@ public class WarehouseController extends SkeletonController {
 
         if (page.equalsIgnoreCase(Constants.ROUTE.INVENTORY)) {
             model.addAttribute(Constants.LIST, inventoryRepository.findAll());
+            model.addAttribute(Constants.SUPPLIERS, supplierRepository.getSuppliersByActiveTrue());
+            model.addAttribute(Constants.INVENTORY_GROUPS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("inventory-group"));
             if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.SUPPLIERS, supplierRepository.getSuppliersByActiveTrue());
-                model.addAttribute(Constants.INVENTORY_GROUPS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("inventory-group"));
-                model.addAttribute(Constants.FORM, new Inventory());
                 model.addAttribute(Constants.FORM, new Inventory(new Action(dictionaryRepository.getDictionaryByAttr1AndActiveTrue("buy"),
                         Util.findWarehouse(organizationRepository.getOrganizationsByActiveTrueAndOrganization(getSessionUser().getEmployee().getOrganization())))));
+            }
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.ACTION)) {
+            int id = Integer.parseInt(data.get());
+            model.addAttribute(Constants.LIST, actionRepository.getActionsByActiveTrueAndInventory_Id(id));
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new Action());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.SUPPLIER)) {
             model.addAttribute(Constants.CITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("city"));

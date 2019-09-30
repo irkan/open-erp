@@ -1,5 +1,6 @@
 package com.openerp.controller;
 
+import com.openerp.entity.CurrencyRate;
 import com.openerp.entity.User;
 import com.openerp.util.Constants;
 import com.openerp.repository.*;
@@ -122,6 +123,27 @@ public class SkeletonController {
     String mapPost(RedirectAttributes redirectAttributes, String redirect){
         redirectAttributes.getFlashAttributes().remove(Constants.FORM);
         return "redirect:"+redirect;
+    }
+
+    double getRate(String currency){
+        if(currency!=null && currency.trim().length()>0){
+            if(currency.trim().equalsIgnoreCase("AZN")){
+                return 1;
+            } else {
+                CurrencyRate currencyRate = currencyRateRepository.getCurrencyRateByCode(currency.toUpperCase());
+                if(currencyRate!=null){
+                    return currencyRate.getValue();
+                }
+            }
+        }
+        return 0;
+    }
+
+    double price(boolean debt, double price){
+        if(!debt){
+            return price*(-1.0d);
+        }
+        return price;
     }
 
 }

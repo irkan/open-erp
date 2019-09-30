@@ -31,11 +31,7 @@ public class Action {
 
     //@Pattern(regexp="\\d+",message="Say daxil edin")
     @Column(name = "amount")
-    private int amount;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "action_date", nullable = false)
-    private Date actionDate = new Date();
+    private int amount=1;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -45,6 +41,17 @@ public class Action {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "warehouse_supplier_id")
     private Supplier supplier;
+
+    @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
+    private Boolean active = true;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_date", nullable = false)
+    private Date createdDate = new Date();
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "created_by_admin_user_id")
+    private User createdUser;
 
     public Action(Organization warehouse) {
         this.warehouse = warehouse;

@@ -26,10 +26,12 @@
                                     <th>ID</th>
                                     <th>Hesab nömrəsi</th>
                                     <th>Açıqlama</th>
-                                    <th>Say</th>
+                                    <th>Tarix</th>
+                                    <th>Miqdar</th>
                                     <th>Qiymət</th>
+                                    <th>Kurs</th>
                                     <th>Ümumi qiymət</th>
-                                    <th>Balans</th>
+                                    <th>Hesabda qalıq</th>
                                     <th>Əməliyyat</th>
                                 </tr>
                                 </thead>
@@ -40,15 +42,22 @@
                                         <td><c:out value="${t.id}" /></td>
                                         <td><c:out value="${t.account.accountNumber}" /></td>
                                         <td><c:out value="${t.description}" /></td>
-                                        <td><c:out value="${t.amount}" /></td>
-                                        <td><c:out value="${t.price}" /></td>
+                                        <td><c:out value="${utl:getFormattedDateTime(t.createdDate)}" /></td>
+                                        <td><c:out value="${t.amount}" /> ədəd</td>
+                                        <td>
+                                            <span><c:out value="${t.price}" /></span>
+                                            <span class="kt-font-bold font-italic font-size-10px"><c:out value="${t.currency}" /></span>
+                                        </td>
+                                        <td><c:out value="${t.rate}" /></td>
                                         <td>
                                             <c:choose>
-                                                <c:when test="${t.sumPrice>0}">
+                                                <c:when test="${t.debt and t.sumPrice!=0}">
                                                     <span class="kt-font-bold kt-font-success"><c:out value="${t.sumPrice}" /></span>
+                                                    <span class="kt-font-bold kt-font-success font-italic font-size-10px">AZN</span>
                                                 </c:when>
-                                                <c:when test="${t.sumPrice<0}">
-                                                    <span class="kt-font-bold kt-font-danger"><c:out value="${t.sumPrice}" /></span>
+                                                <c:when test="${!t.debt and t.sumPrice!=0}">
+                                                    <span class="kt-font-bold kt-font-danger">-<c:out value="${t.sumPrice}" /></span>
+                                                    <span class="kt-font-bold kt-font-danger font-italic font-size-10px">AZN</span>
                                                 </c:when>
                                                 <c:otherwise>
                                                     <span class="kt-font-bold"><c:out value="${t.sumPrice}" /></span>
@@ -158,17 +167,29 @@
                         <form:textarea path="description" cssClass="form-control"/>
                         <form:errors path="description" cssClass="alert-danger control-label"/>
                     </div>
-                    <div class="form-group">
-                        <form:label path="price">Alış qiyməti</form:label>
-                        <div class="input-group" >
-                            <form:input path="price" cssClass="form-control" placeholder="Qiyməti daxil edin"/>
-                            <div class="input-group-append">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <div class="form-group">
+                                <form:label path="price">Alış qiyməti</form:label>
+                                <div class="input-group" >
+                                    <form:input path="price" cssClass="form-control" placeholder="Qiyməti daxil edin"/>
+                                    <div class="input-group-append">
                                                     <span class="input-group-text">
                                                         <i class="la la-usd"></i>
                                                     </span>
+                                    </div>
+                                </div>
+                                <form:errors path="price" cssClass="alert-danger control-label"/>
                             </div>
                         </div>
-                        <form:errors path="price" cssClass="alert-danger control-label"/>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <form:label path="currency">&nbsp;</form:label>
+                                <form:select  path="currency" cssClass="custom-select form-control">
+                                    <form:options items="${currencies}" itemLabel="name" itemValue="name" />
+                                </form:select>
+                            </div>
+                        </div>
                     </div>
                 </form:form>
             </div>

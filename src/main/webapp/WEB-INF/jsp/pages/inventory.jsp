@@ -29,7 +29,7 @@
                                     <th>Açıqlama</th>
                                     <th>Barkod</th>
                                     <th>Vəziyyət</th>
-                                    <th>Say</th>
+                                    <th>Miqdar</th>
                                     <th>Anbar</th>
                                     <th>Tədarükçü</th>
                                     <th>Status</th>
@@ -55,7 +55,7 @@
                                                 </c:otherwise>
                                             </c:choose>
                                         </td>
-                                        <td><c:out value="${utl:calculateInventoryAmount(t.actions)}"/>
+                                        <td><c:out value="${utl:calculateInventoryAmount(t.actions)}"/> ədəd
                                         </td>
                                         <td><c:out value="${t.actions.get(0).warehouse.name}" /></td>
                                         <td><c:out value="${t.actions.get(0).supplier.name}" /></td>
@@ -70,6 +70,14 @@
                                                 <c:when test="${view.status}">
                                                     <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
                                                         <i class="la <c:out value="${view.object.icon}"/>"></i>
+                                                    </a>
+                                                </c:when>
+                                            </c:choose>
+                                            <c:set var="actions" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'actions')}"/>
+                                            <c:choose>
+                                                <c:when test="${actions.status}">
+                                                    <a href="/warehouse/action/<c:out value="${t.id}"/>" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${actions.object.name}"/>">
+                                                        <i class="la <c:out value="${actions.object.icon}"/>"></i>
                                                     </a>
                                                 </c:when>
                                             </c:choose>

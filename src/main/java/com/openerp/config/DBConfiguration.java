@@ -322,6 +322,8 @@ public class DBConfiguration {
             operations.add(upload);
             Operation reload = new Operation("Yenilə", "reload", "flaticon2-reload");
             operations.add(reload);
+            Operation actions = new Operation("Hərəkətlər", "actions", "flaticon-logout");
+            operations.add(actions);
 
             operationRepository.saveAll(operations);
 
@@ -495,6 +497,9 @@ public class DBConfiguration {
 
             ModuleOperation reloadModuleOperation1 = new ModuleOperation(currencyRate, reload, null);
             moduleOperations.add(reloadModuleOperation1);
+
+            ModuleOperation actionsModuleOperation1 = new ModuleOperation(inventory, actions, null);
+            moduleOperations.add(actionsModuleOperation1);
 
             moduleOperationRepository.saveAll(moduleOperations);
 
@@ -724,6 +729,9 @@ public class DBConfiguration {
 
             UserModuleOperation userReloadModuleOperation1 = new UserModuleOperation(user, reloadModuleOperation1);
             userModuleOperations.add(userReloadModuleOperation1);
+
+            UserModuleOperation userTransferModuleOperation1 = new UserModuleOperation(user, actionsModuleOperation1);
+            userModuleOperations.add(userTransferModuleOperation1);
 
             userModuleOperationRepository.saveAll(userModuleOperations);
 

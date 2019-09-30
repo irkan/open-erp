@@ -13,13 +13,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/hr")
 public class HRController extends SkeletonController {
 
-    @GetMapping(value = "/{page}")
-    public String route(Model model, @PathVariable("page") String page) throws Exception {
+    @GetMapping(value = {"/{page}", "/{page}/{data}"})
+    public String route(Model model, @PathVariable("page") String page, @PathVariable("data") Optional<String> data, RedirectAttributes redirectAttributes) throws Exception {
         session.setAttribute(Constants.PAGE, page);
         String description = "";
         List<Module> moduleList = (List<Module>) session.getAttribute(Constants.MODULES);

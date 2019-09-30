@@ -39,19 +39,19 @@ public class Transaction {
     private Boolean debt = false;
 
     @Pattern(regexp=".{0,50}",message="Maksimum 5 simvol ola bilər")
-    @Column(name = "currency", nullable = false)
+    @Column(name = "currency", columnDefinition="varchar(5) default 'AZN'")
     private String currency;
 
-    @Column(name = "rate", nullable = false)
+    @Column(name = "rate", columnDefinition="double default 1")
     private double rate;
 
-    @Column(name = "price", nullable = false, columnDefinition="double default 0")
+    @Column(name = "price", nullable = false, columnDefinition="Decimal(10,2) default 0")
     private double price=0d;
 
-    @Column(name = "sum_price", nullable = false, columnDefinition="double default 0")
-    private double sumPrice=calSumPrice(this.debt, this.price, this.amount);
+    @Column(name = "sum_price", nullable = false, columnDefinition="Decimal(10,2) default 0")
+    private double sumPrice=0d;
 
-    @Column(name = "balance", nullable = false, columnDefinition="double default 0")
+    @Column(name = "balance", nullable = false, columnDefinition="Decimal(10,2) default 0")
     private double balance;
 
     @Column(name = "is_approve", nullable = false, columnDefinition="boolean default true")
@@ -69,27 +69,12 @@ public class Transaction {
     @JoinColumn(name = "created_by_admin_user_id")
     private User createdUser;
 
-    public Transaction(Dictionary reason, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String description, @Pattern(regexp = ".{0,50}", message = "Maksimum 50 simvol ola bilər") double price) {
-        this.reason = reason;
-        this.description = description;
-        this.price = price;
-    }
-
-    public Transaction(@Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String description, @Pattern(regexp = ".{0,50}", message = "Maksimum 50 simvol ola bilər") double price, Boolean approve) {
-        this.description = description;
-        this.price = price;
-        this.approve = approve;
-    }
-
     public Transaction(@Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String description, Boolean approve) {
         this.description = description;
         this.approve = approve;
     }
 
-    private double calSumPrice(boolean debt, double price, int amount){
-        if(!debt){
-            return price*amount*(-1.0d);
-        }
-        return price*amount;
-    }
+
+
+
 }

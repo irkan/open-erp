@@ -17,13 +17,14 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/accounting")
 public class AccountingController extends SkeletonController {
 
-    @GetMapping(value = "/{page}")
-    public String route(Model model, @PathVariable("page") String page, RedirectAttributes redirectAttributes) throws Exception {
+    @GetMapping(value = {"/{page}", "/{page}/{data}"})
+    public String route(Model model, @PathVariable("page") String page, @PathVariable("data") Optional<String> data, RedirectAttributes redirectAttributes) throws Exception {
         session.setAttribute(Constants.PAGE, page);
         String description = "";
         List<Module> moduleList = (List<Module>) session.getAttribute(Constants.MODULES);
@@ -36,6 +37,7 @@ public class AccountingController extends SkeletonController {
         session.setAttribute(Constants.MODULE_DESCRIPTION, description);
 
         if (page.equalsIgnoreCase(Constants.ROUTE.TRANSACTION)) {
+            model.addAttribute(Constants.CURRENCIES,  dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("currency"));
             model.addAttribute(Constants.ACCOUNTS,
                     accountRepository.getAccountsByActiveTrueAndOrganization(
                             Util.getUserBranch(getSessionUser().getEmployee().getOrganization())));
@@ -77,7 +79,10 @@ public class AccountingController extends SkeletonController {
             trn.setApprove(true);
             trn.setApproveDate(new Date());
             trn.setPrice(transaction.getPrice());
-            trn.setSumPrice(trn.getAmount()*transaction.getPrice());
+            trn.setCurrency(transaction.getCurrency());
+            trn.setRate(getRate(transaction.getCurrency()));
+            double sumPrice = trn.getAmount()*transaction.getPrice()*trn.getRate();
+            trn.setSumPrice(sumPrice);
             trn.setAccount(transaction.getAccount());
             transactionRepository.save(trn);
         }

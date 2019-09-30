@@ -22,14 +22,15 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("/admin")
 public class AdministratorController extends SkeletonController {
 
-    @GetMapping(value = "/{page}")
-    public String route(Model model, @PathVariable("page") String page, RedirectAttributes redirectAttributes) throws Exception {
+    @GetMapping(value = {"/{page}", "/{page}/{data}"})
+    public String route(Model model, @PathVariable("page") String page, @PathVariable("data") Optional<String> data, RedirectAttributes redirectAttributes) throws Exception {
         session.setAttribute(Constants.PAGE, page);
         String description = "";
         List<Module> moduleList = (List<Module>) session.getAttribute(Constants.MODULES);
