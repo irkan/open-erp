@@ -291,6 +291,10 @@ public class DBConfiguration {
             modules.add(shortenedWorkingDay);
             Module workAttendance = new Module("İşə davamiyyət", "İşə davamiyyət", "work-attendance", "la la-calendar", module1);
             modules.add(workAttendance);
+            Module payroll = new Module("Əmək haqqı", "Maaşların hesablanması", "payroll", "flaticon-security", null);
+            modules.add(payroll);
+            Module sale = new Module("Satış", "Satışın idarə edilməsi", "sale", "flaticon2-delivery-truck", null);
+            modules.add(sale);
 
             moduleRepository.saveAll(modules);
 

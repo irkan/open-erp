@@ -4,6 +4,7 @@ import com.openerp.entity.Module;
 import com.openerp.entity.User;
 import com.openerp.entity.UserModuleOperation;
 import com.openerp.util.Constants;
+import com.openerp.util.Util;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.DigestUtils;
@@ -55,6 +56,7 @@ public class LoginController extends SkeletonController {
         if(parentModules.size()>0){
             session.setAttribute(Constants.USER, user);
             session.setAttribute(Constants.PAGE, "module");
+            session.setAttribute(Constants.PARENT_MODULES_MAP, Util.convertParentModulesMap(parentModules));
             session.setAttribute(Constants.PARENT_MODULES, parentModules);
             return "redirect:/route/"+parentModules.get(0).getPath();
         }

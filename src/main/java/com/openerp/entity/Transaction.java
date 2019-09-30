@@ -38,6 +38,13 @@ public class Transaction {
     @Column(name = "is_debt", nullable = false, columnDefinition="boolean default true")
     private Boolean debt = false;
 
+    @Pattern(regexp=".{0,50}",message="Maksimum 5 simvol ola bilər")
+    @Column(name = "currency", nullable = false)
+    private String currency;
+
+    @Column(name = "rate", nullable = false)
+    private double rate;
+
     @Column(name = "price", nullable = false, columnDefinition="double default 0")
     private double price=0d;
 

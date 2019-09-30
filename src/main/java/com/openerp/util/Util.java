@@ -1,9 +1,6 @@
 package com.openerp.util;
 
-import com.openerp.entity.Action;
-import com.openerp.entity.CurrencyRate;
-import com.openerp.entity.ModuleOperation;
-import com.openerp.entity.Organization;
+import com.openerp.entity.*;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 import org.w3c.dom.Document;
@@ -24,6 +21,22 @@ public class Util {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static Map<Integer, List<Module>> convertParentModulesMap(List<Module> modules){
+        Map<Integer, List<Module>> moduleMap = new HashMap<>();
+        int length = Math.round(modules.size()/3);
+        length = (modules.size() % 3)>0?length+1:length;
+        for(int i=0; i<length; i++){
+            List<Module> mdls = new ArrayList<>();
+            for(int j=3*i; j<(i+1)*3; j++){
+                if(modules.size()>j){
+                    mdls.add(modules.get(j));
+                }
+            }
+            moduleMap.put(i, mdls);
+        }
+        return moduleMap;
     }
 
     public static Organization findWarehouse(List<Organization> organizations){
