@@ -195,7 +195,6 @@
                         </h3>
                     </div>
                     <div class="kt-grid-nav kt-grid-nav--skin-light">
-                    <c:set var="parent_modules_size" value="${sessionScope.parent_modules.size()}"/>
                     <c:forEach var="p" items="${sessionScope.parent_modules_map.keySet()}" varStatus="loop">
                     <div class="kt-grid-nav__row">
                         <c:forEach var="t" items="${sessionScope.parent_modules_map.get(p)}" varStatus="loop">

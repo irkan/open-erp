@@ -60,5 +60,8 @@ public class Constants {
         public static final String NON_WORKING_DAY = "non-working-day";
         public static final String SHORTENED_WORKING_DAY = "shortened-working-day";
         public static final String WORK_ATTENDANCE = "work-attendance";
+        public static final String SALARY = "salary";
+        public static final String BUSINESS_TRIP = "business-trip";
+        public static final String VACATION = "vacation";
     }
 }
