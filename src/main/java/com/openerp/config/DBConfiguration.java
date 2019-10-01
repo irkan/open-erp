@@ -805,7 +805,7 @@ public class DBConfiguration {
             payrollConfigurations.add(payrollConfiguration5);
             PayrollConfiguration payrollConfiguration6 = new PayrollConfiguration("Həmkarlar təşkilatına üzvlük haqqı", "{membership_fee_for_trade_union}={gross_salary}*{fee}%", "Həmkarlar təşkilatına üzvlük haqqı = Hesablanan aylıq əmək haqqı * x%");
             payrollConfigurations.add(payrollConfiguration6);
-            PayrollConfiguration payrollConfiguration7 = new PayrollConfiguration("İcbari tibbi sığorta haqqı", "{compulsory_health_insurance}=10", "Həmkarlar təşkilatına üzvlük haqqı = Hesablanan aylıq əmək haqqı * x%");
+            PayrollConfiguration payrollConfiguration7 = new PayrollConfiguration("İcbari tibbi sığorta haqqı", "{compulsory_health_insurance}=10", "İcbari tibbi sığorta haqqı = 10");
             payrollConfigurations.add(payrollConfiguration7);
             PayrollConfiguration payrollConfiguration8 = new PayrollConfiguration("Yekun ödəniləcək məbləğ", "{total_amount_payable}={gross_salary}-{tax_income}-{dsmf_deduction}-{unemployment_insurance}-{compulsory_health_insurance}-{membership_fee_for_trade_union}", "Yekun ödəniləcək məbləğ = Hesablanan əmək haqqı - Gəlir vergisi - DSMF ayırmaları - İşsizlikdən sığorta haqqı - İcbari tibbi sığprta haqqı - Həmkarlar təşkilatına üzvlük haqqı");
             payrollConfigurations.add(payrollConfiguration8);
