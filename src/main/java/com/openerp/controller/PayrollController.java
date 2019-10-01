@@ -43,7 +43,20 @@ public class PayrollController extends SkeletonController {
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Vacation());
             }
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.PAYROLL_CONFIGURATION)){
+            model.addAttribute(Constants.LIST, payrollConfigurationRepository.getPayrollConfigurationsByActiveTrueOrderById());
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new PayrollConfiguration());
+            }
         }
         return "layout";
+    }
+
+    @PostMapping(value = "/payroll-configuration")
+    public String postInventory(@ModelAttribute(Constants.FORM) @Validated PayrollConfiguration payrollConfiguration, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        if(!binding.hasErrors()){
+            payrollConfigurationRepository.save(payrollConfiguration);
+        }
+        return mapPost(payrollConfiguration, binding, redirectAttributes);
     }
 }

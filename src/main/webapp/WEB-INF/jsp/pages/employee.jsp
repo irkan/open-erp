@@ -198,18 +198,35 @@
                                 <form:errors path="contractStartDate" cssClass="control-label alert-danger" />
                             </div>
                         </div>
-                        <div class="col-md-3">
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
                             <div class="form-group">
-                                <form:label path="salary">Aylıq maaş</form:label>
+                                <form:label path="salaryOfficial">Aylıq maaş (rəsmi hissə)</form:label>
                                 <div class="input-group" >
-                                    <form:input path="salary" cssClass="form-control" placeholder="350 AZN"/>
+                                    <form:input path="salaryOfficial" cssClass="form-control" placeholder="350 AZN"/>
                                     <div class="input-group-append">
                                         <span class="input-group-text">
                                             <i class="la la-money"></i>
                                         </span>
                                     </div>
                                 </div>
-                                <form:errors path="salary" cssClass="control-label alert-danger" />
+                                <form:errors path="salaryOfficial" cssClass="control-label alert-danger" />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <form:label path="salaryNonOfficial">Aylıq maaş (qeyri rəsmi hissə)</form:label>
+                                <div class="input-group" >
+                                    <form:input path="salaryNonOfficial" cssClass="form-control" placeholder="350 AZN"/>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-money"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <form:errors path="salaryNonOfficial" cssClass="control-label alert-danger" />
                             </div>
                         </div>
                     </div>

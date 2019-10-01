@@ -81,6 +81,10 @@ public class DeleteController extends SkeletonController {
             ShortenedWorkingDay shortenedWorkingDay = shortenedWorkingDayRepository.getShortenedWorkingDayById(Integer.parseInt(id));
             shortenedWorkingDay.setActive(false);
             shortenedWorkingDayRepository.save(shortenedWorkingDay);
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.PAYROLL_CONFIGURATION)){
+            PayrollConfiguration payrollConfiguration = payrollConfigurationRepository.getPayrollConfigurationById(Integer.parseInt(id));
+            payrollConfiguration.setActive(false);
+            payrollConfigurationRepository.save(payrollConfiguration);
         }
         return "redirect:/"+parent+"/"+path;
     }

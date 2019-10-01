@@ -1,6 +1,7 @@
 package com.openerp.controller;
 
 import com.openerp.entity.CurrencyRate;
+import com.openerp.entity.PayrollConfiguration;
 import com.openerp.entity.User;
 import com.openerp.util.Constants;
 import com.openerp.repository.*;
@@ -84,6 +85,9 @@ public class SkeletonController {
 
     @Autowired
     ShortenedWorkingDayRepository shortenedWorkingDayRepository;
+
+    @Autowired
+    PayrollConfigurationRepository payrollConfigurationRepository;
 
     @Autowired
     HttpServletRequest request;

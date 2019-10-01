@@ -60,6 +60,9 @@ public class DBConfiguration {
     @Autowired
     AccountRepository accountRepository;
 
+    @Autowired
+    PayrollConfigurationRepository payrollConfigurationRepository;
+
     @Value("${default.admin.username}")
     private String defaultAdminUsername;
 
@@ -299,6 +302,8 @@ public class DBConfiguration {
             modules.add(vacation);
             Module businessTrip = new Module("Ezamiyyət", "Ezamiyyət", "business-trip", "la la-calendar", payroll);
             modules.add(businessTrip);
+            Module payrollConfiguration = new Module("Sazlama", "Sazlama", "payroll-configuration", "flaticon2-settings", payroll);
+            modules.add(payrollConfiguration);
 
             Module sale = new Module("Satış", "Satışın idarə edilməsi", "sale", "flaticon2-delivery-truck", null);
             modules.add(sale);
@@ -363,6 +368,8 @@ public class DBConfiguration {
             moduleOperations.add(createModuleOperation18);
             ModuleOperation createModuleOperation19 = new ModuleOperation(businessTrip, create, null);
             moduleOperations.add(createModuleOperation19);
+            ModuleOperation createModuleOperation20 = new ModuleOperation(payrollConfiguration, create, null);
+            moduleOperations.add(createModuleOperation20);
 
 
             ModuleOperation editModuleOperation1 = new ModuleOperation(subModule1, edit, null);
@@ -397,6 +404,8 @@ public class DBConfiguration {
             moduleOperations.add(editModuleOperation18);
             ModuleOperation editModuleOperation19 = new ModuleOperation(businessTrip, edit, null);
             moduleOperations.add(editModuleOperation19);
+            ModuleOperation editModuleOperation20 = new ModuleOperation(payrollConfiguration, edit, null);
+            moduleOperations.add(editModuleOperation20);
 
             ModuleOperation deleteModuleOperation1 = new ModuleOperation(subModule1, delete, null);
             moduleOperations.add(deleteModuleOperation1);
@@ -432,6 +441,8 @@ public class DBConfiguration {
             moduleOperations.add(deleteModuleOperation18);
             ModuleOperation deleteModuleOperation19 = new ModuleOperation(businessTrip, delete, null);
             moduleOperations.add(deleteModuleOperation19);
+            ModuleOperation deleteModuleOperation20 = new ModuleOperation(payrollConfiguration, delete, null);
+            moduleOperations.add(deleteModuleOperation20);
 
             ModuleOperation viewModuleOperation6 = new ModuleOperation(subModule6, view, null);
             moduleOperations.add(viewModuleOperation6);
@@ -553,7 +564,7 @@ public class DBConfiguration {
 
             organizationRepository.saveAll(organizations);
 
-            Employee employee = new Employee(person, position1, new Date(), null, (double) 0, headBranch);
+            Employee employee = new Employee(person, position1, new Date(), null, 2375d, 463d, headBranch);
             employeeRepository.save(employee);
 
             User user = new User(defaultAdminUsername, DigestUtils.md5DigestAsHex("admin".getBytes()), employee, new UserDetail("az"));
@@ -596,6 +607,8 @@ public class DBConfiguration {
             userModuleOperations.add(userCreateModuleOperation18);
             UserModuleOperation userCreateModuleOperation19 = new UserModuleOperation(user, createModuleOperation19);
             userModuleOperations.add(userCreateModuleOperation19);
+            UserModuleOperation userCreateModuleOperation20 = new UserModuleOperation(user, createModuleOperation20);
+            userModuleOperations.add(userCreateModuleOperation20);
 
             UserModuleOperation userEditModuleOperation1 = new UserModuleOperation(user, editModuleOperation1);
             userModuleOperations.add(userEditModuleOperation1);
@@ -629,6 +642,8 @@ public class DBConfiguration {
             userModuleOperations.add(userEditModuleOperation18);
             UserModuleOperation userEditModuleOperation19 = new UserModuleOperation(user, editModuleOperation19);
             userModuleOperations.add(userEditModuleOperation19);
+            UserModuleOperation userEditModuleOperation20 = new UserModuleOperation(user, editModuleOperation20);
+            userModuleOperations.add(userEditModuleOperation20);
 
             UserModuleOperation userDeleteModuleOperation1 = new UserModuleOperation(user, deleteModuleOperation1);
             userModuleOperations.add(userDeleteModuleOperation1);
@@ -664,6 +679,8 @@ public class DBConfiguration {
             userModuleOperations.add(userDeleteModuleOperation18);
             UserModuleOperation userDeleteModuleOperation19 = new UserModuleOperation(user, deleteModuleOperation19);
             userModuleOperations.add(userDeleteModuleOperation19);
+            UserModuleOperation userDeleteModuleOperation20 = new UserModuleOperation(user, deleteModuleOperation20);
+            userModuleOperations.add(userDeleteModuleOperation20);
 
             UserModuleOperation userExportModuleOperation1 = new UserModuleOperation(user, exportModuleOperation1);
             userModuleOperations.add(userExportModuleOperation1);
@@ -774,6 +791,26 @@ public class DBConfiguration {
             }
 
             accountRepository.saveAll(accounts);
+
+            List<PayrollConfiguration> payrollConfigurations = new ArrayList<>();
+            PayrollConfiguration payrollConfiguration1 = new PayrollConfiguration("Minimal əmək haqqı", "{minimal_salary}=200", "Azərbaycan Respublikasında müəyyənləşdirilmiş minimal əmək haqqı");
+            payrollConfigurations.add(payrollConfiguration1);
+            PayrollConfiguration payrollConfiguration2 = new PayrollConfiguration("Vergiyə cəlb olunan məbləğ", "{tax_amount_involved}={gross_salary}-{allowance}", "Vergiyə cəlb olunan məbləğ = Hesablanan aylıq əmək haqqı - Güzəşt");
+            payrollConfigurations.add(payrollConfiguration2);
+            PayrollConfiguration payrollConfiguration3 = new PayrollConfiguration("Gəlir vergisi", "{tax_income}={tax_amount_involved}>8000?({tax_amount_involved}-8000)*14%:0", "Gəlir vergisi: Vergiyə cəlb olunan məbləğ 8 000 manatadək olduqda: 0; Vergiyə cəlb olunan məbləğ 8 000 manatdan çox olduqda: Vergiyə cəlb olunan məbləğ *14%");
+            payrollConfigurations.add(payrollConfiguration3);
+            PayrollConfiguration payrollConfiguration4 = new PayrollConfiguration("DSMF ayırmaları", "{dsmf_deduction}={gross_salary}>{minimal_salary}?{minimal_salary}*3%+({gross_salary}-{minimal_salary})*10%:{gross_salary}*3%", "DSMF ayırmaları: Əmək haqqı 200 manatadək olduqda: Hesablanan aylıq əmək haqqı * 3%; Əmək haqqı 200 manatdan çox olduqda: 6 + (Hesablanan aylıq əmək haqqı-200) * 10%;");
+            payrollConfigurations.add(payrollConfiguration4);
+            PayrollConfiguration payrollConfiguration5 = new PayrollConfiguration("İşsizlikdən sığorta haqqı", "{unemployment_insurance}={gross_salary}*0.5%", "İşsizlikdən sığorta haqqı = Hesablanan aylıq əmək haqqı * 0.5%");
+            payrollConfigurations.add(payrollConfiguration5);
+            PayrollConfiguration payrollConfiguration6 = new PayrollConfiguration("Həmkarlar təşkilatına üzvlük haqqı", "{membership_fee_for_trade_union}={gross_salary}*{fee}%", "Həmkarlar təşkilatına üzvlük haqqı = Hesablanan aylıq əmək haqqı * x%");
+            payrollConfigurations.add(payrollConfiguration6);
+            PayrollConfiguration payrollConfiguration7 = new PayrollConfiguration("İcbari tibbi sığorta haqqı", "{compulsory_health_insurance}=10", "Həmkarlar təşkilatına üzvlük haqqı = Hesablanan aylıq əmək haqqı * x%");
+            payrollConfigurations.add(payrollConfiguration7);
+            PayrollConfiguration payrollConfiguration8 = new PayrollConfiguration("Yekun ödəniləcək məbləğ", "{total_amount_payable}={gross_salary}-{tax_income}-{dsmf_deduction}-{unemployment_insurance}-{compulsory_health_insurance}-{membership_fee_for_trade_union}", "Yekun ödəniləcək məbləğ = Hesablanan əmək haqqı - Gəlir vergisi - DSMF ayırmaları - İşsizlikdən sığorta haqqı - İcbari tibbi sığprta haqqı - Həmkarlar təşkilatına üzvlük haqqı");
+            payrollConfigurations.add(payrollConfiguration8);
+
+            payrollConfigurationRepository.saveAll(payrollConfigurations);
 
         } catch (Exception e){
             log.error(e);

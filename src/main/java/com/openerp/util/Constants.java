@@ -63,5 +63,6 @@ public class Constants {
         public static final String SALARY = "salary";
         public static final String BUSINESS_TRIP = "business-trip";
         public static final String VACATION = "vacation";
+        public static final String PAYROLL_CONFIGURATION = "payroll-configuration";
     }
 }
