@@ -24,6 +24,7 @@
     <tr>
         <th>№</th>
         <th>ID</th>
+        <th>Tipi</th>
         <th>Adlandırma</th>
         <th>Formula</th>
         <th>Açıqlama</th>
@@ -35,6 +36,7 @@
         <tr>
             <td>${loop.index + 1}</td>
             <td><c:out value="${t.id}" /></td>
+            <td><c:out value="${t.type.name}" /></td>
             <td><c:out value="${t.name}" /></td>
             <td><c:out value="${t.formula}" /></td>
             <td><c:out value="${t.description}" /></td>
@@ -93,6 +95,12 @@
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form" method="post" action="/payroll/payroll-configuration" cssClass="form-group">
                     <form:input type="hidden" name="id" path="id"/>
+                    <div class="form-group">
+                        <form:label path="type">Tipi</form:label>
+                        <form:select  path="type" cssClass="custom-select form-control">
+                            <form:options items="${formula_types}" itemLabel="name" itemValue="id" />
+                        </form:select>
+                    </div>
                     <div class="form-group">
                         <form:label path="name">Adlandırma</form:label>
                         <form:input path="name" cssClass="form-control" placeholder="Adı daxil edin"/>

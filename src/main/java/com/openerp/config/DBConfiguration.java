@@ -63,6 +63,9 @@ public class DBConfiguration {
     @Autowired
     PayrollConfigurationRepository payrollConfigurationRepository;
 
+    @Autowired
+    EmployeeDetailRepository employeeDetailRepository;
+
     @Value("${default.admin.username}")
     private String defaultAdminUsername;
 
@@ -99,6 +102,10 @@ public class DBConfiguration {
             types.add(currencyType);
             DictionaryType shortenedTimeType = new DictionaryType("Qısaldılmış iş saatı", "shortened-time", null);
             types.add(shortenedTimeType);
+            DictionaryType formulaType = new DictionaryType("Formula tipi", "formula-type", null);
+            types.add(formulaType);
+            DictionaryType employeeDetail = new DictionaryType("Əlavə sahələr", "employee-additional-field", null);
+            types.add(employeeDetail);
 
             List<Dictionary> dictionaries = new ArrayList<>();
             Dictionary male = new Dictionary("Kişi", "Male", null, genderType);
@@ -235,6 +242,22 @@ public class DBConfiguration {
             dictionaries.add(hour7);
             Dictionary hour8 = new Dictionary("8 saat", "8", null, shortenedTimeType);
             dictionaries.add(hour8);
+            Dictionary formulaType1 = new Dictionary("Maaş", "salary", null, formulaType);
+            dictionaries.add(formulaType1);
+            Dictionary formulaType2 = new Dictionary("Məzuniyyət günü", "vacation-day", null, formulaType);
+            dictionaries.add(formulaType2);
+            Dictionary formulaType3 = new Dictionary("Məzuniyyət haqqı", "vacation", null, formulaType);
+            dictionaries.add(formulaType3);
+            Dictionary employeeDetail1 = new Dictionary("Ümumi əmək haqqı (rəsmi hissə)", "gross_salary_official_part", "0", employeeDetail);
+            dictionaries.add(employeeDetail1);
+            Dictionary employeeDetail2 = new Dictionary("Ümumi əmək haqqı (qeyri rəsmi hissə)", "gross_salary_non_official_part", "0", employeeDetail);
+            dictionaries.add(employeeDetail2);
+            Dictionary employeeDetail3 = new Dictionary("Satışdan pay", "sales_dividend", "0", employeeDetail);
+            dictionaries.add(employeeDetail3);
+            Dictionary employeeDetail4 = new Dictionary("Keçmiş iş stajı (illərin cəmi)", "previous_sum_work_experience_year", "0", employeeDetail);
+            dictionaries.add(employeeDetail4);
+            Dictionary employeeDetail5 = new Dictionary("Həmkərlar ittifaqı, üzvülük haqqı", "membership_fee_for_trade_union_fee", "0", employeeDetail);
+            dictionaries.add(employeeDetail5);
 
             dictionaryTypeRepository.saveAll(types);
             dictionaryRepository.saveAll(dictionaries);
@@ -564,8 +587,26 @@ public class DBConfiguration {
 
             organizationRepository.saveAll(organizations);
 
-            Employee employee = new Employee(person, position1, new Date(), null, 2375d, 463d, headBranch);
+
+            Employee employee = new Employee(person, position1, new Date(), null, headBranch);
             employeeRepository.save(employee);
+
+            List<EmployeeDetail> employeeDetails = new ArrayList<>();
+            EmployeeDetail employeeDetailField1 = new EmployeeDetail(employee, "gross_salary_official_part", "1200", "", true);
+            employeeDetails.add(employeeDetailField1);
+            EmployeeDetail employeeDetailField2 = new EmployeeDetail(employee, "gross_salary_non_official_part", "2700", "", true);
+            employeeDetails.add(employeeDetailField2);
+            EmployeeDetail employeeDetailField3 = new EmployeeDetail(employee, "sales_dividend", "0", "", false);
+            employeeDetails.add(employeeDetailField3);
+            EmployeeDetail employeeDetailField4 = new EmployeeDetail(employee, "previous_sum_work_experience_year", "8", "", true);
+            employeeDetails.add(employeeDetailField4);
+            EmployeeDetail employeeDetailField5 = new EmployeeDetail(employee, "membership_fee_for_trade_union_fee", "1%", "", true);
+            employeeDetails.add(employeeDetailField5);
+            EmployeeDetail employeeDetailField6 = new EmployeeDetail(employee, "calculated_vacation_day", "0", "", true);
+            employeeDetails.add(employeeDetailField6);
+
+            employeeDetailRepository.saveAll(employeeDetails);
+
 
             User user = new User(defaultAdminUsername, DigestUtils.md5DigestAsHex("admin".getBytes()), employee, new UserDetail("az"));
 
@@ -793,26 +834,37 @@ public class DBConfiguration {
             accountRepository.saveAll(accounts);
 
             List<PayrollConfiguration> payrollConfigurations = new ArrayList<>();
-            PayrollConfiguration payrollConfiguration1 = new PayrollConfiguration("Minimal əmək haqqı", "{minimal_salary}=200", "Azərbaycan Respublikasında müəyyənləşdirilmiş minimal əmək haqqı");
+            PayrollConfiguration payrollConfiguration1 = new PayrollConfiguration(formulaType1, "Minimal əmək haqqı", "{minimal_salary}=200", "Azərbaycan Respublikasında müəyyənləşdirilmiş minimal əmək haqqı");
             payrollConfigurations.add(payrollConfiguration1);
-            PayrollConfiguration payrollConfiguration2 = new PayrollConfiguration("Vergiyə cəlb olunan məbləğ", "{tax_amount_involved}={gross_salary}-{allowance}", "Vergiyə cəlb olunan məbləğ = Hesablanan aylıq əmək haqqı - Güzəşt");
+            PayrollConfiguration payrollConfiguration2 = new PayrollConfiguration(formulaType1,"Vergiyə cəlb olunan məbləğ", "{tax_amount_involved}={gross_salary}-{allowance}", "Vergiyə cəlb olunan məbləğ = Hesablanan aylıq əmək haqqı - Güzəşt");
             payrollConfigurations.add(payrollConfiguration2);
-            PayrollConfiguration payrollConfiguration3 = new PayrollConfiguration("Gəlir vergisi", "{tax_income}={tax_amount_involved}>8000?({tax_amount_involved}-8000)*14%:0", "Gəlir vergisi: Vergiyə cəlb olunan məbləğ 8 000 manatadək olduqda: 0; Vergiyə cəlb olunan məbləğ 8 000 manatdan çox olduqda: Vergiyə cəlb olunan məbləğ *14%");
+            PayrollConfiguration payrollConfiguration3 = new PayrollConfiguration(formulaType1,"Gəlir vergisi", "{tax_income}={tax_amount_involved}>8000?({tax_amount_involved}-8000)*14%:0", "Gəlir vergisi: Vergiyə cəlb olunan məbləğ 8 000 manatadək olduqda: 0; Vergiyə cəlb olunan məbləğ 8 000 manatdan çox olduqda: Vergiyə cəlb olunan məbləğ *14%");
             payrollConfigurations.add(payrollConfiguration3);
-            PayrollConfiguration payrollConfiguration4 = new PayrollConfiguration("DSMF ayırmaları", "{dsmf_deduction}={gross_salary}>{minimal_salary}?{minimal_salary}*3%+({gross_salary}-{minimal_salary})*10%:{gross_salary}*3%", "DSMF ayırmaları: Əmək haqqı 200 manatadək olduqda: Hesablanan aylıq əmək haqqı * 3%; Əmək haqqı 200 manatdan çox olduqda: 6 + (Hesablanan aylıq əmək haqqı-200) * 10%;");
+            PayrollConfiguration payrollConfiguration4 = new PayrollConfiguration(formulaType1,"DSMF ayırmaları", "{dsmf_deduction}={gross_salary}>{minimal_salary}?{minimal_salary}*3%+({gross_salary}-{minimal_salary})*10%:{gross_salary}*3%", "DSMF ayırmaları: Əmək haqqı 200 manatadək olduqda: Hesablanan aylıq əmək haqqı * 3%; Əmək haqqı 200 manatdan çox olduqda: 6 + (Hesablanan aylıq əmək haqqı-200) * 10%;");
             payrollConfigurations.add(payrollConfiguration4);
-            PayrollConfiguration payrollConfiguration5 = new PayrollConfiguration("İşsizlikdən sığorta haqqı", "{unemployment_insurance}={gross_salary}*0.5%", "İşsizlikdən sığorta haqqı = Hesablanan aylıq əmək haqqı * 0.5%");
+            PayrollConfiguration payrollConfiguration5 = new PayrollConfiguration(formulaType1,"İşsizlikdən sığorta haqqı", "{unemployment_insurance}={gross_salary}*0.5%", "İşsizlikdən sığorta haqqı = Hesablanan aylıq əmək haqqı * 0.5%");
             payrollConfigurations.add(payrollConfiguration5);
-            PayrollConfiguration payrollConfiguration6 = new PayrollConfiguration("Həmkarlar təşkilatına üzvlük haqqı", "{membership_fee_for_trade_union}={gross_salary}*{fee}%", "Həmkarlar təşkilatına üzvlük haqqı = Hesablanan aylıq əmək haqqı * x%");
+            PayrollConfiguration payrollConfiguration6 = new PayrollConfiguration(formulaType1,"Həmkarlar təşkilatına üzvlük haqqı", "{membership_fee_for_trade_union}={membership_fee_for_trade_union_fee}>0?{gross_salary}*{membership_fee_for_trade_union_fee}:0", "Həmkarlar təşkilatına üzvlük haqqı = Hesablanan aylıq əmək haqqı * x%");
             payrollConfigurations.add(payrollConfiguration6);
-            PayrollConfiguration payrollConfiguration7 = new PayrollConfiguration("İcbari tibbi sığorta haqqı", "{compulsory_health_insurance}=10", "İcbari tibbi sığorta haqqı = 10");
+            PayrollConfiguration payrollConfiguration7 = new PayrollConfiguration(formulaType1,"İcbari tibbi sığorta haqqı", "{compulsory_health_insurance}=10", "İcbari tibbi sığorta haqqı = 10");
             payrollConfigurations.add(payrollConfiguration7);
-            PayrollConfiguration payrollConfiguration8 = new PayrollConfiguration("Yekun ödəniləcək məbləğ", "{total_amount_payable}={gross_salary}-{tax_income}-{dsmf_deduction}-{unemployment_insurance}-{compulsory_health_insurance}-{membership_fee_for_trade_union}", "Yekun ödəniləcək məbləğ = Hesablanan əmək haqqı - Gəlir vergisi - DSMF ayırmaları - İşsizlikdən sığorta haqqı - İcbari tibbi sığprta haqqı - Həmkarlar təşkilatına üzvlük haqqı");
+            PayrollConfiguration payrollConfiguration8 = new PayrollConfiguration(formulaType1,"Yekun ödəniləcək məbləğ", "{total_amount_payable}={gross_salary}-{tax_income}-{dsmf_deduction}-{unemployment_insurance}-{compulsory_health_insurance}-{membership_fee_for_trade_union}", "Yekun ödəniləcək məbləğ = Hesablanan əmək haqqı - Gəlir vergisi - DSMF ayırmaları - İşsizlikdən sığorta haqqı - İcbari tibbi sığprta haqqı - Həmkarlar təşkilatına üzvlük haqqı");
             payrollConfigurations.add(payrollConfiguration8);
+            PayrollConfiguration payrollConfiguration9 = new PayrollConfiguration(formulaType2,"Minimal məzuniyyət günlərinin sayı", "{minimal_vacation_day}=21", "AR ƏM əsasən minimal məzuniyyət günlərinin sayı 21 gün təyin edilmişdir");
+            payrollConfigurations.add(payrollConfiguration9);
+            PayrollConfiguration payrollConfiguration10 = new PayrollConfiguration(formulaType2,"Əlavə məzuniyyət günlərinin sayı", "{additional_vacation_day}={work_experience}>15?9:{work_experience}>10?6:{work_experience}>5?3:0", "İş stajı 15 ildən çox olduqda 9 gün, iş stajı 10 ildən çox olduqda 6 gün, iş stajı 5 ildən çox olduqda 3 gün əlavə məzuniyyət tətbiq edilir");
+            payrollConfigurations.add(payrollConfiguration10);
+            PayrollConfiguration payrollConfiguration11 = new PayrollConfiguration(formulaType3,"Orta aylıq əmək haqqı", "{average_salary}={sum_work_month_salary_max_12}/{work_month_salary_count_max_12}", "Orta aylıq əmək haqqı = məzuniyyətdən əvvəlki 12 təqvim ayının əmək haqqının cəmlənmiş məbləği / 12");
+            payrollConfigurations.add(payrollConfiguration11);
+            PayrollConfiguration payrollConfiguration12 = new PayrollConfiguration(formulaType3,"Bir günlük əmək haqqı", "{one_day_salary}={average_salary}/30.4", "Bir günlük əmək haqqı = orta aylıq əmək haqqı / 30.4");
+            payrollConfigurations.add(payrollConfiguration12);
+            PayrollConfiguration payrollConfiguration13 = new PayrollConfiguration(formulaType3,"Məzuniyyət haqqı", "{vacation_pay}={one_day_salary}*{taken_vacation_day}", "Məzuniyyət haqqı = Bir günlük əmək haqqı * Məzuniyyət günləri");
+            payrollConfigurations.add(payrollConfiguration13);
 
             payrollConfigurationRepository.saveAll(payrollConfigurations);
 
         } catch (Exception e){
+            e.printStackTrace();
             log.error(e);
         } finally {
             log.info("System was running!");

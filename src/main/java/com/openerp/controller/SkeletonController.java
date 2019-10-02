@@ -90,6 +90,9 @@ public class SkeletonController {
     PayrollConfigurationRepository payrollConfigurationRepository;
 
     @Autowired
+    EmployeeDetailRepository employeeDetailRepository;
+
+    @Autowired
     HttpServletRequest request;
 
     @Autowired

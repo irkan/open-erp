@@ -40,12 +40,6 @@ public class Employee {
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date contractEndDate;
 
-    @Column(name = "gross_salary_official_part")
-    private double salaryOfficial;
-
-    @Column(name = "gross_salary_non_official_part")
-    private double salaryNonOfficial;
-
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hr_organization_id", nullable = false)
     private Organization organization;
@@ -54,13 +48,11 @@ public class Employee {
     @OneToOne(mappedBy = "employee")
     private User user;
 
-    public Employee(Person person, Dictionary position, Date contractStartDate, Date contractEndDate, double salaryOfficial, double salaryNonOfficial, Organization organization) {
+    public Employee(Person person, Dictionary position, Date contractStartDate, Date contractEndDate, Organization organization) {
         this.person = person;
         this.position = position;
         this.contractStartDate = contractStartDate;
         this.contractEndDate = contractEndDate;
-        this.salaryOfficial = salaryOfficial;
-        this.salaryNonOfficial = salaryNonOfficial;
         this.organization = organization;
     }
 }

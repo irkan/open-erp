@@ -21,6 +21,10 @@ public class PayrollConfiguration {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "admin_dictionary_formula_type_id")
+    private Dictionary type;
+
     @Pattern(regexp=".{2,100}",message="Minimum 2 maksimum 100 simvol ola bilər")
     @Column(name = "name")
     private String name;
@@ -44,7 +48,8 @@ public class PayrollConfiguration {
     @JoinColumn(name = "created_by_admin_user_id")
     private User createdUser;
 
-    public PayrollConfiguration(@Pattern(regexp = ".{2,100}", message = "Minimum 2 maksimum 100 simvol ola bilər") String name, @Pattern(regexp = ".{2,300}", message = "Minimum 2 maksimum 300 simvol ola bilər") String formula, @Pattern(regexp = ".{0,400}", message = "Maksimum 400 simvol ola bilər") String description) {
+    public PayrollConfiguration(Dictionary type, @Pattern(regexp = ".{2,100}", message = "Minimum 2 maksimum 100 simvol ola bilər") String name, @Pattern(regexp = ".{2,300}", message = "Minimum 2 maksimum 300 simvol ola bilər") String formula, @Pattern(regexp = ".{0,400}", message = "Maksimum 400 simvol ola bilər") String description) {
+        this.type = type;
         this.name = name;
         this.formula = formula;
         this.description = description;

@@ -201,33 +201,16 @@
 
                     </div>
                     <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <form:label path="salaryOfficial">Aylıq maaş (rəsmi hissə)</form:label>
-                                <div class="input-group" >
-                                    <form:input path="salaryOfficial" cssClass="form-control" placeholder="350 AZN"/>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-money"></i>
-                                        </span>
+                        <div class="col-md-12">
+                            <c:forEach var="t" items="${employee_additional_fields}">
+                                <div class="form-group">
+                                    <label><c:out value="${t.name}"/></label>
+                                    <div class="input-group" >
+                                        <input type="text" name="salaryNonOfficial" class="form-control" />
                                     </div>
                                 </div>
-                                <form:errors path="salaryOfficial" cssClass="control-label alert-danger" />
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <form:label path="salaryNonOfficial">Aylıq maaş (qeyri rəsmi hissə)</form:label>
-                                <div class="input-group" >
-                                    <form:input path="salaryNonOfficial" cssClass="form-control" placeholder="350 AZN"/>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-money"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                                <form:errors path="salaryNonOfficial" cssClass="control-label alert-danger" />
-                            </div>
+                            </c:forEach>
+
                         </div>
                     </div>
                     <hr style="width: 100%"/>

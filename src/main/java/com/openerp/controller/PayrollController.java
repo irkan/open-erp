@@ -44,6 +44,7 @@ public class PayrollController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new Vacation());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.PAYROLL_CONFIGURATION)){
+            model.addAttribute(Constants.FORMULA_TYPES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("city"));
             model.addAttribute(Constants.LIST, payrollConfigurationRepository.getPayrollConfigurationsByActiveTrueOrderById());
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new PayrollConfiguration());

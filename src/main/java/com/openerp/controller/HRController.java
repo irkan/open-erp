@@ -41,6 +41,7 @@ public class HRController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new Organization());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.EMPLOYEE)){
+            model.addAttribute(Constants.EMPLOYEE_ADDITIONAL_FIELDS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-additional-field"));
             model.addAttribute(Constants.CITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("city"));
             model.addAttribute(Constants.POSITIONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position"));
             model.addAttribute(Constants.NATIONALITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("nationality"));

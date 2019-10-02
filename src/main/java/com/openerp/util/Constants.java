@@ -35,6 +35,8 @@ public class Constants {
     public static final String ACCOUNTS = "accounts";
     public static final String SHORTENED_TIMES = "shortened_times";
     public static final String PARENT_MODULES_MAP = "parent_modules_map";
+    public static final String FORMULA_TYPES = "formula_types";
+    public static final String EMPLOYEE_ADDITIONAL_FIELDS = "employee_additional_fields";
 
     public static final class ROUTE{
         public static final String MODULE = "module";
