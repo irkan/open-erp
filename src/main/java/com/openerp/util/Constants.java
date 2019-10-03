@@ -39,6 +39,9 @@ public class Constants {
     public static final String EMPLOYEE_ADDITIONAL_FIELDS = "employee_additional_fields";
     public static final String IDENTIFIERS = "identifiers";
     public static final String MONTHS = "months";
+    public static final String YEARS = "years";
+    public static final String DAYS_IN_MONTH = "days_in_month";
+    public static final String BRANCHES = "branches";
 
     public static final class ROUTE{
         public static final String MODULE = "module";

@@ -15,30 +15,62 @@
     <div class="alert alert-light alert-elevate" role="alert">
         <div class="alert-icon"><i class="flaticon-warning kt-font-brand"></i></div>
         <div class="alert-text">
-            DataTables fully supports colspan and rowspan in the table's header, assigning the required order listeners
-            to the TH element suitable for that column.
+            Əmək haqqı hesablamalı ayda bir dəfə olmaqla hər ayın sonu həyata keçirilməlidir! Hesablama əməliyyatının ağırlığını nəzərə alaraq bildirirk ki, göstərilmiş tarix üzrə hesablanmış əmək haqqı üçün təkrar sorğu göndərildikdə, nəticələr tarixçədən təqdim ediləcəkdir!
         </div>
     </div>
     <div class="row">
         <div class="col-lg-12">
             <div class="kt-portlet kt-portlet--mobile">
                 <div class="kt-portlet__head kt-portlet__head--lg">
-                    <div class="kt-portlet__head-label">
-
-
-
-
-                        burda form olacaq
-                    </div>
-                    <div class="kt-portlet__head-toolbar">
-                        <div class="kt-portlet__head-wrapper">
-                            <div class="kt-portlet__head-actions">                                &nbsp;
-                                <a href="#" class="btn btn-brand btn-elevate btn-icon-sm">
-                                    <i class="la la-play"></i>
-                                    İş vaxtının uçotu prosesini başlat
-                                </a>
+                    <div class="kt-portlet__head-title" style="width: 100%">
+                        <form:form modelAttribute="form" id="filter-form" method="post" action="/payroll/salary/filter">
+                            <div class="row">
+                                <div class="col-sm-3 offset-sm-2">
+                                    <div class="form-group">
+                                        <form:label path="branch">&nbsp;</form:label>
+                                        <form:select  path="branch" cssClass="custom-select form-control">
+                                            <form:options items="${branches}" itemLabel="name" itemValue="id" />
+                                        </form:select>
+                                        <form:errors path="branch" cssClass="control-label alert-danger" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <form:label path="month">&nbsp;</form:label>
+                                        <form:select  path="month" cssClass="custom-select form-control">
+                                            <form:options items="${months}" itemLabel="name" itemValue="attr2" />
+                                        </form:select>
+                                        <form:errors path="month" cssClass="control-label alert-danger" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <form:label path="year">&nbsp;</form:label>
+                                        <form:select  path="year" cssClass="custom-select form-control">
+                                            <form:options items="${years}"/>
+                                        </form:select>
+                                        <form:errors path="year" cssClass="control-label alert-danger" />
+                                    </div>
+                                    <%--<div class="form-group">
+                                        <label>&nbsp;</label>
+                                        <select  name="year" class="custom-select form-control">
+                                            <c:forEach var="t" items="${years}" varStatus="loop">
+                                                <option value="<c:out value="${t}"/>"><c:out value="${t}"/></option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>--%>
+                                </div>
+                                <div class="col-sm-2 text-center">
+                                    <label>&nbsp;</label>
+                                    <div class="form-group">
+                                        <a href="#" onclick="submit($('#filter-form'))" class="btn btn-brand btn-elevate btn-icon-sm">
+                                            <i class="la la-filter"></i>
+                                            Filter
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        </form:form>
                     </div>
                 </div>
                 <div class="kt-portlet__body">
@@ -49,24 +81,27 @@
                                    id="kt_table_1">
                                 <thead>
                                 <tr>
-                                    <th>№</th>
-                                    <th>ID</th>
+                                    <th rowspan="2">№</th>
+                                    <th colspan="3" class="text-center" style="letter-spacing: 4px;">Əməkdaş</th>
+                                    <th colspan="<c:out value="${days_in_month}"/>" class="text-center" style="letter-spacing: 4px;">Ayın günləri</th>
+                                </tr>
+                                <tr>
                                     <th>Struktur</th>
                                     <th>Ad Soyad Ata adı</th>
                                     <th>Vəzifə</th>
+                                    <c:forEach var = "i" begin = "1" end = "${days_in_month}">
+                                        <th class="bg-light"><c:out value = "${i}"/></th>
+                                    </c:forEach>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${list}" varStatus="loop">
                                     <tr>
                                         <td>${loop.index + 1}</td>
-                                        <td><c:out value="${t.id}"/></td>
                                         <td><c:out value="${t.organization.name}"/></td>
                                         <th><c:out value="${t.person.firstName}"/> <c:out value="${t.person.lastName}"/>
                                             <c:out value="${t.person.fatherName}"/></th>
                                         <td><c:out value="${t.position.name}"/></td>
-
-
                                     </tr>
                                 </c:forEach>
                                 </tbody>
@@ -94,7 +129,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form:form modelAttribute="form" id="form" method="post" action="/admin/dictionary-type"
+                <%--<form:form modelAttribute="form" id="form" method="post" action="/admin/dictionary-type"
                            cssClass="form-group">
                     <form:input type="hidden" name="id" path="id"/>
                     <form:input type="hidden" name="active" path="active" value="1"/>
@@ -113,7 +148,7 @@
                         <form:input path="attr2" cssClass="form-control" placeholder="Atributu daxil edin"/>
                         <form:errors path="attr2" cssClass="alert alert-danger"/>
                     </div>
-                </form:form>
+                </form:form>--%>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" onclick="submit($('#form'));">Yadda saxla</button>

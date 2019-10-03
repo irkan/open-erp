@@ -22,6 +22,16 @@ public class Salary {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
+    @Column(name = "month")
+    private int month=(new Date()).getMonth()+1;
+
+    @Column(name = "year")
+    private int year=(new Date()).getYear()+1900;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "hr_branch_organization_id")
+    private Organization branch;
+
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;
 

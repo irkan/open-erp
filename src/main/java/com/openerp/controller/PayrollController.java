@@ -3,6 +3,7 @@ package com.openerp.controller;
 import com.openerp.entity.*;
 import com.openerp.util.Constants;
 import com.openerp.util.ReadWriteExcelFile;
+import com.openerp.util.Util;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.YearMonth;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,12 +35,10 @@ public class PayrollController extends SkeletonController {
         session.setAttribute(Constants.MODULE_DESCRIPTION, description);
 
         if (page.equalsIgnoreCase(Constants.ROUTE.SALARY)){
-            model.addAttribute(Constants.LIST, employeeRepository.getEmployeesByContractEndDateIsNull());
             model.addAttribute(Constants.MONTHS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("month"));
-            YearMonth yearMonthObject = YearMonth.of(2019, 10);
-            int daysInMonth = yearMonthObject.lengthOfMonth();
-            System.out.println(daysInMonth);
-
+            model.addAttribute(Constants.YEARS, Util.getYears(new Date()));
+            model.addAttribute(Constants.BRANCHES, organizationRepository.getOrganizationsByActiveTrueAndOrganizationType_Attr1("branch"));
+            model.addAttribute(Constants.LIST, employeeRepository.getEmployeesByContractEndDateIsNull());
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Salary());
             }
@@ -51,7 +51,7 @@ public class PayrollController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new Vacation());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.PAYROLL_CONFIGURATION)){
-            model.addAttribute(Constants.FORMULA_TYPES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("city"));
+            model.addAttribute(Constants.FORMULA_TYPES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("formula-type"));
             model.addAttribute(Constants.LIST, payrollConfigurationRepository.getPayrollConfigurationsByActiveTrueOrderById());
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new PayrollConfiguration());
@@ -66,5 +66,13 @@ public class PayrollController extends SkeletonController {
             payrollConfigurationRepository.save(payrollConfiguration);
         }
         return mapPost(payrollConfiguration, binding, redirectAttributes);
+    }
+
+    @PostMapping(value = "/salary/filter")
+    public String postSalaryFilter(@ModelAttribute(Constants.FORM) @Validated Salary salary, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        YearMonth yearMonthObject = YearMonth.of(salary.getYear(), salary.getMonth());
+        int daysInMonth = yearMonthObject.lengthOfMonth();
+        redirectAttributes.addFlashAttribute(Constants.DAYS_IN_MONTH, daysInMonth);
+        return mapPost(salary, binding, redirectAttributes, "/payroll/salary");
     }
 }

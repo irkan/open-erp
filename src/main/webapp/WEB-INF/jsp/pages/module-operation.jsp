@@ -36,7 +36,7 @@
             <c:when test="${not empty t.module.module}">
                 <tr>
                     <td>${loop.index + 1}</td>
-                    <td><c:out value="${t.id}" /> <%--${utl:toJson(t)}--%></td>
+                    <td><c:out value="${t.id}" /></td>
                     <td><c:out value="${t.module.module.name}" /></td>
                     <td><c:out value="${t.module.name}" /></td>
                     <td><c:out value="${t.operation.name}" /></td>>

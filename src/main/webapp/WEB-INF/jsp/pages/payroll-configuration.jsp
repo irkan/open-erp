@@ -108,12 +108,12 @@
                     </div>
                     <div class="form-group">
                         <form:label path="formula">Formula</form:label>
-                        <form:textarea path="formula" cssClass="form-control" placeholder="Formulanı daxil edin" />
+                        <form:textarea path="formula" rows="4" cssClass="form-control" placeholder="Formulanı daxil edin" />
                         <form:errors path="formula" cssClass="alert-danger"/>
                     </div>
                     <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>
-                        <form:textarea path="description" cssClass="form-control" placeholder="Açıqlamanı daxil edin" />
+                        <form:textarea path="description" rows="4" cssClass="form-control" placeholder="Açıqlamanı daxil edin" />
                         <form:errors path="description" cssClass="alert alert-danger"/>
                     </div>
                 </form:form>
