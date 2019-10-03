@@ -24,6 +24,7 @@
     <tr>
         <th>№</th>
         <th>ID</th>
+        <th>İdentifikator</th>
         <th>Qeyri iş günü</th>
         <th>Açıqlama</th>
         <th>Əməliyyat</th>
@@ -34,6 +35,7 @@
         <tr>
             <td>${loop.index + 1}</td>
             <td><c:out value="${t.id}" /></td>
+            <td><c:out value="${t.identifier}" /></td>
             <td><c:out value="${utl:getFormattedDate(t.nonWorkingDate)}" /></td>
             <td><c:out value="${t.description}" /></td>
             <td nowrap class="text-center">
@@ -101,6 +103,13 @@
                             </div>
                         </div>
                         <form:errors path="nonWorkingDate" cssClass="control-label alert-danger" />
+                    </div>
+                    <div class="form-group">
+                        <form:label path="identifier">İdentifikator</form:label>
+                        <form:select  path="identifier" cssClass="custom-select form-control">
+                            <form:options items="${identifiers}" itemLabel="name" itemValue="attr1" />
+                        </form:select>
+                        <form:errors path="identifier" cssClass="control-label alert-danger" />
                     </div>
                     <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>

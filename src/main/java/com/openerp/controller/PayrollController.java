@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +33,12 @@ public class PayrollController extends SkeletonController {
         session.setAttribute(Constants.MODULE_DESCRIPTION, description);
 
         if (page.equalsIgnoreCase(Constants.ROUTE.SALARY)){
+            model.addAttribute(Constants.LIST, employeeRepository.getEmployeesByContractEndDateIsNull());
+            model.addAttribute(Constants.MONTHS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("month"));
+            YearMonth yearMonthObject = YearMonth.of(2019, 10);
+            int daysInMonth = yearMonthObject.lengthOfMonth();
+            System.out.println(daysInMonth);
+
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Salary());
             }

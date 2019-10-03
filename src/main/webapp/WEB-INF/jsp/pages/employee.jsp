@@ -39,11 +39,11 @@
         <tr>
             <td>${loop.index + 1}</td>
             <td><c:out value="${t.id}" /></td>
-            <td><c:out value="${t.person.firstName}"/> <c:out value="${t.person.lastName}"/> <c:out value="${t.person.fatherName}"/></td>
+            <th><c:out value="${t.person.firstName}"/> <c:out value="${t.person.lastName}"/> <c:out value="${t.person.fatherName}"/></th>
             <td><c:out value="${t.organization.name}" /></td>
             <td><c:out value="${t.position.name}" /></td>
             <td><c:out value="${utl:getFormattedDate(t.contractStartDate)}" /></td>
-            <td><c:out value="${t.contractEndDate}" /></td>
+            <td><c:out value="${utl:getFormattedDate(t.contractEndDate)}" /></td>
             <c:choose>
                 <c:when test="${empty t.contractEndDate}">
                     <td>

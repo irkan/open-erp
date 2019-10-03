@@ -47,16 +47,18 @@ public class HRController extends SkeletonController {
             model.addAttribute(Constants.NATIONALITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("nationality"));
             model.addAttribute(Constants.GENDERS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("gender"));
             model.addAttribute(Constants.ORGANIZATIONS, organizationRepository.getOrganizationsByActiveTrue());
-            model.addAttribute(Constants.LIST, employeeRepository.findAll());
+            model.addAttribute(Constants.LIST, employeeRepository.getEmployeesByContractEndDateIsNull());
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Employee());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.NON_WORKING_DAY)){
+            model.addAttribute(Constants.IDENTIFIERS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("identifier"));
             model.addAttribute(Constants.LIST, nonWorkingDayRepository.getNonWorkingDaysByActiveTrue());
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new NonWorkingDay());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.SHORTENED_WORKING_DAY)){
+            model.addAttribute(Constants.IDENTIFIERS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("identifier"));
             model.addAttribute(Constants.SHORTENED_TIMES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("shortened-time"));
             model.addAttribute(Constants.LIST, shortenedWorkingDayRepository.getShortenedWorkingDaysByActiveTrue());
             if(!model.containsAttribute(Constants.FORM)){

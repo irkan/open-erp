@@ -27,6 +27,10 @@ public class ShortenedWorkingDay {
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date workingDate;
 
+    @Pattern(regexp=".{1,2}",message="Minimum 1 maksimum 2 simvol ola bilər")
+    @Column(name = "identifier")
+    private String identifier;
+
     @Pattern(regexp=".{0,250}",message="Maksimum 250 simvol ola bilər")
     @Column(name = "description")
     private String description;

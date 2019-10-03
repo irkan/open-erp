@@ -106,6 +106,10 @@ public class DBConfiguration {
             types.add(formulaType);
             DictionaryType employeeDetail = new DictionaryType("Əlavə sahələr", "employee-additional-field", null);
             types.add(employeeDetail);
+            DictionaryType identifierType = new DictionaryType("İdentifikator", "identifier", null);
+            types.add(identifierType);
+            DictionaryType monthType = new DictionaryType("Ay / Tarix", "month", null);
+            types.add(monthType);
 
             List<Dictionary> dictionaries = new ArrayList<>();
             Dictionary male = new Dictionary("Kişi", "Male", null, genderType);
@@ -258,6 +262,36 @@ public class DBConfiguration {
             dictionaries.add(employeeDetail4);
             Dictionary employeeDetail5 = new Dictionary("Həmkərlar ittifaqı, üzvülük haqqı", "membership_fee_for_trade_union_fee", "0", employeeDetail);
             dictionaries.add(employeeDetail5);
+            Dictionary identifier1 = new Dictionary("İstirahət günü", "İ", null, identifierType);
+            dictionaries.add(identifier1);
+            Dictionary identifier2 = new Dictionary("Bayram", "B", null, identifierType);
+            dictionaries.add(identifier2);
+            Dictionary identifier3 = new Dictionary("Qara bayram", "QB", null, identifierType);
+            dictionaries.add(identifier3);
+            Dictionary january = new Dictionary("Yanvar", "January", "1", monthType);
+            dictionaries.add(january);
+            Dictionary february = new Dictionary("Fevral", "February", "2", monthType);
+            dictionaries.add(february);
+            Dictionary march = new Dictionary("Mart", "March", "3", monthType);
+            dictionaries.add(march);
+            Dictionary april = new Dictionary("Aprel", "April", "4", monthType);
+            dictionaries.add(april);
+            Dictionary may = new Dictionary("May", "May", "5", monthType);
+            dictionaries.add(may);
+            Dictionary june = new Dictionary("İyun", "June", "6", monthType);
+            dictionaries.add(june);
+            Dictionary july = new Dictionary("İyul", "July", "7", monthType);
+            dictionaries.add(july);
+            Dictionary august = new Dictionary("Avqust", "August", "8", monthType);
+            dictionaries.add(august);
+            Dictionary september = new Dictionary("Sentyabr", "September", "9", monthType);
+            dictionaries.add(september);
+            Dictionary october = new Dictionary("Oktyabr", "October", "10", monthType);
+            dictionaries.add(october);
+            Dictionary november = new Dictionary("Noyabr", "November", "11", monthType);
+            dictionaries.add(november);
+            Dictionary december = new Dictionary("Dekabr", "December", "12", monthType);
+            dictionaries.add(december);
 
             dictionaryTypeRepository.saveAll(types);
             dictionaryRepository.saveAll(dictionaries);
@@ -319,7 +353,7 @@ public class DBConfiguration {
             modules.add(workAttendance);
             Module payroll = new Module("Əmək haqqı", "Maaşların hesablanması", "payroll", "flaticon-security", null);
             modules.add(payroll);
-            Module salary = new Module("Maaş", "Maaşların hesablanması", "salary", "flaticon-security", payroll);
+            Module salary = new Module("İş vaxtının uçotu", "Maaşların hesablanması", "salary", "flaticon-security", payroll);
             modules.add(salary);
             Module vacation = new Module("Məzuniyyət", "Məzuniyyət", "vacation", "la la-calendar", payroll);
             modules.add(vacation);

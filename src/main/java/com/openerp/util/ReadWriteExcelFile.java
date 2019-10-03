@@ -104,8 +104,9 @@ public class ReadWriteExcelFile {
 				ShortenedWorkingDay shortenedWorkingDay = new ShortenedWorkingDay();
 				double value = row.getCell(0).getNumericCellValue()*24*60*60*1000-2209176000000l;
 				shortenedWorkingDay.setWorkingDate(new Date((long) value));
-				shortenedWorkingDay.setDescription(row.getCell(1).getStringCellValue());
-				shortenedWorkingDay.setShortenedTime((int)row.getCell(2).getNumericCellValue());
+				shortenedWorkingDay.setIdentifier(row.getCell(1).getStringCellValue());
+				shortenedWorkingDay.setDescription(row.getCell(2).getStringCellValue());
+				shortenedWorkingDay.setShortenedTime((int)row.getCell(3).getNumericCellValue());
 				shortenedWorkingDays.add(shortenedWorkingDay);
 			}
 		}
@@ -124,7 +125,8 @@ public class ReadWriteExcelFile {
 				NonWorkingDay nonWorkingDay = new NonWorkingDay();
 				double value = row.getCell(0).getNumericCellValue()*24*60*60*1000-2209176000000l;
 				nonWorkingDay.setNonWorkingDate(new Date((long) value));
-				nonWorkingDay.setDescription(row.getCell(1).getStringCellValue());
+				nonWorkingDay.setIdentifier(row.getCell(1).getStringCellValue());
+				nonWorkingDay.setDescription(row.getCell(2).getStringCellValue());
 				nonWorkingDays.add(nonWorkingDay);
 			}
 		}

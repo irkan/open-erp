@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     List<Employee> getEmployeesByOrganization_Id(int organizationId);
+    List<Employee> getEmployeesByContractEndDateIsNull();
 }
