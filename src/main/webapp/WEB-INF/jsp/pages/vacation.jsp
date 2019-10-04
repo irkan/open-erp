@@ -38,8 +38,8 @@
             <td><c:out value="${t.id}" /></td>
             <th><c:out value="${t.employee.person.firstName}"/> <c:out value="${t.employee.person.lastName}"/>
                 <c:out value="${t.employee.person.fatherName}"/></th>
-            <td><c:out value="${utl:getFormattedDate(t.startDate)}" /></td>
-            <td><c:out value="${utl:getFormattedDate(t.endDate)}" /></td>
+            <td><fmt:formatDate value = "${t.startDate}" pattern = "dd.MM.yyyy" /></td>
+            <td><fmt:formatDate value = "${t.endDate}" pattern = "dd.MM.yyyy" /></td>
             <td><c:out value="${t.description}" /></td>
             <td nowrap class="text-center">
                 <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
@@ -61,7 +61,7 @@
                 <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
                 <c:choose>
                     <c:when test="${delete.status}">
-                        <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
+                        <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.dateRange}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
                             <i class="<c:out value="${delete.object.icon}"/>"></i>
                         </a>
                     </c:when>
@@ -112,7 +112,7 @@
                     </div>
                     <div class="form-group">
                         <form:label path="dateRange">Başlama - Bitmə tarixi</form:label>
-                        <div class="kt-input-icon pull-right" id='date-range-picker'>
+                        <div class="kt-input-icon" id='date-range-picker'>
                             <form:input path="dateRange" cssClass="form-control" placeholder="Tarix aralığı dd.MM.yyyy - dd.MM.yyyy"/>
                             <span class="kt-input-icon__icon kt-input-icon__icon--right"><span><i class="la la-calendar-check-o"></i></span></span>
                         </div>

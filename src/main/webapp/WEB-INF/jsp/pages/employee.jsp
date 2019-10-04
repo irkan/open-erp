@@ -42,8 +42,8 @@
             <th><c:out value="${t.person.firstName}"/> <c:out value="${t.person.lastName}"/> <c:out value="${t.person.fatherName}"/></th>
             <td><c:out value="${t.organization.name}" /></td>
             <td><c:out value="${t.position.name}" /></td>
-            <td><c:out value="${utl:getFormattedDate(t.contractStartDate)}" /></td>
-            <td><c:out value="${utl:getFormattedDate(t.contractEndDate)}" /></td>
+            <td><fmt:formatDate value = "${t.contractStartDate}" pattern = "dd.MM.yyyy" /></td>
+            <td><fmt:formatDate value = "${t.contractEndDate}" pattern = "dd.MM.yyyy" /></td>
             <c:choose>
                 <c:when test="${empty t.contractEndDate}">
                     <td>

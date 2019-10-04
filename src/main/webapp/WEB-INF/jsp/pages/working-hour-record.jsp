@@ -17,55 +17,54 @@
         <div class="alert-text">
             Əmək haqqı hesablamalı ayda bir dəfə olmaqla hər ayın sonu həyata keçirilməlidir! Hesablama əməliyyatının ağırlığını nəzərə alaraq bildirirk ki, göstərilmiş tarix üzrə hesablanmış əmək haqqı üçün təkrar sorğu göndərildikdə, nəticələr tarixçədən təqdim ediləcəkdir!
         </div>
+        <div class="alert-close">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true"><i class="la la-close"></i></span>
+            </button>
+        </div>
     </div>
     <div class="row">
         <div class="col-lg-12">
             <div class="kt-portlet kt-portlet--mobile">
-                <c:set var="filter" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'filter')}"/>
+                <c:set var="search" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'search')}"/>
                 <c:choose>
-                    <c:when test="${filter.status}">
+                    <c:when test="${search.status}">
                         <div class="kt-portlet__head kt-portlet__head--lg">
                             <div class="kt-portlet__head-title" style="width: 100%">
-                                <form:form modelAttribute="form" id="filter-form" method="post" action="/payroll/working-hour-record/filter">
+                                <form id="filter-form" method="post" action="/payroll/working-hour-record/search">
                                     <div class="row">
                                         <div class="col-sm-3 offset-sm-2">
                                             <div class="form-group">
-                                                <form:label path="branch">&nbsp;</form:label>
-                                                <form:select  path="branch" cssClass="custom-select form-control">
-                                                    <form:options items="${branches}" itemLabel="name" itemValue="id" />
-                                                </form:select>
-                                                <form:errors path="branch" cssClass="control-label alert-danger" />
+                                                <label>&nbsp;</label>
+                                                <select  name="branch" class="custom-select form-control">
+                                                    <c:forEach var="t" items="${branches}" varStatus="loop">
+                                                        <c:set var="selected" value="${t.id==branch_id?'selected':''}"/>
+                                                        <option value="<c:out value="${t.id}"/>" <c:out value="${selected}"/>><c:out value="${t.name}"/></option>
+                                                    </c:forEach>
+                                                </select>
                                             </div>
                                         </div>
-                                        <div class="col-sm-2">
+                                        <div class="col-sm-3">
                                             <div class="form-group">
-                                                <form:label path="month">&nbsp;</form:label>
-                                                <form:select  path="month" cssClass="custom-select form-control">
-                                                    <form:options items="${months}" itemLabel="name" itemValue="attr2" />
-                                                </form:select>
-                                                <form:errors path="month" cssClass="control-label alert-danger" />
+                                                <label>&nbsp;</label>
+                                                <input name="monthYear" class="form-control" type="month" value="<c:out value="${year_month}"/>" />
                                             </div>
                                         </div>
-                                        <div class="col-sm-2">
-                                            <div class="form-group">
-                                                <form:label path="year">&nbsp;</form:label>
-                                                <form:select  path="year" cssClass="custom-select form-control">
-                                                    <form:options items="${years}"/>
-                                                </form:select>
-                                                <form:errors path="year" cssClass="control-label alert-danger" />
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-2 text-center">
+                                        <div class="col-sm-3">
                                             <label>&nbsp;</label>
                                             <div class="form-group">
-                                                <a href="#" onclick="submit($('#filter-form'))" class="btn btn-brand btn-elevate btn-icon-sm" title="<c:out value="${filter.object.name}"/>">
-                                                    <i class="la <c:out value="${filter.object.icon}"/>"></i>
-                                                    Filter
+                                                <a href="#" onclick="submit($('#filter-form'))" class="btn btn-brand btn-elevate btn-icon-sm" title="<c:out value="${search.object.name}"/>">
+                                                    <i class="la <c:out value="${search.object.icon}"/>"></i>
+                                                    Axtar
                                                 </a>
+                                                <button type="reset" class="btn btn-secondary btn-secondary--icon">
+                                                    <i class="la la-close"></i>
+                                                    Təmizlə
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
-                                </form:form>
+                                </form>
                             </div>
                         </div>
                     </c:when>
@@ -75,7 +74,7 @@
                     <c:choose>
                         <c:when test="${not empty list}">
                             <table class="table table-striped- table-bordered table-hover table-checkable"
-                                   id="kt_table_1">
+                                   id="kt_table_3">
                                 <thead>
                                 <tr>
                                     <th rowspan="2">№</th>
@@ -87,7 +86,7 @@
                                     <th>Ad Soyad Ata adı</th>
                                     <th>Vəzifə</th>
                                     <c:forEach var = "i" begin = "1" end = "${days_in_month}">
-                                        <th class="bg-light"><c:out value = "${i}"/></th>
+                                        <th class="bg-light text-center"><c:out value = "${i}"/></th>
                                     </c:forEach>
                                 </tr>
                                 </thead>
@@ -99,10 +98,14 @@
                                         <th><c:out value="${t.person.firstName}"/> <c:out value="${t.person.lastName}"/>
                                             <c:out value="${t.person.fatherName}"/></th>
                                         <td><c:out value="${t.position.name}"/></td>
+                                        <c:forEach var = "i" begin = "1" end = "${days_in_month}">
+                                            <td class="text-center"><input type="text" name="identify" class="type-ahead" value="İG" style="width: 46px; border: none; background-color: #f9f9f9; text-align: center"></td>
+                                        </c:forEach>
                                     </tr>
                                 </c:forEach>
                                 </tbody>
                             </table>
+
                         </c:when>
                         <c:otherwise>
                             Məlumat yoxdur
@@ -154,5 +157,68 @@
         </div>
     </div>
 </div>
+
+<script src="<c:url value="/assets/vendors/general/typeahead.js/dist/typeahead.bundle.js" />" type="text/javascript"></script>
+<script src="<c:url value="/assets/vendors/general/typeahead.js/dist/typeahead.jquery.js" />" type="text/javascript"></script>
+
+<script>
+    var KTTypeahead = function() {
+
+        var states = [
+            <c:forEach var="t" items="${identifiers}" varStatus="loop">
+                '<c:out value="${t.attr1}"/>',
+            </c:forEach>
+        ];
+
+        // Private functions
+        var demo1 = function() {
+            var substringMatcher = function(strs) {
+                return function findMatches(q, cb) {
+                    var matches, substringRegex;
+                    matches = [];
+                    substrRegex = new RegExp(q, 'i');
+                    $.each(strs, function(i, str) {
+                        if (substrRegex.test(str)) {
+                            matches.push(str);
+                        }
+                    });
+
+                    cb(matches);
+                };
+            };
+
+            $('.type-ahead').typeahead({
+                hint: true,
+                highlight: true,
+                minLength: 0
+            }, {
+                name: 'states',
+                source: substringMatcher(states)
+            });
+        };
+        return {
+            init: function() {
+                demo1();
+            }
+        };
+    }();
+
+    var KTDatatablesBasicScrollable = function() {
+        var initTable2 = function() {
+            var table = $('#kt_table_3');
+            table.DataTable({
+                scrollX: true
+            });
+        };
+        return {
+            init: function() {
+                initTable2();
+            }
+        };
+    }();
+
+    KTTypeahead.init();
+    KTDatatablesBasicScrollable.init();
+</script>
 
 

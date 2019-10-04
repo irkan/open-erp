@@ -43,6 +43,8 @@ public class Constants {
     public static final String DAYS_IN_MONTH = "days_in_month";
     public static final String BRANCHES = "branches";
     public static final String VACATION_FORMATS = "vacation_formats";
+    public static final String YEAR_MONTH = "year_month";
+    public static final String BRANCH_ID = "branch_id";
 
     public static final class ROUTE{
         public static final String MODULE = "module";

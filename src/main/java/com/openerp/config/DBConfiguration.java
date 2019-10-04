@@ -108,8 +108,6 @@ public class DBConfiguration {
             types.add(employeeDetail);
             DictionaryType identifierType = new DictionaryType("İdentifikator", "identifier", null);
             types.add(identifierType);
-            DictionaryType monthType = new DictionaryType("Ay / Tarix", "month", null);
-            types.add(monthType);
             DictionaryType vacationType = new DictionaryType("Məzuniyyət forması", "vacation-format", null);
             types.add(vacationType);
 
@@ -264,40 +262,35 @@ public class DBConfiguration {
             dictionaries.add(employeeDetail4);
             Dictionary employeeDetail5 = new Dictionary("Həmkərlar ittifaqı, üzvülük haqqı", "membership_fee_for_trade_union_fee", "0", employeeDetail);
             dictionaries.add(employeeDetail5);
-            Dictionary identifier1 = new Dictionary("İstirahət günü", "İ", null, identifierType);
+            Dictionary identifier1 = new Dictionary("İstirahət", "İ", null, identifierType);
             dictionaries.add(identifier1);
             Dictionary identifier2 = new Dictionary("Bayram", "B", null, identifierType);
             dictionaries.add(identifier2);
-            Dictionary identifier3 = new Dictionary("Qara bayram", "QB", null, identifierType);
+            Dictionary identifier3 = new Dictionary("Qara Bayram", "QB", null, identifierType);
             dictionaries.add(identifier3);
-            Dictionary january = new Dictionary("Yanvar", "January", "1", monthType);
-            dictionaries.add(january);
-            Dictionary february = new Dictionary("Fevral", "February", "2", monthType);
-            dictionaries.add(february);
-            Dictionary march = new Dictionary("Mart", "March", "3", monthType);
-            dictionaries.add(march);
-            Dictionary april = new Dictionary("Aprel", "April", "4", monthType);
-            dictionaries.add(april);
-            Dictionary may = new Dictionary("May", "May", "5", monthType);
-            dictionaries.add(may);
-            Dictionary june = new Dictionary("İyun", "June", "6", monthType);
-            dictionaries.add(june);
-            Dictionary july = new Dictionary("İyul", "July", "7", monthType);
-            dictionaries.add(july);
-            Dictionary august = new Dictionary("Avqust", "August", "8", monthType);
-            dictionaries.add(august);
-            Dictionary september = new Dictionary("Sentyabr", "September", "9", monthType);
-            dictionaries.add(september);
-            Dictionary october = new Dictionary("Oktyabr", "October", "10", monthType);
-            dictionaries.add(october);
-            Dictionary november = new Dictionary("Noyabr", "November", "11", monthType);
-            dictionaries.add(november);
-            Dictionary december = new Dictionary("Dekabr", "December", "12", monthType);
-            dictionaries.add(december);
-            Dictionary vacationType1 = new Dictionary("Ödənişli", "payable", null, vacationType);
+            Dictionary identifier4 = new Dictionary("Məzuniyyət", "M", null, identifierType);
+            dictionaries.add(identifier4);
+            Dictionary identifier5 = new Dictionary("Analıq Məzuniyyəti", "AM", null, identifierType);
+            dictionaries.add(identifier5);
+            Dictionary identifier6 = new Dictionary("İş Günü", "İG", null, identifierType);
+            dictionaries.add(identifier6);
+            Dictionary identifier7 = new Dictionary("Qısaldılmış İş Günü", "QİG", null, identifierType);
+            dictionaries.add(identifier7);
+            Dictionary identifier8 = new Dictionary("Qısaldılmış İş Günü (Səhər)", "QİG(S)", null, identifierType);
+            dictionaries.add(identifier8);
+            Dictionary identifier9 = new Dictionary("Qısaldılmış İş Günü (Axşam)", "QİG(A)", null, identifierType);
+            dictionaries.add(identifier9);
+            Dictionary identifier10 = new Dictionary("1-ci növbə", "I", null, identifierType);
+            dictionaries.add(identifier10);
+            Dictionary identifier11 = new Dictionary("2-ci növbə", "II", null, identifierType);
+            dictionaries.add(identifier11);
+            Dictionary identifier12 = new Dictionary("Ödənişsiz Məzuniyyət", "ÖM", null, identifierType);
+            dictionaries.add(identifier12);
+            Dictionary vacationType1 = new Dictionary("Ödənişli Məzuniyyət", "payable", null, vacationType);
             dictionaries.add(vacationType1);
             Dictionary vacationType2 = new Dictionary("Öz hesabına", "self-payable", null, vacationType);
             dictionaries.add(vacationType2);
+
 
             dictionaryTypeRepository.saveAll(types);
             dictionaryRepository.saveAll(dictionaries);
@@ -392,8 +385,8 @@ public class DBConfiguration {
             operations.add(reload);
             Operation actions = new Operation("Hərəkətlər", "actions", "flaticon-logout");
             operations.add(actions);
-            Operation filter = new Operation("Filter", "filter", "la la-filter");
-            operations.add(filter);
+            Operation search = new Operation("Axtar", "search", "la la-search");
+            operations.add(search);
 
             operationRepository.saveAll(operations);
 
@@ -573,8 +566,8 @@ public class DBConfiguration {
             ModuleOperation actionsModuleOperation1 = new ModuleOperation(inventory, actions, null);
             moduleOperations.add(actionsModuleOperation1);
 
-            ModuleOperation filterModuleOperation1 = new ModuleOperation(workingHourRecord, actions, null);
-            moduleOperations.add(filterModuleOperation1);
+            ModuleOperation searchModuleOperation1 = new ModuleOperation(workingHourRecord, search, null);
+            moduleOperations.add(searchModuleOperation1);
 
             moduleOperationRepository.saveAll(moduleOperations);
 
@@ -828,8 +821,8 @@ public class DBConfiguration {
             UserModuleOperation userTransferModuleOperation1 = new UserModuleOperation(user, actionsModuleOperation1);
             userModuleOperations.add(userTransferModuleOperation1);
 
-            UserModuleOperation userFilterModuleOperation1 = new UserModuleOperation(user, filterModuleOperation1);
-            userModuleOperations.add(userFilterModuleOperation1);
+            UserModuleOperation userSearchModuleOperation1 = new UserModuleOperation(user, searchModuleOperation1);
+            userModuleOperations.add(userSearchModuleOperation1);
 
             userModuleOperationRepository.saveAll(userModuleOperations);
 

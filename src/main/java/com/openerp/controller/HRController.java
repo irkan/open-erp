@@ -13,6 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -167,9 +169,15 @@ public class HRController extends SkeletonController {
                 vacationRepository.save(vacation);
 
                 if(vacation.getId()!=null && vacation.getStartDate()!=null && vacation.getEndDate()!=null){
-                    long aday = 24*60*60*1000;
-                    for(long i=vacation.getStartDate().getTime(); i<vacation.getEndDate().getTime(); i=i+aday){
-                        vacationDetailRepository.save(new VacationDetail(new Date(i), vacation));
+                    vacationDetailRepository.deleteInBatch(vacationDetailRepository.getVacationDetailsByVacation_Id(vacation.getId()));
+                    Calendar start = Calendar.getInstance();
+                    start.setTime(vacation.getStartDate());
+                    Calendar end = Calendar.getInstance();
+                    end.setTime(vacation.getEndDate());
+                    end.add(Calendar.DATE, 1);
+
+                    for (Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
+                        vacationDetailRepository.save(new VacationDetail(date, vacation));
                     }
                 }
             }

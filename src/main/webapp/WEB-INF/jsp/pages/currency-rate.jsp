@@ -40,7 +40,7 @@
                                         <td><c:out value="${t.name}"/></td>
                                         <td><c:out value="${t.value}"/></td>
                                         <td><c:out value="${t.nominal}"/></td>
-                                        <td><c:out value="${utl:getFormattedDate(t.rateDate)}"/></td>
+                                        <td><fmt:formatDate value = "${t.rateDate}" pattern = "dd.MM.yyyy" /></td>
                                         <td><c:out value="${t.code}"/></td>
                                     </tr>
                                 </c:forEach>

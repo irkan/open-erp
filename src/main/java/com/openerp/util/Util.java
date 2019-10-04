@@ -125,13 +125,4 @@ public class Util {
         }
         return currencyRates;
     }
-
-    public static List<Integer> getYears(Date current){
-        List<Integer> years = new ArrayList<>();
-        int year = current.getYear();
-        for(int i = year-5; i<=year+5; i++ ){
-            years.add(i+1900);
-        }
-        return years;
-    }
 }

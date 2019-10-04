@@ -247,7 +247,7 @@ public class AdministratorController extends SkeletonController {
     public List<Employee> getEmployees(@PathVariable("organizationId") int organizationId) {
         List<Employee> employees = new ArrayList<>();
         try{
-            employees = employeeRepository.getEmployeesByOrganization_Id(organizationId);
+            employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization_Id(organizationId);
         } catch (Exception e){
             e.printStackTrace();
         }

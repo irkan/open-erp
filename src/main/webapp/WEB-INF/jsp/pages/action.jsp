@@ -43,7 +43,7 @@
             <td><c:out value="${t.supplier.name}" /></td>
             <td><c:out value="${t.inventory.name}" /></td>
             <td><c:out value="${t.amount}" /></td>
-            <td><c:out value="${utl:getFormattedDateTime(t.createdDate)}" /></td>
+            <td><fmt:formatDate value = "${t.createdDate}" pattern = "dd.MM.yyyy" /></td>
             <td nowrap class="text-center">
                 <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
                 <c:choose>

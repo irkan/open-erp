@@ -42,7 +42,7 @@
                                         <td><c:out value="${t.id}" /></td>
                                         <td><c:out value="${t.account.accountNumber}" /></td>
                                         <td><c:out value="${t.description}" /></td>
-                                        <td><c:out value="${utl:getFormattedDateTime(t.createdDate)}" /></td>
+                                        <td><fmt:formatDate value = "${t.createdDate}" pattern = "dd.MM.yyyy" /></td>
                                         <td><c:out value="${t.amount}" /> ədəd</td>
                                         <td>
                                             <span><c:out value="${t.price}" /></span>

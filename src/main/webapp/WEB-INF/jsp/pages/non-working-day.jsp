@@ -36,7 +36,7 @@
             <td>${loop.index + 1}</td>
             <td><c:out value="${t.id}" /></td>
             <td><c:out value="${t.identifier}" /></td>
-            <td><c:out value="${utl:getFormattedDate(t.nonWorkingDate)}" /></td>
+            <td><fmt:formatDate value = "${t.nonWorkingDate}" pattern = "dd.MM.yyyy" /></td>
             <td><c:out value="${t.description}" /></td>
             <td nowrap class="text-center">
                 <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
@@ -58,7 +58,7 @@
                 <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
                 <c:choose>
                     <c:when test="${delete.status}">
-                        <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${utl:getFormattedDate(t.nonWorkingDate)}" /><br/><c:out value="${t.description}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
+                        <a href="javascript:deleteData('<c:out value="${t.id}" />', '<fmt:formatDate value = "${t.nonWorkingDate}" pattern = "dd.MM.yyyy" /><br/><c:out value="${t.description}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
                             <i class="<c:out value="${delete.object.icon}"/>"></i>
                         </a>
                     </c:when>

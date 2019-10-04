@@ -20,6 +20,11 @@ public class DateUtility {
         return utilDate;
     }
 
+    public static String getYearMonth(Date date) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
+        return dateFormat.format(date);
+    }
+
     public static String getFormattedDate(Date date) {
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
         return dateFormat.format(date);
