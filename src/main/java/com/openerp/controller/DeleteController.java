@@ -85,6 +85,10 @@ public class DeleteController extends SkeletonController {
             PayrollConfiguration payrollConfiguration = payrollConfigurationRepository.getPayrollConfigurationById(Integer.parseInt(id));
             payrollConfiguration.setActive(false);
             payrollConfigurationRepository.save(payrollConfiguration);
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.VACATION)){
+            Vacation vacation = vacationRepository.getVacationById(Integer.parseInt(id));
+            vacation.setActive(false);
+            vacationRepository.save(vacation);
         }
         return "redirect:/"+parent+"/"+path;
     }

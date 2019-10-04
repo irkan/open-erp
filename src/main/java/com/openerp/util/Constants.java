@@ -42,6 +42,7 @@ public class Constants {
     public static final String YEARS = "years";
     public static final String DAYS_IN_MONTH = "days_in_month";
     public static final String BRANCHES = "branches";
+    public static final String VACATION_FORMATS = "vacation_formats";
 
     public static final class ROUTE{
         public static final String MODULE = "module";
@@ -71,5 +72,6 @@ public class Constants {
         public static final String BUSINESS_TRIP = "business-trip";
         public static final String VACATION = "vacation";
         public static final String PAYROLL_CONFIGURATION = "payroll-configuration";
+        public static final String WORKING_HOUR_RECORD = "working-hour-record";
     }
 }

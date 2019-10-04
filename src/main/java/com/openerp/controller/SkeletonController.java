@@ -93,6 +93,15 @@ public class SkeletonController {
     EmployeeDetailRepository employeeDetailRepository;
 
     @Autowired
+    WorkingHourRecordRepository workingHourRecordRepository;
+
+    @Autowired
+    VacationRepository vacationRepository;
+
+    @Autowired
+    VacationDetailRepository vacationDetailRepository;
+
+    @Autowired
     HttpServletRequest request;
 
     @Autowired

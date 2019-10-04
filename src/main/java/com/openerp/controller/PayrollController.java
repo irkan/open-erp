@@ -34,21 +34,13 @@ public class PayrollController extends SkeletonController {
         }
         session.setAttribute(Constants.MODULE_DESCRIPTION, description);
 
-        if (page.equalsIgnoreCase(Constants.ROUTE.SALARY)){
+        if (page.equalsIgnoreCase(Constants.ROUTE.WORKING_HOUR_RECORD)){
             model.addAttribute(Constants.MONTHS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("month"));
             model.addAttribute(Constants.YEARS, Util.getYears(new Date()));
             model.addAttribute(Constants.BRANCHES, organizationRepository.getOrganizationsByActiveTrueAndOrganizationType_Attr1("branch"));
             model.addAttribute(Constants.LIST, employeeRepository.getEmployeesByContractEndDateIsNull());
             if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new Salary());
-            }
-        } else if (page.equalsIgnoreCase(Constants.ROUTE.BUSINESS_TRIP)){
-            if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new BusinessTrip());
-            }
-        } else if (page.equalsIgnoreCase(Constants.ROUTE.VACATION)){
-            if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new Vacation());
+                model.addAttribute(Constants.FORM, new WorkingHourRecord());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.PAYROLL_CONFIGURATION)){
             model.addAttribute(Constants.FORMULA_TYPES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("formula-type"));
@@ -68,11 +60,11 @@ public class PayrollController extends SkeletonController {
         return mapPost(payrollConfiguration, binding, redirectAttributes);
     }
 
-    @PostMapping(value = "/salary/filter")
-    public String postSalaryFilter(@ModelAttribute(Constants.FORM) @Validated Salary salary, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
-        YearMonth yearMonthObject = YearMonth.of(salary.getYear(), salary.getMonth());
+    @PostMapping(value = "/working-hour-record/filter")
+    public String postSalaryFilter(@ModelAttribute(Constants.FORM) @Validated WorkingHourRecord workingHourRecord, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        YearMonth yearMonthObject = YearMonth.of(workingHourRecord.getYear(), workingHourRecord.getMonth());
         int daysInMonth = yearMonthObject.lengthOfMonth();
         redirectAttributes.addFlashAttribute(Constants.DAYS_IN_MONTH, daysInMonth);
-        return mapPost(salary, binding, redirectAttributes, "/payroll/salary");
+        return mapPost(workingHourRecord, binding, redirectAttributes, "/payroll/salary");
     }
 }

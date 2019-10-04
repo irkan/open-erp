@@ -8,15 +8,15 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "payroll_business_trip")
+@Table(name = "hr_business_trip")
 @Getter
 @Setter
 @NoArgsConstructor
 public class BusinessTrip {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "payroll_sequence")
-    @SequenceGenerator(sequenceName = "aa_payroll_sequence", allocationSize = 1, name = "payroll_sequence")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "hr_sequence")
+    @SequenceGenerator(sequenceName = "aa_hr_sequence", allocationSize = 1, name = "hr_sequence")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 

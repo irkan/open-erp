@@ -24,9 +24,10 @@
     <tr>
         <th>№</th>
         <th>ID</th>
-        <th>Ad</th>
-        <th>Atribut#1</th>
-        <th>Atribut#2</th>
+        <th>Ad Soyad Ata adı</th>
+        <th>Başlama tarixi</th>
+        <th>Bitmə tarixi</th>
+        <th>Açıqlama</th>
         <th>Əməliyyat</th>
     </tr>
     </thead>
@@ -34,10 +35,12 @@
     <c:forEach var="t" items="${list}" varStatus="loop">
         <tr>
             <td>${loop.index + 1}</td>
-            <td><c:out value="${t.id}" /> <%--${utl:toJson(t)}--%></td>
-            <td><c:out value="${t.name}" /></td>
-            <td><c:out value="${t.attr1}" /></td>
-            <td><c:out value="${t.attr2}" /></td>
+            <td><c:out value="${t.id}" /></td>
+            <th><c:out value="${t.employee.person.firstName}"/> <c:out value="${t.employee.person.lastName}"/>
+                <c:out value="${t.employee.person.fatherName}"/></th>
+            <td><c:out value="${utl:getFormattedDate(t.startDate)}" /></td>
+            <td><c:out value="${utl:getFormattedDate(t.endDate)}" /></td>
+            <td><c:out value="${t.description}" /></td>
             <td nowrap class="text-center">
                 <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
                 <c:choose>
@@ -58,7 +61,7 @@
                 <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
                 <c:choose>
                     <c:when test="${delete.status}">
-                        <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
+                        <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
                             <i class="<c:out value="${delete.object.icon}"/>"></i>
                         </a>
                     </c:when>
@@ -91,23 +94,34 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form:form modelAttribute="form" id="form" method="post" action="/admin/dictionary-type" cssClass="form-group">
-                    <form:input type="hidden" name="id" path="id"/>
-                    <form:input type="hidden" name="active" path="active" value="1"/>
+                <form:form modelAttribute="form" id="form" method="post" action="/hr/vacation" cssClass="form-group">
+                    <form:input type="hidden" path="id"/>
                     <div class="form-group">
-                        <form:label path="name">Ad</form:label>
-                        <form:input path="name" cssClass="form-control" placeholder="Adı daxil edin"/>
-                        <form:errors path="name" cssClass="alert-danger control-label"/>
+                        <form:label path="employee">Əməkdaş</form:label>
+                        <form:select  path="employee" cssClass="custom-select form-control">
+                            <form:options items="${employees}" itemLabel="person.fullName" itemValue="id" />
+                        </form:select>
+                        <form:errors path="employee" cssClass="control-label alert alert-danger" />
                     </div>
                     <div class="form-group">
-                        <form:label path="attr1">Atribut#1</form:label>
-                        <form:input path="attr1" cssClass="form-control" placeholder="Atributu daxil edin" />
-                        <form:errors path="attr1" cssClass="alert-danger"/>
+                        <form:label path="format">Məzuniyyətin forması</form:label>
+                        <form:select  path="format" cssClass="custom-select form-control">
+                            <form:options items="${vacation_formats}" itemLabel="name" itemValue="id" />
+                        </form:select>
+                        <form:errors path="format" cssClass="control-label alert alert-danger" />
                     </div>
                     <div class="form-group">
-                        <form:label path="attr2">Atribut#2</form:label>
-                        <form:input path="attr2" cssClass="form-control" placeholder="Atributu daxil edin" />
-                        <form:errors path="attr2" cssClass="alert alert-danger"/>
+                        <form:label path="dateRange">Başlama - Bitmə tarixi</form:label>
+                        <div class="kt-input-icon pull-right" id='date-range-picker'>
+                            <form:input path="dateRange" cssClass="form-control" placeholder="Tarix aralığı dd.MM.yyyy - dd.MM.yyyy"/>
+                            <span class="kt-input-icon__icon kt-input-icon__icon--right"><span><i class="la la-calendar-check-o"></i></span></span>
+                        </div>
+                        <form:errors path="dateRange" cssClass="alert-danger control-label"/>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="description">Açıqlama</form:label>
+                        <form:textarea path="description" cssClass="form-control" placeholder="Açıqlamanı daxil edin" />
+                        <form:errors path="description" cssClass="alert-danger control-label"/>
                     </div>
                 </form:form>
             </div>
@@ -119,4 +133,13 @@
     </div>
 </div>
 
+<script>
+    $('#date-range-picker').daterangepicker({
+        buttonClasses: ' btn',
+        applyClass: 'btn-primary',
+        cancelClass: 'btn-secondary'
+    }, function(start, end, label) {
+        $('#date-range-picker .form-control').val( start.format('DD.MM.YYYY') + ' - ' + end.format('DD.MM.YYYY'));
+    });
+</script>
 

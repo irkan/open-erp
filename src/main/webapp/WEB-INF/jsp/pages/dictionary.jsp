@@ -22,10 +22,9 @@
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="group_table">
                                 <thead>
                                 <tr>
-                                    <th>№</th>
                                     <th>ID</th>
-                                    <th>Tipi</th>
                                     <th>Ad</th>
+                                    <th>Tipi</th>
                                     <th>Atribut#1</th>
                                     <th>Atribut#2</th>
                                     <th>Əməliyyat</th>
@@ -34,10 +33,9 @@
                                 <tbody>
                                 <c:forEach var="t" items="${list}" varStatus="loop">
                                     <tr>
-                                        <td>${loop.index + 1}</td>
                                         <td><c:out value="${t.id}" /></td>
-                                        <td><c:out value="${t.dictionaryType.name}" /></td>
                                         <td><c:out value="${t.name}" /></td>
+                                        <th><c:out value="${t.dictionaryType.name}" /></th>
                                         <td><c:out value="${t.attr1}" /></td>
                                         <td><c:out value="${t.attr2}" /></td>
                                         <td nowrap class="text-center">

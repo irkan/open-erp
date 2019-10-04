@@ -3,18 +3,16 @@ package com.openerp.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 @Entity
-@Table(name = "payroll_salary")
+@Table(name = "payroll_working_hour_record")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Salary {
+public class WorkingHourRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "payroll_sequence")

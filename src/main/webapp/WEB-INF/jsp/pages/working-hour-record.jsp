@@ -21,58 +21,55 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="kt-portlet kt-portlet--mobile">
-                <div class="kt-portlet__head kt-portlet__head--lg">
-                    <div class="kt-portlet__head-title" style="width: 100%">
-                        <form:form modelAttribute="form" id="filter-form" method="post" action="/payroll/salary/filter">
-                            <div class="row">
-                                <div class="col-sm-3 offset-sm-2">
-                                    <div class="form-group">
-                                        <form:label path="branch">&nbsp;</form:label>
-                                        <form:select  path="branch" cssClass="custom-select form-control">
-                                            <form:options items="${branches}" itemLabel="name" itemValue="id" />
-                                        </form:select>
-                                        <form:errors path="branch" cssClass="control-label alert-danger" />
+                <c:set var="filter" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'filter')}"/>
+                <c:choose>
+                    <c:when test="${filter.status}">
+                        <div class="kt-portlet__head kt-portlet__head--lg">
+                            <div class="kt-portlet__head-title" style="width: 100%">
+                                <form:form modelAttribute="form" id="filter-form" method="post" action="/payroll/working-hour-record/filter">
+                                    <div class="row">
+                                        <div class="col-sm-3 offset-sm-2">
+                                            <div class="form-group">
+                                                <form:label path="branch">&nbsp;</form:label>
+                                                <form:select  path="branch" cssClass="custom-select form-control">
+                                                    <form:options items="${branches}" itemLabel="name" itemValue="id" />
+                                                </form:select>
+                                                <form:errors path="branch" cssClass="control-label alert-danger" />
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <div class="form-group">
+                                                <form:label path="month">&nbsp;</form:label>
+                                                <form:select  path="month" cssClass="custom-select form-control">
+                                                    <form:options items="${months}" itemLabel="name" itemValue="attr2" />
+                                                </form:select>
+                                                <form:errors path="month" cssClass="control-label alert-danger" />
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <div class="form-group">
+                                                <form:label path="year">&nbsp;</form:label>
+                                                <form:select  path="year" cssClass="custom-select form-control">
+                                                    <form:options items="${years}"/>
+                                                </form:select>
+                                                <form:errors path="year" cssClass="control-label alert-danger" />
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-2 text-center">
+                                            <label>&nbsp;</label>
+                                            <div class="form-group">
+                                                <a href="#" onclick="submit($('#filter-form'))" class="btn btn-brand btn-elevate btn-icon-sm" title="<c:out value="${filter.object.name}"/>">
+                                                    <i class="la <c:out value="${filter.object.icon}"/>"></i>
+                                                    Filter
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-sm-2">
-                                    <div class="form-group">
-                                        <form:label path="month">&nbsp;</form:label>
-                                        <form:select  path="month" cssClass="custom-select form-control">
-                                            <form:options items="${months}" itemLabel="name" itemValue="attr2" />
-                                        </form:select>
-                                        <form:errors path="month" cssClass="control-label alert-danger" />
-                                    </div>
-                                </div>
-                                <div class="col-sm-2">
-                                    <div class="form-group">
-                                        <form:label path="year">&nbsp;</form:label>
-                                        <form:select  path="year" cssClass="custom-select form-control">
-                                            <form:options items="${years}"/>
-                                        </form:select>
-                                        <form:errors path="year" cssClass="control-label alert-danger" />
-                                    </div>
-                                    <%--<div class="form-group">
-                                        <label>&nbsp;</label>
-                                        <select  name="year" class="custom-select form-control">
-                                            <c:forEach var="t" items="${years}" varStatus="loop">
-                                                <option value="<c:out value="${t}"/>"><c:out value="${t}"/></option>
-                                            </c:forEach>
-                                        </select>
-                                    </div>--%>
-                                </div>
-                                <div class="col-sm-2 text-center">
-                                    <label>&nbsp;</label>
-                                    <div class="form-group">
-                                        <a href="#" onclick="submit($('#filter-form'))" class="btn btn-brand btn-elevate btn-icon-sm">
-                                            <i class="la la-filter"></i>
-                                            Filter
-                                        </a>
-                                    </div>
-                                </div>
+                                </form:form>
                             </div>
-                        </form:form>
-                    </div>
-                </div>
+                        </div>
+                    </c:when>
+                </c:choose>
                 <div class="kt-portlet__body">
 
                     <c:choose>

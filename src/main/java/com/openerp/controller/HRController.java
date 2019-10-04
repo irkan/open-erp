@@ -2,6 +2,7 @@ package com.openerp.controller;
 
 import com.openerp.entity.*;
 import com.openerp.util.Constants;
+import com.openerp.util.DateUtility;
 import com.openerp.util.ReadWriteExcelFile;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,6 +68,17 @@ public class HRController extends SkeletonController {
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.WORK_ATTENDANCE)){
 
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.BUSINESS_TRIP)){
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new BusinessTrip());
+            }
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.VACATION)){
+            model.addAttribute(Constants.EMPLOYEES, employeeRepository.getEmployeesByContractEndDateIsNull());
+            model.addAttribute(Constants.VACATION_FORMATS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("vacation-format"));
+            model.addAttribute(Constants.LIST, vacationRepository.getVacationsByActiveTrue());
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new Vacation());
+            }
         }
         return "layout";
     }
@@ -141,5 +154,26 @@ public class HRController extends SkeletonController {
             }
         }
         return mapPost(redirectAttributes, "/hr/shortened-working-day");
+    }
+
+    @PostMapping(value = "/vacation")
+    public String postVacation(@ModelAttribute(Constants.FORM) @Validated Vacation vacation, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        if(!binding.hasErrors()){
+            String range = vacation.getDateRange();
+            if(range.length()>15){
+                String rangeDates[] = range.split("-");
+                vacation.setStartDate(DateUtility.getUtilDate(rangeDates[0].trim()));
+                vacation.setEndDate(DateUtility.getUtilDate(rangeDates[1].trim()));
+                vacationRepository.save(vacation);
+
+                if(vacation.getId()!=null && vacation.getStartDate()!=null && vacation.getEndDate()!=null){
+                    long aday = 24*60*60*1000;
+                    for(long i=vacation.getStartDate().getTime(); i<vacation.getEndDate().getTime(); i=i+aday){
+                        vacationDetailRepository.save(new VacationDetail(new Date(i), vacation));
+                    }
+                }
+            }
+        }
+        return mapPost(vacation, binding, redirectAttributes);
     }
 }
