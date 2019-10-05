@@ -78,34 +78,41 @@
                                 <thead>
                                 <tr>
                                     <th rowspan="2">№</th>
-                                    <th colspan="3" class="text-center" style="letter-spacing: 4px;">Əməkdaş</th>
-                                    <th colspan="<c:out value="${days_in_month}"/>" class="text-center" style="letter-spacing: 4px;">Ayın günləri</th>
+                                    <th rowspan="2" style="width: 400px; !important;">Ad Soyad Ata adı</th>
+                                    <th colspan="2" class="text-center" style="letter-spacing: 4px;">Əməkdaş</th>
+                                    <th colspan="<c:out value="${days_in_month}"/>" class="text-center" style="letter-spacing: 4px;">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                Ayın günləri
+                                            </div>
+                                            <div class="col-6">
+                                                Ayın günləri
+                                            </div>
+                                        </div>
+                                    </th>
                                 </tr>
                                 <tr>
-                                    <th>Struktur</th>
-                                    <th>Ad Soyad Ata adı</th>
                                     <th>Vəzifə</th>
+                                    <th>Struktur</th>
                                     <c:forEach var = "i" begin = "1" end = "${days_in_month}">
-                                        <th class="bg-light text-center"><c:out value = "${i}"/></th>
+                                        <th class="bg-light text-center kt-padding-0"><c:out value = "${i}"/></th>
                                     </c:forEach>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${list}" varStatus="loop">
                                     <tr>
-                                        <td>${loop.index + 1}</td>
-                                        <td><c:out value="${t.organization.name}"/></td>
-                                        <th><c:out value="${t.person.firstName}"/> <c:out value="${t.person.lastName}"/>
-                                            <c:out value="${t.person.fatherName}"/></th>
+                                        <td class="text-center">${loop.index + 1}</td>
+                                        <th><c:out value="${t.person.firstName}"/> <c:out value="${t.person.lastName}"/> <c:out value="${t.person.fatherName}"/></th>
                                         <td><c:out value="${t.position.name}"/></td>
+                                        <td><c:out value="${t.organization.name}"/></td>
                                         <c:forEach var = "i" begin = "1" end = "${days_in_month}">
-                                            <td class="text-center"><input type="text" name="identify" class="type-ahead" value="İG" style="width: 46px; border: none; background-color: #f9f9f9; text-align: center"></td>
+                                            <td class="text-center kt-padding-0"><input type="text" name="identify" class="type-ahead" value="İG" style="width: 46px; border: none; background-color: #f9f9f9; text-align: center"></td>
                                         </c:forEach>
                                     </tr>
                                 </c:forEach>
                                 </tbody>
                             </table>
-
                         </c:when>
                         <c:otherwise>
                             Məlumat yoxdur
@@ -116,8 +123,21 @@
         </div>
 
     </div>
-</div>
 
+    <div class="alert alert-info alert-elevate" role="alert">
+        <div class="alert-icon"><i class="flaticon-warning kt-font-brand kt-font-light"></i></div>
+        <div class="alert-text">
+            <c:forEach var="t" items="${identifiers}" varStatus="loop">
+                [&nbsp;<span style="font-weight: 400; font-size: 14px"><c:out value="${t.attr1}"/></span> - <c:out value="${t.name}"/>&nbsp;]&nbsp;&nbsp;&nbsp;
+            </c:forEach>
+        </div>
+        <div class="alert-close">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true"><i class="la la-close"></i></span>
+            </button>
+        </div>
+    </div>
+</div>
 
 <div class="modal fade" id="modal-operation" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -207,7 +227,21 @@
         var initTable2 = function() {
             var table = $('#kt_table_3');
             table.DataTable({
-                scrollX: true
+                scrollX: true,
+                paging: false,
+                autoWidth: false,
+                searching: false,
+                columnDefs: [
+                    {orderable: false, targets: 0}/*,
+                    {class: 'col-2', targets: 1},
+                    {width: '400px', class: 'col-2', targets: 2},
+                    {orderable: false, targets: 3}*/
+                ],
+                /*aoColumns : [ { "sClass": "my_class" }],*/
+                fixedColumns:   {
+                    leftColumns: 2
+                },
+                order: [[1, 'asc']]
             });
         };
         return {

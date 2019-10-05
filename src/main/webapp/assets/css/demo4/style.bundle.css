@@ -24681,11 +24681,11 @@ body.swal2-height-auto {
     width: 100% !important;
     border-collapse: initial !important;
     border-spacing: 0 !important;
-    margin: 1rem 0 !important; }
+    margin: 0 0 !important; }
     .dataTables_wrapper .dataTable th, .dataTables_wrapper .dataTable td {
       vertical-align: middle; }
       .dataTables_wrapper .dataTable th .kt-checkbox, .dataTables_wrapper .dataTable td .kt-checkbox {
-        margin-top: 0.3rem;
+        margin-top: 0;
         margin-bottom: 0; }
       .dataTables_wrapper .dataTable th.dt-center, .dataTables_wrapper .dataTable td.dt-center {
         text-align: center; }
