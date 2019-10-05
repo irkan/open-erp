@@ -53,7 +53,9 @@ input[type="checkbox"]{
 .font-size-12px{
     font-size: 12px;
 }
-.my_class {
-    overflow:hidden;
-    width:200px;
+.type-ahead {
+    width: 46px;
+    border: none;
+    background-color: #f9f9f9;
+    text-align: center
 }

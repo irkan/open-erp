@@ -78,22 +78,15 @@
                                 <thead>
                                 <tr>
                                     <th rowspan="2">№</th>
-                                    <th rowspan="2" style="width: 400px; !important;">Ad Soyad Ata adı</th>
+                                    <th rowspan="2"><div style="width: 200px !important;">Ad Soyad Ata adı</div></th>
                                     <th colspan="2" class="text-center" style="letter-spacing: 4px;">Əməkdaş</th>
                                     <th colspan="<c:out value="${days_in_month}"/>" class="text-center" style="letter-spacing: 4px;">
-                                        <div class="row">
-                                            <div class="col-6">
-                                                Ayın günləri
-                                            </div>
-                                            <div class="col-6">
-                                                Ayın günləri
-                                            </div>
-                                        </div>
+                                        Ayın günləri
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th>Vəzifə</th>
-                                    <th>Struktur</th>
+                                    <th><div style="width: 200px !important;">Vəzifə</div></th>
+                                    <th><div style="width: 130px !important;">Struktur</div></th>
                                     <c:forEach var = "i" begin = "1" end = "${days_in_month}">
                                         <th class="bg-light text-center kt-padding-0"><c:out value = "${i}"/></th>
                                     </c:forEach>
@@ -102,12 +95,27 @@
                                 <tbody>
                                 <c:forEach var="t" items="${list}" varStatus="loop">
                                     <tr>
-                                        <td class="text-center">${loop.index + 1}</td>
-                                        <th><c:out value="${t.person.firstName}"/> <c:out value="${t.person.lastName}"/> <c:out value="${t.person.fatherName}"/></th>
-                                        <td><c:out value="${t.position.name}"/></td>
-                                        <td><c:out value="${t.organization.name}"/></td>
+                                        <td class="text-center">
+                                            ${loop.index + 1}
+                                            <input type="hidden" name="id" value="<c:out value="${t.id}"/>"/>
+                                            <input type="hidden" name="employee-id" value="<c:out value="${t.id}"/>"/>
+                                        </td>
+                                        <th>
+                                            <input type="hidden" name="person-full-name" value="<c:out value="${t.person.firstName}"/> <c:out value="${t.person.lastName}"/> <c:out value="${t.person.fatherName}"/>"/>
+                                            <c:out value="${t.person.firstName}"/> <c:out value="${t.person.lastName}"/> <c:out value="${t.person.fatherName}"/>
+                                        </th>
+                                        <td>
+                                            <input type="hidden" name="position" value="<c:out value="${t.position.name}"/>"/>
+                                            <c:out value="${t.position.name}"/>
+                                        </td>
+                                        <td>
+                                            <input type="hidden" name="organization-name" value="<c:out value="${t.organization.name}"/>"/>
+                                            <c:out value="${t.organization.name}"/>
+                                        </td>
                                         <c:forEach var = "i" begin = "1" end = "${days_in_month}">
-                                            <td class="text-center kt-padding-0"><input type="text" name="identify" class="type-ahead" value="İG" style="width: 46px; border: none; background-color: #f9f9f9; text-align: center"></td>
+                                            <td class="text-center kt-padding-0">
+                                                <input type="text" name="identify" class="type-ahead" value="İG">
+                                            </td>
                                         </c:forEach>
                                     </tr>
                                 </c:forEach>
@@ -128,7 +136,7 @@
         <div class="alert-icon"><i class="flaticon-warning kt-font-brand kt-font-light"></i></div>
         <div class="alert-text">
             <c:forEach var="t" items="${identifiers}" varStatus="loop">
-                [&nbsp;<span style="font-weight: 400; font-size: 14px"><c:out value="${t.attr1}"/></span> - <c:out value="${t.name}"/>&nbsp;]&nbsp;&nbsp;&nbsp;
+                [&nbsp;<span style="font-weight: 400; font-size: 13px"><c:out value="${t.attr1}"/></span> - <c:out value="${t.name}"/>&nbsp;]&nbsp;&nbsp;&nbsp;
             </c:forEach>
         </div>
         <div class="alert-close">
