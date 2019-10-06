@@ -1,6 +1,7 @@
 package com.openerp.util;
 
 import com.openerp.entity.*;
+import com.openerp.entity.Dictionary;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 import org.w3c.dom.Document;
@@ -124,5 +125,18 @@ public class Util {
             }
         }
         return currencyRates;
+    }
+
+    public static String getIdentifier(List<Vacation> vacations, List<BusinessTrip> businessTrips, List<Object> illnesses, int day, Employee employee){
+        for (Vacation vacation: vacations) {
+            if(vacation.getEmployee().getId()==employee.getId()){
+                for (VacationDetail vacationDetail: vacation.getVacationDetails()) {
+                    if(vacationDetail.getVacationDate().getDate()==day){
+                        return vacation.getIdentifier().getAttr1();
+                    }
+                }
+            }
+        }
+        return "İG";
     }
 }

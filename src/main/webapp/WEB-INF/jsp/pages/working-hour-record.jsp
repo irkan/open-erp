@@ -26,45 +26,55 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="kt-portlet kt-portlet--mobile">
+                <form:form modelAttribute="form" id="form" method="post" action="/payroll/working-hour-record" cssClass="form-group">
+                    <form:hidden path="id"/>
                 <c:set var="search" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'search')}"/>
                 <c:choose>
                     <c:when test="${search.status}">
                         <div class="kt-portlet__head kt-portlet__head--lg">
                             <div class="kt-portlet__head-title" style="width: 100%">
-                                <form id="filter-form" method="post" action="/payroll/working-hour-record/search">
-                                    <div class="row">
-                                        <div class="col-sm-3 offset-sm-2">
-                                            <div class="form-group">
-                                                <label>&nbsp;</label>
-                                                <select  name="branch" class="custom-select form-control">
-                                                    <c:forEach var="t" items="${branches}" varStatus="loop">
-                                                        <c:set var="selected" value="${t.id==branch_id?'selected':''}"/>
-                                                        <option value="<c:out value="${t.id}"/>" <c:out value="${selected}"/>><c:out value="${t.name}"/></option>
-                                                    </c:forEach>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <div class="form-group">
-                                                <label>&nbsp;</label>
-                                                <input name="monthYear" class="form-control" type="month" value="<c:out value="${year_month}"/>" />
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <label>&nbsp;</label>
-                                            <div class="form-group">
-                                                <a href="#" onclick="submit($('#filter-form'))" class="btn btn-brand btn-elevate btn-icon-sm" title="<c:out value="${search.object.name}"/>">
-                                                    <i class="la <c:out value="${search.object.icon}"/>"></i>
-                                                    Axtar
-                                                </a>
-                                                <button type="reset" class="btn btn-secondary btn-secondary--icon">
-                                                    <i class="la la-close"></i>
-                                                    Təmizlə
-                                                </button>
-                                            </div>
+                                <div class="row">
+                                    <div class="col-sm-3 offset-sm-1">
+                                        <div class="form-group">
+                                            <form:label path="branch">&nbsp;</form:label>
+                                            <form:select  path="branch" cssClass="custom-select form-control">
+                                                <c:forEach var="t" items="${branches}" varStatus="loop">
+                                                    <c:set var="selected" value="${t.id==form.branch.id?'selected':''}"/>
+                                                    <option value="<c:out value="${t.id}"/>" <c:out value="${selected}"/>><c:out value="${t.name}"/></option>
+                                                </c:forEach>
+                                            </form:select>
+                                            <form:errors path="branch" cssClass="control-label alert alert-danger" />
                                         </div>
                                     </div>
-                                </form>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label>&nbsp;</label>
+                                            <input name="monthYear" class="form-control" type="month" value="<c:out value="${form.monthYear}"/>" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label>&nbsp;</label>
+                                        <div class="form-group">
+                                            <a href="#" onclick="submit($('#form'))" class="btn btn-brand btn-elevate btn-icon-sm" title="<c:out value="${search.object.name}"/>">
+                                                <i class="la <c:out value="${search.object.icon}"/>"></i>
+                                                Axtar
+                                            </a>
+                                            <button type="reset" class="btn btn-secondary btn-secondary--icon">
+                                                <i class="la la-close"></i>
+                                                Təmizlə
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label>&nbsp;</label>
+                                        <div class="form-group">
+                                            <a href="#" onclick="submit($('#form'))" class="btn btn-warning btn-elevate btn-icon-sm" title="<c:out value="${search.object.name}"/>">
+                                                <i class="la <c:out value="${search.object.icon}"/>"></i>
+                                                Yadda Saxla
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </c:when>
@@ -72,28 +82,28 @@
                 <div class="kt-portlet__body">
 
                     <c:choose>
-                        <c:when test="${not empty list}">
+                        <c:when test="${not empty form.workingHourRecordEmployees}">
                             <table class="table table-striped- table-bordered table-hover table-checkable"
                                    id="kt_table_3">
                                 <thead>
                                 <tr>
                                     <th rowspan="2">№</th>
-                                    <th rowspan="2"><div style="width: 200px !important;">Ad Soyad Ata adı</div></th>
+                                    <th rowspan="2"><div style="width: 220px !important;">Ad Soyad Ata adı</div></th>
                                     <th colspan="2" class="text-center" style="letter-spacing: 4px;">Əməkdaş</th>
                                     <th colspan="<c:out value="${days_in_month}"/>" class="text-center" style="letter-spacing: 4px;">
                                         Ayın günləri
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th><div style="width: 200px !important;">Vəzifə</div></th>
-                                    <th><div style="width: 130px !important;">Struktur</div></th>
+                                    <th class="bg-warning" style="border: none;"><div style="width: 180px !important;">Vəzifə</div></th>
+                                    <th class="bg-warning" style="border: none;"><div style="width: 120px !important;">Struktur</div></th>
                                     <c:forEach var = "i" begin = "1" end = "${days_in_month}">
-                                        <th class="bg-light text-center kt-padding-0"><c:out value = "${i}"/></th>
+                                        <th class="bg-info text-center kt-padding-0" style="border: none; color: white"><c:out value = "${i}"/></th>
                                     </c:forEach>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <c:forEach var="t" items="${list}" varStatus="loop">
+                                <c:forEach var="t" items="${form.workingHourRecordEmployees}" varStatus="loop">
                                     <tr>
                                         <td class="text-center">
                                             ${loop.index + 1}
@@ -101,20 +111,19 @@
                                             <input type="hidden" name="employee-id" value="<c:out value="${t.id}"/>"/>
                                         </td>
                                         <th>
-                                            <input type="hidden" name="person-full-name" value="<c:out value="${t.person.firstName}"/> <c:out value="${t.person.lastName}"/> <c:out value="${t.person.fatherName}"/>"/>
-                                            <c:out value="${t.person.firstName}"/> <c:out value="${t.person.lastName}"/> <c:out value="${t.person.fatherName}"/>
+                                            <c:out value="${t.fullName}"/>
                                         </th>
                                         <td>
-                                            <input type="hidden" name="position" value="<c:out value="${t.position.name}"/>"/>
-                                            <c:out value="${t.position.name}"/>
+                                            <c:out value="${t.position}"/>
                                         </td>
                                         <td>
-                                            <input type="hidden" name="organization-name" value="<c:out value="${t.organization.name}"/>"/>
-                                            <c:out value="${t.organization.name}"/>
+                                            <c:out value="${t.organization}"/>
                                         </td>
                                         <c:forEach var = "i" begin = "1" end = "${days_in_month}">
                                             <td class="text-center kt-padding-0">
-                                                <input type="text" name="identify" class="type-ahead" value="İG">
+                                                <div class="typeahead">
+                                                    <input type="text" name="identify" class="type-ahead" value="İG">
+                                                </div>
                                             </td>
                                         </c:forEach>
                                     </tr>
@@ -127,6 +136,7 @@
                         </c:otherwise>
                     </c:choose>
                 </div>
+                </form:form>
             </div>
         </div>
 
@@ -218,7 +228,8 @@
             $('.type-ahead').typeahead({
                 hint: true,
                 highlight: true,
-                minLength: 0
+                minLength: 0,
+                items: 'all'
             }, {
                 name: 'states',
                 source: substringMatcher(states)
@@ -235,6 +246,7 @@
         var initTable2 = function() {
             var table = $('#kt_table_3');
             table.DataTable({
+                scrollY: 400,
                 scrollX: true,
                 paging: false,
                 autoWidth: false,

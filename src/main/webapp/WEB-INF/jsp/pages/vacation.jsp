@@ -25,6 +25,7 @@
         <th>№</th>
         <th>ID</th>
         <th>Ad Soyad Ata adı</th>
+        <th>Məzuniyyət forması</th>
         <th>Başlama tarixi</th>
         <th>Bitmə tarixi</th>
         <th>Açıqlama</th>
@@ -38,6 +39,7 @@
             <td><c:out value="${t.id}" /></td>
             <th><c:out value="${t.employee.person.firstName}"/> <c:out value="${t.employee.person.lastName}"/>
                 <c:out value="${t.employee.person.fatherName}"/></th>
+            <td><c:out value="${t.identifier.attr1}"/> - <c:out value="${t.identifier.name}"/></td>
             <td><fmt:formatDate value = "${t.startDate}" pattern = "dd.MM.yyyy" /></td>
             <td><fmt:formatDate value = "${t.endDate}" pattern = "dd.MM.yyyy" /></td>
             <td><c:out value="${t.description}" /></td>
@@ -104,11 +106,11 @@
                         <form:errors path="employee" cssClass="control-label alert alert-danger" />
                     </div>
                     <div class="form-group">
-                        <form:label path="format">Məzuniyyətin forması</form:label>
-                        <form:select  path="format" cssClass="custom-select form-control">
-                            <form:options items="${vacation_formats}" itemLabel="name" itemValue="id" />
+                        <form:label path="identifier">Məzuniyyətin forması</form:label>
+                        <form:select  path="identifier" cssClass="custom-select form-control">
+                            <form:options items="${identifiers}" itemLabel="name" itemValue="id" />
                         </form:select>
-                        <form:errors path="format" cssClass="control-label alert alert-danger" />
+                        <form:errors path="identifier" cssClass="control-label alert alert-danger" />
                     </div>
                     <div class="form-group">
                         <form:label path="dateRange">Başlama - Bitmə tarixi</form:label>

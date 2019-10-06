@@ -29,8 +29,8 @@ public class Vacation {
     private Employee employee;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_dictionary_vacation_format_id", nullable = false)
-    private Dictionary format;
+    @JoinColumn(name = "admin_dictionary_identifier_id", nullable = false)
+    private Dictionary identifier;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "start_date")

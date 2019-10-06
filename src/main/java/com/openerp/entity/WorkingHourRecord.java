@@ -1,11 +1,13 @@
 package com.openerp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "payroll_working_hour_record")
@@ -20,6 +22,9 @@ public class WorkingHourRecord {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
+    @Column(name = "monthYear")
+    private String monthYear=String.valueOf((new Date()).getYear()+1900)+"-"+String.valueOf((new Date()).getMonth()+1);
+
     @Column(name = "month")
     private int month=(new Date()).getMonth()+1;
 
@@ -29,6 +34,9 @@ public class WorkingHourRecord {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hr_branch_organization_id")
     private Organization branch;
+
+    @OneToMany(mappedBy = "workingHourRecord")
+    private List<WorkingHourRecordEmployee> workingHourRecordEmployees;
 
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;
@@ -41,4 +49,13 @@ public class WorkingHourRecord {
     @JoinColumn(name = "created_by_admin_user_id")
     private User createdUser;
 
+    public WorkingHourRecord(int month, int year, Organization branch) {
+        this.month = month;
+        this.year = year;
+        this.branch = branch;
+    }
+
+    public WorkingHourRecord(Organization branch) {
+        this.branch = branch;
+    }
 }

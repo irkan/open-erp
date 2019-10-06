@@ -76,7 +76,7 @@ public class HRController extends SkeletonController {
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.VACATION)){
             model.addAttribute(Constants.EMPLOYEES, employeeRepository.getEmployeesByContractEndDateIsNull());
-            model.addAttribute(Constants.VACATION_FORMATS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("vacation-format"));
+            model.addAttribute(Constants.IDENTIFIERS, dictionaryRepository.getDictionariesByActiveTrueAndAttr2AndDictionaryType_Attr1("vacation", "identifier"));
             model.addAttribute(Constants.LIST, vacationRepository.getVacationsByActiveTrue());
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Vacation());
@@ -177,7 +177,7 @@ public class HRController extends SkeletonController {
                     end.add(Calendar.DATE, 1);
 
                     for (Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
-                        vacationDetailRepository.save(new VacationDetail(date, vacation));
+                        vacationDetailRepository.save(new VacationDetail(vacation.getIdentifier().getAttr1(), date, vacation));
                     }
                 }
             }

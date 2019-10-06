@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 @Entity
@@ -26,11 +27,16 @@ public class VacationDetail {
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date vacationDate;
 
+    @Pattern(regexp=".{0,10}",message="Maksimum 10 simvol ola bilər")
+    @Column(name = "identifier")
+    private String identifier;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hr_vacation_id")
     private Vacation vacation;
 
-    public VacationDetail(Date vacationDate, Vacation vacation) {
+    public VacationDetail(String identifier, Date vacationDate, Vacation vacation) {
+        this.identifier = identifier;
         this.vacationDate = vacationDate;
         this.vacation = vacation;
     }

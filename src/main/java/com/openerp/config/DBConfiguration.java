@@ -1,5 +1,6 @@
 package com.openerp.config;
 
+import com.openerp.dummy.DummyContact;
 import com.openerp.util.DateUtility;
 import com.openerp.entity.*;
 import com.openerp.repository.*;
@@ -108,8 +109,6 @@ public class DBConfiguration {
             types.add(employeeDetail);
             DictionaryType identifierType = new DictionaryType("İdentifikator", "identifier", null);
             types.add(identifierType);
-            DictionaryType vacationType = new DictionaryType("Məzuniyyət forması", "vacation-format", null);
-            types.add(vacationType);
 
             List<Dictionary> dictionaries = new ArrayList<>();
             Dictionary male = new Dictionary("Kişi", "Male", null, genderType);
@@ -280,16 +279,16 @@ public class DBConfiguration {
             dictionaries.add(identifier2);
             Dictionary identifier3 = new Dictionary("Qara Bayram", "QB", null, identifierType);
             dictionaries.add(identifier3);
-            Dictionary identifier4 = new Dictionary("Məzuniyyət", "M", null, identifierType);
+            Dictionary identifier4 = new Dictionary("Məzuniyyət", "M", "vacation", identifierType);
             dictionaries.add(identifier4);
-            Dictionary identifier12 = new Dictionary("Ödənişsiz Məzuniyyət", "ÖM", null, identifierType);
+            Dictionary identifier12 = new Dictionary("Ödənişsiz Məzuniyyət", "ÖM", "vacation", identifierType);
             dictionaries.add(identifier12);
-            Dictionary identifier5 = new Dictionary("Analıq Məzuniyyəti", "AM", null, identifierType);
+            Dictionary identifier14 = new Dictionary("Rəhbər Məzuniyyəti", "RM", "vacation", identifierType);
+            dictionaries.add(identifier14);
+            Dictionary identifier5 = new Dictionary("Analıq Məzuniyyəti", "AM", "vacation", identifierType);
             dictionaries.add(identifier5);
-            Dictionary vacationType1 = new Dictionary("Ödənişli Məzuniyyət", "payable", null, vacationType);
-            dictionaries.add(vacationType1);
-            Dictionary vacationType2 = new Dictionary("Öz hesabına", "self-payable", null, vacationType);
-            dictionaries.add(vacationType2);
+            Dictionary identifier13 = new Dictionary("Ezamiyyət", "E", null, identifierType);
+            dictionaries.add(identifier13);
 
 
             dictionaryTypeRepository.saveAll(types);
@@ -571,10 +570,6 @@ public class DBConfiguration {
 
             moduleOperationRepository.saveAll(moduleOperations);
 
-            Contact contact1 = new Contact("502535110", null, "irkan.ehmedov@gmail.com", "Ü.Hacıbəyov 195A", baku);
-            Person person = new Person(contact1, "İrkan", "Əhmədov", "Əflatun", DateUtility.getUtilDate("25.09.1989"), male, azerbaijanNationality, "4HWL0AM", null);
-            personRepository.save(person);
-
             List<Organization> organizations = new ArrayList<>();
 
             Contact headBranchContact = new Contact("503442323", "125656776", "head.office@sual.az", "M.Xiyəbani 194A", baku);
@@ -621,7 +616,8 @@ public class DBConfiguration {
 
             organizationRepository.saveAll(organizations);
 
-
+            Contact contact1 = new Contact("502535110", null, "irkan.ehmedov@gmail.com", "Ü.Hacıbəyov 195A", baku);
+            Person person = new Person(contact1, "İrkan", "Əhmədov", "Əflatun", DateUtility.getUtilDate("25.09.1989"), male, azerbaijanNationality, "4HWL0AM", null);
             Employee employee = new Employee(person, position1, new Date(), null, headBranch);
             employeeRepository.save(employee);
 

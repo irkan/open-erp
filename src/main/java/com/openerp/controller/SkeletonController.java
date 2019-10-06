@@ -1,11 +1,9 @@
 package com.openerp.controller;
 
 import com.openerp.entity.CurrencyRate;
-import com.openerp.entity.PayrollConfiguration;
 import com.openerp.entity.User;
 import com.openerp.util.Constants;
 import com.openerp.repository.*;
-import com.openerp.util.StringToXML;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -93,6 +91,12 @@ public class SkeletonController {
     EmployeeDetailRepository employeeDetailRepository;
 
     @Autowired
+    WorkingHourRecordEmployeeRepository workingHourRecordEmployeeRepository;
+
+    @Autowired
+    WorkingHourRecordEmployeeIdentifierRepository workingHourRecordEmployeeIdentifierRepository;
+
+    @Autowired
     WorkingHourRecordRepository workingHourRecordRepository;
 
     @Autowired
@@ -124,6 +128,12 @@ public class SkeletonController {
         if(!binding.hasErrors()){
             redirectAttributes.getFlashAttributes().remove(Constants.FORM);
         }
+        return "redirect:"+request.getRequestURI();
+    }
+
+    String mapPost2(Object object, BindingResult binding, RedirectAttributes redirectAttributes){
+        redirectAttributes.addFlashAttribute(Constants.FORM_RESULT_BINDING, binding);
+        redirectAttributes.addFlashAttribute(Constants.FORM, object);
         return "redirect:"+request.getRequestURI();
     }
 
