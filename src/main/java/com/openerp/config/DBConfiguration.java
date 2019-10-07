@@ -195,7 +195,7 @@ public class DBConfiguration {
             dictionaries.add(departmentOrganization);
             Dictionary unitOrganization = new Dictionary("Şöbə", "unit", "flaticon-plus", organizationType);
             dictionaries.add(unitOrganization);
-            Dictionary moveAction = new Dictionary("Göndərilmə", "transfer", null, actionType);
+            Dictionary moveAction = new Dictionary("Nəqliyyat", "transfer", null, actionType);
             dictionaries.add(moveAction);
             Dictionary buyAction = new Dictionary("Alış", "buy", null, actionType);
             dictionaries.add(buyAction);
@@ -205,6 +205,10 @@ public class DBConfiguration {
             dictionaries.add(deletionAction);
             Dictionary cancellationAction = new Dictionary("Ləğv edilmə", "cancellation", null, actionType);
             dictionaries.add(cancellationAction);
+            Dictionary customCostAction = new Dictionary("Gömrük", "custom", null, actionType);
+            dictionaries.add(customCostAction);
+            Dictionary taxExpenseAction = new Dictionary("Vergi", "tax", null, actionType);
+            dictionaries.add(taxExpenseAction);
             Dictionary reason1 = new Dictionary("Xarabdır", "break", null, reasonType);
             dictionaries.add(reason1);
             Dictionary inventoryGroup1 = new Dictionary("İnventar qrup #1", "group1", null, inventoryGroupType);
@@ -287,7 +291,7 @@ public class DBConfiguration {
             dictionaries.add(identifier14);
             Dictionary identifier5 = new Dictionary("Analıq Məzuniyyəti", "AM", "vacation", identifierType);
             dictionaries.add(identifier5);
-            Dictionary identifier13 = new Dictionary("Ezamiyyət", "E", null, identifierType);
+            Dictionary identifier13 = new Dictionary("Ezamiyyət", "E", "business-trip", identifierType);
             dictionaries.add(identifier13);
 
 

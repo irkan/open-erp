@@ -72,7 +72,7 @@ public class HRController extends SkeletonController {
 
         } else if (page.equalsIgnoreCase(Constants.ROUTE.BUSINESS_TRIP)){
             model.addAttribute(Constants.EMPLOYEES, employeeRepository.getEmployeesByContractEndDateIsNull());
-            model.addAttribute(Constants.IDENTIFIERS, dictionaryRepository.getDictionariesByActiveTrueAndAttr2AndDictionaryType_Attr1("vacation", "identifier"));
+            model.addAttribute(Constants.IDENTIFIERS, dictionaryRepository.getDictionariesByActiveTrueAndAttr2AndDictionaryType_Attr1("business-trip", "identifier"));
             model.addAttribute(Constants.LIST, businessTripRepository.getBusinessTripsByActiveTrue());
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new BusinessTrip());

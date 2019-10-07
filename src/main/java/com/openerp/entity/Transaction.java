@@ -21,8 +21,12 @@ public class Transaction {
     private Integer id;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_dictionary_expense_reason_id")
-    private Dictionary reason;
+    @JoinColumn(name = "warehouse_action_id")
+    private Action warehouseAction;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "admin_dictionary_action_id")
+    private Dictionary action;
 
     @Pattern(regexp=".{0,250}",message="Maksimum 250 simvol ola bilər")
     @Column(name = "description")
@@ -69,12 +73,14 @@ public class Transaction {
     @JoinColumn(name = "created_by_admin_user_id")
     private User createdUser;
 
-    public Transaction(@Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String description, Boolean approve) {
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "transaction_id", referencedColumnName = "id")
+    private Transaction transaction;
+
+    public Transaction(Action warehouseAction, Dictionary action, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String description, Boolean approve) {
+        this.warehouseAction = warehouseAction;
+        this.action = action;
         this.description = description;
         this.approve = approve;
     }
-
-
-
-
 }

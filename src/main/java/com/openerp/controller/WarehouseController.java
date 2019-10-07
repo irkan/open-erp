@@ -70,7 +70,7 @@ public class WarehouseController extends SkeletonController {
             action.setInventory(inventory);
             actionRepository.save(action);
             String description = action.getAction().getName()+", "+action.getSupplier().getName()+" -> "+action.getWarehouse().getName()+", "+inventory.getName()+", Say: " + action.getAmount() + " ədəd";
-            Transaction transaction = new Transaction(description, false);
+            Transaction transaction = new Transaction(action, action.getAction(), description, false);
             transaction.setAmount(inventory.getAction().getAmount());
             transactionRepository.save(transaction);
         }

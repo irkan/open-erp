@@ -24,6 +24,7 @@
                                 <tr>
                                     <th>№</th>
                                     <th>ID</th>
+                                    <th>Nədir?</th>
                                     <th>Hesab nömrəsi</th>
                                     <th>Açıqlama</th>
                                     <th>Tarix</th>
@@ -40,6 +41,7 @@
                                     <tr>
                                         <td>${loop.index + 1}</td>
                                         <td><c:out value="${t.id}" /></td>
+                                        <td><c:out value="${t.action.name}" /></td>
                                         <td><c:out value="${t.account.accountNumber}" /></td>
                                         <td><c:out value="${t.description}" /></td>
                                         <td><fmt:formatDate value = "${t.createdDate}" pattern = "dd.MM.yyyy" /></td>

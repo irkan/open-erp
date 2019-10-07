@@ -96,7 +96,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form:form modelAttribute="form" id="form" method="post" action="/hr/vacation" cssClass="form-group">
+                <form:form modelAttribute="form" id="form" method="post" action="/hr/business-trip" cssClass="form-group">
                     <form:input type="hidden" path="id"/>
                     <div class="form-group">
                         <form:label path="employee">Əməkdaş</form:label>
@@ -106,7 +106,7 @@
                         <form:errors path="employee" cssClass="control-label alert alert-danger" />
                     </div>
                     <div class="form-group">
-                        <form:label path="identifier">Məzuniyyətin forması</form:label>
+                        <form:label path="identifier">Ezamiyyət forması</form:label>
                         <form:select  path="identifier" cssClass="custom-select form-control">
                             <form:options items="${identifiers}" itemLabel="name" itemValue="id" />
                         </form:select>
