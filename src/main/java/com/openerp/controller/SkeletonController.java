@@ -192,6 +192,10 @@ public class SkeletonController {
         if(vacationDetail!=null){
             return vacationDetail.getVacation().getIdentifier().getAttr1();
         }
+        BusinessTripDetail businessTripDetail = StaticUtils.getBusinessTripDetailByEmployeeAndBusinessTripDateAndBusinessTrip_Active(employee, date, true);
+        if(businessTripDetail!=null){
+            return businessTripDetail.getBusinessTrip().getIdentifier().getAttr1();
+        }
         return "İG";
     }
 
