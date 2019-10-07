@@ -34,4 +34,25 @@
             int calculateInventoryAmount(java.util.List)
         </function-signature>
     </function>
+    <function>
+        <name>identify</name>
+        <function-class>com.openerp.controller.SkeletonController</function-class>
+        <function-signature>
+            java.lang.String identify(com.openerp.entity.Employee,java.util.Date)
+        </function-signature>
+    </function>
+    <function>
+        <name>generate</name>
+        <function-class>com.openerp.util.DateUtility</function-class>
+        <function-signature>
+            java.util.Date generate(int,int,int)
+        </function-signature>
+    </function>
+    <function>
+        <name>weekDay</name>
+        <function-class>com.openerp.util.DateUtility</function-class>
+        <function-signature>
+            java.lang.String weekDay(int,int,int)
+        </function-signature>
+    </function>
 </taglib>

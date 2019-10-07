@@ -11466,7 +11466,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sInfo": "Showing _START_ to _END_ of _TOTAL_ entries",
+			"sInfo": "Göstərilir _START_ - _END_ ümumi _TOTAL_ məlumat",
 	
 	
 			/**

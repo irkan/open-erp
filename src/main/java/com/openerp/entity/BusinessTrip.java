@@ -1,11 +1,15 @@
 package com.openerp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "hr_business_trip")
@@ -19,6 +23,36 @@ public class BusinessTrip {
     @SequenceGenerator(sequenceName = "aa_hr_sequence", allocationSize = 1, name = "hr_sequence")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "hr_employee_id", nullable = false)
+    private Employee employee;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "admin_dictionary_identifier_id", nullable = false)
+    private Dictionary identifier;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "start_date")
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    private Date startDate;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "end_date")
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    private Date endDate;
+
+    @Pattern(regexp=".{10,25}",message="Minimum 10 maksimum 25 simvol ola bilər")
+    @Column(name = "date_range", nullable = false)
+    private String dateRange;
+
+    @Pattern(regexp=".{5,250}",message="Minimum 5 maksimum 250 simvol ola bilər")
+    @Column(name = "description")
+    private String description;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "businessTrip")
+    private List<BusinessTripDetail> businessTripDetails;
 
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;

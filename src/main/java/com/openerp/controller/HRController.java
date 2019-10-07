@@ -71,6 +71,9 @@ public class HRController extends SkeletonController {
         } else if (page.equalsIgnoreCase(Constants.ROUTE.WORK_ATTENDANCE)){
 
         } else if (page.equalsIgnoreCase(Constants.ROUTE.BUSINESS_TRIP)){
+            model.addAttribute(Constants.EMPLOYEES, employeeRepository.getEmployeesByContractEndDateIsNull());
+            model.addAttribute(Constants.IDENTIFIERS, dictionaryRepository.getDictionariesByActiveTrueAndAttr2AndDictionaryType_Attr1("vacation", "identifier"));
+            model.addAttribute(Constants.LIST, businessTripRepository.getBusinessTripsByActiveTrue());
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new BusinessTrip());
             }
@@ -177,11 +180,38 @@ public class HRController extends SkeletonController {
                     end.add(Calendar.DATE, 1);
 
                     for (Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
-                        vacationDetailRepository.save(new VacationDetail(vacation.getIdentifier().getAttr1(), date, vacation));
+                        vacationDetailRepository.save(new VacationDetail(vacation.getIdentifier().getAttr1(), date, vacation, vacation.getEmployee()));
                     }
                 }
             }
         }
         return mapPost(vacation, binding, redirectAttributes);
+    }
+
+    @PostMapping(value = "/business-trip")
+    public String postBusinessTrip(@ModelAttribute(Constants.FORM) @Validated BusinessTrip businessTrip, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        if(!binding.hasErrors()){
+            String range = businessTrip.getDateRange();
+            if(range.length()>15){
+                String rangeDates[] = range.split("-");
+                businessTrip.setStartDate(DateUtility.getUtilDate(rangeDates[0].trim()));
+                businessTrip.setEndDate(DateUtility.getUtilDate(rangeDates[1].trim()));
+                businessTripRepository.save(businessTrip);
+
+                if(businessTrip.getId()!=null && businessTrip.getStartDate()!=null && businessTrip.getEndDate()!=null){
+                    businessTripDetailRepository.deleteInBatch(businessTripDetailRepository.getBusinessTripDetailsByBusinessTrip_Id(businessTrip.getId()));
+                    Calendar start = Calendar.getInstance();
+                    start.setTime(businessTrip.getStartDate());
+                    Calendar end = Calendar.getInstance();
+                    end.setTime(businessTrip.getEndDate());
+                    end.add(Calendar.DATE, 1);
+
+                    for (Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
+                        businessTripDetailRepository.save(new BusinessTripDetail(businessTrip.getIdentifier().getAttr1(), date, businessTrip, businessTrip.getEmployee()));
+                    }
+                }
+            }
+        }
+        return mapPost(businessTrip, binding, redirectAttributes);
     }
 }

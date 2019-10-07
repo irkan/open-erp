@@ -58,6 +58,7 @@ public class LoginController extends SkeletonController {
             session.setAttribute(Constants.PAGE, "module");
             session.setAttribute(Constants.PARENT_MODULES_MAP, Util.convertParentModulesMap(parentModules));
             session.setAttribute(Constants.PARENT_MODULES, parentModules);
+            session.setAttribute(Constants.VACATION_DETAIL_REPOSITORY, vacationDetailRepository);
             return "redirect:/route/"+parentModules.get(0).getPath();
         }
         model.addAttribute(Constants.ERROR, "true");

@@ -10,9 +10,9 @@ var KTDatatablesBasicBasic = function() {
 			// DOM Layout settings
 			dom: "<'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 dataTables_pager'lp>>",
 
-			lengthMenu: [5, 10, 25, 50],
+			lengthMenu: [5, 10, 25, 50, 75, 100, 200],
 
-			pageLength: 10,
+			pageLength: 25,
 
 			language: {
 				'lengthMenu': 'Display _MENU_',
@@ -21,7 +21,7 @@ var KTDatatablesBasicBasic = function() {
 			columnDefs: [
 				{
 					targets: 0,
-					width: '30px',
+					width: '25px',
 					className: 'dt-center',
 					orderable: false
 				},

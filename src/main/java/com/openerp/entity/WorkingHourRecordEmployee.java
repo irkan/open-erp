@@ -30,8 +30,7 @@ public class WorkingHourRecordEmployee {
     @JoinColumn(name = "hr_employee_id")
     private Employee employee;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "workingHourRecordEmployee")
+    @OneToMany(mappedBy = "workingHourRecordEmployee", fetch = FetchType.EAGER)
     private List<WorkingHourRecordEmployeeIdentifier> workingHourRecordEmployeeIdentifiers;
 
     @Pattern(regexp=".{0,255}",message="Maksimum 255 simvol ola bilər")

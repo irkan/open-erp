@@ -81,16 +81,17 @@ public class PayrollController extends SkeletonController {
                     workingHourRecordRepository.save(workingHourRecord);
                     List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization_Id(workingHourRecord.getBranch().getId());
                     List<WorkingHourRecordEmployee> workingHourRecordEmployees = new ArrayList<>();
+                    /*
                     String startDate = "01."+(workingHourRecord.getMonth()>9?workingHourRecord.getMonth():"0"+workingHourRecord.getMonth())+"." + workingHourRecord.getYear();
                     String endDate = daysInMonth + "."+(workingHourRecord.getMonth()>9?workingHourRecord.getMonth():"0"+workingHourRecord.getMonth())+"." + workingHourRecord.getYear();
-                    List<Vacation> vacations = vacationRepository.getVacationsByActiveTrueAndStartDateAndEndDate(DateUtility.getUtilDate(startDate), DateUtility.getUtilDate(endDate));
+                    */
                     for(Employee employee: employees){
                         WorkingHourRecordEmployee workingHourRecordEmployee = new WorkingHourRecordEmployee(workingHourRecord, employee, employee.getPerson().getFullName(), employee.getPosition().getName(), employee.getOrganization().getName());
                         workingHourRecordEmployeeRepository.save(workingHourRecordEmployee);
                         List<WorkingHourRecordEmployeeIdentifier> workingHourRecordEmployeeIdentifiers = new ArrayList<>();
                         for(int i=1; i<=daysInMonth; i++){
-                            String identifier = Util.getIdentifier(vacations, null, null, i, employee);
-                            WorkingHourRecordEmployeeIdentifier workingHourRecordEmployeeIdentifier = new WorkingHourRecordEmployeeIdentifier(workingHourRecordEmployee, identifier);
+                            Date date = DateUtility.generate(i, workingHourRecord.getMonth(), workingHourRecord.getYear());
+                            WorkingHourRecordEmployeeIdentifier workingHourRecordEmployeeIdentifier = new WorkingHourRecordEmployeeIdentifier(workingHourRecordEmployee, SkeletonController.identify(employee, date), i, date.getDay());
                             workingHourRecordEmployeeIdentifiers.add(workingHourRecordEmployeeIdentifier);
                         }
                         workingHourRecordEmployee.setWorkingHourRecordEmployeeIdentifiers(workingHourRecordEmployeeIdentifiers);
@@ -100,7 +101,6 @@ public class PayrollController extends SkeletonController {
                 }
                 whr = workingHourRecordRepository.getWorkingHourRecordByActiveTrueAndMonthAndYearAndBranch_Id(workingHourRecord.getMonth(), workingHourRecord.getYear(), workingHourRecord.getBranch().getId());
                 whr.setWorkingHourRecordEmployees(workingHourRecordEmployeeRepository.getWorkingHourRecordEmployeesByWorkingHourRecord_Id(whr.getId()));
-                redirectAttributes.addFlashAttribute(Constants.LIST, whr.getWorkingHourRecordEmployees());
             }
         }
         return mapPost2(whr, binding, redirectAttributes);

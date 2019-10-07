@@ -87,18 +87,23 @@
                                    id="kt_table_3">
                                 <thead>
                                 <tr>
-                                    <th rowspan="2">№</th>
-                                    <th rowspan="2"><div style="width: 220px !important;">Ad Soyad Ata adı</div></th>
-                                    <th colspan="2" class="text-center" style="letter-spacing: 4px;">Əməkdaş</th>
+                                    <th rowspan="3">№</th>
+                                    <th rowspan="3" ><div style="width: 220px !important;">Ad Soyad Ata adı</div></th>
+                                    <th colspan="2" rowspan="2" class="text-center" style="letter-spacing: 4px;">Əməkdaş</th>
                                     <th colspan="<c:out value="${days_in_month}"/>" class="text-center" style="letter-spacing: 4px;">
-                                        Ayın günləri
+                                        Ayın və həftənin günləri
                                     </th>
+                                </tr>
+                                <tr>
+                                    <c:forEach var = "i" begin = "1" end = "${days_in_month}">
+                                        <th class="bg-info text-center kt-padding-1" style="border: none; color: white;"><c:out value = "${utl:weekDay(i, form.month, form.year)}"/></th>
+                                    </c:forEach>
                                 </tr>
                                 <tr>
                                     <th class="bg-warning" style="border: none;"><div style="width: 180px !important;">Vəzifə</div></th>
                                     <th class="bg-warning" style="border: none;"><div style="width: 120px !important;">Struktur</div></th>
                                     <c:forEach var = "i" begin = "1" end = "${days_in_month}">
-                                        <th class="bg-info text-center kt-padding-0" style="border: none; color: white"><c:out value = "${i}"/></th>
+                                        <th class="bg-info text-center kt-padding-0" style="border: none; color: white;"><c:out value = "${i}"/></th>
                                     </c:forEach>
                                 </tr>
                                 </thead>
@@ -119,10 +124,10 @@
                                         <td>
                                             <c:out value="${t.organization}"/>
                                         </td>
-                                        <c:forEach var = "i" begin = "1" end = "${days_in_month}">
-                                            <td class="text-center kt-padding-0">
+                                        <c:forEach var="p" items="${t.workingHourRecordEmployeeIdentifiers}" varStatus="loop">
+                                            <td class="text-center kt-padding-0">  <%--<c:out value="${utl:identify(t.employee, utl:generate(i, t.month, t.year))}"/>--%>
                                                 <div class="typeahead">
-                                                    <input type="text" name="identify" class="type-ahead" value="İG">
+                                                    <input type="text" name="identify" class="type-ahead" value="<c:out value="${p.identifier}"/>">
                                                 </div>
                                             </td>
                                         </c:forEach>

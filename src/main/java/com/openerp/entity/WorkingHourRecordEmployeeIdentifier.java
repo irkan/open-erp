@@ -28,8 +28,16 @@ public class WorkingHourRecordEmployeeIdentifier {
     @Column(name = "identifier")
     private String identifier;
 
-    public WorkingHourRecordEmployeeIdentifier(WorkingHourRecordEmployee workingHourRecordEmployee, @Pattern(regexp = ".{0,8}", message = "Maksimum 8 simvol ola bilər") String identifier) {
+    @Column(name = "month_day")
+    private int monthDay;
+
+    @Column(name = "week_day")
+    private int weekDay;
+
+    public WorkingHourRecordEmployeeIdentifier(WorkingHourRecordEmployee workingHourRecordEmployee, @Pattern(regexp = ".{0,8}", message = "Maksimum 8 simvol ola bilər") String identifier, int weekDay, int monthDay) {
         this.workingHourRecordEmployee = workingHourRecordEmployee;
         this.identifier = identifier;
+        this.monthDay = monthDay;
+        this.weekDay = weekDay;
     }
 }

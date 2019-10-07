@@ -1,7 +1,7 @@
 package com.openerp.controller;
 
-import com.openerp.entity.CurrencyRate;
-import com.openerp.entity.User;
+import com.openerp.entity.*;
+import com.openerp.service.StaticUtils;
 import com.openerp.util.Constants;
 import com.openerp.repository.*;
 import org.apache.log4j.Logger;
@@ -11,8 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 
 @Controller
 public class SkeletonController {
@@ -106,10 +108,23 @@ public class SkeletonController {
     VacationDetailRepository vacationDetailRepository;
 
     @Autowired
+    BusinessTripRepository businessTripRepository;
+
+    @Autowired
+    BusinessTripDetailRepository businessTripDetailRepository;
+
+
+    @Autowired
     HttpServletRequest request;
 
     @Autowired
     HttpSession session;
+
+    @PostConstruct
+    public void init() {
+        StaticUtils.setConfig(vacationDetailRepository, businessTripDetailRepository);
+    }
+
 
     protected void checkSession() throws Exception {
         if(session.getAttribute(Constants.USER) == null) {
@@ -170,6 +185,14 @@ public class SkeletonController {
             return price*(-1.0d);
         }
         return price;
+    }
+
+    public static String identify(Employee employee, Date date){
+        VacationDetail vacationDetail = StaticUtils.getVacationDetailByEmployeeAndVacationDateAndVacation_Active(employee, date, true);
+        if(vacationDetail!=null){
+            return vacationDetail.getVacation().getIdentifier().getAttr1();
+        }
+        return "İG";
     }
 
 }

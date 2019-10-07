@@ -11,6 +11,5 @@ import java.util.List;
 
 public interface VacationRepository extends JpaRepository<Vacation, Integer> {
     List<Vacation> getVacationsByActiveTrue();
-    List<Vacation> getVacationsByActiveTrueAndStartDateAndEndDate(Date startDate, Date endDate);
     Vacation getVacationById(int id);
 }
