@@ -22,6 +22,16 @@ public class RandomString {
         return sb.toString(); 
     }
 
+    public static String getNumeric(int n){
+        String NumericStringSuffix = "0123456789";
+        StringBuilder sb = new StringBuilder(n);
+        for (int i = 0; i < n; i++) {
+            int index = (int)(NumericStringSuffix.length() * Math.random());
+            sb.append(NumericStringSuffix.charAt(index));
+        }
+        return sb.toString();
+    }
+
     public static void main(String[] args) {
         System.out.println(getAlphaNumeric(16));
     }

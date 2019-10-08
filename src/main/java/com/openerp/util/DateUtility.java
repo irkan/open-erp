@@ -30,6 +30,11 @@ public class DateUtility {
         return dateFormat.format(date);
     }
 
+    public static String getFormattedDateddMMyy(Date date) {
+        DateFormat dateFormat = new SimpleDateFormat("ddMMyy");
+        return dateFormat.format(date);
+    }
+
     public static String getFormattedDateTime(Date date) {
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy hh:mm");
         return dateFormat.format(date);

@@ -126,4 +126,8 @@ public class Util {
         }
         return currencyRates;
     }
+
+    public static String generateBarcode(int groupId){
+        return groupId+DateUtility.getFormattedDateddMMyy(new Date())+RandomString.getNumeric(4);
+    }
 }

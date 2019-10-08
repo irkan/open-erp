@@ -65,6 +65,9 @@ public class WarehouseController extends SkeletonController {
     @PostMapping(value = "/inventory")
     public String postInventory(@ModelAttribute(Constants.FORM) @Validated Inventory inventory, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         if(!binding.hasErrors()){
+            if(inventory.getGroup().getId()!=null && (inventory.getBarcode()==null || inventory.getBarcode().trim().length()==0)){
+                inventory.setBarcode(Util.generateBarcode(inventory.getGroup().getId()));
+            }
             inventoryRepository.save(inventory);
             Action action = inventory.getAction();
             action.setInventory(inventory);
