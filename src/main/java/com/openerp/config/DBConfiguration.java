@@ -293,6 +293,8 @@ public class DBConfiguration {
             dictionaries.add(identifier5);
             Dictionary identifier13 = new Dictionary("Ezamiyyət", "E", "business-trip", identifierType);
             dictionaries.add(identifier13);
+            Dictionary identifier15 = new Dictionary("Xəstəlik", "X", "illness", identifierType);
+            dictionaries.add(identifier15);
 
 
             dictionaryTypeRepository.saveAll(types);
@@ -353,14 +355,16 @@ public class DBConfiguration {
             modules.add(shortenedWorkingDay);
             Module workAttendance = new Module("İşə davamiyyət", "İşə davamiyyət", "work-attendance", "la la-calendar", module1);
             modules.add(workAttendance);
+            Module vacation = new Module("Məzuniyyət", "Məzuniyyət", "vacation", "la la-calendar", workAttendance);
+            modules.add(vacation);
+            Module businessTrip = new Module("Ezamiyyət", "Ezamiyyət", "business-trip", "la la-calendar", workAttendance);
+            modules.add(businessTrip);
+            Module illness = new Module("Xəstəlik", "Xəstəlik", "illness", "la la-calendar", workAttendance);
+            modules.add(illness);
             Module payroll = new Module("Əmək haqqı", "Maaşların hesablanması", "payroll", "flaticon-security", null);
             modules.add(payroll);
             Module workingHourRecord = new Module("İş vaxtının uçotu", "Maaşların hesablanması", "working-hour-record", "flaticon-security", payroll);
             modules.add(workingHourRecord);
-            Module vacation = new Module("Məzuniyyət", "Məzuniyyət", "vacation", "la la-calendar", module1);
-            modules.add(vacation);
-            Module businessTrip = new Module("Ezamiyyət", "Ezamiyyət", "business-trip", "la la-calendar", module1);
-            modules.add(businessTrip);
             Module payrollConfiguration = new Module("Sazlama", "Sazlama", "payroll-configuration", "flaticon2-settings", payroll);
             modules.add(payrollConfiguration);
 
@@ -382,6 +386,8 @@ public class DBConfiguration {
             operations.add(export);
             Operation approve = new Operation("Təsdiq", "approve", "flaticon2-check-mark");
             operations.add(approve);
+            Operation cancel = new Operation("Təsdiqi ləğv", "cancel", "flaticon2-cancel-music");
+            operations.add(cancel);
             Operation upload = new Operation("Yüklə", "upload", "flaticon-upload");
             operations.add(upload);
             Operation reload = new Operation("Yenilə", "reload", "flaticon2-reload");
@@ -390,6 +396,8 @@ public class DBConfiguration {
             operations.add(actions);
             Operation search = new Operation("Axtar", "search", "la la-search");
             operations.add(search);
+            Operation save = new Operation("Yadda saxla", "save", "la la-save");
+            operations.add(save);
 
             operationRepository.saveAll(operations);
 
@@ -429,6 +437,8 @@ public class DBConfiguration {
             moduleOperations.add(createModuleOperation19);
             ModuleOperation createModuleOperation20 = new ModuleOperation(payrollConfiguration, create, null);
             moduleOperations.add(createModuleOperation20);
+            ModuleOperation createModuleOperation21 = new ModuleOperation(illness, create, null);
+            moduleOperations.add(createModuleOperation21);
 
 
             ModuleOperation editModuleOperation1 = new ModuleOperation(subModule1, edit, null);
@@ -463,6 +473,8 @@ public class DBConfiguration {
             moduleOperations.add(editModuleOperation19);
             ModuleOperation editModuleOperation20 = new ModuleOperation(payrollConfiguration, edit, null);
             moduleOperations.add(editModuleOperation20);
+            ModuleOperation editModuleOperation21 = new ModuleOperation(illness, edit, null);
+            moduleOperations.add(editModuleOperation21);
 
             ModuleOperation deleteModuleOperation1 = new ModuleOperation(subModule1, delete, null);
             moduleOperations.add(deleteModuleOperation1);
@@ -498,6 +510,10 @@ public class DBConfiguration {
             moduleOperations.add(deleteModuleOperation19);
             ModuleOperation deleteModuleOperation20 = new ModuleOperation(payrollConfiguration, delete, null);
             moduleOperations.add(deleteModuleOperation20);
+            ModuleOperation deleteModuleOperation21 = new ModuleOperation(workingHourRecord, delete, null);
+            moduleOperations.add(deleteModuleOperation21);
+            ModuleOperation deleteModuleOperation22 = new ModuleOperation(illness, delete, null);
+            moduleOperations.add(deleteModuleOperation22);
 
             ModuleOperation viewModuleOperation6 = new ModuleOperation(subModule6, view, null);
             moduleOperations.add(viewModuleOperation6);
@@ -554,9 +570,13 @@ public class DBConfiguration {
             moduleOperations.add(exportModuleOperation16);
             ModuleOperation exportModuleOperation17 = new ModuleOperation(workAttendance, export, null);
             moduleOperations.add(exportModuleOperation17);
+            ModuleOperation exportModuleOperation18 = new ModuleOperation(workingHourRecord, export, null);
+            moduleOperations.add(exportModuleOperation18);
 
             ModuleOperation approveModuleOperation3 = new ModuleOperation(transaction, approve, null);
             moduleOperations.add(approveModuleOperation3);
+            ModuleOperation approveModuleOperation4 = new ModuleOperation(workingHourRecord, approve, null);
+            moduleOperations.add(approveModuleOperation4);
 
             ModuleOperation uploadModuleOperation1 = new ModuleOperation(nonWorkingDay, upload, null);
             moduleOperations.add(uploadModuleOperation1);
@@ -571,6 +591,12 @@ public class DBConfiguration {
 
             ModuleOperation searchModuleOperation1 = new ModuleOperation(workingHourRecord, search, null);
             moduleOperations.add(searchModuleOperation1);
+
+            ModuleOperation saveModuleOperation1 = new ModuleOperation(workingHourRecord, save, null);
+            moduleOperations.add(saveModuleOperation1);
+
+            ModuleOperation cancelModuleOperation1 = new ModuleOperation(workingHourRecord, cancel, null);
+            moduleOperations.add(cancelModuleOperation1);
 
             moduleOperationRepository.saveAll(moduleOperations);
 
@@ -682,6 +708,8 @@ public class DBConfiguration {
             userModuleOperations.add(userCreateModuleOperation19);
             UserModuleOperation userCreateModuleOperation20 = new UserModuleOperation(user, createModuleOperation20);
             userModuleOperations.add(userCreateModuleOperation20);
+            UserModuleOperation userCreateModuleOperation21 = new UserModuleOperation(user, createModuleOperation21);
+            userModuleOperations.add(userCreateModuleOperation21);
 
             UserModuleOperation userEditModuleOperation1 = new UserModuleOperation(user, editModuleOperation1);
             userModuleOperations.add(userEditModuleOperation1);
@@ -715,6 +743,8 @@ public class DBConfiguration {
             userModuleOperations.add(userEditModuleOperation19);
             UserModuleOperation userEditModuleOperation20 = new UserModuleOperation(user, editModuleOperation20);
             userModuleOperations.add(userEditModuleOperation20);
+            UserModuleOperation userEditModuleOperation21 = new UserModuleOperation(user, editModuleOperation21);
+            userModuleOperations.add(userEditModuleOperation21);
 
             UserModuleOperation userDeleteModuleOperation1 = new UserModuleOperation(user, deleteModuleOperation1);
             userModuleOperations.add(userDeleteModuleOperation1);
@@ -750,6 +780,10 @@ public class DBConfiguration {
             userModuleOperations.add(userDeleteModuleOperation19);
             UserModuleOperation userDeleteModuleOperation20 = new UserModuleOperation(user, deleteModuleOperation20);
             userModuleOperations.add(userDeleteModuleOperation20);
+            UserModuleOperation userDeleteModuleOperation21 = new UserModuleOperation(user, deleteModuleOperation21);
+            userModuleOperations.add(userDeleteModuleOperation21);
+            UserModuleOperation userDeleteModuleOperation22 = new UserModuleOperation(user, deleteModuleOperation22);
+            userModuleOperations.add(userDeleteModuleOperation22);
 
             UserModuleOperation userExportModuleOperation1 = new UserModuleOperation(user, exportModuleOperation1);
             userModuleOperations.add(userExportModuleOperation1);
@@ -781,6 +815,8 @@ public class DBConfiguration {
             userModuleOperations.add(userExportModuleOperation16);
             UserModuleOperation userExportModuleOperation17 = new UserModuleOperation(user, exportModuleOperation17);
             userModuleOperations.add(userExportModuleOperation17);
+            UserModuleOperation userExportModuleOperation18 = new UserModuleOperation(user, exportModuleOperation18);
+            userModuleOperations.add(userExportModuleOperation18);
 
             UserModuleOperation userViewModuleOperation6 = new UserModuleOperation(user, viewModuleOperation6);
             userModuleOperations.add(userViewModuleOperation6);
@@ -809,6 +845,8 @@ public class DBConfiguration {
 
             UserModuleOperation userApproveModuleOperation3 = new UserModuleOperation(user, approveModuleOperation3);
             userModuleOperations.add(userApproveModuleOperation3);
+            UserModuleOperation userApproveModuleOperation4 = new UserModuleOperation(user, approveModuleOperation4);
+            userModuleOperations.add(userApproveModuleOperation4);
 
             UserModuleOperation userUploadModuleOperation1 = new UserModuleOperation(user, uploadModuleOperation1);
             userModuleOperations.add(userUploadModuleOperation1);
@@ -823,6 +861,12 @@ public class DBConfiguration {
 
             UserModuleOperation userSearchModuleOperation1 = new UserModuleOperation(user, searchModuleOperation1);
             userModuleOperations.add(userSearchModuleOperation1);
+
+            UserModuleOperation userSaveModuleOperation1 = new UserModuleOperation(user, saveModuleOperation1);
+            userModuleOperations.add(userSaveModuleOperation1);
+
+            UserModuleOperation userCancelModuleOperation1 = new UserModuleOperation(user, cancelModuleOperation1);
+            userModuleOperations.add(userCancelModuleOperation1);
 
             userModuleOperationRepository.saveAll(userModuleOperations);
 

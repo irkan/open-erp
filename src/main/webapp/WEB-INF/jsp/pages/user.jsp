@@ -106,7 +106,11 @@
                     </table>
                 </c:when>
                 <c:otherwise>
-                    Məlumat yoxdur
+                    <div class="row">
+                                <div class="col-md-12 text-center" style="letter-spacing: 10px;">
+                                    Məlumat yoxdur
+                                </div>
+                            </div>
                 </c:otherwise>
             </c:choose>
 

@@ -38,6 +38,17 @@ public class WorkingHourRecord {
     @OneToMany(mappedBy = "workingHourRecord")
     private List<WorkingHourRecordEmployee> workingHourRecordEmployees;
 
+    @Column(name = "is_approve", nullable = false, columnDefinition="boolean default true")
+    private Boolean approve = false;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "approve_date")
+    private Date approveDate;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "approved_by_admin_user_id")
+    private User approvedUser;
+
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;
 

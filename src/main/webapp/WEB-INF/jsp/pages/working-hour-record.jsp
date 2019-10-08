@@ -27,14 +27,14 @@
         <div class="col-lg-12">
             <div class="kt-portlet kt-portlet--mobile">
                 <form:form modelAttribute="form" id="form" method="post" action="/payroll/working-hour-record" cssClass="form-group">
-                    <form:hidden path="id"/>
+                    <input name="id" type="hidden" value="<c:out value="${form.id}"/>" />
                 <c:set var="search" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'search')}"/>
                 <c:choose>
                     <c:when test="${search.status}">
                         <div class="kt-portlet__head kt-portlet__head--lg">
                             <div class="kt-portlet__head-title" style="width: 100%">
                                 <div class="row">
-                                    <div class="col-sm-3 offset-sm-1">
+                                    <div class="col-sm-3">
                                         <div class="form-group">
                                             <form:label path="branch">&nbsp;</form:label>
                                             <form:select  path="branch" cssClass="custom-select form-control">
@@ -52,12 +52,12 @@
                                             <input name="monthYear" class="form-control" type="month" value="<c:out value="${form.monthYear}"/>" />
                                         </div>
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-2">
                                         <label>&nbsp;</label>
                                         <div class="form-group">
                                             <a href="#" onclick="submit($('#form'))" class="btn btn-brand btn-elevate btn-icon-sm" title="<c:out value="${search.object.name}"/>">
                                                 <i class="la <c:out value="${search.object.icon}"/>"></i>
-                                                Axtar
+                                                <c:out value="${search.object.name}"/>
                                             </a>
                                             <button type="reset" class="btn btn-secondary btn-secondary--icon">
                                                 <i class="la la-close"></i>
@@ -65,13 +65,53 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-4 text-right">
                                         <label>&nbsp;</label>
                                         <div class="form-group">
-                                            <a href="#" onclick="submit($('#form'))" class="btn btn-warning btn-elevate btn-icon-sm" title="<c:out value="${search.object.name}"/>">
-                                                <i class="la <c:out value="${search.object.icon}"/>"></i>
-                                                Yadda Saxla
-                                            </a>
+                                            <c:set var="save" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'save')}"/>
+                                            <c:choose>
+                                                <c:when test="${save.status}">
+                                                    <c:if test="${not empty form.workingHourRecordEmployees}">
+                                                        <a href="#" onclick="saveWHR($('#form'))" class="btn btn-warning btn-elevate btn-icon-sm" title="<c:out value="${save.object.name}"/>">
+                                                            <i class="la <c:out value="${save.object.icon}"/>"></i>
+                                                            <c:out value="${save.object.name}"/>
+                                                        </a>
+                                                    </c:if>
+                                                </c:when>
+                                            </c:choose>
+                                            <c:set var="approve" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
+                                            <c:choose>
+                                                <c:when test="${approve.status}">
+                                                    <c:if test="${not empty form.workingHourRecordEmployees and !form.approve}">
+                                                        <a href="#" onclick="saveWHR($('#form'))" class="btn btn-success btn-elevate btn-icon-sm" title="<c:out value="${approve.object.name}"/>">
+                                                            <i class="la <c:out value="${approve.object.icon}"/>"></i>
+                                                            <c:out value="${approve.object.name}"/>
+                                                        </a>
+                                                    </c:if>
+                                                </c:when>
+                                            </c:choose>
+                                            <c:set var="cancel" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'cancel')}"/>
+                                            <c:choose>
+                                                <c:when test="${cancel.status}">
+                                                    <c:if test="${not empty form.workingHourRecordEmployees and !form.approve}">
+                                                        <a href="#" onclick="saveWHR($('#form'))" class="btn btn-dark btn-elevate btn-icon-sm" title="<c:out value="${cancel.object.name}"/>">
+                                                            <i class="la <c:out value="${cancel.object.icon}"/>"></i>
+                                                            <c:out value="${cancel.object.name}"/>
+                                                        </a>
+                                                    </c:if>
+                                                </c:when>
+                                            </c:choose>
+                                            <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
+                                            <c:choose>
+                                                <c:when test="${delete.status}">
+                                                    <c:if test="${not empty form.workingHourRecordEmployees}">
+                                                        <a href="javascript:deleteData('<c:out value="${form.id}" />', '<c:out value="${form.month}"/>.<c:out value="${form.year}"/> tarixli iş vaxtının uçotu ');" class="btn btn-danger btn-elevate btn-icon-sm" title="<c:out value="${delete.object.name}"/>">
+                                                            <i class="la <c:out value="${delete.object.icon}"/>"></i>
+                                                            <c:out value="${delete.object.name}"/>
+                                                        </a>
+                                                    </c:if>
+                                                </c:when>
+                                            </c:choose>
                                         </div>
                                     </div>
                                 </div>
@@ -83,8 +123,7 @@
 
                     <c:choose>
                         <c:when test="${not empty form.workingHourRecordEmployees}">
-                            <table class="table table-striped- table-bordered table-hover table-checkable"
-                                   id="kt_table_3">
+                            <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_3">
                                 <thead>
                                 <tr>
                                     <th rowspan="3">№</th>
@@ -96,14 +135,14 @@
                                 </tr>
                                 <tr>
                                     <c:forEach var = "i" begin = "1" end = "${days_in_month}">
-                                        <th class="bg-info text-center kt-padding-1" style="border: none; color: white;"><c:out value = "${utl:weekDay(i, form.month, form.year)}"/></th>
+                                        <th class="bg-info text-center kt-padding-1" style="border: none; color: white;"><c:out value = "${i}"/></th>
                                     </c:forEach>
                                 </tr>
                                 <tr>
                                     <th class="bg-warning" style="border: none;"><div style="width: 180px !important;">Vəzifə</div></th>
                                     <th class="bg-warning" style="border: none;"><div style="width: 120px !important;">Struktur</div></th>
                                     <c:forEach var = "i" begin = "1" end = "${days_in_month}">
-                                        <th class="bg-info text-center kt-padding-0" style="border: none; color: white;"><c:out value = "${i}"/></th>
+                                        <th class="bg-info text-center kt-padding-0" style="border: none; color: white;"><c:out value = "${utl:weekDay(i, form.month, form.year)}"/></th>
                                     </c:forEach>
                                 </tr>
                                 </thead>
@@ -112,8 +151,12 @@
                                     <tr>
                                         <td class="text-center">
                                             ${loop.index + 1}
-                                            <input type="hidden" name="id" value="<c:out value="${t.id}"/>"/>
-                                            <input type="hidden" name="employee-id" value="<c:out value="${t.id}"/>"/>
+                                            <input type="hidden" name="workingHourRecordEmployees[${loop.index}].id" value="<c:out value="${t.id}"/>"/>
+                                            <input type="hidden" name="workingHourRecordEmployees[${loop.index}].workingHourRecord" value="<c:out value="${form.id}"/>"/>
+                                            <input type="hidden" name="workingHourRecordEmployees[${loop.index}].employee.id" value="<c:out value="${t.employee.id}"/>"/>
+                                            <input type="hidden" name="workingHourRecordEmployees[${loop.index}].fullName" value="<c:out value="${t.fullName}"/>"/>
+                                            <input type="hidden" name="workingHourRecordEmployees[${loop.index}].position" value="<c:out value="${t.position}"/>"/>
+                                            <input type="hidden" name="workingHourRecordEmployees[${loop.index}].organization" value="<c:out value="${t.organization}"/>"/>
                                         </td>
                                         <th>
                                             <c:out value="${t.fullName}"/>
@@ -124,10 +167,14 @@
                                         <td>
                                             <c:out value="${t.organization}"/>
                                         </td>
-                                        <c:forEach var="p" items="${t.workingHourRecordEmployeeIdentifiers}" varStatus="loop">
-                                            <td class="text-center kt-padding-0">  <%--<c:out value="${utl:identify(t.employee, utl:generate(i, t.month, t.year))}"/>--%>
+                                        <c:forEach var="p" items="${t.workingHourRecordEmployeeIdentifiers}" varStatus="count">
+                                            <td class="text-center kt-padding-0">
                                                 <div class="typeahead">
-                                                    <input type="text" name="identify" class="type-ahead" value="<c:out value="${p.identifier}"/>">
+                                                    <input type="hidden" name="workingHourRecordEmployees[${loop.index}].workingHourRecordEmployeeIdentifiers[${count.index}].id" value="<c:out value="${p.id}"/>"/>
+                                                    <input type="hidden" name="workingHourRecordEmployees[${loop.index}].workingHourRecordEmployeeIdentifiers[${count.index}].workingHourRecordEmployee" value="<c:out value="${t.id}"/>"/>
+                                                    <input type="hidden" name="workingHourRecordEmployees[${loop.index}].workingHourRecordEmployeeIdentifiers[${count.index}].weekDay" value="<c:out value="${p.weekDay}"/>"/>
+                                                    <input type="hidden" name="workingHourRecordEmployees[${loop.index}].workingHourRecordEmployeeIdentifiers[${count.index}].monthDay" value="<c:out value="${p.monthDay}"/>"/>
+                                                    <input type="text" class="type-ahead" name="workingHourRecordEmployees[${loop.index}].workingHourRecordEmployeeIdentifiers[${count.index}].identifier" value="<c:out value="${p.identifier}"/>"/>
                                                 </div>
                                             </td>
                                         </c:forEach>
@@ -137,7 +184,11 @@
                             </table>
                         </c:when>
                         <c:otherwise>
-                            Məlumat yoxdur
+                            <div class="row">
+                                <div class="col-md-12 text-center" style="letter-spacing: 10px;">
+                                    Məlumat yoxdur
+                                </div>
+                            </div>
                         </c:otherwise>
                     </c:choose>
                 </div>
@@ -278,6 +329,11 @@
 
     KTTypeahead.init();
     KTDatatablesBasicScrollable.init();
+
+    function saveWHR(form){
+        $(form).attr("action", "/payroll/working-hour-record/save");
+        submit(form)
+    }
 </script>
 
 

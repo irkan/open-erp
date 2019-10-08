@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface WorkingHourRecordRepository extends JpaRepository<WorkingHourRecord, Integer> {
     WorkingHourRecord getWorkingHourRecordByActiveTrueAndMonthAndYearAndBranch_Id(int month, int year, int branch);
+    WorkingHourRecord getWorkingHourRecordById(int id);
 }

@@ -84,6 +84,13 @@ public class HRController extends SkeletonController {
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Vacation());
             }
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.ILLNESS)){
+            model.addAttribute(Constants.EMPLOYEES, employeeRepository.getEmployeesByContractEndDateIsNull());
+            model.addAttribute(Constants.IDENTIFIERS, dictionaryRepository.getDictionariesByActiveTrueAndAttr2AndDictionaryType_Attr1("illness", "identifier"));
+            model.addAttribute(Constants.LIST, illnessRepository.getIllnessesByActiveTrue());
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new Illness());
+            }
         }
         return "layout";
     }
@@ -213,5 +220,32 @@ public class HRController extends SkeletonController {
             }
         }
         return mapPost(businessTrip, binding, redirectAttributes);
+    }
+
+    @PostMapping(value = "/illness")
+    public String postIllness(@ModelAttribute(Constants.FORM) @Validated Illness illness, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        if(!binding.hasErrors()){
+            String range = illness.getDateRange();
+            if(range.length()>15){
+                String rangeDates[] = range.split("-");
+                illness.setStartDate(DateUtility.getUtilDate(rangeDates[0].trim()));
+                illness.setEndDate(DateUtility.getUtilDate(rangeDates[1].trim()));
+                illnessRepository.save(illness);
+
+                if(illness.getId()!=null && illness.getStartDate()!=null && illness.getEndDate()!=null){
+                    illnessDetailRepository.deleteInBatch(illnessDetailRepository.getIllnessDetailsByIllness_Id(illness.getId()));
+                    Calendar start = Calendar.getInstance();
+                    start.setTime(illness.getStartDate());
+                    Calendar end = Calendar.getInstance();
+                    end.setTime(illness.getEndDate());
+                    end.add(Calendar.DATE, 1);
+
+                    for (Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
+                        illnessDetailRepository.save(new IllnessDetail(illness.getIdentifier().getAttr1(), date, illness, illness.getEmployee()));
+                    }
+                }
+            }
+        }
+        return mapPost(illness, binding, redirectAttributes);
     }
 }

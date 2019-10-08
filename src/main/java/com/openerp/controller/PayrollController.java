@@ -105,4 +105,16 @@ public class PayrollController extends SkeletonController {
         }
         return mapPost2(whr, binding, redirectAttributes);
     }
+
+    @PostMapping(value = "/working-hour-record/save")
+    public String postWorkingHourRecordSave(@ModelAttribute(Constants.FORM) @Validated WorkingHourRecord workingHourRecord, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        if(!binding.hasErrors()){
+            for(WorkingHourRecordEmployee whre: workingHourRecord.getWorkingHourRecordEmployees()){
+                for(WorkingHourRecordEmployeeIdentifier whrei: whre.getWorkingHourRecordEmployeeIdentifiers()){
+                    workingHourRecordEmployeeIdentifierRepository.save(whrei);
+                }
+            }
+        }
+        return mapPost(workingHourRecord, binding, redirectAttributes, "/payroll/working-hour-record");
+    }
 }

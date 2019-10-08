@@ -89,6 +89,10 @@ public class DeleteController extends SkeletonController {
             Vacation vacation = vacationRepository.getVacationById(Integer.parseInt(id));
             vacation.setActive(false);
             vacationRepository.save(vacation);
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.WORKING_HOUR_RECORD)){
+            WorkingHourRecord workingHourRecord = workingHourRecordRepository.getWorkingHourRecordById(Integer.parseInt(id));
+            workingHourRecord.setActive(false);
+            workingHourRecordRepository.save(workingHourRecord);
         }
         return "redirect:/"+parent+"/"+path;
     }

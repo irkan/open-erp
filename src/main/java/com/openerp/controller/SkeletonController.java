@@ -113,6 +113,12 @@ public class SkeletonController {
     @Autowired
     BusinessTripDetailRepository businessTripDetailRepository;
 
+    @Autowired
+    IllnessRepository illnessRepository;
+
+    @Autowired
+    IllnessDetailRepository illnessDetailRepository;
+
 
     @Autowired
     HttpServletRequest request;
@@ -122,7 +128,7 @@ public class SkeletonController {
 
     @PostConstruct
     public void init() {
-        StaticUtils.setConfig(vacationDetailRepository, businessTripDetailRepository);
+        StaticUtils.setConfig(vacationDetailRepository, businessTripDetailRepository, illnessDetailRepository);
     }
 
 
@@ -195,6 +201,10 @@ public class SkeletonController {
         BusinessTripDetail businessTripDetail = StaticUtils.getBusinessTripDetailByEmployeeAndBusinessTripDateAndBusinessTrip_Active(employee, date, true);
         if(businessTripDetail!=null){
             return businessTripDetail.getBusinessTrip().getIdentifier().getAttr1();
+        }
+        IllnessDetail illnessDetail = StaticUtils.getIllnessDetailByEmployeeAndIllnessDateAndIllness_Active(employee, date, true);
+        if(illnessDetail!=null){
+            return illnessDetail.getIllness().getIdentifier().getAttr1();
         }
         return "İG";
     }
