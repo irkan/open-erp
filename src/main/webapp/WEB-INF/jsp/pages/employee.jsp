@@ -170,51 +170,81 @@
                     </div>
                     <hr style="width: 100%"/>
                     <div class="row">
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <form:label path="organization">Struktur</form:label>
-                                <form:select  path="organization" cssClass="custom-select form-control">
-                                    <form:options items="${organizations}" itemLabel="name" itemValue="id" />
-                                </form:select>
-                                <form:errors path="organization" cssClass="control-label alert-danger" />
+                        <div class="col-md-7">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <form:label path="organization">Struktur</form:label>
+                                        <form:select  path="organization" cssClass="custom-select form-control">
+                                            <form:options items="${organizations}" itemLabel="name" itemValue="id" />
+                                        </form:select>
+                                        <form:errors path="organization" cssClass="control-label alert-danger" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <form:label path="position">Vəzifə</form:label>
+                                        <form:select  path="position" cssClass="custom-select form-control">
+                                            <form:options items="${positions}" itemLabel="name" itemValue="id" />
+                                        </form:select>
+                                        <form:errors path="position" cssClass="control-label alert-danger" />
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <form:label path="position">Vəzifə</form:label>
-                                <form:select  path="position" cssClass="custom-select form-control">
-                                    <form:options items="${positions}" itemLabel="name" itemValue="id" />
-                                </form:select>
-                                <form:errors path="position" cssClass="control-label alert-danger" />
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <form:label path="contractStartDate">İşə başlama tarixi</form:label>
-                                <div class="input-group date" >
-                                    <form:input path="contractStartDate" date="date" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
-                                    <div class="input-group-append">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <form:label path="contractStartDate">İşə başlama tarixi</form:label>
+                                        <div class="input-group date" >
+                                            <form:input path="contractStartDate" date="date" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
+                                            <div class="input-group-append">
                                         <span class="input-group-text">
                                             <i class="la la-calendar"></i>
                                         </span>
+                                            </div>
+                                        </div>
+                                        <form:errors path="contractStartDate" cssClass="control-label alert-danger" />
                                     </div>
                                 </div>
-                                <form:errors path="contractStartDate" cssClass="control-label alert-danger" />
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <form:label path="socialCardNumber">Sosial kart nömrəsi</form:label>
+                                        <form:input path="socialCardNumber" cssClass="form-control" placeholder="Sosial kart nömrəsini daxil edin"/>
+                                        <form:errors path="socialCardNumber" cssClass="control-label alert-danger" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <form:label path="bankAccountNumber">Bank hesab nömrəsi</form:label>
+                                        <form:input path="bankAccountNumber" cssClass="form-control" placeholder="Bank hesab nömrəsini daxil edin"/>
+                                        <form:errors path="bankAccountNumber" cssClass="control-label alert-danger" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <form:label path="bankCardNumber">Bank kart nömrəsi</form:label>
+                                        <form:input path="bankCardNumber" cssClass="form-control" placeholder="Bank kart nömrəsini daxil edin"/>
+                                        <form:errors path="bankCardNumber" cssClass="control-label alert-danger" />
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <c:forEach var="t" items="${employee_additional_fields}">
-                                <div class="form-group">
-                                    <label><c:out value="${t.name}"/></label>
-                                    <div class="input-group" >
-                                        <input type="text" name="salaryNonOfficial" class="form-control" />
+                        <div class="col-md-5">
+                            <c:forEach var="t" items="${employee_additional_fields}" varStatus="loop">
+                                <div class="form-group-0_5">
+                                    <div class="row">
+                                        <div class="col-md-8 text-right" style="padding-top: 8px;">
+                                            <label><c:out value="${t.name}"/></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="hidden" name="employeeDetails[${loop.index}].key" value="${t.attr1}" class="form-control" />
+                                            <input type="text" name="employeeDetails[${loop.index}].value" value="${t.attr2}" class="form-control" />
+                                        </div>
                                     </div>
                                 </div>
                             </c:forEach>
-
                         </div>
                     </div>
                     <hr style="width: 100%"/>

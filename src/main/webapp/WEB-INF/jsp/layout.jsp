@@ -64,12 +64,13 @@
 
     function edit(form, data, modal, modal_title){
         data = data.replace(/\&#034;/g, '"');
-        let obj = jQuery.parseJSON(data);
+        var obj = jQuery.parseJSON(data);
         console.log(obj);
         $.each( $(form).find("input,select,textarea"), function( key, element ) {
-            let tagName = $(element).prop("tagName");
-            let name = $(element).attr("name").split(".");
-            let value;
+            console.log($(element).attr("name"));
+            var tagName = $(element).prop("tagName");
+            var name = $(element).attr("name").split(".");
+            var value;
             if(name.length===1){
                 value = obj[name[0]];
             } else if(name.length===2){
@@ -79,17 +80,16 @@
             } else if(name.length===4){
                 value = obj[name[0]][name[1]][name[2]][name[3]];
             }
+            //console.log(value);
             if(tagName.toLowerCase()==="input"){
                 if($(element).attr("type")==="checkbox"){
 
                 } else if($(element).attr("type")==="radio"){
                     $("input[name='"+$(element).attr("name")+"'][value='"+value.id+"']").prop('checked', true);
+                } else if($(element).attr("date")==='date') {
+                    $(element).val(getFormattedDate(new Date(value)));
                 } else {
-                    if($(element).attr("date")==='date'){
-                        $(element).val(getFormattedDate(new Date(value)));
-                    } else {
-                        $(element).val(value);
-                    }
+                    $(element).val(value);
                 }
             } else if(tagName.toLowerCase()==="textarea"){
                 $(element).val(value);

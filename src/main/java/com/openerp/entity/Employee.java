@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "hr_employee")
@@ -43,6 +44,18 @@ public class Employee {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hr_organization_id", nullable = false)
     private Organization organization;
+
+    @Column(name = "social_card_number")
+    private String socialCardNumber;
+
+    @Column(name = "bank_account_number")
+    private String bankAccountNumber;
+
+    @Column(name = "bank_card_number")
+    private String bankCardNumber;
+
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<EmployeeDetail> employeeDetails;
 
     @JsonIgnore
     @OneToOne(mappedBy = "employee")

@@ -110,6 +110,9 @@ public class DBConfiguration {
             DictionaryType identifierType = new DictionaryType("İdentifikator", "identifier", null);
             types.add(identifierType);
 
+            dictionaryTypeRepository.saveAll(types);
+
+
             List<Dictionary> dictionaries = new ArrayList<>();
             Dictionary male = new Dictionary("Kişi", "Male", null, genderType);
             dictionaries.add(male);
@@ -255,15 +258,15 @@ public class DBConfiguration {
             dictionaries.add(formulaType2);
             Dictionary formulaType3 = new Dictionary("Məzuniyyət haqqı", "vacation", null, formulaType);
             dictionaries.add(formulaType3);
-            Dictionary employeeDetail1 = new Dictionary("Ümumi əmək haqqı (rəsmi hissə)", "gross_salary_official_part", "0", employeeDetail);
+            Dictionary employeeDetail1 = new Dictionary("Ümumi əmək haqqı (rəsmi)", "{gross_salary}", "0", employeeDetail);
             dictionaries.add(employeeDetail1);
-            Dictionary employeeDetail2 = new Dictionary("Ümumi əmək haqqı (qeyri rəsmi hissə)", "gross_salary_non_official_part", "0", employeeDetail);
+            Dictionary employeeDetail2 = new Dictionary("Ümumi əmək haqqı", "{salary}", "0", employeeDetail);
             dictionaries.add(employeeDetail2);
-            Dictionary employeeDetail3 = new Dictionary("Satışdan pay", "sales_dividend", "0", employeeDetail);
+            Dictionary employeeDetail3 = new Dictionary("Satışdan bonus", "{sales_dividend}", "0", employeeDetail);
             dictionaries.add(employeeDetail3);
-            Dictionary employeeDetail4 = new Dictionary("Keçmiş iş stajı (illərin cəmi)", "previous_sum_work_experience_year", "0", employeeDetail);
+            Dictionary employeeDetail4 = new Dictionary("Keçmiş iş stajı (illərin cəmi)", "{previous_work_experience}", "0", employeeDetail);
             dictionaries.add(employeeDetail4);
-            Dictionary employeeDetail5 = new Dictionary("Həmkərlar ittifaqı, üzvülük haqqı", "membership_fee_for_trade_union_fee", "0", employeeDetail);
+            Dictionary employeeDetail5 = new Dictionary("Həmkərlar ittifaqı, üzvülük haqqı", "{membership_fee_for_trade_union_fee}", "0", employeeDetail);
             dictionaries.add(employeeDetail5);
             Dictionary identifier6 = new Dictionary("İş Günü", "İG", null, identifierType);
             dictionaries.add(identifier6);
@@ -281,8 +284,6 @@ public class DBConfiguration {
             dictionaries.add(identifier1);
             Dictionary identifier2 = new Dictionary("Bayram", "B", null, identifierType);
             dictionaries.add(identifier2);
-            Dictionary identifier3 = new Dictionary("Qara Bayram", "QB", null, identifierType);
-            dictionaries.add(identifier3);
             Dictionary identifier4 = new Dictionary("Məzuniyyət", "M", "vacation", identifierType);
             dictionaries.add(identifier4);
             Dictionary identifier12 = new Dictionary("Ödənişsiz Məzuniyyət", "ÖM", "vacation", identifierType);
@@ -296,10 +297,7 @@ public class DBConfiguration {
             Dictionary identifier15 = new Dictionary("Xəstəlik", "X", "illness", identifierType);
             dictionaries.add(identifier15);
 
-
-            dictionaryTypeRepository.saveAll(types);
             dictionaryRepository.saveAll(dictionaries);
-
 
 
             List<Module> modules = new ArrayList<>();
@@ -649,23 +647,13 @@ public class DBConfiguration {
             Contact contact1 = new Contact("502535110", null, "irkan.ehmedov@gmail.com", "Ü.Hacıbəyov 195A", baku);
             Person person = new Person(contact1, "İrkan", "Əhmədov", "Əflatun", DateUtility.getUtilDate("25.09.1989"), male, azerbaijanNationality, "4HWL0AM", null);
             Employee employee = new Employee(person, position1, new Date(), null, headBranch);
-            employeeRepository.save(employee);
-
             List<EmployeeDetail> employeeDetails = new ArrayList<>();
-            EmployeeDetail employeeDetailField1 = new EmployeeDetail(employee, "gross_salary_official_part", "1200", "", true);
-            employeeDetails.add(employeeDetailField1);
-            EmployeeDetail employeeDetailField2 = new EmployeeDetail(employee, "gross_salary_non_official_part", "2700", "", true);
-            employeeDetails.add(employeeDetailField2);
-            EmployeeDetail employeeDetailField3 = new EmployeeDetail(employee, "sales_dividend", "0", "", false);
-            employeeDetails.add(employeeDetailField3);
-            EmployeeDetail employeeDetailField4 = new EmployeeDetail(employee, "previous_sum_work_experience_year", "8", "", true);
-            employeeDetails.add(employeeDetailField4);
-            EmployeeDetail employeeDetailField5 = new EmployeeDetail(employee, "membership_fee_for_trade_union_fee", "1%", "", true);
-            employeeDetails.add(employeeDetailField5);
-            EmployeeDetail employeeDetailField6 = new EmployeeDetail(employee, "calculated_vacation_day", "0", "", true);
-            employeeDetails.add(employeeDetailField6);
-
-            employeeDetailRepository.saveAll(employeeDetails);
+            for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-additional-field")){
+                EmployeeDetail employeeDetailField1 = new EmployeeDetail(employee, dictionary.getAttr1(), dictionary.getAttr2());
+                employeeDetails.add(employeeDetailField1);
+            }
+            employee.setEmployeeDetails(employeeDetails);
+            employeeRepository.save(employee);
 
 
             User user = new User(defaultAdminUsername, DigestUtils.md5DigestAsHex("admin".getBytes()), employee, new UserDetail("az"));
@@ -921,7 +909,7 @@ public class DBConfiguration {
             payrollConfigurations.add(payrollConfiguration4);
             PayrollConfiguration payrollConfiguration5 = new PayrollConfiguration(formulaType1,"İşsizlikdən sığorta haqqı", "{unemployment_insurance}={gross_salary}*0.5%", "İşsizlikdən sığorta haqqı = Hesablanan aylıq əmək haqqı * 0.5%");
             payrollConfigurations.add(payrollConfiguration5);
-            PayrollConfiguration payrollConfiguration6 = new PayrollConfiguration(formulaType1,"Həmkarlar təşkilatına üzvlük haqqı", "{membership_fee_for_trade_union}={membership_fee_for_trade_union_fee}>0?{gross_salary}*{membership_fee_for_trade_union_fee}:0", "Həmkarlar təşkilatına üzvlük haqqı = Hesablanan aylıq əmək haqqı * x%");
+            PayrollConfiguration payrollConfiguration6 = new PayrollConfiguration(formulaType1,"Həmkarlar təşkilatına üzvlük haqqı", "{membership_fee_for_trade_union}={gross_salary}*{membership_fee_for_trade_union_fee}", "Həmkarlar təşkilatına üzvlük haqqı = Hesablanan aylıq əmək haqqı * x%");
             payrollConfigurations.add(payrollConfiguration6);
             PayrollConfiguration payrollConfiguration7 = new PayrollConfiguration(formulaType1,"İcbari tibbi sığorta haqqı", "{compulsory_health_insurance}=10", "İcbari tibbi sığorta haqqı = 10");
             payrollConfigurations.add(payrollConfiguration7);

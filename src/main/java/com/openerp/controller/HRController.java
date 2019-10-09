@@ -106,9 +106,6 @@ public class HRController extends SkeletonController {
     @PostMapping(value = "/employee")
     public String postEmployee(@ModelAttribute(Constants.FORM) @Validated Employee employee, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         if (!binding.hasErrors()) {
-            Person person = employee.getPerson();
-            personRepository.save(person);
-            employee.setPerson(person);
             employeeRepository.save(employee);
         }
         return mapPost(employee, binding, redirectAttributes);

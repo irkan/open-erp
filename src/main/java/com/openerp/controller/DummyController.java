@@ -57,10 +57,16 @@ public class DummyController extends SkeletonController {
         List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
         List<Organization> organizations = organizationRepository.getOrganizationsByActiveTrueAndOrganizationType_Attr1("branch");
         List<Employee> employees = new ArrayList<>();
-        for(int i=1; i<200; i++){
+        for(int i=1; i<=200; i++){
             Contact contact = new DummyContact().getContact(cities);
             Person person = new DummyPerson().getPerson(contact, nationalities, genders);
             Employee employee = new DummyEmployee().getEmployee(person, positions, organizations);
+            List<EmployeeDetail> employeeDetails = new ArrayList<>();
+            for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-additional-field")){
+                EmployeeDetail employeeDetailField1 = new EmployeeDetail(employee, dictionary.getAttr1(), dictionary.getAttr2());
+                employeeDetails.add(employeeDetailField1);
+            }
+            employee.setEmployeeDetails(employeeDetails);
             employees.add(employee);
         }
         employeeRepository.saveAll(employees);
