@@ -67,13 +67,14 @@
         var obj = jQuery.parseJSON(data);
         console.log(obj);
         $.each( $(form).find("input,select,textarea"), function( key, element ) {
-            console.log($(element).attr("name"));
+            //console.log($(element).attr("name"));
             var tagName = $(element).prop("tagName");
             var name = $(element).attr("name").split(".");
             var value;
             if(name.length===1){
                 value = obj[name[0]];
             } else if(name.length===2){
+                console.log(name[0].length);
                 value = obj[name[0]][name[1]];
             } else if(name.length===3){
                 value = obj[name[0]][name[1]][name[2]];
