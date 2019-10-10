@@ -119,6 +119,9 @@ public class SkeletonController {
     @Autowired
     IllnessDetailRepository illnessDetailRepository;
 
+    @Autowired
+    AdvanceRepository advanceRepository;
+
 
     @Autowired
     HttpServletRequest request;

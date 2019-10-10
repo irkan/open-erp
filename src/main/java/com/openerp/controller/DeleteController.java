@@ -93,6 +93,10 @@ public class DeleteController extends SkeletonController {
             WorkingHourRecord workingHourRecord = workingHourRecordRepository.getWorkingHourRecordById(Integer.parseInt(id));
             workingHourRecord.setActive(false);
             workingHourRecordRepository.save(workingHourRecord);
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.ADVANCE)){
+            Advance advance = advanceRepository.getAdvanceById(Integer.parseInt(id));
+            advance.setActive(false);
+            advanceRepository.save(advance);
         }
         return "redirect:/"+parent+"/"+path;
     }

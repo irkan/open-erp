@@ -106,6 +106,9 @@ public class HRController extends SkeletonController {
     @PostMapping(value = "/employee")
     public String postEmployee(@ModelAttribute(Constants.FORM) @Validated Employee employee, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         if (!binding.hasErrors()) {
+            for(EmployeeDetail ed: employee.getEmployeeDetails()){
+                ed.setEmployee(employee);
+            }
             employeeRepository.save(employee);
         }
         return mapPost(employee, binding, redirectAttributes);
@@ -186,6 +189,10 @@ public class HRController extends SkeletonController {
                     for (Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
                         vacationDetailRepository.save(new VacationDetail(vacation.getIdentifier().getAttr1(), date, vacation, vacation.getEmployee()));
                     }
+
+                    String description = vacation.getIdentifier().getName() + " " + DateUtility.getFormattedDate(vacation.getStartDate()) + " - " + DateUtility.getFormattedDate(vacation.getEndDate());
+                    Advance advance = new Advance(vacation.getIdentifier(), vacation.getEmployee(), description, vacation.getStartDate(), 473.50, false);
+                    advanceRepository.save(advance);
                 }
             }
         }

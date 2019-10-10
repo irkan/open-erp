@@ -67,41 +67,88 @@
         var obj = jQuery.parseJSON(data);
         console.log(obj);
         $.each( $(form).find("input,select,textarea"), function( key, element ) {
-            //console.log($(element).attr("name"));
-            var tagName = $(element).prop("tagName");
-            var name = $(element).attr("name").split(".");
-            var value;
-            if(name.length===1){
-                value = obj[name[0]];
-            } else if(name.length===2){
-                console.log(name[0].length);
-                value = obj[name[0]][name[1]];
-            } else if(name.length===3){
-                value = obj[name[0]][name[1]][name[2]];
-            } else if(name.length===4){
-                value = obj[name[0]][name[1]][name[2]][name[3]];
-            }
-            //console.log(value);
-            if(tagName.toLowerCase()==="input"){
-                if($(element).attr("type")==="checkbox"){
+            try{
+                var tagName = $(element).prop("tagName");
+                var value = findValue(obj, element);
+                if(tagName.toLowerCase()==="input"){
+                    if($(element).attr("type")==="checkbox"){
 
-                } else if($(element).attr("type")==="radio"){
-                    $("input[name='"+$(element).attr("name")+"'][value='"+value.id+"']").prop('checked', true);
-                } else if($(element).attr("date")==='date') {
-                    $(element).val(getFormattedDate(new Date(value)));
-                } else {
+                    } else if($(element).attr("type")==="radio"){
+                        $("input[name='"+$(element).attr("name")+"'][value='"+value.id+"']").prop('checked', true);
+                    } else if($(element).attr("date")==='date') {
+                        $(element).val(getFormattedDate(new Date(value)));
+                    } else {
+                        $(element).val(value);
+                    }
+                } else if(tagName.toLowerCase()==="textarea"){
                     $(element).val(value);
+                } else if(tagName.toLowerCase()==="select"){
+                    if(value!=null){
+                        $("#"+$(element).attr("id")+" option[value="+value.id+"]").attr("selected", "selected");
+                    }
                 }
-            } else if(tagName.toLowerCase()==="textarea"){
-                $(element).val(value);
-            } else if(tagName.toLowerCase()==="select"){
-                if(value!=null){
-                    $("#"+$(element).attr("id")+" option[value="+value.id+"]").attr("selected", "selected");
-                }
+            } catch (e) {
+                console.error(e);
             }
         });
         $('#' + modal).find(".modal-title").html(modal_title);
         $('#' + modal).modal('toggle');
+    }
+
+    function findValue(obj, element){
+        var originalName = $(element).attr("name");
+        var name = originalName.split(".");
+        var value;
+        if(name.length===1){
+            if(getIndex(name[0])!=null){
+                value = obj[name[0]][getIndex(name[0])];
+            } else {
+                value = obj[name[0]]
+            }
+        } else if(name.length===2){
+            if(getIndex(name[0])!=null){
+                console.log(getName(name[0]));
+                console.log(getIndex(name[0]));
+                console.log(name[1]);
+                value = obj[getName(name[0])][getIndex(name[0])][name[1]];
+            } else if(getIndex(name[1])!=null){
+                value = obj[name[0]][getName(name[1])][getIndex(name[1])];
+            } else {
+                value = obj[name[0]][name[1]];
+            }
+        } else if(name.length===3){
+            console.log('teeeeeeeeeeeeeeeeeest');
+            console.log(name[0]);
+            console.log(getIndex(name[0]));
+            console.log(name[1]);
+            console.log(name[2]);
+            if(getIndex(name[0])!=null){
+                value = obj[getName(name[0])][getIndex(name[0])][name[1]][name[2]];
+            } else if(getIndex(name[1])!=null){
+                value = obj[name[0]][getName(name[1])][getIndex(name[1])][name[2]];
+            } else if(getIndex(name[2])!=null){
+                value = obj[name[0]][name[1]][getName(name[2])][getIndex(name[2])];
+            } else {
+                value = obj[name[0]][name[1]][name[2]];
+            }
+        }
+        return value;
+    }
+
+    function getIndex(name) {
+        var data = name.split("[");
+        if (data.length > 1) {
+            return parseInt(data[1].split("]")[0]);
+        }
+        return null;
+    }
+
+    function getName(name){
+        var data = name.split("[");
+        if(data.length>1){
+            return data[0];
+        }
+        return name;
     }
 
     function deleteData(id, info){

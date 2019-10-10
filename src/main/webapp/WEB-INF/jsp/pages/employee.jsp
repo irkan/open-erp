@@ -239,7 +239,8 @@
                                             <label><c:out value="${t.name}"/></label>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="hidden" name="employeeDetails[${loop.index}].key" value="${t.attr1}" class="form-control" />
+                                            <input type="hidden" name="employeeDetails[${loop.index}].id"/>
+                                            <input type="hidden" name="employeeDetails[${loop.index}].key" value="${t.attr1}"/>
                                             <input type="text" name="employeeDetails[${loop.index}].value" value="${t.attr2}" class="form-control" />
                                         </div>
                                     </div>

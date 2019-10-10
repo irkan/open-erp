@@ -49,15 +49,15 @@ public class DummyController extends SkeletonController {
         return "redirect:/login";
     }
 
-    @GetMapping("/employee")
-    public String employee() throws Exception {
+    @GetMapping("/employee/{count}")
+    public String employee(@PathVariable(name = "count") int count) throws Exception {
         List<Dictionary> cities = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("city");
         List<Dictionary> genders = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("gender");
         List<Dictionary> nationalities = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("nationality");
         List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
         List<Organization> organizations = organizationRepository.getOrganizationsByActiveTrueAndOrganizationType_Attr1("branch");
         List<Employee> employees = new ArrayList<>();
-        for(int i=1; i<=200; i++){
+        for(int i=1; i<=count; i++){
             Contact contact = new DummyContact().getContact(cities);
             Person person = new DummyPerson().getPerson(contact, nationalities, genders);
             Employee employee = new DummyEmployee().getEmployee(person, positions, organizations);

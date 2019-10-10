@@ -52,6 +52,11 @@ public class PayrollController extends SkeletonController {
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new PayrollConfiguration());
             }
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.ADVANCE)){
+            model.addAttribute(Constants.LIST, advanceRepository.getAdvancesByActiveTrue());
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new Advance());
+            }
         }
         return "layout";
     }
@@ -81,10 +86,6 @@ public class PayrollController extends SkeletonController {
                     workingHourRecordRepository.save(workingHourRecord);
                     List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization_Id(workingHourRecord.getBranch().getId());
                     List<WorkingHourRecordEmployee> workingHourRecordEmployees = new ArrayList<>();
-                    /*
-                    String startDate = "01."+(workingHourRecord.getMonth()>9?workingHourRecord.getMonth():"0"+workingHourRecord.getMonth())+"." + workingHourRecord.getYear();
-                    String endDate = daysInMonth + "."+(workingHourRecord.getMonth()>9?workingHourRecord.getMonth():"0"+workingHourRecord.getMonth())+"." + workingHourRecord.getYear();
-                    */
                     for(Employee employee: employees){
                         WorkingHourRecordEmployee workingHourRecordEmployee = new WorkingHourRecordEmployee(workingHourRecord, employee, employee.getPerson().getFullName(), employee.getPosition().getName(), employee.getOrganization().getName());
                         workingHourRecordEmployeeRepository.save(workingHourRecordEmployee);
@@ -116,5 +117,26 @@ public class PayrollController extends SkeletonController {
             }
         }
         return mapPost(workingHourRecord, binding, redirectAttributes, "/payroll/working-hour-record");
+    }
+
+    @PostMapping(value = "/advance")
+    public String postAdvance(@ModelAttribute(Constants.FORM) @Validated Advance advance, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        if(!binding.hasErrors()){
+            advanceRepository.save(advance);
+        }
+        return mapPost(advance, binding, redirectAttributes);
+    }
+
+    @PostMapping(value = "/advance/approve")
+    public String postAdvanceApprove(@ModelAttribute(Constants.FORM) @Validated Advance advance, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        if(!binding.hasErrors()){
+            Advance adv = advanceRepository.getAdvanceById(advance.getId());
+            adv.setDescription(advance.getDescription());
+            adv.setPayed(advance.getPayed());
+            adv.setApprove(true);
+            adv.setApproveDate(new Date());
+            advanceRepository.save(adv);
+        }
+        return mapPost(advance, binding, redirectAttributes, "/payroll/advance");
     }
 }
