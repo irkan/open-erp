@@ -400,6 +400,8 @@ public class DBConfiguration {
             operations.add(search);
             Operation save = new Operation("Yadda saxla", "save", "la la-save");
             operations.add(save);
+            Operation calculate = new Operation("Hesablama", "calculate", "la la-calculator");
+            operations.add(calculate);
 
             operationRepository.saveAll(operations);
 
@@ -615,6 +617,9 @@ public class DBConfiguration {
 
             ModuleOperation cancelModuleOperation1 = new ModuleOperation(workingHourRecord, cancel, null);
             moduleOperations.add(cancelModuleOperation1);
+
+            ModuleOperation calculateModuleOperation1 = new ModuleOperation(salary, calculate, null);
+            moduleOperations.add(calculateModuleOperation1);
 
             moduleOperationRepository.saveAll(moduleOperations);
 
@@ -891,6 +896,9 @@ public class DBConfiguration {
 
             UserModuleOperation userCancelModuleOperation1 = new UserModuleOperation(user, cancelModuleOperation1);
             userModuleOperations.add(userCancelModuleOperation1);
+
+            UserModuleOperation userCalculateModuleOperation1 = new UserModuleOperation(user, calculateModuleOperation1);
+            userModuleOperations.add(userCalculateModuleOperation1);
 
             userModuleOperationRepository.saveAll(userModuleOperations);
 

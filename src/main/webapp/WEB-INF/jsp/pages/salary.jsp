@@ -26,38 +26,39 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="kt-portlet kt-portlet--mobile">
-                <form:form modelAttribute="form" id="form" method="post" action="/payroll/working-hour-record" cssClass="form-group">
+                <form:form modelAttribute="form" id="form" method="post" action="/payroll/salary/calculate" cssClass="form-group">
                     <input name="id" type="hidden" value="<c:out value="${form.id}"/>" />
-                <c:set var="search" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'search')}"/>
+                    <input name="workingHourRecord.id" type="hidden" value="<c:out value="${form.workingHourRecord.id}"/>" />
+                <c:set var="calculate" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'calculate')}"/>
                 <c:choose>
-                    <c:when test="${search.status}">
+                    <c:when test="${calculate.status}">
                         <div class="kt-portlet__head kt-portlet__head--lg">
                             <div class="kt-portlet__head-title" style="width: 100%">
                                 <div class="row">
                                     <div class="col-sm-3">
                                         <div class="form-group">
-                                            <form:label path="branch">&nbsp;</form:label>
-                                            <form:select  path="branch" cssClass="custom-select form-control">
+                                            <form:label path="workingHourRecord.branch">&nbsp;</form:label>
+                                            <form:select  path="workingHourRecord.branch" cssClass="custom-select form-control">
                                                 <c:forEach var="t" items="${branches}" varStatus="loop">
-                                                    <c:set var="selected" value="${t.id==form.branch.id?'selected':''}"/>
+                                                    <c:set var="selected" value="${t.id==form.workingHourRecord.branch.id?'selected':''}"/>
                                                     <option value="<c:out value="${t.id}"/>" <c:out value="${selected}"/>><c:out value="${t.name}"/></option>
                                                 </c:forEach>
                                             </form:select>
-                                            <form:errors path="branch" cssClass="control-label alert alert-danger" />
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <div class="form-group">
-                                            <label>&nbsp;</label>
-                                            <input name="monthYear" class="form-control" type="month" value="<c:out value="${form.monthYear}"/>" />
+                                            <form:errors path="workingHourRecord.branch" cssClass="control-label alert alert-danger" />
                                         </div>
                                     </div>
                                     <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label>&nbsp;</label>
+                                            <input name="workingHourRecord.monthYear" class="form-control" type="month" value="<c:out value="${form.workingHourRecord.monthYear}"/>" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
                                         <label>&nbsp;</label>
                                         <div class="form-group">
-                                            <a href="#" onclick="submit($('#form'))" class="btn btn-brand btn-elevate btn-icon-sm" title="<c:out value="${search.object.name}"/>">
-                                                <i class="la <c:out value="${search.object.icon}"/>"></i>
-                                                <c:out value="${search.object.name}"/>
+                                            <a href="#" onclick="submit($('#form'))" class="btn btn-brand btn-elevate btn-icon-sm" title="<c:out value="${calculate.object.name}"/>">
+                                                <i class="la <c:out value="${calculate.object.icon}"/>"></i>
+                                                <c:out value="${calculate.object.name}"/>
                                             </a>
                                             <button type="reset" class="btn btn-secondary btn-secondary--icon">
                                                 <i class="la la-close"></i>
@@ -66,12 +67,13 @@
                                         </div>
                                     </div>
                                     <div class="col-sm-4 text-right">
+                                        <c:out value="${form.workingHourRecord.workingHourRecordEmployees.size()}" />
                                         <label>&nbsp;</label>
                                         <div class="form-group">
                                             <c:set var="save" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'save')}"/>
                                             <c:choose>
                                                 <c:when test="${save.status}">
-                                                    <c:if test="${not empty form.workingHourRecordEmployees}">
+                                                    <c:if test="${not empty form.salaryEmployees}">
                                                         <a href="#" onclick="saveWHR($('#form'))" class="btn btn-warning btn-elevate btn-icon-sm" title="<c:out value="${save.object.name}"/>">
                                                             <i class="la <c:out value="${save.object.icon}"/>"></i>
                                                             <c:out value="${save.object.name}"/>
@@ -82,8 +84,8 @@
                                             <c:set var="approve" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
                                             <c:choose>
                                                 <c:when test="${approve.status}">
-                                                    <c:if test="${not empty form.workingHourRecordEmployees and !form.approve}">
-                                                        <a href="#" onclick="approveData('<c:out value="${form.id}"/>', '<c:out value="${form.month}"/>.<c:out value="${form.year}"/> tarixli iş vaxtının uçotu')" class="btn btn-success btn-elevate btn-icon-sm" title="<c:out value="${approve.object.name}"/>">
+                                                    <c:if test="${not empty form.workingHourRecord.workingHourRecordEmployees and !form.approve}">
+                                                        <a href="#" onclick="saveWHR($('#form'))" class="btn btn-success btn-elevate btn-icon-sm" title="<c:out value="${approve.object.name}"/>">
                                                             <i class="la <c:out value="${approve.object.icon}"/>"></i>
                                                             <c:out value="${approve.object.name}"/>
                                                         </a>
@@ -93,8 +95,8 @@
                                             <c:set var="cancel" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'cancel')}"/>
                                             <c:choose>
                                                 <c:when test="${cancel.status}">
-                                                    <c:if test="${not empty form.workingHourRecordEmployees and form.approve}">
-                                                        <a href="#" onclick="approveData('<c:out value="${form.id}"/>', '<c:out value="${form.month}"/>.<c:out value="${form.year}"/> tarixli iş vaxtının uçotu')" class="btn btn-dark btn-elevate btn-icon-sm" title="<c:out value="${cancel.object.name}"/>">
+                                                    <c:if test="${not empty form.workingHourRecord.workingHourRecordEmployees and !form.approve}">
+                                                        <a href="#" onclick="saveWHR($('#form'))" class="btn btn-dark btn-elevate btn-icon-sm" title="<c:out value="${cancel.object.name}"/>">
                                                             <i class="la <c:out value="${cancel.object.icon}"/>"></i>
                                                             <c:out value="${cancel.object.name}"/>
                                                         </a>
@@ -104,8 +106,8 @@
                                             <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
                                             <c:choose>
                                                 <c:when test="${delete.status}">
-                                                    <c:if test="${not empty form.workingHourRecordEmployees}">
-                                                        <a href="javascript:deleteData('<c:out value="${form.id}" />', '<c:out value="${form.month}"/>.<c:out value="${form.year}"/> tarixli iş vaxtının uçotu');" class="btn btn-danger btn-elevate btn-icon-sm" title="<c:out value="${delete.object.name}"/>">
+                                                    <c:if test="${not empty form.workingHourRecord.workingHourRecordEmployees}">
+                                                        <a href="javascript:deleteData('<c:out value="${form.workingHourRecord.id}" />', '<c:out value="${form.workingHourRecord.month}"/>.<c:out value="${form.workingHourRecord.year}"/> tarixli maaş hesablanması ');" class="btn btn-danger btn-elevate btn-icon-sm" title="<c:out value="${delete.object.name}"/>">
                                                             <i class="la <c:out value="${delete.object.icon}"/>"></i>
                                                             <c:out value="${delete.object.name}"/>
                                                         </a>
@@ -120,9 +122,8 @@
                     </c:when>
                 </c:choose>
                 <div class="kt-portlet__body">
-
                     <c:choose>
-                        <c:when test="${not empty form.workingHourRecordEmployees}">
+                        <c:when test="${not empty form.workingHourRecord.workingHourRecordEmployees}">
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_3">
                                 <thead>
                                 <tr>
@@ -142,12 +143,12 @@
                                     <th class="bg-warning" style="border: none;"><div style="width: 180px !important;">Vəzifə</div></th>
                                     <th class="bg-warning" style="border: none;"><div style="width: 120px !important;">Struktur</div></th>
                                     <c:forEach var = "i" begin = "1" end = "${days_in_month}">
-                                        <th class="bg-info text-center kt-padding-0" style="border: none; color: white;"><c:out value = "${utl:weekDay(i, form.month, form.year)}"/></th>
+                                        <th class="bg-info text-center kt-padding-0" style="border: none; color: white;"><c:out value = "${utl:weekDay(i, form.workingHourRecord.month, form.workingHourRecord.year)}"/></th>
                                     </c:forEach>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <c:forEach var="t" items="${form.workingHourRecordEmployees}" varStatus="loop">
+                                <c:forEach var="t" items="${form.workingHourRecord.workingHourRecordEmployees}" varStatus="loop">
                                     <tr>
                                         <td class="text-center">
                                             ${loop.index + 1}
@@ -197,20 +198,20 @@
         </div>
 
     </div>
+    <c:if test="${not empty error}">
+        <div class="alert alert-danger alert-elevate" role="alert">
+            <div class="alert-icon"><i class="flaticon-warning kt-font-brand kt-font-light"></i></div>
+            <div class="alert-text">
+                <c:out value="${error}"/>
+            </div>
+            <div class="alert-close">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true"><i class="la la-close"></i></span>
+                </button>
+            </div>
+        </div>
+    </c:if>
 
-    <div class="alert alert-info alert-elevate" role="alert">
-        <div class="alert-icon"><i class="flaticon-warning kt-font-brand kt-font-light"></i></div>
-        <div class="alert-text">
-            <c:forEach var="t" items="${identifiers}" varStatus="loop">
-                [&nbsp;<span style="font-weight: 400; font-size: 13px"><c:out value="${t.attr1}"/></span> - <c:out value="${t.name}"/>&nbsp;]&nbsp;&nbsp;&nbsp;
-            </c:forEach>
-        </div>
-        <div class="alert-close">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true"><i class="la la-close"></i></span>
-            </button>
-        </div>
-    </div>
 </div>
 
 <div class="modal fade" id="modal-operation" tabindex="-1" role="dialog">
@@ -251,10 +252,6 @@
         </div>
     </div>
 </div>
-
-<form id="approve-form" method="post" action="/payroll/working-hour-record/approve" style="display: none">
-    <input type="hidden" name="id" id="elementId" />
-</form>
 
 <script src="<c:url value="/assets/vendors/general/typeahead.js/dist/typeahead.bundle.js" />" type="text/javascript"></script>
 <script src="<c:url value="/assets/vendors/general/typeahead.js/dist/typeahead.jquery.js" />" type="text/javascript"></script>
@@ -338,36 +335,6 @@
         $(form).attr("action", "/payroll/working-hour-record/save");
         submit(form)
     }
-
-    function approveData(id, info){
-        $("#elementId").val(id, info);
-        swal.fire({
-            title: 'Əminsinizmi?',
-            html: info,
-            type: 'success',
-            allowEnterKey: true,
-            showCancelButton: true,
-            buttonsStyling: false,
-            cancelButtonText: 'İmtina',
-            cancelButtonColor: '#d1d5cf',
-            cancelButtonClass: 'btn btn-default',
-            confirmButtonText: 'Bəli, icra edilsin!',
-            confirmButtonColor: '#c40000',
-            confirmButtonClass: 'btn btn-success',
-            footer: '<a href>Məlumatlar yenilənsinmi?</a>'
-        }).then(function(result) {
-            if (result.value) {
-                swal.fire({
-                    text: 'Proses davam edir...',
-                    onOpen: function() {
-                        swal.showLoading();
-                        $("#approve-form").submit();
-                    }
-                })
-            }
-        })
-    }
-
 </script>
 
 

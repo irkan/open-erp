@@ -59,6 +59,14 @@ public class PayrollController extends SkeletonController {
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Advance());
             }
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.SALARY)){
+            model.addAttribute(Constants.BRANCHES, organizationRepository.getOrganizationsByActiveTrueAndOrganizationType_Attr1("branch"));
+            if(!model.containsAttribute(Constants.BRANCH_ID)){
+                model.addAttribute(Constants.BRANCH_ID, getSessionUser().getEmployee().getOrganization().getId());
+            }
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new Salary(new WorkingHourRecord(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()))));
+            }
         }
         return "layout";
     }
@@ -109,6 +117,18 @@ public class PayrollController extends SkeletonController {
         return mapPost2(whr, binding, redirectAttributes);
     }
 
+    @PostMapping(value = "/working-hour-record/approve")
+    public String postWorkingHourRecordApprove(@RequestParam(name = "id", defaultValue = "0") int id, RedirectAttributes redirectAttributes) throws Exception {
+        WorkingHourRecord whr = workingHourRecordRepository.getWorkingHourRecordById(id);
+        whr.setApprove(!whr.getApprove());
+        if(whr.getApprove()){
+            whr.setApproveDate(new Date());
+            whr.setApprovedUser(getSessionUser());
+        }
+        workingHourRecordRepository.save(whr);
+        return mapPost(redirectAttributes, "/payroll/working-hour-record");
+    }
+
     @PostMapping(value = "/working-hour-record/save")
     public String postWorkingHourRecordSave(@ModelAttribute(Constants.FORM) @Validated WorkingHourRecord workingHourRecord, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         if(!binding.hasErrors()){
@@ -140,5 +160,46 @@ public class PayrollController extends SkeletonController {
             advanceRepository.save(adv);
         }
         return mapPost(advance, binding, redirectAttributes, "/payroll/advance");
+    }
+
+    @PostMapping(value = "/salary/calculate")
+    public String postSalaryCalculate(@ModelAttribute(Constants.FORM) @Validated Salary salary, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        Salary slry = null;
+        if(!binding.hasErrors()){
+            if(salary.getWorkingHourRecord().getMonthYear().length()>6 && salary.getWorkingHourRecord().getMonthYear().contains("-")){
+                int year = Integer.parseInt(salary.getWorkingHourRecord().getMonthYear().split("-")[0]);
+                int month = Integer.parseInt(salary.getWorkingHourRecord().getMonthYear().split("-")[1]);
+                YearMonth yearMonthObject = YearMonth.of(year, month);
+                int daysInMonth = yearMonthObject.lengthOfMonth();
+                salary.getWorkingHourRecord().setYear(year);
+                salary.getWorkingHourRecord().setMonth(month);
+                redirectAttributes.addFlashAttribute(Constants.DAYS_IN_MONTH, daysInMonth);
+                WorkingHourRecord whr = workingHourRecordRepository.getWorkingHourRecordByActiveTrueAndMonthAndYearAndBranch_Id(salary.getWorkingHourRecord().getMonth(), salary.getWorkingHourRecord().getYear(), salary.getWorkingHourRecord().getBranch().getId());
+                String message = "";
+                if(whr==null){
+                    message = "İş vaxtının uçotu cədvəli tapılmadı!";
+                }
+                if(whr!=null && !whr.getApprove()){
+                    message = "İş vaxtının uçotu cədvəli təsdiq edilməyib!";
+                }
+                redirectAttributes.addFlashAttribute(Constants.ERROR, message);
+
+                if(whr!=null && whr.getApprove()){
+                    slry = salaryRepository.getSalaryByActiveTrueAndWorkingHourRecord(whr);
+                    if(slry==null){
+                        slry = new Salary(whr);
+                        List<SalaryEmployee> salaryEmployees = new ArrayList<>();
+                        for(WorkingHourRecordEmployee whre: workingHourRecordEmployeeRepository.getWorkingHourRecordEmployeesByWorkingHourRecord_Id(whr.getId())){
+                            salaryEmployees.add(new SalaryEmployee(slry, whre));
+                        }
+                        slry.setSalaryEmployees(salaryEmployees);
+                        salaryRepository.save(slry);
+                    }
+                }
+            }
+        }
+        //WorkingHourRecord whr = workingHourRecordRepository.getWorkingHourRecordByActiveTrueAndMonthAndYearAndBranch_Id(salary.getWorkingHourRecord().getMonth(), salary.getWorkingHourRecord().getYear(), salary.getWorkingHourRecord().getBranch().getId());
+        //slry = salaryRepository.getSalaryByActiveTrueAndWorkingHourRecord()
+        return mapPost2(slry, binding, redirectAttributes, "/payroll/salary");
     }
 }

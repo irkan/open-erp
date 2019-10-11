@@ -21,19 +21,16 @@ public class SalaryEmployee {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
-   /*
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "payroll_working_hour_record_id")
-    private List<WorkingHourRecordEmployee> workingHourRecordEmployees;
-
-    @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
-    private Boolean active = true;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_date", nullable = false)
-    private Date createdDate = new Date();
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "payroll_salary_id")
+    private Salary salary;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "created_by_admin_user_id")
-    private User createdUser;*/
+    @JoinColumn(name = "payroll_working_hour_record_employee_id")
+    private WorkingHourRecordEmployee workingHourRecordEmployee;
+
+    public SalaryEmployee(Salary salary, WorkingHourRecordEmployee workingHourRecordEmployee) {
+        this.salary = salary;
+        this.workingHourRecordEmployee = workingHourRecordEmployee;
+    }
 }
