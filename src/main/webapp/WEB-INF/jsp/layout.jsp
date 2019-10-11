@@ -107,9 +107,6 @@
             }
         } else if(name.length===2){
             if(getIndex(name[0])!=null){
-                console.log(getName(name[0]));
-                console.log(getIndex(name[0]));
-                console.log(name[1]);
                 value = obj[getName(name[0])][getIndex(name[0])][name[1]];
             } else if(getIndex(name[1])!=null){
                 value = obj[name[0]][getName(name[1])][getIndex(name[1])];
@@ -117,11 +114,6 @@
                 value = obj[name[0]][name[1]];
             }
         } else if(name.length===3){
-            console.log('teeeeeeeeeeeeeeeeeest');
-            console.log(name[0]);
-            console.log(getIndex(name[0]));
-            console.log(name[1]);
-            console.log(name[2]);
             if(getIndex(name[0])!=null){
                 value = obj[getName(name[0])][getIndex(name[0])][name[1]][name[2]];
             } else if(getIndex(name[1])!=null){
@@ -160,7 +152,7 @@
             allowEnterKey: true,
             showCancelButton: true,
             buttonsStyling: false,
-            cancelButtonText: 'İmtina et',
+            cancelButtonText: 'İmtina',
             cancelButtonColor: '#d1d5cf',
             cancelButtonClass: 'btn btn-default',
             confirmButtonText: 'Bəli, silinsin!',

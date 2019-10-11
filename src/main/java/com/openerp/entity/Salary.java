@@ -21,9 +21,12 @@ public class Salary {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
-    /*@OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "payroll_working_hour_record_id")
     private WorkingHourRecord workingHourRecord;
+
+    @OneToMany(mappedBy = "salary", cascade = CascadeType.ALL)
+    private List<SalaryEmployee> salaryEmployees;
 
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;
@@ -34,5 +37,9 @@ public class Salary {
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "created_by_admin_user_id")
-    private User createdUser;*/
+    private User createdUser;
+
+    public Salary(WorkingHourRecord workingHourRecord) {
+        this.workingHourRecord = workingHourRecord;
+    }
 }

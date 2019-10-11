@@ -122,6 +122,12 @@ public class SkeletonController {
     @Autowired
     AdvanceRepository advanceRepository;
 
+    @Autowired
+    SalaryRepository salaryRepository;
+
+    @Autowired
+    SalaryEmployeeRepository salaryEmployeeRepository;
+
 
     @Autowired
     HttpServletRequest request;
@@ -159,6 +165,12 @@ public class SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.FORM_RESULT_BINDING, binding);
         redirectAttributes.addFlashAttribute(Constants.FORM, object);
         return "redirect:"+request.getRequestURI();
+    }
+
+    String mapPost2(Object object, BindingResult binding, RedirectAttributes redirectAttributes, String redirect){
+        redirectAttributes.addFlashAttribute(Constants.FORM_RESULT_BINDING, binding);
+        redirectAttributes.addFlashAttribute(Constants.FORM, object);
+        return "redirect:"+redirect;
     }
 
     String mapPost(Object object, BindingResult binding, RedirectAttributes redirectAttributes, String redirect){
