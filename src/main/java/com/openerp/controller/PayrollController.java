@@ -53,7 +53,9 @@ public class PayrollController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new PayrollConfiguration());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.ADVANCE)){
+            model.addAttribute(Constants.IDENTIFIERS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("identifier"));
             model.addAttribute(Constants.LIST, advanceRepository.getAdvancesByActiveTrue());
+            model.addAttribute(Constants.EMPLOYEES, employeeRepository.getEmployeesByContractEndDateIsNull());
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Advance());
             }

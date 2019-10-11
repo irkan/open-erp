@@ -46,13 +46,13 @@
                                             <form:errors path="branch" cssClass="control-label alert alert-danger" />
                                         </div>
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-2">
                                         <div class="form-group">
                                             <label>&nbsp;</label>
                                             <input name="monthYear" class="form-control" type="month" value="<c:out value="${form.monthYear}"/>" />
                                         </div>
                                     </div>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-3">
                                         <label>&nbsp;</label>
                                         <div class="form-group">
                                             <a href="#" onclick="submit($('#form'))" class="btn btn-brand btn-elevate btn-icon-sm" title="<c:out value="${search.object.name}"/>">
@@ -93,7 +93,7 @@
                                             <c:set var="cancel" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'cancel')}"/>
                                             <c:choose>
                                                 <c:when test="${cancel.status}">
-                                                    <c:if test="${not empty form.workingHourRecordEmployees and !form.approve}">
+                                                    <c:if test="${not empty form.workingHourRecordEmployees and form.approve}">
                                                         <a href="#" onclick="saveWHR($('#form'))" class="btn btn-dark btn-elevate btn-icon-sm" title="<c:out value="${cancel.object.name}"/>">
                                                             <i class="la <c:out value="${cancel.object.icon}"/>"></i>
                                                             <c:out value="${cancel.object.name}"/>

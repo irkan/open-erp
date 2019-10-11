@@ -42,7 +42,7 @@ public class Advance {
     @Temporal(TemporalType.DATE)
     @Column(name = "calculate_date")
     @DateTimeFormat(pattern = "dd.MM.yyyy")
-    private Date calculateDate;
+    private Date calculateDate=new Date();
 
     @Column(name = "is_approve", nullable = false, columnDefinition="boolean default true")
     private Boolean approve = true;

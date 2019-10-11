@@ -27,6 +27,7 @@
         <th>Əməkdaş</th>
         <th>Struktur</th>
         <th>Məbləğ</th>
+        <th>Tarix</th>
         <th>Açıqlama</th>
         <th>Əməliyyat</th>
     </tr>
@@ -39,6 +40,7 @@
             <td><c:out value="${t.employee.person.fullName}" /></td>
             <td><c:out value="${t.employee.organization.name}" /></td>
             <td><c:out value="${t.payed}" /></td>
+            <td><fmt:formatDate value = "${t.calculateDate}" pattern = "dd.MM.yyyy" /></td>
             <td><c:out value="${t.description}" /></td>
             <td nowrap class="text-center">
                 <c:set var="approve" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
@@ -107,11 +109,39 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form:form modelAttribute="form" id="form" method="post" action="/admin/dictionary-type" cssClass="form-group">
-                    <form:input type="hidden" name="id" path="id"/>
+                <form:form modelAttribute="form" id="form" method="post" action="/payroll/advance" cssClass="form-group">
+                    <form:hidden path="id"/>
+                    <form:hidden path="approve"/>
+                    <form:hidden path="calculateDate"/>
                     <div class="form-group">
-                        <form:label path="description">Ad</form:label>
-                        <form:input path="description" cssClass="form-control" placeholder="Adı daxil edin"/>
+                        <form:label path="employee">Əməkdaş</form:label>
+                        <form:select  path="employee" cssClass="custom-select form-control">
+                            <form:options items="${employees}" itemLabel="person.fullName" itemValue="id" />
+                        </form:select>
+                        <form:errors path="employee" cssClass="control-label alert alert-danger" />
+                    </div>
+                    <div class="form-group">
+                        <form:label path="identifier">İdentifikator</form:label>
+                        <form:select  path="identifier" cssClass="custom-select form-control">
+                            <form:options items="${identifiers}" itemLabel="name" itemValue="id" />
+                        </form:select>
+                        <form:errors path="identifier" cssClass="control-label alert alert-danger" />
+                    </div>
+                    <div class="form-group">
+                        <form:label path="payed">Məbləğ</form:label>
+                        <div class="input-group" >
+                            <form:input path="payed" cssClass="form-control" placeholder="Məbləği daxil edin"/>
+                            <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="la la-usd"></i>
+                                                    </span>
+                            </div>
+                        </div>
+                        <form:errors path="payed" cssClass="alert-danger control-label"/>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="description">Açıqlama</form:label>
+                        <form:textarea path="description" cssClass="form-control"/>
                         <form:errors path="description" cssClass="alert-danger control-label"/>
                     </div>
                 </form:form>
