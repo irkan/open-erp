@@ -55,4 +55,11 @@
             java.lang.String weekDay(int,int,int)
         </function-signature>
     </function>
+    <function>
+        <name>findParentModule</name>
+        <function-class>com.openerp.util.Util</function-class>
+        <function-signature>
+            com.openerp.entity.Module findParentModule(com.openerp.entity.Module)
+        </function-signature>
+    </function>
 </taglib>

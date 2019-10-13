@@ -159,7 +159,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form:form modelAttribute="form" id="transaction-approve-form" method="post" action="/accounting/transaction-approve" cssClass="form-group">
+                <form:form modelAttribute="form" id="transaction-approve-form" method="post" action="/accounting/transaction/approve" cssClass="form-group">
                     <form:hidden path="id"/>
                     <div class="form-group">
                         <form:label path="account">Hesab</form:label>
@@ -176,7 +176,7 @@
                     <div class="row">
                         <div class="col-sm-8">
                             <div class="form-group">
-                                <form:label path="price">Alış qiyməti</form:label>
+                                <form:label path="price">Qiyməti</form:label>
                                 <div class="input-group" >
                                     <form:input path="price" cssClass="form-control" placeholder="Qiyməti daxil edin"/>
                                     <div class="input-group-append">
@@ -195,6 +195,17 @@
                                     <form:options items="${currencies}" itemLabel="name" itemValue="name" />
                                 </form:select>
                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Digər xərclər varmı?</label>
+                        <div class="row">
+                            <fmt:parseNumber var = "grid" integerOnly = "true" type = "number" value = "${12/expenses.size()}" />
+                            <c:forEach var="t" items="${expenses}" varStatus="loop">
+                                <div class="col-md-${grid}">
+                                    <label><input type="checkbox" name="expense" value="<c:out value="${t.id}"/>" /> <c:out value="${t.name}"/></label>
+                                </div>
+                            </c:forEach>
                         </div>
                     </div>
                 </form:form>

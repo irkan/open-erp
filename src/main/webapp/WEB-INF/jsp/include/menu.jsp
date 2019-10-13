@@ -29,9 +29,10 @@
             <div id="kt_header_menu" class="kt-header-menu kt-header-menu-mobile ">
                 <ul class="kt-menu__nav ">
                     <c:forEach var="t" items="${sessionScope.modules}" varStatus="loop">
+                        <c:set var="parent" value="${utl:findParentModule(t)}"/>
                         <li class="kt-menu__item <c:out value="${t.children.size()>0 ? ' kt-menu__item--submenu ' : ' '}"/> <c:out value="${t.path==page ? 'kt-menu__item--here' : ' '}"/> kt-menu__item--rel"
                             data-ktmenu-submenu-toggle="click" aria-haspopup="true">
-                            <a href="${t.children.size()>0?'javascript:;':t.path}"
+                            <a href="${t.children.size()>0?'javascript:;':'/'.concat(parent.path).concat('/').concat(t.path)}"
                                class="kt-menu__link <c:out value="${t.children.size()>0 ? ' kt-menu__toggle ' : ' '}"/>">
                                 <i class="<c:out value="${t.icon}" />"
                                    style="color: #d6d6d6;margin-right: 10px;font-size: 18px;"></i>
@@ -53,9 +54,10 @@
                                             </a>
                                         </li>
                                         <c:forEach var="p" items="${t.children}" varStatus="loop">
+                                            <c:set var="subParent" value="${utl:findParentModule(p)}"/>
                                             <li class="kt-menu__item  kt-menu__item--submenu"
                                                 data-ktmenu-submenu-toggle="hover" aria-haspopup="true">
-                                                <a href="<c:out value="${p.path}" />"
+                                                <a href="/<c:out value="${subParent.path}" />/<c:out value="${p.path}" />"
                                                    class="kt-menu__link">
                                                     <i class="<c:out value="${p.icon}" />"
                                                        style="color: #d6d6d6;margin-right: 10px;font-size: 16px;"></i>

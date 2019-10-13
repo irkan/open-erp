@@ -33,7 +33,6 @@ public class Action {
     @Column(name = "amount")
     private int amount=1;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "warehouse_inventory_id")
     private Inventory inventory;
@@ -41,6 +40,13 @@ public class Action {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "warehouse_supplier_id")
     private Supplier supplier;
+
+    @Column(name = "is_approve", nullable = false, columnDefinition="boolean default true")
+    private Boolean approve = true;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "approve_date")
+    private Date approveDate;
 
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;
@@ -60,5 +66,14 @@ public class Action {
     public Action(Dictionary action, Organization warehouse) {
         this.action = action;
         this.warehouse = warehouse;
+    }
+
+    public Action(Dictionary action, Organization warehouse, int amount, Inventory inventory, Supplier supplier, Boolean approve) {
+        this.action = action;
+        this.warehouse = warehouse;
+        this.amount = amount;
+        this.inventory = inventory;
+        this.supplier = supplier;
+        this.approve = approve;
     }
 }

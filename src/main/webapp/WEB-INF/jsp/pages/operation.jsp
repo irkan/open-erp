@@ -90,6 +90,7 @@
             </div>
             <div class="modal-body">
                 <form:form modelAttribute="form" method="post" id="form" action="/admin/operation" cssClass="form-group">
+                    <form:hidden path="id"/>
                     <div class="form-group">
                         <form:label path="name">Ad</form:label>
                         <form:input path="name" cssClass="form-control" placeholder="Modulun adını daxil edin" />

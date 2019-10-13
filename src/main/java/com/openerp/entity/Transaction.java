@@ -1,5 +1,6 @@
 package com.openerp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -7,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "accounting_transaction")
@@ -21,8 +23,8 @@ public class Transaction {
     private Integer id;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "warehouse_action_id")
-    private Action warehouseAction;
+    @JoinColumn(name = "warehouse_inventory_id")
+    private Inventory inventory;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "admin_dictionary_action_id")
@@ -77,10 +79,16 @@ public class Transaction {
     @JoinColumn(name = "transaction_id", referencedColumnName = "id")
     private Transaction transaction;
 
-    public Transaction(Action warehouseAction, Dictionary action, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String description, Boolean approve) {
-        this.warehouseAction = warehouseAction;
+    @JsonIgnore
+    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="transaction")
+    private List<Transaction> children;
+
+
+    public Transaction(Inventory inventory, Dictionary action, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String description, Boolean approve, Transaction transaction) {
+        this.inventory = inventory;
         this.action = action;
         this.description = description;
         this.approve = approve;
+        this.transaction = transaction;
     }
 }

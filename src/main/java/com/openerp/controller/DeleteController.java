@@ -19,7 +19,13 @@ public class DeleteController extends SkeletonController {
         for(UserModuleOperation umo: user.getUserModuleOperations()){
             if(umo.getModuleOperation()!=null && umo.getModuleOperation().getModule()!=null
                     && umo.getModuleOperation().getModule().getPath().equalsIgnoreCase(path)){
-                parent = umo.getModuleOperation().getModule().getModule().getPath();
+                if(umo.getModuleOperation().getModule().getModule()==null){
+                    parent = umo.getModuleOperation().getModule().getPath();
+                } else if(umo.getModuleOperation().getModule().getModule().getModule()==null) {
+                    parent = umo.getModuleOperation().getModule().getModule().getPath();
+                } else if(umo.getModuleOperation().getModule().getModule().getModule().getModule()==null) {
+                    parent = umo.getModuleOperation().getModule().getModule().getModule().getPath();
+                }
                 break;
             }
 
@@ -97,6 +103,15 @@ public class DeleteController extends SkeletonController {
             Advance advance = advanceRepository.getAdvanceById(Integer.parseInt(id));
             advance.setActive(false);
             advanceRepository.save(advance);
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.INVENTORY)){
+            Inventory inventory = inventoryRepository.getInventoryById(Integer.parseInt(id));
+            inventory.setActive(false);
+            inventoryRepository.save(inventory);
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.ACTION)){
+            Action action = actionRepository.getActionById(Integer.parseInt(id));
+            action.setActive(false);
+            actionRepository.save(action);
+            return "redirect:/"+parent+"/"+path+"/"+action.getInventory().getId();
         }
         return "redirect:/"+parent+"/"+path;
     }

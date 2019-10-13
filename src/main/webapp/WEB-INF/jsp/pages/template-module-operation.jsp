@@ -40,7 +40,7 @@
                                         <td></td>
                                         <c:forEach var="t" items="${operations}" varStatus="loop">
                                             <td class="text-center" style="width: ${75/operations.size()}%">
-                                                <span><c:out value="${t.name}" /></span><i class="icon-custom <c:out value="${t.icon}" />"></i>
+                                                <span><c:out value="${t.name}" /></span><br/><i class="icon-custom <c:out value="${t.icon}" />"></i>
                                             </td>
                                         </c:forEach>
                                     </tr>

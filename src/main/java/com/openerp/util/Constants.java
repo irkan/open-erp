@@ -46,6 +46,8 @@ public class Constants {
     public static final String YEAR_MONTH = "year_month";
     public static final String BRANCH_ID = "branch_id";
     public static final String VACATION_DETAIL_REPOSITORY = "vacation_detail_repository";
+    public static final String EXPENSES = "expenses";
+    public static final String WAREHOUSES = "warehouses";
 
     public static final class ROUTE{
         public static final String MODULE = "module";
@@ -78,5 +80,6 @@ public class Constants {
         public static final String WORKING_HOUR_RECORD = "working-hour-record";
         public static final String ILLNESS = "illness";
         public static final String ADVANCE = "advance";
+        public static final String FINANCING = "financing";
     }
 }

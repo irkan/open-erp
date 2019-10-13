@@ -9,7 +9,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -129,5 +131,24 @@ public class Util {
 
     public static String generateBarcode(int groupId){
         return groupId+DateUtility.getFormattedDateddMMyy(new Date())+RandomString.getNumeric(4);
+    }
+
+    public static Module findParentModule(Module module){
+        if(module.getModule()==null){
+            return module;
+        } else if(module.getModule().getModule()==null){
+            return module.getModule();
+        } else if(module.getModule().getModule().getModule()==null){
+            return module.getModule().getModule();
+        } else if(module.getModule().getModule().getModule().getModule()==null){
+            return module.getModule().getModule().getModule();
+        }
+        return null;
+    }
+
+    public static String format(double amount){
+        DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.CEILING);
+        return df.format(amount).replace(",", ".");
     }
 }

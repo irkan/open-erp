@@ -128,6 +128,8 @@ public class SkeletonController {
     @Autowired
     SalaryEmployeeRepository salaryEmployeeRepository;
 
+    @Autowired
+    FinancingRepository financingRepository;
 
     @Autowired
     HttpServletRequest request;

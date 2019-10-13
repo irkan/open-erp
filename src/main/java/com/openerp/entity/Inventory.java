@@ -27,7 +27,7 @@ public class Inventory {
     private Dictionary group;
 
     @Pattern(regexp=".{2,50}",message="Minimum 2 maksimum 50 simvol ola bilər")
-    @Column(name = "name", unique = true, nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Pattern(regexp=".{0,250}",message="Maksimum 250 simvol ola bilər")
@@ -41,6 +41,9 @@ public class Inventory {
     @Column(name = "is_old", nullable = false, columnDefinition="boolean default true")
     private boolean old = false;
 
+    @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
+    private Boolean active = true;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_date", nullable = false)
     private Date createdDate = new Date();
@@ -49,6 +52,7 @@ public class Inventory {
     @JoinColumn(name = "created_by_admin_user_id")
     private User createdUser;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "inventory")
     private List<Action> actions;
 

@@ -53,6 +53,24 @@
                         </a>
                     </c:when>
                 </c:choose>
+                <c:set var="approve" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
+                <c:choose>
+                    <c:when test="${approve.status}">
+                        <c:if test="${!t.approve}">
+                            <a href="javascript:approve($('#transaction-approve-form'), $('#transaction-approve-modal'));" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${approve.object.name}"/>">
+                                <i class="<c:out value="${approve.object.icon}"/>"></i>
+                            </a>
+                        </c:if>
+                    </c:when>
+                </c:choose>
+                <c:set var="transfer" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'transfer')}"/>
+                <c:choose>
+                    <c:when test="${transfer.status}">
+                        <a href="javascript:transfer($('#form'), '<c:out value="${utl:toJson(t)}" />', 'transfer-modal-operation');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
+                            <i class="<c:out value="${transfer.object.icon}"/>"></i>
+                        </a>
+                    </c:when>
+                </c:choose>
                 <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
                 <c:choose>
                     <c:when test="${edit.status}">
@@ -64,7 +82,7 @@
                 <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
                 <c:choose>
                     <c:when test="${delete.status}">
-                        <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
+                        <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.action.name}" /> / <c:out value="${t.warehouse.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
                             <i class="<c:out value="${delete.object.icon}"/>"></i>
                         </a>
                     </c:when>
@@ -91,33 +109,36 @@
 </div>
 
 
-<div class="modal fade" id="modal-operation" tabindex="-1" role="dialog">
+<div class="modal fade" id="transfer-modal-operation" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"></h5>
+                <h5 class="modal-title">Göndər</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form:form modelAttribute="form" id="form" method="post" action="/admin/dictionary-type" cssClass="form-group">
-                    <form:input type="hidden" name="id" path="id"/>
-                    <form:input type="hidden" name="active" path="active" value="1"/>
+                <form:form modelAttribute="form" id="form" method="post" action="/warehouse/action/transfer" cssClass="form-group">
+                    <form:input type="hidden" path="id"/>
+                    <form:input type="hidden" path="inventory"/>
+                    <form:input type="hidden" path="action"/>
+                    <form:input type="hidden" path="supplier"/>
                     <div class="form-group">
-                        <form:label path="name">Ad</form:label>
-                        <form:input path="name" cssClass="form-control" placeholder="Adı daxil edin"/>
-                        <form:errors path="name" cssClass="alert-danger control-label"/>
+                        <label for="from">Haradan?</label>
+                        <input name="from" id="from" class="form-control" readonly/>
                     </div>
                     <div class="form-group">
-                        <form:label path="attr1">Atribut#1</form:label>
-                        <form:input path="attr1" cssClass="form-control" placeholder="Atributu daxil edin" />
-                        <form:errors path="attr1" cssClass="alert-danger"/>
+                        <form:label path="warehouse">Haraya?</form:label>
+                        <form:select  path="warehouse" cssClass="custom-select form-control">
+                            <form:options items="${warehouses}" itemLabel="name" itemValue="id" />
+                        </form:select>
+                        <form:errors path="warehouse" cssClass="alert-danger"/>
                     </div>
                     <div class="form-group">
-                        <form:label path="attr2">Atribut#2</form:label>
-                        <form:input path="attr2" cssClass="form-control" placeholder="Atributu daxil edin" />
-                        <form:errors path="attr2" cssClass="alert alert-danger"/>
+                        <form:label path="amount">Say</form:label>
+                        <form:input path="amount" cssClass="form-control" placeholder="Sayı daxil edin"  />
+                        <form:errors path="amount" cssClass="alert alert-danger"/>
                     </div>
                 </form:form>
             </div>
@@ -128,5 +149,23 @@
         </div>
     </div>
 </div>
+
+<script>
+    function transfer(form, data, modal){
+        try {
+            data = data.replace(/\&#034;/g, '"');
+            var obj = jQuery.parseJSON(data);
+            console.log(obj);
+            $(form).find("input[name='from']").val(obj["warehouse"]["name"]);
+            $(form).find("input[name='id']").val(obj["id"]);
+            $(form).find("input[name='inventory']").val(obj["inventory"]["id"]);
+            $(form).find("input[name='action']").val(obj["action"]["id"]);
+            $(form).find("input[name='supplier']").val(obj["supplier"]["id"]);
+            $('#' + modal).modal('toggle');
+        } catch (e) {
+            console.error(e);
+        }
+    }
+</script>
 
 

@@ -36,7 +36,7 @@ public class WarehouseController extends SkeletonController {
         session.setAttribute(Constants.MODULE_DESCRIPTION, description);
 
         if (page.equalsIgnoreCase(Constants.ROUTE.INVENTORY)) {
-            model.addAttribute(Constants.LIST, inventoryRepository.findAll());
+            model.addAttribute(Constants.LIST, inventoryRepository.getInventoriesByActiveTrue());
             model.addAttribute(Constants.SUPPLIERS, supplierRepository.getSuppliersByActiveTrue());
             model.addAttribute(Constants.INVENTORY_GROUPS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("inventory-group"));
             if(!model.containsAttribute(Constants.FORM)){
@@ -44,8 +44,14 @@ public class WarehouseController extends SkeletonController {
                         Util.findWarehouse(organizationRepository.getOrganizationsByActiveTrueAndOrganization(getSessionUser().getEmployee().getOrganization())))));
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.ACTION)) {
-            int id = Integer.parseInt(data.get());
-            model.addAttribute(Constants.LIST, actionRepository.getActionsByActiveTrueAndInventory_Id(id));
+            model.addAttribute(Constants.WAREHOUSES, organizationRepository.getOrganizationsByActiveTrueAndOrganizationType_Attr1("warehouse"));
+            List<Action> actions = null;
+            if(!data.equals(Optional.empty())){
+                actions = actionRepository.getActionsByActiveTrueAndInventory_IdAndInventory_Active(Integer.parseInt(data.get()), true);
+            } else {
+                actions = actionRepository.getActionsByActiveTrueAndInventory_Active(true);
+            }
+            model.addAttribute(Constants.LIST, actions);
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Action());
             }
@@ -73,7 +79,7 @@ public class WarehouseController extends SkeletonController {
             action.setInventory(inventory);
             actionRepository.save(action);
             String description = action.getAction().getName()+", "+action.getSupplier().getName()+" -> "+action.getWarehouse().getName()+", "+inventory.getName()+", Say: " + action.getAmount() + " ədəd";
-            Transaction transaction = new Transaction(action, action.getAction(), description, false);
+            Transaction transaction = new Transaction(inventory, action.getAction(), description, false, null);
             transaction.setAmount(inventory.getAction().getAmount());
             transactionRepository.save(transaction);
         }
@@ -86,5 +92,23 @@ public class WarehouseController extends SkeletonController {
             supplierRepository.save(supplier);
         }
         return mapPost(supplier, binding, redirectAttributes);
+    }
+
+    @PostMapping(value = "/action/transfer")
+    public String postActionTranfer(@ModelAttribute(Constants.FORM) @Validated Action action, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        if(!binding.hasErrors()){
+            Action actn = actionRepository.getActionById(action.getId());
+            actn.setAmount(actn.getAmount()-action.getAmount());
+            actionRepository.save(actn);
+
+            Action sendAction = new Action(dictionaryRepository.getDictionaryByAttr1AndActiveTrue("send"),
+                    action.getWarehouse(),
+                    action.getAmount(),
+                    action.getInventory(),
+                    action.getSupplier(),
+                    false);
+            actionRepository.save(sendAction);
+        }
+        return mapPost(action, binding, redirectAttributes, "/warehouse/action/"+action.getInventory().getId());
     }
 }

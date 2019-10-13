@@ -1,6 +1,8 @@
 package com.openerp.controller;
 
 import com.openerp.entity.*;
+import com.openerp.repository.ActionRepository;
+import com.openerp.repository.InventoryRepository;
 import com.openerp.util.Constants;
 import com.openerp.util.Util;
 import org.springframework.http.MediaType;
@@ -41,6 +43,7 @@ public class AccountingController extends SkeletonController {
             model.addAttribute(Constants.ACCOUNTS,
                     accountRepository.getAccountsByActiveTrueAndOrganization(
                             Util.getUserBranch(getSessionUser().getEmployee().getOrganization())));
+            model.addAttribute(Constants.EXPENSES, dictionaryRepository.getDictionariesByActiveTrueAndAttr2AndDictionaryType_Attr1("expense", "action"));
             model.addAttribute(Constants.LIST, transactionRepository.findAll());
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Transaction());
@@ -51,6 +54,11 @@ public class AccountingController extends SkeletonController {
             model.addAttribute(Constants.LIST, accountRepository.getAccountsByActiveTrue());
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Account());
+            }
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.FINANCING)) {
+            model.addAttribute(Constants.LIST, financingRepository.getFinancingsByActiveTrue());
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new Financing());
             }
         }
         return "layout";
@@ -72,8 +80,8 @@ public class AccountingController extends SkeletonController {
         return mapPost(transaction, binding, redirectAttributes);
     }
 
-    @PostMapping(value = "/transaction-approve")
-    public String postTransactionApprove(@ModelAttribute(Constants.FORM) @Validated Transaction transaction, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+    @PostMapping(value = "/transaction/approve")
+    public String postTransactionApprove(@ModelAttribute(Constants.FORM) @Validated Transaction transaction, @RequestParam(name = "expense", required = false) int[] expenses, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         if(!binding.hasErrors()){
             Transaction trn = transactionRepository.getTransactionById(transaction.getId());
             trn.setApprove(true);
@@ -85,7 +93,41 @@ public class AccountingController extends SkeletonController {
             trn.setSumPrice(sumPrice);
             trn.setAccount(transaction.getAccount());
             transactionRepository.save(trn);
+
+            if(expenses!=null){
+                for(int expense: expenses){
+                    Dictionary action = dictionaryRepository.getDictionaryById(expense);
+                    String description = action.getName()+", "+ trn.getDescription();
+                    Transaction transaction1 = new Transaction(trn.getInventory(), action, description, false, trn);
+                    transactionRepository.save(transaction1);
+                }
+            }
+
+            Financing financing = financingRepository.getFinancingByActiveTrueAndInventory(trn.getInventory());
+
+            Double financingPrice = calculateFinancing(trn, inventoryRepository);
+            if(financing!=null){
+                financing.setPrice(financingPrice);
+            } else {
+                financing = new Financing(trn.getInventory(), financingPrice);
+            }
+            financingRepository.save(financing);
         }
         return mapPost(transaction, binding, redirectAttributes, "/accounting/transaction");
+    }
+
+    private static Double calculateFinancing(Transaction transaction, InventoryRepository inventoryRepository){
+        Inventory inventory = inventoryRepository.getInventoryById(transaction.getInventory().getId());
+        int amount=0;
+        for(Action action: inventory.getActions()){
+            amount+=action.getAmount();
+        }
+
+        Transaction parent = transaction.getTransaction()==null?transaction:transaction.getTransaction();
+        double sumPrice = parent.getSumPrice();
+        for(Transaction trn: parent.getChildren()){
+            sumPrice+=trn.getPrice();
+        }
+        return Double.parseDouble(Util.format(sumPrice/amount));
     }
 }
