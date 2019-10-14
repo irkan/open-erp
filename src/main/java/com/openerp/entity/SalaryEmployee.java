@@ -1,5 +1,6 @@
 package com.openerp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,6 +29,10 @@ public class SalaryEmployee {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "payroll_working_hour_record_employee_id")
     private WorkingHourRecordEmployee workingHourRecordEmployee;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "salaryEmployee", cascade = CascadeType.ALL)
+    private List<SalaryEmployeeDetail> salaryEmployeeDetails;
 
     public SalaryEmployee(Salary salary, WorkingHourRecordEmployee workingHourRecordEmployee) {
         this.salary = salary;

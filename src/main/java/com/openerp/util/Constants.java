@@ -48,6 +48,7 @@ public class Constants {
     public static final String VACATION_DETAIL_REPOSITORY = "vacation_detail_repository";
     public static final String EXPENSES = "expenses";
     public static final String WAREHOUSES = "warehouses";
+    public static final String SALARY_EMPLOYEES = "salary_employees";
 
     public static final class ROUTE{
         public static final String MODULE = "module";

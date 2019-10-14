@@ -272,6 +272,8 @@ public class DBConfiguration {
             dictionaries.add(employeeDetail4);
             Dictionary employeeDetail5 = new Dictionary("Həmkərlar ittifaqı, üzvülük haqqı", "{membership_fee_for_trade_union_fee}", "0", employeeDetail);
             dictionaries.add(employeeDetail5);
+            Dictionary employeeDetail6 = new Dictionary("Güzəşt", "{allowance}", "0", employeeDetail);
+            dictionaries.add(employeeDetail6);
             Dictionary identifier6 = new Dictionary("İş Günü", "İG", null, identifierType);
             dictionaries.add(identifier6);
             Dictionary identifier7 = new Dictionary("Qısaldılmış İş Günü", "QİG", null, identifierType);
@@ -983,11 +985,11 @@ public class DBConfiguration {
             accountRepository.saveAll(accounts);
 
             List<PayrollConfiguration> payrollConfigurations = new ArrayList<>();
-            PayrollConfiguration payrollConfiguration1 = new PayrollConfiguration(formulaType1, "Minimal əmək haqqı", "{minimal_salary}=200", "Azərbaycan Respublikasında müəyyənləşdirilmiş minimal əmək haqqı");
+            PayrollConfiguration payrollConfiguration1 = new PayrollConfiguration(formulaType1, "Minimal əmək haqqı", "{minimal_salary}=250", "Azərbaycan Respublikasında müəyyənləşdirilmiş minimal əmək haqqı");
             payrollConfigurations.add(payrollConfiguration1);
             PayrollConfiguration payrollConfiguration2 = new PayrollConfiguration(formulaType1,"Vergiyə cəlb olunan məbləğ", "{tax_amount_involved}={gross_salary}-{allowance}", "Vergiyə cəlb olunan məbləğ = Hesablanan aylıq əmək haqqı - Güzəşt");
             payrollConfigurations.add(payrollConfiguration2);
-            PayrollConfiguration payrollConfiguration3 = new PayrollConfiguration(formulaType1,"Gəlir vergisi", "{tax_income}={tax_amount_involved}>8000?({tax_amount_involved}-8000)*14%:0", "Gəlir vergisi: Vergiyə cəlb olunan məbləğ 8 000 manatadək olduqda: 0; Vergiyə cəlb olunan məbləğ 8 000 manatdan çox olduqda: Vergiyə cəlb olunan məbləğ *14%");
+            PayrollConfiguration payrollConfiguration3 = new PayrollConfiguration(formulaType1,"Gəlir vergisi", "{tax_income}=({tax_amount_involved})>8000?({tax_amount_involved}-8000)*14%:0", "Gəlir vergisi: Vergiyə cəlb olunan məbləğ 8 000 manatadək olduqda: 0; Vergiyə cəlb olunan məbləğ 8 000 manatdan çox olduqda: Vergiyə cəlb olunan məbləğ *14%");
             payrollConfigurations.add(payrollConfiguration3);
             PayrollConfiguration payrollConfiguration4 = new PayrollConfiguration(formulaType1,"DSMF ayırmaları", "{dsmf_deduction}={gross_salary}>{minimal_salary}?{minimal_salary}*3%+({gross_salary}-{minimal_salary})*10%:{gross_salary}*3%", "DSMF ayırmaları: Əmək haqqı 200 manatadək olduqda: Hesablanan aylıq əmək haqqı * 3%; Əmək haqqı 200 manatdan çox olduqda: 6 + (Hesablanan aylıq əmək haqqı-200) * 10%;");
             payrollConfigurations.add(payrollConfiguration4);
@@ -997,18 +999,24 @@ public class DBConfiguration {
             payrollConfigurations.add(payrollConfiguration6);
             PayrollConfiguration payrollConfiguration7 = new PayrollConfiguration(formulaType1,"İcbari tibbi sığorta haqqı", "{compulsory_health_insurance}=10", "İcbari tibbi sığorta haqqı = 10");
             payrollConfigurations.add(payrollConfiguration7);
-            PayrollConfiguration payrollConfiguration8 = new PayrollConfiguration(formulaType1,"Yekun ödəniləcək məbləğ", "{total_amount_payable}={gross_salary}-{tax_income}-{dsmf_deduction}-{unemployment_insurance}-{compulsory_health_insurance}-{membership_fee_for_trade_union}", "Yekun ödəniləcək məbləğ = Hesablanan əmək haqqı - Gəlir vergisi - DSMF ayırmaları - İşsizlikdən sığorta haqqı - İcbari tibbi sığprta haqqı - Həmkarlar təşkilatına üzvlük haqqı");
+            PayrollConfiguration payrollConfiguration8 = new PayrollConfiguration(formulaType1,"Yekun ödəniləcək məbləğ (Rəsmi hissə)", "{total_amount_payable_official}={gross_salary}-{tax_income}-{dsmf_deduction}-{unemployment_insurance}-{compulsory_health_insurance}-{membership_fee_for_trade_union}", "Yekun ödəniləcək məbləğ = Hesablanan əmək haqqı - Gəlir vergisi - DSMF ayırmaları - İşsizlikdən sığorta haqqı - İcbari tibbi sığprta haqqı - Həmkarlar təşkilatına üzvlük haqqı");
             payrollConfigurations.add(payrollConfiguration8);
-            PayrollConfiguration payrollConfiguration9 = new PayrollConfiguration(formulaType2,"Minimal məzuniyyət günlərinin sayı", "{minimal_vacation_day}=21", "AR ƏM əsasən minimal məzuniyyət günlərinin sayı 21 gün təyin edilmişdir");
+            PayrollConfiguration payrollConfiguration9 = new PayrollConfiguration(formulaType1,"İş stajına görə əmək haqqına əlavə", "{work_experience_salary}={work_experience}>10?{salary}*15%:{work_experience}>5?{salary}*10%:{work_experience}>3?{salary}*5%:0", "İş stajına görə əmək haqqına əlavə = İş stajı 10 ildən artıq olduqda əlavə 15%, 5 ildən artıq olduqda əlavə 10%, 3 ildən artıq olduqda əlavə 5%");
             payrollConfigurations.add(payrollConfiguration9);
-            PayrollConfiguration payrollConfiguration10 = new PayrollConfiguration(formulaType2,"Əlavə məzuniyyət günlərinin sayı", "{additional_vacation_day}={work_experience}>15?9:{work_experience}>10?6:{work_experience}>5?3:0", "İş stajı 15 ildən çox olduqda 9 gün, iş stajı 10 ildən çox olduqda 6 gün, iş stajı 5 ildən çox olduqda 3 gün əlavə məzuniyyət tətbiq edilir");
+            PayrollConfiguration payrollConfiguration10 = new PayrollConfiguration(formulaType1,"Ümumi əmək haqqı", "{total_salary}={salary}+{work_experience_salary}", "Ümumi əmək haqqı = İş stajına görə əmək haqqına əlavə + Əmək haqqı");
             payrollConfigurations.add(payrollConfiguration10);
-            PayrollConfiguration payrollConfiguration11 = new PayrollConfiguration(formulaType3,"Orta aylıq əmək haqqı", "{average_salary}={sum_work_month_salary_max_12}/{work_month_salary_count_max_12}", "Orta aylıq əmək haqqı = məzuniyyətdən əvvəlki 12 təqvim ayının əmək haqqının cəmlənmiş məbləği / 12");
+            PayrollConfiguration payrollConfiguration11 = new PayrollConfiguration(formulaType1,"Yekun ödəniləcək məbləğ (Qeyri rəsmi hissə)", "{total_amount_payable_non_official}={total_salary}-{total_amount_payable_official}", "Yekun ödəniləcək məbləğ (Qeyri rəsmi hissə) = Ümumi əmək haqqı - Yekun ödəniləcək məbləğ (Rəsmi hissə)");
             payrollConfigurations.add(payrollConfiguration11);
-            PayrollConfiguration payrollConfiguration12 = new PayrollConfiguration(formulaType3,"Bir günlük əmək haqqı", "{one_day_salary}={average_salary}/30.4", "Bir günlük əmək haqqı = orta aylıq əmək haqqı / 30.4");
+            PayrollConfiguration payrollConfiguration12 = new PayrollConfiguration(formulaType2,"Minimal məzuniyyət günlərinin sayı", "{minimal_vacation_day}=21", "AR ƏM əsasən minimal məzuniyyət günlərinin sayı 21 gün təyin edilmişdir");
             payrollConfigurations.add(payrollConfiguration12);
-            PayrollConfiguration payrollConfiguration13 = new PayrollConfiguration(formulaType3,"Məzuniyyət haqqı", "{vacation_pay}={one_day_salary}*{taken_vacation_day}", "Məzuniyyət haqqı = Bir günlük əmək haqqı * Məzuniyyət günləri");
+            PayrollConfiguration payrollConfiguration13 = new PayrollConfiguration(formulaType2,"Əlavə məzuniyyət günlərinin sayı", "{additional_vacation_day}={work_experience}>15?9:{work_experience}>10?6:{work_experience}>5?3:0", "İş stajı 15 ildən çox olduqda 9 gün, iş stajı 10 ildən çox olduqda 6 gün, iş stajı 5 ildən çox olduqda 3 gün əlavə məzuniyyət tətbiq edilir");
             payrollConfigurations.add(payrollConfiguration13);
+            PayrollConfiguration payrollConfiguration14 = new PayrollConfiguration(formulaType3,"Orta aylıq əmək haqqı", "{average_salary}={sum_work_month_salary_max_12}/{work_month_salary_count_max_12}", "Orta aylıq əmək haqqı = məzuniyyətdən əvvəlki 12 təqvim ayının əmək haqqının cəmlənmiş məbləği / 12");
+            payrollConfigurations.add(payrollConfiguration14);
+            PayrollConfiguration payrollConfiguration15 = new PayrollConfiguration(formulaType3,"Bir günlük əmək haqqı", "{one_day_salary}={average_salary}/30.4", "Bir günlük əmək haqqı = orta aylıq əmək haqqı / 30.4");
+            payrollConfigurations.add(payrollConfiguration15);
+            PayrollConfiguration payrollConfiguration16 = new PayrollConfiguration(formulaType3,"Məzuniyyət haqqı", "{vacation_pay}={one_day_salary}*{taken_vacation_day}", "Məzuniyyət haqqı = Bir günlük əmək haqqı * Məzuniyyət günləri");
+            payrollConfigurations.add(payrollConfiguration16);
 
             payrollConfigurationRepository.saveAll(payrollConfigurations);
 

@@ -132,6 +132,9 @@ public class SkeletonController {
     FinancingRepository financingRepository;
 
     @Autowired
+    SalaryEmployeeDetailRepository salaryEmployeeDetailRepository;
+
+    @Autowired
     HttpServletRequest request;
 
     @Autowired

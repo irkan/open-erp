@@ -3,6 +3,7 @@ package com.openerp.controller;
 import com.openerp.dummy.DummyContact;
 import com.openerp.dummy.DummyEmployee;
 import com.openerp.dummy.DummyPerson;
+import com.openerp.dummy.DummyUtil;
 import com.openerp.entity.*;
 import com.openerp.util.Constants;
 import com.openerp.util.DateUtility;
@@ -63,6 +64,13 @@ public class DummyController extends SkeletonController {
             Employee employee = new DummyEmployee().getEmployee(person, positions, organizations);
             List<EmployeeDetail> employeeDetails = new ArrayList<>();
             for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-additional-field")){
+                if(dictionary.getAttr1().equalsIgnoreCase("{salary}")){
+                    dictionary.setAttr2(DummyUtil.randomSalary());
+                } else if(dictionary.getAttr1().equalsIgnoreCase("{gross_salary}")){
+                    dictionary.setAttr2(DummyUtil.randomGrossSalary());
+                } else if(dictionary.getAttr1().equalsIgnoreCase("{previous_work_experience}")){
+                    dictionary.setAttr2(DummyUtil.randomPreviousWorkExperience());
+                }
                 EmployeeDetail employeeDetailField1 = new EmployeeDetail(employee, dictionary.getAttr1(), dictionary.getAttr2());
                 employeeDetails.add(employeeDetailField1);
             }

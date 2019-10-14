@@ -2,6 +2,7 @@ package com.openerp.util;
 
 import com.openerp.entity.*;
 import com.openerp.entity.Dictionary;
+import org.springframework.context.annotation.Description;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 import org.w3c.dom.Document;
@@ -150,5 +151,55 @@ public class Util {
         DecimalFormat df = new DecimalFormat("#.##");
         df.setRoundingMode(RoundingMode.CEILING);
         return df.format(amount).replace(",", ".");
+    }
+
+    public static String findEmployeeDetail(List<EmployeeDetail> employeeDetails, String key){
+        for(EmployeeDetail ed: employeeDetails){
+            if(ed.getKey().equalsIgnoreCase(key)){
+                return ed.getValue();
+            }
+        }
+        return "0";
+    }
+
+    public static String findEmployeeDetailDescription(List<Dictionary> dictionaries, String key){
+        for(Dictionary d: dictionaries){
+            if(d.getAttr1().trim().equalsIgnoreCase(key)){
+                return d.getName();
+            }
+        }
+        return "0";
+    }
+
+    public static String findPayrollConfiguration(List<PayrollConfiguration> payrollConfigurations, String key){
+        for(PayrollConfiguration pc: payrollConfigurations){
+            String[] formulas = pc.getFormula().split("=");
+            for(int i=0; i<formulas.length; i++){
+                if(formulas[i].trim().equalsIgnoreCase(key)){
+                    return formulas[i+1];
+                }
+            }
+        }
+        return "0";
+    }
+
+    public static String findPayrollConfigurationDescription(List<PayrollConfiguration> payrollConfigurations, String key){
+        for(PayrollConfiguration pc: payrollConfigurations){
+            String[] formulas = pc.getFormula().split("=");
+            for(int i=0; i<formulas.length; i++){
+                if(formulas[i].trim().equalsIgnoreCase(key)){
+                    return pc.getName();
+                }
+            }
+        }
+        return null;
+    }
+
+    public static String calculateWorkExperience(Date workExperience){
+        Date today = new Date();
+        double year = ((today.getTime()-workExperience.getTime())/31536)/1000000d;
+        DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.CEILING);
+        return df.format(year).replace(",", ".");
     }
 }

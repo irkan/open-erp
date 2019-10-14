@@ -4,6 +4,7 @@ import com.openerp.entity.*;
 import com.openerp.util.Constants;
 import com.openerp.util.DateUtility;
 import com.openerp.util.Util;
+import org.springframework.context.annotation.Description;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,11 +12,14 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("/payroll")
@@ -194,7 +198,224 @@ public class PayrollController extends SkeletonController {
                         }
                         slry.setSalaryEmployees(salaryEmployees);
                         salaryRepository.save(slry);
+
+                        List<PayrollConfiguration> payrollConfigurations = payrollConfigurationRepository.getPayrollConfigurationsByActiveTrueOrderById();
+                        List<Dictionary> employeeAdditionalFields = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-additional-field");
+                        ScriptEngineManager mgr = new ScriptEngineManager();
+                        ScriptEngine engine = mgr.getEngineByName("JavaScript");
+                        for(SalaryEmployee se: slry.getSalaryEmployees()){
+                            List<EmployeeDetail> employeeDetails = se.getWorkingHourRecordEmployee().getEmployee().getEmployeeDetails();
+                            List<SalaryEmployeeDetail> salaryEmployeeDetails = new ArrayList<>();
+                            String salary1 = Util.findEmployeeDetail(employeeDetails, "{salary}");
+                            salaryEmployeeDetails.add(
+                                    new SalaryEmployeeDetail(
+                                            se,
+                                            Util.findEmployeeDetailDescription(employeeAdditionalFields, "{salary}"),
+                                            "{salary}",
+                                            String.valueOf(engine.eval(salary1)),
+                                            salary1,
+                                            salary1
+                                    )
+                            );
+                            String percent = "*0.01";
+                            String gross_salary = Util.findEmployeeDetail(employeeDetails, "{gross_salary}");
+                            salaryEmployeeDetails.add(
+                                    new SalaryEmployeeDetail(
+                                            se,
+                                            Util.findEmployeeDetailDescription(employeeAdditionalFields, "{gross_salary}"),
+                                            "{gross_salary}",
+                                            String.valueOf(engine.eval(gross_salary)),
+                                            gross_salary,
+                                            gross_salary
+                                    )
+                            );
+                            String allowance = Util.findEmployeeDetail(employeeDetails, "{allowance}");
+                            salaryEmployeeDetails.add(
+                                    new SalaryEmployeeDetail(
+                                            se,
+                                            Util.findEmployeeDetailDescription(employeeAdditionalFields, "{allowance}"),
+                                            "{allowance}",
+                                            String.valueOf(engine.eval(allowance)),
+                                            allowance,
+                                            allowance
+                                    )
+                            );
+                            String membership_fee_for_trade_union_fee = Util.findEmployeeDetail(employeeDetails, "{membership_fee_for_trade_union_fee}");
+                            salaryEmployeeDetails.add(
+                                    new SalaryEmployeeDetail(
+                                            se,
+                                            Util.findEmployeeDetailDescription(employeeAdditionalFields, "{membership_fee_for_trade_union_fee}"),
+                                            "{membership_fee_for_trade_union_fee}",
+                                            String.valueOf(engine.eval(membership_fee_for_trade_union_fee)),
+                                            membership_fee_for_trade_union_fee,
+                                            membership_fee_for_trade_union_fee
+                                    )
+                            );
+                            String minimal_salary = Util.findPayrollConfiguration(payrollConfigurations,"{minimal_salary}");
+                            salaryEmployeeDetails.add(
+                                    new SalaryEmployeeDetail(
+                                            se,
+                                            Util.findPayrollConfigurationDescription(payrollConfigurations, "{minimal_salary}"),
+                                            "{minimal_salary}",
+                                            String.valueOf(engine.eval(minimal_salary)),
+                                            minimal_salary,
+                                            minimal_salary
+                                    )
+                            );
+                            String tax_amount_involved = Util.findPayrollConfiguration(payrollConfigurations,"{tax_amount_involved}")
+                                    .replaceAll(Pattern.quote("{gross_salary}"), gross_salary)
+                                    .replaceAll(Pattern.quote("{allowance}"), allowance)
+                                    .replaceAll(Pattern.quote("%"), percent);
+                            salaryEmployeeDetails.add(
+                                    new SalaryEmployeeDetail(
+                                            se,
+                                            Util.findPayrollConfigurationDescription(payrollConfigurations, "{tax_amount_involved}"),
+                                            "{tax_amount_involved}",
+                                            String.valueOf(engine.eval(tax_amount_involved)),
+                                            tax_amount_involved,
+                                            Util.findPayrollConfiguration(payrollConfigurations,"{tax_amount_involved}")
+                                    )
+                            );
+                            String tax_income = Util.findPayrollConfiguration(payrollConfigurations,"{tax_income}")
+                                    .replaceAll(Pattern.quote("{tax_amount_involved}"), String.valueOf(engine.eval(tax_amount_involved)))
+                                    .replaceAll(Pattern.quote("%"), percent);
+                            salaryEmployeeDetails.add(
+                                    new SalaryEmployeeDetail(
+                                            se,
+                                            Util.findPayrollConfigurationDescription(payrollConfigurations, "{tax_income}"),
+                                            "{tax_income}",
+                                            String.valueOf(engine.eval(tax_income)),
+                                            tax_income,
+                                            Util.findPayrollConfiguration(payrollConfigurations,"{tax_income}")
+                                    )
+                            );
+                            String dsmf_deduction = Util.findPayrollConfiguration(payrollConfigurations,"{dsmf_deduction}")
+                                    .replaceAll(Pattern.quote("{gross_salary}"), gross_salary)
+                                    .replaceAll(Pattern.quote("{minimal_salary}"), minimal_salary)
+                                    .replaceAll(Pattern.quote("%"), percent);
+                            salaryEmployeeDetails.add(
+                                    new SalaryEmployeeDetail(
+                                            se,
+                                            Util.findPayrollConfigurationDescription(payrollConfigurations, "{dsmf_deduction}"),
+                                            "{dsmf_deduction}",
+                                            String.valueOf(engine.eval(dsmf_deduction)),
+                                            dsmf_deduction,
+                                            Util.findPayrollConfiguration(payrollConfigurations,"{dsmf_deduction}")
+                                    )
+                            );
+                            String membership_fee_for_trade_union = Util.findPayrollConfiguration(payrollConfigurations,"{membership_fee_for_trade_union}")
+                                    .replaceAll(Pattern.quote("{gross_salary}"), gross_salary)
+                                    .replaceAll(Pattern.quote("{membership_fee_for_trade_union_fee}"), membership_fee_for_trade_union_fee)
+                                    .replaceAll(Pattern.quote("%"), percent);
+                            salaryEmployeeDetails.add(
+                                    new SalaryEmployeeDetail(
+                                            se,
+                                            Util.findPayrollConfigurationDescription(payrollConfigurations, "{membership_fee_for_trade_union}"),
+                                            "{membership_fee_for_trade_union}",
+                                            String.valueOf(engine.eval(membership_fee_for_trade_union)),
+                                            membership_fee_for_trade_union,
+                                            Util.findPayrollConfiguration(payrollConfigurations,"{membership_fee_for_trade_union}")
+                                    )
+                            );
+                            String compulsory_health_insurance = Util.findPayrollConfiguration(payrollConfigurations,"{compulsory_health_insurance}")
+                                    .replaceAll(Pattern.quote("{gross_salary}"), gross_salary)
+                                    .replaceAll(Pattern.quote("%"), percent);
+                            salaryEmployeeDetails.add(
+                                    new SalaryEmployeeDetail(
+                                            se,
+                                            Util.findPayrollConfigurationDescription(payrollConfigurations, "{compulsory_health_insurance}"),
+                                            "{compulsory_health_insurance}",
+                                            String.valueOf(engine.eval(compulsory_health_insurance)),
+                                            compulsory_health_insurance,
+                                            Util.findPayrollConfiguration(payrollConfigurations,"{compulsory_health_insurance}")
+                                    )
+                            );
+                            String unemployment_insurance = Util.findPayrollConfiguration(payrollConfigurations,"{unemployment_insurance}")
+                                    .replaceAll(Pattern.quote("{gross_salary}"), gross_salary)
+                                    .replaceAll(Pattern.quote("%"), percent);
+                            salaryEmployeeDetails.add(
+                                    new SalaryEmployeeDetail(
+                                            se,
+                                            Util.findPayrollConfigurationDescription(payrollConfigurations, "{unemployment_insurance}"),
+                                            "{unemployment_insurance}",
+                                            String.valueOf(engine.eval(unemployment_insurance)),
+                                            unemployment_insurance,
+                                            Util.findPayrollConfiguration(payrollConfigurations,"{unemployment_insurance}")
+                                    )
+                            );
+                            String total_amount_payable_official = Util.findPayrollConfiguration(payrollConfigurations,"{total_amount_payable_official}")
+                                    .replaceAll(Pattern.quote("{gross_salary}"), gross_salary)
+                                    .replaceAll(Pattern.quote("{tax_income}"), String.valueOf(engine.eval(tax_income)))
+                                    .replaceAll(Pattern.quote("{dsmf_deduction}"), String.valueOf(engine.eval(dsmf_deduction)))
+                                    .replaceAll(Pattern.quote("{unemployment_insurance}"), String.valueOf(engine.eval(unemployment_insurance)))
+                                    .replaceAll(Pattern.quote("{compulsory_health_insurance}"), String.valueOf(engine.eval(compulsory_health_insurance)))
+                                    .replaceAll(Pattern.quote("{membership_fee_for_trade_union}"), String.valueOf(engine.eval(membership_fee_for_trade_union)));
+                            salaryEmployeeDetails.add(
+                                    new SalaryEmployeeDetail(
+                                            se,
+                                            Util.findPayrollConfigurationDescription(payrollConfigurations, "{total_amount_payable_official}"),
+                                            "{total_amount_payable_official}",
+                                            String.valueOf(engine.eval(total_amount_payable_official)),
+                                            total_amount_payable_official,
+                                            Util.findPayrollConfiguration(payrollConfigurations,"{total_amount_payable_official}")
+                                    )
+                            );
+                            String work_experience = Util.calculateWorkExperience(se.getWorkingHourRecordEmployee().getEmployee().getContractStartDate());
+                            salaryEmployeeDetails.add(
+                                    new SalaryEmployeeDetail(
+                                            se,
+                                            "İş stajı",
+                                            "{work_experience}",
+                                            String.valueOf(engine.eval(work_experience)),
+                                            work_experience,
+                                            work_experience
+                                    )
+                            );
+                            String work_experience_salary = Util.findPayrollConfiguration(payrollConfigurations,"{work_experience_salary}")
+                                    .replaceAll(Pattern.quote("{work_experience}"), work_experience)
+                                    .replaceAll(Pattern.quote("{salary}"), salary1)
+                                    .replaceAll(Pattern.quote("%"), percent);
+                            salaryEmployeeDetails.add(
+                                    new SalaryEmployeeDetail(
+                                            se,
+                                            Util.findPayrollConfigurationDescription(payrollConfigurations, "{work_experience_salary}"),
+                                            "{work_experience_salary}",
+                                            String.valueOf(engine.eval(work_experience_salary)),
+                                            work_experience_salary,
+                                            Util.findPayrollConfiguration(payrollConfigurations,"{work_experience_salary}")
+                                    )
+                            );
+                            String total_salary = Util.findPayrollConfiguration(payrollConfigurations,"{total_salary}")
+                                    .replaceAll(Pattern.quote("{work_experience_salary}"), String.valueOf(engine.eval(work_experience_salary)))
+                                    .replaceAll(Pattern.quote("{salary}"), salary1);
+                            salaryEmployeeDetails.add(
+                                    new SalaryEmployeeDetail(
+                                            se,
+                                            Util.findPayrollConfigurationDescription(payrollConfigurations, "{total_salary}"),
+                                            "{total_salary}",
+                                            String.valueOf(engine.eval(total_salary)),
+                                            total_salary,
+                                            Util.findPayrollConfiguration(payrollConfigurations,"{total_salary}")
+                                    )
+                            );
+                            String total_amount_payable_non_official = Util.findPayrollConfiguration(payrollConfigurations,"{total_amount_payable_non_official}")
+                                    .replaceAll(Pattern.quote("{total_salary}"), String.valueOf(engine.eval(total_salary)))
+                                    .replaceAll(Pattern.quote("{total_amount_payable_official}"), String.valueOf(engine.eval(total_amount_payable_official)));
+                            salaryEmployeeDetails.add(
+                                    new SalaryEmployeeDetail(
+                                            se,
+                                            Util.findPayrollConfigurationDescription(payrollConfigurations, "{total_amount_payable_non_official}"),
+                                            "{total_amount_payable_non_official}",
+                                            String.valueOf(engine.eval(total_amount_payable_non_official)),
+                                            total_amount_payable_non_official,
+                                            Util.findPayrollConfiguration(payrollConfigurations,"{total_amount_payable_non_official}")
+                                    )
+                            );
+
+                            salaryEmployeeDetailRepository.saveAll(salaryEmployeeDetails);
+                        }
                     }
+                    redirectAttributes.addFlashAttribute(Constants.SALARY_EMPLOYEES, salaryEmployeeRepository.getSalaryEmployeesBySalary_Id(slry.getId()));
                 }
             }
         }

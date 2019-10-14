@@ -14,7 +14,7 @@ public class DummyEmployee {
         Employee employee = new Employee(
                 person,
                 DummyUtil.randomDictionary(positions),
-                new Date(),
+                DummyUtil.randomContractStartDate(),
                 null,
                 DummyUtil.randomOrganization(organizations)
         );

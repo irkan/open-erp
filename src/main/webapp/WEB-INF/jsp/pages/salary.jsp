@@ -67,13 +67,12 @@
                                         </div>
                                     </div>
                                     <div class="col-sm-4 text-right">
-                                        <c:out value="${form.workingHourRecord.workingHourRecordEmployees.size()}" />
                                         <label>&nbsp;</label>
                                         <div class="form-group">
                                             <c:set var="save" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'save')}"/>
                                             <c:choose>
                                                 <c:when test="${save.status}">
-                                                    <c:if test="${not empty form.salaryEmployees}">
+                                                    <c:if test="${not empty salary_employees}">
                                                         <a href="#" onclick="saveWHR($('#form'))" class="btn btn-warning btn-elevate btn-icon-sm" title="<c:out value="${save.object.name}"/>">
                                                             <i class="la <c:out value="${save.object.icon}"/>"></i>
                                                             <c:out value="${save.object.name}"/>
@@ -84,7 +83,7 @@
                                             <c:set var="approve" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
                                             <c:choose>
                                                 <c:when test="${approve.status}">
-                                                    <c:if test="${not empty form.workingHourRecord.workingHourRecordEmployees and !form.approve}">
+                                                    <c:if test="${not empty salary_employees and !form.approve}">
                                                         <a href="#" onclick="saveWHR($('#form'))" class="btn btn-success btn-elevate btn-icon-sm" title="<c:out value="${approve.object.name}"/>">
                                                             <i class="la <c:out value="${approve.object.icon}"/>"></i>
                                                             <c:out value="${approve.object.name}"/>
@@ -95,7 +94,7 @@
                                             <c:set var="cancel" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'cancel')}"/>
                                             <c:choose>
                                                 <c:when test="${cancel.status}">
-                                                    <c:if test="${not empty form.workingHourRecord.workingHourRecordEmployees and !form.approve}">
+                                                    <c:if test="${not empty salary_employees and !form.approve}">
                                                         <a href="#" onclick="saveWHR($('#form'))" class="btn btn-dark btn-elevate btn-icon-sm" title="<c:out value="${cancel.object.name}"/>">
                                                             <i class="la <c:out value="${cancel.object.icon}"/>"></i>
                                                             <c:out value="${cancel.object.name}"/>
@@ -106,7 +105,7 @@
                                             <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
                                             <c:choose>
                                                 <c:when test="${delete.status}">
-                                                    <c:if test="${not empty form.workingHourRecord.workingHourRecordEmployees}">
+                                                    <c:if test="${not empty salary_employees}">
                                                         <a href="javascript:deleteData('<c:out value="${form.workingHourRecord.id}" />', '<c:out value="${form.workingHourRecord.month}"/>.<c:out value="${form.workingHourRecord.year}"/> tarixli maaş hesablanması ');" class="btn btn-danger btn-elevate btn-icon-sm" title="<c:out value="${delete.object.name}"/>">
                                                             <i class="la <c:out value="${delete.object.icon}"/>"></i>
                                                             <c:out value="${delete.object.name}"/>
@@ -123,7 +122,7 @@
                 </c:choose>
                 <div class="kt-portlet__body">
                     <c:choose>
-                        <c:when test="${not empty form.workingHourRecord.workingHourRecordEmployees}">
+                        <c:when test="${not empty salary_employees}">
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_3">
                                 <thead>
                                 <tr>
@@ -148,27 +147,27 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <c:forEach var="t" items="${form.workingHourRecord.workingHourRecordEmployees}" varStatus="loop">
+                                <c:forEach var="t" items="${salary_employees}" varStatus="loop">
                                     <tr>
                                         <td class="text-center">
                                             ${loop.index + 1}
-                                            <input type="hidden" name="workingHourRecordEmployees[${loop.index}].id" value="<c:out value="${t.id}"/>"/>
+                                           <%-- <input type="hidden" name="workingHourRecordEmployees[${loop.index}].id" value="<c:out value="${t.id}"/>"/>
                                             <input type="hidden" name="workingHourRecordEmployees[${loop.index}].workingHourRecord" value="<c:out value="${form.id}"/>"/>
                                             <input type="hidden" name="workingHourRecordEmployees[${loop.index}].employee.id" value="<c:out value="${t.employee.id}"/>"/>
                                             <input type="hidden" name="workingHourRecordEmployees[${loop.index}].fullName" value="<c:out value="${t.fullName}"/>"/>
                                             <input type="hidden" name="workingHourRecordEmployees[${loop.index}].position" value="<c:out value="${t.position}"/>"/>
-                                            <input type="hidden" name="workingHourRecordEmployees[${loop.index}].organization" value="<c:out value="${t.organization}"/>"/>
+                                            <input type="hidden" name="workingHourRecordEmployees[${loop.index}].organization" value="<c:out value="${t.organization}"/>"/>--%>
                                         </td>
                                         <th>
-                                            <c:out value="${t.fullName}"/>
+                                            <c:out value="${t.workingHourRecordEmployee.fullName}"/>
                                         </th>
                                         <td>
-                                            <c:out value="${t.position}"/>
+                                            <c:out value="${t.workingHourRecordEmployee.position}"/>
                                         </td>
                                         <td>
-                                            <c:out value="${t.organization}"/>
+                                            <c:out value="${t.workingHourRecordEmployee.organization}"/>
                                         </td>
-                                        <c:forEach var="p" items="${t.workingHourRecordEmployeeIdentifiers}" varStatus="count">
+                                        <c:forEach var="p" items="${t.workingHourRecordEmployee.workingHourRecordEmployeeIdentifiers}" varStatus="count">
                                             <td class="text-center kt-padding-0">
                                                 <div class="typeahead">
                                                     <input type="hidden" name="workingHourRecordEmployees[${loop.index}].workingHourRecordEmployeeIdentifiers[${count.index}].id" value="<c:out value="${p.id}"/>"/>
