@@ -350,6 +350,9 @@ public class PayrollController extends SkeletonController {
                                     .replaceAll(Pattern.quote("{unemployment_insurance}"), String.valueOf(engine.eval(unemployment_insurance)))
                                     .replaceAll(Pattern.quote("{compulsory_health_insurance}"), String.valueOf(engine.eval(compulsory_health_insurance)))
                                     .replaceAll(Pattern.quote("{membership_fee_for_trade_union}"), String.valueOf(engine.eval(membership_fee_for_trade_union)));
+                            if(Double.parseDouble(String.valueOf(engine.eval(total_amount_payable_official)))<0){
+                                total_amount_payable_official = "0";
+                            }
                             salaryEmployeeDetails.add(
                                     new SalaryEmployeeDetail(
                                             se,

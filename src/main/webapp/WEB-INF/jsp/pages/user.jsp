@@ -130,14 +130,6 @@
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form" method="post" action="/admin/user" cssClass="form-group">
                     <div class="form-group">
-                        <form:label path="employee.organization">Flial</form:label>
-                        <form:select  path="employee.organization" cssClass="custom-select form-control" onchange="getSelect(this, '/admin/employee/get/', 'employee')">
-                            <form:options itemLabel="Strukturu seçin" itemValue="0" disabled="true" />
-                            <form:options items="${organizations}" itemLabel="name" itemValue="id" />
-                        </form:select>
-                        <form:errors path="employee.organization" cssClass="control-label alert alert-danger" />
-                    </div>
-                    <div class="form-group">
                         <form:label path="employee">Əməkdaş</form:label>
                         <form:select  path="employee" cssClass="custom-select form-control">
                             <form:options itemLabel="Əməkdaşı seçin" itemValue="0" disabled="true" />

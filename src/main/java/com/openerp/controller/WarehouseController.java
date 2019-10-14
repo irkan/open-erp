@@ -36,7 +36,15 @@ public class WarehouseController extends SkeletonController {
         session.setAttribute(Constants.MODULE_DESCRIPTION, description);
 
         if (page.equalsIgnoreCase(Constants.ROUTE.INVENTORY)) {
-            model.addAttribute(Constants.LIST, inventoryRepository.getInventoriesByActiveTrue());
+            List<Inventory> inventories = null;
+            if(getSessionUser().getEmployee().getOrganization().getOrganization()==null){
+                inventories = inventoryRepository.getInventoriesByActiveTrue();
+            } else {
+                inventories = inventoryRepository.getInventoriesByActiveTrueAndAction_Warehouse_Id(
+                        Util.findWarehouse(organizationRepository.getOrganizationsByActiveTrueAndOrganization(getSessionUser().getEmployee().getOrganization())).getId()
+                );
+            }
+            model.addAttribute(Constants.LIST, inventories);
             model.addAttribute(Constants.SUPPLIERS, supplierRepository.getSuppliersByActiveTrue());
             model.addAttribute(Constants.INVENTORY_GROUPS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("inventory-group"));
             if(!model.containsAttribute(Constants.FORM)){
@@ -47,10 +55,19 @@ public class WarehouseController extends SkeletonController {
             model.addAttribute(Constants.WAREHOUSES, organizationRepository.getOrganizationsByActiveTrueAndOrganizationType_Attr1("warehouse"));
             List<Action> actions = null;
             if(!data.equals(Optional.empty())){
-                actions = actionRepository.getActionsByActiveTrueAndInventory_IdAndInventory_Active(Integer.parseInt(data.get()), true);
+                if(getSessionUser().getEmployee().getOrganization().getOrganization()==null){
+                    actions = actionRepository.getActionsByActiveTrueAndInventory_IdAndInventory_Active(Integer.parseInt(data.get()), true);
+                } else {
+                    actions = actionRepository.getActionsByActiveTrueAndInventory_IdAndInventory_ActiveAndWarehouse(Integer.parseInt(data.get()), true, Util.findWarehouse(organizationRepository.getOrganizationsByActiveTrueAndOrganization(getSessionUser().getEmployee().getOrganization())));
+                }
             } else {
-                actions = actionRepository.getActionsByActiveTrueAndInventory_Active(true);
+                if(getSessionUser().getEmployee().getOrganization().getOrganization()==null){
+                    actions = actionRepository.getActionsByActiveTrueAndInventory_Active(true);
+                } else {
+                    actions = actionRepository.getActionsByActiveTrueAndInventory_ActiveAndWarehouse(true, Util.findWarehouse(organizationRepository.getOrganizationsByActiveTrueAndOrganization(getSessionUser().getEmployee().getOrganization())));
+                }
             }
+
             model.addAttribute(Constants.LIST, actions);
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Action());
@@ -108,6 +125,14 @@ public class WarehouseController extends SkeletonController {
                     action.getSupplier(),
                     false);
             actionRepository.save(sendAction);
+        }
+        return mapPost(action, binding, redirectAttributes, "/warehouse/action/"+action.getInventory().getId());
+    }
+
+    @PostMapping(value = "/action/approve")
+    public String postActionApprove(@ModelAttribute(Constants.FORM) @Validated Action action, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        if(!binding.hasErrors()){
+
         }
         return mapPost(action, binding, redirectAttributes, "/warehouse/action/"+action.getInventory().getId());
     }

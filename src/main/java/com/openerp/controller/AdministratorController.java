@@ -66,9 +66,8 @@ public class AdministratorController extends SkeletonController {
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.USER)){
             model.addAttribute(Constants.LANGUAGES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("language"));
-            model.addAttribute(Constants.ORGANIZATIONS, organizationRepository.findAll());
-            model.addAttribute(Constants.EMPLOYEES, employeeRepository.findAll());
-            model.addAttribute(Constants.LIST, userRepository.findAll());
+            model.addAttribute(Constants.EMPLOYEES, employeeRepository.getEmployeesByContractEndDateIsNull());
+            model.addAttribute(Constants.LIST, userRepository.getUsersByActiveTrue());
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new User());
             }

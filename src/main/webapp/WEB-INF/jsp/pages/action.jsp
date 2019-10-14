@@ -57,7 +57,7 @@
                 <c:choose>
                     <c:when test="${approve.status}">
                         <c:if test="${!t.approve}">
-                            <a href="javascript:approve($('#transaction-approve-form'), $('#transaction-approve-modal'));" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${approve.object.name}"/>">
+                            <a href="javascript:approve($('#transfer-approve-form'), $('#transfer-approve-modal'), '<c:out value="${t.id}" />', '<c:out value="${t.inventory.id}" />', '<c:out value="${t.inventory.name}" />', '<c:out value="${t.inventory.barcode}" />', '<c:out value="${t.warehouse.name}" />', '<c:out value="${t.action.name}" />', '<c:out value="${t.supplier.name}" />', '<c:out value="${t.amount}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${approve.object.name}"/>">
                                 <i class="<c:out value="${approve.object.icon}"/>"></i>
                             </a>
                         </c:if>
@@ -66,9 +66,11 @@
                 <c:set var="transfer" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'transfer')}"/>
                 <c:choose>
                     <c:when test="${transfer.status}">
-                        <a href="javascript:transfer($('#form'), '<c:out value="${utl:toJson(t)}" />', 'transfer-modal-operation');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
-                            <i class="<c:out value="${transfer.object.icon}"/>"></i>
-                        </a>
+                        <c:if test="${t.approve}">
+                            <a href="javascript:transfer($('#form'), '<c:out value="${utl:toJson(t)}" />', 'transfer-modal-operation');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
+                                <i class="<c:out value="${transfer.object.icon}"/>"></i>
+                            </a>
+                        </c:if>
                     </c:when>
                 </c:choose>
                 <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
@@ -150,6 +152,74 @@
     </div>
 </div>
 
+<div class="modal fade" id="transfer-approve-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form:form modelAttribute="form" id="transfer-approve-form" method="post" action="/warehouse/action/approve" cssClass="form-group">
+                    <form:hidden path="id"/>
+                    <form:hidden path="inventory"/>
+                    <div class="row">
+                        <div class="col-sm-12 text-center">
+                            <label id="inventory_name" style="font-size: 16px; font-weight: bold;"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 text-right">
+                            <label>Barkod</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <label id="barcode_label"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 text-right">
+                            <label>Anbar</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <label id="warehouse_label"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 text-right">
+                            <label>Hərəkət</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <label id="action_label"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 text-right">
+                            <label>Təchizatçı</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <label id="supplier_label"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 text-right">
+                            <label>Miqdar</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <label id="amount_label"></label>
+                        </div>
+                    </div>
+                </form:form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="submit($('#transfer-approve-form'));">Bəli, təsdiq edirəm!</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     function transfer(form, data, modal){
         try {
@@ -165,6 +235,19 @@
         } catch (e) {
             console.error(e);
         }
+    }
+
+    function approve(form, modal, id, inventory_id, inventory_name, barcode_label, warehouse_label, action_label, supplier_label, amount_label){
+        $(form).find("#id").val(id);
+        $(form).find("#inventory").val(inventory_id);
+        $(form).find("#inventory_name").text(inventory_name);
+        $(form).find("#barcode_label").text(barcode_label);
+        $(form).find("#warehouse_label").text(warehouse_label);
+        $(form).find("#action_label").text(action_label);
+        $(form).find("#supplier_label").text(supplier_label);
+        $(form).find("#amount_label").text(amount_label);
+        $(modal).find(".modal-title").html('Təsdiq et!');
+        $(modal).modal('toggle');
     }
 </script>
 
