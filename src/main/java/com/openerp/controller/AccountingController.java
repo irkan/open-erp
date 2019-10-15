@@ -44,7 +44,14 @@ public class AccountingController extends SkeletonController {
                     accountRepository.getAccountsByActiveTrueAndOrganization(
                             Util.getUserBranch(getSessionUser().getEmployee().getOrganization())));
             model.addAttribute(Constants.EXPENSES, dictionaryRepository.getDictionariesByActiveTrueAndAttr2AndDictionaryType_Attr1("expense", "action"));
-            model.addAttribute(Constants.LIST, transactionRepository.findAll());
+
+            List<Transaction> transactions = null;
+            if(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getOrganization()==null){
+                transactions = transactionRepository.getTransactionsByOrderByApproveDescCreatedDateDesc();
+            } else {
+                transactions = transactionRepository.getTransactionsByBranchOrderByApproveDescCreatedDateDesc(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()));
+            }
+            model.addAttribute(Constants.LIST, transactions);
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Transaction());
             }
@@ -82,36 +89,40 @@ public class AccountingController extends SkeletonController {
 
     @PostMapping(value = "/transaction/approve")
     public String postTransactionApprove(@ModelAttribute(Constants.FORM) @Validated Transaction transaction, @RequestParam(name = "expense", required = false) int[] expenses, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
-        if(!binding.hasErrors()){
+        if(!binding.hasErrors()) {
             Transaction trn = transactionRepository.getTransactionById(transaction.getId());
-            trn.setApprove(true);
-            trn.setApproveDate(new Date());
-            trn.setPrice(transaction.getPrice());
-            trn.setCurrency(transaction.getCurrency());
-            trn.setRate(getRate(transaction.getCurrency()));
-            double sumPrice = trn.getAmount()*transaction.getPrice()*trn.getRate();
-            trn.setSumPrice(sumPrice);
-            trn.setAccount(transaction.getAccount());
-            transactionRepository.save(trn);
+            if (trn.getBranch().getId() == Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getId()){
+                trn.setApprove(true);
+                trn.setApproveDate(new Date());
+                trn.setPrice(transaction.getPrice());
+                trn.setCurrency(transaction.getCurrency());
+                trn.setRate(getRate(transaction.getCurrency()));
+                double sumPrice = trn.getAmount() * transaction.getPrice() * trn.getRate();
+                trn.setSumPrice(sumPrice);
+                trn.setAccount(transaction.getAccount());
+                transactionRepository.save(trn);
 
-            if(expenses!=null){
-                for(int expense: expenses){
-                    Dictionary action = dictionaryRepository.getDictionaryById(expense);
-                    String description = action.getName()+", "+ trn.getDescription();
-                    Transaction transaction1 = new Transaction(trn.getInventory(), action, description, false, trn);
-                    transactionRepository.save(transaction1);
+                if (expenses != null) {
+                    for (int expense : expenses) {
+                        Dictionary action = dictionaryRepository.getDictionaryById(expense);
+                        String description = action.getName() + ", " + trn.getDescription();
+                        Transaction transaction1 = new Transaction(trn.getBranch(), trn.getInventory(), action, description, false, trn);
+                        transactionRepository.save(transaction1);
+                    }
                 }
-            }
 
-            Financing financing = financingRepository.getFinancingByActiveTrueAndInventory(trn.getInventory());
+                Financing financing = financingRepository.getFinancingByActiveTrueAndInventory(trn.getInventory());
 
-            Double financingPrice = calculateFinancing(trn, inventoryRepository);
-            if(financing!=null){
-                financing.setPrice(financingPrice);
+                Double financingPrice = calculateFinancing(trn, inventoryRepository);
+                if (financing != null) {
+                    financing.setPrice(financingPrice);
+                } else {
+                    financing = new Financing(trn.getInventory(), financingPrice);
+                }
+                financingRepository.save(financing);
             } else {
-                financing = new Financing(trn.getInventory(), financingPrice);
+                redirectAttributes.addFlashAttribute(Constants.ERROR, "Təsdiqləmə əməliyyatı " + Util.getUserBranch(trn.getBranch()).getName() + " tərəfindən edilməlidir!");
             }
-            financingRepository.save(financing);
         }
         return mapPost(transaction, binding, redirectAttributes, "/accounting/transaction");
     }

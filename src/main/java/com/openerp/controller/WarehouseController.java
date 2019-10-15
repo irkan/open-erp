@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,7 +38,7 @@ public class WarehouseController extends SkeletonController {
 
         if (page.equalsIgnoreCase(Constants.ROUTE.INVENTORY)) {
             List<Inventory> inventories = null;
-            if(getSessionUser().getEmployee().getOrganization().getOrganization()==null){
+            if(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getOrganization()==null){
                 inventories = inventoryRepository.getInventoriesByActiveTrue();
             } else {
                 inventories = inventoryRepository.getInventoriesByActiveTrueAndAction_Warehouse_Id(
@@ -55,13 +56,13 @@ public class WarehouseController extends SkeletonController {
             model.addAttribute(Constants.WAREHOUSES, organizationRepository.getOrganizationsByActiveTrueAndOrganizationType_Attr1("warehouse"));
             List<Action> actions = null;
             if(!data.equals(Optional.empty())){
-                if(getSessionUser().getEmployee().getOrganization().getOrganization()==null){
+                if(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getOrganization()==null){
                     actions = actionRepository.getActionsByActiveTrueAndInventory_IdAndInventory_Active(Integer.parseInt(data.get()), true);
                 } else {
                     actions = actionRepository.getActionsByActiveTrueAndInventory_IdAndInventory_ActiveAndWarehouse(Integer.parseInt(data.get()), true, Util.findWarehouse(organizationRepository.getOrganizationsByActiveTrueAndOrganization(getSessionUser().getEmployee().getOrganization())));
                 }
             } else {
-                if(getSessionUser().getEmployee().getOrganization().getOrganization()==null){
+                if(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getOrganization()==null){
                     actions = actionRepository.getActionsByActiveTrueAndInventory_Active(true);
                 } else {
                     actions = actionRepository.getActionsByActiveTrueAndInventory_ActiveAndWarehouse(true, Util.findWarehouse(organizationRepository.getOrganizationsByActiveTrueAndOrganization(getSessionUser().getEmployee().getOrganization())));
@@ -96,7 +97,8 @@ public class WarehouseController extends SkeletonController {
             action.setInventory(inventory);
             actionRepository.save(action);
             String description = action.getAction().getName()+", "+action.getSupplier().getName()+" -> "+action.getWarehouse().getName()+", "+inventory.getName()+", Say: " + action.getAmount() + " ədəd";
-            Transaction transaction = new Transaction(inventory, action.getAction(), description, false, null);
+            Organization organization = organizationRepository.getOrganizationByIdAndActiveTrue(action.getWarehouse().getId());
+            Transaction transaction = new Transaction(Util.getUserBranch(organization), inventory, action.getAction(), description, false, null);
             transaction.setAmount(inventory.getAction().getAmount());
             transactionRepository.save(transaction);
         }
@@ -112,19 +114,23 @@ public class WarehouseController extends SkeletonController {
     }
 
     @PostMapping(value = "/action/transfer")
-    public String postActionTranfer(@ModelAttribute(Constants.FORM) @Validated Action action, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+    public String postActionTransfer(@ModelAttribute(Constants.FORM) @Validated Action action, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         if(!binding.hasErrors()){
-            Action actn = actionRepository.getActionById(action.getId());
-            actn.setAmount(actn.getAmount()-action.getAmount());
-            actionRepository.save(actn);
+            if(financingRepository.getFinancingByActiveTrueAndInventory(action.getInventory())!=null){
+                Action actn = actionRepository.getActionById(action.getId());
+                actn.setAmount(actn.getAmount()-action.getAmount());
+                actionRepository.save(actn);
 
-            Action sendAction = new Action(dictionaryRepository.getDictionaryByAttr1AndActiveTrue("send"),
-                    action.getWarehouse(),
-                    action.getAmount(),
-                    action.getInventory(),
-                    action.getSupplier(),
-                    false);
-            actionRepository.save(sendAction);
+                Action sendAction = new Action(dictionaryRepository.getDictionaryByAttr1AndActiveTrue("send"),
+                        action.getWarehouse(),
+                        action.getAmount(),
+                        action.getInventory(),
+                        action.getSupplier(),
+                        false);
+                actionRepository.save(sendAction);
+            } else {
+                redirectAttributes.addFlashAttribute(Constants.ERROR, "Maliyyətləndirmə edilməyib! Alış və qiymətləndirilmə təsdiqlənməlidir!");
+            }
         }
         return mapPost(action, binding, redirectAttributes, "/warehouse/action/"+action.getInventory().getId());
     }
@@ -132,7 +138,23 @@ public class WarehouseController extends SkeletonController {
     @PostMapping(value = "/action/approve")
     public String postActionApprove(@ModelAttribute(Constants.FORM) @Validated Action action, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         if(!binding.hasErrors()){
-
+            action = actionRepository.getActionById(action.getId());
+            if (Util.getUserBranch(action.getWarehouse()).getId() == Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getId()){
+                String description = action.getAction().getName()+", "+action.getSupplier().getName()+" -> "+action.getWarehouse().getName()+", "+action.getInventory().getName()+", Say: " + action.getAmount() + " ədəd";
+                Organization organization = organizationRepository.getOrganizationByIdAndActiveTrue(action.getWarehouse().getId());
+                Transaction transaction = new Transaction(Util.getUserBranch(organization), action.getInventory(), action.getAction(), description, false, null);
+                Financing financing = financingRepository.getFinancingByActiveTrueAndInventory(action.getInventory());
+                transaction.setAmount(action.getAmount());
+                transaction.setPrice(financing.getPrice());
+                transaction.setCurrency(financing.getCurrency());
+                transaction.setRate(1d);
+                transactionRepository.save(transaction);
+                action.setApprove(!action.getApprove());
+                action.setApproveDate(new Date());
+                actionRepository.save(action);
+            } else {
+                redirectAttributes.addFlashAttribute(Constants.ERROR, "Təsdiqləmə əməliyyatı " + Util.getUserBranch(action.getWarehouse()).getName() + " tərəfindən edilməlidir!");
+            }
         }
         return mapPost(action, binding, redirectAttributes, "/warehouse/action/"+action.getInventory().getId());
     }

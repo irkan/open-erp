@@ -22,6 +22,10 @@ public class Transaction {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "hr_organization_id")
+    private Organization branch;
+
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "warehouse_inventory_id")
     private Inventory inventory;
@@ -84,7 +88,8 @@ public class Transaction {
     private List<Transaction> children;
 
 
-    public Transaction(Inventory inventory, Dictionary action, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String description, Boolean approve, Transaction transaction) {
+    public Transaction(Organization branch, Inventory inventory, Dictionary action, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String description, Boolean approve, Transaction transaction) {
+        this.branch = branch;
         this.inventory = inventory;
         this.action = action;
         this.description = description;

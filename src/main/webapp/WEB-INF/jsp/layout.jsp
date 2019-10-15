@@ -183,6 +183,46 @@
 
         return day + '.' + month + '.' + year;
     }
+
+    var KTBootstrapNotifyDemo = function () {
+        var danger = function (message) {
+                var content = {};
+                content.message = message;
+                content.icon = 'icon la la-warning';
+                var notify = $.notify(content, {
+                    type: 'danger',
+                    allow_dismiss: true,
+                    mouse_over:  true,
+                    spacing: 10,
+                    timer: 2500,
+                    placement: {
+                        from: 'bottom',
+                        align: 'center'
+                    },
+                    offset: {
+                        x: 30,
+                        y: 30
+                    },
+                    delay: 100,
+                    z_index: 10000,
+                    animate: {
+                        enter: 'animated fadeInDown',
+                        exit: 'animated fadeOutDown'
+                    }
+                });
+        };
+        return {
+            init: function(message) {
+                danger(message);
+            }
+        };
+    }();
+
+    jQuery(document).ready(function() {
+        <c:if test="${not empty error}">
+            KTBootstrapNotifyDemo.init('<c:out value="${error}"/>');
+        </c:if>
+    });
 </script>
 
 

@@ -10,6 +10,7 @@ import java.util.List;
 public interface OrganizationRepository extends JpaRepository<Organization, Integer> {
     List<Organization> findOrganizationsByOrganizationIsNullAndActiveTrue();
     List<Organization> getOrganizationsByActiveTrue();
+    Organization getOrganizationByIdAndActiveTrue(int id);
     List<Organization> getOrganizationsByActiveTrueAndOrganization(Organization organization);
     List<Organization> getOrganizationsByActiveTrueAndOrganizationType_Attr1(String attr1);
 }
