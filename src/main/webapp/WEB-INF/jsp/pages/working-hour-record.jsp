@@ -83,7 +83,7 @@
                                             <c:choose>
                                                 <c:when test="${approve.status}">
                                                     <c:if test="${not empty form.workingHourRecordEmployees and !form.approve}">
-                                                        <a href="#" onclick="approveData('<c:out value="${form.id}"/>', '<c:out value="${form.month}"/>.<c:out value="${form.year}"/> tarixli iş vaxtının uçotu')" class="btn btn-success btn-elevate btn-icon-sm" title="<c:out value="${approve.object.name}"/>">
+                                                        <a href="#" onclick="approveData($('#form'), '<c:out value="${form.month}"/>.<c:out value="${form.year}"/> tarixli iş vaxtının uçotu')" class="btn btn-success btn-elevate btn-icon-sm" title="<c:out value="${approve.object.name}"/>">
                                                             <i class="la <c:out value="${approve.object.icon}"/>"></i>
                                                             <c:out value="${approve.object.name}"/>
                                                         </a>
@@ -94,9 +94,20 @@
                                             <c:choose>
                                                 <c:when test="${cancel.status}">
                                                     <c:if test="${not empty form.workingHourRecordEmployees and form.approve}">
-                                                        <a href="#" onclick="approveData('<c:out value="${form.id}"/>', '<c:out value="${form.month}"/>.<c:out value="${form.year}"/> tarixli iş vaxtının uçotu')" class="btn btn-dark btn-elevate btn-icon-sm" title="<c:out value="${cancel.object.name}"/>">
+                                                        <a href="#" onclick="approveData($('#form'), '<c:out value="${form.month}"/>.<c:out value="${form.year}"/> tarixli iş vaxtının uçotu')" class="btn btn-dark btn-elevate btn-icon-sm" title="<c:out value="${cancel.object.name}"/>">
                                                             <i class="la <c:out value="${cancel.object.icon}"/>"></i>
                                                             <c:out value="${cancel.object.name}"/>
+                                                        </a>
+                                                    </c:if>
+                                                </c:when>
+                                            </c:choose>
+                                            <c:set var="reload" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'reload')}"/>
+                                            <c:choose>
+                                                <c:when test="${reload.status}">
+                                                    <c:if test="${not empty form.workingHourRecordEmployees and !form.approve}">
+                                                        <a href="javascript:reloadWHR($('#form'))" class="btn btn-info btn-elevate btn-icon-sm" title="<c:out value="${reload.object.name}"/>">
+                                                            <i class="la <c:out value="${reload.object.icon}"/>"></i>
+                                                            <c:out value="${reload.object.name}"/>
                                                         </a>
                                                     </c:if>
                                                 </c:when>
@@ -120,7 +131,6 @@
                     </c:when>
                 </c:choose>
                 <div class="kt-portlet__body">
-
                     <c:choose>
                         <c:when test="${not empty form.workingHourRecordEmployees}">
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_3">
@@ -128,6 +138,7 @@
                                 <tr>
                                     <th rowspan="3">№</th>
                                     <th rowspan="3" ><div style="width: 220px !important;">Ad Soyad Ata adı</div></th>
+                                    <th colspan="2" rowspan="2" class="text-center" style="letter-spacing: 4px;">Günlər</th>
                                     <th colspan="2" rowspan="2" class="text-center" style="letter-spacing: 4px;">Əməkdaş</th>
                                     <th colspan="<c:out value="${days_in_month}"/>" class="text-center" style="letter-spacing: 4px;">
                                         Ayın və həftənin günləri
@@ -139,6 +150,8 @@
                                     </c:forEach>
                                 </tr>
                                 <tr>
+                                    <th class="bg-danger text-center" style="color:white; border: none;"><div style="width: 64px !important;" class="text-center">iş/gün sayı</div></th>
+                                    <th class="bg-danger text-center" style="color:white; border: none;"><div style="width: 64px !important;" class="text-center">İşdə iştirak</div></th>
                                     <th class="bg-warning" style="border: none;"><div style="width: 180px !important;">Vəzifə</div></th>
                                     <th class="bg-warning" style="border: none;"><div style="width: 120px !important;">Struktur</div></th>
                                     <c:forEach var = "i" begin = "1" end = "${days_in_month}">
@@ -160,6 +173,14 @@
                                         </td>
                                         <th>
                                             <c:out value="${t.fullName}"/>
+                                        </th>
+                                        <th class="text-center" style="padding: 0;">
+                                            <%--<form:input path="workingHourRecordEmployees[${loop.index}].workDaysInMonth" cssClass="type-ahead-day"/>--%>
+
+                                            <input type="text" class="type-ahead-day" name="workingHourRecordEmployees[${loop.index}].workDaysInMonth" value="<c:out value="${t.workDaysInMonth}"/>"/>
+                                        </th>
+                                        <th class="text-center">
+                                            <c:out value="${t.workDutyDaysInMonth}"/>
                                         </th>
                                         <td>
                                             <c:out value="${t.position}"/>
@@ -252,10 +273,6 @@
     </div>
 </div>
 
-<form id="approve-form" method="post" action="/payroll/working-hour-record/approve" style="display: none">
-    <input type="hidden" name="id" id="elementId" />
-</form>
-
 <script src="<c:url value="/assets/vendors/general/typeahead.js/dist/typeahead.bundle.js" />" type="text/javascript"></script>
 <script src="<c:url value="/assets/vendors/general/typeahead.js/dist/typeahead.jquery.js" />" type="text/javascript"></script>
 
@@ -319,7 +336,7 @@
                 ],
                 /*aoColumns : [ { "sClass": "my_class" }],*/
                 fixedColumns:   {
-                    leftColumns: 2
+                    leftColumns: 4
                 },
                 order: [[1, 'asc']]
             });
@@ -339,8 +356,36 @@
         submit(form)
     }
 
-    function approveData(id, info){
-        $("#elementId").val(id, info);
+    function reloadWHR(form){
+        swal.fire({
+            title: 'Əminsinizmi?',
+            html: 'Məzuniyyət, Ezamiyyət, Xəstəlik və İşə davamiyyət məlumatları yenilənəcəkdir. Yenilənmədən öncə dəyişib yadda saxlamadığınız məlumat varsa, YADDA SAXLA əməliyyatını etməlisiniz',
+            type: 'info',
+            allowEnterKey: true,
+            showCancelButton: true,
+            buttonsStyling: false,
+            cancelButtonText: 'İmtina',
+            cancelButtonColor: '#d1d5cf',
+            cancelButtonClass: 'btn btn-default',
+            confirmButtonText: 'Bəli, icra edilsin!',
+            confirmButtonColor: '#c40000',
+            confirmButtonClass: 'btn btn-info',
+            footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+        }).then(function(result) {
+            if (result.value) {
+                swal.fire({
+                    text: 'Proses davam edir...',
+                    onOpen: function() {
+                        $(form).attr("action", "/payroll/working-hour-record/reload");
+                        swal.showLoading();
+                        $(form).submit();
+                    }
+                })
+            }
+        })
+    }
+
+    function approveData(form, info){
         swal.fire({
             title: 'Əminsinizmi?',
             html: info,
@@ -360,8 +405,9 @@
                 swal.fire({
                     text: 'Proses davam edir...',
                     onOpen: function() {
+                        $(form).attr("action", "/payroll/working-hour-record/approve");
                         swal.showLoading();
-                        $("#approve-form").submit();
+                        $(form).submit();
                     }
                 })
             }

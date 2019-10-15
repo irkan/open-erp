@@ -97,6 +97,7 @@ public class PayrollController extends SkeletonController {
                 redirectAttributes.addFlashAttribute(Constants.DAYS_IN_MONTH, daysInMonth);
                 whr = workingHourRecordRepository.getWorkingHourRecordByActiveTrueAndMonthAndYearAndBranch_Id(workingHourRecord.getMonth(), workingHourRecord.getYear(), workingHourRecord.getBranch().getId());
                 if(whr ==null){
+                    workingHourRecord.setId(null);
                     workingHourRecordRepository.save(workingHourRecord);
                     List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization_Id(workingHourRecord.getBranch().getId());
                     List<WorkingHourRecordEmployee> workingHourRecordEmployees = new ArrayList<>();
@@ -122,15 +123,21 @@ public class PayrollController extends SkeletonController {
     }
 
     @PostMapping(value = "/working-hour-record/approve")
-    public String postWorkingHourRecordApprove(@RequestParam(name = "id", defaultValue = "0") int id, RedirectAttributes redirectAttributes) throws Exception {
-        WorkingHourRecord whr = workingHourRecordRepository.getWorkingHourRecordById(id);
-        whr.setApprove(!whr.getApprove());
-        if(whr.getApprove()){
-            whr.setApproveDate(new Date());
-            whr.setApprovedUser(getSessionUser());
+    public String postWorkingHourRecordApprove(@ModelAttribute(Constants.FORM) @Validated WorkingHourRecord workingHourRecord2, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        WorkingHourRecord workingHourRecord = workingHourRecordRepository.getWorkingHourRecordById(workingHourRecord2.getId());
+        if(!binding.hasErrors()) {
+            workingHourRecord.setApprove(!workingHourRecord.getApprove());
+            if (workingHourRecord.getApprove()) {
+                workingHourRecord.setApproveDate(new Date());
+                workingHourRecord.setApprovedUser(getSessionUser());
+            }
+            workingHourRecordRepository.save(workingHourRecord);
+            YearMonth yearMonthObject = YearMonth.of(workingHourRecord.getYear(), workingHourRecord.getMonth());
+            int daysInMonth = yearMonthObject.lengthOfMonth();
+            redirectAttributes.addFlashAttribute(Constants.DAYS_IN_MONTH, daysInMonth);
         }
-        workingHourRecordRepository.save(whr);
-        return mapPost(redirectAttributes, "/payroll/working-hour-record");
+        workingHourRecord.setWorkingHourRecordEmployees(workingHourRecordEmployeeRepository.getWorkingHourRecordEmployeesByWorkingHourRecord_Id(workingHourRecord.getId()));
+        return mapPost2(workingHourRecord, binding, redirectAttributes, "/payroll/working-hour-record");
     }
 
     @PostMapping(value = "/working-hour-record/save")
@@ -141,8 +148,39 @@ public class PayrollController extends SkeletonController {
                     workingHourRecordEmployeeIdentifierRepository.save(whrei);
                 }
             }
+            YearMonth yearMonthObject = YearMonth.of(workingHourRecord.getYear(), workingHourRecord.getMonth());
+            int daysInMonth = yearMonthObject.lengthOfMonth();
+            redirectAttributes.addFlashAttribute(Constants.DAYS_IN_MONTH, daysInMonth);
         }
-        return mapPost(workingHourRecord, binding, redirectAttributes, "/payroll/working-hour-record");
+        WorkingHourRecord whr = workingHourRecordRepository.getWorkingHourRecordById(workingHourRecord.getId());
+        whr.setWorkingHourRecordEmployees(workingHourRecordEmployeeRepository.getWorkingHourRecordEmployeesByWorkingHourRecord_Id(whr.getId()));
+        return mapPost2(whr, binding, redirectAttributes, "/payroll/working-hour-record");
+    }
+
+    @PostMapping(value = "/working-hour-record/reload")
+    public String postWorkingHourRecordReload(@ModelAttribute(Constants.FORM) @Validated WorkingHourRecord workingHourRecord2, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        WorkingHourRecord workingHourRecord = workingHourRecordRepository.getWorkingHourRecordById(workingHourRecord2.getId());
+        if(!binding.hasErrors()){
+            YearMonth yearMonthObject = YearMonth.of(workingHourRecord.getYear(), workingHourRecord.getMonth());
+            int daysInMonth = yearMonthObject.lengthOfMonth();
+            redirectAttributes.addFlashAttribute(Constants.DAYS_IN_MONTH, daysInMonth);
+            for(WorkingHourRecordEmployee whre: workingHourRecord.getWorkingHourRecordEmployees()){
+                List<WorkingHourRecordEmployeeIdentifier> whreis = new ArrayList<>();
+                for(WorkingHourRecordEmployeeIdentifier whrei: whre.getWorkingHourRecordEmployeeIdentifiers()){
+                    String date = whrei.getMonthDay()>9?String.valueOf(whrei.getMonthDay()):("0"+whrei.getMonthDay());
+                            date += ".";
+                            date += workingHourRecord.getMonth()>9?String.valueOf(workingHourRecord.getMonth()):("0"+workingHourRecord.getMonth());
+                            date += "." + String.valueOf(workingHourRecord.getYear());
+                    String value = SkeletonController.identify(whre.getEmployee(), DateUtility.getUtilDate(date));
+                    if(!value.equalsIgnoreCase("İG")){
+                        whrei.setIdentifier(value);
+                    }
+                    whreis.add(whrei);
+                }
+                whre.setWorkingHourRecordEmployeeIdentifiers(whreis);
+            }
+        }
+        return mapPost2(workingHourRecord, binding, redirectAttributes, "/payroll/working-hour-record");
     }
 
     @PostMapping(value = "/advance")

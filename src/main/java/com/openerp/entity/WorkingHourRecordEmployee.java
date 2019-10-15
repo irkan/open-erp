@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -25,6 +26,12 @@ public class WorkingHourRecordEmployee {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "payroll_working_hour_record_id")
     private WorkingHourRecord workingHourRecord;
+
+    @Column(name = "work_days_in_month")
+    private int workDaysInMonth=0;
+
+    @Column(name = "work_duty_days_in_month")
+    private int workDutyDaysInMonth=0;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hr_employee_id")

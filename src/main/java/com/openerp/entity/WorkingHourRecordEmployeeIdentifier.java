@@ -34,7 +34,7 @@ public class WorkingHourRecordEmployeeIdentifier {
     @Column(name = "week_day")
     private int weekDay;
 
-    public WorkingHourRecordEmployeeIdentifier(WorkingHourRecordEmployee workingHourRecordEmployee, @Pattern(regexp = ".{0,8}", message = "Maksimum 8 simvol ola bilər") String identifier, int weekDay, int monthDay) {
+    public WorkingHourRecordEmployeeIdentifier(WorkingHourRecordEmployee workingHourRecordEmployee, @Pattern(regexp = ".{0,8}", message = "Maksimum 8 simvol ola bilər") String identifier, int monthDay, int weekDay) {
         this.workingHourRecordEmployee = workingHourRecordEmployee;
         this.identifier = identifier;
         this.monthDay = monthDay;
