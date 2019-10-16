@@ -13,6 +13,8 @@ import org.w3c.dom.NodeList;
 import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -202,4 +204,31 @@ public class Util {
         df.setRoundingMode(RoundingMode.CEILING);
         return df.format(year).replace(",", ".");
     }
+
+    public static List<WorkingHourRecordEmployeeDayCalculation> calculateWorkingHourRecordEmployeeDay(WorkingHourRecordEmployee workingHourRecordEmployee, List<Dictionary> identifiers){
+        List<WorkingHourRecordEmployeeDayCalculation> whrecs = new ArrayList<>();
+        for(Dictionary identifier: identifiers){
+            whrecs.add(
+                    new WorkingHourRecordEmployeeDayCalculation(
+                            workingHourRecordEmployee,
+                            identifier.getName(),
+                            identifier.getAttr1(),
+                            Util.calculateIdentifier(workingHourRecordEmployee, identifier.getAttr1()),
+                            identifier
+                    )
+            );
+        }
+        return whrecs;
+    }
+
+    public static int calculateIdentifier(WorkingHourRecordEmployee workingHourRecordEmployee, String identifier){
+        int i=0;
+        for(WorkingHourRecordEmployeeIdentifier whrei: workingHourRecordEmployee.getWorkingHourRecordEmployeeIdentifiers()){
+            if(whrei.getIdentifier().equalsIgnoreCase(identifier)){
+                i=i+1;
+            }
+        }
+        return i;
+    }
+
 }

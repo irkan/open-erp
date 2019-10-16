@@ -49,6 +49,7 @@ public class Constants {
     public static final String EXPENSES = "expenses";
     public static final String WAREHOUSES = "warehouses";
     public static final String SALARY_EMPLOYEES = "salary_employees";
+    public static final String WORK_DAYS_IN_MONTH_LIST = "work_days_in_month_list";
 
     public static final class ROUTE{
         public static final String MODULE = "module";

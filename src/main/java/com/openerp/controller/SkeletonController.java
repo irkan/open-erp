@@ -15,6 +15,7 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 public class SkeletonController {
@@ -142,7 +143,7 @@ public class SkeletonController {
 
     @PostConstruct
     public void init() {
-        StaticUtils.setConfig(vacationDetailRepository, businessTripDetailRepository, illnessDetailRepository);
+        StaticUtils.setConfig(vacationDetailRepository, businessTripDetailRepository, illnessDetailRepository, nonWorkingDayRepository);
     }
 
 
@@ -225,6 +226,10 @@ public class SkeletonController {
         IllnessDetail illnessDetail = StaticUtils.getIllnessDetailByEmployeeAndIllnessDateAndIllness_Active(employee, date, true);
         if(illnessDetail!=null){
             return illnessDetail.getIllness().getIdentifier().getAttr1();
+        }
+        NonWorkingDay nonWorkingDay = StaticUtils.getNonWorkingDayByNonWorkingDateAndActiveTrue(date);
+        if(nonWorkingDay!=null){
+            return nonWorkingDay.getIdentifier();
         }
         return "İG";
     }

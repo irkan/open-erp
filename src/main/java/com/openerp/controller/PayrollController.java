@@ -101,8 +101,13 @@ public class PayrollController extends SkeletonController {
                     workingHourRecordRepository.save(workingHourRecord);
                     List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization_Id(workingHourRecord.getBranch().getId());
                     List<WorkingHourRecordEmployee> workingHourRecordEmployees = new ArrayList<>();
+                    List<NonWorkingDay> nonWorkingDays = nonWorkingDayRepository.getNotWorkingDaysBtStartDateAndEndDate(
+                            DateUtility.generate(1, workingHourRecord.getMonth(), workingHourRecord.getYear()),
+                            DateUtility.generate(daysInMonth, workingHourRecord.getMonth(), workingHourRecord.getYear())
+                    );
+                    int workDaysInMonth = daysInMonth - nonWorkingDays.size();
                     for(Employee employee: employees){
-                        WorkingHourRecordEmployee workingHourRecordEmployee = new WorkingHourRecordEmployee(workingHourRecord, employee, employee.getPerson().getFullName(), employee.getPosition().getName(), employee.getOrganization().getName());
+                        WorkingHourRecordEmployee workingHourRecordEmployee = new WorkingHourRecordEmployee(workingHourRecord, employee, employee.getPerson().getFullName(), employee.getPosition().getName(), employee.getOrganization().getName(), workDaysInMonth, 0);
                         workingHourRecordEmployeeRepository.save(workingHourRecordEmployee);
                         List<WorkingHourRecordEmployeeIdentifier> workingHourRecordEmployeeIdentifiers = new ArrayList<>();
                         for(int i=1; i<=daysInMonth; i++){
@@ -143,10 +148,13 @@ public class PayrollController extends SkeletonController {
     @PostMapping(value = "/working-hour-record/save")
     public String postWorkingHourRecordSave(@ModelAttribute(Constants.FORM) @Validated WorkingHourRecord workingHourRecord, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         if(!binding.hasErrors()){
+            List<Dictionary> identifiers = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("identifier");
             for(WorkingHourRecordEmployee whre: workingHourRecord.getWorkingHourRecordEmployees()){
-                for(WorkingHourRecordEmployeeIdentifier whrei: whre.getWorkingHourRecordEmployeeIdentifiers()){
+                /*for(WorkingHourRecordEmployeeIdentifier whrei: whre.getWorkingHourRecordEmployeeIdentifiers()){
                     workingHourRecordEmployeeIdentifierRepository.save(whrei);
-                }
+                }*/
+                whre.setWorkingHourRecordEmployeeDayCalculations(Util.calculateWorkingHourRecordEmployeeDay(whre, identifiers));
+                workingHourRecordEmployeeRepository.save(whre);
             }
             YearMonth yearMonthObject = YearMonth.of(workingHourRecord.getYear(), workingHourRecord.getMonth());
             int daysInMonth = yearMonthObject.lengthOfMonth();

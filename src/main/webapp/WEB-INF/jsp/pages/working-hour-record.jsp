@@ -34,7 +34,7 @@
                         <div class="kt-portlet__head kt-portlet__head--lg">
                             <div class="kt-portlet__head-title" style="width: 100%">
                                 <div class="row">
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-2">
                                         <div class="form-group">
                                             <form:label path="branch">&nbsp;</form:label>
                                             <form:select  path="branch" cssClass="custom-select form-control">
@@ -131,6 +131,7 @@
                     </c:when>
                 </c:choose>
                 <div class="kt-portlet__body">
+                    <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
                     <c:choose>
                         <c:when test="${not empty form.workingHourRecordEmployees}">
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_3">
@@ -175,11 +176,11 @@
                                             <c:out value="${t.fullName}"/>
                                         </th>
                                         <th class="text-center" style="padding: 0;">
-                                            <%--<form:input path="workingHourRecordEmployees[${loop.index}].workDaysInMonth" cssClass="type-ahead-day"/>--%>
-
-                                            <input type="text" class="type-ahead-day" name="workingHourRecordEmployees[${loop.index}].workDaysInMonth" value="<c:out value="${t.workDaysInMonth}"/>"/>
+                                            <input type="hidden" name="workingHourRecordEmployees[${loop.index}].workDaysInMonth" value="<c:out value="${t.workDaysInMonth}"/>"/>
+                                            <input type="text" class="type-ahead-day" attr="workingHourRecordEmployees[${loop.index}].workDaysInMonth" value="<c:out value="${t.workDaysInMonth}"/>" onkeyup="$('input[name=\''+$(this).attr('attr')+'\']').val($(this).val())"/>
                                         </th>
                                         <th class="text-center">
+                                            <input type="hidden" class="type-ahead-day" name="workingHourRecordEmployees[${loop.index}].workDutyDaysInMonth" value="<c:out value="${t.workDutyDaysInMonth}"/>"/>
                                             <c:out value="${t.workDutyDaysInMonth}"/>
                                         </th>
                                         <td>

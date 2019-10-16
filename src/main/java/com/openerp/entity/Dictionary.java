@@ -45,4 +45,9 @@ public class Dictionary {
         this.attr2 = attr2;
         this.dictionaryType = dictionaryType;
     }
+
+    public Dictionary(@Pattern(regexp = ".{2,50}", message = "Minimum 2 maksimum 50 simvol ola bilər") String name, @Pattern(regexp = ".{1,50}", message = "Minimum 1 maksimum 50 simvol ola bilər") String attr1) {
+        this.name = name;
+        this.attr1 = attr1;
+    }
 }

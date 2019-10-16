@@ -126,7 +126,7 @@ public class HRController extends SkeletonController {
     public String postNonWorkingDayUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) throws Exception {
         List<NonWorkingDay> nonWorkingDays = ReadWriteExcelFile.readXLSXFileNonWorkingDays(file.getInputStream());
         for(NonWorkingDay nonWorkingDay: nonWorkingDays){
-            NonWorkingDay nwd = nonWorkingDayRepository.getNonWorkingDayByNonWorkingDate(nonWorkingDay.getNonWorkingDate());
+            NonWorkingDay nwd = nonWorkingDayRepository.getNonWorkingDayByNonWorkingDateAndActiveTrue(nonWorkingDay.getNonWorkingDate());
             if(nwd!=null && !nwd.getActive()){
                 nwd.setActive(true);
                 nonWorkingDayRepository.save(nwd);

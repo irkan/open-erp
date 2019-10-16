@@ -40,6 +40,9 @@ public class WorkingHourRecordEmployee {
     @OneToMany(mappedBy = "workingHourRecordEmployee", fetch = FetchType.EAGER)
     private List<WorkingHourRecordEmployeeIdentifier> workingHourRecordEmployeeIdentifiers;
 
+    @OneToMany(mappedBy = "workingHourRecordEmployee")
+    private List<WorkingHourRecordEmployeeDayCalculation> workingHourRecordEmployeeDayCalculations;
+
     @Pattern(regexp=".{0,255}",message="Maksimum 255 simvol ola bilər")
     @Column(name = "full_name")
     private String fullName;
@@ -52,11 +55,13 @@ public class WorkingHourRecordEmployee {
     @Column(name = "organization")
     private String organization;
 
-    public WorkingHourRecordEmployee(WorkingHourRecord workingHourRecord, Employee employee, @Pattern(regexp = ".{0,255}", message = "Maksimum 255 simvol ola bilər") String fullName, @Pattern(regexp = ".{0,255}", message = "Maksimum 255 simvol ola bilər") String position, @Pattern(regexp = ".{0,255}", message = "Maksimum 255 simvol ola bilər") String organization) {
+    public WorkingHourRecordEmployee(WorkingHourRecord workingHourRecord, Employee employee, @Pattern(regexp = ".{0,255}", message = "Maksimum 255 simvol ola bilər") String fullName, @Pattern(regexp = ".{0,255}", message = "Maksimum 255 simvol ola bilər") String position, @Pattern(regexp = ".{0,255}", message = "Maksimum 255 simvol ola bilər") String organization, int workDaysInMonth, int workDutyDaysInMonth) {
         this.workingHourRecord = workingHourRecord;
         this.employee = employee;
         this.fullName = fullName;
         this.position = position;
         this.organization = organization;
+        this.workDaysInMonth = workDaysInMonth;
+        this.workDutyDaysInMonth = workDutyDaysInMonth;
     }
 }

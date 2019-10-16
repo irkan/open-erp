@@ -78,4 +78,8 @@ public class DateUtility {
         }
         return null;
     }
+
+    public static String generateStringDate(int day, int month, int year){
+        return (day > 9 ? day : "0" + day) + "." + (month > 9 ? month : "0" + month) + "." + year;
+    }
 }
