@@ -40,7 +40,7 @@ public class LoginController extends SkeletonController {
                                 @RequestParam(name="password") String password) throws Exception {
         User user = userRepository.findByUsernameAndPasswordAndActiveTrue(username, DigestUtils.md5DigestAsHex(password.getBytes()));
         if(user==null){
-            model.addAttribute(Constants.ERROR, "true");
+            model.addAttribute("error", "true");
             model.addAttribute(Constants.MESSAGE, "İstifadəçi adı və ya şifrəniz yanlışdır!");
             return "login";
         }
@@ -61,7 +61,7 @@ public class LoginController extends SkeletonController {
             session.setAttribute(Constants.VACATION_DETAIL_REPOSITORY, vacationDetailRepository);
             return "redirect:/route/"+parentModules.get(0).getPath();
         }
-        model.addAttribute(Constants.ERROR, "true");
+        model.addAttribute("error", "true");
         model.addAttribute(Constants.MESSAGE, "Sistemdən istifadə icazələri ilə təmin edilməmisiniz!");
         return "login";
     }

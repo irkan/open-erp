@@ -44,7 +44,16 @@
                                         <td><c:out value="${t.group.name}" /></td>
                                         <td><c:out value="${t.name}" /></td>
                                         <td><c:out value="${t.description}" /></td>
-                                        <td><c:out value="${t.barcode}" /> <%--<c:out value="${utl:toJson(t)}" /> --%> </td>
+                                        <td><c:out value="${t.barcode}" />
+                                            <c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
+                                            <c:choose>
+                                                <c:when test="${export.status}">
+                                                    <a href="javascript:printBarcode('<c:out value="${t.name}" />', '<c:out value="${t.barcode}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${export.object.name}"/>">
+                                                        <i class="la <c:out value="${export.object.icon}"/>"></i>
+                                                    </a>
+                                                </c:when>
+                                            </c:choose>
+                                        </td>
                                         <td>
                                             <c:choose>
                                                 <c:when test="${t.old}">
@@ -190,20 +199,21 @@
                                 </div>
                                 <form:errors path="action.amount" cssClass="alert-danger control-label"/>
                             </div>
+                            <div class="form-group">
+                                <label class="kt-checkbox kt-checkbox--brand">
+                                    <form:checkbox path="old"/> İşlənmişdir
+                                    <span></span>
+                                </label>
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <form:label path="barcode">Barkod</form:label>
-                                <form:input path="barcode" cssClass="form-control" placeholder="Barkodu daxil edin" readonly="true"/>
+                                <img src="<c:url value="/assets/media/barcode.png" />" style="width: 200px; height: 80px;">
+                                <form:hidden path="barcode" cssClass="form-control" placeholder="Barkodu daxil edin" readonly="true"/>
                                 <form:errors path="barcode" cssClass="alert-danger control-label"/>
                             </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="kt-checkbox kt-checkbox--brand">
-                            <form:checkbox path="old"/> İşlənmişdir
-                            <span></span>
-                        </label>
                     </div>
                 </form:form>
             </div>
@@ -215,6 +225,41 @@
     </div>
 </div>
 
+<div id="barcodePrint" style="display: none; margin: 10px;">
+    <div id="barcodeTarget" style="margin: 10px;"></div>
+</div>
+
 <script src="<c:url value="/assets/js/demo4/pages/crud/datatables/advanced/row-grouping.js" />" type="text/javascript"></script>
+<script src="<c:url value="/assets/js/jquery-barcode.js" />" type="text/javascript"></script>
+<script>
+    function printBarcode(description, barcode) {
+        generateBarcode('code128', barcode, 'css');
+        var divToPrint=document.getElementById('barcodePrint');
+        var newWin=window.open('','Print-Window');
+        newWin.document.open();
+        newWin.document.write('<html><body style="width: 220px; height: 90px; padding-left: 40px;" onload="window.print()"><div style="text-align: center;margin-bottom: 3px; font-size: 12px; font-weight: bold">'+description+'</div>'+divToPrint.innerHTML+'</body></html>');
+        newWin.document.close();
+        setTimeout(function(){newWin.close();},10);
+    }
+
+    function generateBarcode(btype, value, renderer){
+        var settings = {
+            output:renderer,
+            bgColor: '#FFFFFF',
+            color: '#000000',
+            barWidth: 2,
+            barHeight: 50,
+            moduleSize: 5,
+            fontSize: 18,
+            marginHRI: 1,
+            posX: 30,
+            posY: 5,
+            addQuietZone: 1
+        };
+        $("#barcodeTarget").html("").show().barcode(value, btype, settings);
+    }
+
+
+</script>
 
 

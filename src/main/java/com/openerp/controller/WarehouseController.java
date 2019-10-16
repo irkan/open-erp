@@ -1,5 +1,6 @@
 package com.openerp.controller;
 
+import com.openerp.domain.Response;
 import com.openerp.entity.*;
 import com.openerp.util.Constants;
 import com.openerp.util.Util;
@@ -114,9 +115,17 @@ public class WarehouseController extends SkeletonController {
     }
 
     @PostMapping(value = "/action/transfer")
-    public String postActionTransfer(@ModelAttribute(Constants.FORM) @Validated Action action, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+    public String postActionTransfer(@ModelAttribute(Constants.FORM) @Validated Action action, @RequestParam(name="fromWarehouse", defaultValue = "0") int fromWarehouseId, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         if(!binding.hasErrors()){
-            if(financingRepository.getFinancingByActiveTrueAndInventory(action.getInventory())!=null){
+            List<String> dangers = new ArrayList<>();
+            if(financingRepository.getFinancingByActiveTrueAndInventory(action.getInventory())==null){
+                dangers.add("Maliyyətləndirmə edilməyib! Alış və qiymətləndirilmə təsdiqlənməlidir!");
+            }
+            if(fromWarehouseId==action.getWarehouse().getId()){
+                dangers.add(action.getWarehouse().getName() + " - özündən özünə Göndərmə əməliyyatı edilə bilməz!");
+            }
+            redirectAttributes.addFlashAttribute(Constants.STATUS.DANGER, new Response(Constants.STATUS.DANGER, dangers));
+            if(dangers.size()==0){
                 Action actn = actionRepository.getActionById(action.getId());
                 actn.setAmount(actn.getAmount()-action.getAmount());
                 actionRepository.save(actn);
@@ -128,8 +137,6 @@ public class WarehouseController extends SkeletonController {
                         action.getSupplier(),
                         false);
                 actionRepository.save(sendAction);
-            } else {
-                redirectAttributes.addFlashAttribute(Constants.ERROR, "Maliyyətləndirmə edilməyib! Alış və qiymətləndirilmə təsdiqlənməlidir!");
             }
         }
         return mapPost(action, binding, redirectAttributes, "/warehouse/action/"+action.getInventory().getId());
@@ -138,8 +145,15 @@ public class WarehouseController extends SkeletonController {
     @PostMapping(value = "/action/approve")
     public String postActionApprove(@ModelAttribute(Constants.FORM) @Validated Action action, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         if(!binding.hasErrors()){
+            Response response = null;
             action = actionRepository.getActionById(action.getId());
-            if (Util.getUserBranch(action.getWarehouse()).getId() == Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getId()){
+            if (Util.getUserBranch(action.getWarehouse()).getId() != Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getId()){
+                List<String> messages = new ArrayList<>();
+                messages.add("Təsdiqləmə əməliyyatı " + Util.getUserBranch(action.getWarehouse()).getName() + " tərəfindən edilməlidir!");
+                response = new Response(Constants.STATUS.DANGER, messages);
+                redirectAttributes.addFlashAttribute(Constants.STATUS.DANGER, response);
+            }
+            if(response==null){
                 String description = action.getAction().getName()+", "+action.getSupplier().getName()+" -> "+action.getWarehouse().getName()+", "+action.getInventory().getName()+", Say: " + action.getAmount() + " ədəd";
                 Organization organization = organizationRepository.getOrganizationByIdAndActiveTrue(action.getWarehouse().getId());
                 Transaction transaction = new Transaction(Util.getUserBranch(organization), action.getInventory(), action.getAction(), description, false, null);
@@ -152,8 +166,6 @@ public class WarehouseController extends SkeletonController {
                 action.setApprove(!action.getApprove());
                 action.setApproveDate(new Date());
                 actionRepository.save(action);
-            } else {
-                redirectAttributes.addFlashAttribute(Constants.ERROR, "Təsdiqləmə əməliyyatı " + Util.getUserBranch(action.getWarehouse()).getName() + " tərəfindən edilməlidir!");
             }
         }
         return mapPost(action, binding, redirectAttributes, "/warehouse/action/"+action.getInventory().getId());

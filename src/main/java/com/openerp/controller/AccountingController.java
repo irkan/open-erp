@@ -1,5 +1,6 @@
 package com.openerp.controller;
 
+import com.openerp.domain.Response;
 import com.openerp.entity.*;
 import com.openerp.repository.ActionRepository;
 import com.openerp.repository.InventoryRepository;
@@ -121,7 +122,9 @@ public class AccountingController extends SkeletonController {
                 }
                 financingRepository.save(financing);
             } else {
-                redirectAttributes.addFlashAttribute(Constants.ERROR, "Təsdiqləmə əməliyyatı " + Util.getUserBranch(trn.getBranch()).getName() + " tərəfindən edilməlidir!");
+                List<String> messages = new ArrayList<>();
+                messages.add("Təsdiqləmə əməliyyatı " + Util.getUserBranch(trn.getBranch()).getName() + " tərəfindən edilməlidir!");
+                redirectAttributes.addFlashAttribute(Constants.STATUS.DANGER, new Response(Constants.STATUS.DANGER, messages));
             }
         }
         return mapPost(transaction, binding, redirectAttributes, "/accounting/transaction");

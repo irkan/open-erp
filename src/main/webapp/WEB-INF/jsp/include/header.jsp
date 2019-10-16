@@ -36,7 +36,6 @@
 <link href="<c:url value="/assets/vendors/general/@yaireo/tagify/dist/tagify.css" />" rel="stylesheet" type="text/css"/>
 <link href="<c:url value="/assets/vendors/general/summernote/dist/summernote.css" />" rel="stylesheet" type="text/css"/>
 <link href="<c:url value="/assets/vendors/general/bootstrap-markdown/css/bootstrap-markdown.min.css" />" rel="stylesheet" type="text/css"/>
-<link href="<c:url value="/assets/vendors/general/animate.css" />" rel="stylesheet" type="text/css"/>
 <link href="<c:url value="/assets/vendors/general/toastr/build/toastr.css" />" rel="stylesheet" type="text/css"/>
 <link href="<c:url value="/assets/vendors/general/dual-listbox/dist/dual-listbox.css" />" rel="stylesheet" type="text/css"/>
 <link href="<c:url value="/assets/vendors/general/morris.js/morris.css" />" rel="stylesheet" type="text/css"/>

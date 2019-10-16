@@ -22,7 +22,6 @@ public class Constants {
     public static final String TEMPLATE_MODULE_OPERATIONS = "template_module_operations";
     public static final String TEMPLATE_ID = "template_id";
     public static final String PARENT_MODULES = "parent_modules";
-    public static final String ERROR = "error";
     public static final String MESSAGE = "message";
     public static final String PROFILE_SUB_PAGE = "profile_sub_page";
     public static final String FORM_RESULT_BINDING = "org.springframework.validation.BindingResult.form";
@@ -38,19 +37,21 @@ public class Constants {
     public static final String FORMULA_TYPES = "formula_types";
     public static final String EMPLOYEE_ADDITIONAL_FIELDS = "employee_additional_fields";
     public static final String IDENTIFIERS = "identifiers";
-    public static final String MONTHS = "months";
-    public static final String YEARS = "years";
     public static final String DAYS_IN_MONTH = "days_in_month";
     public static final String BRANCHES = "branches";
-    public static final String VACATION_FORMATS = "vacation_formats";
     public static final String YEAR_MONTH = "year_month";
     public static final String BRANCH_ID = "branch_id";
     public static final String VACATION_DETAIL_REPOSITORY = "vacation_detail_repository";
     public static final String EXPENSES = "expenses";
     public static final String WAREHOUSES = "warehouses";
     public static final String SALARY_EMPLOYEES = "salary_employees";
-    public static final String WORK_DAYS_IN_MONTH_LIST = "work_days_in_month_list";
 
+    public static final class STATUS{
+        public static final String DANGER = "danger";
+        public static final String WARNING = "warning";
+        public static final String INFO = "info";
+        public static final String SUCCESS = "success";
+    }
     public static final class ROUTE{
         public static final String MODULE = "module";
         public static final String OPERATION = "operation";

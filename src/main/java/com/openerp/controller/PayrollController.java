@@ -1,5 +1,6 @@
 package com.openerp.controller;
 
+import com.openerp.domain.Response;
 import com.openerp.entity.*;
 import com.openerp.util.Constants;
 import com.openerp.util.DateUtility;
@@ -232,7 +233,9 @@ public class PayrollController extends SkeletonController {
                 if(whr!=null && !whr.getApprove()){
                     message = "İş vaxtının uçotu cədvəli təsdiq edilməyib!";
                 }
-                redirectAttributes.addFlashAttribute(Constants.ERROR, message);
+                List<String> messages = new ArrayList<>();
+                messages.add(message);
+                redirectAttributes.addFlashAttribute(Constants.STATUS.DANGER, new Response(Constants.STATUS.DANGER, messages));
 
                 if(whr!=null && whr.getApprove()){
                     slry = salaryRepository.getSalaryByActiveTrueAndWorkingHourRecord(whr);

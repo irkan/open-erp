@@ -122,10 +122,11 @@
             </div>
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form" method="post" action="/warehouse/action/transfer" cssClass="form-group">
-                    <form:input type="hidden" path="id"/>
-                    <form:input type="hidden" path="inventory"/>
-                    <form:input type="hidden" path="action"/>
-                    <form:input type="hidden" path="supplier"/>
+                    <input type="hidden" name="id"/>
+                    <input type="hidden" name="inventory"/>
+                    <input type="hidden" name="action"/>
+                    <input type="hidden" name="supplier"/>
+                    <input type="hidden" name="fromWarehouse"/>
                     <div class="form-group">
                         <label for="from">Haradan?</label>
                         <input name="from" id="from" class="form-control" readonly/>
@@ -227,6 +228,7 @@
             var obj = jQuery.parseJSON(data);
             console.log(obj);
             $(form).find("input[name='from']").val(obj["warehouse"]["name"]);
+            $(form).find("input[name='fromWarehouse']").val(obj["warehouse"]["id"]);
             $(form).find("input[name='id']").val(obj["id"]);
             $(form).find("input[name='inventory']").val(obj["inventory"]["id"]);
             $(form).find("input[name='action']").val(obj["action"]["id"]);
