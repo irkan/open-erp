@@ -206,25 +206,63 @@ public class Util {
     }
 
     public static List<WorkingHourRecordEmployeeDayCalculation> calculateWorkingHourRecordEmployeeDay(WorkingHourRecordEmployee workingHourRecordEmployee, List<Dictionary> identifiers){
-        List<WorkingHourRecordEmployeeDayCalculation> whrecs = new ArrayList<>();
+        List<WorkingHourRecordEmployeeDayCalculation> whredcs = new ArrayList<>();
+        List<WorkingHourRecordEmployeeDayCalculation> whredcsCurrent = workingHourRecordEmployee.getWorkingHourRecordEmployeeDayCalculations();
         for(Dictionary identifier: identifiers){
-            whrecs.add(
-                    new WorkingHourRecordEmployeeDayCalculation(
-                            workingHourRecordEmployee,
-                            identifier.getName(),
-                            identifier.getAttr1(),
-                            Util.calculateIdentifier(workingHourRecordEmployee, identifier.getAttr1()),
-                            identifier
-                    )
-            );
+            if(!identifier.getAttr1().contentEquals("HİG")) {
+                WorkingHourRecordEmployeeDayCalculation whredc = findWorkingHourRecordEmployeeDayCalculation(whredcsCurrent, identifier.getAttr1());
+                whredc.setWorkingHourRecordEmployee(workingHourRecordEmployee);
+                whredc.setDescription(identifier.getName());
+                whredc.setKey(identifier.getAttr1());
+                whredc.setValue(Util.calculateIdentifier(workingHourRecordEmployee, identifier.getAttr1()));
+                whredc.setIdentifier(identifier);
+                whredcs.add(whredc);
+            }
         }
-        return whrecs;
+        for(Dictionary identifier: identifiers){
+            if(identifier.getAttr1().contentEquals("HİG")){
+                WorkingHourRecordEmployeeDayCalculation whredc = findWorkingHourRecordEmployeeDayCalculation(whredcsCurrent, identifier.getAttr1());
+                whredc.setWorkingHourRecordEmployee(workingHourRecordEmployee);
+                whredc.setDescription(identifier.getName());
+                whredc.setKey(identifier.getAttr1());
+                whredc.setValue(Util.calculateHIG(whredcs));
+                whredc.setIdentifier(identifier);
+                whredcs.add(whredc);
+            }
+        }
+        return whredcs;
+    }
+
+    public static int calculateHIG(List<WorkingHourRecordEmployeeDayCalculation> whredcs){
+        int uig = 0;
+        for(WorkingHourRecordEmployeeDayCalculation whredc: whredcs){
+            if(whredc.getKey().contentEquals("İG") ||
+                    whredc.getKey().contentEquals("QİG") ||
+                    whredc.getKey().contentEquals("QİG(S)") ||
+                    whredc.getKey().contentEquals("QİG(A)") ||
+                    whredc.getKey().contentEquals("I") ||
+                    whredc.getKey().contentEquals("II")){
+                uig+=whredc.getValue();
+            }
+        }
+        return uig;
+    }
+
+    public static WorkingHourRecordEmployeeDayCalculation findWorkingHourRecordEmployeeDayCalculation(List<WorkingHourRecordEmployeeDayCalculation> whredcs, String identifier){
+        if(whredcs!=null){
+            for(WorkingHourRecordEmployeeDayCalculation whredc: whredcs){
+                if(whredc.getKey().contentEquals(identifier)){
+                    return whredc;
+                }
+            }
+        }
+        return new WorkingHourRecordEmployeeDayCalculation();
     }
 
     public static int calculateIdentifier(WorkingHourRecordEmployee workingHourRecordEmployee, String identifier){
         int i=0;
         for(WorkingHourRecordEmployeeIdentifier whrei: workingHourRecordEmployee.getWorkingHourRecordEmployeeIdentifiers()){
-            if(whrei.getIdentifier().equalsIgnoreCase(identifier)){
+            if(whrei.getIdentifier().contentEquals(identifier)){
                 i=i+1;
             }
         }

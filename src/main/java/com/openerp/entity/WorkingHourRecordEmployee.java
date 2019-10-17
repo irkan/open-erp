@@ -27,12 +27,6 @@ public class WorkingHourRecordEmployee {
     @JoinColumn(name = "payroll_working_hour_record_id")
     private WorkingHourRecord workingHourRecord;
 
-    @Column(name = "work_days_in_month")
-    private int workDaysInMonth=0;
-
-    @Column(name = "work_duty_days_in_month")
-    private int workDutyDaysInMonth=0;
-
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hr_employee_id")
     private Employee employee;
@@ -55,13 +49,11 @@ public class WorkingHourRecordEmployee {
     @Column(name = "organization")
     private String organization;
 
-    public WorkingHourRecordEmployee(WorkingHourRecord workingHourRecord, Employee employee, @Pattern(regexp = ".{0,255}", message = "Maksimum 255 simvol ola bilər") String fullName, @Pattern(regexp = ".{0,255}", message = "Maksimum 255 simvol ola bilər") String position, @Pattern(regexp = ".{0,255}", message = "Maksimum 255 simvol ola bilər") String organization, int workDaysInMonth, int workDutyDaysInMonth) {
+    public WorkingHourRecordEmployee(WorkingHourRecord workingHourRecord, Employee employee, @Pattern(regexp = ".{0,255}", message = "Maksimum 255 simvol ola bilər") String fullName, @Pattern(regexp = ".{0,255}", message = "Maksimum 255 simvol ola bilər") String position, @Pattern(regexp = ".{0,255}", message = "Maksimum 255 simvol ola bilər") String organization) {
         this.workingHourRecord = workingHourRecord;
         this.employee = employee;
         this.fullName = fullName;
         this.position = position;
         this.organization = organization;
-        this.workDaysInMonth = workDaysInMonth;
-        this.workDutyDaysInMonth = workDutyDaysInMonth;
     }
 }

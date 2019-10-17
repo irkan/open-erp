@@ -102,13 +102,9 @@ public class PayrollController extends SkeletonController {
                     workingHourRecordRepository.save(workingHourRecord);
                     List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization_Id(workingHourRecord.getBranch().getId());
                     List<WorkingHourRecordEmployee> workingHourRecordEmployees = new ArrayList<>();
-                    List<NonWorkingDay> nonWorkingDays = nonWorkingDayRepository.getNotWorkingDaysBtStartDateAndEndDate(
-                            DateUtility.generate(1, workingHourRecord.getMonth(), workingHourRecord.getYear()),
-                            DateUtility.generate(daysInMonth, workingHourRecord.getMonth(), workingHourRecord.getYear())
-                    );
-                    int workDaysInMonth = daysInMonth - nonWorkingDays.size();
+                    List<Dictionary> identifiers = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("identifier");
                     for(Employee employee: employees){
-                        WorkingHourRecordEmployee workingHourRecordEmployee = new WorkingHourRecordEmployee(workingHourRecord, employee, employee.getPerson().getFullName(), employee.getPosition().getName(), employee.getOrganization().getName(), workDaysInMonth, 0);
+                        WorkingHourRecordEmployee workingHourRecordEmployee = new WorkingHourRecordEmployee(workingHourRecord, employee, employee.getPerson().getFullName(), employee.getPosition().getName(), employee.getOrganization().getName());
                         workingHourRecordEmployeeRepository.save(workingHourRecordEmployee);
                         List<WorkingHourRecordEmployeeIdentifier> workingHourRecordEmployeeIdentifiers = new ArrayList<>();
                         for(int i=1; i<=daysInMonth; i++){
@@ -118,11 +114,19 @@ public class PayrollController extends SkeletonController {
                         }
                         workingHourRecordEmployee.setWorkingHourRecordEmployeeIdentifiers(workingHourRecordEmployeeIdentifiers);
                         workingHourRecordEmployeeIdentifierRepository.saveAll(workingHourRecordEmployeeIdentifiers);
+                        List<WorkingHourRecordEmployeeDayCalculation> workingHourRecordEmployeeDayCalculations = new ArrayList<>();
+                        for(WorkingHourRecordEmployeeDayCalculation whredc: Util.calculateWorkingHourRecordEmployeeDay(workingHourRecordEmployee, identifiers)){
+                            workingHourRecordEmployeeDayCalculations.add(whredc);
+                        }
+                        workingHourRecordEmployeeDayCalculationRepository.saveAll(workingHourRecordEmployeeDayCalculations);
                     }
                     workingHourRecord.setWorkingHourRecordEmployees(workingHourRecordEmployees);
                 }
                 whr = workingHourRecordRepository.getWorkingHourRecordByActiveTrueAndMonthAndYearAndBranch_Id(workingHourRecord.getMonth(), workingHourRecord.getYear(), workingHourRecord.getBranch().getId());
                 whr.setWorkingHourRecordEmployees(workingHourRecordEmployeeRepository.getWorkingHourRecordEmployeesByWorkingHourRecord_Id(whr.getId()));
+                for(WorkingHourRecordEmployee whre: whr.getWorkingHourRecordEmployees()){
+                    whre.setWorkingHourRecordEmployeeDayCalculations(workingHourRecordEmployeeDayCalculationRepository.getWorkingHourRecordEmployeeDayCalculationsByWorkingHourRecordEmployee(whre));
+                }
             }
         }
         return mapPost2(whr, binding, redirectAttributes);
@@ -143,6 +147,9 @@ public class PayrollController extends SkeletonController {
             redirectAttributes.addFlashAttribute(Constants.DAYS_IN_MONTH, daysInMonth);
         }
         workingHourRecord.setWorkingHourRecordEmployees(workingHourRecordEmployeeRepository.getWorkingHourRecordEmployeesByWorkingHourRecord_Id(workingHourRecord.getId()));
+        for(WorkingHourRecordEmployee whre: workingHourRecord.getWorkingHourRecordEmployees()){
+            whre.setWorkingHourRecordEmployeeDayCalculations(workingHourRecordEmployeeDayCalculationRepository.getWorkingHourRecordEmployeeDayCalculationsByWorkingHourRecordEmployee(whre));
+        }
         return mapPost2(workingHourRecord, binding, redirectAttributes, "/payroll/working-hour-record");
     }
 
@@ -151,11 +158,14 @@ public class PayrollController extends SkeletonController {
         if(!binding.hasErrors()){
             List<Dictionary> identifiers = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("identifier");
             for(WorkingHourRecordEmployee whre: workingHourRecord.getWorkingHourRecordEmployees()){
-                /*for(WorkingHourRecordEmployeeIdentifier whrei: whre.getWorkingHourRecordEmployeeIdentifiers()){
+                for(WorkingHourRecordEmployeeIdentifier whrei: whre.getWorkingHourRecordEmployeeIdentifiers()){
                     workingHourRecordEmployeeIdentifierRepository.save(whrei);
-                }*/
-                whre.setWorkingHourRecordEmployeeDayCalculations(Util.calculateWorkingHourRecordEmployeeDay(whre, identifiers));
-                workingHourRecordEmployeeRepository.save(whre);
+                }
+                List<WorkingHourRecordEmployeeDayCalculation> workingHourRecordEmployeeDayCalculations = workingHourRecordEmployeeDayCalculationRepository.getWorkingHourRecordEmployeeDayCalculationsByWorkingHourRecordEmployee(whre);
+                whre.setWorkingHourRecordEmployeeDayCalculations(workingHourRecordEmployeeDayCalculations);
+                for(WorkingHourRecordEmployeeDayCalculation whredc: Util.calculateWorkingHourRecordEmployeeDay(whre, identifiers)){
+                    workingHourRecordEmployeeDayCalculationRepository.save(whredc);
+                }
             }
             YearMonth yearMonthObject = YearMonth.of(workingHourRecord.getYear(), workingHourRecord.getMonth());
             int daysInMonth = yearMonthObject.lengthOfMonth();
@@ -163,6 +173,9 @@ public class PayrollController extends SkeletonController {
         }
         WorkingHourRecord whr = workingHourRecordRepository.getWorkingHourRecordById(workingHourRecord.getId());
         whr.setWorkingHourRecordEmployees(workingHourRecordEmployeeRepository.getWorkingHourRecordEmployeesByWorkingHourRecord_Id(whr.getId()));
+        for(WorkingHourRecordEmployee whre: whr.getWorkingHourRecordEmployees()){
+            whre.setWorkingHourRecordEmployeeDayCalculations(workingHourRecordEmployeeDayCalculationRepository.getWorkingHourRecordEmployeeDayCalculationsByWorkingHourRecordEmployee(whre));
+        }
         return mapPost2(whr, binding, redirectAttributes, "/payroll/working-hour-record");
     }
 
@@ -173,6 +186,7 @@ public class PayrollController extends SkeletonController {
             YearMonth yearMonthObject = YearMonth.of(workingHourRecord.getYear(), workingHourRecord.getMonth());
             int daysInMonth = yearMonthObject.lengthOfMonth();
             redirectAttributes.addFlashAttribute(Constants.DAYS_IN_MONTH, daysInMonth);
+            List<Dictionary> identifiers = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("identifier");
             for(WorkingHourRecordEmployee whre: workingHourRecord.getWorkingHourRecordEmployees()){
                 List<WorkingHourRecordEmployeeIdentifier> whreis = new ArrayList<>();
                 for(WorkingHourRecordEmployeeIdentifier whrei: whre.getWorkingHourRecordEmployeeIdentifiers()){
@@ -187,6 +201,12 @@ public class PayrollController extends SkeletonController {
                     whreis.add(whrei);
                 }
                 whre.setWorkingHourRecordEmployeeIdentifiers(whreis);
+
+                List<WorkingHourRecordEmployeeDayCalculation> workingHourRecordEmployeeDayCalculations = new ArrayList<>();
+                for(WorkingHourRecordEmployeeDayCalculation whredc: Util.calculateWorkingHourRecordEmployeeDay(whre, identifiers)){
+                    workingHourRecordEmployeeDayCalculations.add(whredc);
+                }
+                whre.setWorkingHourRecordEmployeeDayCalculations(workingHourRecordEmployeeDayCalculations);
             }
         }
         return mapPost2(workingHourRecord, binding, redirectAttributes, "/payroll/working-hour-record");

@@ -65,7 +65,7 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <div class="col-sm-4 text-right">
+                                    <div class="col-sm-5 text-right">
                                         <label>&nbsp;</label>
                                         <div class="form-group">
                                             <c:set var="save" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'save')}"/>
@@ -139,11 +139,11 @@
                                 <tr>
                                     <th rowspan="3">№</th>
                                     <th rowspan="3" ><div style="width: 220px !important;">Ad Soyad Ata adı</div></th>
-                                    <th colspan="2" rowspan="2" class="text-center" style="letter-spacing: 4px;">Günlər</th>
                                     <th colspan="2" rowspan="2" class="text-center" style="letter-spacing: 4px;">Əməkdaş</th>
                                     <th colspan="<c:out value="${days_in_month}"/>" class="text-center" style="letter-spacing: 4px;">
                                         Ayın və həftənin günləri
                                     </th>
+                                    <th colspan="<c:out value="${identifiers.size()}"/>" rowspan="2" class="text-center" style="letter-spacing: 4px;">Günlər</th>
                                 </tr>
                                 <tr>
                                     <c:forEach var = "i" begin = "1" end = "${days_in_month}">
@@ -151,12 +151,13 @@
                                     </c:forEach>
                                 </tr>
                                 <tr>
-                                    <th class="bg-danger text-center" style="color:white; border: none;"><div style="width: 64px !important;" class="text-center">iş/gün sayı</div></th>
-                                    <th class="bg-danger text-center" style="color:white; border: none;"><div style="width: 64px !important;" class="text-center">İşdə iştirak</div></th>
                                     <th class="bg-warning" style="border: none;"><div style="width: 180px !important;">Vəzifə</div></th>
                                     <th class="bg-warning" style="border: none;"><div style="width: 120px !important;">Struktur</div></th>
                                     <c:forEach var = "i" begin = "1" end = "${days_in_month}">
                                         <th class="bg-info text-center kt-padding-0" style="border: none; color: white;"><c:out value = "${utl:weekDay(i, form.month, form.year)}"/></th>
+                                    </c:forEach>
+                                    <c:forEach var="p" items="${identifiers}" varStatus="count">
+                                        <th class="bg-danger text-center" style="color:white; border: none;"><c:out value="${p.attr1}"/></th>
                                     </c:forEach>
                                 </tr>
                                 </thead>
@@ -175,14 +176,6 @@
                                         <th>
                                             <c:out value="${t.fullName}"/>
                                         </th>
-                                        <th class="text-center" style="padding: 0;">
-                                            <input type="hidden" name="workingHourRecordEmployees[${loop.index}].workDaysInMonth" value="<c:out value="${t.workDaysInMonth}"/>"/>
-                                            <input type="text" class="type-ahead-day" attr="workingHourRecordEmployees[${loop.index}].workDaysInMonth" value="<c:out value="${t.workDaysInMonth}"/>" onkeyup="$('input[name=\''+$(this).attr('attr')+'\']').val($(this).val())"/>
-                                        </th>
-                                        <th class="text-center">
-                                            <input type="hidden" class="type-ahead-day" name="workingHourRecordEmployees[${loop.index}].workDutyDaysInMonth" value="<c:out value="${t.workDutyDaysInMonth}"/>"/>
-                                            <c:out value="${t.workDutyDaysInMonth}"/>
-                                        </th>
                                         <td>
                                             <c:out value="${t.position}"/>
                                         </td>
@@ -199,6 +192,11 @@
                                                     <input type="text" class="type-ahead" name="workingHourRecordEmployees[${loop.index}].workingHourRecordEmployeeIdentifiers[${count.index}].identifier" value="<c:out value="${p.identifier}"/>"/>
                                                 </div>
                                             </td>
+                                        </c:forEach>
+                                        <c:forEach var="p" items="${t.workingHourRecordEmployeeDayCalculations}" varStatus="count">
+                                            <th class="text-center">
+                                                <c:out value="${p.value}"/>
+                                            </th>
                                         </c:forEach>
                                     </tr>
                                 </c:forEach>
@@ -337,7 +335,7 @@
                 ],
                 /*aoColumns : [ { "sClass": "my_class" }],*/
                 fixedColumns:   {
-                    leftColumns: 4
+                    leftColumns: 2
                 },
                 order: [[1, 'asc']]
             });

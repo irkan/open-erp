@@ -302,6 +302,8 @@ public class DBConfiguration {
             dictionaries.add(identifier13);
             Dictionary identifier15 = new Dictionary("Xəstəlik", "X", "illness", identifierType);
             dictionaries.add(identifier15);
+            Dictionary identifier16 = new Dictionary("Hesablanmış İş Günü", "HİG", null, identifierType);
+            dictionaries.add(identifier16);
 
             dictionaryRepository.saveAll(dictionaries);
 

@@ -100,6 +100,9 @@ public class SkeletonController {
     WorkingHourRecordEmployeeIdentifierRepository workingHourRecordEmployeeIdentifierRepository;
 
     @Autowired
+    WorkingHourRecordEmployeeDayCalculationRepository workingHourRecordEmployeeDayCalculationRepository;
+
+    @Autowired
     WorkingHourRecordRepository workingHourRecordRepository;
 
     @Autowired

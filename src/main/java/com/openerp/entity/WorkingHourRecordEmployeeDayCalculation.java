@@ -20,7 +20,7 @@ public class WorkingHourRecordEmployeeDayCalculation {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hr_working_hour_record_employee_id")
     private WorkingHourRecordEmployee workingHourRecordEmployee;
 
