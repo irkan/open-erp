@@ -75,7 +75,14 @@ public class DummyController extends SkeletonController {
                 employeeDetails.add(employeeDetailField1);
             }
             employee.setEmployeeDetails(employeeDetails);
+            List<Dictionary> weekDays = DummyUtil.randomWeekDay(dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("week-day"));
+            List<EmployeeRestDay> employeeRestDays = new ArrayList<>();
+            for(Dictionary weekDay: weekDays){
+                employeeRestDays.add(new EmployeeRestDay(employee, weekDay.getName(), weekDay.getAttr1(), Integer.parseInt(weekDay.getAttr2())));
+            }
+            employee.setEmployeeRestDays(employeeRestDays);
             employees.add(employee);
+
         }
         employeeRepository.saveAll(employees);
         return "redirect:/login";

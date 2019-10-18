@@ -103,7 +103,7 @@ public class HRController extends SkeletonController {
     }
 
     @PostMapping(value = "/employee")
-    public String postEmployee(@ModelAttribute(Constants.FORM) @Validated Employee employee, @RequestParam(name = "employeeRestDays") int[] ids, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+    public String postEmployee(@ModelAttribute(Constants.FORM) @Validated Employee employee, @RequestParam(name = "employeeRestDays", defaultValue = "0") int[] ids, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         if (!binding.hasErrors()) {
             for(EmployeeDetail ed: employee.getEmployeeDetails()){
                 ed.setEmployee(employee);
@@ -112,11 +112,13 @@ public class HRController extends SkeletonController {
                 employeeRestDayRepository.deleteInBatch(employeeRestDayRepository.getEmployeeRestDaysByEmployee(employee));
             }
             List<EmployeeRestDay> erds = new ArrayList<>();
-            for(int id: ids){
-                Dictionary weekDay = dictionaryRepository.getDictionaryById(id);
-                if(weekDay!=null){
-                    EmployeeRestDay erd = new EmployeeRestDay(employee, weekDay.getName(), weekDay.getAttr1(), Integer.parseInt(weekDay.getAttr2()));
-                    erds.add(erd);
+            if(ids[0]!=0){
+                for(int id: ids){
+                    Dictionary weekDay = dictionaryRepository.getDictionaryById(id);
+                    if(weekDay!=null){
+                        EmployeeRestDay erd = new EmployeeRestDay(employee, weekDay.getName(), weekDay.getAttr1(), Integer.parseInt(weekDay.getAttr2()));
+                        erds.add(erd);
+                    }
                 }
             }
             employee.setEmployeeRestDays(erds);

@@ -1,10 +1,12 @@
 package com.openerp.dummy;
 
 import com.openerp.entity.Dictionary;
+import com.openerp.entity.EmployeeRestDay;
 import com.openerp.entity.Organization;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -53,5 +55,18 @@ public class DummyUtil {
         Date today = new Date();
         long time = today.getTime() - (month * 2592000000l);
         return new Date(time);
+    }
+
+    public static List<Dictionary> randomWeekDay(List<Dictionary> weekDays){
+        int leftLimit = 0;
+        int rightLimit = weekDays.size()-1;
+        Random random = new Random();
+        int loop = random.nextInt(4)-1;
+        List<Dictionary> dictionaries = new ArrayList<>();
+        for(int i=0; i<loop; i++){
+            int index = leftLimit + new Random().nextInt(rightLimit-leftLimit);
+            dictionaries.add(weekDays.get(index));
+        }
+        return dictionaries;
     }
 }
