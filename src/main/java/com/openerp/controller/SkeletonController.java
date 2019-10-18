@@ -142,6 +142,9 @@ public class SkeletonController {
     SalaryEmployeeDetailRepository salaryEmployeeDetailRepository;
 
     @Autowired
+    SaleGroupRepository saleGroupRepository;
+
+    @Autowired
     HttpServletRequest request;
 
     @Autowired

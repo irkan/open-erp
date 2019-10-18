@@ -25,9 +25,6 @@ public class EmployeeRestDay {
     @JoinColumn(name = "hr_employee_id")
     private Employee employee;
 
-    @Column(name = "name")
-    private String name;
-
     @Column(name = "description")
     private String description;
 

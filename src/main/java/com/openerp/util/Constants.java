@@ -85,5 +85,6 @@ public class Constants {
         public static final String ILLNESS = "illness";
         public static final String ADVANCE = "advance";
         public static final String FINANCING = "financing";
+        public static final String SALE_GROUP = "sale-group";
     }
 }
