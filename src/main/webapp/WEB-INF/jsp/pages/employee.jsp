@@ -230,6 +230,22 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <form:label path="employeeRestDays">İstirahət günləri</form:label>
+                                        <form:select  path="employeeRestDays" cssClass="custom-select form-control" multiple="multiple">
+                                            <form:options items="${week_days}" itemLabel="name" itemValue="id" />
+                                        </form:select>
+                                        <%--<select id="employeeRestDays" name="employeeRestDays" multiple="multiple">
+                                            <c:forEach var="t" items="${week_days}">
+                                                <option value="<c:out value="${t.id}"/>" value="<c:out value="${t.id}"/>"><c:out value="${t.name}"/></option>
+                                            </c:forEach>
+                                        </select>--%>
+                                        <form:errors path="employeeRestDays" cssClass="control-label alert-danger" />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-5">
                             <c:forEach var="t" items="${employee_additional_fields}" varStatus="loop">
@@ -326,5 +342,12 @@
         </div>
     </div>
 </div>
+
+<script>
+    $('#employeeRestDays').select2({
+        placeholder: "Həftə günlərini seçin",
+        allowClear: true
+    });
+</script>
 
 

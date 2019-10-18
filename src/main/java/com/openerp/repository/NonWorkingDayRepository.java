@@ -14,5 +14,5 @@ public interface NonWorkingDayRepository extends JpaRepository<NonWorkingDay, In
     NonWorkingDay getNonWorkingDayByNonWorkingDateAndActiveTrue(Date date);
     List<NonWorkingDay> getNonWorkingDaysByActiveTrue();
     @Query(value = "from NonWorkingDay t where t.active=1 and t.nonWorkingDate BETWEEN :startDate AND :endDate")
-    List<NonWorkingDay> getNotWorkingDaysBtStartDateAndEndDate(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
+    List<NonWorkingDay> getNotWorkingDaysByStartDateAndEndDate(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 }

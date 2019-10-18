@@ -37,6 +37,9 @@ public class SkeletonController {
     EmployeeRepository employeeRepository;
 
     @Autowired
+    EmployeeRestDayRepository employeeRestDayRepository;
+
+    @Autowired
     OperationRepository operationRepository;
 
     @Autowired

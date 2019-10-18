@@ -109,6 +109,8 @@ public class DBConfiguration {
             types.add(employeeDetail);
             DictionaryType identifierType = new DictionaryType("İdentifikator", "identifier", null);
             types.add(identifierType);
+            DictionaryType weekDay = new DictionaryType("Həftənin Günü", "week-day", null);
+            types.add(weekDay);
 
             dictionaryTypeRepository.saveAll(types);
 
@@ -302,8 +304,24 @@ public class DBConfiguration {
             dictionaries.add(identifier13);
             Dictionary identifier15 = new Dictionary("Xəstəlik", "X", "illness", identifierType);
             dictionaries.add(identifier15);
-            Dictionary identifier16 = new Dictionary("Hesablanmış İş Günü", "HİG", null, identifierType);
+            Dictionary identifier16 = new Dictionary("Ümumi İş Günü", "ÜİG", null, identifierType);
             dictionaries.add(identifier16);
+            Dictionary identifier17 = new Dictionary("Hesablanmış İş Günü", "HİG", null, identifierType);
+            dictionaries.add(identifier17);
+            Dictionary weekDay6 = new Dictionary("Şənbə", "ş", "6", weekDay);
+            dictionaries.add(weekDay6);
+            Dictionary weekDay0 = new Dictionary("Bazar", "b", "0", weekDay);
+            dictionaries.add(weekDay0);
+            Dictionary weekDay1 = new Dictionary("Bazar Ertəsi", "b.e", "1", weekDay);
+            dictionaries.add(weekDay1);
+            Dictionary weekDay2 = new Dictionary("Çərşənbə Axşamı", "ç.a", "2", weekDay);
+            dictionaries.add(weekDay2);
+            Dictionary weekDay3 = new Dictionary("Çərşənbə", "ç", "3", weekDay);
+            dictionaries.add(weekDay3);
+            Dictionary weekDay4 = new Dictionary("Cümə Axşamı", "c.a", "4", weekDay);
+            dictionaries.add(weekDay4);
+            Dictionary weekDay5 = new Dictionary("Cümə", "c", "5", weekDay);
+            dictionaries.add(weekDay5);
 
             dictionaryRepository.saveAll(dictionaries);
 

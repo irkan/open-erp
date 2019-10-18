@@ -57,6 +57,9 @@ public class Employee {
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<EmployeeDetail> employeeDetails;
 
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<EmployeeRestDay> employeeRestDays;
+
     @JsonIgnore
     @OneToOne(mappedBy = "employee")
     private User user;

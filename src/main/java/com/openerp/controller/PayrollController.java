@@ -156,6 +156,9 @@ public class PayrollController extends SkeletonController {
     @PostMapping(value = "/working-hour-record/save")
     public String postWorkingHourRecordSave(@ModelAttribute(Constants.FORM) @Validated WorkingHourRecord workingHourRecord, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         if(!binding.hasErrors()){
+            YearMonth yearMonthObject = YearMonth.of(workingHourRecord.getYear(), workingHourRecord.getMonth());
+            int daysInMonth = yearMonthObject.lengthOfMonth();
+            redirectAttributes.addFlashAttribute(Constants.DAYS_IN_MONTH, daysInMonth);
             List<Dictionary> identifiers = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("identifier");
             for(WorkingHourRecordEmployee whre: workingHourRecord.getWorkingHourRecordEmployees()){
                 for(WorkingHourRecordEmployeeIdentifier whrei: whre.getWorkingHourRecordEmployeeIdentifiers()){
@@ -167,9 +170,6 @@ public class PayrollController extends SkeletonController {
                     workingHourRecordEmployeeDayCalculationRepository.save(whredc);
                 }
             }
-            YearMonth yearMonthObject = YearMonth.of(workingHourRecord.getYear(), workingHourRecord.getMonth());
-            int daysInMonth = yearMonthObject.lengthOfMonth();
-            redirectAttributes.addFlashAttribute(Constants.DAYS_IN_MONTH, daysInMonth);
         }
         WorkingHourRecord whr = workingHourRecordRepository.getWorkingHourRecordById(workingHourRecord.getId());
         whr.setWorkingHourRecordEmployees(workingHourRecordEmployeeRepository.getWorkingHourRecordEmployeesByWorkingHourRecord_Id(whr.getId()));

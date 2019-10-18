@@ -1,6 +1,7 @@
 package com.openerp.controller;
 
 import com.openerp.entity.*;
+import com.openerp.entity.Dictionary;
 import com.openerp.util.Constants;
 import com.openerp.util.DateUtility;
 import com.openerp.util.ReadWriteExcelFile;
@@ -14,10 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 @RequestMapping("/hr")
@@ -50,6 +48,7 @@ public class HRController extends SkeletonController {
             model.addAttribute(Constants.POSITIONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position"));
             model.addAttribute(Constants.NATIONALITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("nationality"));
             model.addAttribute(Constants.GENDERS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("gender"));
+            model.addAttribute(Constants.WEEK_DAYS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("week-day"));
             model.addAttribute(Constants.ORGANIZATIONS, organizationRepository.getOrganizationsByActiveTrue());
             model.addAttribute(Constants.LIST, employeeRepository.getEmployeesByContractEndDateIsNull());
             if(!model.containsAttribute(Constants.FORM)){
@@ -104,11 +103,23 @@ public class HRController extends SkeletonController {
     }
 
     @PostMapping(value = "/employee")
-    public String postEmployee(@ModelAttribute(Constants.FORM) @Validated Employee employee, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+    public String postEmployee(@ModelAttribute(Constants.FORM) @Validated Employee employee, @RequestParam(name = "employeeRestDays") int[] ids, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         if (!binding.hasErrors()) {
             for(EmployeeDetail ed: employee.getEmployeeDetails()){
                 ed.setEmployee(employee);
             }
+            if(employee!=null && employee.getId()!=null){
+                employeeRestDayRepository.deleteInBatch(employeeRestDayRepository.getEmployeeRestDaysByEmployee(employee));
+            }
+            List<EmployeeRestDay> erds = new ArrayList<>();
+            for(int id: ids){
+                Dictionary weekDay = dictionaryRepository.getDictionaryById(id);
+                if(weekDay!=null){
+                    EmployeeRestDay erd = new EmployeeRestDay(employee, weekDay.getName(), weekDay.getAttr1(), Integer.parseInt(weekDay.getAttr2()));
+                    erds.add(erd);
+                }
+            }
+            employee.setEmployeeRestDays(erds);
             employeeRepository.save(employee);
         }
         return mapPost(employee, binding, redirectAttributes);
