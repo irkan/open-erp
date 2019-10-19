@@ -48,10 +48,14 @@ public class Constants {
     public static final String WEEK_DAYS = "week_days";
 
     public static final class STATUS{
-        public static final String DANGER = "danger";
+        public static final String RESPONSE = "response";
+        public static final String ERROR = "error";
         public static final String WARNING = "warning";
         public static final String INFO = "info";
         public static final String SUCCESS = "success";
+    }
+    public static final class TEXT{
+        public static final String SUCCESS = "Proses uğurla icra edildi!";
     }
     public static final class ROUTE{
         public static final String MODULE = "module";

@@ -39,6 +39,14 @@ public class SaleController extends SkeletonController {
         session.setAttribute(Constants.MODULE_DESCRIPTION, description);
 
         if (page.equalsIgnoreCase(Constants.ROUTE.SALE_GROUP)){
+            List<Employee> employees;
+            if(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getOrganization()==null){
+                employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization_Id(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getId());
+            } else {
+                employees = employeeRepository.getEmployeesByContractEndDateIsNull();
+            }
+            model.addAttribute(Constants.EMPLOYEES, employees);
+
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new SaleGroup());
             }

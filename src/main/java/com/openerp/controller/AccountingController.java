@@ -124,7 +124,7 @@ public class AccountingController extends SkeletonController {
             } else {
                 List<String> messages = new ArrayList<>();
                 messages.add("Təsdiqləmə əməliyyatı " + Util.getUserBranch(trn.getBranch()).getName() + " tərəfindən edilməlidir!");
-                redirectAttributes.addFlashAttribute(Constants.STATUS.DANGER, new Response(Constants.STATUS.DANGER, messages));
+                redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, new Response(Constants.STATUS.ERROR, messages));
             }
         }
         return mapPost(transaction, binding, redirectAttributes, "/accounting/transaction");

@@ -1,9 +1,13 @@
 package com.openerp.util;
 
+import com.openerp.domain.Response;
 import com.openerp.entity.*;
 import com.openerp.entity.Dictionary;
 import org.springframework.context.annotation.Description;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.client.RestTemplate;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -309,6 +313,18 @@ public class Util {
             }
         }
         return i;
+    }
+
+    public static Response response(BindingResult binding, String defaultMessage){
+        List<String> messages = new ArrayList<>();
+        if(binding!=null && binding.getErrorCount()>0){
+            for(FieldError fe: binding.getFieldErrors()){
+                messages.add(fe.getField() + " : " +fe.getDefaultMessage());
+            }
+            return new Response(Constants.STATUS.ERROR, messages);
+        }
+        messages.add(defaultMessage);
+        return new Response(Constants.STATUS.SUCCESS, messages);
     }
 
 }

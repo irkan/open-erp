@@ -2,8 +2,11 @@ package com.openerp.controller;
 
 import com.openerp.entity.*;
 import com.openerp.util.Constants;
+import com.openerp.util.Util;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +16,7 @@ import java.util.List;
 public class DeleteController extends SkeletonController {
 
     @PostMapping(value = "/{path}")
-    public String getSubModules(@PathVariable("path") String path, @RequestParam(name="deletedId", defaultValue = "0") String id) throws Exception {
+    public String getSubModules(RedirectAttributes redirectAttributes, @PathVariable("path") String path, @RequestParam(name="deletedId", defaultValue = "0") String id) throws Exception {
         User user = getSessionUser();
         String parent = "admin";
         for(UserModuleOperation umo: user.getUserModuleOperations()){
@@ -30,6 +33,7 @@ public class DeleteController extends SkeletonController {
             }
 
         }
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(null, Constants.TEXT.SUCCESS));
         if(path.equalsIgnoreCase(Constants.ROUTE.DICTIONARY_TYPE)){
             DictionaryType dictionaryType = dictionaryTypeRepository.getDictionaryTypeById(Integer.parseInt(id));
             dictionaryType.setActive(false);

@@ -124,7 +124,7 @@ public class WarehouseController extends SkeletonController {
             if(fromWarehouseId==action.getWarehouse().getId()){
                 dangers.add(action.getWarehouse().getName() + " - özündən özünə Göndərmə əməliyyatı edilə bilməz!");
             }
-            redirectAttributes.addFlashAttribute(Constants.STATUS.DANGER, new Response(Constants.STATUS.DANGER, dangers));
+            redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, new Response(Constants.STATUS.ERROR, dangers));
             if(dangers.size()==0){
                 Action actn = actionRepository.getActionById(action.getId());
                 actn.setAmount(actn.getAmount()-action.getAmount());
@@ -150,8 +150,8 @@ public class WarehouseController extends SkeletonController {
             if (Util.getUserBranch(action.getWarehouse()).getId() != Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getId()){
                 List<String> messages = new ArrayList<>();
                 messages.add("Təsdiqləmə əməliyyatı " + Util.getUserBranch(action.getWarehouse()).getName() + " tərəfindən edilməlidir!");
-                response = new Response(Constants.STATUS.DANGER, messages);
-                redirectAttributes.addFlashAttribute(Constants.STATUS.DANGER, response);
+                response = new Response(Constants.STATUS.ERROR, messages);
+                redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, response);
             }
             if(response==null){
                 String description = action.getAction().getName()+", "+action.getSupplier().getName()+" -> "+action.getWarehouse().getName()+", "+action.getInventory().getName()+", Say: " + action.getAmount() + " ədəd";

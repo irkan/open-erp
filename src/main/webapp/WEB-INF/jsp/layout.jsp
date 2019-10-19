@@ -184,49 +184,38 @@
         return day + '.' + month + '.' + year;
     }
 
-    var KTBootstrapNotifyDemo = function () {
-        var notify = function (type, message) {
-                if(type==='error'){
-                    type='danger';
-                }
-                var content = {};
-                content.message = message;
-                content.icon = 'icon la la-warning';
-                var notify = $.notify(content, {
-                    type: type,
-                    allow_dismiss: true,
-                    mouse_over:  'pause',
-                    spacing: 10,
-                    timer: 2500,
-                    placement: {
-                        from: 'bottom',
-                        align: 'center'
-                    },
-                    offset: {
-                        x: 30,
-                        y: 30
-                    },
-                    delay: 1000,
-                    z_index: 10000,
-                    animate: {
-                        enter: 'animated fadeInDown',
-                        exit: 'animated fadeOutDown'
-                    }
-                });
-        };
-        return {
-            init: function(type, message) {
-                notify(type, message);
-            }
-        };
-    }();
 
     jQuery(document).ready(function() {
-        <c:if test="${not empty danger}">
-            var data = "<c:out value="${utl:toJson(danger)}"/>".replace(/\&#034;/g, '"');
+        <c:if test="${not empty response}">
+            toastr.options = {
+                "closeButton": true,
+                "debug": true,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-bottom-center",
+                "preventDuplicates": true,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+
+            var data = "<c:out value="${utl:toJson(response)}"/>".replace(/\&#034;/g, '"');
             var obj = jQuery.parseJSON(data);
             $.each( obj['messages'], function( key, value ) {
-                KTBootstrapNotifyDemo.init(obj['type'], value);
+                if(obj['type']==='error'){
+                    toastr.error(value);
+                } else if(obj['type']==='info'){
+                    toastr.info(value);
+                } else if(obj['type']==='warning'){
+                    toastr.warning(value);
+                } else if(obj['type']==='success'){
+                    toastr.success(value);
+                }
             });
         </c:if>
     });

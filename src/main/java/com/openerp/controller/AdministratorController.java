@@ -1,5 +1,6 @@
 package com.openerp.controller;
 
+import com.openerp.domain.Response;
 import com.openerp.entity.*;
 import com.openerp.util.Constants;
 import com.openerp.util.DateUtility;
@@ -131,6 +132,7 @@ public class AdministratorController extends SkeletonController {
 
     @PostMapping(value = "/dictionary-type")
     public String postDictionaryType(@ModelAttribute(Constants.FORM) @Validated DictionaryType dictionaryType, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             dictionaryTypeRepository.save(dictionaryType);
         }

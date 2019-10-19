@@ -255,7 +255,7 @@ public class PayrollController extends SkeletonController {
                 }
                 List<String> messages = new ArrayList<>();
                 messages.add(message);
-                redirectAttributes.addFlashAttribute(Constants.STATUS.DANGER, new Response(Constants.STATUS.DANGER, messages));
+                redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, new Response(Constants.STATUS.ERROR, messages));
 
                 if(whr!=null && whr.getApprove()){
                     slry = salaryRepository.getSalaryByActiveTrueAndWorkingHourRecord(whr);
