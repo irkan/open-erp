@@ -5,6 +5,7 @@ import com.openerp.entity.Dictionary;
 import com.openerp.util.Constants;
 import com.openerp.util.DateUtility;
 import com.openerp.util.ReadWriteExcelFile;
+import com.openerp.util.Util;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -96,6 +97,7 @@ public class HRController extends SkeletonController {
 
     @PostMapping(value = "/organization")
     public String postOrganization(@ModelAttribute(Constants.FORM) @Validated Organization organization, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             organizationRepository.save(organization);
         }

@@ -103,6 +103,7 @@ public class AdministratorController extends SkeletonController {
 
     @PostMapping(value = "/module")
     public String postModule(@ModelAttribute(Constants.FORM) @Validated Module module, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             moduleRepository.save(module);
             File source = new File(request.getRealPath("/WEB-INF/jsp/pages/empty.jsp"));
@@ -124,6 +125,7 @@ public class AdministratorController extends SkeletonController {
 
     @PostMapping(value = "/operation")
     public String postOperation(@ModelAttribute(Constants.FORM) @Validated Operation operation, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             operationRepository.save(operation);
         }
@@ -141,6 +143,7 @@ public class AdministratorController extends SkeletonController {
 
     @PostMapping(value = "/dictionary")
     public String postDictionary(@ModelAttribute(Constants.FORM) @Validated Dictionary dictionary, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             dictionaryRepository.save(dictionary);
         }
@@ -149,6 +152,7 @@ public class AdministratorController extends SkeletonController {
 
     @PostMapping(value = "/user")
     public String postUser(@ModelAttribute(Constants.FORM) @Validated User user, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
             userRepository.save(user);
@@ -158,6 +162,7 @@ public class AdministratorController extends SkeletonController {
 
     @PostMapping(value = "/module-operation")
     public String postModuleOperation(@ModelAttribute(Constants.FORM) @Validated ModuleOperation moduleOperation, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             moduleOperationRepository.save(moduleOperation);
         }

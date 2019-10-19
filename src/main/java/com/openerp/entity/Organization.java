@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -22,9 +23,11 @@ public class Organization implements Serializable {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
+    @Pattern(regexp=".{2,50}",message="Minimum 2 maksimum 50 simvol ola bilər")
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Pattern(regexp=".{0,255}",message="Maksimum 255 simvol ola bilər")
     @Column(name = "description")
     private String description;
 
