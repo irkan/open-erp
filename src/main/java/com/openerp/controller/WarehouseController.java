@@ -70,6 +70,14 @@ public class WarehouseController extends SkeletonController {
                 }
             }
 
+            List<Employee> employees;
+            if(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getOrganization()==null){
+                employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization_Id(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getId());
+            } else {
+                employees = employeeRepository.getEmployeesByContractEndDateIsNull();
+            }
+            model.addAttribute(Constants.EMPLOYEES, employees);
+
             model.addAttribute(Constants.LIST, actions);
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Action());
@@ -117,15 +125,15 @@ public class WarehouseController extends SkeletonController {
     @PostMapping(value = "/action/transfer")
     public String postActionTransfer(@ModelAttribute(Constants.FORM) @Validated Action action, @RequestParam(name="fromWarehouse", defaultValue = "0") int fromWarehouseId, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         if(!binding.hasErrors()){
-            List<String> dangers = new ArrayList<>();
+            List<String> messages = new ArrayList<>();
             if(financingRepository.getFinancingByActiveTrueAndInventory(action.getInventory())==null){
-                dangers.add("Maliyyətləndirmə edilməyib! Alış və qiymətləndirilmə təsdiqlənməlidir!");
+                messages.add("Maliyyətləndirmə edilməyib! Alış və qiymətləndirilmə təsdiqlənməlidir!");
             }
             if(fromWarehouseId==action.getWarehouse().getId()){
-                dangers.add(action.getWarehouse().getName() + " - özündən özünə Göndərmə əməliyyatı edilə bilməz!");
+                messages.add(action.getWarehouse().getName() + " - özündən özünə Göndərmə əməliyyatı edilə bilməz!");
             }
-            redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, new Response(Constants.STATUS.ERROR, dangers));
-            if(dangers.size()==0){
+            redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, new Response(Constants.STATUS.ERROR, messages));
+            if(messages.size()==0){
                 Action actn = actionRepository.getActionById(action.getId());
                 actn.setAmount(actn.getAmount()-action.getAmount());
                 actionRepository.save(actn);
@@ -169,5 +177,32 @@ public class WarehouseController extends SkeletonController {
             }
         }
         return mapPost(action, binding, redirectAttributes, "/warehouse/action/"+action.getInventory().getId());
+    }
+
+    @PostMapping(value = "/action/consolidate")
+    public String postActionConsolidate(@ModelAttribute(Constants.FORM) @Validated Action action, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        Action actn = actionRepository.getActionById(action.getId());
+        if(!binding.hasErrors()) {
+            List<String> messages = new ArrayList<>();
+            if(financingRepository.getFinancingByActiveTrueAndInventory(actn.getInventory())==null){
+                messages.add("Maliyyətləndirmə edilməyib! Alış və qiymətləndirilmə təsdiqlənməlidir!");
+            }
+            if(messages.size()==0) {
+                action.setId(null);
+                action.setInventory(actn.getInventory());
+                action.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrue("consolidate"));
+                action.setSupplier(actn.getSupplier());
+                action.setWarehouse(actn.getWarehouse());
+                if(actn.getAmount()-action.getAmount()>=0){
+                    actionRepository.save(action);
+                    actn.setAmount(actn.getAmount()-action.getAmount());
+                    actionRepository.save(actn);
+                } else {
+                    messages.add("Say limitini aşmısınız!");
+                }
+                redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, new Response(Constants.STATUS.ERROR, messages));
+            }
+        }
+        return mapPost(action, binding, redirectAttributes, "/warehouse/action/"+actn.getInventory().getId());
     }
 }

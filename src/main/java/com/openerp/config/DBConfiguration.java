@@ -206,6 +206,8 @@ public class DBConfiguration {
             dictionaries.add(sendAction);
             Dictionary buyAction = new Dictionary("Alış", "buy", null, actionType);
             dictionaries.add(buyAction);
+            Dictionary consolidateDic = new Dictionary("Təhkim edilmə", "consolidate", null, actionType);
+            dictionaries.add(consolidateDic);
             Dictionary returnAction = new Dictionary("Qaytarılma", "return", null, actionType);
             dictionaries.add(returnAction);
             Dictionary deletionAction = new Dictionary("Silinmə", "deletion", null, actionType);
@@ -435,6 +437,8 @@ public class DBConfiguration {
             operations.add(calculate);
             Operation transfer = new Operation("Göndərmə", "transfer", "flaticon-reply");
             operations.add(transfer);
+            Operation consolidate = new Operation("Təhkim edilmə", "consolidate", "la la-user");
+            operations.add(consolidate);
 
             operationRepository.saveAll(operations);
 
@@ -679,6 +683,9 @@ public class DBConfiguration {
             ModuleOperation transferModuleOperation1 = new ModuleOperation(action, transfer, null);
             moduleOperations.add(transferModuleOperation1);
 
+            ModuleOperation consolidateModuleOperation1 = new ModuleOperation(action, consolidate, null);
+            moduleOperations.add(consolidateModuleOperation1);
+
             moduleOperationRepository.saveAll(moduleOperations);
 
             List<Organization> organizations = new ArrayList<>();
@@ -870,6 +877,8 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, calculateModuleOperation1));
 
             userModuleOperations.add(new UserModuleOperation(user, transferModuleOperation1));
+
+            userModuleOperations.add(new UserModuleOperation(user, consolidateModuleOperation1));
 
             userModuleOperationRepository.saveAll(userModuleOperations);
 

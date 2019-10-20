@@ -48,6 +48,10 @@ public class Action {
     @Column(name = "approve_date")
     private Date approveDate;
 
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "hr_employee_id")
+    private Employee employee;
+
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;
 

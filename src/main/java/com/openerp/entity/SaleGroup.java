@@ -25,6 +25,10 @@ public class SaleGroup {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "hr_organization_id")
+    private Organization organization;
+
     @OneToMany(mappedBy = "saleGroup", cascade = CascadeType.ALL)
     private List<SaleGroupEmployee> saleGroupEmployees;
 

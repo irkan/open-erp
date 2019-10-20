@@ -46,7 +46,6 @@ public class SaleController extends SkeletonController {
                 employees = employeeRepository.getEmployeesByContractEndDateIsNull();
             }
             model.addAttribute(Constants.EMPLOYEES, employees);
-
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new SaleGroup());
             }
@@ -55,8 +54,15 @@ public class SaleController extends SkeletonController {
     }
 
     @PostMapping(value = "/sale-group")
-    public String postInventory(@ModelAttribute(Constants.FORM) @Validated SaleGroup saleGroup, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+    public String postInventory(@ModelAttribute(Constants.FORM) @Validated SaleGroup saleGroup, @RequestParam(name = "saleGroupEmployees", defaultValue = "0") int[] employeeIds, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         if(!binding.hasErrors()){
+            List<SaleGroupEmployee> saleGroupEmployees = new ArrayList<>();
+            for(int id: employeeIds){
+                if(id!=0){
+                    saleGroupEmployees.add(new SaleGroupEmployee(saleGroup, employeeRepository.getEmployeeById(id)));
+                }
+            }
+            saleGroup.setSaleGroupEmployees(saleGroupEmployees);
             saleGroupRepository.save(saleGroup);
         }
         return mapPost(saleGroup, binding, redirectAttributes);
