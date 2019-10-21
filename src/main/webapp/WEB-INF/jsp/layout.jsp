@@ -72,6 +72,10 @@
                 var value = findValue(obj, element);
                 if(tagName.toLowerCase()==="input"){
                     if($(element).attr("type")==="checkbox"){
+                        $("input[name='"+$(element).attr("name")+"']").prop('checked', false);
+                        if(value){
+                            $("input[name='"+$(element).attr("name")+"']").prop('checked', true);
+                        }
 
                     } else if($(element).attr("type")==="radio"){
                         $("input[name='"+$(element).attr("name")+"'][value='"+value.id+"']").prop('checked', true);

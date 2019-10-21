@@ -48,6 +48,10 @@ public class Person {
     @JoinColumn(name = "admin_dictionary_nationality_id")
     private Dictionary nationality;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "admin_dictionary_marital_status_id")
+    private Dictionary maritalStatus;
+
     @Column(name = "id_card_pin_code")
     private String idCardPinCode;
 
@@ -83,7 +87,7 @@ public class Person {
         return firstName+" "+lastName+" "+fatherName;
     }
 
-    public Person(Contact contact, String firstName, String lastName, String fatherName, Date birthday, Dictionary gender, Dictionary nationality, String idCardPinCode, User createdUser) {
+    public Person(Contact contact, String firstName, String lastName, String fatherName, Date birthday, Dictionary gender, Dictionary nationality, Dictionary maritalStatus, String idCardPinCode, User createdUser) {
         this.contact = contact;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -91,6 +95,7 @@ public class Person {
         this.birthday = birthday;
         this.gender = gender;
         this.nationality = nationality;
+        this.maritalStatus = maritalStatus;
         this.idCardPinCode = idCardPinCode;
         this.createdUser = createdUser;
     }

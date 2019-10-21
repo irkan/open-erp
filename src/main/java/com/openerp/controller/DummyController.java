@@ -40,10 +40,11 @@ public class DummyController extends SkeletonController {
         List<Dictionary> cities = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("city");
         List<Dictionary> genders = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("gender");
         List<Dictionary> nationalities = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("nationality");
+        List<Dictionary> maritalStatuses = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("marital-status");
         List<Person> persons = new ArrayList<>();
         for(int i=1; i<400; i++){
             Contact contact = new DummyContact().getContact(cities);
-            Person person = new DummyPerson().getPerson(contact, nationalities, genders);
+            Person person = new DummyPerson().getPerson(contact, nationalities, genders, maritalStatuses);
             persons.add(person);
         }
         personRepository.saveAll(persons);
@@ -55,12 +56,13 @@ public class DummyController extends SkeletonController {
         List<Dictionary> cities = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("city");
         List<Dictionary> genders = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("gender");
         List<Dictionary> nationalities = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("nationality");
+        List<Dictionary> maritalStatuses = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("marital-status");
         List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
         List<Organization> organizations = organizationRepository.getOrganizationsByActiveTrueAndOrganizationType_Attr1("branch");
         List<Employee> employees = new ArrayList<>();
         for(int i=1; i<=count; i++){
             Contact contact = new DummyContact().getContact(cities);
-            Person person = new DummyPerson().getPerson(contact, nationalities, genders);
+            Person person = new DummyPerson().getPerson(contact, nationalities, genders, maritalStatuses);
             Employee employee = new DummyEmployee().getEmployee(person, positions, organizations);
             List<EmployeeDetail> employeeDetails = new ArrayList<>();
             for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-additional-field")){

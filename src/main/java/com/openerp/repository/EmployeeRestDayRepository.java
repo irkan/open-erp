@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface EmployeeRestDayRepository extends JpaRepository<EmployeeRestDay, Integer> {
     List<EmployeeRestDay> getEmployeeRestDaysByEmployee(Employee employee);
+    List<EmployeeRestDay> getEmployeeRestDaysByEmployeeAndDay(Employee employee, int day);
 }

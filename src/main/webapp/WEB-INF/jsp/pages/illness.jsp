@@ -28,6 +28,7 @@
         <th>Xəstəlik forması</th>
         <th>Başlama tarixi</th>
         <th>Bitmə tarixi</th>
+        <th>Gün sayı</th>
         <th>Açıqlama</th>
         <th>Əməliyyat</th>
     </tr>
@@ -42,6 +43,7 @@
             <td><c:out value="${t.identifier.attr1}"/> - <c:out value="${t.identifier.name}"/></td>
             <td><fmt:formatDate value = "${t.startDate}" pattern = "dd.MM.yyyy" /></td>
             <td><fmt:formatDate value = "${t.endDate}" pattern = "dd.MM.yyyy" /></td>
+            <td><c:out value="${t.illnessDetails.size()}" /> gün</td>
             <td><c:out value="${t.description}" /></td>
             <td nowrap class="text-center">
                 <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>

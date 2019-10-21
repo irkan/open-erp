@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 import java.util.Date;
 import java.util.List;
 
@@ -53,6 +54,13 @@ public class Employee {
 
     @Column(name = "bank_card_number")
     private String bankCardNumber;
+
+    @Column(name = "is_disability", nullable = false, columnDefinition="boolean default false")
+    private Boolean disability = false;
+
+    @Pattern(regexp=".{0,250}",message="Maksimum 250 simvol ola bilər")
+    @Column(name = "description")
+    private String description;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<EmployeeDetail> employeeDetails;

@@ -138,7 +138,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <form:label path="person.birthday">Doğum tarixi</form:label>
                                 <div class="input-group date" >
@@ -152,14 +152,21 @@
                                 <form:errors path="person.birthday" cssClass="control-label alert-danger" />
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="form-group">
-                                <fmt:parseNumber var = "grid" integerOnly = "true" type = "number" value = "${12/genders.size()}" />
                                 <form:label path="person.gender">Cins</form:label><br/>
                                 <form:radiobuttons items="${genders}" path="person.gender" itemLabel="name" itemValue="id"/>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <form:label path="person.maritalStatus">Ailə vəziyyəti</form:label>
+                                <form:select  path="person.maritalStatus" cssClass="custom-select form-control">
+                                    <form:options items="${marital_statuses}" itemLabel="name" itemValue="id" />
+                                </form:select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <form:label path="person.nationality">Milliyət</form:label>
                                 <form:select  path="person.nationality" cssClass="custom-select form-control">
@@ -246,6 +253,13 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                         <form:checkbox path="disability" label="Əlillik varmı?" cssClass="form-control"/>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-5">
                             <c:forEach var="t" items="${employee_additional_fields}" varStatus="loop">
@@ -262,6 +276,15 @@
                                     </div>
                                 </div>
                             </c:forEach>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <form:label path="description">Açıqlama</form:label>
+                                <form:textarea path="description" cssClass="form-control"/>
+                                <form:errors path="description" cssClass="control-label alert-danger" />
+                            </div>
                         </div>
                     </div>
                     <hr style="width: 100%"/>
