@@ -6,14 +6,18 @@ import com.openerp.util.Constants;
 import com.openerp.util.DateUtility;
 import com.openerp.util.ReadWriteExcelFile;
 import com.openerp.util.Util;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+import org.springframework.validation.*;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import java.io.File;
 import java.time.LocalDate;
 import java.util.*;
@@ -107,6 +111,16 @@ public class HRController extends SkeletonController {
 
     @PostMapping(value = "/employee")
     public String postEmployee(@ModelAttribute(Constants.FORM) @Validated Employee employee, @RequestParam(name = "employeeRestDays", defaultValue = "0") int[] ids, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+         if(employee.getPerson().getFirstName().length()<2){
+            FieldError fieldError = new FieldError("person.firstName", "person.firstName", "Minimum 2 simvol olmalıdır!");
+            binding.addError(fieldError);
+        }
+
+        if(employee.getPerson().getLastName().length()<2){
+            FieldError fieldError = new FieldError("person.lastName", "person.lastName", "Minimum 2 simvol olmalıdır!");
+            binding.addError(fieldError);
+        }
+
         if (!binding.hasErrors()) {
             for(EmployeeDetail ed: employee.getEmployeeDetails()){
                 ed.setEmployee(employee);

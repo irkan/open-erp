@@ -5,8 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
 import java.util.List;
@@ -58,7 +60,7 @@ public class Employee {
     @Column(name = "is_specialist_or_manager", nullable = false, columnDefinition="boolean default false")
     private Boolean specialistOrManager = false;
 
-    @Pattern(regexp=".{0,250}",message="Maksimum 250 simvol ola bilər")
+    @Pattern(regexp=".{0,250}", message="Maksimum 250 simvol ola bilər")
     @Column(name = "description")
     private String description;
 

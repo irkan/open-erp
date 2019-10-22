@@ -1,6 +1,7 @@
 package com.openerp.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.openerp.validation.EmployeeGroup;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,11 +25,11 @@ public class Person {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
-    @Pattern(regexp=".{2,20}",message="Minimum 2 maksimum 20 simvol ola bilər")
+    @Pattern(regexp=".{2,20}",message="Minimum 2 maksimum 20 simvol ola bilər", groups = EmployeeGroup.class)
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Pattern(regexp=".{2,20}",message="Minimum 2 maksimum 20 simvol ola bilər")
+    @Pattern(regexp=".{2,20}",message="Minimum 2 maksimum 20 simvol ola bilər", groups = EmployeeGroup.class)
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
