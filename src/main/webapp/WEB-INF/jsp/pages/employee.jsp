@@ -254,14 +254,34 @@
                                 </div>
                             </div>
                             <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="kt-checkbox kt-checkbox--brand">
+                                            <form:checkbox path="disability"/> Əlillik varmı?
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="kt-checkbox kt-checkbox--brand">
+                                            <form:checkbox path="specialistOrManager"/> Mütəxəsis və ya rəhbərdirmi?
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                         <form:checkbox path="disability" label="Əlillik varmı?" cssClass="form-control"/>
+                                        <form:label path="description">Açıqlama</form:label>
+                                        <form:textarea path="description" cssClass="form-control"/>
+                                        <form:errors path="description" cssClass="control-label alert-danger" />
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-md-5 bg-light pt-4 pb-4">
                             <c:forEach var="t" items="${employee_additional_fields}" varStatus="loop">
                                 <div class="form-group-0_5">
                                     <div class="row">
@@ -276,68 +296,6 @@
                                     </div>
                                 </div>
                             </c:forEach>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <form:label path="description">Açıqlama</form:label>
-                                <form:textarea path="description" cssClass="form-control"/>
-                                <form:errors path="description" cssClass="control-label alert-danger" />
-                            </div>
-                        </div>
-                    </div>
-                    <div id="kt_repeater_1">
-                        <div class="form-group form-group-last row" id="kt_repeater_2">
-                            <label class="col-lg-2 col-form-label">Contacts:</label>
-                            <div data-repeater-list="" class="col-lg-10">
-                                <div data-repeater-item class="form-group row align-items-center">
-                                    <div class="col-md-3">
-                                        <div class="kt-form__group--inline">
-                                            <div class="kt-form__label">
-                                                <label>Name:</label>
-                                            </div>
-                                            <div class="kt-form__control">
-                                                <input type="text" name="text-input" class="form-control" placeholder="Enter full name">
-                                            </div>
-                                        </div>
-                                        <div class="d-md-none kt-margin-b-10"></div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="kt-form__group--inline">
-                                            <div class="kt-form__label">
-                                                <label class="kt-label m-label--single">Number:</label>
-                                            </div>
-                                            <div class="kt-form__control">
-                                                <input type="email" class="form-control" placeholder="Enter contact number">
-                                            </div>
-                                        </div>
-                                        <div class="d-md-none kt-margin-b-10"></div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div class="kt-radio-inline">
-                                            <label class="kt-checkbox kt-checkbox--state-success">
-                                                <input type="checkbox"> Primary
-                                                <span></span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <a href="javascript:;" data-repeater-delete="" class="btn-sm btn btn-label-danger btn-bold">
-                                            <i class="la la-trash-o"></i>
-                                            Delete
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group form-group-last row">
-                            <label class="col-lg-2 col-form-label"></label>
-                            <div class="col-lg-4">
-                                <a href="javascript:;" data-repeater-create="" class="btn btn-bold btn-sm btn-label-brand">
-                                    <i class="la la-plus"></i> Add
-                                </a>
-                            </div>
                         </div>
                     </div>
                     <hr style="width: 100%"/>
@@ -423,33 +381,6 @@
     $('#employeeRestDays').select2({
         placeholder: "Həftə günlərini seçin",
         allowClear: true
-    });
-
-    var KTFormRepeater = function() {
-        var demo1 = function() {
-            $('#kt_repeater_1').repeater({
-                initEmpty: false,
-
-                defaultValues: {
-                    'text-input': 'foo'
-                },
-                show: function () {
-                    $(this).slideDown();
-                },
-                hide: function (deleteElement) {
-                    $(this).slideUp(deleteElement);
-                }
-            });
-        };
-        return {
-            init: function() {
-                demo1();
-            }
-        };
-    }();
-
-    jQuery(document).ready(function() {
-        KTFormRepeater.init();
     });
 </script>
 

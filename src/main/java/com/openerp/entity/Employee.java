@@ -58,6 +58,9 @@ public class Employee {
     @Column(name = "is_disability", nullable = false, columnDefinition="boolean default false")
     private Boolean disability = false;
 
+    @Column(name = "is_specialist_or_manager", nullable = false, columnDefinition="boolean default false")
+    private Boolean specialistOrManager = false;
+
     @Pattern(regexp=".{0,250}",message="Maksimum 250 simvol ola bilər")
     @Column(name = "description")
     private String description;

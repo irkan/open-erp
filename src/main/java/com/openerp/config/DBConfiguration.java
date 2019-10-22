@@ -284,6 +284,10 @@ public class DBConfiguration {
             dictionaries.add(employeeDetail5);
             Dictionary employeeDetail6 = new Dictionary("Güzəşt", "{allowance}", "0", employeeDetail);
             dictionaries.add(employeeDetail6);
+            Dictionary employeeDetail7 = new Dictionary("Əsas məzuniyyət günlərinin sayı", "{main_vacation_days}", "23", employeeDetail);
+            dictionaries.add(employeeDetail7);
+            Dictionary employeeDetail8 = new Dictionary("Əlavə məzuniyyət günlərinin sayı", "{additional_vacation_days}", "0", employeeDetail);
+            dictionaries.add(employeeDetail8);
             Dictionary identifier6 = new Dictionary("İş Günü", "İG", null, identifierType);
             dictionaries.add(identifier6);
             Dictionary identifier7 = new Dictionary("Qısaldılmış İş Günü", "QİG", null, identifierType);
