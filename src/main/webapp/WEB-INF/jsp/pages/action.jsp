@@ -30,6 +30,7 @@
         <th>İnventar</th>
         <th>Miqdar</th>
         <th>Tarix</th>
+        <th>Təhkim edilib</th>
         <th>Əməliyyat</th>
     </tr>
     </thead>
@@ -44,6 +45,7 @@
             <td><c:out value="${t.inventory.name}" /></td>
             <td><c:out value="${t.amount}" /></td>
             <td><fmt:formatDate value = "${t.createdDate}" pattern = "dd.MM.yyyy" /></td>
+            <td><c:out value="${t.employee.person.fullName}" /></td>
             <td nowrap class="text-center">
                 <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
                 <c:choose>
@@ -69,6 +71,16 @@
                         <c:if test="${t.approve}">
                             <a href="javascript:transfer($('#form'), '<c:out value="${utl:toJson(t)}" />', 'transfer-modal-operation');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
                                 <i class="<c:out value="${transfer.object.icon}"/>"></i>
+                            </a>
+                        </c:if>
+                    </c:when>
+                </c:choose>
+                <c:set var="consolidate" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'consolidate')}"/>
+                <c:choose>
+                    <c:when test="${consolidate.status}">
+                        <c:if test="${t.approve}">
+                            <a href="javascript:consolidate($('#form-consolidate'), '<c:out value="${utl:toJson(t)}" />', 'consolidate-modal');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${consolidate.object.name}"/>">
+                                <i class="<c:out value="${consolidate.object.icon}"/>"></i>
                             </a>
                         </c:if>
                     </c:when>
@@ -154,7 +166,7 @@
 </div>
 
 <div class="modal fade" id="transfer-approve-modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"></h5>
@@ -221,6 +233,61 @@
     </div>
 </div>
 
+<div class="modal fade" id="consolidate-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Təhkim etmə</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form:form modelAttribute="form" id="form-consolidate" method="post" action="/warehouse/action/consolidate" cssClass="form-group">
+                    <form:hidden path="id"/>
+                    <div class="row">
+                        <div class="col-sm-12 text-center">
+                            <label id="inventory_name" style="font-size: 16px; font-weight: bold;"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 text-right">
+                            <label>Barkod</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <label id="barcode_label"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 text-right">
+                            <label>Anbar</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <label id="warehouse_label"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="employee">Əməkdaş</form:label>
+                        <form:select  path="employee" cssClass="custom-select form-control">
+                            <form:options items="${employees}" itemLabel="person.fullName" itemValue="id" />
+                        </form:select>
+                        <form:errors path="warehouse" cssClass="alert-danger"/>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="amount">Say</form:label>
+                        <form:input path="amount" cssClass="form-control" placeholder="Sayı daxil edin"  />
+                        <form:errors path="amount" cssClass="alert alert-danger"/>
+                    </div>
+                </form:form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="submit($('#form-consolidate'));">Yadda saxla</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     function transfer(form, data, modal){
         try {
@@ -233,6 +300,27 @@
             $(form).find("input[name='inventory']").val(obj["inventory"]["id"]);
             $(form).find("input[name='action']").val(obj["action"]["id"]);
             $(form).find("input[name='supplier']").val(obj["supplier"]["id"]);
+            $('#' + modal).modal('toggle');
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    function consolidate(form, data, modal){
+        try {
+            data = data.replace(/\&#034;/g, '"');
+            var obj = jQuery.parseJSON(data);
+            console.log(obj);
+
+            if(obj["employee"]!=null){
+                $("#employee option[value="+obj["employee"]["id"]+"]").attr("selected", "selected");
+            }
+
+            $(form).find("input[name='amount']").val(obj["amount"]);
+            $(form).find("#id").val(obj["id"]);
+            $(form).find("#inventory_name").text(obj["inventory"]["name"]);
+            $(form).find("#barcode_label").text(obj["inventory"]["barcode"]);
+            $(form).find("#warehouse_label").text(obj["warehouse"]["name"]);
             $('#' + modal).modal('toggle');
         } catch (e) {
             console.error(e);

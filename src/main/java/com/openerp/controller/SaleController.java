@@ -46,7 +46,6 @@ public class SaleController extends SkeletonController {
                 employees = employeeRepository.getEmployeesByContractEndDateIsNull();
             }
             model.addAttribute(Constants.EMPLOYEES, employees);
-
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new SaleGroup());
             }

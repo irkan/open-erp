@@ -21,16 +21,12 @@ public class SaleGroupEmployee {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "sale_sale_group_id")
+    @JoinColumn(name = "sale_group_id")
     private SaleGroup saleGroup;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name="hr_employee_id", nullable = false)
     private Employee employee;
-
-    @Pattern(regexp=".{2,50}",message="Minimum 2 maksimum 50 simvol ola bilər")
-    @Column(name = "name", nullable = false)
-    private String name;
 
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;
@@ -42,4 +38,9 @@ public class SaleGroupEmployee {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "created_by_admin_user_id")
     private User createdUser;
+
+    public SaleGroupEmployee(SaleGroup saleGroup, Employee employee) {
+        this.saleGroup = saleGroup;
+        this.employee = employee;
+    }
 }

@@ -1,4 +1,5 @@
-<%--
+<%@ page import="java.util.Date" %>
+<%@ page import="com.openerp.util.DateUtility" %><%--
   Created by IntelliJ IDEA.
   User: irkan.ahmadov
   Date: 01.09.2019
@@ -138,7 +139,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <form:label path="person.birthday">Doğum tarixi</form:label>
                                 <div class="input-group date" >
@@ -152,14 +153,21 @@
                                 <form:errors path="person.birthday" cssClass="control-label alert-danger" />
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="form-group">
-                                <fmt:parseNumber var = "grid" integerOnly = "true" type = "number" value = "${12/genders.size()}" />
                                 <form:label path="person.gender">Cins</form:label><br/>
                                 <form:radiobuttons items="${genders}" path="person.gender" itemLabel="name" itemValue="id"/>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <form:label path="person.maritalStatus">Ailə vəziyyəti</form:label>
+                                <form:select  path="person.maritalStatus" cssClass="custom-select form-control">
+                                    <form:options items="${marital_statuses}" itemLabel="name" itemValue="id" />
+                                </form:select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <form:label path="person.nationality">Milliyət</form:label>
                                 <form:select  path="person.nationality" cssClass="custom-select form-control">
@@ -246,8 +254,35 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="kt-checkbox kt-checkbox--brand">
+                                            <form:checkbox path="person.disability" onclick="calculateVacationDay($('input[name=\"person.disability\"]'), $('input[name=specialistOrManager]'), $('input[name=contractStartDate]'), $('input[key=\"{previous_work_experience}\"]'))"/> Əlillik varmı?
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="kt-checkbox kt-checkbox--brand">
+                                            <form:checkbox path="specialistOrManager" onclick="calculateVacationDay($('input[name=\"person.disability\"]'), $('input[name=specialistOrManager]'), $('input[name=contractStartDate]'), $('input[key=\"{previous_work_experience}\"]'))"/> Mütəxəsis və ya rəhbərdirmi?
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <form:label path="description">Açıqlama</form:label>
+                                        <form:textarea path="description" cssClass="form-control"/>
+                                        <form:errors path="description" cssClass="control-label alert-danger" />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-md-5 bg-light pt-4">
                             <c:forEach var="t" items="${employee_additional_fields}" varStatus="loop">
                                 <div class="form-group-0_5">
                                     <div class="row">
@@ -257,7 +292,14 @@
                                         <div class="col-md-4">
                                             <input type="hidden" name="employeeDetails[${loop.index}].id"/>
                                             <input type="hidden" name="employeeDetails[${loop.index}].key" value="${t.attr1}"/>
-                                            <input type="text" name="employeeDetails[${loop.index}].value" value="${t.attr2}" class="form-control" />
+                                            <c:choose>
+                                                <c:when test="${t.attr1 eq '{previous_work_experience}'}">
+                                                    <input type="text" name="employeeDetails[${loop.index}].value" value="${t.attr2}" key="${t.attr1}" onkeyup="calculateVacationDay($('input[name=\'person.disability\']'), $('input[name=specialistOrManager]'), $('input[name=contractStartDate]'), $('input[key=\'{previous_work_experience}\']'))" class="form-control" />
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <input type="text" name="employeeDetails[${loop.index}].value" value="${t.attr2}" key="${t.attr1}" class="form-control" />
+                                                </c:otherwise>
+                                            </c:choose>
                                         </div>
                                     </div>
                                 </div>
@@ -348,6 +390,36 @@
         placeholder: "Həftə günlərini seçin",
         allowClear: true
     });
+    
+    function calculateVacationDay(disability, specialistOrManager, contractStartDate, previousWorkExperience) {
+        $("input[key='{main_vacation_days}']").val("21");
+        if($(disability).is(":checked")){
+            $("input[key='{main_vacation_days}']").val("43");
+        }
+
+        if($(specialistOrManager).is(":checked") && !$(disability).is(":checked")){
+            $("input[key='{main_vacation_days}']").val("30");
+        }
+        $("input[key='{additional_vacation_days}']").val("0");
+        var current = calculateCurrentWorkExperience($(contractStartDate).val(), "<%= DateUtility.getFormattedDate(new Date())%>");
+        var experience = parseFloat(current)+parseFloat($(previousWorkExperience).val());
+        if(experience>=15){
+            $("input[key='{additional_vacation_days}']").val("6");
+        } else if(experience>=10){
+            $("input[key='{additional_vacation_days}']").val("4");
+        } else if(experience>=5){
+            $("input[key='{additional_vacation_days}']").val("2");
+        }
+        if($(disability).is(":checked")){
+            $("input[key='{additional_vacation_days}']").val("0");
+        }
+    }
+
+    function calculateCurrentWorkExperience(contractStartDate, today){
+        var array1 = contractStartDate.split(".");
+        var array2 = today.split(".");
+        return parseFloat(array2[2])-parseFloat(array1[2])
+    }
 </script>
 
 

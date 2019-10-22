@@ -155,7 +155,7 @@ public class SkeletonController {
 
     @PostConstruct
     public void init() {
-        StaticUtils.setConfig(vacationDetailRepository, businessTripDetailRepository, illnessDetailRepository, nonWorkingDayRepository);
+        StaticUtils.setConfig(vacationDetailRepository, businessTripDetailRepository, illnessDetailRepository, nonWorkingDayRepository, employeeRestDayRepository);
     }
 
 
@@ -227,6 +227,10 @@ public class SkeletonController {
     }
 
     public static String identify(Employee employee, Date date){
+        EmployeeRestDay employeeRestDay = StaticUtils.getEmployeeRestDayByEmployeeAndDay(employee, date);
+        if(employeeRestDay!=null){
+            return "İ";
+        }
         VacationDetail vacationDetail = StaticUtils.getVacationDetailByEmployeeAndVacationDateAndVacation_Active(employee, date, true);
         if(vacationDetail!=null){
             return vacationDetail.getVacation().getIdentifier().getAttr1();
@@ -241,7 +245,13 @@ public class SkeletonController {
         }
         NonWorkingDay nonWorkingDay = StaticUtils.getNonWorkingDayByNonWorkingDateAndActiveTrue(date);
         if(nonWorkingDay!=null){
-            return nonWorkingDay.getIdentifier();
+            if(nonWorkingDay.getIdentifier().contentEquals("İ")){
+                if(StaticUtils.getEmployeeRestDaysByEmployee(employee).size()==0){
+                    return nonWorkingDay.getIdentifier();
+                }
+            } else if(nonWorkingDay.getIdentifier().contentEquals("B")){
+                return nonWorkingDay.getIdentifier();
+            }
         }
         return "İG";
     }

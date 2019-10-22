@@ -101,7 +101,7 @@ public class DummyPerson {
         return fatherNames;
     }
 
-    public Person getPerson(Contact contact, List<Dictionary> nationalities, List<Dictionary> genders){
+    public Person getPerson(Contact contact, List<Dictionary> nationalities, List<Dictionary> genders, List<Dictionary> maritalStatuses){
         Person person = new Person(
                 contact,
                 DummyUtil.randomString(getFirstNames()),
@@ -110,7 +110,9 @@ public class DummyPerson {
                 new Date(),
                 DummyUtil.randomDictionary(genders),
                 DummyUtil.randomDictionary(nationalities),
-                null,
+                DummyUtil.randomDictionary(maritalStatuses),
+                DummyUtil.randomIdCardPinCode(),
+                DummyUtil.randomBoolean(),
                 null
         );
         return person;

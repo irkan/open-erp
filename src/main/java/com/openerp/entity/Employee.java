@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 import java.util.Date;
 import java.util.List;
 
@@ -54,6 +55,13 @@ public class Employee {
     @Column(name = "bank_card_number")
     private String bankCardNumber;
 
+    @Column(name = "is_specialist_or_manager", nullable = false, columnDefinition="boolean default false")
+    private Boolean specialistOrManager = false;
+
+    @Pattern(regexp=".{0,250}",message="Maksimum 250 simvol ola bilər")
+    @Column(name = "description")
+    private String description;
+
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<EmployeeDetail> employeeDetails;
 
@@ -70,5 +78,18 @@ public class Employee {
         this.contractStartDate = contractStartDate;
         this.contractEndDate = contractEndDate;
         this.organization = organization;
+    }
+
+    public Employee(Person person, Dictionary position, Date contractStartDate, Date contractEndDate, Organization organization, String socialCardNumber, String bankAccountNumber, String bankCardNumber, Boolean specialistOrManager, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String description) {
+        this.person = person;
+        this.position = position;
+        this.contractStartDate = contractStartDate;
+        this.contractEndDate = contractEndDate;
+        this.organization = organization;
+        this.socialCardNumber = socialCardNumber;
+        this.bankAccountNumber = bankAccountNumber;
+        this.bankCardNumber = bankCardNumber;
+        this.specialistOrManager = specialistOrManager;
+        this.description = description;
     }
 }

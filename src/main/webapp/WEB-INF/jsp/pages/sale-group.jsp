@@ -11,6 +11,8 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="utl" uri="/WEB-INF/tld/Util.tld"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<link href="<c:url value="/assets/external/bootstrap-duallistbox-4/dist/bootstrap-duallistbox.min.css" />" rel="stylesheet" type="text/css"/>
+
 <div class="kt-container  kt-grid__item kt-grid__item--fluid">
     <div class="row">
         <div class="col-lg-12">
@@ -116,6 +118,7 @@
 </div>
 
 <script src="<c:url value="/assets/js/demo4/pages/crud/datatables/advanced/row-grouping.js" />" type="text/javascript"></script>
+<script src="<c:url value="/assets/external/bootstrap-duallistbox-4/dist/jquery.bootstrap-duallistbox.js" />" type="text/javascript"></script>
 
 <script>
     var KTDualListbox = function () {
@@ -142,10 +145,11 @@
                 var dualListBox = new DualListbox(id,{
                     addEvent: function(value) {
                         console.log(value);
-                        console.log('PASHAAAAA');
+                        console.log(id);
                     },
                     removeEvent: function(value) {
                         console.log(value);
+                        console.log(id);
                     },
                     availableTitle: availableTitle,
                     selectedTitle: selectedTitle,
@@ -168,9 +172,27 @@
         };
     }();
 
-    KTUtil.ready(function() {
+    /*KTUtil.ready(function() {
         KTDualListbox.init();
-    });
+    });*/
+
+    $(function(){
+        var dual = $('.kt-dual-listbox').bootstrapDualListbox({
+            nonSelectedListLabel: 'Seçilməmiş',
+            selectedListLabel: 'Seçilmiş',
+            preserveSelectionOnMove: 'moved',
+            moveOnSelect: false,
+            infoText: 'Göstərilir {0}',
+            filterPlaceHolder: 'Axtar...',
+            infoTextEmpty: 'Boş siyahı',
+            eventMoveOverrid: true,
+            eventMoveAllOverride: true,
+            setMoveOnSelect(value, refresh){
+                alert(value);
+            }
+        });
+        dual.bootstrapDualListbox('refresh');
+    })
 </script>
 
 
