@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
 
@@ -23,6 +24,7 @@ public class NonWorkingDay {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
+    @NotNull(message = "Boş olmamalıdır")
     @Temporal(TemporalType.DATE)
     @Column(name = "non_working_date", unique = true, nullable = false)
     @DateTimeFormat(pattern = "dd.MM.yyyy")
