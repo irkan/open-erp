@@ -34,10 +34,15 @@ public class EmployeeRestDay {
     @Column(name = "day")
     private int day;
 
-    public EmployeeRestDay(Employee employee, String description, String identifier, int day) {
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "admin_dictionary_week_day_id", nullable = false)
+    private Dictionary type;
+
+    public EmployeeRestDay(Employee employee, String description, String identifier, int day, Dictionary type) {
         this.employee = employee;
         this.description = description;
         this.identifier = identifier;
         this.day = day;
+        this.type = type;
     }
 }

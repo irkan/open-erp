@@ -111,7 +111,8 @@ public class DummyPerson {
                 DummyUtil.randomDictionary(genders),
                 DummyUtil.randomDictionary(nationalities),
                 DummyUtil.randomDictionary(maritalStatuses),
-                null,
+                DummyUtil.randomIdCardPinCode(),
+                DummyUtil.randomBoolean(),
                 null
         );
         return person;

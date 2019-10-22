@@ -16,7 +16,12 @@ public class DummyEmployee {
                 DummyUtil.randomDictionary(positions),
                 DummyUtil.randomContractStartDate(),
                 null,
-                DummyUtil.randomOrganization(organizations)
+                DummyUtil.randomOrganization(organizations),
+                DummyUtil.randomSocialCardNumber(),
+                DummyUtil.randomBankAccountNumber(),
+                DummyUtil.randomBankCardNumber(),
+                DummyUtil.randomBoolean(),
+                ""
         );
         return employee;
     }

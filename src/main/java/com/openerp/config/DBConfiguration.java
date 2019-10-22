@@ -284,7 +284,7 @@ public class DBConfiguration {
             dictionaries.add(employeeDetail5);
             Dictionary employeeDetail6 = new Dictionary("Güzəşt", "{allowance}", "0", employeeDetail);
             dictionaries.add(employeeDetail6);
-            Dictionary employeeDetail7 = new Dictionary("Əsas məzuniyyət günlərinin sayı", "{main_vacation_days}", "23", employeeDetail);
+            Dictionary employeeDetail7 = new Dictionary("Əsas məzuniyyət günlərinin sayı", "{main_vacation_days}", "21", employeeDetail);
             dictionaries.add(employeeDetail7);
             Dictionary employeeDetail8 = new Dictionary("Əlavə məzuniyyət günlərinin sayı", "{additional_vacation_days}", "0", employeeDetail);
             dictionaries.add(employeeDetail8);
@@ -747,7 +747,7 @@ public class DBConfiguration {
             organizationRepository.saveAll(organizations);
 
             Contact contact1 = new Contact("502535110", null, "irkan.ehmedov@gmail.com", "Ü.Hacıbəyov 195A", baku);
-            Person person = new Person(contact1, "İrkan", "Əhmədov", "Əflatun", DateUtility.getUtilDate("25.09.1989"), male, azerbaijanNationality, married, "4HWL0AM", null);
+            Person person = new Person(contact1, "İrkan", "Əhmədov", "Əflatun", DateUtility.getUtilDate("25.09.1989"), male, azerbaijanNationality, married, "4HWL0AM", false, null);
             Employee employee = new Employee(person, position1, new Date(), null, headBranch);
             List<EmployeeDetail> employeeDetails = new ArrayList<>();
             for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-additional-field")){
@@ -897,27 +897,27 @@ public class DBConfiguration {
             List<Supplier> suppliers = new ArrayList<>();
 
             Contact supplier1Contact = new Contact("702046451", null, "aqualine.az@gmail.com", "Keşlə bazarı", baku);
-            Person supplier1Person = new Person(supplier1Contact, "Əli", "Vəliyev", null, null, male, azerbaijanNationality, married, null, null);
+            Person supplier1Person = new Person(supplier1Contact, "Əli", "Vəliyev", null, null, male, azerbaijanNationality, married, null,false, null);
             Supplier supplier1 = new Supplier("Aqualine MMC", "Sintra təminatçısı", supplier1Person);
             suppliers.add(supplier1);
 
             Contact supplier2Contact = new Contact("553128122", null, "samir.bagirov@gmail.com", "Tonqal restoranının yanı", baku);
-            Person supplier2Person = new Person(supplier2Contact, "Samir", "Bağırov", null, null, male, azerbaijanNationality, single, null, null);
+            Person supplier2Person = new Person(supplier2Contact, "Samir", "Bağırov", null, null, male, azerbaijanNationality, single, null,false, null);
             Supplier supplier2 = new Supplier("Techflow MMC", "Təminatçı", supplier2Person);
             suppliers.add(supplier2);
 
             Contact supplier3Contact = new Contact("552263010", null, "sintra.az@gmail.com", "Binəqədi rayonu", baku);
-            Person supplier3Person = new Person(supplier3Contact, "Elmar", "Məmmədov", null, null, male, azerbaijanNationality, single, null, null);
+            Person supplier3Person = new Person(supplier3Contact, "Elmar", "Məmmədov", null, null, male, azerbaijanNationality, single, null,false, null);
             Supplier supplier3 = new Supplier("Sintra MMC", "Təminatçı", supplier3Person);
             suppliers.add(supplier3);
 
             Contact supplier4Contact = new Contact(null, null, "sadarak@gmail.com", null, baku);
-            Person supplier4Person = new Person(supplier4Contact, "Sədərək", "Ticarət mərkəzi", null, null, male, azerbaijanNationality, single, null, null);
+            Person supplier4Person = new Person(supplier4Contact, "Sədərək", "Ticarət mərkəzi", null, null, male, azerbaijanNationality, single, null,false, null);
             Supplier supplier4 = new Supplier("Sədərək", "Təminatçı", supplier4Person);
             suppliers.add(supplier4);
 
             Contact supplier5Contact = new Contact(null, null, "other.supplier@gmail.com", null, baku);
-            Person supplier5Person = new Person(supplier5Contact, "Digər", "Təminatçı", null, null, male, azerbaijanNationality, single, null, null);
+            Person supplier5Person = new Person(supplier5Contact, "Digər", "Təminatçı", null, null, male, azerbaijanNationality, single, null,false, null);
             Supplier supplier5 = new Supplier("Digər", "Təminatçı", supplier5Person);
             suppliers.add(supplier5);
 

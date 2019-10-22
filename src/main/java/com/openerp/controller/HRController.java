@@ -119,7 +119,7 @@ public class HRController extends SkeletonController {
                 for(int id: ids){
                     Dictionary weekDay = dictionaryRepository.getDictionaryById(id);
                     if(weekDay!=null){
-                        EmployeeRestDay erd = new EmployeeRestDay(employee, weekDay.getName(), weekDay.getAttr1(), Integer.parseInt(weekDay.getAttr2()));
+                        EmployeeRestDay erd = new EmployeeRestDay(employee, weekDay.getName(), weekDay.getAttr1(), Integer.parseInt(weekDay.getAttr2()), weekDay);
                         erds.add(erd);
                     }
                 }

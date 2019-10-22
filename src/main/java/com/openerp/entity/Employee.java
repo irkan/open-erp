@@ -55,9 +55,6 @@ public class Employee {
     @Column(name = "bank_card_number")
     private String bankCardNumber;
 
-    @Column(name = "is_disability", nullable = false, columnDefinition="boolean default false")
-    private Boolean disability = false;
-
     @Column(name = "is_specialist_or_manager", nullable = false, columnDefinition="boolean default false")
     private Boolean specialistOrManager = false;
 
@@ -81,5 +78,18 @@ public class Employee {
         this.contractStartDate = contractStartDate;
         this.contractEndDate = contractEndDate;
         this.organization = organization;
+    }
+
+    public Employee(Person person, Dictionary position, Date contractStartDate, Date contractEndDate, Organization organization, String socialCardNumber, String bankAccountNumber, String bankCardNumber, Boolean specialistOrManager, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String description) {
+        this.person = person;
+        this.position = position;
+        this.contractStartDate = contractStartDate;
+        this.contractEndDate = contractEndDate;
+        this.organization = organization;
+        this.socialCardNumber = socialCardNumber;
+        this.bankAccountNumber = bankAccountNumber;
+        this.bankCardNumber = bankCardNumber;
+        this.specialistOrManager = specialistOrManager;
+        this.description = description;
     }
 }

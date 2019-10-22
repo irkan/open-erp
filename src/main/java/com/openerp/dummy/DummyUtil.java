@@ -69,4 +69,88 @@ public class DummyUtil {
         }
         return dictionaries;
     }
+
+    public static String randomSocialCardNumber(){
+        String NumericStringSuffix = "0123456789";
+        StringBuilder sb = new StringBuilder(6);
+        for (int i = 0; i < 6; i++) {
+            int index = (int)(NumericStringSuffix.length() * Math.random());
+            sb.append(NumericStringSuffix.charAt(index));
+        }
+        return sb.toString();
+    }
+
+    public static String randomBankCardNumber(){
+        String NumericStringSuffix = "123456789";
+        StringBuilder sb = new StringBuilder(16);
+        for (int i = 0; i < 16; i++) {
+            int index = (int)(NumericStringSuffix.length() * Math.random());
+            sb.append(NumericStringSuffix.charAt(index));
+        }
+        return sb.toString();
+    }
+
+    public static String randomIdCardPinCode(){
+        String AlphaNumericString = "AZNUSDERGBPTLWZ0123456789";
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 7; i++) {
+            int index = (int)(AlphaNumericString.length() * Math.random());
+            sb.append(AlphaNumericString.charAt(index));
+        }
+        return sb.toString();
+    }
+
+    public static String randomBankAccountNumber(){
+        String AlphaString = "AZNUSDERGBPTL";
+        String NumericString = "0123456789";
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 2; i++) {
+            int index = (int)(NumericString.length() * Math.random());
+            sb.append(NumericString.charAt(index));
+        }
+        for (int i = 0; i < 4; i++) {
+            int index = (int)(AlphaString.length() * Math.random());
+            sb.append(AlphaString.charAt(index));
+        }
+        for (int i = 0; i < 16; i++) {
+            int index = (int)(NumericString.length() * Math.random());
+            sb.append(NumericString.charAt(index));
+        }
+        return "AZ"+sb.toString();
+    }
+
+    public static boolean randomBoolean(){
+        int[] a = {1,0,0,0,0,0,0,0,0,0,1,0,0,0};
+        int index = (int)(a.length * Math.random());
+        if(a[index]==1){
+            return true;
+        }
+        return false;
+    }
+
+    public static String calculateMainVacationDays(String mainVacationDays, boolean disability, boolean specialistOrManager){
+        if(disability){
+            mainVacationDays = "43";
+        }
+        if(specialistOrManager && !disability){
+            mainVacationDays = "30";
+        }
+        return mainVacationDays;
+    }
+
+    public static String calculateAdditionalVacationDays(String additionalVacationDays, Date contractStartDate, String previousWorkExperience, boolean disability){
+        Date today = new Date();
+        int experience = Integer.parseInt(previousWorkExperience) + today.getYear()-contractStartDate.getYear();
+        if(experience>=15){
+            additionalVacationDays = "6";
+        } else if(experience>=10){
+            additionalVacationDays = "4";
+        } else if(experience>=5){
+            additionalVacationDays = "2";
+        }
+        if(disability){
+            additionalVacationDays = "0";
+        }
+        return additionalVacationDays;
+    }
 }

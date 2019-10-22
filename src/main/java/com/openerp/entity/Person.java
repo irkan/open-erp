@@ -55,6 +55,9 @@ public class Person {
     @Column(name = "id_card_pin_code")
     private String idCardPinCode;
 
+    @Column(name = "is_disability", nullable = false, columnDefinition="boolean default false")
+    private Boolean disability = false;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_date", nullable = false)
     private Date createdDate = new Date();
@@ -87,7 +90,7 @@ public class Person {
         return firstName+" "+lastName+" "+fatherName;
     }
 
-    public Person(Contact contact, String firstName, String lastName, String fatherName, Date birthday, Dictionary gender, Dictionary nationality, Dictionary maritalStatus, String idCardPinCode, User createdUser) {
+    public Person(Contact contact, String firstName, String lastName, String fatherName, Date birthday, Dictionary gender, Dictionary nationality, Dictionary maritalStatus, String idCardPinCode, boolean disability, User createdUser) {
         this.contact = contact;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -97,6 +100,7 @@ public class Person {
         this.nationality = nationality;
         this.maritalStatus = maritalStatus;
         this.idCardPinCode = idCardPinCode;
+        this.disability = disability;
         this.createdUser = createdUser;
     }
 }

@@ -87,8 +87,16 @@
                 } else if(tagName.toLowerCase()==="textarea"){
                     $(element).val(value);
                 } else if(tagName.toLowerCase()==="select"){
-                    if(value!=null){
-                        $("#"+$(element).attr("id")+" option[value="+value.id+"]").attr("selected", "selected");
+                    if($(element).attr("multiple")){
+                        $("#"+$(element).attr("id")+" option:selected").removeAttr("selected");
+                        $(value).each(function(key, item){
+                            $("#"+$(element).attr("id")+" option[value="+item.type.id+"]").attr("selected", "selected");
+                        });
+                        $("#"+$(element).attr("id")).select2();
+                    } else {
+                        if(value!=null){
+                            $("#"+$(element).attr("id")+" option[value="+value.id+"]").attr("selected", "selected");
+                        }
                     }
                 }
             } catch (e) {
@@ -223,6 +231,25 @@
             });
         </c:if>
     });
+
+    var KTAppOptions = {
+        "colors": {
+            "state": {
+                "brand": "#366cf3",
+                "light": "#ffffff",
+                "dark": "#282a3c",
+                "primary": "#5867dd",
+                "success": "#34bfa3",
+                "info": "#36a3f7",
+                "warning": "#ffb822",
+                "danger": "#fd3995"
+            },
+            "base": {
+                "label": ["#c5cbe3", "#a1a8c3", "#3d4465", "#3e4466"],
+                "shape": ["#f0f3ff", "#d9dffa", "#afb4d4", "#646c9a"]
+            }
+        }
+    };
 </script>
 
 
