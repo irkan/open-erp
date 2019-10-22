@@ -74,6 +74,7 @@ public class AccountingController extends SkeletonController {
 
     @PostMapping(value = "/account")
     public String postAccount(@ModelAttribute(Constants.FORM) @Validated Account account, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             accountRepository.save(account);
         }
@@ -82,6 +83,7 @@ public class AccountingController extends SkeletonController {
 
     @PostMapping(value = "/transaction")
     public String postTransaction(@ModelAttribute(Constants.FORM) @Validated Transaction transaction, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             transactionRepository.save(transaction);
         }

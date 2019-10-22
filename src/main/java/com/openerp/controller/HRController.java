@@ -185,6 +185,7 @@ public class HRController extends SkeletonController {
 
     @PostMapping(value = "/vacation")
     public String postVacation(@ModelAttribute(Constants.FORM) @Validated Vacation vacation, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             String range = vacation.getDateRange();
             if(range.length()>15){
@@ -216,6 +217,7 @@ public class HRController extends SkeletonController {
 
     @PostMapping(value = "/business-trip")
     public String postBusinessTrip(@ModelAttribute(Constants.FORM) @Validated BusinessTrip businessTrip, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             String range = businessTrip.getDateRange();
             if(range.length()>15){
@@ -243,6 +245,7 @@ public class HRController extends SkeletonController {
 
     @PostMapping(value = "/illness")
     public String postIllness(@ModelAttribute(Constants.FORM) @Validated Illness illness, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             String range = illness.getDateRange();
             if(range.length()>15){

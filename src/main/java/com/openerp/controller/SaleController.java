@@ -56,6 +56,7 @@ public class SaleController extends SkeletonController {
 
     @PostMapping(value = "/sale-group")
     public String postInventory(@ModelAttribute(Constants.FORM) @Validated SaleGroup saleGroup, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             saleGroupRepository.save(saleGroup);
         }

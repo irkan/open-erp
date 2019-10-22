@@ -89,6 +89,7 @@ public class WarehouseController extends SkeletonController {
 
     @PostMapping(value = "/inventory")
     public String postInventory(@ModelAttribute(Constants.FORM) @Validated Inventory inventory, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             if(inventory.getGroup().getId()!=null && (inventory.getBarcode()==null || inventory.getBarcode().trim().length()==0)){
                 inventory.setBarcode(Util.generateBarcode(inventory.getGroup().getId()));
@@ -108,6 +109,7 @@ public class WarehouseController extends SkeletonController {
 
     @PostMapping(value = "/supplier")
     public String postSupplier(@ModelAttribute(Constants.FORM) @Validated Supplier supplier, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             supplierRepository.save(supplier);
         }

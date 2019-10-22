@@ -78,6 +78,7 @@ public class PayrollController extends SkeletonController {
 
     @PostMapping(value = "/payroll-configuration")
     public String postInventory(@ModelAttribute(Constants.FORM) @Validated PayrollConfiguration payrollConfiguration, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             payrollConfigurationRepository.save(payrollConfiguration);
         }
@@ -214,6 +215,7 @@ public class PayrollController extends SkeletonController {
 
     @PostMapping(value = "/advance")
     public String postAdvance(@ModelAttribute(Constants.FORM) @Validated Advance advance, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             advanceRepository.save(advance);
         }
