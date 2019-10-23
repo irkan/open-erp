@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.DigestUtils;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -184,26 +185,24 @@ public class WarehouseController extends SkeletonController {
     @PostMapping(value = "/action/consolidate")
     public String postActionConsolidate(@ModelAttribute(Constants.FORM) @Validated Action action, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         Action actn = actionRepository.getActionById(action.getId());
+        if(financingRepository.getFinancingByActiveTrueAndInventory(actn.getInventory())==null){
+            FieldError fieldError = new FieldError("", "", "Maliyyətləndirmə edilməyib! Alış və qiymətləndirilmə təsdiqlənməlidir!");
+            binding.addError(fieldError);
+        }
+        if(actn.getAmount()-action.getAmount()<0){
+            FieldError fieldError = new FieldError("amount", "amount", "Say limitini aşmısınız!");
+            binding.addError(fieldError);
+        }
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()) {
-            List<String> messages = new ArrayList<>();
-            if(financingRepository.getFinancingByActiveTrueAndInventory(actn.getInventory())==null){
-                messages.add("Maliyyətləndirmə edilməyib! Alış və qiymətləndirilmə təsdiqlənməlidir!");
-            }
-            if(messages.size()==0) {
-                action.setId(null);
-                action.setInventory(actn.getInventory());
-                action.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrue("consolidate"));
-                action.setSupplier(actn.getSupplier());
-                action.setWarehouse(actn.getWarehouse());
-                if(actn.getAmount()-action.getAmount()>=0){
-                    actionRepository.save(action);
-                    actn.setAmount(actn.getAmount()-action.getAmount());
-                    actionRepository.save(actn);
-                } else {
-                    messages.add("Say limitini aşmısınız!");
-                }
-                redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, new Response(Constants.STATUS.ERROR, messages));
-            }
+            action.setId(null);
+            action.setInventory(actn.getInventory());
+            action.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrue("consolidate"));
+            action.setSupplier(actn.getSupplier());
+            action.setWarehouse(actn.getWarehouse());
+            actionRepository.save(action);
+            actn.setAmount(actn.getAmount() - action.getAmount());
+            actionRepository.save(actn);
         }
         return mapPost(action, binding, redirectAttributes, "/warehouse/action/"+actn.getInventory().getId());
     }
