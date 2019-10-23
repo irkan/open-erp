@@ -111,7 +111,8 @@ public class HRController extends SkeletonController {
 
     @PostMapping(value = "/employee")
     public String postEmployee(@ModelAttribute(Constants.FORM) @Validated Employee employee, @RequestParam(name = "employeeRestDays", defaultValue = "0") int[] ids, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
-         if(employee.getPerson().getFirstName().length()<2){
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
+        if(employee.getPerson().getFirstName().length()<2){
             FieldError fieldError = new FieldError("person.firstName", "person.firstName", "Minimum 2 simvol olmalıdır!");
             binding.addError(fieldError);
         }
@@ -146,6 +147,7 @@ public class HRController extends SkeletonController {
 
     @PostMapping(value = "/non-working-day")
     public String postNonWorkingDay(@ModelAttribute(Constants.FORM) @Validated NonWorkingDay nonWorkingDay, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             nonWorkingDayRepository.save(nonWorkingDay);
         }
@@ -173,6 +175,7 @@ public class HRController extends SkeletonController {
 
     @PostMapping(value = "/shortened-working-day")
     public String postShortenedWorkingDay(@ModelAttribute(Constants.FORM) @Validated ShortenedWorkingDay shortenedWorkingDay, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             shortenedWorkingDayRepository.save(shortenedWorkingDay);
         }
