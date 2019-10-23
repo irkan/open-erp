@@ -72,7 +72,7 @@
                                             <c:set var="save" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'save')}"/>
                                             <c:choose>
                                                 <c:when test="${save.status}">
-                                                    <c:if test="${not empty salary_employees}">
+                                                    <c:if test="${not empty form}">
                                                         <a href="#" onclick="saveWHR($('#form'))" class="btn btn-warning btn-elevate btn-icon-sm" title="<c:out value="${save.object.name}"/>">
                                                             <i class="la <c:out value="${save.object.icon}"/>"></i>
                                                             <c:out value="${save.object.name}"/>
@@ -83,7 +83,7 @@
                                             <c:set var="approve" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
                                             <c:choose>
                                                 <c:when test="${approve.status}">
-                                                    <c:if test="${not empty salary_employees and !form.approve}">
+                                                    <c:if test="${not empty form and !form.approve}">
                                                         <a href="#" onclick="saveWHR($('#form'))" class="btn btn-success btn-elevate btn-icon-sm" title="<c:out value="${approve.object.name}"/>">
                                                             <i class="la <c:out value="${approve.object.icon}"/>"></i>
                                                             <c:out value="${approve.object.name}"/>
@@ -94,7 +94,7 @@
                                             <c:set var="cancel" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'cancel')}"/>
                                             <c:choose>
                                                 <c:when test="${cancel.status}">
-                                                    <c:if test="${not empty salary_employees and !form.approve}">
+                                                    <c:if test="${not empty form and !form.approve}">
                                                         <a href="#" onclick="saveWHR($('#form'))" class="btn btn-dark btn-elevate btn-icon-sm" title="<c:out value="${cancel.object.name}"/>">
                                                             <i class="la <c:out value="${cancel.object.icon}"/>"></i>
                                                             <c:out value="${cancel.object.name}"/>
@@ -105,7 +105,7 @@
                                             <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
                                             <c:choose>
                                                 <c:when test="${delete.status}">
-                                                    <c:if test="${not empty salary_employees}">
+                                                    <c:if test="${not empty form}">
                                                         <a href="javascript:deleteData('<c:out value="${form.workingHourRecord.id}" />', '<c:out value="${form.workingHourRecord.month}"/>.<c:out value="${form.workingHourRecord.year}"/> tarixli maaş hesablanması ');" class="btn btn-danger btn-elevate btn-icon-sm" title="<c:out value="${delete.object.name}"/>">
                                                             <i class="la <c:out value="${delete.object.icon}"/>"></i>
                                                             <c:out value="${delete.object.name}"/>
@@ -122,63 +122,30 @@
                 </c:choose>
                 <div class="kt-portlet__body">
                     <c:choose>
-                        <c:when test="${not empty salary_employees}">
-                            <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_3">
+                        <c:when test="${not empty form.salaryEmployees}">
+                            <table class="table table-striped- table-bordered table-hover table-checkable" id="group_table">
                                 <thead>
                                 <tr>
-                                    <th rowspan="3">№</th>
-                                    <th rowspan="3" ><div style="width: 220px !important;">Ad Soyad Ata adı</div></th>
-                                    <th colspan="2" rowspan="2" class="text-center" style="letter-spacing: 4px;">Əməkdaş</th>
-                                    <th colspan="<c:out value="${days_in_month}"/>" class="text-center" style="letter-spacing: 4px;">
-                                        Ayın və həftənin günləri
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <c:forEach var = "i" begin = "1" end = "${days_in_month}">
-                                        <th class="bg-info text-center kt-padding-1" style="border: none; color: white;"><c:out value = "${i}"/></th>
-                                    </c:forEach>
-                                </tr>
-                                <tr>
-                                    <th class="bg-warning" style="border: none;"><div style="width: 180px !important;">Vəzifə</div></th>
-                                    <th class="bg-warning" style="border: none;"><div style="width: 120px !important;">Struktur</div></th>
-                                    <c:forEach var = "i" begin = "1" end = "${days_in_month}">
-                                        <th class="bg-info text-center kt-padding-0" style="border: none; color: white;"><c:out value = "${utl:weekDay(i, form.workingHourRecord.month, form.workingHourRecord.year)}"/></th>
-                                    </c:forEach>
+                                    <th>ID</th>
+                                    <th>Skeleton Formula</th>
+                                    <th>Ad Soyad Ata adı</th>
+                                    <th>Açıqlama</th>
+                                    <th>Key</th>
+                                    <th>Dəyər</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <c:forEach var="t" items="${salary_employees}" varStatus="loop">
-                                    <tr>
-                                        <td class="text-center">
-                                            ${loop.index + 1}
-                                           <%-- <input type="hidden" name="workingHourRecordEmployees[${loop.index}].id" value="<c:out value="${t.id}"/>"/>
-                                            <input type="hidden" name="workingHourRecordEmployees[${loop.index}].workingHourRecord" value="<c:out value="${form.id}"/>"/>
-                                            <input type="hidden" name="workingHourRecordEmployees[${loop.index}].employee.id" value="<c:out value="${t.employee.id}"/>"/>
-                                            <input type="hidden" name="workingHourRecordEmployees[${loop.index}].fullName" value="<c:out value="${t.fullName}"/>"/>
-                                            <input type="hidden" name="workingHourRecordEmployees[${loop.index}].position" value="<c:out value="${t.position}"/>"/>
-                                            <input type="hidden" name="workingHourRecordEmployees[${loop.index}].organization" value="<c:out value="${t.organization}"/>"/>--%>
-                                        </td>
-                                        <th>
-                                            <c:out value="${t.workingHourRecordEmployee.fullName}"/>
-                                        </th>
-                                        <td>
-                                            <c:out value="${t.workingHourRecordEmployee.position}"/>
-                                        </td>
-                                        <td>
-                                            <c:out value="${t.workingHourRecordEmployee.organization}"/>
-                                        </td>
-                                        <c:forEach var="p" items="${t.workingHourRecordEmployee.workingHourRecordEmployeeIdentifiers}" varStatus="count">
-                                            <td class="text-center kt-padding-0">
-                                                <div class="typeahead">
-                                                    <input type="hidden" name="workingHourRecordEmployees[${loop.index}].workingHourRecordEmployeeIdentifiers[${count.index}].id" value="<c:out value="${p.id}"/>"/>
-                                                    <input type="hidden" name="workingHourRecordEmployees[${loop.index}].workingHourRecordEmployeeIdentifiers[${count.index}].workingHourRecordEmployee" value="<c:out value="${t.id}"/>"/>
-                                                    <input type="hidden" name="workingHourRecordEmployees[${loop.index}].workingHourRecordEmployeeIdentifiers[${count.index}].weekDay" value="<c:out value="${p.weekDay}"/>"/>
-                                                    <input type="hidden" name="workingHourRecordEmployees[${loop.index}].workingHourRecordEmployeeIdentifiers[${count.index}].monthDay" value="<c:out value="${p.monthDay}"/>"/>
-                                                    <input type="text" class="type-ahead" name="workingHourRecordEmployees[${loop.index}].workingHourRecordEmployeeIdentifiers[${count.index}].identifier" value="<c:out value="${p.identifier}"/>"/>
-                                                </div>
-                                            </td>
-                                        </c:forEach>
-                                    </tr>
+                                <c:forEach var="t" items="${form.salaryEmployees}" varStatus="loop">
+                                    <c:forEach var="p" items="${t.salaryEmployeeDetails}" varStatus="loop">
+                                        <tr>
+                                            <td><c:out value="${p.id}" /></td>
+                                            <td><c:out value="${p.skeletonFormula}" /> = <c:out value="${p.formula}" /></td>
+                                            <td><c:out value="${t.workingHourRecordEmployee.fullName}" /></td>
+                                            <td><c:out value="${p.description}" /></td>
+                                            <td><c:out value="${p.key}" /></td>
+                                            <td><c:out value="${p.value}" /></td>
+                                        </tr>
+                                    </c:forEach>
                                 </c:forEach>
                                 </tbody>
                             </table>
@@ -241,6 +208,7 @@
 
 <script src="<c:url value="/assets/vendors/general/typeahead.js/dist/typeahead.bundle.js" />" type="text/javascript"></script>
 <script src="<c:url value="/assets/vendors/general/typeahead.js/dist/typeahead.jquery.js" />" type="text/javascript"></script>
+<script src="<c:url value="/assets/js/demo4/pages/crud/datatables/advanced/row-grouping.js" />" type="text/javascript"></script>
 
 <script>
     var KTTypeahead = function() {

@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SalaryRepository extends JpaRepository<Salary, Integer> {
     Salary getSalaryByActiveTrueAndWorkingHourRecord(WorkingHourRecord workingHourRecord);
+    Salary getSalaryById(int id);
 }

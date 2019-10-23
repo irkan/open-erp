@@ -159,6 +159,15 @@ public class Util {
         return df.format(amount).replace(",", ".");
     }
 
+    public static String findWorkingHourRecordEmployeeDayCalculations(List<WorkingHourRecordEmployeeDayCalculation> workingHourRecordEmployeeDayCalculations, String key){
+        for(WorkingHourRecordEmployeeDayCalculation whredc: workingHourRecordEmployeeDayCalculations){
+            if(whredc.getKey().equalsIgnoreCase(key)){
+                return String.valueOf(whredc.getValue());
+            }
+        }
+        return "0";
+    }
+
     public static String findEmployeeDetail(List<EmployeeDetail> employeeDetails, String key){
         for(EmployeeDetail ed: employeeDetails){
             if(ed.getKey().equalsIgnoreCase(key)){
@@ -214,7 +223,7 @@ public class Util {
         List<WorkingHourRecordEmployeeDayCalculation> whredcsCurrent = workingHourRecordEmployee.getWorkingHourRecordEmployeeDayCalculations();
         List<WorkingHourRecordEmployeeIdentifier> whreisCurrent = workingHourRecordEmployee.getWorkingHourRecordEmployeeIdentifiers();
         for(Dictionary identifier: identifiers){
-            if(!identifier.getAttr1().contentEquals("HİG") || !identifier.getAttr1().contentEquals("ÜİG")) {
+            if(!identifier.getAttr1().contentEquals("HİG") && !identifier.getAttr1().contentEquals("ÜİG")) {
                 WorkingHourRecordEmployeeDayCalculation whredc = findWorkingHourRecordEmployeeDayCalculation(whredcsCurrent, identifier.getAttr1());
                 whredc.setWorkingHourRecordEmployee(workingHourRecordEmployee);
                 whredc.setDescription(identifier.getName());
@@ -278,7 +287,7 @@ public class Util {
     }
 
     public static int calculateHIG(List<WorkingHourRecordEmployeeDayCalculation> whredcs){
-        int uig = 0;
+        int hig = 0;
         for(WorkingHourRecordEmployeeDayCalculation whredc: whredcs){
             if(whredc.getKey().contentEquals("İG") ||
                     whredc.getKey().contentEquals("QİG") ||
@@ -286,12 +295,13 @@ public class Util {
                     whredc.getKey().contentEquals("QİG(A)") ||
                     whredc.getKey().contentEquals("I") ||
                     whredc.getKey().contentEquals("II") ||
-                    whredc.getKey().contentEquals("B")
+                    whredc.getKey().contentEquals("DM") ||
+                    whredc.getKey().contentEquals("RM")
             ){
-                uig+=whredc.getValue();
+                hig+=whredc.getValue();
             }
         }
-        return uig;
+        return hig;
     }
 
     public static WorkingHourRecordEmployeeDayCalculation findWorkingHourRecordEmployeeDayCalculation(List<WorkingHourRecordEmployeeDayCalculation> whredcs, String identifier){
