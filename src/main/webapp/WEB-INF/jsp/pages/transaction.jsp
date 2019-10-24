@@ -201,13 +201,16 @@
                     </div>
                     <div class="form-group">
                         <label>Digər xərclər varmı?</label>
-                        <div class="row">
-                            <fmt:parseNumber var = "grid" integerOnly = "true" type = "number" value = "${12/expenses.size()}" />
-                            <c:forEach var="t" items="${expenses}" varStatus="loop">
-                                <div class="col-md-${grid}">
-                                    <label><input type="checkbox" name="expense" value="<c:out value="${t.id}"/>" /> <c:out value="${t.name}"/></label>
-                                </div>
-                            </c:forEach>
+                        <div class="row mt-1">
+                            <div class="col-md-12">
+                                <c:forEach var="t" items="${expenses}" varStatus="loop">
+                                    <label class="kt-checkbox kt-checkbox--brand">
+                                        <input type="checkbox" name="expense" value="${t.id}"/><c:out value="${t.name}"/>
+                                        <span></span>
+                                    </label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                </c:forEach>
+                            </div>
                         </div>
                     </div>
                 </form:form>
