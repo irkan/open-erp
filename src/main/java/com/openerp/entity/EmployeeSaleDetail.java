@@ -4,18 +4,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.Pattern;
-import java.util.Date;
 
 @Entity
-@Table(name = "hr_employee_detail")
+@Table(name = "hr_employee_sale_detail")
 @Getter
 @Setter
 @NoArgsConstructor
-public class EmployeeDetail {
+public class EmployeeSaleDetail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "hr_sequence")
@@ -34,7 +31,7 @@ public class EmployeeDetail {
     @Column(name = "value")
     private String value;
 
-    public EmployeeDetail(Employee employee, String key, String value) {
+    public EmployeeSaleDetail(Employee employee, String key, String value) {
         this.employee = employee;
         this.key = key;
         this.value = value;

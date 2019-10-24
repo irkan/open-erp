@@ -15,7 +15,6 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
-import java.util.List;
 
 @Controller
 public class SkeletonController {
@@ -94,7 +93,10 @@ public class SkeletonController {
     PayrollConfigurationRepository payrollConfigurationRepository;
 
     @Autowired
-    EmployeeDetailRepository employeeDetailRepository;
+    EmployeePayrollDetailRepository employeePayrollDetailRepository;
+
+    @Autowired
+    EmployeeSaleDetailRepository employeeSaleDetailRepository;
 
     @Autowired
     WorkingHourRecordEmployeeRepository workingHourRecordEmployeeRepository;

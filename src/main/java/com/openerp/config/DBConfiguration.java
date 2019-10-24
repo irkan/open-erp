@@ -1,6 +1,5 @@
 package com.openerp.config;
 
-import com.openerp.dummy.DummyContact;
 import com.openerp.util.DateUtility;
 import com.openerp.entity.*;
 import com.openerp.repository.*;
@@ -65,7 +64,7 @@ public class DBConfiguration {
     PayrollConfigurationRepository payrollConfigurationRepository;
 
     @Autowired
-    EmployeeDetailRepository employeeDetailRepository;
+    EmployeePayrollDetailRepository employeeDetailRepository;
 
     @Value("${default.admin.username}")
     private String defaultAdminUsername;
@@ -107,8 +106,10 @@ public class DBConfiguration {
             types.add(shortenedTimeType);
             DictionaryType formulaType = new DictionaryType("Formula tipi", "formula-type", null);
             types.add(formulaType);
-            DictionaryType employeeDetail = new DictionaryType("Əlavə sahələr", "employee-additional-field", null);
-            types.add(employeeDetail);
+            DictionaryType employeePayrollDetailType = new DictionaryType("Əlavə əmək haqqı sahələri", "employee-payroll-field", null);
+            types.add(employeePayrollDetailType);
+            DictionaryType employeeSaleDetailType = new DictionaryType("Əlavə satış sahələri", "employee-sale-field", null);
+            types.add(employeeSaleDetailType);
             DictionaryType identifierType = new DictionaryType("İdentifikator", "identifier", null);
             types.add(identifierType);
             DictionaryType weekDay = new DictionaryType("Həftənin Günü", "week-day", null);
@@ -274,20 +275,28 @@ public class DBConfiguration {
             dictionaries.add(formulaType2);
             Dictionary formulaType3 = new Dictionary("Məzuniyyət haqqı", "vacation", null, formulaType);
             dictionaries.add(formulaType3);
-            Dictionary employeeDetail1 = new Dictionary("Ümumi əmək haqqı (rəsmi)", "{gross_salary}", "0", employeeDetail);
-            dictionaries.add(employeeDetail1);
-            Dictionary employeeDetail2 = new Dictionary("Ümumi əmək haqqı", "{salary}", "0", employeeDetail);
-            dictionaries.add(employeeDetail2);
-            Dictionary employeeDetail3 = new Dictionary("Keçmiş iş stajı (illərin cəmi)", "{previous_work_experience}", "0", employeeDetail);
-            dictionaries.add(employeeDetail3);
-            Dictionary employeeDetail4 = new Dictionary("Həmkərlar ittifaqı, üzvülük haqqı", "{membership_fee_for_trade_union_fee}", "0", employeeDetail);
-            dictionaries.add(employeeDetail4);
-            Dictionary employeeDetail5 = new Dictionary("Güzəşt", "{allowance}", "0", employeeDetail);
-            dictionaries.add(employeeDetail5);
-            Dictionary employeeDetail6 = new Dictionary("Əsas məzuniyyət günlərinin sayı", "{main_vacation_days}", "21", employeeDetail);
-            dictionaries.add(employeeDetail6);
-            Dictionary employeeDetail7 = new Dictionary("Əlavə məzuniyyət günlərinin sayı", "{additional_vacation_days}", "0", employeeDetail);
-            dictionaries.add(employeeDetail7);
+            Dictionary employeePayrollDetail1 = new Dictionary("Ümumi əmək haqqı (rəsmi)", "{gross_salary}", "0", employeePayrollDetailType);
+            dictionaries.add(employeePayrollDetail1);
+            Dictionary employeePayrollDetail2 = new Dictionary("Ümumi əmək haqqı", "{salary}", "0", employeePayrollDetailType);
+            dictionaries.add(employeePayrollDetail2);
+            Dictionary employeePayrollDetail3 = new Dictionary("Keçmiş iş stajı (illərin cəmi)", "{previous_work_experience}", "0", employeePayrollDetailType);
+            dictionaries.add(employeePayrollDetail3);
+            Dictionary employeePayrollDetail4 = new Dictionary("Həmkərlar ittifaqı, üzvülük haqqı", "{membership_fee_for_trade_union_fee}", "0", employeePayrollDetailType);
+            dictionaries.add(employeePayrollDetail4);
+            Dictionary employeePayrollDetail5 = new Dictionary("Güzəşt", "{allowance}", "0", employeePayrollDetailType);
+            dictionaries.add(employeePayrollDetail5);
+            Dictionary employeePayrollDetail6 = new Dictionary("Əsas məzuniyyət günlərinin sayı", "{main_vacation_days}", "21", employeePayrollDetailType);
+            dictionaries.add(employeePayrollDetail6);
+            Dictionary employeePayrollDetail7 = new Dictionary("Əlavə məzuniyyət günlərinin sayı", "{additional_vacation_days}", "0", employeePayrollDetailType);
+            dictionaries.add(employeePayrollDetail7);
+            Dictionary employeeSaleDetail1 = new Dictionary("Canavasser", "{canavasser}", "{sale_price}>1698?30:25", employeeSaleDetailType);
+            dictionaries.add(employeeSaleDetail1);
+            Dictionary employeeSaleDetail2 = new Dictionary("Diller", "{dealer}", "{sale_price}>1698?120:100", employeeSaleDetailType);
+            dictionaries.add(employeeSaleDetail2);
+            Dictionary employeeSaleDetail3 = new Dictionary("Ven lider", "{van_leader}", "{sale_price}>1698?50:40", employeeSaleDetailType);
+            dictionaries.add(employeeSaleDetail3);
+            Dictionary employeeSaleDetail4 = new Dictionary("Konsul", "{counsul}", "30", employeeSaleDetailType);
+            dictionaries.add(employeeSaleDetail4);
             Dictionary identifier6 = new Dictionary("İş Günü", "İG", null, identifierType);
             dictionaries.add(identifier6);
             Dictionary identifier7 = new Dictionary("Qısaldılmış İş Günü", "QİG", null, identifierType);
@@ -363,8 +372,8 @@ public class DBConfiguration {
             modules.add(module1);
             Module subModule6 = new Module("Struktur", "Struktur", "organization", "flaticon-map", module1);
             modules.add(subModule6);
-            Module subModule7 = new Module("Əməkdaş", "Əməkdaş", "employee", "flaticon-users", module1);
-            modules.add(subModule7);
+            Module employee = new Module("Əməkdaş", "Əməkdaş", "employee", "flaticon-users", module1);
+            modules.add(employee);
             Module subModule11 = new Module("İkon", "İkon", "flat-icon", "flaticon-paper-plane-1", module);
             modules.add(subModule11);
             Module subModule12 = new Module("Flat ikon", "Flat ikon", "flat-icon", null, subModule11);
@@ -443,6 +452,10 @@ public class DBConfiguration {
             operations.add(actions);
             Operation search = new Operation("Axtar", "search", "la la-search");
             operations.add(search);
+            Operation payrollOperation = new Operation("Əmək haqqı detalları", "payroll", "flaticon-security");
+            operations.add(payrollOperation);
+            Operation saleOperation = new Operation("Satış detalları", "sale", "flaticon2-delivery-truck");
+            operations.add(saleOperation);
             Operation save = new Operation("Yadda saxla", "save", "la la-save");
             operations.add(save);
             Operation calculate = new Operation("Hesabla", "calculate", "la la-calculator");
@@ -468,7 +481,7 @@ public class DBConfiguration {
             moduleOperations.add(createModuleOperation5);
             ModuleOperation createModuleOperation6 = new ModuleOperation(subModule6, create, null);
             moduleOperations.add(createModuleOperation6);
-            ModuleOperation createModuleOperation7 = new ModuleOperation(subModule7, create, null);
+            ModuleOperation createModuleOperation7 = new ModuleOperation(employee, create, null);
             moduleOperations.add(createModuleOperation7);
             ModuleOperation createModuleOperation8 = new ModuleOperation(subModule8, create, null);
             moduleOperations.add(createModuleOperation8);
@@ -510,7 +523,7 @@ public class DBConfiguration {
             moduleOperations.add(editModuleOperation4);
             ModuleOperation editModuleOperation6 = new ModuleOperation(subModule6, edit, null);
             moduleOperations.add(editModuleOperation6);
-            ModuleOperation editModuleOperation7 = new ModuleOperation(subModule7, edit, null);
+            ModuleOperation editModuleOperation7 = new ModuleOperation(employee, edit, null);
             moduleOperations.add(editModuleOperation7);
             ModuleOperation editModuleOperation8 = new ModuleOperation(subModule8, edit, null);
             moduleOperations.add(editModuleOperation8);
@@ -553,7 +566,7 @@ public class DBConfiguration {
             moduleOperations.add(deleteModuleOperation5);
             ModuleOperation deleteModuleOperation6 = new ModuleOperation(subModule6, delete, null);
             moduleOperations.add(deleteModuleOperation6);
-            ModuleOperation deleteModuleOperation7 = new ModuleOperation(subModule7, delete, null);
+            ModuleOperation deleteModuleOperation7 = new ModuleOperation(employee, delete, null);
             moduleOperations.add(deleteModuleOperation7);
             ModuleOperation deleteModuleOperation8 = new ModuleOperation(subModule8, delete, null);
             moduleOperations.add(deleteModuleOperation8);
@@ -590,7 +603,7 @@ public class DBConfiguration {
 
             ModuleOperation viewModuleOperation6 = new ModuleOperation(subModule6, view, null);
             moduleOperations.add(viewModuleOperation6);
-            ModuleOperation viewModuleOperation7 = new ModuleOperation(subModule7, view, null);
+            ModuleOperation viewModuleOperation7 = new ModuleOperation(employee, view, null);
             moduleOperations.add(viewModuleOperation7);
             ModuleOperation viewModuleOperation9 = new ModuleOperation(subModule9, view, null);
             moduleOperations.add(viewModuleOperation9);
@@ -627,7 +640,7 @@ public class DBConfiguration {
             moduleOperations.add(exportModuleOperation5);
             ModuleOperation exportModuleOperation6 = new ModuleOperation(subModule6, export, null);
             moduleOperations.add(exportModuleOperation6);
-            ModuleOperation exportModuleOperation7 = new ModuleOperation(subModule7, export, null);
+            ModuleOperation exportModuleOperation7 = new ModuleOperation(employee, export, null);
             moduleOperations.add(exportModuleOperation7);
             ModuleOperation exportModuleOperation8 = new ModuleOperation(subModule8, export, null);
             moduleOperations.add(exportModuleOperation8);
@@ -698,6 +711,12 @@ public class DBConfiguration {
             ModuleOperation consolidateModuleOperation1 = new ModuleOperation(action, consolidate, null);
             moduleOperations.add(consolidateModuleOperation1);
 
+            ModuleOperation payrollModuleOperation1 = new ModuleOperation(employee, payrollOperation, null);
+            moduleOperations.add(payrollModuleOperation1);
+
+            ModuleOperation saleModuleOperation1 = new ModuleOperation(employee, saleOperation, null);
+            moduleOperations.add(saleModuleOperation1);
+
             moduleOperationRepository.saveAll(moduleOperations);
 
             List<Organization> organizations = new ArrayList<>();
@@ -748,17 +767,25 @@ public class DBConfiguration {
 
             Contact contact1 = new Contact("502535110", null, "irkan.ehmedov@gmail.com", "Ü.Hacıbəyov 195A", baku);
             Person person = new Person(contact1, "İrkan", "Əhmədov", "Əflatun", DateUtility.getUtilDate("25.09.1989"), male, azerbaijanNationality, married, "4HWL0AM", false, null);
-            Employee employee = new Employee(person, position1, new Date(), null, headBranch);
-            List<EmployeeDetail> employeeDetails = new ArrayList<>();
-            for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-additional-field")){
-                EmployeeDetail employeeDetailField1 = new EmployeeDetail(employee, dictionary.getAttr1(), dictionary.getAttr2());
-                employeeDetails.add(employeeDetailField1);
+            Employee employee0 = new Employee(person, position1, new Date(), null, headBranch);
+            List<EmployeePayrollDetail> employeePayrollDetails = new ArrayList<>();
+            for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-payroll-field")){
+                EmployeePayrollDetail employeePayrollDetail = new EmployeePayrollDetail(employee0, dictionary.getAttr1(), dictionary.getAttr2());
+                employeePayrollDetails.add(employeePayrollDetail);
             }
-            employee.setEmployeeDetails(employeeDetails);
-            employeeRepository.save(employee);
+            employee0.setEmployeePayrollDetails(employeePayrollDetails);
+
+            List<EmployeeSaleDetail> employeeSaleDetails = new ArrayList<>();
+            for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-sale-field")){
+                EmployeeSaleDetail employeeSaleDetail = new EmployeeSaleDetail(employee0, dictionary.getAttr1(), dictionary.getAttr2());
+                employeeSaleDetails.add(employeeSaleDetail);
+            }
+            employee0.setEmployeeSaleDetails(employeeSaleDetails);
+
+            employeeRepository.save(employee0);
 
 
-            User user = new User(defaultAdminUsername, DigestUtils.md5DigestAsHex("admin".getBytes()), employee, new UserDetail("az"));
+            User user = new User(defaultAdminUsername, DigestUtils.md5DigestAsHex("admin".getBytes()), employee0, new UserDetail("az"));
 
             userRepository.save(user);
 
@@ -892,6 +919,10 @@ public class DBConfiguration {
 
             userModuleOperations.add(new UserModuleOperation(user, consolidateModuleOperation1));
 
+            userModuleOperations.add(new UserModuleOperation(user, payrollModuleOperation1));
+
+            userModuleOperations.add(new UserModuleOperation(user, saleModuleOperation1));
+
             userModuleOperationRepository.saveAll(userModuleOperations);
 
             List<Supplier> suppliers = new ArrayList<>();
@@ -939,7 +970,7 @@ public class DBConfiguration {
             payrollConfigurations.add(new PayrollConfiguration(formulaType1,"Ümumi iş günlərinin sayı", "{total_working_days}={uig}", "Ümumi iş günlərinin sayı"));
             payrollConfigurations.add(new PayrollConfiguration(formulaType1,"Hesablanmış iş günlərinin sayı", "{calculated_working_days}={hig}", "Hesablanmış iş günlərinin sayı"));
             payrollConfigurations.add(new PayrollConfiguration(formulaType1,"Hesablanmış əmək haqqı (Rəsmi hissə)", "{calculated_gross_salary}={gross_salary}*{calculated_working_days}/{total_working_days}", "Hesablanmış ümumi əmək haqqı = ümumi əmək haqqı * hesablanmış iş günlərinin sayı / ümumi iş günlərinin sayı"));
-            payrollConfigurations.add(new PayrollConfiguration(formulaType1,"Hesablanmış əmək haqqı (Qeyri rəsmi hissə)", "{calculated_salary}={salary}*{calculated_working_days}/{total_working_days}", "Hesablanmış ümumi əmək haqqı = ümumi əmək haqqı * hesablanmış iş günlərinin sayı / ümumi iş günlərinin sayı"));
+            payrollConfigurations.add(new PayrollConfiguration(formulaType1,"Hesablanmış əmək haqqı (Qeyri rəsmi hissə)", "{calculated_salary}={salary}*{calculated_working_days}/{total_working_days}", "Ümumi əmək haqqı = əmək haqqı * hesablanmış iş günlərinin sayı / ümumi iş günlərinin sayı"));
             payrollConfigurations.add(new PayrollConfiguration(formulaType1,"Vergiyə cəlb olunan məbləğ", "{tax_amount_involved}={gross_salary}-{allowance}", "Vergiyə cəlb olunan məbləğ = Hesablanan aylıq əmək haqqı - Güzəşt"));
             payrollConfigurations.add(new PayrollConfiguration(formulaType1,"Gəlir vergisi", "{tax_income}=({tax_amount_involved})>8000?({tax_amount_involved}-8000)*14%:0", "Gəlir vergisi: Vergiyə cəlb olunan məbləğ 8 000 manatadək olduqda: 0; Vergiyə cəlb olunan məbləğ 8 000 manatdan çox olduqda: Vergiyə cəlb olunan məbləğ *14%"));
             payrollConfigurations.add(new PayrollConfiguration(formulaType1,"DSMF ayırmaları", "{dsmf_deduction}={gross_salary}>{minimal_salary}?{minimal_salary}*3%+({gross_salary}-{minimal_salary})*10%:{gross_salary}*3%", "DSMF ayırmaları: Əmək haqqı 200 manatadək olduqda: Hesablanan aylıq əmək haqqı * 3%; Əmək haqqı 200 manatdan çox olduqda: 6 + (Hesablanan aylıq əmək haqqı-200) * 10%;"));

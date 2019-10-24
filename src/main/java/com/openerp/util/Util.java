@@ -3,11 +3,9 @@ package com.openerp.util;
 import com.openerp.domain.Response;
 import com.openerp.entity.*;
 import com.openerp.entity.Dictionary;
-import org.springframework.context.annotation.Description;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.client.RestTemplate;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -17,10 +15,7 @@ import org.w3c.dom.NodeList;
 import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.regex.Pattern;
 
 public class Util {
     public static Object check(Object object){
@@ -168,8 +163,8 @@ public class Util {
         return "0";
     }
 
-    public static String findEmployeeDetail(List<EmployeeDetail> employeeDetails, String key){
-        for(EmployeeDetail ed: employeeDetails){
+    public static String findEmployeeDetail(List<EmployeePayrollDetail> employeeDetails, String key){
+        for(EmployeePayrollDetail ed: employeeDetails){
             if(ed.getKey().equalsIgnoreCase(key)){
                 return ed.getValue();
             }

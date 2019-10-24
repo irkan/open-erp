@@ -5,10 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
-import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
 import java.util.List;
@@ -65,7 +63,10 @@ public class Employee {
     private String description;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<EmployeeDetail> employeeDetails;
+    private List<EmployeePayrollDetail> employeePayrollDetails;
+
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<EmployeeSaleDetail> employeeSaleDetails;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<EmployeeRestDay> employeeRestDays;

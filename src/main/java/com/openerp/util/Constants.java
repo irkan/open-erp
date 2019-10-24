@@ -35,7 +35,8 @@ public class Constants {
     public static final String SHORTENED_TIMES = "shortened_times";
     public static final String PARENT_MODULES_MAP = "parent_modules_map";
     public static final String FORMULA_TYPES = "formula_types";
-    public static final String EMPLOYEE_ADDITIONAL_FIELDS = "employee_additional_fields";
+    public static final String EMPLOYEE_PAYROLL_FIELDS = "employee_payroll_fields";
+    public static final String EMPLOYEE_SALE_FIELDS = "employee_sale_fields";
     public static final String IDENTIFIERS = "identifiers";
     public static final String DAYS_IN_MONTH = "days_in_month";
     public static final String BRANCHES = "branches";

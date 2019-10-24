@@ -5,20 +5,11 @@ import com.openerp.dummy.DummyEmployee;
 import com.openerp.dummy.DummyPerson;
 import com.openerp.dummy.DummyUtil;
 import com.openerp.entity.*;
-import com.openerp.util.Constants;
-import com.openerp.util.DateUtility;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.time.YearMonth;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/dummy")
@@ -64,8 +55,8 @@ public class DummyController extends SkeletonController {
             Contact contact = new DummyContact().getContact(cities);
             Person person = new DummyPerson().getPerson(contact, nationalities, genders, maritalStatuses);
             Employee employee = new DummyEmployee().getEmployee(person, positions, organizations);
-            List<EmployeeDetail> employeeDetails = new ArrayList<>();
-            for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-additional-field")){
+            List<EmployeePayrollDetail> employeePayrollDetails = new ArrayList<>();
+            for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-payroll-field")){
                 String previousWorkExperience = DummyUtil.randomPreviousWorkExperience();
                 if(dictionary.getAttr1().equalsIgnoreCase("{salary}")){
                     dictionary.setAttr2(DummyUtil.randomSalary());
@@ -78,10 +69,16 @@ public class DummyController extends SkeletonController {
                 } else if(dictionary.getAttr1().equalsIgnoreCase("{additional_vacation_days}")){
                     dictionary.setAttr2(DummyUtil.calculateAdditionalVacationDays(dictionary.getAttr2(), employee.getContractStartDate(), previousWorkExperience, employee.getPerson().getDisability()));
                 }
-                EmployeeDetail employeeDetailField1 = new EmployeeDetail(employee, dictionary.getAttr1(), dictionary.getAttr2());
-                employeeDetails.add(employeeDetailField1);
+                employeePayrollDetails.add(new EmployeePayrollDetail(employee, dictionary.getAttr1(), dictionary.getAttr2()));
             }
-            employee.setEmployeeDetails(employeeDetails);
+            employee.setEmployeePayrollDetails(employeePayrollDetails);
+
+            List<EmployeeSaleDetail> employeeSaleDetails = new ArrayList<>();
+            for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-sale-field")){
+                employeeSaleDetails.add(new EmployeeSaleDetail(employee, dictionary.getAttr1(), dictionary.getAttr2()));
+            }
+            employee.setEmployeeSaleDetails(employeeSaleDetails);
+
             List<Dictionary> weekDays = DummyUtil.randomWeekDay(dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("week-day"));
             List<EmployeeRestDay> employeeRestDays = new ArrayList<>();
             for(Dictionary weekDay: weekDays){

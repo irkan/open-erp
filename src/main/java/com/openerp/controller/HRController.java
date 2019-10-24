@@ -1,12 +1,12 @@
 package com.openerp.controller;
 
+import com.openerp.dummy.DummyUtil;
 import com.openerp.entity.*;
 import com.openerp.entity.Dictionary;
 import com.openerp.util.Constants;
 import com.openerp.util.DateUtility;
 import com.openerp.util.ReadWriteExcelFile;
 import com.openerp.util.Util;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.*;
@@ -15,11 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import java.io.File;
-import java.time.LocalDate;
 import java.util.*;
 
 @Controller
@@ -48,7 +43,8 @@ public class HRController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new Organization());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.EMPLOYEE)){
-            model.addAttribute(Constants.EMPLOYEE_ADDITIONAL_FIELDS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-additional-field"));
+            model.addAttribute(Constants.EMPLOYEE_PAYROLL_FIELDS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-payroll-field"));
+            model.addAttribute(Constants.EMPLOYEE_SALE_FIELDS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-sale-field"));
             model.addAttribute(Constants.CITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("city"));
             model.addAttribute(Constants.POSITIONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position"));
             model.addAttribute(Constants.NATIONALITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("nationality"));
@@ -121,7 +117,7 @@ public class HRController extends SkeletonController {
         }
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if (!binding.hasErrors()) {
-            for(EmployeeDetail ed: employee.getEmployeeDetails()){
+            for(EmployeePayrollDetail ed: employee.getEmployeePayrollDetails()){
                 ed.setEmployee(employee);
             }
             if(employee!=null && employee.getId()!=null){
@@ -138,6 +134,21 @@ public class HRController extends SkeletonController {
                 }
             }
             employee.setEmployeeRestDays(erds);
+
+            List<EmployeePayrollDetail> employeePayrollDetails = new ArrayList<>();
+            for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-payroll-field")){
+                EmployeePayrollDetail employeeDetailField1 = new EmployeePayrollDetail(employee, dictionary.getAttr1(), dictionary.getAttr2());
+                employeePayrollDetails.add(employeeDetailField1);
+            }
+            employee.setEmployeePayrollDetails(employeePayrollDetails);
+
+            List<EmployeeSaleDetail> employeeSaleDetails = new ArrayList<>();
+            for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-sale-field")){
+                EmployeePayrollDetail employeeDetailField1 = new EmployeePayrollDetail(employee, dictionary.getAttr1(), dictionary.getAttr2());
+                employeePayrollDetails.add(employeeDetailField1);
+            }
+            employee.setEmployeeSaleDetails(employeeSaleDetails);
+
             employeeRepository.save(employee);
         }
         return mapPost(employee, binding, redirectAttributes);

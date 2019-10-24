@@ -5,7 +5,6 @@ import com.openerp.entity.*;
 import com.openerp.util.Constants;
 import com.openerp.util.DateUtility;
 import com.openerp.util.Util;
-import org.springframework.context.annotation.Description;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -272,11 +271,11 @@ public class PayrollController extends SkeletonController {
                         salaryRepository.save(slry);
 
                         List<PayrollConfiguration> payrollConfigurations = payrollConfigurationRepository.getPayrollConfigurationsByActiveTrueOrderById();
-                        List<Dictionary> employeeAdditionalFields = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-additional-field");
+                        List<Dictionary> employeeAdditionalFields = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-payroll-field");
                         ScriptEngineManager mgr = new ScriptEngineManager();
                         ScriptEngine engine = mgr.getEngineByName("JavaScript");
                         for(SalaryEmployee se: slry.getSalaryEmployees()){
-                            List<EmployeeDetail> employeeDetails = se.getWorkingHourRecordEmployee().getEmployee().getEmployeeDetails();
+                            List<EmployeePayrollDetail> employeeDetails = se.getWorkingHourRecordEmployee().getEmployee().getEmployeePayrollDetails();
                             List<WorkingHourRecordEmployeeDayCalculation> workingHourRecordEmployeeDayCalculations = se.getWorkingHourRecordEmployee().getWorkingHourRecordEmployeeDayCalculations();
                             List<SalaryEmployeeDetail> salaryEmployeeDetails = new ArrayList<>();
                             String gross_salary = Util.findEmployeeDetail(employeeDetails, "{gross_salary}");

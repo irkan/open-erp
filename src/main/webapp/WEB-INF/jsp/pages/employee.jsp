@@ -69,8 +69,24 @@
                 <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
                 <c:choose>
                     <c:when test="${edit.status}">
-                        <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                        <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" id="dblclick" class="btn btn-sm btn-clean btn-icon btn-icon-md dblclick" title="<c:out value="${edit.object.name}"/>">
                             <i class="<c:out value="${edit.object.icon}"/>"></i>
+                        </a>
+                    </c:when>
+                </c:choose>
+                <c:set var="payroll" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'payroll')}"/>
+                <c:choose>
+                    <c:when test="${payroll.status}">
+                        <a href="javascript:edit($('#form-payroll'), '<c:out value="${utl:toJson(t)}" />', 'modal-payroll', '<c:out value="${payroll.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${payroll.object.name}"/>">
+                            <i class="<c:out value="${payroll.object.icon}"/>"></i>
+                        </a>
+                    </c:when>
+                </c:choose>
+                <c:set var="sale" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'sale')}"/>
+                <c:choose>
+                    <c:when test="${sale.status}">
+                        <a href="javascript:edit($('#form-sale'), '<c:out value="${utl:toJson(t)}" />', 'modal-sale', '<c:out value="${sale.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${sale.object.name}"/>">
+                            <i class="<c:out value="${sale.object.icon}"/>"></i>
                         </a>
                     </c:when>
                 </c:choose>
@@ -238,6 +254,8 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-md-5 bg-light">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
@@ -245,34 +263,29 @@
                                         <form:select  path="employeeRestDays" cssClass="custom-select form-control" multiple="multiple">
                                             <form:options items="${week_days}" itemLabel="name" itemValue="id" />
                                         </form:select>
-                                        <%--<select id="employeeRestDays" name="employeeRestDays" multiple="multiple">
-                                            <c:forEach var="t" items="${week_days}">
-                                                <option value="<c:out value="${t.id}"/>" value="<c:out value="${t.id}"/>"><c:out value="${t.name}"/></option>
-                                            </c:forEach>
-                                        </select>--%>
                                         <form:errors path="employeeRestDays" cssClass="control-label alert-danger" />
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-5">
                                     <div class="form-group">
                                         <label class="kt-checkbox kt-checkbox--brand">
-                                            <form:checkbox path="person.disability" onclick="calculateVacationDay($('input[name=\"person.disability\"]'), $('input[name=specialistOrManager]'), $('input[name=contractStartDate]'), $('input[key=\"{previous_work_experience}\"]'))"/> Əlillik varmı?
+                                            <form:checkbox path="person.disability"/> Əlillik varmı?
                                             <span></span>
                                         </label>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-7">
                                     <div class="form-group">
                                         <label class="kt-checkbox kt-checkbox--brand">
-                                            <form:checkbox path="specialistOrManager" onclick="calculateVacationDay($('input[name=\"person.disability\"]'), $('input[name=specialistOrManager]'), $('input[name=contractStartDate]'), $('input[key=\"{previous_work_experience}\"]'))"/> Mütəxəsis və ya rəhbərdirmi?
+                                            <form:checkbox path="specialistOrManager"/> Mütəxəsis və ya rəhbərdirmi?
                                             <span></span>
                                         </label>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row" style="margin-top: -4px;">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <form:label path="description">Açıqlama</form:label>
@@ -281,29 +294,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-5 bg-light pt-4">
-                            <c:forEach var="t" items="${employee_additional_fields}" varStatus="loop">
-                                <div class="form-group-0_5">
-                                    <div class="row">
-                                        <div class="col-md-8 text-right" style="padding-top: 8px;">
-                                            <label><c:out value="${t.name}"/></label>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <input type="hidden" name="employeeDetails[${loop.index}].id"/>
-                                            <input type="hidden" name="employeeDetails[${loop.index}].key" value="${t.attr1}"/>
-                                            <c:choose>
-                                                <c:when test="${t.attr1 eq '{previous_work_experience}'}">
-                                                    <input type="text" name="employeeDetails[${loop.index}].value" value="${t.attr2}" key="${t.attr1}" onkeyup="calculateVacationDay($('input[name=\'person.disability\']'), $('input[name=specialistOrManager]'), $('input[name=contractStartDate]'), $('input[key=\'{previous_work_experience}\']'))" class="form-control" />
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <input type="text" name="employeeDetails[${loop.index}].value" value="${t.attr2}" key="${t.attr1}" class="form-control" />
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </div>
-                                    </div>
-                                </div>
-                            </c:forEach>
                         </div>
                     </div>
                     <hr style="width: 100%"/>
@@ -385,6 +375,108 @@
     </div>
 </div>
 
+<div class="modal fade" id="modal-payroll" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Əmək haqqı məlumatları</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form:form modelAttribute="form" id="form-payroll" method="post" action="/hr/employee/payroll" cssClass="form-group">
+                    <input type="hidden" name="id"/>
+                    <div class="row mb-4">
+                        <div class="col-md-6 text-right">
+                            <input type="text" name="person.firstName" class="style-none" disabled style="text-align: right;">
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" name="person.lastName" class="style-none" disabled>
+                        </div>
+                    </div>
+                    <c:forEach var="t" items="${employee_payroll_fields}" varStatus="loop">
+                        <div class="form-group-0_5">
+                            <div class="row">
+                                <div class="col-md-8 text-right" style="padding-top: 8px;">
+                                    <label><c:out value="${t.name}"/></label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="hidden" name="employeePayrollDetails[${loop.index}].id"/>
+                                    <input type="hidden" name="employeePayrollDetails[${loop.index}].key" value="${t.attr1}"/>
+                                    <c:choose>
+                                        <c:when test="${t.attr1 eq '{previous_work_experience}'}">
+                                            <input type="text" name="employeePayrollDetails[${loop.index}].value" value="${t.attr2}" key="${t.attr1}" onkeyup="calculateVacationDay($('input[name=\'person.disability\']'), $('input[name=specialistOrManager]'), $('input[name=contractStartDate]'), $('input[key=\'{previous_work_experience}\']'))" class="form-control" />
+                                        </c:when>
+                                        <c:otherwise>
+                                            <input type="text" name="employeePayrollDetails[${loop.index}].value" value="${t.attr2}" key="${t.attr1}" class="form-control" />
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                            </div>
+                        </div>
+                    </c:forEach>
+                </form:form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="submit($('#form-payroll'));">Yadda saxla</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-sale" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Satış məlumatları</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form:form modelAttribute="form" id="form-sale" method="post" action="/hr/employee/sale" cssClass="form-group">
+                    <input type="hidden" name="id"/>
+                    <div class="row mb-4">
+                        <div class="col-md-6 text-right">
+                            <input type="text" name="person.firstName" class="style-none" disabled style="text-align: right;">
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" name="person.lastName" class="style-none" disabled>
+                        </div>
+                    </div>
+                    <c:forEach var="t" items="${employee_sale_fields}" varStatus="loop">
+                        <div class="form-group-0_5">
+                            <div class="row">
+                                <div class="col-md-3 text-right" style="padding-top: 8px;">
+                                    <label><c:out value="${t.name}"/></label>
+                                </div>
+                                <div class="col-md-9">
+                                    <input type="hidden" name="employeeSaleDetails[${loop.index}].id"/>
+                                    <input type="hidden" name="employeeSaleDetails[${loop.index}].key" value="${t.attr1}"/>
+                                    <c:choose>
+                                        <c:when test="${t.attr1 eq '{previous_work_experience}'}">
+                                            <input type="text" name="employeeSaleDetails[${loop.index}].value" value="${t.attr2}" key="${t.attr1}" onkeyup="calculateVacationDay($('input[name=\'person.disability\']'), $('input[name=specialistOrManager]'), $('input[name=contractStartDate]'), $('input[key=\'{previous_work_experience}\']'))" class="form-control" />
+                                        </c:when>
+                                        <c:otherwise>
+                                            <input type="text" name="employeeSaleDetails[${loop.index}].value" value="${t.attr2}" key="${t.attr1}" class="form-control" />
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                            </div>
+                        </div>
+                    </c:forEach>
+                </form:form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="submit($('#form-sale'));">Yadda saxla</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="<c:url value="/assets/js/demo4/pages/crud/datatables/advanced/row-grouping.js" />" type="text/javascript"></script>
 
 <script>
@@ -422,6 +514,20 @@
         var array2 = today.split(".");
         return parseFloat(array2[2])-parseFloat(array1[2])
     }
+
+    $('#group_table tbody').on('dblclick', 'tr', function () {
+        var ref = $(this).find('td:first').text();
+        alert(ref);
+        console.log("--------------------------------------------");
+        console.log($($($(this).find('td:last')).find('a#dblclick')));
+        $($($(this).find('td:last')).find('a#dblclick')).trigger('click');
+
+        var function1 = $($($(this).find('td:last')).find('a#dblclick')).attr('href');
+        $(function1).click();
+        $(function1).trigger('click');
+        console.log(function1)
+        $(this).find('a').click();
+    });
 </script>
 
 
