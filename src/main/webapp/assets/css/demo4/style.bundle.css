@@ -188,7 +188,8 @@ th {
   text-align: inherit; }
 
 label {
-  display: inline-block; }
+  display: inline-block;
+  margin-bottom: 0.2rem;}
 
 button {
   border-radius: 0; }

@@ -21,13 +21,13 @@
 
 <c:choose>
     <c:when test="${not empty list}">
-<table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+<table class="table table-striped- table-bordered table-hover table-checkable" id="group_table">
     <thead>
     <tr>
         <th>№</th>
         <th>ID</th>
-        <th>Ad Soyad Ata adı</th>
         <th>Struktur</th>
+        <th>Ad Soyad Ata adı</th>
         <th>Vəzifə</th>
         <th>İşə başlıyıb</th>
         <th>İşdən ayrılıb</th>
@@ -40,8 +40,8 @@
         <tr>
             <td>${loop.index + 1}</td>
             <td><c:out value="${t.id}" /></td>
-            <th><c:out value="${t.person.firstName}"/> <c:out value="${t.person.lastName}"/> <c:out value="${t.person.fatherName}"/></th>
             <td><c:out value="${t.organization.name}" /></td>
+            <th><c:out value="${t.person.firstName}"/> <c:out value="${t.person.lastName}"/> <c:out value="${t.person.fatherName}"/></th>
             <td><c:out value="${t.position.name}" /></td>
             <td><fmt:formatDate value = "${t.contractStartDate}" pattern = "dd.MM.yyyy" /></td>
             <td><fmt:formatDate value = "${t.contractEndDate}" pattern = "dd.MM.yyyy" /></td>
@@ -384,6 +384,8 @@
         </div>
     </div>
 </div>
+
+<script src="<c:url value="/assets/js/demo4/pages/crud/datatables/advanced/row-grouping.js" />" type="text/javascript"></script>
 
 <script>
     $('#employeeRestDays').select2({
