@@ -154,6 +154,24 @@ public class HRController extends SkeletonController {
         return mapPost(employee, binding, redirectAttributes);
     }
 
+    @PostMapping(value = "/employee/payroll")
+    public String postEmployeePayroll(@ModelAttribute(Constants.FORM) @Validated Employee employee, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
+        if (!binding.hasErrors()) {
+
+        }
+        return mapPost(employee, binding, redirectAttributes, "/hr/employee");
+    }
+
+    @PostMapping(value = "/employee/sale")
+    public String postEmployeeSale(@ModelAttribute(Constants.FORM) @Validated Employee employee, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
+        if (!binding.hasErrors()) {
+
+        }
+        return mapPost(employee, binding, redirectAttributes, "/hr/employee");
+    }
+
     @PostMapping(value = "/non-working-day")
     public String postNonWorkingDay(@ModelAttribute(Constants.FORM) @Validated NonWorkingDay nonWorkingDay, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
