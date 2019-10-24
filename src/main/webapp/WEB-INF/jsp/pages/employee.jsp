@@ -461,7 +461,7 @@
                                 </div>
                                 <div class="col-md-9">
                                     <input type="hidden" name="employeeSaleDetails[${loop.index}].employee"/>
-                                    <input type="hidden" name="employeeSaleDetails[${loop.index}].employeePayrollField" value="${t.id}"/>
+                                    <input type="hidden" name="employeeSaleDetails[${loop.index}].employeeSalaryField" value="${t.id}"/>
                                     <input type="hidden" name="employeeSaleDetails[${loop.index}].key" value="${t.attr1}"/>
                                     <input type="text" name="employeeSaleDetails[${loop.index}].value" value="${t.attr2}" class="form-control" />
                                 </div>
