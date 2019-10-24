@@ -137,14 +137,14 @@ public class HRController extends SkeletonController {
 
             List<EmployeePayrollDetail> employeePayrollDetails = new ArrayList<>();
             for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-payroll-field")){
-                EmployeePayrollDetail employeeDetailField1 = new EmployeePayrollDetail(employee, dictionary.getAttr1(), dictionary.getAttr2());
+                EmployeePayrollDetail employeeDetailField1 = new EmployeePayrollDetail(employee, dictionary, dictionary.getAttr1(), dictionary.getAttr2());
                 employeePayrollDetails.add(employeeDetailField1);
             }
             employee.setEmployeePayrollDetails(employeePayrollDetails);
 
             List<EmployeeSaleDetail> employeeSaleDetails = new ArrayList<>();
             for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-sale-field")){
-                EmployeePayrollDetail employeeDetailField1 = new EmployeePayrollDetail(employee, dictionary.getAttr1(), dictionary.getAttr2());
+                EmployeePayrollDetail employeeDetailField1 = new EmployeePayrollDetail(employee, dictionary, dictionary.getAttr1(), dictionary.getAttr2());
                 employeePayrollDetails.add(employeeDetailField1);
             }
             employee.setEmployeeSaleDetails(employeeSaleDetails);
@@ -156,21 +156,38 @@ public class HRController extends SkeletonController {
 
     @PostMapping(value = "/employee/payroll")
     public String postEmployeePayroll(@ModelAttribute(Constants.FORM) @Validated Employee employee, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
-        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
-        if (!binding.hasErrors()) {
-            for(EmployeePayrollDetail epd: employee.getEmployeePayrollDetails()){
-                epd.setEmployee(employee);
-                employeePayrollDetailRepository.save(epd);
+        employeePayrollDetailRepository.deleteInBatch(employeePayrollDetailRepository.getEmployeePayrollDetailsByEmployee_Id(employee.getId()));
+        List<EmployeePayrollDetail> employeePayrollDetails = new ArrayList<>();
+        for(int i=0; i<employee.getEmployeePayrollDetails().size(); i++){
+            EmployeePayrollDetail employeePayrollDetail = employee.getEmployeePayrollDetails().get(i);
+            if(employeePayrollDetail.getValue().trim().length()<1){
+                FieldError fieldError = new FieldError("", "", employeePayrollDetail.getEmployeePayrollField().getName() + ": Boş olmalıdır!");
+                binding.addError(fieldError);
             }
+            employeePayrollDetails.add(employeePayrollDetail);
+        }
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()){
+            employeePayrollDetailRepository.saveAll(employeePayrollDetails);
         }
         return mapPost(employee, binding, redirectAttributes, "/hr/employee");
     }
 
     @PostMapping(value = "/employee/sale")
     public String postEmployeeSale(@ModelAttribute(Constants.FORM) @Validated Employee employee, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        employeeSaleDetailRepository.deleteInBatch(employeeSaleDetailRepository.getEmployeeSaleDetailsByEmployee_Id(employee.getId()));
+        List<EmployeeSaleDetail> employeeSaleDetails = new ArrayList<>();
+        for(int i=0; i<employee.getEmployeeSaleDetails().size(); i++){
+            EmployeeSaleDetail employeeSaleDetail = employee.getEmployeeSaleDetails().get(i);
+            if(employeeSaleDetail.getValue().trim().length()<1){
+                FieldError fieldError = new FieldError("", "", employeeSaleDetail.getEmployeeSaleField().getName() + ": Boş olmalıdır!");
+                binding.addError(fieldError);
+            }
+            employeeSaleDetails.add(employeeSaleDetail);
+        }
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
-        if (!binding.hasErrors()) {
-
+        if(!binding.hasErrors()){
+            employeeSaleDetailRepository.saveAll(employeeSaleDetails);
         }
         return mapPost(employee, binding, redirectAttributes, "/hr/employee");
     }

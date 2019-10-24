@@ -80,6 +80,7 @@ input[type="checkbox"]{
 .style-none{
     border: none;
     background: none;
-    margin: 0;
+    margin: -6px;
     padding: 0;
+    width: 100%;
 }

@@ -25,14 +25,19 @@ public class EmployeeSaleDetail {
     @JoinColumn(name = "hr_employee_id")
     private Employee employee;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "admin_dictionary_employee_sale_field_id")
+    private Dictionary employeeSaleField;
+
     @Column(name = "key_field")
     private String key;
 
     @Column(name = "value")
     private String value;
 
-    public EmployeeSaleDetail(Employee employee, String key, String value) {
+    public EmployeeSaleDetail(Employee employee, Dictionary employeeSaleField, String key, String value) {
         this.employee = employee;
+        this.employeeSaleField = employeeSaleField;
         this.key = key;
         this.value = value;
     }

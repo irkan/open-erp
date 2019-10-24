@@ -76,12 +76,14 @@
                         if(value){
                             $("input[name='"+$(element).attr("name")+"']").prop('checked', true);
                         }
-
                     } else if($(element).attr("type")==="radio"){
                         $("input[name='"+$(element).attr("name")+"'][value='"+value.id+"']").prop('checked', true);
                     } else if($(element).attr("date")==='date') {
                         $(element).val(getFormattedDate(new Date(value)));
                     } else {
+                        if(value.id !== undefined){
+                            value = value.id;
+                        }
                         $(element).val(value);
                     }
                 } else if(tagName.toLowerCase()==="textarea"){

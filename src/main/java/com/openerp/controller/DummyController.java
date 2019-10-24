@@ -69,13 +69,13 @@ public class DummyController extends SkeletonController {
                 } else if(dictionary.getAttr1().equalsIgnoreCase("{additional_vacation_days}")){
                     dictionary.setAttr2(DummyUtil.calculateAdditionalVacationDays(dictionary.getAttr2(), employee.getContractStartDate(), previousWorkExperience, employee.getPerson().getDisability()));
                 }
-                employeePayrollDetails.add(new EmployeePayrollDetail(employee, dictionary.getAttr1(), dictionary.getAttr2()));
+                employeePayrollDetails.add(new EmployeePayrollDetail(employee, dictionary, dictionary.getAttr1(), dictionary.getAttr2()));
             }
             employee.setEmployeePayrollDetails(employeePayrollDetails);
 
             List<EmployeeSaleDetail> employeeSaleDetails = new ArrayList<>();
             for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-sale-field")){
-                employeeSaleDetails.add(new EmployeeSaleDetail(employee, dictionary.getAttr1(), dictionary.getAttr2()));
+                employeeSaleDetails.add(new EmployeeSaleDetail(employee, dictionary, dictionary.getAttr1(), dictionary.getAttr2()));
             }
             employee.setEmployeeSaleDetails(employeeSaleDetails);
 

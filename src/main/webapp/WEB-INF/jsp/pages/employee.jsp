@@ -408,7 +408,8 @@
                                     <label><c:out value="${t.name}"/></label>
                                 </div>
                                 <div class="col-md-4">
-                                    <input type="hidden" name="employeePayrollDetails[${loop.index}].id"/>
+                                    <input type="hidden" name="employeePayrollDetails[${loop.index}].employee"/>
+                                    <input type="hidden" name="employeePayrollDetails[${loop.index}].employeePayrollField" value="${t.id}"/>
                                     <input type="hidden" name="employeePayrollDetails[${loop.index}].key" value="${t.attr1}"/>
                                     <c:choose>
                                         <c:when test="${t.attr1 eq '{previous_work_experience}'}">
@@ -459,16 +460,10 @@
                                     <label><c:out value="${t.name}"/></label>
                                 </div>
                                 <div class="col-md-9">
-                                    <input type="hidden" name="employeeSaleDetails[${loop.index}].id"/>
+                                    <input type="hidden" name="employeeSaleDetails[${loop.index}].employee"/>
+                                    <input type="hidden" name="employeeSaleDetails[${loop.index}].employeePayrollField" value="${t.id}"/>
                                     <input type="hidden" name="employeeSaleDetails[${loop.index}].key" value="${t.attr1}"/>
-                                    <c:choose>
-                                        <c:when test="${t.attr1 eq '{previous_work_experience}'}">
-                                            <input type="text" name="employeeSaleDetails[${loop.index}].value" value="${t.attr2}" key="${t.attr1}" onkeyup="calculateVacationDay($('input[name=\'person.disability\']'), $('input[name=specialistOrManager]'), $('input[name=contractStartDate]'), $('input[key=\'{previous_work_experience}\']'))" class="form-control" />
-                                        </c:when>
-                                        <c:otherwise>
-                                            <input type="text" name="employeeSaleDetails[${loop.index}].value" value="${t.attr2}" key="${t.attr1}" class="form-control" />
-                                        </c:otherwise>
-                                    </c:choose>
+                                    <input type="text" name="employeeSaleDetails[${loop.index}].value" value="${t.attr2}" class="form-control" />
                                 </div>
                             </div>
                         </div>

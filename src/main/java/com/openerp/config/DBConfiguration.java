@@ -770,14 +770,14 @@ public class DBConfiguration {
             Employee employee0 = new Employee(person, position1, new Date(), null, headBranch);
             List<EmployeePayrollDetail> employeePayrollDetails = new ArrayList<>();
             for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-payroll-field")){
-                EmployeePayrollDetail employeePayrollDetail = new EmployeePayrollDetail(employee0, dictionary.getAttr1(), dictionary.getAttr2());
+                EmployeePayrollDetail employeePayrollDetail = new EmployeePayrollDetail(employee0, dictionary, dictionary.getAttr1(), dictionary.getAttr2());
                 employeePayrollDetails.add(employeePayrollDetail);
             }
             employee0.setEmployeePayrollDetails(employeePayrollDetails);
 
             List<EmployeeSaleDetail> employeeSaleDetails = new ArrayList<>();
             for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-sale-field")){
-                EmployeeSaleDetail employeeSaleDetail = new EmployeeSaleDetail(employee0, dictionary.getAttr1(), dictionary.getAttr2());
+                EmployeeSaleDetail employeeSaleDetail = new EmployeeSaleDetail(employee0, dictionary, dictionary.getAttr1(), dictionary.getAttr2());
                 employeeSaleDetails.add(employeeSaleDetail);
             }
             employee0.setEmployeeSaleDetails(employeeSaleDetails);

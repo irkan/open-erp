@@ -28,6 +28,10 @@ public class EmployeePayrollDetail {
     @JoinColumn(name = "hr_employee_id")
     private Employee employee;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "admin_dictionary_employee_payroll_field_id")
+    private Dictionary employeePayrollField;
+
     @Column(name = "key_field")
     private String key;
 
@@ -35,8 +39,9 @@ public class EmployeePayrollDetail {
     @Column(name = "value")
     private String value;
 
-    public EmployeePayrollDetail(Employee employee, String key, String value) {
+    public EmployeePayrollDetail(Employee employee, Dictionary employeePayrollField, String key, String value) {
         this.employee = employee;
+        this.employeePayrollField = employeePayrollField;
         this.key = key;
         this.value = value;
     }
