@@ -31,6 +31,7 @@ public class EmployeePayrollDetail {
     @Column(name = "key_field")
     private String key;
 
+    @Pattern(regexp=".{1,50}",message="Boş olmamalıdır")
     @Column(name = "value")
     private String value;
 

@@ -158,7 +158,10 @@ public class HRController extends SkeletonController {
     public String postEmployeePayroll(@ModelAttribute(Constants.FORM) @Validated Employee employee, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if (!binding.hasErrors()) {
-
+            for(EmployeePayrollDetail epd: employee.getEmployeePayrollDetails()){
+                epd.setEmployee(employee);
+                employeePayrollDetailRepository.save(epd);
+            }
         }
         return mapPost(employee, binding, redirectAttributes, "/hr/employee");
     }

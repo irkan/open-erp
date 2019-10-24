@@ -171,8 +171,14 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <form:label path="person.gender">Cins</form:label><br/>
-                                <form:radiobuttons items="${genders}" path="person.gender" itemLabel="name" itemValue="id"/>
+                                <form:label path="person.gender" cssClass="mb-3">Cins</form:label><br/>
+                                <c:forEach var="t" items="${genders}" varStatus="loop">
+                                    <label class="kt-radio kt-radio--brand">
+                                        <form:radiobutton path="person.gender" value="${t.id}"/> <c:out value="${t.name}"/>
+                                        <span></span>
+                                    </label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                </c:forEach>
                             </div>
                         </div>
                         <div class="col-md-3">
