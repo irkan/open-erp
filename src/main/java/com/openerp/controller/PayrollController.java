@@ -238,6 +238,7 @@ public class PayrollController extends SkeletonController {
     @PostMapping(value = "/salary/calculate")
     public String postSalaryCalculate(@ModelAttribute(Constants.FORM) @Validated Salary salary, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         Salary slry = new Salary();
+        WorkingHourRecord whr = null;
         if(!binding.hasErrors()){
             if(salary.getWorkingHourRecord().getMonthYear().length()>6 && salary.getWorkingHourRecord().getMonthYear().contains("-")){
                 int year = Integer.parseInt(salary.getWorkingHourRecord().getMonthYear().split("-")[0]);
@@ -247,7 +248,7 @@ public class PayrollController extends SkeletonController {
                 salary.getWorkingHourRecord().setYear(year);
                 salary.getWorkingHourRecord().setMonth(month);
                 redirectAttributes.addFlashAttribute(Constants.DAYS_IN_MONTH, daysInMonth);
-                WorkingHourRecord whr = workingHourRecordRepository.getWorkingHourRecordByActiveTrueAndMonthAndYearAndBranch_Id(salary.getWorkingHourRecord().getMonth(), salary.getWorkingHourRecord().getYear(), salary.getWorkingHourRecord().getBranch().getId());
+                whr = workingHourRecordRepository.getWorkingHourRecordByActiveTrueAndMonthAndYearAndBranch_Id(salary.getWorkingHourRecord().getMonth(), salary.getWorkingHourRecord().getYear(), salary.getWorkingHourRecord().getBranch().getId());
                 List<String> messages = new ArrayList<>();
                 if(whr==null){
                     messages.add("İş vaxtının uçotu cədvəli tapılmadı!");
@@ -336,6 +337,20 @@ public class PayrollController extends SkeletonController {
                                             String.valueOf(engine.eval(salary1)),
                                             salary1,
                                             salary1
+                                    )
+                            );
+                            String calculated_salary = Util.findPayrollConfiguration(payrollConfigurations,"{calculated_salary}")
+                                    .replaceAll(Pattern.quote("{salary}"), salary1)
+                                    .replaceAll(Pattern.quote("{calculated_working_days}"), calculated_working_days)
+                                    .replaceAll(Pattern.quote("{total_working_days}"), total_working_days);
+                            salaryEmployeeDetails.add(
+                                    new SalaryEmployeeDetail(
+                                            se,
+                                            Util.findPayrollConfigurationDescription(payrollConfigurations, "{calculated_salary}"),
+                                            "{calculated_salary}",
+                                            String.valueOf(engine.eval(calculated_salary)),
+                                            calculated_salary,
+                                            Util.findPayrollConfiguration(payrollConfigurations,"{calculated_salary}")
                                     )
                             );
                             String percent = "*0.01";
@@ -531,8 +546,10 @@ public class PayrollController extends SkeletonController {
                 }
             }
         }
-        for(SalaryEmployee salaryEmployee: slry.getSalaryEmployees()){
-            salaryEmployee.setSalaryEmployeeDetails(salaryEmployeeDetailRepository.getSalaryEmployeeDetailsBySalaryEmployee(salaryEmployee));
+        if(slry.getSalaryEmployees()!=null){
+            for(SalaryEmployee salaryEmployee: slry.getSalaryEmployees()){
+                salaryEmployee.setSalaryEmployeeDetails(salaryEmployeeDetailRepository.getSalaryEmployeeDetailsBySalaryEmployee(salaryEmployee));
+            }
         }
         return mapPost2(slry, binding, redirectAttributes, "/payroll/salary");
     }

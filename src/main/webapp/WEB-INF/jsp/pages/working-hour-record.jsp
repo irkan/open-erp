@@ -71,7 +71,7 @@
                                             <c:set var="save" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'save')}"/>
                                             <c:choose>
                                                 <c:when test="${save.status}">
-                                                    <c:if test="${not empty form.workingHourRecordEmployees}">
+                                                    <c:if test="${not empty form.workingHourRecordEmployees and !form.approve}">
                                                         <a href="#" onclick="saveWHR($('#form'))" class="btn btn-warning btn-elevate btn-icon-sm" title="<c:out value="${save.object.name}"/>">
                                                             <i class="la <c:out value="${save.object.icon}"/>"></i>
                                                             <c:out value="${save.object.name}"/>
