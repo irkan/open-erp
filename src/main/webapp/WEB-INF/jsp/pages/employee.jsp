@@ -408,7 +408,6 @@
                                     <label><c:out value="${t.name}"/></label>
                                 </div>
                                 <div class="col-md-4">
-                                    <input type="hidden" name="employeePayrollDetails[${loop.index}].employee"/>
                                     <input type="hidden" name="employeePayrollDetails[${loop.index}].employeePayrollField" value="${t.id}"/>
                                     <input type="hidden" name="employeePayrollDetails[${loop.index}].key" value="${t.attr1}"/>
                                     <c:choose>
@@ -460,7 +459,6 @@
                                     <label><c:out value="${t.name}"/></label>
                                 </div>
                                 <div class="col-md-9">
-                                    <input type="hidden" name="employeeSaleDetails[${loop.index}].employee"/>
                                     <input type="hidden" name="employeeSaleDetails[${loop.index}].employeeSalaryField" value="${t.id}"/>
                                     <input type="hidden" name="employeeSaleDetails[${loop.index}].key" value="${t.attr1}"/>
                                     <input type="text" name="employeeSaleDetails[${loop.index}].value" value="${t.attr2}" class="form-control" />

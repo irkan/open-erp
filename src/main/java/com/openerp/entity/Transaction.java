@@ -6,7 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
 
@@ -48,13 +50,15 @@ public class Transaction {
     @Column(name = "is_debt", nullable = false, columnDefinition="boolean default true")
     private Boolean debt = false;
 
-    @Pattern(regexp=".{0,50}",message="Maksimum 5 simvol ola bilər")
+    @Pattern(regexp=".{2,5}",message="Maksimum 5 simvol ola bilər")
     @Column(name = "currency", columnDefinition="varchar(5) default 'AZN'")
     private String currency;
 
     @Column(name = "rate", columnDefinition="double default 1")
     private double rate;
 
+    /*@Pattern(regexp="[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?",message="Maksimum 5 simvol ola bilər")*/
+    /*@Size(min = 5, max = 1111111111, message = "Sehvdir")*/
     @Column(name = "price", nullable = false, columnDefinition="Decimal(10,2) default 0")
     private double price=0d;
 

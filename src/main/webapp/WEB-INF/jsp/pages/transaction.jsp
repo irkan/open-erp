@@ -196,6 +196,7 @@
                                 <form:select  path="currency" cssClass="custom-select form-control">
                                     <form:options items="${currencies}" itemLabel="name" itemValue="name" />
                                 </form:select>
+                                <form:errors path="currency" cssClass="alert-danger control-label"/>
                             </div>
                         </div>
                     </div>

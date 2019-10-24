@@ -160,6 +160,7 @@ public class HRController extends SkeletonController {
         List<EmployeePayrollDetail> employeePayrollDetails = new ArrayList<>();
         for(int i=0; i<employee.getEmployeePayrollDetails().size(); i++){
             EmployeePayrollDetail employeePayrollDetail = employee.getEmployeePayrollDetails().get(i);
+            employeePayrollDetail.setEmployee(employee);
             if(employeePayrollDetail.getValue().trim().length()<1){
                 FieldError fieldError = new FieldError("", "", employeePayrollDetail.getEmployeePayrollField().getName() + ": Boş olmalıdır!");
                 binding.addError(fieldError);
@@ -179,6 +180,7 @@ public class HRController extends SkeletonController {
         List<EmployeeSaleDetail> employeeSaleDetails = new ArrayList<>();
         for(int i=0; i<employee.getEmployeeSaleDetails().size(); i++){
             EmployeeSaleDetail employeeSaleDetail = employee.getEmployeeSaleDetails().get(i);
+            employeeSaleDetail.setEmployee(employee);
             if(employeeSaleDetail.getValue().trim().length()<1){
                 FieldError fieldError = new FieldError("", "", employeeSaleDetail.getEmployeeSaleField().getName() + ": Boş olmalıdır!");
                 binding.addError(fieldError);
