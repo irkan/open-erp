@@ -414,7 +414,7 @@ public class DBConfiguration {
             modules.add(illness);
             Module payroll = new Module("Əmək haqqı", "Maaşların hesablanması", "payroll", "flaticon-security", null);
             modules.add(payroll);
-            Module workingHourRecord = new Module("İş vaxtının uçotu", "Maaşların hesablanması", "working-hour-record", "flaticon2-schedule", payroll);
+            Module workingHourRecord = new Module("İş vaxtının uçotu", "İş vaxtının uçotu", "working-hour-record", "flaticon2-schedule", payroll);
             modules.add(workingHourRecord);
             Module advance = new Module("Avans", "Avans", "advance", "flaticon2-percentage", payroll);
             modules.add(advance);
@@ -464,6 +464,8 @@ public class DBConfiguration {
             operations.add(transfer);
             Operation consolidate = new Operation("Təhkim edilmə", "consolidate", "la la-user");
             operations.add(consolidate);
+            Operation detail = new Operation("Detal", "detail", "la la-external-link");
+            operations.add(detail);
 
             operationRepository.saveAll(operations);
 
@@ -627,6 +629,8 @@ public class DBConfiguration {
             moduleOperations.add(viewModuleOperation18);
             ModuleOperation viewModuleOperation19 = new ModuleOperation(financing, view, null);
             moduleOperations.add(viewModuleOperation19);
+            ModuleOperation viewModuleOperation20 = new ModuleOperation(salary, view, null);
+            moduleOperations.add(viewModuleOperation20);
 
             ModuleOperation exportModuleOperation1 = new ModuleOperation(subModule1, export, null);
             moduleOperations.add(exportModuleOperation1);
@@ -716,6 +720,9 @@ public class DBConfiguration {
 
             ModuleOperation saleModuleOperation1 = new ModuleOperation(employee, saleOperation, null);
             moduleOperations.add(saleModuleOperation1);
+
+            ModuleOperation detailModuleOperation1 = new ModuleOperation(salary, detail, null);
+            moduleOperations.add(detailModuleOperation1);
 
             moduleOperationRepository.saveAll(moduleOperations);
 
@@ -892,6 +899,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation17));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation18));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation19));
+            userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation20));
 
             userModuleOperations.add(new UserModuleOperation(user, approveModuleOperation3));
             userModuleOperations.add(new UserModuleOperation(user, approveModuleOperation4));
@@ -922,6 +930,8 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, payrollModuleOperation1));
 
             userModuleOperations.add(new UserModuleOperation(user, saleModuleOperation1));
+
+            userModuleOperations.add(new UserModuleOperation(user, detailModuleOperation1));
 
             userModuleOperationRepository.saveAll(userModuleOperations);
 

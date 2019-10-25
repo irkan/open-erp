@@ -72,7 +72,7 @@
                                             <c:set var="save" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'save')}"/>
                                             <c:choose>
                                                 <c:when test="${save.status}">
-                                                    <c:if test="${not empty form}">
+                                                    <c:if test="${not empty form.salaryEmployees}">
                                                         <a href="#" onclick="saveWHR($('#form'))" class="btn btn-warning btn-elevate btn-icon-sm" title="<c:out value="${save.object.name}"/>">
                                                             <i class="la <c:out value="${save.object.icon}"/>"></i>
                                                             <c:out value="${save.object.name}"/>
@@ -105,7 +105,7 @@
                                             <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
                                             <c:choose>
                                                 <c:when test="${delete.status}">
-                                                    <c:if test="${not empty form}">
+                                                    <c:if test="${not empty form.salaryEmployees}">
                                                         <a href="javascript:deleteData('<c:out value="${form.workingHourRecord.id}" />', '<c:out value="${form.workingHourRecord.month}"/>.<c:out value="${form.workingHourRecord.year}"/> tarixli maaş hesablanması ');" class="btn btn-danger btn-elevate btn-icon-sm" title="<c:out value="${delete.object.name}"/>">
                                                             <i class="la <c:out value="${delete.object.icon}"/>"></i>
                                                             <c:out value="${delete.object.name}"/>
@@ -123,29 +123,72 @@
                 <div class="kt-portlet__body">
                     <c:choose>
                         <c:when test="${not empty form.salaryEmployees}">
-                            <table class="table table-striped- table-bordered table-hover table-checkable" id="group_table">
+                            <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
                                 <thead>
                                 <tr>
+                                    <th>WHR_ID</th>
                                     <th>ID</th>
-                                    <th>Skeleton Formula</th>
                                     <th>Ad Soyad Ata adı</th>
-                                    <th>Açıqlama</th>
-                                    <th>Key</th>
-                                    <th>Dəyər</th>
+                                    <th>Ümumi əmək haqqı (Rəsmi hissə)</th>
+                                    <th>Hesablanmış əmək haqqı (Rəsmi hissə)</th>
+                                    <th>Ümumi əmək haqqı</th>
+                                    <th>Hesablanmış əmək haqqı (Qeyri rəsmi hissə)</th>
+                                    <th>Əməliyyat</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${form.salaryEmployees}" varStatus="loop">
-                                    <c:forEach var="p" items="${t.salaryEmployeeDetails}" varStatus="loop">
-                                        <tr>
-                                            <td><c:out value="${p.id}" /></td>
-                                            <td><c:out value="${p.skeletonFormula}" /> = <c:out value="${p.formula}" /></td>
-                                            <td><c:out value="${t.workingHourRecordEmployee.fullName}" /></td>
-                                            <td><c:out value="${p.description}" /></td>
-                                            <td><c:out value="${p.key}" /></td>
-                                            <td><c:out value="${p.value}" /></td>
-                                        </tr>
-                                    </c:forEach>
+                                    <tr>
+                                        <td><c:out value="${t.workingHourRecordEmployee.id}" /></td>
+                                        <td><c:out value="${t.id}" /></td>
+                                        <td><c:out value="${t.workingHourRecordEmployee.fullName}" /></td>
+                                        <td>
+                                            <c:forEach var="p" items="${t.salaryEmployeeDetails}" varStatus="loop">
+                                                <c:if test="${p.key eq '{gross_salary}'}">
+                                                    <c:out value="${p.value}" />
+                                                </c:if>
+                                            </c:forEach>
+                                        </td>
+                                        <td>
+                                            <c:forEach var="p" items="${t.salaryEmployeeDetails}" varStatus="loop">
+                                                <c:if test="${p.key eq '{calculated_gross_salary}'}">
+                                                    <c:out value="${p.value}" />
+                                                </c:if>
+                                            </c:forEach>
+                                        </td>
+                                        <td>
+                                            <c:forEach var="p" items="${t.salaryEmployeeDetails}" varStatus="loop">
+                                                <c:if test="${p.key eq '{salary}'}">
+                                                    <c:out value="${p.value}" />
+                                                </c:if>
+                                            </c:forEach>
+                                        </td>
+                                        <td>
+                                            <c:forEach var="p" items="${t.salaryEmployeeDetails}" varStatus="loop">
+                                                <c:if test="${p.key eq '{calculated_salary}'}">
+                                                    <c:out value="${p.value}" />
+                                                </c:if>
+                                            </c:forEach>
+                                        </td>
+                                        <td nowrap class="text-center">
+                                            <%--<c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
+                                            <c:choose>
+                                                <c:when test="${view.status}">
+                                                    <a href="javascript:viewData('<c:out value="${utl:toJson(t)}" />')" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
+                                                        <i class="la <c:out value="${view.object.icon.name}"/>"></i>
+                                                    </a>
+                                                </c:when>
+                                            </c:choose>
+                                            <c:set var="detail" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'detail')}"/>
+                                            <c:choose>
+                                                <c:when test="${detail.status}">
+                                                    <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${detail.object.name}"/>">
+                                                        <i class="la <c:out value="${detail.object.icon.name}"/>"></i>
+                                                    </a>
+                                                </c:when>
+                                            </c:choose>--%>
+                                        </td>
+                                    </tr>
                                 </c:forEach>
                                 </tbody>
                             </table>
@@ -162,132 +205,48 @@
                 </form:form>
             </div>
         </div>
-
     </div>
-
 </div>
 
-<div class="modal fade" id="modal-operation" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="modal-view" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"></h5>
+                <h5 class="modal-title">Maaş detallarla</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <%--<form:form modelAttribute="form" id="form" method="post" action="/admin/dictionary-type"
-                           cssClass="form-group">
-                    <form:input type="hidden" name="id" path="id"/>
-                    <form:input type="hidden" name="active" path="active" value="1"/>
-                    <div class="form-group">
-                        <form:label path="name">Ad</form:label>
-                        <form:input path="name" cssClass="form-control" placeholder="Adı daxil edin"/>
-                        <form:errors path="name" cssClass="alert-danger control-label"/>
-                    </div>
-                    <div class="form-group">
-                        <form:label path="attr1">Atribut#1</form:label>
-                        <form:input path="attr1" cssClass="form-control" placeholder="Atributu daxil edin"/>
-                        <form:errors path="attr1" cssClass="alert-danger"/>
-                    </div>
-                    <div class="form-group">
-                        <form:label path="attr2">Atribut#2</form:label>
-                        <form:input path="attr2" cssClass="form-control" placeholder="Atributu daxil edin"/>
-                        <form:errors path="attr2" cssClass="alert alert-danger"/>
-                    </div>
-                </form:form>--%>
+
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="submit($('#form'));">Yadda saxla</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
             </div>
         </div>
     </div>
 </div>
 
-<script src="<c:url value="/assets/vendors/general/typeahead.js/dist/typeahead.bundle.js" />" type="text/javascript"></script>
-<script src="<c:url value="/assets/vendors/general/typeahead.js/dist/typeahead.jquery.js" />" type="text/javascript"></script>
 <script src="<c:url value="/assets/js/demo4/pages/crud/datatables/advanced/row-grouping.js" />" type="text/javascript"></script>
 
 <script>
-    var KTTypeahead = function() {
-
-        var states = [
-            <c:forEach var="t" items="${identifiers}" varStatus="loop">
-                '<c:out value="${t.attr1}"/>',
-            </c:forEach>
-        ];
-
-        // Private functions
-        var demo1 = function() {
-            var substringMatcher = function(strs) {
-                return function findMatches(q, cb) {
-                    var matches, substringRegex;
-                    matches = [];
-                    substrRegex = new RegExp(q, 'i');
-                    $.each(strs, function(i, str) {
-                        if (substrRegex.test(str)) {
-                            matches.push(str);
-                        }
-                    });
-
-                    cb(matches);
-                };
-            };
-
-            $('.type-ahead').typeahead({
-                hint: true,
-                highlight: true,
-                minLength: 0,
-                items: 'all'
-            }, {
-                name: 'states',
-                source: substringMatcher(states)
-            });
-        };
-        return {
-            init: function() {
-                demo1();
-            }
-        };
-    }();
-
-    var KTDatatablesBasicScrollable = function() {
-        var initTable2 = function() {
-            var table = $('#kt_table_3');
-            table.DataTable({
-                scrollY: 400,
-                scrollX: true,
-                paging: false,
-                autoWidth: false,
-                searching: false,
-                columnDefs: [
-                    {orderable: false, targets: 0}/*,
-                    {class: 'col-2', targets: 1},
-                    {width: '400px', class: 'col-2', targets: 2},
-                    {orderable: false, targets: 3}*/
-                ],
-                /*aoColumns : [ { "sClass": "my_class" }],*/
-                fixedColumns:   {
-                    leftColumns: 2
-                },
-                order: [[1, 'asc']]
-            });
-        };
-        return {
-            init: function() {
-                initTable2();
-            }
-        };
-    }();
-
-    KTTypeahead.init();
-    KTDatatablesBasicScrollable.init();
-
-    function saveWHR(form){
-        $(form).attr("action", "/payroll/working-hour-record/save");
-        submit(form)
+    <c:if test="${view.status}">
+        $('#kt_table_1 tbody').on('dblclick', 'tr', function () {
+            var ref = $(this).find('td:first').text();
+            alert(ref);
+        });
+    </c:if>
+    <c:if test="${detail.status}">
+    $('#kt_table_2 tbody').on('dblclick', 'tr', function () {
+        var ref = $(this).find('td:first').text();
+        alert(ref);
+    });
+    </c:if>
+    function viewData(data){
+        data = data.replace(/\&#034;/g, '"');
+        var obj = jQuery.parseJSON(data);
+        console.log(obj);
+        $('#modal-view').modal('toggle');
     }
 </script>
 

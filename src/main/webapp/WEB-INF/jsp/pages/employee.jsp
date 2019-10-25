@@ -37,7 +37,7 @@
     </thead>
     <tbody>
     <c:forEach var="t" items="${list}" varStatus="loop">
-        <tr>
+        <tr data="<c:out value="${utl:toJson(t)}" />">
             <td>${loop.index + 1}</td>
             <td><c:out value="${t.id}" /></td>
             <td><c:out value="${t.organization.name}" /></td>
@@ -69,7 +69,7 @@
                 <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
                 <c:choose>
                     <c:when test="${edit.status}">
-                        <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" id="dblclick" class="btn btn-sm btn-clean btn-icon btn-icon-md dblclick" title="<c:out value="${edit.object.name}"/>">
+                        <a href="javascript:console.log($(this).parents('tr').html());edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
                             <i class="<c:out value="${edit.object.icon}"/>"></i>
                         </a>
                     </c:when>
@@ -513,20 +513,11 @@
         var array2 = today.split(".");
         return parseFloat(array2[2])-parseFloat(array1[2])
     }
-
-    $('#group_table tbody').on('dblclick', 'tr', function () {
-        var ref = $(this).find('td:first').text();
-        alert(ref);
-        console.log("--------------------------------------------");
-        console.log($($($(this).find('td:last')).find('a#dblclick')));
-        $($($(this).find('td:last')).find('a#dblclick')).trigger('click');
-
-        var function1 = $($($(this).find('td:last')).find('a#dblclick')).attr('href');
-        $(function1).click();
-        $(function1).trigger('click');
-        console.log(function1)
-        $(this).find('a').click();
-    });
+    <c:if test="${edit.status}">
+        $('#group_table tbody').on('dblclick', 'tr', function () {
+            edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
+        });
+    </c:if>
 </script>
 
 

@@ -71,6 +71,9 @@ public class PayrollController extends SkeletonController {
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Salary(new WorkingHourRecord(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()))));
             }
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.SALARY_EMPLOYEE)){
+            List<SalaryEmployee> salaryEmployees = salaryEmployeeRepository.getSalaryEmployeesByWorkingHourRecordEmployeeOrderBySalary_IdDesc(workingHourRecordEmployeeRepository.getWorkingHourRecordEmployeeById(Integer.parseInt(data.get())));
+            model.addAttribute(Constants.LIST, salaryEmployees);
         }
         return "layout";
     }

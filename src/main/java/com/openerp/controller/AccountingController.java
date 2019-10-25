@@ -91,7 +91,7 @@ public class AccountingController extends SkeletonController {
     }
 
     @PostMapping(value = "/transaction/approve")
-    public String postTransactionApprove(@ModelAttribute(Constants.FORM) @Validated Transaction transaction, @RequestParam(name = "expense", required = false) int[] expenses, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+    public String postTransactionApprove(@ModelAttribute(Constants.FORM) @Validated Transaction transaction, BindingResult binding, RedirectAttributes redirectAttributes, @RequestParam(name = "expense", required = false) int[] expenses) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()) {
             Transaction trn = transactionRepository.getTransactionById(transaction.getId());
