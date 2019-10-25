@@ -117,9 +117,7 @@ public class HRController extends SkeletonController {
         }
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if (!binding.hasErrors()) {
-            for(EmployeePayrollDetail ed: employee.getEmployeePayrollDetails()){
-                ed.setEmployee(employee);
-            }
+
             if(employee!=null && employee.getId()!=null){
                 employeeRestDayRepository.deleteInBatch(employeeRestDayRepository.getEmployeeRestDaysByEmployee(employee));
             }
@@ -134,7 +132,7 @@ public class HRController extends SkeletonController {
                 }
             }
             employee.setEmployeeRestDays(erds);
-
+                
             List<EmployeePayrollDetail> employeePayrollDetails = new ArrayList<>();
             for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-payroll-field")){
                 EmployeePayrollDetail employeeDetailField1 = new EmployeePayrollDetail(employee, dictionary, dictionary.getAttr1(), dictionary.getAttr2());
