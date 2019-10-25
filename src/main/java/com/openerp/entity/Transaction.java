@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -56,12 +55,7 @@ public class Transaction {
     @Column(name = "rate", columnDefinition="double default 1")
     private double rate;
 
-    /*@Pattern(regexp="[0-9]{2,5}",message="Maksimum 5 simvol ola bilər")*/
-    /*@Size(min = 5, max = 1111111111, message = "Sehvdir")*/
-    //@Size(min=1, message= "whatever")
-    //@NotEmpty(message = "not empty")
-    //@NotBlank(message = "not blank")
-    @NotEmpty(message = "test1")
+    @DecimalMin(value = "0", message = "Minimum 0 olmalıdır")
     @Column(name = "price", nullable = false, columnDefinition="Decimal(10,2) default 0")
     private double price=0d;
 

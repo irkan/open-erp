@@ -22,10 +22,12 @@ public class SalaryEmployee {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "payroll_salary_id")
     private Salary salary;
 
+    @JsonIgnore
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "payroll_working_hour_record_employee_id")
     private WorkingHourRecordEmployee workingHourRecordEmployee;

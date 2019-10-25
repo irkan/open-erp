@@ -6,6 +6,7 @@ import com.openerp.entity.Dictionary;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.client.RestTemplate;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -324,7 +325,11 @@ public class Util {
         List<String> messages = new ArrayList<>();
         if(binding!=null && binding.getErrorCount()>0){
             for(FieldError fe: binding.getFieldErrors()){
-                messages.add(fe.getField() + " : " +fe.getDefaultMessage());
+                String message = fe.getDefaultMessage();
+                if(message.length()>120){
+                    message = "Format səhvdir";
+                }
+                messages.add(fe.getField() + " : " +message);
             }
             return new Response(Constants.STATUS.ERROR, messages);
         }
