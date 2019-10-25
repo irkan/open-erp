@@ -4,11 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.Date;
 import java.util.List;
 
@@ -57,8 +56,12 @@ public class Transaction {
     @Column(name = "rate", columnDefinition="double default 1")
     private double rate;
 
-    /*@Pattern(regexp="[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?",message="Maksimum 5 simvol ola bilər")*/
+    /*@Pattern(regexp="[0-9]{2,5}",message="Maksimum 5 simvol ola bilər")*/
     /*@Size(min = 5, max = 1111111111, message = "Sehvdir")*/
+    //@Size(min=1, message= "whatever")
+    //@NotEmpty(message = "not empty")
+    //@NotBlank(message = "not blank")
+    @NotEmpty(message = "test1")
     @Column(name = "price", nullable = false, columnDefinition="Decimal(10,2) default 0")
     private double price=0d;
 
