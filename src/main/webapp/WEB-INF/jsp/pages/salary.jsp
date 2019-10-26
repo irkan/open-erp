@@ -171,11 +171,11 @@
                                             </c:forEach>
                                         </td>
                                         <td nowrap class="text-center">
-                                            <%--<c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
+                                            <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
                                             <c:choose>
                                                 <c:when test="${view.status}">
                                                     <a href="javascript:viewData('<c:out value="${utl:toJson(t)}" />')" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
-                                                        <i class="la <c:out value="${view.object.icon.name}"/>"></i>
+                                                        <i class="la <c:out value="${view.object.icon}"/>"></i>
                                                     </a>
                                                 </c:when>
                                             </c:choose>
@@ -183,10 +183,10 @@
                                             <c:choose>
                                                 <c:when test="${detail.status}">
                                                     <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${detail.object.name}"/>">
-                                                        <i class="la <c:out value="${detail.object.icon.name}"/>"></i>
+                                                        <i class="la <c:out value="${detail.object.icon}"/>"></i>
                                                     </a>
                                                 </c:when>
-                                            </c:choose>--%>
+                                            </c:choose>
                                         </td>
                                     </tr>
                                 </c:forEach>

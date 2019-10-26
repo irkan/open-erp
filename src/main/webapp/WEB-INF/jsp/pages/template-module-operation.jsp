@@ -33,14 +33,12 @@
                             <c:when test="${not empty list}">
                                 <table class="table table-striped- table-bordered table-hover table-checkable" id="group_table">
                                     <thead>
-                                    <tr>
+                                    <tr style="height: 190px;">
                                         <td style="width: 15px;"></td>
-                                        <td style="width: 25%"></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td colspan="3" style="width: 25%"></td>
                                         <c:forEach var="t" items="${operations}" varStatus="loop">
-                                            <td class="text-center" style="width: ${75/operations.size()}%">
-                                                <span><c:out value="${t.name}" /></span><br/><i class="icon-custom <c:out value="${t.icon}" />"></i>
+                                            <td nowrap style="vertical-align: bottom;">
+                                                <div class="rotate" style="width: 30px;"><c:out value="${t.name}" /></div><br/><i class="icon-custom <c:out value="${t.icon}" />"></i>
                                             </td>
                                         </c:forEach>
                                     </tr>
@@ -94,8 +92,34 @@
     </div>
 </div>
 
-<script src="<c:url value="/assets/js/demo4/pages/crud/datatables/advanced/row-grouping.js" />" type="text/javascript"></script>
 <script>
+    $(function(){
+        $('#group_table').DataTable({
+            responsive: true,
+            pageLength: 100,
+            autoWidth: false,
+            order: [[2, 'asc']],
+            drawCallback: function(settings) {
+                var api = this.api();
+                var rows = api.rows({page: 'current'}).nodes();
+                var last = null;
+
+                api.column(2, {page: 'current'}).data().each(function(group, i) {
+                    if (last !== group) {
+                        $(rows).eq(i).before(
+                            '<tr class="group"><td colspan="30">' + group + '</td></tr>'
+                        );
+                        last = group;
+                    }
+                });
+            },
+            columnDefs: [
+                {targets: [2], visible: false}
+            ],
+            ordering: false
+        })
+    });
+
     function checkedRow(element){
         let row = $(element).closest("tr");
         if($(element).prop("checked") == true){

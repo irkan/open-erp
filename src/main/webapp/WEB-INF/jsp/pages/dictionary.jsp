@@ -43,7 +43,7 @@
                                             <c:choose>
                                                 <c:when test="${view.status}">
                                                     <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
-                                                        <i class="la <c:out value="${view.object.icon.name}"/>"></i>
+                                                        <i class="la <c:out value="${view.object.icon}"/>"></i>
                                                     </a>
                                                 </c:when>
                                             </c:choose>
