@@ -117,7 +117,6 @@ public class HRController extends SkeletonController {
         }
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if (!binding.hasErrors()) {
-
             if(employee!=null && employee.getId()!=null){
                 employeeRestDayRepository.deleteInBatch(employeeRestDayRepository.getEmployeeRestDaysByEmployee(employee));
             }
@@ -132,20 +131,22 @@ public class HRController extends SkeletonController {
                 }
             }
             employee.setEmployeeRestDays(erds);
-                
-            List<EmployeePayrollDetail> employeePayrollDetails = new ArrayList<>();
-            for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-payroll-field")){
-                EmployeePayrollDetail employeeDetailField1 = new EmployeePayrollDetail(employee, dictionary, dictionary.getAttr1(), dictionary.getAttr2());
-                employeePayrollDetails.add(employeeDetailField1);
-            }
-            employee.setEmployeePayrollDetails(employeePayrollDetails);
 
-            List<EmployeeSaleDetail> employeeSaleDetails = new ArrayList<>();
-            for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-sale-field")){
-                EmployeePayrollDetail employeeDetailField1 = new EmployeePayrollDetail(employee, dictionary, dictionary.getAttr1(), dictionary.getAttr2());
-                employeePayrollDetails.add(employeeDetailField1);
+            if(employee.getId()==null || employee.getId()==0){
+                List<EmployeePayrollDetail> employeePayrollDetails = new ArrayList<>();
+                for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-payroll-field")){
+                    EmployeePayrollDetail employeeDetailField1 = new EmployeePayrollDetail(employee, dictionary, dictionary.getAttr1(), dictionary.getAttr2());
+                    employeePayrollDetails.add(employeeDetailField1);
+                }
+                employee.setEmployeePayrollDetails(employeePayrollDetails);
+
+                List<EmployeeSaleDetail> employeeSaleDetails = new ArrayList<>();
+                for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-sale-field")){
+                    EmployeePayrollDetail employeeDetailField1 = new EmployeePayrollDetail(employee, dictionary, dictionary.getAttr1(), dictionary.getAttr2());
+                    employeePayrollDetails.add(employeeDetailField1);
+                }
+                employee.setEmployeeSaleDetails(employeeSaleDetails);
             }
-            employee.setEmployeeSaleDetails(employeeSaleDetails);
 
             employeeRepository.save(employee);
         }

@@ -71,7 +71,7 @@ table.dataTable thead > tr > th.sorting_asc, table.dataTable thead > tr > th.sor
 table.dataTable thead > tr > td.sorting_asc,
 table.dataTable thead > tr > td.sorting_desc,
 table.dataTable thead > tr > td.sorting {
-  padding-right: 30px; }
+  padding-right: 22px; }
 
 table.dataTable thead > tr > th:active,
 table.dataTable thead > tr > td:active {
