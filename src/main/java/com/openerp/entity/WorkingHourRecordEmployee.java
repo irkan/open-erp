@@ -23,17 +23,21 @@ public class WorkingHourRecordEmployee {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "payroll_working_hour_record_id")
     private WorkingHourRecord workingHourRecord;
 
+    @JsonIgnore
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hr_employee_id")
     private Employee employee;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "workingHourRecordEmployee", fetch = FetchType.EAGER)
     private List<WorkingHourRecordEmployeeIdentifier> workingHourRecordEmployeeIdentifiers;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "workingHourRecordEmployee")
     private List<WorkingHourRecordEmployeeDayCalculation> workingHourRecordEmployeeDayCalculations;
 

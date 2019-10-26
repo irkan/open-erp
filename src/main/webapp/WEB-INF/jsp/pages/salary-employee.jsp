@@ -35,7 +35,12 @@
                                         <tr>
                                             <td><c:out value="${p.id}" /></td>
                                             <td><c:out value="${p.skeletonFormula}" /> = <c:out value="${p.formula}" /></td>
-                                            <td><c:out value="${t.workingHourRecordEmployee.fullName}" /></td>
+                                            <td>
+                                                <fmt:setLocale value="en_US" />
+                                                <fmt:formatDate value="${utl:generate(1, t.salary.workingHourRecord.month, t.salary.workingHourRecord.year)}" pattern="MMMM" type="both" />,
+                                                <c:out value="${t.salary.workingHourRecord.year}" /> -
+                                                <c:out value="${t.workingHourRecordEmployee.fullName}" />
+                                            </td>
                                             <td><c:out value="${p.description}" /></td>
                                             <td><c:out value="${p.key}" /></td>
                                             <td><c:out value="${p.value}" /></td>

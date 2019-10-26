@@ -22,22 +22,25 @@ public class SalaryEmployee {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "payroll_salary_id")
     private Salary salary;
 
     @JsonIgnore
     @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "hr_employee_id")
+    private Employee employee;
+
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "payroll_working_hour_record_employee_id")
     private WorkingHourRecordEmployee workingHourRecordEmployee;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "salaryEmployee", cascade = CascadeType.ALL)
     private List<SalaryEmployeeDetail> salaryEmployeeDetails;
 
-    public SalaryEmployee(Salary salary, WorkingHourRecordEmployee workingHourRecordEmployee) {
+    public SalaryEmployee(Salary salary, Employee employee, WorkingHourRecordEmployee workingHourRecordEmployee) {
         this.salary = salary;
+        this.employee = employee;
         this.workingHourRecordEmployee = workingHourRecordEmployee;
     }
 }

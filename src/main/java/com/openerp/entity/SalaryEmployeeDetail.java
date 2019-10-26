@@ -1,5 +1,6 @@
 package com.openerp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,6 +20,7 @@ public class SalaryEmployeeDetail {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "payroll_salary_employee_id")
     private SalaryEmployee salaryEmployee;

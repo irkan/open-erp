@@ -13,10 +13,14 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class Util {
     public static Object check(Object object){
@@ -335,6 +339,38 @@ public class Util {
         }
         messages.add(defaultMessage);
         return new Response(Constants.STATUS.SUCCESS, messages);
+    }
+
+    public static String calculateMainVacationDays(List<PayrollConfiguration> payrollConfigurations, Employee employee) throws ScriptException {
+        ScriptEngineManager mgr = new ScriptEngineManager();
+        ScriptEngine engine = mgr.getEngineByName("JavaScript");
+        return String.valueOf(engine.eval(Util.findPayrollConfiguration(payrollConfigurations,"{main_vacation_days}")
+                .replaceAll(Pattern.quote("{disability}"), String.valueOf(employee.getPerson().getDisability()))
+                .replaceAll(Pattern.quote("{specialist_or_manager}"), String.valueOf(employee.getSpecialistOrManager()))));
+    }
+
+    public static String calculateAdditionalVacationDays(List<PayrollConfiguration> payrollConfigurations, Employee employee, String previousWorkExperience) throws ScriptException {
+        Date today = new Date();
+        int experience = Integer.parseInt(previousWorkExperience) + today.getYear()-employee.getContractStartDate().getYear();
+        ScriptEngineManager mgr = new ScriptEngineManager();
+        ScriptEngine engine = mgr.getEngineByName("JavaScript");
+        String additionalVacationDays = String.valueOf(engine.eval(Util.findPayrollConfiguration(payrollConfigurations,"{additional_vacation_days}")
+                .replaceAll(Pattern.quote("{work_experience}"), String.valueOf(experience))));
+        if(employee.getPerson().getDisability()){
+            additionalVacationDays = "0";
+        }
+        return additionalVacationDays;
+    }
+
+    public static String findPreviousWorkExperience(List<EmployeePayrollDetail> employeePayrollDetails){
+        for(EmployeePayrollDetail epd: employeePayrollDetails){
+            if(epd.getKey().equalsIgnoreCase("{previous_work_experience}")){
+                if(epd.getValue()!=null && epd.getValue().trim().length()>0){
+                    return epd.getValue();
+                }
+            }
+        }
+        return "0";
     }
 
 }

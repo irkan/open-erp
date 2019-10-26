@@ -138,7 +138,7 @@
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${form.salaryEmployees}" varStatus="loop">
-                                    <tr>
+                                    <tr data="<c:out value="${utl:toJson(t)}" />">
                                         <td><c:out value="${t.workingHourRecordEmployee.id}" /></td>
                                         <td><c:out value="${t.id}" /></td>
                                         <td><c:out value="${t.workingHourRecordEmployee.fullName}" /></td>
@@ -182,7 +182,7 @@
                                             <c:set var="detail" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'detail')}"/>
                                             <c:choose>
                                                 <c:when test="${detail.status}">
-                                                    <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${detail.object.name}"/>">
+                                                    <a href="/payroll/salary-employee/<c:out value="${t.employee.id}"/>" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${detail.object.name}"/>">
                                                         <i class="la <c:out value="${detail.object.icon}"/>"></i>
                                                     </a>
                                                 </c:when>
@@ -218,7 +218,21 @@
                 </button>
             </div>
             <div class="modal-body">
+                <table class="table table-striped- table-bordered table-hover table-checkable" id="group_table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Skeleton Formula</th>
+                        <th>Ad Soyad Ata adı</th>
+                        <th>Açıqlama</th>
+                        <th>Key</th>
+                        <th>Dəyər</th>
+                    </tr>
+                    </thead>
+                    <tbody>
 
+                    </tbody>
+                </table>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
@@ -227,27 +241,68 @@
     </div>
 </div>
 
-<script src="<c:url value="/assets/js/demo4/pages/crud/datatables/advanced/row-grouping.js" />" type="text/javascript"></script>
-
 <script>
     <c:if test="${view.status}">
         $('#kt_table_1 tbody').on('dblclick', 'tr', function () {
-            var ref = $(this).find('td:first').text();
-            alert(ref);
+            viewData($(this).attr('data'))
         });
-    </c:if>
-    <c:if test="${detail.status}">
-    $('#kt_table_2 tbody').on('dblclick', 'tr', function () {
-        var ref = $(this).find('td:first').text();
-        alert(ref);
-    });
     </c:if>
     function viewData(data){
         data = data.replace(/\&#034;/g, '"');
         var obj = jQuery.parseJSON(data);
         console.log(obj);
+        KTDatatablesAdvancedRowGrouping.init(obj.salaryEmployeeDetails, obj.workingHourRecordEmployee.fullName);
         $('#modal-view').modal('toggle');
     }
+
+    var KTDatatablesAdvancedRowGrouping = function() {
+
+        var initTable1 = function(data, fullName) {
+            var table = $('#group_table');
+
+            table.DataTable({
+                responsive: true,
+                pageLength: 100,
+                bDestroy: true,
+                data: data,
+                order: [[2, 'asc']],
+                columns: [
+                    { "data": 'id' },
+                    { "data": 'formula' },
+                    { "defaultContent": fullName },
+                    { "data": 'description' },
+                    { "data": 'key' },
+                    { "data": 'value' }
+                ],
+                drawCallback: function(settings) {
+                    var api = this.api();
+                    var rows = api.rows({page: 'current'}).nodes();
+                    var last = null;
+
+                    api.column(2, {page: 'current'}).data().each(function(group, i) {
+                        if (last !== group) {
+                            $(rows).eq(i).before(
+                                '<tr class="group"><td colspan="30">' + group + '</td></tr>'
+                            );
+                            last = group;
+                        }
+                    });
+                },
+                columnDefs: [
+                    {
+                        targets: [2],
+                        visible: false
+                    }
+                ]
+            });
+        };
+
+        return {
+            init: function(data, fullName) {
+                initTable1(data, fullName);
+            }
+        };
+    }();
 </script>
 
 

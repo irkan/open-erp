@@ -72,7 +72,7 @@ public class PayrollController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new Salary(new WorkingHourRecord(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()))));
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.SALARY_EMPLOYEE)){
-            List<SalaryEmployee> salaryEmployees = salaryEmployeeRepository.getSalaryEmployeesByWorkingHourRecordEmployeeOrderBySalary_IdDesc(workingHourRecordEmployeeRepository.getWorkingHourRecordEmployeeById(Integer.parseInt(data.get())));
+            List<SalaryEmployee> salaryEmployees = salaryEmployeeRepository.getSalaryEmployeesByEmployee_IdOrderByEmployeeDesc(Integer.parseInt(data.get()));
             model.addAttribute(Constants.LIST, salaryEmployees);
         }
         return "layout";
@@ -268,7 +268,7 @@ public class PayrollController extends SkeletonController {
                         slry = new Salary(whr);
                         List<SalaryEmployee> salaryEmployees = new ArrayList<>();
                         for(WorkingHourRecordEmployee whre: workingHourRecordEmployeeRepository.getWorkingHourRecordEmployeesByWorkingHourRecord_Id(whr.getId())){
-                            salaryEmployees.add(new SalaryEmployee(slry, whre));
+                            salaryEmployees.add(new SalaryEmployee(slry, whre.getEmployee(), whre));
                         }
                         slry.setSalaryEmployees(salaryEmployees);
                         salaryRepository.save(slry);

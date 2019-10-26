@@ -130,22 +130,31 @@ public class HRController extends SkeletonController {
                 }
             }
             employee.setEmployeeRestDays(erds);
-
-            if(employee.getId()==null || employee.getId()==0){
-                List<EmployeePayrollDetail> employeePayrollDetails = new ArrayList<>();
-                for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-payroll-field")){
-                    EmployeePayrollDetail employeeDetailField1 = new EmployeePayrollDetail(employee, dictionary, dictionary.getAttr1(), dictionary.getAttr2());
-                    employeePayrollDetails.add(employeeDetailField1);
-                }
-                employee.setEmployeePayrollDetails(employeePayrollDetails);
-
-                List<EmployeeSaleDetail> employeeSaleDetails = new ArrayList<>();
-                for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-sale-field")){
-                    EmployeePayrollDetail employeeDetailField1 = new EmployeePayrollDetail(employee, dictionary, dictionary.getAttr1(), dictionary.getAttr2());
-                    employeePayrollDetails.add(employeeDetailField1);
-                }
-                employee.setEmployeeSaleDetails(employeeSaleDetails);
+            int employeeId = 0;
+            if(employee.getId()!=null){
+                employeeId = employee.getId();
             }
+            List<PayrollConfiguration> payrollConfigurations = payrollConfigurationRepository.getPayrollConfigurationsByActiveTrueOrderById();
+            employeePayrollDetailRepository.deleteInBatch(employeePayrollDetailRepository.getEmployeePayrollDetailsByEmployee_Id(employeeId));
+            List<EmployeePayrollDetail> employeePayrollDetails = new ArrayList<>();
+            for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-payroll-field")){
+                EmployeePayrollDetail employeeDetailField1 = new EmployeePayrollDetail(employee, dictionary, dictionary.getAttr1(), dictionary.getAttr2());
+                if(employeeDetailField1.getKey().equalsIgnoreCase("{main_vacation_days}")){
+                    employeeDetailField1.setValue(Util.calculateMainVacationDays(payrollConfigurations, employee));
+                } else if(employeeDetailField1.getKey().equalsIgnoreCase("{additional_vacation_days}")){
+                    employeeDetailField1.setValue(Util.calculateAdditionalVacationDays(payrollConfigurations, employee, Util.findPreviousWorkExperience(employeePayrollDetails)));
+                }
+                employeePayrollDetails.add(employeeDetailField1);
+            }
+            employee.setEmployeePayrollDetails(employeePayrollDetails);
+
+            employeeSaleDetailRepository.deleteInBatch(employeeSaleDetailRepository.getEmployeeSaleDetailsByEmployee_Id(employeeId));
+            List<EmployeeSaleDetail> employeeSaleDetails = new ArrayList<>();
+            for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-sale-field")){
+                EmployeeSaleDetail employeeDetailField1 = new EmployeeSaleDetail(employee, dictionary, dictionary.getAttr1(), dictionary.getAttr2());
+                employeeSaleDetails.add(employeeDetailField1);
+            }
+            employee.setEmployeeSaleDetails(employeeSaleDetails);
 
             employeeRepository.save(employee);
         }
@@ -155,10 +164,16 @@ public class HRController extends SkeletonController {
     @PostMapping(value = "/employee/payroll")
     public String postEmployeePayroll(@ModelAttribute(Constants.FORM) @Validated Employee employee, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         employeePayrollDetailRepository.deleteInBatch(employeePayrollDetailRepository.getEmployeePayrollDetailsByEmployee_Id(employee.getId()));
+        List<PayrollConfiguration> payrollConfigurations = payrollConfigurationRepository.getPayrollConfigurationsByActiveTrueOrderById();
         List<EmployeePayrollDetail> employeePayrollDetails = new ArrayList<>();
         for(int i=0; i<employee.getEmployeePayrollDetails().size(); i++){
             EmployeePayrollDetail employeePayrollDetail = employee.getEmployeePayrollDetails().get(i);
             employeePayrollDetail.setEmployee(employee);
+            if(employeePayrollDetail.getKey().equalsIgnoreCase("{main_vacation_days}")){
+                employeePayrollDetail.setValue(Util.calculateMainVacationDays(payrollConfigurations, employee));
+            } else if(employeePayrollDetail.getKey().equalsIgnoreCase("{additional_vacation_days}")){
+                employeePayrollDetail.setValue(Util.calculateAdditionalVacationDays(payrollConfigurations, employee, Util.findPreviousWorkExperience(employeePayrollDetails)));
+            }
             if(employeePayrollDetail.getValue().trim().length()<1){
                 FieldError fieldError = new FieldError("", "", employeePayrollDetail.getEmployeePayrollField().getName() + ": Boş olmalıdır!");
                 binding.addError(fieldError);
