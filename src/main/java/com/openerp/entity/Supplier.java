@@ -30,7 +30,7 @@ public class Supplier {
     private String description;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "hr_person_id")
+    @JoinColumn(name = "common_person_id")
     private Person person;
 
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")

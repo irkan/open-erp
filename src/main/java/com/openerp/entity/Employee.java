@@ -25,7 +25,7 @@ public class Employee {
     private Integer id;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "hr_person_id")
+    @JoinColumn(name = "common_person_id")
     private Person person;
 
     @OneToOne(fetch = FetchType.EAGER)

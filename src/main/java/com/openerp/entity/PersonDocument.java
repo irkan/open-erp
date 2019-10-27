@@ -7,20 +7,20 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "hr_person_document")
+@Table(name = "common_person_document")
 @Getter
 @Setter
 @NoArgsConstructor
 public class PersonDocument {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "hr_sequence")
-    @SequenceGenerator(sequenceName = "aa_hr_sequence", allocationSize = 1, name = "hr_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "common_sequence")
+    @SequenceGenerator(sequenceName = "aa_common_sequence", allocationSize = 1, name = "common_sequence")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_person_id", nullable = false)
+    @JoinColumn(name = "common_person_id", nullable = false)
     private Person person;
 
     @OneToOne(fetch = FetchType.EAGER)

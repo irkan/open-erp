@@ -24,7 +24,7 @@ public class Module {
     private Integer id;
 
     @Pattern(regexp=".{2,50}",message="Minimum 2 maksimum 50 simvol ola bilər")
-    @Column(name = "name", unique = true, nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "description")

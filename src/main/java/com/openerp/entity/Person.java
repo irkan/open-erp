@@ -13,15 +13,15 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "hr_person")
+@Table(name = "common_person")
 @Getter
 @Setter
 @NoArgsConstructor
 public class Person {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "hr_sequence")
-    @SequenceGenerator(sequenceName = "aa_hr_sequence", allocationSize = 1, name = "hr_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "common_sequence")
+    @SequenceGenerator(sequenceName = "aa_common_sequence", allocationSize = 1, name = "common_sequence")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
