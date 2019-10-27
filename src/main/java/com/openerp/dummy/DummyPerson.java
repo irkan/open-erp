@@ -84,8 +84,10 @@ public class DummyPerson {
         fatherNames.add("Əflatun");
         fatherNames.add("İrkan");
         fatherNames.add("İmdad");
+        fatherNames.add("Seymur");
         fatherNames.add("Vüqar");
         fatherNames.add("Davud");
+        fatherNames.add("Alim");
         fatherNames.add("Məmməd");
         fatherNames.add("Paşa");
         fatherNames.add("Əlyar");
@@ -112,6 +114,7 @@ public class DummyPerson {
                 DummyUtil.randomDictionary(nationalities),
                 DummyUtil.randomDictionary(maritalStatuses),
                 DummyUtil.randomIdCardPinCode(),
+                DummyUtil.randomIdCardSerialNumber(),
                 DummyUtil.randomBoolean(),
                 null
         );

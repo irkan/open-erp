@@ -54,7 +54,7 @@
                                                     <td class="text-center" style="width: 8px; background-color: #f7f8fa">
                                                         <label class="kt-checkbox kt-checkbox--brand">
                                                             <input type="checkbox" onclick="checkedRow(this)">
-                                                            <span></span>
+                                                            <span style="top: -11px; left: 7px;"></span>
                                                         </label></td>
                                                     <c:forEach var="o" items="${operations}" varStatus="loop">
                                                         <td class="text-center">
@@ -65,13 +65,13 @@
                                                                         <c:when test="${status.status}">
                                                                             <label class="kt-checkbox kt-checkbox--brand">
                                                                                 <form:checkbox path="moduleOperations" value="${status.object}" checked="checked"/>
-                                                                                <span></span>
+                                                                                <span style="top: -11px"></span>
                                                                             </label>
                                                                         </c:when>
                                                                         <c:otherwise>
                                                                             <label class="kt-checkbox kt-checkbox--brand">
                                                                                 <form:checkbox path="moduleOperations" value="${status.object}"/>
-                                                                                <span></span>
+                                                                                <span style="top: -11px"></span>
                                                                             </label>
                                                                         </c:otherwise>
                                                                     </c:choose>

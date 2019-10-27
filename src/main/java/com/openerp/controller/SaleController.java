@@ -50,6 +50,7 @@ public class SaleController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new SaleGroup());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.SALES)){
+            model.addAttribute(Constants.CITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("city"));
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Sales());
             }

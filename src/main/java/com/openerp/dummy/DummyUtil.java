@@ -100,6 +100,16 @@ public class DummyUtil {
         return sb.toString();
     }
 
+    public static String randomIdCardSerialNumber(){
+        String AlphaNumericString = "0123456789";
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 7; i++) {
+            int index = (int)(AlphaNumericString.length() * Math.random());
+            sb.append(AlphaNumericString.charAt(index));
+        }
+        return "AA" + sb.toString();
+    }
+
     public static String randomBankAccountNumber(){
         String AlphaString = "AZNUSDERGBPTL";
         String NumericString = "0123456789";

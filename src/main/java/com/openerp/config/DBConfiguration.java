@@ -787,7 +787,7 @@ public class DBConfiguration {
             organizationRepository.saveAll(organizations);
 
             Contact contact1 = new Contact("502535110", null, "irkan.ehmedov@gmail.com", "Ü.Hacıbəyov 195A", baku);
-            Person person = new Person(contact1, "İrkan", "Əhmədov", "Əflatun", DateUtility.getUtilDate("25.09.1989"), male, azerbaijanNationality, married, "4HWL0AM", false, null);
+            Person person = new Person(contact1, "İrkan", "Əhmədov", "Əflatun", DateUtility.getUtilDate("25.09.1989"), male, azerbaijanNationality, married, "4HWL0AM", "AA0844002", false, null);
             Employee employee0 = new Employee(person, position1, new Date(), null, headBranch);
             List<EmployeePayrollDetail> employeePayrollDetails = new ArrayList<>();
             for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-payroll-field")){
@@ -957,27 +957,27 @@ public class DBConfiguration {
             List<Supplier> suppliers = new ArrayList<>();
 
             Contact supplier1Contact = new Contact("702046451", null, "aqualine.az@gmail.com", "Keşlə bazarı", baku);
-            Person supplier1Person = new Person(supplier1Contact, "Əli", "Vəliyev", null, null, male, azerbaijanNationality, married, null,false, null);
+            Person supplier1Person = new Person(supplier1Contact, "Əli", "Vəliyev", null, null, male, azerbaijanNationality, married, null, null, false, null);
             Supplier supplier1 = new Supplier("Aqualine MMC", "Sintra təminatçısı", supplier1Person);
             suppliers.add(supplier1);
 
             Contact supplier2Contact = new Contact("553128122", null, "samir.bagirov@gmail.com", "Tonqal restoranının yanı", baku);
-            Person supplier2Person = new Person(supplier2Contact, "Samir", "Bağırov", null, null, male, azerbaijanNationality, single, null,false, null);
+            Person supplier2Person = new Person(supplier2Contact, "Samir", "Bağırov", null, null, male, azerbaijanNationality, single, null, null, false, null);
             Supplier supplier2 = new Supplier("Techflow MMC", "Təminatçı", supplier2Person);
             suppliers.add(supplier2);
 
             Contact supplier3Contact = new Contact("552263010", null, "sintra.az@gmail.com", "Binəqədi rayonu", baku);
-            Person supplier3Person = new Person(supplier3Contact, "Elmar", "Məmmədov", null, null, male, azerbaijanNationality, single, null,false, null);
+            Person supplier3Person = new Person(supplier3Contact, "Elmar", "Məmmədov", null, null, male, azerbaijanNationality, single, null, null, false, null);
             Supplier supplier3 = new Supplier("Sintra MMC", "Təminatçı", supplier3Person);
             suppliers.add(supplier3);
 
             Contact supplier4Contact = new Contact(null, null, "sadarak@gmail.com", null, baku);
-            Person supplier4Person = new Person(supplier4Contact, "Sədərək", "Ticarət mərkəzi", null, null, male, azerbaijanNationality, single, null,false, null);
+            Person supplier4Person = new Person(supplier4Contact, "Sədərək", "Ticarət mərkəzi", null, null, male, azerbaijanNationality, single, null, null, false, null);
             Supplier supplier4 = new Supplier("Sədərək", "Təminatçı", supplier4Person);
             suppliers.add(supplier4);
 
             Contact supplier5Contact = new Contact(null, null, "other.supplier@gmail.com", null, baku);
-            Person supplier5Person = new Person(supplier5Contact, "Digər", "Təminatçı", null, null, male, azerbaijanNationality, single, null,false, null);
+            Person supplier5Person = new Person(supplier5Contact, "Digər", "Təminatçı", null, null, male, azerbaijanNationality, single, null, null, false, null);
             Supplier supplier5 = new Supplier("Digər", "Təminatçı", supplier5Person);
             suppliers.add(supplier5);
 

@@ -16,7 +16,6 @@
       -webkit-box-pack: center;
       -ms-flex-pack: center;
       justify-content: center;
-      width: 70%;
       margin: 0 auto; }
       .kt-wizard-v1 .kt-wizard-v1__nav .kt-wizard-v1__nav-items .kt-wizard-v1__nav-item {
         display: -webkit-box;
@@ -69,7 +68,7 @@
           -webkit-box-pack: center;
           -ms-flex-pack: center;
           justify-content: center;
-          padding: 2rem 1rem;
+          padding: 0.2rem 0.2rem;
           text-align: center; }
           .kt-wizard-v1 .kt-wizard-v1__nav .kt-wizard-v1__nav-items .kt-wizard-v1__nav-item .kt-wizard-v1__nav-body .kt-wizard-v1__nav-icon {
             font-size: 3.7rem;
@@ -152,14 +151,14 @@
     justify-content: center;
     background-color: #f9fafc; }
     .kt-wizard-v1 .kt-wizard-v1__wrapper .kt-form {
-      width: 60%;
-      padding: 4rem 0 5rem; }
+      width: 90%;
+      padding: 2rem 0 2rem; }
       .kt-wizard-v1 .kt-wizard-v1__wrapper .kt-form .kt-wizard-v1__content {
         padding-bottom: 2rem;
         margin-bottom: 2rem;
         border-bottom: 1px solid #eeeef4; }
         .kt-wizard-v1 .kt-wizard-v1__wrapper .kt-form .kt-wizard-v1__content .kt-wizard-v1__form {
-          margin-top: 3rem; }
+          margin-top: 0; }
         .kt-wizard-v1 .kt-wizard-v1__wrapper .kt-form .kt-wizard-v1__content .kt-wizard-v1__review .kt-wizard-v1__review-item {
           padding-bottom: 1rem;
           margin-bottom: 1rem;

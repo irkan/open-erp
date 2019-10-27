@@ -34,6 +34,9 @@ public class Contact {
     @Column(name = "address")
     private String address;
 
+    @Column(name = "living_address")
+    private String livingAddress;
+
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "admin_dictionary_city_id")
     private Dictionary city;
