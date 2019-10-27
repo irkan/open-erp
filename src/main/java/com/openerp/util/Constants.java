@@ -94,5 +94,6 @@ public class Constants {
         public static final String FINANCING = "financing";
         public static final String SALE_GROUP = "sale-group";
         public static final String SALARY_EMPLOYEE = "salary-employee";
+        public static final String SALES = "sales";
     }
 }

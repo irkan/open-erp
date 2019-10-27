@@ -49,6 +49,10 @@ public class SaleController extends SkeletonController {
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new SaleGroup());
             }
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.SALES)){
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new Sales());
+            }
         }
         return "layout";
     }
