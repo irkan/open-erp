@@ -51,7 +51,11 @@
                                                     <td>${loop.index + 1}</td>
                                                     <td class="text-right"><span><c:out value="${m.name}" /></span><i class="icon-custom <c:out value="${m.icon}" />"></i></td>
                                                     <td><c:out value="${m.module.name}" /></td>
-                                                    <td class="text-center" style="width: 8px; background-color: #f7f8fa"><input type="checkbox" onclick="checkedRow(this)"></td>
+                                                    <td class="text-center" style="width: 8px; background-color: #f7f8fa">
+                                                        <label class="kt-checkbox kt-checkbox--brand">
+                                                            <input type="checkbox" onclick="checkedRow(this)">
+                                                            <span></span>
+                                                        </label></td>
                                                     <c:forEach var="o" items="${operations}" varStatus="loop">
                                                         <td class="text-center">
                                                             <c:set var="status" value="${utl:checkAccess(list, user_module_operations, template_module_operations, m.id, o.id)}"/>
@@ -59,10 +63,16 @@
                                                                 <c:when test="${status.object ne 0 && not empty status.object}">
                                                                     <c:choose>
                                                                         <c:when test="${status.status}">
-                                                                            <form:checkbox path="moduleOperations" value="${status.object}" checked="checked"/>
+                                                                            <label class="kt-checkbox kt-checkbox--brand">
+                                                                                <form:checkbox path="moduleOperations" value="${status.object}" checked="checked"/>
+                                                                                <span></span>
+                                                                            </label>
                                                                         </c:when>
                                                                         <c:otherwise>
-                                                                            <form:checkbox path="moduleOperations" value="${status.object}"/>
+                                                                            <label class="kt-checkbox kt-checkbox--brand">
+                                                                                <form:checkbox path="moduleOperations" value="${status.object}"/>
+                                                                                <span></span>
+                                                                            </label>
                                                                         </c:otherwise>
                                                                     </c:choose>
                                                                 </c:when>
