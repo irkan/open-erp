@@ -48,7 +48,7 @@ public final class StaticUtils {
         return illnessDetailRepository.getIllnessDetailByEmployeeAndIllnessDateAndIllness_Active(employee, illnessDate, active);
     }
 
-    public static NonWorkingDay getNonWorkingDayByNonWorkingDateAndActiveTrue(Date date) {
-        return nonWorkingDayRepository.getNonWorkingDayByNonWorkingDateAndActiveTrue(date);
+    public static List<NonWorkingDay> getNonWorkingDaysByNonWorkingDateAndActiveTrue(Date date) {
+        return nonWorkingDayRepository.getNonWorkingDaysByNonWorkingDateAndActiveTrue(date);
     }
 }

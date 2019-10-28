@@ -239,7 +239,7 @@ public class Util {
                 whredc.setWorkingHourRecordEmployee(workingHourRecordEmployee);
                 whredc.setDescription(identifier.getName());
                 whredc.setKey(identifier.getAttr1());
-                whredc.setValue(Util.calculateHIG(whredcs));
+                whredc.setValue(Util.calculateUIG(whreisCurrent, whredcs));
                 whredc.setIdentifier(identifier);
                 whredcs.add(whredc);
             }
@@ -250,7 +250,7 @@ public class Util {
                 whredc.setWorkingHourRecordEmployee(workingHourRecordEmployee);
                 whredc.setDescription(identifier.getName());
                 whredc.setKey(identifier.getAttr1());
-                whredc.setValue(Util.calculateUIG(whreisCurrent, whredcs));
+                whredc.setValue(Util.calculateHIG(whredcs));
                 whredc.setIdentifier(identifier);
                 whredcs.add(whredc);
             }
@@ -263,7 +263,9 @@ public class Util {
         int iWHREICount = findIdentifierCountInWorkingHourRecordEmployeeIdentifier(whreis, "İ");
         int bWHREDCCount = findIdentifierCountInWHREDC(whredcs, "B");
         int bWHREICount = findIdentifierCountInWorkingHourRecordEmployeeIdentifier(whreis, "B");
-        return whreis.size()-(iWHREDCCount>iWHREICount?iWHREDCCount:iWHREICount) - (bWHREDCCount>bWHREICount?bWHREDCCount:bWHREICount) ;
+        int qigWHREDCCount = findIdentifierCountInWHREDC(whredcs, "QİG");
+        int qigWHREICount = findIdentifierCountInWorkingHourRecordEmployeeIdentifier(whreis, "QİG");
+        return whreis.size()-(iWHREDCCount>iWHREICount?iWHREDCCount:iWHREICount) - (bWHREDCCount>bWHREICount?bWHREDCCount:bWHREICount) - (qigWHREDCCount>qigWHREICount?qigWHREDCCount:qigWHREICount);
     }
 
     public static int findIdentifierCountInWorkingHourRecordEmployeeIdentifier(List<WorkingHourRecordEmployeeIdentifier> workingHourRecordEmployeeIdentifiers, String identifier){
@@ -277,26 +279,26 @@ public class Util {
     }
 
     public static int findIdentifierCountInWHREDC(List<WorkingHourRecordEmployeeDayCalculation> whredcs, String identifier){
-        int i=0;
         for(WorkingHourRecordEmployeeDayCalculation whredc: whredcs){
             if(whredc.getKey().contentEquals(identifier)){
-                i=i+1;
+                return whredc.getValue();
             }
         }
-        return i;
+        return 0;
     }
 
     public static int calculateHIG(List<WorkingHourRecordEmployeeDayCalculation> whredcs){
         int hig = 0;
         for(WorkingHourRecordEmployeeDayCalculation whredc: whredcs){
             if(whredc.getKey().contentEquals("İG") ||
-                    whredc.getKey().contentEquals("QİG") ||
                     whredc.getKey().contentEquals("QİG(S)") ||
                     whredc.getKey().contentEquals("QİG(A)") ||
                     whredc.getKey().contentEquals("I") ||
                     whredc.getKey().contentEquals("II") ||
                     whredc.getKey().contentEquals("DM") ||
-                    whredc.getKey().contentEquals("RM")
+                    whredc.getKey().contentEquals("RM") ||
+                    whredc.getKey().contentEquals("E") ||
+                    whredc.getKey().contentEquals("X")
             ){
                 hig+=whredc.getValue();
             }

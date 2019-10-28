@@ -153,8 +153,6 @@ public class DBConfiguration {
             dictionaries.add(position4);
             Dictionary position5 = new Dictionary("Baş mühasib", "Head  accauntant", null, positionType);
             dictionaries.add(position5);
-            Dictionary position6 = new Dictionary("Reklamçı", "Promoter", null, positionType);
-            dictionaries.add(position6);
             Dictionary position7 = new Dictionary("Anbardar", "Warehouse", null, positionType);
             dictionaries.add(position7);
             Dictionary position8 = new Dictionary("Baş anbardar", "Head warehouse", null, positionType);
@@ -299,8 +297,6 @@ public class DBConfiguration {
             dictionaries.add(employeeSaleDetail4);
             Dictionary identifier6 = new Dictionary("İş Günü", "İG", null, identifierType);
             dictionaries.add(identifier6);
-            Dictionary identifier7 = new Dictionary("Qısaldılmış İş Günü", "QİG", null, identifierType);
-            dictionaries.add(identifier7);
             Dictionary identifier8 = new Dictionary("Qısaldılmış İş Günü (Səhər)", "QİG(S)", null, identifierType);
             dictionaries.add(identifier8);
             Dictionary identifier9 = new Dictionary("Qısaldılmış İş Günü (Axşam)", "QİG(A)", null, identifierType);
@@ -313,6 +309,8 @@ public class DBConfiguration {
             dictionaries.add(identifier1);
             Dictionary identifier2 = new Dictionary("Bayram", "B", null, identifierType);
             dictionaries.add(identifier2);
+            Dictionary identifier7 = new Dictionary("Qeyri İş Günü", "QİG", null, identifierType);
+            dictionaries.add(identifier7);
             Dictionary identifier4 = new Dictionary("Məzuniyyət", "M", "vacation", identifierType);
             dictionaries.add(identifier4);
             Dictionary identifier18 = new Dictionary("Daxili Məzuniyyət", "DM", "vacation", identifierType);

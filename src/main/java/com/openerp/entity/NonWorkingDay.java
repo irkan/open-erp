@@ -26,11 +26,11 @@ public class NonWorkingDay {
 
     @NotNull(message = "Boş olmamalıdır")
     @Temporal(TemporalType.DATE)
-    @Column(name = "non_working_date", unique = true, nullable = false)
+    @Column(name = "non_working_date", nullable = false)
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date nonWorkingDate;
 
-    @Pattern(regexp=".{1,2}",message="Minimum 1 maksimum 2 simvol ola bilər")
+    @Pattern(regexp=".{1,3}",message="Minimum 1 maksimum 2 simvol ola bilər")
     @Column(name = "identifier")
     private String identifier;
 

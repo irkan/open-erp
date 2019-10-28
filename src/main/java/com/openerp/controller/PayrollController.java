@@ -325,7 +325,7 @@ public class PayrollController extends SkeletonController {
                                             se,
                                             Util.findPayrollConfigurationDescription(payrollConfigurations, "{calculated_gross_salary}"),
                                             "{calculated_gross_salary}",
-                                            String.valueOf(engine.eval(calculated_gross_salary)),
+                                            Util.format(Double.parseDouble(String.valueOf(engine.eval(calculated_gross_salary)))),
                                             calculated_gross_salary,
                                             Util.findPayrollConfiguration(payrollConfigurations,"{calculated_gross_salary}")
                                     )
@@ -336,7 +336,7 @@ public class PayrollController extends SkeletonController {
                                             se,
                                             Util.findEmployeeDetailDescription(employeeAdditionalFields, "{salary}"),
                                             "{salary}",
-                                            String.valueOf(engine.eval(salary1)),
+                                            Util.format(Double.parseDouble(String.valueOf(engine.eval(salary1)))),
                                             salary1,
                                             salary1
                                     )
@@ -350,7 +350,7 @@ public class PayrollController extends SkeletonController {
                                             se,
                                             Util.findPayrollConfigurationDescription(payrollConfigurations, "{calculated_salary}"),
                                             "{calculated_salary}",
-                                            String.valueOf(engine.eval(calculated_salary)),
+                                            Util.format(Double.parseDouble(String.valueOf(engine.eval(calculated_salary)))),
                                             calculated_salary,
                                             Util.findPayrollConfiguration(payrollConfigurations,"{calculated_salary}")
                                     )
@@ -425,7 +425,7 @@ public class PayrollController extends SkeletonController {
                                             se,
                                             Util.findPayrollConfigurationDescription(payrollConfigurations, "{dsmf_deduction}"),
                                             "{dsmf_deduction}",
-                                            String.valueOf(engine.eval(dsmf_deduction)),
+                                            Util.format(Double.parseDouble(String.valueOf(engine.eval(dsmf_deduction)))),
                                             dsmf_deduction,
                                             Util.findPayrollConfiguration(payrollConfigurations,"{dsmf_deduction}")
                                     )
@@ -439,7 +439,7 @@ public class PayrollController extends SkeletonController {
                                             se,
                                             Util.findPayrollConfigurationDescription(payrollConfigurations, "{membership_fee_for_trade_union}"),
                                             "{membership_fee_for_trade_union}",
-                                            String.valueOf(engine.eval(membership_fee_for_trade_union)),
+                                            Util.format(Double.parseDouble(String.valueOf(engine.eval(membership_fee_for_trade_union)))),
                                             membership_fee_for_trade_union,
                                             Util.findPayrollConfiguration(payrollConfigurations,"{membership_fee_for_trade_union}")
                                     )
@@ -452,7 +452,7 @@ public class PayrollController extends SkeletonController {
                                             se,
                                             Util.findPayrollConfigurationDescription(payrollConfigurations, "{compulsory_health_insurance}"),
                                             "{compulsory_health_insurance}",
-                                            String.valueOf(engine.eval(compulsory_health_insurance)),
+                                            Util.format(Double.parseDouble(String.valueOf(engine.eval(compulsory_health_insurance)))),
                                             compulsory_health_insurance,
                                             Util.findPayrollConfiguration(payrollConfigurations,"{compulsory_health_insurance}")
                                     )
@@ -465,7 +465,7 @@ public class PayrollController extends SkeletonController {
                                             se,
                                             Util.findPayrollConfigurationDescription(payrollConfigurations, "{unemployment_insurance}"),
                                             "{unemployment_insurance}",
-                                            String.valueOf(engine.eval(unemployment_insurance)),
+                                            Util.format(Double.parseDouble(String.valueOf(engine.eval(unemployment_insurance)))),
                                             unemployment_insurance,
                                             Util.findPayrollConfiguration(payrollConfigurations,"{unemployment_insurance}")
                                     )
@@ -485,7 +485,7 @@ public class PayrollController extends SkeletonController {
                                             se,
                                             Util.findPayrollConfigurationDescription(payrollConfigurations, "{total_amount_payable_official}"),
                                             "{total_amount_payable_official}",
-                                            String.valueOf(engine.eval(total_amount_payable_official)),
+                                            Util.format(Double.parseDouble(String.valueOf(engine.eval(total_amount_payable_official)))),
                                             total_amount_payable_official,
                                             Util.findPayrollConfiguration(payrollConfigurations,"{total_amount_payable_official}")
                                     )
@@ -510,7 +510,7 @@ public class PayrollController extends SkeletonController {
                                             se,
                                             Util.findPayrollConfigurationDescription(payrollConfigurations, "{work_experience_salary}"),
                                             "{work_experience_salary}",
-                                            String.valueOf(engine.eval(work_experience_salary)),
+                                            Util.format(Double.parseDouble(String.valueOf(engine.eval(work_experience_salary)))),
                                             work_experience_salary,
                                             Util.findPayrollConfiguration(payrollConfigurations,"{work_experience_salary}")
                                     )
@@ -523,7 +523,7 @@ public class PayrollController extends SkeletonController {
                                             se,
                                             Util.findPayrollConfigurationDescription(payrollConfigurations, "{total_salary}"),
                                             "{total_salary}",
-                                            String.valueOf(engine.eval(total_salary)),
+                                            Util.format(Double.parseDouble(String.valueOf(engine.eval(total_salary)))),
                                             total_salary,
                                             Util.findPayrollConfiguration(payrollConfigurations,"{total_salary}")
                                     )
@@ -536,7 +536,7 @@ public class PayrollController extends SkeletonController {
                                             se,
                                             Util.findPayrollConfigurationDescription(payrollConfigurations, "{total_amount_payable_non_official}"),
                                             "{total_amount_payable_non_official}",
-                                            String.valueOf(engine.eval(total_amount_payable_non_official)),
+                                            Util.format(Double.parseDouble(String.valueOf(engine.eval(total_amount_payable_non_official)))),
                                             total_amount_payable_non_official,
                                             Util.findPayrollConfiguration(payrollConfigurations,"{total_amount_payable_non_official}")
                                     )

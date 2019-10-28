@@ -15,6 +15,7 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 public class SkeletonController {
@@ -245,13 +246,16 @@ public class SkeletonController {
         if(illnessDetail!=null){
             return illnessDetail.getIllness().getIdentifier().getAttr1();
         }
-        NonWorkingDay nonWorkingDay = StaticUtils.getNonWorkingDayByNonWorkingDateAndActiveTrue(date);
-        if(nonWorkingDay!=null){
+        List<NonWorkingDay> nonWorkingDays = StaticUtils.getNonWorkingDaysByNonWorkingDateAndActiveTrue(date);
+        if(nonWorkingDays.size()>0){
+            NonWorkingDay nonWorkingDay = nonWorkingDays.get(0);
             if(nonWorkingDay.getIdentifier().contentEquals("İ")){
                 if(StaticUtils.getEmployeeRestDaysByEmployee(employee).size()==0){
                     return nonWorkingDay.getIdentifier();
                 }
             } else if(nonWorkingDay.getIdentifier().contentEquals("B")){
+                return nonWorkingDay.getIdentifier();
+            } else if(nonWorkingDay.getIdentifier().contentEquals("QİG")){
                 return nonWorkingDay.getIdentifier();
             }
         }

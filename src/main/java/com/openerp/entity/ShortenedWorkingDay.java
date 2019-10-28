@@ -25,7 +25,7 @@ public class ShortenedWorkingDay {
 
     @NotNull(message = "Boş olmamalıdır")
     @Temporal(TemporalType.DATE)
-    @Column(name = "working_date", unique = true, nullable = false)
+    @Column(name = "working_date", nullable = false)
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date workingDate;
 

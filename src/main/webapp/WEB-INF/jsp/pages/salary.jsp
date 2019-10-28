@@ -35,7 +35,7 @@
                         <div class="kt-portlet__head kt-portlet__head--lg">
                             <div class="kt-portlet__head-title" style="width: 100%">
                                 <div class="row">
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-2">
                                         <div class="form-group">
                                             <form:label path="workingHourRecord.branch">&nbsp;</form:label>
                                             <form:select  path="workingHourRecord.branch" cssClass="custom-select form-control">
@@ -66,7 +66,7 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <div class="col-sm-4 text-right">
+                                    <div class="col-sm-5 text-right">
                                         <label>&nbsp;</label>
                                         <div class="form-group">
                                             <c:set var="save" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'save')}"/>
@@ -126,7 +126,6 @@
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
                                 <thead>
                                 <tr>
-                                    <th>WHR_ID</th>
                                     <th>ID</th>
                                     <th>Ad Soyad Ata adı</th>
                                     <th>Ümumi əmək haqqı (Rəsmi hissə)</th>
@@ -139,7 +138,6 @@
                                 <tbody>
                                 <c:forEach var="t" items="${form.salaryEmployees}" varStatus="loop">
                                     <tr data="<c:out value="${utl:toJson(t)}" />">
-                                        <td><c:out value="${t.workingHourRecordEmployee.id}" /></td>
                                         <td><c:out value="${t.id}" /></td>
                                         <td><c:out value="${t.workingHourRecordEmployee.fullName}" /></td>
                                         <td>

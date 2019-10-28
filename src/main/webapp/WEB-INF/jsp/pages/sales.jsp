@@ -179,7 +179,7 @@
                                                 <div></div>
                                                 <div class="custom-file">
                                                     <input type="file" name="file" class="custom-file-input" id="file2" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-                                                    <label class="custom-file-label" for="file2">Ş.v-nin ön hissəsi</label>
+                                                    <label class="custom-file-label" for="file2">Ş.v-nin arxa hissəsi</label>
                                                 </div>
                                             </div>
                                         </div>

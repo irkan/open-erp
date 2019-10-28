@@ -220,16 +220,9 @@ public class HRController extends SkeletonController {
     public String postNonWorkingDayUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) throws Exception {
         List<NonWorkingDay> nonWorkingDays = ReadWriteExcelFile.readXLSXFileNonWorkingDays(file.getInputStream());
         for(NonWorkingDay nonWorkingDay: nonWorkingDays){
-            NonWorkingDay nwd = nonWorkingDayRepository.getNonWorkingDayByNonWorkingDateAndActiveTrue(nonWorkingDay.getNonWorkingDate());
-            if(nwd!=null && !nwd.getActive()){
-                nwd.setActive(true);
-                nonWorkingDayRepository.save(nwd);
-            } else {
-                try {
-                    nonWorkingDayRepository.save(nonWorkingDay);
-                } catch (Exception e){
-                    log.error(e);
-                }
+            List<NonWorkingDay> nwds = nonWorkingDayRepository.getNonWorkingDaysByNonWorkingDateAndActiveTrue(nonWorkingDay.getNonWorkingDate());
+            if(nwds!=null && nwds.size()==0){
+                nonWorkingDayRepository.save(nonWorkingDay);
             }
         }
         return mapPost(redirectAttributes, "/hr/non-working-day");
@@ -248,16 +241,9 @@ public class HRController extends SkeletonController {
     public String postShortenedWorkingDayUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) throws Exception {
         List<ShortenedWorkingDay> shortenedWorkingDays = ReadWriteExcelFile.readXLSXFileShortenedWorkingDays(file.getInputStream());
         for(ShortenedWorkingDay shortenedWorkingDay: shortenedWorkingDays){
-            ShortenedWorkingDay swd = shortenedWorkingDayRepository.getShortenedWorkingDayByWorkingDate(shortenedWorkingDay.getWorkingDate());
-            if(swd!=null && !swd.getActive()){
-                swd.setActive(true);
-                shortenedWorkingDayRepository.save(swd);
-            } else {
-                try {
-                    shortenedWorkingDayRepository.save(shortenedWorkingDay);
-                } catch (Exception e){
-                    log.error(e);
-                }
+            List<ShortenedWorkingDay> swds = shortenedWorkingDayRepository.getShortenedWorkingDaysByWorkingDate(shortenedWorkingDay.getWorkingDate());
+            if(swds!=null && swds.size()==0){
+                shortenedWorkingDayRepository.save(shortenedWorkingDay);
             }
         }
         return mapPost(redirectAttributes, "/hr/shortened-working-day");
