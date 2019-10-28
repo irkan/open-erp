@@ -280,48 +280,46 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!--end: Form Wizard Step 2-->
-
-                        <!--begin: Form Wizard Step 3-->
                         <div class="kt-wizard-v1__content" data-ktwizard-type="step-content">
                             <div class="kt-form__section kt-form__section--first">
                                 <div class="kt-wizard-v1__form">
-                                    <div class="form-group">
-                                        <label>Delivery Type</label>
-                                        <select name="delivery" class="form-control">
-                                            <option value="">Select a Service Type Option</option>
-                                            <option value="overnight" selected>Overnight Delivery (within 48 hours)</option>
-                                            <option value="express">Express Delivery (within 5 working days)</option>
-                                            <option value="basic">Basic Delivery (within 5 - 10 working days)</option>
-                                        </select>
+                                    <div class="row">
+                                        <div class="col-sm-8 offset-sm-2">
+                                            <form:hidden path="action" cssClass="form-control"/>
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" style="background-color: white; border-right: none;"><i class="la la-search"></i></span>
+                                                    </div>
+                                                    <form:input path="action.inventory.barcode" class="form-control" placeholder="Barkodu daxil edin..." style="border-left: none;" />
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-primary" type="button" onclick="findInventory($('input[name=\'action.inventory.barcode\']'))">İnventar axtar</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <form:label path="action.inventory.name">İnventar</form:label>
+                                                <form:input path="action.inventory.name" cssClass="form-control" readonly="true"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <form:label path="action.warehouse.name">Anbar</form:label>
+                                                <form:input path="action.warehouse.name" cssClass="form-control" readonly="true"/>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="form-group">
-                                        <label>Packaging Type</label>
-                                        <select name="packaging" class="form-control">
-                                            <option value="">Select a Packaging Type Option</option>
-                                            <option value="regular" selected>Regular Packaging</option>
-                                            <option value="oversized">Oversized Packaging</option>
-                                            <option value="fragile">Fragile Packaging</option>
-                                            <option value="frozen">Frozen Packaging</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Preferred Delivery Window</label>
-                                        <select name="preferreddelivery" class="form-control">
-                                            <option value="">Select a Preferred Delivery Option</option>
-                                            <option value="morning" selected>Morning Delivery (8:00AM - 11:00AM)</option>
-                                            <option value="afternoon">Afternoon Delivery (11:00AM - 3:00PM)</option>
-                                            <option value="evening">Evening Delivery (3:00PM - 7:00PM)</option>
-                                        </select>
+                                        <form:label path="action.inventory.description">Açıqlama</form:label>
+                                        <form:textarea path="action.inventory.description" cssClass="form-control" readonly="true"/>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                        <!--end: Form Wizard Step 3-->
-
-                        <!--begin: Form Wizard Step 4-->
                         <div class="kt-wizard-v1__content" data-ktwizard-type="step-content">
                             <div class="kt-form__section kt-form__section--first">
                                 <div class="kt-wizard-v1__form">
@@ -864,6 +862,47 @@
     jQuery(document).ready(function() {
         KTWizard1.init();
     });
+
+    function findInventory(element){
+        if($(element).val().trim().length>0){
+            swal.fire({
+                text: 'Proses davam edir...',
+                onOpen: function() {
+                    swal.showLoading();
+                    $.ajax({
+                        url: '/warehouse/inventory/action/'+$(element).val(),
+                        type: 'GET',
+                        dataType: 'json',
+                        beforeSend: function() {
+                            $("input[name='action']").val('');
+                            $("input[name='action.inventory.name']").val('');
+                            $("textarea[name='action.inventory.description']").val('');
+                            $("input[name='action.warehouse.name']").val('');
+                        },
+                        success: function(action) {
+                            console.log(action);
+                            $("input[name='action']").val(action.id);
+                            $("input[name='action.inventory.name']").val(action.inventory.name);
+                            $("textarea[name='action.inventory.description']").val(action.inventory.description);
+                            $("input[name='action.warehouse.name']").val(action.warehouse.name);
+                            swal.close();
+                        },
+                        error: function() {
+                            swal.fire({
+                                title: "Xəta baş verdi!",
+                                html: "Əlaqə saxlamağınızı xahiş edirik.",
+                                type: "error",
+                                cancelButtonText: 'Bağla',
+                                cancelButtonColor: '#c40000',
+                                cancelButtonClass: 'btn btn-danger',
+                                footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+                            });
+                        }
+                    })
+                }
+            });
+        }
+    }
 </script>
 
 

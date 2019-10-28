@@ -206,4 +206,17 @@ public class WarehouseController extends SkeletonController {
         }
         return mapPost(action, binding, redirectAttributes, "/warehouse/action/"+actn.getInventory().getId());
     }
+
+    @ResponseBody
+    @GetMapping(value = "/inventory/action/{barcode}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Action findInventory(Model model, @PathVariable("barcode") String barcode){
+        try {
+            List<Action> actions = actionRepository.getActionsByActiveTrueAndInventory_BarcodeAndEmployeeAndInventory_Active(barcode, getSessionUser().getEmployee(), true);
+            if(actions.size()>0)
+                return actions.get(0);
+        } catch (Exception e){
+            log.error(e);
+        }
+        return null;
+    }
 }

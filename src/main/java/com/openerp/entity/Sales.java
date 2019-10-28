@@ -24,4 +24,19 @@ public class Sales {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "crm_customer_id", nullable = false)
     private Customer customer;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "warehouse_action_id")
+    private Action action;
+
+    @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
+    private Boolean active = true;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_date", nullable = false)
+    private Date createdDate = new Date();
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "created_by_admin_user_id")
+    private User createdUser;
 }
