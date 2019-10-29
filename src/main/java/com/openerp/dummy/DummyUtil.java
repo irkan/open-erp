@@ -27,8 +27,8 @@ public class DummyUtil {
     public static String randomSalary(){
         DecimalFormat df = new DecimalFormat("#");
         df.setRoundingMode(RoundingMode.CEILING);
-        double leftLimit = 1300D;
-        double rightLimit = 8000D;
+        double leftLimit = 1400D;
+        double rightLimit = 6300D;
         return df.format(leftLimit + new Random().nextDouble() * (rightLimit - leftLimit)).replace(",", ".");
     }
 

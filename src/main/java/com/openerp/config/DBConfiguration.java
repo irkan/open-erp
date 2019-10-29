@@ -321,10 +321,14 @@ public class DBConfiguration {
             dictionaries.add(identifier14);
             Dictionary identifier5 = new Dictionary("Analıq Məzuniyyəti", "AM", "vacation", identifierType);
             dictionaries.add(identifier5);
+            Dictionary identifier19 = new Dictionary("Təhsil Məzuniyyəti", "TM", "vacation", identifierType);
+            dictionaries.add(identifier19);
             Dictionary identifier13 = new Dictionary("Ezamiyyət", "E", "business-trip", identifierType);
             dictionaries.add(identifier13);
             Dictionary identifier15 = new Dictionary("Xəstəlik", "X", "illness", identifierType);
             dictionaries.add(identifier15);
+            Dictionary identifier20 = new Dictionary("Hesablanmış Məzuniyyət Qalığı", "HMQ", null, identifierType);
+            dictionaries.add(identifier20);
             Dictionary identifier16 = new Dictionary("Ümumi İş Günü", "ÜİG", null, identifierType);
             dictionaries.add(identifier16);
             Dictionary identifier17 = new Dictionary("Hesablanmış İş Günü", "HİG", null, identifierType);

@@ -42,7 +42,7 @@ public class Vacation {
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date endDate;
 
-    @Pattern(regexp=".{10,25}",message="Minimum 10 maksimum 25 simvol ola bilər")
+    @Pattern(regexp=".{15,25}",message="Minimum 15 maksimum 25 simvol ola bilər")
     @Column(name = "date_range", nullable = false)
     private String dateRange;
 

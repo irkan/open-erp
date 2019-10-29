@@ -184,13 +184,20 @@
                                         </td>
                                         <c:forEach var="p" items="${t.workingHourRecordEmployeeIdentifiers}" varStatus="count">
                                             <td class="text-center kt-padding-0">
-                                                <div class="typeahead">
-                                                    <input type="hidden" name="workingHourRecordEmployees[${loop.index}].workingHourRecordEmployeeIdentifiers[${count.index}].id" value="<c:out value="${p.id}"/>"/>
-                                                    <input type="hidden" name="workingHourRecordEmployees[${loop.index}].workingHourRecordEmployeeIdentifiers[${count.index}].workingHourRecordEmployee" value="<c:out value="${t.id}"/>"/>
-                                                    <input type="hidden" name="workingHourRecordEmployees[${loop.index}].workingHourRecordEmployeeIdentifiers[${count.index}].weekDay" value="<c:out value="${p.weekDay}"/>"/>
-                                                    <input type="hidden" name="workingHourRecordEmployees[${loop.index}].workingHourRecordEmployeeIdentifiers[${count.index}].monthDay" value="<c:out value="${p.monthDay}"/>"/>
-                                                    <input type="text" class="type-ahead" name="workingHourRecordEmployees[${loop.index}].workingHourRecordEmployeeIdentifiers[${count.index}].identifier" value="<c:out value="${p.identifier}"/>"/>
-                                                </div>
+                                                <c:choose>
+                                                    <c:when test="${!form.approve}">
+                                                        <div class="typeahead">
+                                                            <input type="hidden" name="workingHourRecordEmployees[${loop.index}].workingHourRecordEmployeeIdentifiers[${count.index}].id" value="<c:out value="${p.id}"/>"/>
+                                                            <input type="hidden" name="workingHourRecordEmployees[${loop.index}].workingHourRecordEmployeeIdentifiers[${count.index}].workingHourRecordEmployee" value="<c:out value="${t.id}"/>"/>
+                                                            <input type="hidden" name="workingHourRecordEmployees[${loop.index}].workingHourRecordEmployeeIdentifiers[${count.index}].weekDay" value="<c:out value="${p.weekDay}"/>"/>
+                                                            <input type="hidden" name="workingHourRecordEmployees[${loop.index}].workingHourRecordEmployeeIdentifiers[${count.index}].monthDay" value="<c:out value="${p.monthDay}"/>"/>
+                                                            <input type="text" class="type-ahead" name="workingHourRecordEmployees[${loop.index}].workingHourRecordEmployeeIdentifiers[${count.index}].identifier" value="<c:out value="${p.identifier}"/>"/>
+                                                        </div>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <label style="padding-top: 11px; font-weight: bold; width: 50px; height: 34px;"><c:out value="${p.identifier}"/></label>
+                                                    </c:otherwise>
+                                                </c:choose>
                                             </td>
                                         </c:forEach>
                                         <c:forEach var="p" items="${t.workingHourRecordEmployeeDayCalculations}" varStatus="count">
@@ -233,45 +240,6 @@
     </div>
 </div>
 
-<div class="modal fade" id="modal-operation" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <%--<form:form modelAttribute="form" id="form" method="post" action="/admin/dictionary-type"
-                           cssClass="form-group">
-                    <form:input type="hidden" name="id" path="id"/>
-                    <form:input type="hidden" name="active" path="active" value="1"/>
-                    <div class="form-group">
-                        <form:label path="name">Ad</form:label>
-                        <form:input path="name" cssClass="form-control" placeholder="Adı daxil edin"/>
-                        <form:errors path="name" cssClass="alert-danger control-label"/>
-                    </div>
-                    <div class="form-group">
-                        <form:label path="attr1">Atribut#1</form:label>
-                        <form:input path="attr1" cssClass="form-control" placeholder="Atributu daxil edin"/>
-                        <form:errors path="attr1" cssClass="alert-danger"/>
-                    </div>
-                    <div class="form-group">
-                        <form:label path="attr2">Atribut#2</form:label>
-                        <form:input path="attr2" cssClass="form-control" placeholder="Atributu daxil edin"/>
-                        <form:errors path="attr2" cssClass="alert alert-danger"/>
-                    </div>
-                </form:form>--%>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="submit($('#form'));">Yadda saxla</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script src="<c:url value="/assets/vendors/general/typeahead.js/dist/typeahead.bundle.js" />" type="text/javascript"></script>
 <script src="<c:url value="/assets/vendors/general/typeahead.js/dist/typeahead.jquery.js" />" type="text/javascript"></script>
 
@@ -284,7 +252,6 @@
             </c:forEach>
         ];
 
-        // Private functions
         var demo1 = function() {
             var substringMatcher = function(strs) {
                 return function findMatches(q, cb) {
@@ -296,7 +263,6 @@
                             matches.push(str);
                         }
                     });
-
                     cb(matches);
                 };
             };
@@ -328,12 +294,8 @@
                 autoWidth: false,
                 searching: false,
                 columnDefs: [
-                    {orderable: false, targets: 0}/*,
-                    {class: 'col-2', targets: 1},
-                    {width: '400px', class: 'col-2', targets: 2},
-                    {orderable: false, targets: 3}*/
+                    {orderable: false, targets: 0}
                 ],
-                /*aoColumns : [ { "sClass": "my_class" }],*/
                 fixedColumns:   {
                     leftColumns: 2
                 },

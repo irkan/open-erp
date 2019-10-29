@@ -101,12 +101,16 @@ public class PayrollController extends SkeletonController {
                 redirectAttributes.addFlashAttribute(Constants.DAYS_IN_MONTH, daysInMonth);
                 whr = workingHourRecordRepository.getWorkingHourRecordByActiveTrueAndMonthAndYearAndBranch_Id(workingHourRecord.getMonth(), workingHourRecord.getYear(), workingHourRecord.getBranch().getId());
                 if(whr ==null){
+                    WorkingHourRecord owhr = workingHourRecordRepository.getWorkingHourRecordByActiveTrueAndMonthAndYearAndBranch_Id(workingHourRecord.getMonth()-1, workingHourRecord.getYear(), workingHourRecord.getBranch().getId());
                     workingHourRecord.setId(null);
                     workingHourRecordRepository.save(workingHourRecord);
                     List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization_Id(workingHourRecord.getBranch().getId());
                     List<WorkingHourRecordEmployee> workingHourRecordEmployees = new ArrayList<>();
                     List<Dictionary> identifiers = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("identifier");
                     for(Employee employee: employees){
+                        List<WorkingHourRecordEmployeeDayCalculation> owhedcs = workingHourRecordEmployeeDayCalculationRepository.getWorkingHourRecordEmployeeDayCalculationsByKeyAndWorkingHourRecordEmployee_EmployeeOrderByWorkingHourRecordEmployeeDesc("M", employee);
+                        double balanceVacationDays = owhedcs.size()>0?owhedcs.get(0).getValue():0;
+
                         WorkingHourRecordEmployee workingHourRecordEmployee = new WorkingHourRecordEmployee(workingHourRecord, employee, employee.getPerson().getFullName(), employee.getPosition().getName(), employee.getOrganization().getName());
                         workingHourRecordEmployeeRepository.save(workingHourRecordEmployee);
                         List<WorkingHourRecordEmployeeIdentifier> workingHourRecordEmployeeIdentifiers = new ArrayList<>();
@@ -118,7 +122,7 @@ public class PayrollController extends SkeletonController {
                         workingHourRecordEmployee.setWorkingHourRecordEmployeeIdentifiers(workingHourRecordEmployeeIdentifiers);
                         workingHourRecordEmployeeIdentifierRepository.saveAll(workingHourRecordEmployeeIdentifiers);
                         List<WorkingHourRecordEmployeeDayCalculation> workingHourRecordEmployeeDayCalculations = new ArrayList<>();
-                        for(WorkingHourRecordEmployeeDayCalculation whredc: Util.calculateWorkingHourRecordEmployeeDay(workingHourRecordEmployee, identifiers)){
+                        for(WorkingHourRecordEmployeeDayCalculation whredc: Util.calculateWorkingHourRecordEmployeeDay(workingHourRecordEmployee, identifiers, balanceVacationDays)){
                             workingHourRecordEmployeeDayCalculations.add(whredc);
                         }
                         workingHourRecordEmployeeDayCalculationRepository.saveAll(workingHourRecordEmployeeDayCalculations);
@@ -162,14 +166,17 @@ public class PayrollController extends SkeletonController {
             YearMonth yearMonthObject = YearMonth.of(workingHourRecord.getYear(), workingHourRecord.getMonth());
             int daysInMonth = yearMonthObject.lengthOfMonth();
             redirectAttributes.addFlashAttribute(Constants.DAYS_IN_MONTH, daysInMonth);
+            WorkingHourRecord owhr = workingHourRecordRepository.getWorkingHourRecordByActiveTrueAndMonthAndYearAndBranch_Id(workingHourRecord.getMonth()-1, workingHourRecord.getYear(), workingHourRecord.getBranch().getId());
             List<Dictionary> identifiers = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("identifier");
             for(WorkingHourRecordEmployee whre: workingHourRecord.getWorkingHourRecordEmployees()){
+                List<WorkingHourRecordEmployeeDayCalculation> owhedcs = workingHourRecordEmployeeDayCalculationRepository.getWorkingHourRecordEmployeeDayCalculationsByKeyAndWorkingHourRecordEmployee_EmployeeOrderByWorkingHourRecordEmployeeDesc("M", whre.getEmployee());
+                double balanceVacationDays = owhedcs.size()>0?owhedcs.get(0).getValue():0;
                 for(WorkingHourRecordEmployeeIdentifier whrei: whre.getWorkingHourRecordEmployeeIdentifiers()){
                     workingHourRecordEmployeeIdentifierRepository.save(whrei);
                 }
                 List<WorkingHourRecordEmployeeDayCalculation> workingHourRecordEmployeeDayCalculations = workingHourRecordEmployeeDayCalculationRepository.getWorkingHourRecordEmployeeDayCalculationsByWorkingHourRecordEmployee(whre);
                 whre.setWorkingHourRecordEmployeeDayCalculations(workingHourRecordEmployeeDayCalculations);
-                for(WorkingHourRecordEmployeeDayCalculation whredc: Util.calculateWorkingHourRecordEmployeeDay(whre, identifiers)){
+                for(WorkingHourRecordEmployeeDayCalculation whredc: Util.calculateWorkingHourRecordEmployeeDay(whre, identifiers, balanceVacationDays)){
                     workingHourRecordEmployeeDayCalculationRepository.save(whredc);
                 }
             }
@@ -192,6 +199,8 @@ public class PayrollController extends SkeletonController {
             List<Dictionary> identifiers = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("identifier");
             for(WorkingHourRecordEmployee whre: workingHourRecord.getWorkingHourRecordEmployees()){
                 List<WorkingHourRecordEmployeeIdentifier> whreis = new ArrayList<>();
+                List<WorkingHourRecordEmployeeDayCalculation> owhedcs = workingHourRecordEmployeeDayCalculationRepository.getWorkingHourRecordEmployeeDayCalculationsByKeyAndWorkingHourRecordEmployee_EmployeeOrderByWorkingHourRecordEmployeeDesc("M", whre.getEmployee());
+                double balanceVacationDays = owhedcs.size()>0?owhedcs.get(0).getValue():0;
                 for(WorkingHourRecordEmployeeIdentifier whrei: whre.getWorkingHourRecordEmployeeIdentifiers()){
                     String date = whrei.getMonthDay()>9?String.valueOf(whrei.getMonthDay()):("0"+whrei.getMonthDay());
                             date += ".";
@@ -206,7 +215,7 @@ public class PayrollController extends SkeletonController {
                 whre.setWorkingHourRecordEmployeeIdentifiers(whreis);
 
                 List<WorkingHourRecordEmployeeDayCalculation> workingHourRecordEmployeeDayCalculations = new ArrayList<>();
-                for(WorkingHourRecordEmployeeDayCalculation whredc: Util.calculateWorkingHourRecordEmployeeDay(whre, identifiers)){
+                for(WorkingHourRecordEmployeeDayCalculation whredc: Util.calculateWorkingHourRecordEmployeeDay(whre, identifiers, balanceVacationDays)){
                     workingHourRecordEmployeeDayCalculations.add(whredc);
                 }
                 whre.setWorkingHourRecordEmployeeDayCalculations(workingHourRecordEmployeeDayCalculations);

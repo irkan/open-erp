@@ -230,6 +230,9 @@ public class SkeletonController {
     }
 
     public static String identify(Employee employee, Date date){
+        if(employee.getContractStartDate().getTime()>date.getTime()){
+            return "";
+        }
         EmployeeRestDay employeeRestDay = StaticUtils.getEmployeeRestDayByEmployeeAndDay(employee, date);
         if(employeeRestDay!=null){
             return "İ";

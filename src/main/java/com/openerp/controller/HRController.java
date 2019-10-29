@@ -251,13 +251,16 @@ public class HRController extends SkeletonController {
 
     @PostMapping(value = "/vacation")
     public String postVacation(@ModelAttribute(Constants.FORM) @Validated Vacation vacation, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
-        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
-            String range = vacation.getDateRange();
-            if(range.length()>15){
-                String rangeDates[] = range.split("-");
-                vacation.setStartDate(DateUtility.getUtilDate(rangeDates[0].trim()));
-                vacation.setEndDate(DateUtility.getUtilDate(rangeDates[1].trim()));
+            String rangeDates[] = vacation.getDateRange().split("-");
+            vacation.setStartDate(DateUtility.getUtilDate(rangeDates[0].trim()));
+            vacation.setEndDate(DateUtility.getUtilDate(rangeDates[1].trim()));
+            if((new Date()).getTime() - vacation.getStartDate().getTime() < 15768000000l  && (vacation.getIdentifier().getAttr1().equalsIgnoreCase("M"))){
+                FieldError fieldError = new FieldError("dateRange", "dateRange", "İşə başlama tarixindən 6 ayı keçməmişdir!");
+                binding.addError(fieldError);
+            }
+
+            if(!binding.hasErrors()){
                 vacationRepository.save(vacation);
 
                 if(vacation.getId()!=null && vacation.getStartDate()!=null && vacation.getEndDate()!=null){
@@ -268,9 +271,12 @@ public class HRController extends SkeletonController {
                     end.setTime(vacation.getEndDate());
                     end.add(Calendar.DATE, 1);
 
+                    List<VacationDetail> vacationDetails = new ArrayList<>();
                     for (Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
-                        vacationDetailRepository.save(new VacationDetail(vacation.getIdentifier().getAttr1(), date, vacation, vacation.getEmployee()));
+                        vacationDetails.add(new VacationDetail(vacation.getIdentifier().getAttr1(), date, vacation, vacation.getEmployee()));
                     }
+                    vacationDetailRepository.saveAll(vacationDetails);
+
 
                     String description = vacation.getIdentifier().getName() + " " + DateUtility.getFormattedDate(vacation.getStartDate()) + " - " + DateUtility.getFormattedDate(vacation.getEndDate());
                     Advance advance = new Advance(vacation.getIdentifier(), vacation.getEmployee(), description, vacation.getStartDate(), 473.50, false);
@@ -278,6 +284,7 @@ public class HRController extends SkeletonController {
                 }
             }
         }
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         return mapPost(vacation, binding, redirectAttributes);
     }
 

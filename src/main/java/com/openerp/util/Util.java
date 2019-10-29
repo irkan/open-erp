@@ -218,7 +218,7 @@ public class Util {
         return df.format(year).replace(",", ".");
     }
 
-    public static List<WorkingHourRecordEmployeeDayCalculation> calculateWorkingHourRecordEmployeeDay(WorkingHourRecordEmployee workingHourRecordEmployee, List<Dictionary> identifiers){
+    public static List<WorkingHourRecordEmployeeDayCalculation> calculateWorkingHourRecordEmployeeDay(WorkingHourRecordEmployee workingHourRecordEmployee, List<Dictionary> identifiers, double balanceVacationDays){
         List<WorkingHourRecordEmployeeDayCalculation> whredcs = new ArrayList<>();
         List<WorkingHourRecordEmployeeDayCalculation> whredcsCurrent = workingHourRecordEmployee.getWorkingHourRecordEmployeeDayCalculations();
         List<WorkingHourRecordEmployeeIdentifier> whreisCurrent = workingHourRecordEmployee.getWorkingHourRecordEmployeeIdentifiers();
@@ -231,6 +231,20 @@ public class Util {
                 whredc.setValue(Util.calculateIdentifier(workingHourRecordEmployee, identifier.getAttr1()));
                 whredc.setIdentifier(identifier);
                 whredcs.add(whredc);
+            }
+        }
+        for(Dictionary identifier: identifiers){
+            if(identifier.getAttr1().contentEquals("HMQ")){
+                int vacationDays = findEmployeeVacationCount(workingHourRecordEmployee.getEmployee());
+                int currentVacationCount = Util.calculateIdentifier(workingHourRecordEmployee, "M");
+                /*WorkingHourRecordEmployeeDayCalculation whredc = findWorkingHourRecordEmployeeDayCalculation(whredcsCurrent, identifier.getAttr1());
+
+                whredc.setWorkingHourRecordEmployee(workingHourRecordEmployee);
+                whredc.setDescription(identifier.getName());
+                whredc.setKey(identifier.getAttr1());
+                whredc.setValue(Util.calculateUIG(whreisCurrent, whredcs));
+                whredc.setIdentifier(identifier);
+                whredcs.add(whredc);*/
             }
         }
         for(Dictionary identifier: identifiers){
@@ -256,6 +270,24 @@ public class Util {
             }
         }
         return whredcs;
+    }
+
+    private static int findEmployeeVacationCount(Employee employee){
+        int mainVacationDay=0;
+        int additionalVacationDay = 0;
+        for(EmployeePayrollDetail epd: employee.getEmployeePayrollDetails()){
+            if(epd.getKey().equalsIgnoreCase("{main_vacation_days}")){
+                if(epd.getValue().trim().length()>0){
+                    mainVacationDay = Integer.parseInt(epd.getValue());
+                }
+            }
+            if(epd.getKey().equalsIgnoreCase("{additional_vacation_days}")){
+                if(epd.getValue().trim().length()>0){
+                    additionalVacationDay = Integer.parseInt(epd.getValue());
+                }
+            }
+        }
+        return mainVacationDay+additionalVacationDay;
     }
 
     public static int calculateUIG(List<WorkingHourRecordEmployeeIdentifier> whreis, List<WorkingHourRecordEmployeeDayCalculation> whredcs){
