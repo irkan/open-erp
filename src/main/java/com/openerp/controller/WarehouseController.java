@@ -51,7 +51,7 @@ public class WarehouseController extends SkeletonController {
             model.addAttribute(Constants.SUPPLIERS, supplierRepository.getSuppliersByActiveTrue());
             model.addAttribute(Constants.INVENTORY_GROUPS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("inventory-group"));
             if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new Inventory(new Action(dictionaryRepository.getDictionaryByAttr1AndActiveTrue("buy"),
+                model.addAttribute(Constants.FORM, new Inventory(new Action(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("buy", "action"),
                         Util.findWarehouse(organizationRepository.getOrganizationsByActiveTrueAndOrganization(getSessionUser().getEmployee().getOrganization())))));
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.ACTION)) {
@@ -90,6 +90,12 @@ public class WarehouseController extends SkeletonController {
             model.addAttribute(Constants.LIST, supplierRepository.getSuppliersByActiveTrue());
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Supplier());
+            }
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.CONSOLIDATE)) {
+            List<Action> actions = actionRepository.getActionsByActiveTrueAndInventory_ActiveAndEmployee_Id(true, getSessionUser().getEmployee().getId());
+            model.addAttribute(Constants.LIST, actions);
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new Action());
             }
         }
 
@@ -141,7 +147,7 @@ public class WarehouseController extends SkeletonController {
                 actn.setAmount(actn.getAmount()-action.getAmount());
                 actionRepository.save(actn);
 
-                Action sendAction = new Action(dictionaryRepository.getDictionaryByAttr1AndActiveTrue("send"),
+                Action sendAction = new Action(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("send", "action"),
                         action.getWarehouse(),
                         action.getAmount(),
                         action.getInventory(),
@@ -165,15 +171,17 @@ public class WarehouseController extends SkeletonController {
                 redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, response);
             }
             if(response==null){
-                String description = action.getAction().getName()+", "+action.getSupplier().getName()+" -> "+action.getWarehouse().getName()+", "+action.getInventory().getName()+", Say: " + action.getAmount() + " ədəd";
-                Organization organization = organizationRepository.getOrganizationByIdAndActiveTrue(action.getWarehouse().getId());
-                Transaction transaction = new Transaction(Util.getUserBranch(organization), action.getInventory(), action.getAction(), description, false, null);
-                Financing financing = financingRepository.getFinancingByActiveTrueAndInventory(action.getInventory());
-                transaction.setAmount(action.getAmount());
-                transaction.setPrice(financing.getPrice());
-                transaction.setCurrency(financing.getCurrency());
-                transaction.setRate(1d);
-                transactionRepository.save(transaction);
+                if(action.getAction().getAttr1().equalsIgnoreCase("send")){
+                    String description = action.getAction().getName()+", "+action.getSupplier().getName()+" -> "+action.getWarehouse().getName()+", "+action.getInventory().getName()+", Say: " + action.getAmount() + " ədəd";
+                    Organization organization = organizationRepository.getOrganizationByIdAndActiveTrue(action.getWarehouse().getId());
+                    Transaction transaction = new Transaction(Util.getUserBranch(organization), action.getInventory(), action.getAction(), description, false, null);
+                    Financing financing = financingRepository.getFinancingByActiveTrueAndInventory(action.getInventory());
+                    transaction.setAmount(action.getAmount());
+                    transaction.setPrice(financing.getPrice());
+                    transaction.setCurrency(financing.getCurrency());
+                    transaction.setRate(1d);
+                    transactionRepository.save(transaction);
+                }
                 action.setApprove(!action.getApprove());
                 action.setApproveDate(new Date());
                 actionRepository.save(action);
@@ -197,7 +205,7 @@ public class WarehouseController extends SkeletonController {
         if(!binding.hasErrors()) {
             action.setId(null);
             action.setInventory(actn.getInventory());
-            action.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrue("consolidate"));
+            action.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("consolidate", "action"));
             action.setSupplier(actn.getSupplier());
             action.setWarehouse(actn.getWarehouse());
             actionRepository.save(action);
@@ -205,6 +213,52 @@ public class WarehouseController extends SkeletonController {
             actionRepository.save(actn);
         }
         return mapPost(action, binding, redirectAttributes, "/warehouse/action/"+actn.getInventory().getId());
+    }
+
+    @PostMapping(value = "/action/return")
+    public String postActionReturn(@ModelAttribute(Constants.FORM) @Validated Action action, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        Action actn = actionRepository.getActionById(action.getId());
+        if(actn.getAmount()-action.getAmount()<0){
+            FieldError fieldError = new FieldError("amount", "amount", "Maksimum "+ actn.getAmount() + " ədəd qaytara bilərsiniz!");
+            binding.addError(fieldError);
+        }
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()) {
+            action.setId(null);
+            action.setInventory(actn.getInventory());
+            action.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("return", "action"));
+            action.setSupplier(actn.getSupplier());
+            action.setWarehouse(actn.getWarehouse());
+            action.setEmployee(actn.getEmployee());
+            action.setApprove(false);
+            actionRepository.save(action);
+            actn.setAmount(actn.getAmount() - action.getAmount());
+            actionRepository.save(actn);
+        }
+        return mapPost(action, binding, redirectAttributes, "/warehouse/action/"+actn.getInventory().getId());
+    }
+
+    @PostMapping(value = "/consolidate/return")
+    public String postConsolidateReturn(@ModelAttribute(Constants.FORM) @Validated Action action, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        Action actn = actionRepository.getActionById(action.getId());
+        if(actn.getAmount()-action.getAmount()<0){
+            FieldError fieldError = new FieldError("amount", "amount", "Maksimum "+ actn.getAmount() + " ədəd qaytara bilərsiniz!");
+            binding.addError(fieldError);
+        }
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()) {
+            action.setId(null);
+            action.setInventory(actn.getInventory());
+            action.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("return", "action"));
+            action.setSupplier(actn.getSupplier());
+            action.setWarehouse(actn.getWarehouse());
+            action.setEmployee(actn.getEmployee());
+            action.setApprove(false);
+            actionRepository.save(action);
+            actn.setAmount(actn.getAmount() - action.getAmount());
+            actionRepository.save(actn);
+        }
+        return mapPost(action, binding, redirectAttributes, "/warehouse/consolidate");
     }
 
     @ResponseBody

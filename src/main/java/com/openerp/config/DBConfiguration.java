@@ -386,6 +386,8 @@ public class DBConfiguration {
             modules.add(warehouse);
             Module inventory = new Module("İnventar", "İnventar", "inventory", "flaticon-tool", warehouse);
             modules.add(inventory);
+            Module consolidate = new Module("Təhkim edilənlər", "Təhkim edilənlər", "consolidate", "flaticon2-medical-records", warehouse);
+            modules.add(consolidate);
             Module action = new Module("Hərəkət", "Hərəkət", "action", "flaticon2-delivery-truck", inventory);
             modules.add(action);
             Module supplier = new Module("Tədarükçü", "Tədarükçü", "supplier", "flaticon-network", warehouse);
@@ -468,8 +470,10 @@ public class DBConfiguration {
             operations.add(calculate);
             Operation transfer = new Operation("Göndərmə", "transfer", "flaticon-reply");
             operations.add(transfer);
-            Operation consolidate = new Operation("Təhkim edilmə", "consolidate", "la la-user");
-            operations.add(consolidate);
+            Operation consolidateOperation = new Operation("Təhkim edilmə", "consolidate", "la la-user");
+            operations.add(consolidateOperation);
+            Operation returnOperation = new Operation("Qaytarılma", "return", "flaticon2-fast-back");
+            operations.add(returnOperation);
             Operation detail = new Operation("Detal", "detail", "la la-external-link");
             operations.add(detail);
 
@@ -728,8 +732,13 @@ public class DBConfiguration {
             ModuleOperation transferModuleOperation1 = new ModuleOperation(action, transfer, null);
             moduleOperations.add(transferModuleOperation1);
 
-            ModuleOperation consolidateModuleOperation1 = new ModuleOperation(action, consolidate, null);
+            ModuleOperation consolidateModuleOperation1 = new ModuleOperation(action, consolidateOperation, null);
             moduleOperations.add(consolidateModuleOperation1);
+
+            ModuleOperation returnModuleOperation1 = new ModuleOperation(action, returnOperation, null);
+            moduleOperations.add(returnModuleOperation1);
+            ModuleOperation returnModuleOperation2 = new ModuleOperation(consolidate, returnOperation, null);
+            moduleOperations.add(returnModuleOperation2);
 
             ModuleOperation payrollModuleOperation1 = new ModuleOperation(employee, payrollOperation, null);
             moduleOperations.add(payrollModuleOperation1);
@@ -947,6 +956,9 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, transferModuleOperation1));
 
             userModuleOperations.add(new UserModuleOperation(user, consolidateModuleOperation1));
+
+            userModuleOperations.add(new UserModuleOperation(user, returnModuleOperation1));
+            userModuleOperations.add(new UserModuleOperation(user, returnModuleOperation2));
 
             userModuleOperations.add(new UserModuleOperation(user, payrollModuleOperation1));
 

@@ -105,12 +105,12 @@
 			<artifactId>docx4j</artifactId>
 			<version>6.1.2</version>
 		</dependency>
-		<dependency>
+		<!--<dependency>
 			<groupId>com.googlecode.jaxb-namespaceprefixmapper-interfaces</groupId>
 			<artifactId>JAXBNamespacePrefixMapper</artifactId>
 			<version>2.2.4</version>
 			<scope>runtime</scope>
-		</dependency>
+		</dependency>-->
 	</dependencies>
 
 	<build>

@@ -694,33 +694,28 @@
     });
 
     var KTWizard1 = function () {
-        // Base elements
         var wizardEl;
         var formEl;
         var validator;
         var wizard;
 
-        // Private functions
         var initWizard = function () {
-            // Initialize form wizard
             wizard = new KTWizard('kt_wizard_v1', {
                 startStep: 1
             });
 
-            // Validation before going to next page
             wizard.on('beforeNext', function(wizardObj) {
                 if (validator.form() !== true) {
-                    wizardObj.stop();  // don't go to the next step
+                    wizardObj.stop();
                 }
             });
 
             wizard.on('beforePrev', function(wizardObj) {
                 if (validator.form() !== true) {
-                    wizardObj.stop();  // don't go to the next step
+                    wizardObj.stop();
                 }
             });
 
-            // Change event
             wizard.on('change', function(wizard) {
                 setTimeout(function() {
                     KTUtil.scrollTop();
@@ -730,12 +725,8 @@
 
         var initValidation = function() {
             validator = formEl.validate({
-                // Validate only visible fields
                 ignore: ":hidden",
-
-                // Validation rules
                 rules: {
-                    //= Step 1
                     address1: {
                         required: true
                     },
@@ -752,7 +743,6 @@
                         required: true
                     },
 
-                    //= Step 2
                     package: {
                         required: true
                     },
@@ -769,7 +759,6 @@
                         required: true
                     },
 
-                    //= Step 3
                     delivery: {
                         required: true
                     },
@@ -780,7 +769,6 @@
                         required: true
                     },
 
-                    //= Step 4
                     locaddress1: {
                         required: true
                     },
@@ -797,8 +785,6 @@
                         required: true
                     },
                 },
-
-                // Display error
                 invalidHandler: function(event, validator) {
                     KTUtil.scrollTop();
 
@@ -809,8 +795,6 @@
                         "confirmButtonClass": "btn btn-secondary"
                     });
                 },
-
-                // Submit valid form
                 submitHandler: function (form) {
 
                 }
@@ -824,16 +808,10 @@
                 e.preventDefault();
 
                 if (validator.form()) {
-                    // See: src\js\framework\base\app.js
                     KTApp.progress(btn);
-                    //KTApp.block(formEl);
-
-                    // See: http://malsup.com/jquery/form/#ajaxSubmit
                     formEl.ajaxSubmit({
                         success: function() {
                             KTApp.unprogress(btn);
-                            //KTApp.unblock(formEl);
-
                             swal.fire({
                                 "title": "",
                                 "text": "The application has been successfully submitted!",
@@ -847,11 +825,9 @@
         }
 
         return {
-            // public functions
             init: function() {
                 wizardEl = KTUtil.get('kt_wizard_v1');
                 formEl = $('#kt_form');
-
                 initWizard();
                 initValidation();
                 initSubmit();
