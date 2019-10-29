@@ -40,7 +40,7 @@ public class Docx4j {
         docx4j.writeDocxToStream(template, filePath+"Hello2.docx");
     }
 
-    public static File generateDocument(Resource resource, String data, String export) throws IOException, Docx4JException {
+    public static File generateDocument(Resource resource, String data, String exportPath) throws IOException, Docx4JException {
         String filePath = "C:\\Users\\i.ahmadov\\Downloads\\";
         String file = "mezun_emri.docx";
 

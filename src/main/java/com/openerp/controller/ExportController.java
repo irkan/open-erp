@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,18 +23,19 @@ public class ExportController extends SkeletonController {
     @Autowired
     ResourceLoader resourceLoader;
 
-    @RequestMapping(value = "/vacation/order", method = RequestMethod.GET)
-    public ResponseEntity<Resource> download(String param) throws IOException, Docx4JException {
+    @RequestMapping(value = "/document/{type}/{page}/{id}", method = RequestMethod.GET)
+    public ResponseEntity<Resource> download(@PathVariable("type") String type, @PathVariable("page") String page, @PathVariable("id") String id) throws IOException, Docx4JException {
+        Resource resource = resourceLoader.getResource("classpath:/template/"+type+"-"+page+".docx");
 
-        File file = Docx4j.generateDocument(resourceLoader.getResource("classpath:/template/vacation-order.docx"),
+        File file = Docx4j.generateDocument(resource,
                 "test dataaaaaaaaaaaa", "");
 
-        InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+        InputStreamResource resourceIS = new InputStreamResource(new FileInputStream(file));
 
         return ResponseEntity.ok()
-                //.headers(headers)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + page + "-" + file.getName())
                 .contentLength(file.length())
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
-                .body(resource);
+                .body(resourceIS);
     }
 }
