@@ -41,6 +41,10 @@ public class Contact {
     @JoinColumn(name = "admin_dictionary_city_id")
     private Dictionary city;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "admin_dictionary_living_city_id")
+    private Dictionary livingCity;
+
     public Contact(String mobilePhone, String homePhone, String email, String address, Dictionary city) {
         this.mobilePhone = mobilePhone;
         this.homePhone = homePhone;

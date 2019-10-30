@@ -114,6 +114,8 @@ public class DBConfiguration {
             types.add(identifierType);
             DictionaryType weekDay = new DictionaryType("Həftənin Günü", "week-day", null);
             types.add(weekDay);
+            DictionaryType salePriceType = new DictionaryType("Satış qiyməti", "sale-price", null);
+            types.add(salePriceType);
 
             dictionaryTypeRepository.saveAll(types);
 
@@ -347,6 +349,12 @@ public class DBConfiguration {
             dictionaries.add(weekDay4);
             Dictionary weekDay5 = new Dictionary("Cümə", "c", "5", weekDay);
             dictionaries.add(weekDay5);
+            Dictionary salePrice1 = new Dictionary("1499 AZN", "1499", null, salePriceType);
+            dictionaries.add(salePrice1);
+            Dictionary salePrice2 = new Dictionary("1599 AZN", "1599", null, salePriceType);
+            dictionaries.add(salePrice2);
+            Dictionary salePrice3 = new Dictionary("1699 AZN", "1699", null, salePriceType);
+            dictionaries.add(salePrice3);
 
             dictionaryRepository.saveAll(dictionaries);
 

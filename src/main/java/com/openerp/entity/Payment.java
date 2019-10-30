@@ -3,17 +3,18 @@ package com.openerp.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 @Entity
-@Table(name = "sale_sales")
+@Table(name = "sale_payment")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Sales {
+public class Payment {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO, generator = "sale_sequence")
@@ -21,20 +22,23 @@ public class Sales {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "crm_customer_id", nullable = false)
-    private Customer customer;
+    @DecimalMin(value = "0", message = "Minimum 0 olmalıdır")
+    @Column(name = "price", nullable = false, columnDefinition="Decimal(10,2) default 0")
+    private double price=0d;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "warehouse_action_id")
-    private Action action;
+    @Pattern(regexp=".{0,10}", message="Maksimum 10 simvol ola bilər")
+    @Column(name = "discount")
+    private String discount;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "sale_payment_id", nullable = false)
-    private Payment payment;
+    @Pattern(regexp=".{0,250}", message="Maksimum 250 simvol ola bilər")
+    @Column(name = "description")
+    private String description;
 
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;
+
+    @Column(name = "is_cash", nullable = false, columnDefinition="boolean default false")
+    private Boolean cash = false;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_date", nullable = false)
