@@ -718,8 +718,6 @@ public class DBConfiguration {
 
             ModuleOperation saveModuleOperation1 = new ModuleOperation(workingHourRecord, save, null);
             moduleOperations.add(saveModuleOperation1);
-            ModuleOperation saveModuleOperation2 = new ModuleOperation(salary, save, null);
-            moduleOperations.add(saveModuleOperation2);
 
             ModuleOperation cancelModuleOperation1 = new ModuleOperation(workingHourRecord, cancel, null);
             moduleOperations.add(cancelModuleOperation1);
@@ -946,7 +944,6 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, searchModuleOperation1));
 
             userModuleOperations.add(new UserModuleOperation(user, saveModuleOperation1));
-            userModuleOperations.add(new UserModuleOperation(user, saveModuleOperation2));
 
             userModuleOperations.add(new UserModuleOperation(user, cancelModuleOperation1));
 
@@ -1009,18 +1006,18 @@ public class DBConfiguration {
             accountRepository.saveAll(accounts);
 
             List<PayrollConfiguration> payrollConfigurations = new ArrayList<>();
-            payrollConfigurations.add(new PayrollConfiguration(formulaType1, "Minimal əmək haqqı", "{minimal_salary}=250", "Azərbaycan Respublikasında müəyyənləşdirilmiş minimal əmək haqqı"));
+            payrollConfigurations.add(new PayrollConfiguration(formulaType1, "Minimal əmək haqqı", "{minimal_salary}=200", "Azərbaycan Respublikasında müəyyənləşdirilmiş minimal əmək haqqı"));
             payrollConfigurations.add(new PayrollConfiguration(formulaType1,"Ümumi iş günlərinin sayı", "{total_working_days}={uig}", "Ümumi iş günlərinin sayı"));
             payrollConfigurations.add(new PayrollConfiguration(formulaType1,"Hesablanmış iş günlərinin sayı", "{calculated_working_days}={hig}", "Hesablanmış iş günlərinin sayı"));
             payrollConfigurations.add(new PayrollConfiguration(formulaType1,"Hesablanmış əmək haqqı (Rəsmi hissə)", "{calculated_gross_salary}={gross_salary}*{calculated_working_days}/{total_working_days}", "Hesablanmış ümumi əmək haqqı = ümumi əmək haqqı * hesablanmış iş günlərinin sayı / ümumi iş günlərinin sayı"));
             payrollConfigurations.add(new PayrollConfiguration(formulaType1,"Hesablanmış əmək haqqı (Qeyri rəsmi hissə)", "{calculated_salary}={salary}*{calculated_working_days}/{total_working_days}", "Ümumi əmək haqqı = əmək haqqı * hesablanmış iş günlərinin sayı / ümumi iş günlərinin sayı"));
-            payrollConfigurations.add(new PayrollConfiguration(formulaType1,"Vergiyə cəlb olunan məbləğ", "{tax_amount_involved}={gross_salary}-{allowance}", "Vergiyə cəlb olunan məbləğ = Hesablanan aylıq əmək haqqı - Güzəşt"));
+            payrollConfigurations.add(new PayrollConfiguration(formulaType1,"Vergiyə cəlb olunan məbləğ", "{tax_amount_involved}={calculated_gross_salary}-{allowance}", "Vergiyə cəlb olunan məbləğ = Hesablanan aylıq əmək haqqı - Güzəşt"));
             payrollConfigurations.add(new PayrollConfiguration(formulaType1,"Gəlir vergisi", "{tax_income}=({tax_amount_involved})>8000?({tax_amount_involved}-8000)*14%:0", "Gəlir vergisi: Vergiyə cəlb olunan məbləğ 8 000 manatadək olduqda: 0; Vergiyə cəlb olunan məbləğ 8 000 manatdan çox olduqda: Vergiyə cəlb olunan məbləğ *14%"));
-            payrollConfigurations.add(new PayrollConfiguration(formulaType1,"DSMF ayırmaları", "{dsmf_deduction}={gross_salary}>{minimal_salary}?{minimal_salary}*3%+({gross_salary}-{minimal_salary})*10%:{gross_salary}*3%", "DSMF ayırmaları: Əmək haqqı 200 manatadək olduqda: Hesablanan aylıq əmək haqqı * 3%; Əmək haqqı 200 manatdan çox olduqda: 6 + (Hesablanan aylıq əmək haqqı-200) * 10%;"));
-            payrollConfigurations.add(new PayrollConfiguration(formulaType1,"İşsizlikdən sığorta haqqı", "{unemployment_insurance}={gross_salary}*0.5%", "İşsizlikdən sığorta haqqı = Hesablanan aylıq əmək haqqı * 0.5%"));
-            payrollConfigurations.add(new PayrollConfiguration(formulaType1,"Həmkarlar təşkilatına üzvlük haqqı", "{membership_fee_for_trade_union}={gross_salary}*{membership_fee_for_trade_union_fee}", "Həmkarlar təşkilatına üzvlük haqqı = Hesablanan aylıq əmək haqqı * x%"));
+            payrollConfigurations.add(new PayrollConfiguration(formulaType1,"DSMF ayırmaları", "{dsmf_deduction}={calculated_gross_salary}>{minimal_salary}?{minimal_salary}*3%+({calculated_gross_salary}-{minimal_salary})*10%:{calculated_gross_salary}*3%", "DSMF ayırmaları: Əmək haqqı 200 manatadək olduqda: Hesablanan aylıq əmək haqqı * 3%; Əmək haqqı 200 manatdan çox olduqda: 6 + (Hesablanan aylıq əmək haqqı-200) * 10%;"));
+            payrollConfigurations.add(new PayrollConfiguration(formulaType1,"İşsizlikdən sığorta haqqı", "{unemployment_insurance}={calculated_gross_salary}*0.5%", "İşsizlikdən sığorta haqqı = Hesablanan aylıq əmək haqqı * 0.5%"));
+            payrollConfigurations.add(new PayrollConfiguration(formulaType1,"Həmkarlar təşkilatına üzvlük haqqı", "{membership_fee_for_trade_union}={calculated_gross_salary}*{membership_fee_for_trade_union_fee}", "Həmkarlar təşkilatına üzvlük haqqı = Hesablanan aylıq əmək haqqı * x%"));
             payrollConfigurations.add(new PayrollConfiguration(formulaType1,"İcbari tibbi sığorta haqqı", "{compulsory_health_insurance}=10", "İcbari tibbi sığorta haqqı = 10"));
-            payrollConfigurations.add(new PayrollConfiguration(formulaType1,"Yekun ödəniləcək məbləğ (Rəsmi hissə)", "{total_amount_payable_official}={gross_salary}-{tax_income}-{dsmf_deduction}-{unemployment_insurance}-{compulsory_health_insurance}-{membership_fee_for_trade_union}", "Yekun ödəniləcək məbləğ = Hesablanan əmək haqqı - Gəlir vergisi - DSMF ayırmaları - İşsizlikdən sığorta haqqı - İcbari tibbi sığprta haqqı - Həmkarlar təşkilatına üzvlük haqqı"));
+            payrollConfigurations.add(new PayrollConfiguration(formulaType1,"Yekun ödəniləcək məbləğ (Rəsmi hissə)", "{total_amount_payable_official}={calculated_gross_salary}-{tax_income}-{dsmf_deduction}-{unemployment_insurance}-{compulsory_health_insurance}-{membership_fee_for_trade_union}", "Yekun ödəniləcək məbləğ = Hesablanan əmək haqqı - Gəlir vergisi - DSMF ayırmaları - İşsizlikdən sığorta haqqı - İcbari tibbi sığprta haqqı - Həmkarlar təşkilatına üzvlük haqqı"));
             payrollConfigurations.add(new PayrollConfiguration(formulaType1,"İş stajına görə əmək haqqına əlavə", "{work_experience_salary}={work_experience}>10?{salary}*15%:{work_experience}>5?{salary}*10%:{work_experience}>3?{salary}*5%:0", "İş stajına görə əmək haqqına əlavə = İş stajı 10 ildən artıq olduqda əlavə 15%, 5 ildən artıq olduqda əlavə 10%, 3 ildən artıq olduqda əlavə 5%"));
             payrollConfigurations.add(new PayrollConfiguration(formulaType1,"Ümumi əmək haqqı", "{total_salary}={salary}+{work_experience_salary}", "Ümumi əmək haqqı = İş stajına görə əmək haqqına əlavə + Əmək haqqı"));
             payrollConfigurations.add(new PayrollConfiguration(formulaType1,"Yekun ödəniləcək məbləğ (Qeyri rəsmi hissə)", "{total_amount_payable_non_official}={total_salary}-{total_amount_payable_official}", "Yekun ödəniləcək məbləğ (Qeyri rəsmi hissə) = Ümumi əmək haqqı - Yekun ödəniləcək məbləğ (Rəsmi hissə)"));

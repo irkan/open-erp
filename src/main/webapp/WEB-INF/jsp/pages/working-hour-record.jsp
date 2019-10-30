@@ -202,7 +202,14 @@
                                         </c:forEach>
                                         <c:forEach var="p" items="${t.workingHourRecordEmployeeDayCalculations}" varStatus="count">
                                             <th class="text-center">
-                                                <c:out value="${p.value}"/>
+                                                <c:choose>
+                                                    <c:when test="${p.key!='HMQ'}">
+                                                        <fmt:formatNumber value="${p.value}" maxFractionDigits="0" />
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <c:out value="${p.value}"/>
+                                                    </c:otherwise>
+                                                </c:choose>
                                             </th>
                                         </c:forEach>
                                     </tr>

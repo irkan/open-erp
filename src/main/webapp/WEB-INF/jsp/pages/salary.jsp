@@ -60,53 +60,16 @@
                                                 <i class="la <c:out value="${calculate.object.icon}"/>"></i>
                                                 <c:out value="${calculate.object.name}"/>
                                             </a>
-                                            <button type="reset" class="btn btn-secondary btn-secondary--icon">
-                                                <i class="la la-close"></i>
-                                                Təmizlə
-                                            </button>
                                         </div>
                                     </div>
                                     <div class="col-sm-5 text-right">
                                         <label>&nbsp;</label>
                                         <div class="form-group">
-                                            <c:set var="save" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'save')}"/>
-                                            <c:choose>
-                                                <c:when test="${save.status}">
-                                                    <c:if test="${not empty form.salaryEmployees}">
-                                                        <a href="#" onclick="saveWHR($('#form'))" class="btn btn-warning btn-elevate btn-icon-sm" title="<c:out value="${save.object.name}"/>">
-                                                            <i class="la <c:out value="${save.object.icon}"/>"></i>
-                                                            <c:out value="${save.object.name}"/>
-                                                        </a>
-                                                    </c:if>
-                                                </c:when>
-                                            </c:choose>
-                                            <c:set var="approve" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
-                                            <c:choose>
-                                                <c:when test="${approve.status}">
-                                                    <c:if test="${not empty form and !form.approve}">
-                                                        <a href="#" onclick="saveWHR($('#form'))" class="btn btn-success btn-elevate btn-icon-sm" title="<c:out value="${approve.object.name}"/>">
-                                                            <i class="la <c:out value="${approve.object.icon}"/>"></i>
-                                                            <c:out value="${approve.object.name}"/>
-                                                        </a>
-                                                    </c:if>
-                                                </c:when>
-                                            </c:choose>
-                                            <c:set var="cancel" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'cancel')}"/>
-                                            <c:choose>
-                                                <c:when test="${cancel.status}">
-                                                    <c:if test="${not empty form and !form.approve}">
-                                                        <a href="#" onclick="saveWHR($('#form'))" class="btn btn-dark btn-elevate btn-icon-sm" title="<c:out value="${cancel.object.name}"/>">
-                                                            <i class="la <c:out value="${cancel.object.icon}"/>"></i>
-                                                            <c:out value="${cancel.object.name}"/>
-                                                        </a>
-                                                    </c:if>
-                                                </c:when>
-                                            </c:choose>
                                             <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
                                             <c:choose>
                                                 <c:when test="${delete.status}">
                                                     <c:if test="${not empty form.salaryEmployees}">
-                                                        <a href="javascript:deleteData('<c:out value="${form.workingHourRecord.id}" />', '<c:out value="${form.workingHourRecord.month}"/>.<c:out value="${form.workingHourRecord.year}"/> tarixli maaş hesablanması ');" class="btn btn-danger btn-elevate btn-icon-sm" title="<c:out value="${delete.object.name}"/>">
+                                                        <a href="javascript:deleteData('<c:out value="${form.id}" />', '<c:out value="${form.workingHourRecord.month}"/>.<c:out value="${form.workingHourRecord.year}"/> tarixli maaş hesablanması ');" class="btn btn-danger btn-elevate btn-icon-sm" title="<c:out value="${delete.object.name}"/>">
                                                             <i class="la <c:out value="${delete.object.icon}"/>"></i>
                                                             <c:out value="${delete.object.name}"/>
                                                         </a>
@@ -132,6 +95,8 @@
                                     <th>Hesablanmış əmək haqqı (Rəsmi hissə)</th>
                                     <th>Ümumi əmək haqqı</th>
                                     <th>Hesablanmış əmək haqqı (Qeyri rəsmi hissə)</th>
+                                    <th>Yekun ödəniləcək məbləğ (Rəsmi hissə)</th>
+                                    <th>Yekun ödəniləcək məbləğ (Qeyri rəsmi hissə)</th>
                                     <th>Əməliyyat</th>
                                 </tr>
                                 </thead>
@@ -139,7 +104,7 @@
                                 <c:forEach var="t" items="${form.salaryEmployees}" varStatus="loop">
                                     <tr data="<c:out value="${utl:toJson(t)}" />">
                                         <td><c:out value="${t.id}" /></td>
-                                        <td><c:out value="${t.workingHourRecordEmployee.fullName}" /></td>
+                                        <td><div style="width: 190px"><c:out value="${t.workingHourRecordEmployee.fullName}" /></div></td>
                                         <td>
                                             <c:forEach var="p" items="${t.salaryEmployeeDetails}" varStatus="loop">
                                                 <c:if test="${p.key eq '{gross_salary}'}">
@@ -164,6 +129,20 @@
                                         <td>
                                             <c:forEach var="p" items="${t.salaryEmployeeDetails}" varStatus="loop">
                                                 <c:if test="${p.key eq '{calculated_salary}'}">
+                                                    <c:out value="${p.value}" />
+                                                </c:if>
+                                            </c:forEach>
+                                        </td>
+                                        <td>
+                                            <c:forEach var="p" items="${t.salaryEmployeeDetails}" varStatus="loop">
+                                                <c:if test="${p.key eq '{total_amount_payable_official}'}">
+                                                    <c:out value="${p.value}" />
+                                                </c:if>
+                                            </c:forEach>
+                                        </td>
+                                        <td>
+                                            <c:forEach var="p" items="${t.salaryEmployeeDetails}" varStatus="loop">
+                                                <c:if test="${p.key eq '{total_amount_payable_non_official}'}">
                                                     <c:out value="${p.value}" />
                                                 </c:if>
                                             </c:forEach>
@@ -207,7 +186,7 @@
 </div>
 
 <div class="modal fade" id="modal-view" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Maaş detallarla</h5>

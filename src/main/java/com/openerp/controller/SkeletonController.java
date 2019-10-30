@@ -230,35 +230,51 @@ public class SkeletonController {
     }
 
     public static String identify(Employee employee, Date date){
-        if(employee.getContractStartDate().getTime()>date.getTime()){
+        if(employee.getContractStartDate().getTime()>date.getTime()) {
+            EmployeeRestDay employeeRestDay = StaticUtils.getEmployeeRestDayByEmployeeAndDay(employee, date);
+            List<NonWorkingDay> nonWorkingDays = StaticUtils.getNonWorkingDaysByNonWorkingDateAndActiveTrue(date);
+            if(employeeRestDay != null){
+                return "İ";
+            } else if (nonWorkingDays.size() > 0) {
+                NonWorkingDay nonWorkingDay = nonWorkingDays.get(0);
+                if (nonWorkingDay.getIdentifier().contentEquals("İ")) {
+                    if (StaticUtils.getEmployeeRestDaysByEmployee(employee).size() == 0) {
+                        return nonWorkingDay.getIdentifier();
+                    }
+                } else if (nonWorkingDay.getIdentifier().contentEquals("B")) {
+                    return nonWorkingDay.getIdentifier();
+                } else if (nonWorkingDay.getIdentifier().contentEquals("QİG")) {
+                    return nonWorkingDay.getIdentifier();
+                }
+            }
             return "";
         }
         EmployeeRestDay employeeRestDay = StaticUtils.getEmployeeRestDayByEmployeeAndDay(employee, date);
-        if(employeeRestDay!=null){
+        if (employeeRestDay != null) {
             return "İ";
         }
         VacationDetail vacationDetail = StaticUtils.getVacationDetailByEmployeeAndVacationDateAndVacation_Active(employee, date, true);
-        if(vacationDetail!=null){
+        if (vacationDetail != null) {
             return vacationDetail.getVacation().getIdentifier().getAttr1();
         }
         BusinessTripDetail businessTripDetail = StaticUtils.getBusinessTripDetailByEmployeeAndBusinessTripDateAndBusinessTrip_Active(employee, date, true);
-        if(businessTripDetail!=null){
+        if (businessTripDetail != null) {
             return businessTripDetail.getBusinessTrip().getIdentifier().getAttr1();
         }
         IllnessDetail illnessDetail = StaticUtils.getIllnessDetailByEmployeeAndIllnessDateAndIllness_Active(employee, date, true);
-        if(illnessDetail!=null){
+        if (illnessDetail != null) {
             return illnessDetail.getIllness().getIdentifier().getAttr1();
         }
         List<NonWorkingDay> nonWorkingDays = StaticUtils.getNonWorkingDaysByNonWorkingDateAndActiveTrue(date);
-        if(nonWorkingDays.size()>0){
+        if (nonWorkingDays.size() > 0) {
             NonWorkingDay nonWorkingDay = nonWorkingDays.get(0);
-            if(nonWorkingDay.getIdentifier().contentEquals("İ")){
-                if(StaticUtils.getEmployeeRestDaysByEmployee(employee).size()==0){
+            if (nonWorkingDay.getIdentifier().contentEquals("İ")) {
+                if (StaticUtils.getEmployeeRestDaysByEmployee(employee).size() == 0) {
                     return nonWorkingDay.getIdentifier();
                 }
-            } else if(nonWorkingDay.getIdentifier().contentEquals("B")){
+            } else if (nonWorkingDay.getIdentifier().contentEquals("B")) {
                 return nonWorkingDay.getIdentifier();
-            } else if(nonWorkingDay.getIdentifier().contentEquals("QİG")){
+            } else if (nonWorkingDay.getIdentifier().contentEquals("QİG")) {
                 return nonWorkingDay.getIdentifier();
             }
         }

@@ -223,7 +223,7 @@ public class Util {
         List<WorkingHourRecordEmployeeDayCalculation> whredcsCurrent = workingHourRecordEmployee.getWorkingHourRecordEmployeeDayCalculations();
         List<WorkingHourRecordEmployeeIdentifier> whreisCurrent = workingHourRecordEmployee.getWorkingHourRecordEmployeeIdentifiers();
         for(Dictionary identifier: identifiers){
-            if(!identifier.getAttr1().contentEquals("HİG") && !identifier.getAttr1().contentEquals("ÜİG")) {
+            if(!identifier.getAttr1().contentEquals("HİG") && !identifier.getAttr1().contentEquals("ÜİG") && !identifier.getAttr1().contentEquals("HMQ")) {
                 WorkingHourRecordEmployeeDayCalculation whredc = findWorkingHourRecordEmployeeDayCalculation(whredcsCurrent, identifier.getAttr1());
                 whredc.setWorkingHourRecordEmployee(workingHourRecordEmployee);
                 whredc.setDescription(identifier.getName());
@@ -235,16 +235,16 @@ public class Util {
         }
         for(Dictionary identifier: identifiers){
             if(identifier.getAttr1().contentEquals("HMQ")){
-                int vacationDays = findEmployeeVacationCount(workingHourRecordEmployee.getEmployee());
+                double vacationDays = findEmployeeVacationCount(workingHourRecordEmployee.getEmployee());
                 int currentVacationCount = Util.calculateIdentifier(workingHourRecordEmployee, "M");
-                /*WorkingHourRecordEmployeeDayCalculation whredc = findWorkingHourRecordEmployeeDayCalculation(whredcsCurrent, identifier.getAttr1());
-
+                double vacation =  Double.parseDouble(Util.format(vacationDays/12)) + balanceVacationDays - currentVacationCount;
+                WorkingHourRecordEmployeeDayCalculation whredc = findWorkingHourRecordEmployeeDayCalculation(whredcsCurrent, identifier.getAttr1());
                 whredc.setWorkingHourRecordEmployee(workingHourRecordEmployee);
                 whredc.setDescription(identifier.getName());
                 whredc.setKey(identifier.getAttr1());
-                whredc.setValue(Util.calculateUIG(whreisCurrent, whredcs));
+                whredc.setValue(vacation);
                 whredc.setIdentifier(identifier);
-                whredcs.add(whredc);*/
+                whredcs.add(whredc);
             }
         }
         for(Dictionary identifier: identifiers){
@@ -272,31 +272,33 @@ public class Util {
         return whredcs;
     }
 
-    private static int findEmployeeVacationCount(Employee employee){
+    private static double findEmployeeVacationCount(Employee employee){
         int mainVacationDay=0;
         int additionalVacationDay = 0;
-        for(EmployeePayrollDetail epd: employee.getEmployeePayrollDetails()){
-            if(epd.getKey().equalsIgnoreCase("{main_vacation_days}")){
-                if(epd.getValue().trim().length()>0){
-                    mainVacationDay = Integer.parseInt(epd.getValue());
+        if(employee!=null && employee.getEmployeePayrollDetails()!=null && employee.getEmployeePayrollDetails().size()>0){
+            for(EmployeePayrollDetail epd: employee.getEmployeePayrollDetails()){
+                if(epd.getKey().equalsIgnoreCase("{main_vacation_days}")){
+                    if(epd.getValue().trim().length()>0){
+                        mainVacationDay = Integer.parseInt(epd.getValue());
+                    }
                 }
-            }
-            if(epd.getKey().equalsIgnoreCase("{additional_vacation_days}")){
-                if(epd.getValue().trim().length()>0){
-                    additionalVacationDay = Integer.parseInt(epd.getValue());
+                if(epd.getKey().equalsIgnoreCase("{additional_vacation_days}")){
+                    if(epd.getValue().trim().length()>0){
+                        additionalVacationDay = Integer.parseInt(epd.getValue());
+                    }
                 }
             }
         }
         return mainVacationDay+additionalVacationDay;
     }
 
-    public static int calculateUIG(List<WorkingHourRecordEmployeeIdentifier> whreis, List<WorkingHourRecordEmployeeDayCalculation> whredcs){
-        int iWHREDCCount = findIdentifierCountInWHREDC(whredcs, "İ");
-        int iWHREICount = findIdentifierCountInWorkingHourRecordEmployeeIdentifier(whreis, "İ");
-        int bWHREDCCount = findIdentifierCountInWHREDC(whredcs, "B");
-        int bWHREICount = findIdentifierCountInWorkingHourRecordEmployeeIdentifier(whreis, "B");
-        int qigWHREDCCount = findIdentifierCountInWHREDC(whredcs, "QİG");
-        int qigWHREICount = findIdentifierCountInWorkingHourRecordEmployeeIdentifier(whreis, "QİG");
+    public static double calculateUIG(List<WorkingHourRecordEmployeeIdentifier> whreis, List<WorkingHourRecordEmployeeDayCalculation> whredcs){
+        double iWHREDCCount = findIdentifierCountInWHREDC(whredcs, "İ");
+        double iWHREICount = findIdentifierCountInWorkingHourRecordEmployeeIdentifier(whreis, "İ");
+        double bWHREDCCount = findIdentifierCountInWHREDC(whredcs, "B");
+        double bWHREICount = findIdentifierCountInWorkingHourRecordEmployeeIdentifier(whreis, "B");
+        double qigWHREDCCount = findIdentifierCountInWHREDC(whredcs, "QİG");
+        double qigWHREICount = findIdentifierCountInWorkingHourRecordEmployeeIdentifier(whreis, "QİG");
         return whreis.size()-(iWHREDCCount>iWHREICount?iWHREDCCount:iWHREICount) - (bWHREDCCount>bWHREICount?bWHREDCCount:bWHREICount) - (qigWHREDCCount>qigWHREICount?qigWHREDCCount:qigWHREICount);
     }
 
@@ -310,7 +312,7 @@ public class Util {
         return i;
     }
 
-    public static int findIdentifierCountInWHREDC(List<WorkingHourRecordEmployeeDayCalculation> whredcs, String identifier){
+    public static double findIdentifierCountInWHREDC(List<WorkingHourRecordEmployeeDayCalculation> whredcs, String identifier){
         for(WorkingHourRecordEmployeeDayCalculation whredc: whredcs){
             if(whredc.getKey().contentEquals(identifier)){
                 return whredc.getValue();

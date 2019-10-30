@@ -33,7 +33,7 @@ public class WorkingHourRecordEmployeeDayCalculation {
     private String key;
 
     @Column(name = "value")
-    private int value=0;
+    private double value=0d;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "admin_dictionary_identifier_id")

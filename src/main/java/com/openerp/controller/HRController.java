@@ -255,7 +255,7 @@ public class HRController extends SkeletonController {
             String rangeDates[] = vacation.getDateRange().split("-");
             vacation.setStartDate(DateUtility.getUtilDate(rangeDates[0].trim()));
             vacation.setEndDate(DateUtility.getUtilDate(rangeDates[1].trim()));
-            if((new Date()).getTime() - vacation.getStartDate().getTime() < 15768000000l  && (vacation.getIdentifier().getAttr1().equalsIgnoreCase("M"))){
+            if(vacation.getStartDate().getTime() - vacation.getEmployee().getContractStartDate().getTime() < 15768000000l  && (vacation.getIdentifier().getAttr1().equalsIgnoreCase("M"))){
                 FieldError fieldError = new FieldError("dateRange", "dateRange", "İşə başlama tarixindən 6 ayı keçməmişdir!");
                 binding.addError(fieldError);
             }
@@ -276,6 +276,8 @@ public class HRController extends SkeletonController {
                         vacationDetails.add(new VacationDetail(vacation.getIdentifier().getAttr1(), date, vacation, vacation.getEmployee()));
                     }
                     vacationDetailRepository.saveAll(vacationDetails);
+
+                    List<SalaryEmployee> salaryEmployees = salaryEmployeeRepository.getSalaryEmployeesBySalary_ActiveAndEmployee_IdOrderByEmployeeDesc(true, vacation.getEmployee().getId());
 
 
                     String description = vacation.getIdentifier().getName() + " " + DateUtility.getFormattedDate(vacation.getStartDate()) + " - " + DateUtility.getFormattedDate(vacation.getEndDate());

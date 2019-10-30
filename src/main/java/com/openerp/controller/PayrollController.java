@@ -72,7 +72,7 @@ public class PayrollController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new Salary(new WorkingHourRecord(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()))));
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.SALARY_EMPLOYEE)){
-            List<SalaryEmployee> salaryEmployees = salaryEmployeeRepository.getSalaryEmployeesByEmployee_IdOrderByEmployeeDesc(Integer.parseInt(data.get()));
+            List<SalaryEmployee> salaryEmployees = salaryEmployeeRepository.getSalaryEmployeesBySalary_ActiveAndEmployee_IdOrderByEmployeeDesc(true, Integer.parseInt(data.get()));
             model.addAttribute(Constants.LIST, salaryEmployees);
         }
         return "layout";
@@ -108,7 +108,7 @@ public class PayrollController extends SkeletonController {
                     List<WorkingHourRecordEmployee> workingHourRecordEmployees = new ArrayList<>();
                     List<Dictionary> identifiers = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("identifier");
                     for(Employee employee: employees){
-                        List<WorkingHourRecordEmployeeDayCalculation> owhedcs = workingHourRecordEmployeeDayCalculationRepository.getWorkingHourRecordEmployeeDayCalculationsByKeyAndWorkingHourRecordEmployee_EmployeeOrderByWorkingHourRecordEmployeeDesc("M", employee);
+                        List<WorkingHourRecordEmployeeDayCalculation> owhedcs = workingHourRecordEmployeeDayCalculationRepository.getWorkingHourRecordEmployeeDayCalculationsByKeyAndWorkingHourRecordEmployee_EmployeeOrderByWorkingHourRecordEmployeeDesc("HMQ", employee);
                         double balanceVacationDays = owhedcs.size()>0?owhedcs.get(0).getValue():0;
 
                         WorkingHourRecordEmployee workingHourRecordEmployee = new WorkingHourRecordEmployee(workingHourRecord, employee, employee.getPerson().getFullName(), employee.getPosition().getName(), employee.getOrganization().getName());
@@ -166,10 +166,9 @@ public class PayrollController extends SkeletonController {
             YearMonth yearMonthObject = YearMonth.of(workingHourRecord.getYear(), workingHourRecord.getMonth());
             int daysInMonth = yearMonthObject.lengthOfMonth();
             redirectAttributes.addFlashAttribute(Constants.DAYS_IN_MONTH, daysInMonth);
-            WorkingHourRecord owhr = workingHourRecordRepository.getWorkingHourRecordByActiveTrueAndMonthAndYearAndBranch_Id(workingHourRecord.getMonth()-1, workingHourRecord.getYear(), workingHourRecord.getBranch().getId());
             List<Dictionary> identifiers = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("identifier");
             for(WorkingHourRecordEmployee whre: workingHourRecord.getWorkingHourRecordEmployees()){
-                List<WorkingHourRecordEmployeeDayCalculation> owhedcs = workingHourRecordEmployeeDayCalculationRepository.getWorkingHourRecordEmployeeDayCalculationsByKeyAndWorkingHourRecordEmployee_EmployeeOrderByWorkingHourRecordEmployeeDesc("M", whre.getEmployee());
+                List<WorkingHourRecordEmployeeDayCalculation> owhedcs = workingHourRecordEmployeeDayCalculationRepository.getWorkingHourRecordEmployeeDayCalculationsByKeyAndWorkingHourRecordEmployee_EmployeeOrderByWorkingHourRecordEmployeeDesc("HMQ", whre.getEmployee());
                 double balanceVacationDays = owhedcs.size()>0?owhedcs.get(0).getValue():0;
                 for(WorkingHourRecordEmployeeIdentifier whrei: whre.getWorkingHourRecordEmployeeIdentifiers()){
                     workingHourRecordEmployeeIdentifierRepository.save(whrei);
@@ -199,7 +198,7 @@ public class PayrollController extends SkeletonController {
             List<Dictionary> identifiers = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("identifier");
             for(WorkingHourRecordEmployee whre: workingHourRecord.getWorkingHourRecordEmployees()){
                 List<WorkingHourRecordEmployeeIdentifier> whreis = new ArrayList<>();
-                List<WorkingHourRecordEmployeeDayCalculation> owhedcs = workingHourRecordEmployeeDayCalculationRepository.getWorkingHourRecordEmployeeDayCalculationsByKeyAndWorkingHourRecordEmployee_EmployeeOrderByWorkingHourRecordEmployeeDesc("M", whre.getEmployee());
+                List<WorkingHourRecordEmployeeDayCalculation> owhedcs = workingHourRecordEmployeeDayCalculationRepository.getWorkingHourRecordEmployeeDayCalculationsByKeyAndWorkingHourRecordEmployee_EmployeeOrderByWorkingHourRecordEmployeeDesc("HMQ", whre.getEmployee());
                 double balanceVacationDays = owhedcs.size()>0?owhedcs.get(0).getValue():0;
                 for(WorkingHourRecordEmployeeIdentifier whrei: whre.getWorkingHourRecordEmployeeIdentifiers()){
                     String date = whrei.getMonthDay()>9?String.valueOf(whrei.getMonthDay()):("0"+whrei.getMonthDay());
@@ -399,7 +398,7 @@ public class PayrollController extends SkeletonController {
                                     )
                             );
                             String tax_amount_involved = Util.findPayrollConfiguration(payrollConfigurations,"{tax_amount_involved}")
-                                    .replaceAll(Pattern.quote("{gross_salary}"), gross_salary)
+                                    .replaceAll(Pattern.quote("{calculated_gross_salary}"), String.valueOf(engine.eval(calculated_gross_salary)))
                                     .replaceAll(Pattern.quote("{allowance}"), allowance)
                                     .replaceAll(Pattern.quote("%"), percent);
                             salaryEmployeeDetails.add(
@@ -426,7 +425,7 @@ public class PayrollController extends SkeletonController {
                                     )
                             );
                             String dsmf_deduction = Util.findPayrollConfiguration(payrollConfigurations,"{dsmf_deduction}")
-                                    .replaceAll(Pattern.quote("{gross_salary}"), gross_salary)
+                                    .replaceAll(Pattern.quote("{calculated_gross_salary}"), String.valueOf(engine.eval(calculated_gross_salary)))
                                     .replaceAll(Pattern.quote("{minimal_salary}"), minimal_salary)
                                     .replaceAll(Pattern.quote("%"), percent);
                             salaryEmployeeDetails.add(
@@ -440,7 +439,7 @@ public class PayrollController extends SkeletonController {
                                     )
                             );
                             String membership_fee_for_trade_union = Util.findPayrollConfiguration(payrollConfigurations,"{membership_fee_for_trade_union}")
-                                    .replaceAll(Pattern.quote("{gross_salary}"), gross_salary)
+                                    .replaceAll(Pattern.quote("{calculated_gross_salary}"), String.valueOf(engine.eval(calculated_gross_salary)))
                                     .replaceAll(Pattern.quote("{membership_fee_for_trade_union_fee}"), membership_fee_for_trade_union_fee)
                                     .replaceAll(Pattern.quote("%"), percent);
                             salaryEmployeeDetails.add(
@@ -467,7 +466,7 @@ public class PayrollController extends SkeletonController {
                                     )
                             );
                             String unemployment_insurance = Util.findPayrollConfiguration(payrollConfigurations,"{unemployment_insurance}")
-                                    .replaceAll(Pattern.quote("{gross_salary}"), gross_salary)
+                                    .replaceAll(Pattern.quote("{calculated_gross_salary}"), String.valueOf(engine.eval(calculated_gross_salary)))
                                     .replaceAll(Pattern.quote("%"), percent);
                             salaryEmployeeDetails.add(
                                     new SalaryEmployeeDetail(
@@ -480,7 +479,7 @@ public class PayrollController extends SkeletonController {
                                     )
                             );
                             String total_amount_payable_official = Util.findPayrollConfiguration(payrollConfigurations,"{total_amount_payable_official}")
-                                    .replaceAll(Pattern.quote("{gross_salary}"), gross_salary)
+                                    .replaceAll(Pattern.quote("{calculated_gross_salary}"), String.valueOf(engine.eval(calculated_gross_salary)))
                                     .replaceAll(Pattern.quote("{tax_income}"), String.valueOf(engine.eval(tax_income)))
                                     .replaceAll(Pattern.quote("{dsmf_deduction}"), String.valueOf(engine.eval(dsmf_deduction)))
                                     .replaceAll(Pattern.quote("{unemployment_insurance}"), String.valueOf(engine.eval(unemployment_insurance)))

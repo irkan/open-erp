@@ -103,6 +103,10 @@ public class DeleteController extends SkeletonController {
             WorkingHourRecord workingHourRecord = workingHourRecordRepository.getWorkingHourRecordById(Integer.parseInt(id));
             workingHourRecord.setActive(false);
             workingHourRecordRepository.save(workingHourRecord);
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.SALARY)){
+            Salary salary = salaryRepository.getSalaryById(Integer.parseInt(id));
+            salary.setActive(false);
+            salaryRepository.save(salary);
         } else if(path.equalsIgnoreCase(Constants.ROUTE.ADVANCE)){
             Advance advance = advanceRepository.getAdvanceById(Integer.parseInt(id));
             advance.setActive(false);
