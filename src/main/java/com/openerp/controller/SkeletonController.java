@@ -253,17 +253,23 @@ public class SkeletonController {
         if (employeeRestDay != null) {
             return "İ";
         }
-        VacationDetail vacationDetail = StaticUtils.getVacationDetailByEmployeeAndVacationDateAndVacation_Active(employee, date, true);
-        if (vacationDetail != null) {
-            return vacationDetail.getVacation().getIdentifier().getAttr1();
+        List<VacationDetail> vacationDetails = StaticUtils.getVacationDetailsByEmployeeAndVacationDateAndVacation_Active(employee, date, true);
+        if (vacationDetails != null && vacationDetails.size()>0) {
+            for(VacationDetail vacationDetail: vacationDetails){
+                return vacationDetail.getVacation().getIdentifier().getAttr1();
+            }
         }
-        BusinessTripDetail businessTripDetail = StaticUtils.getBusinessTripDetailByEmployeeAndBusinessTripDateAndBusinessTrip_Active(employee, date, true);
-        if (businessTripDetail != null) {
-            return businessTripDetail.getBusinessTrip().getIdentifier().getAttr1();
+        List<BusinessTripDetail> businessTripDetails = StaticUtils.getBusinessTripDetailsByEmployeeAndBusinessTripDateAndBusinessTrip_Active(employee, date, true);
+        if (businessTripDetails != null && businessTripDetails.size()>0) {
+            for(BusinessTripDetail businessTripDetail: businessTripDetails){
+                return businessTripDetail.getBusinessTrip().getIdentifier().getAttr1();
+            }
         }
-        IllnessDetail illnessDetail = StaticUtils.getIllnessDetailByEmployeeAndIllnessDateAndIllness_Active(employee, date, true);
-        if (illnessDetail != null) {
-            return illnessDetail.getIllness().getIdentifier().getAttr1();
+        List<IllnessDetail> illnessDetails = StaticUtils.getIllnessDetailsByEmployeeAndIllnessDateAndIllness_Active(employee, date, true);
+        if (illnessDetails != null && illnessDetails.size()>0) {
+            for(IllnessDetail illnessDetail: illnessDetails){
+                return illnessDetail.getIllness().getIdentifier().getAttr1();
+            }
         }
         List<NonWorkingDay> nonWorkingDays = StaticUtils.getNonWorkingDaysByNonWorkingDateAndActiveTrue(date);
         if (nonWorkingDays.size() > 0) {

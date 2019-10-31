@@ -10,5 +10,5 @@ import java.util.List;
 
 public interface IllnessDetailRepository extends JpaRepository<IllnessDetail, Integer> {
     List<IllnessDetail> getIllnessDetailsByIllness_Id(int illnessId);
-    IllnessDetail getIllnessDetailByEmployeeAndIllnessDateAndIllness_Active(Employee employee, Date illnessDate, boolean active);
+    List<IllnessDetail> getIllnessDetailsByEmployeeAndIllnessDateAndIllness_Active(Employee employee, Date illnessDate, boolean active);
 }

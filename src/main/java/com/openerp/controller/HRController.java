@@ -251,20 +251,21 @@ public class HRController extends SkeletonController {
 
     @PostMapping(value = "/vacation")
     public String postVacation(@ModelAttribute(Constants.FORM) @Validated Vacation vacation, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        binding = check(binding, vacation.getDateRange(), vacation .getEmployee());
         if(!binding.hasErrors()){
             String rangeDates[] = vacation.getDateRange().split("-");
             vacation.setStartDate(DateUtility.getUtilDate(rangeDates[0].trim()));
             vacation.setEndDate(DateUtility.getUtilDate(rangeDates[1].trim()));
-            if(vacation.getStartDate().getTime() - vacation.getEmployee().getContractStartDate().getTime() < 15768000000l  && (vacation.getIdentifier().getAttr1().equalsIgnoreCase("M"))){
-                FieldError fieldError = new FieldError("dateRange", "dateRange", "İşə başlama tarixindən 6 ayı keçməmişdir!");
+            if(vacation.getStartDate().getTime() - vacation.getEmployee().getContractStartDate().getTime() < 5253120000l  && (vacation.getIdentifier().getAttr1().equalsIgnoreCase("M"))){
+                FieldError fieldError = new FieldError("dateRange", "dateRange", "İşə başlama tarixindən 2 ayı keçməmişdir!");
                 binding.addError(fieldError);
             }
 
             if(!binding.hasErrors()){
-                vacationRepository.save(vacation);
-
-                if(vacation.getId()!=null && vacation.getStartDate()!=null && vacation.getEndDate()!=null){
-                    vacationDetailRepository.deleteInBatch(vacationDetailRepository.getVacationDetailsByVacation_Id(vacation.getId()));
+                if(vacation.getStartDate()!=null && vacation.getEndDate()!=null){
+                    if(vacation.getId()!=null){
+                        vacationDetailRepository.deleteInBatch(vacationDetailRepository.getVacationDetailsByVacation_Id(vacation.getId()));
+                    }
                     Calendar start = Calendar.getInstance();
                     start.setTime(vacation.getStartDate());
                     Calendar end = Calendar.getInstance();
@@ -275,13 +276,10 @@ public class HRController extends SkeletonController {
                     for (Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
                         vacationDetails.add(new VacationDetail(vacation.getIdentifier().getAttr1(), date, vacation, vacation.getEmployee()));
                     }
-                    vacationDetailRepository.saveAll(vacationDetails);
+                    vacation.setVacationDetails(vacationDetails);
+                    vacationRepository.save(vacation);
 
-                    List<SalaryEmployee> salaryEmployees = salaryEmployeeRepository.getSalaryEmployeesBySalary_ActiveAndEmployee_IdOrderByEmployeeDesc(true, vacation.getEmployee().getId());
-
-
-                    String description = vacation.getIdentifier().getName() + " " + DateUtility.getFormattedDate(vacation.getStartDate()) + " - " + DateUtility.getFormattedDate(vacation.getEndDate());
-                    Advance advance = new Advance(vacation.getIdentifier(), vacation.getEmployee(), description, vacation.getStartDate(), 473.50, false);
+                    Advance advance = calculateVacationPrice(vacation);
                     advanceRepository.save(advance);
                 }
             }
@@ -292,27 +290,29 @@ public class HRController extends SkeletonController {
 
     @PostMapping(value = "/business-trip")
     public String postBusinessTrip(@ModelAttribute(Constants.FORM) @Validated BusinessTrip businessTrip, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        binding = check(binding, businessTrip.getDateRange(), businessTrip.getEmployee());
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
-            String range = businessTrip.getDateRange();
-            if(range.length()>15){
-                String rangeDates[] = range.split("-");
-                businessTrip.setStartDate(DateUtility.getUtilDate(rangeDates[0].trim()));
-                businessTrip.setEndDate(DateUtility.getUtilDate(rangeDates[1].trim()));
-                businessTripRepository.save(businessTrip);
+            String rangeDates[] = businessTrip.getDateRange().split("-");
+            businessTrip.setStartDate(DateUtility.getUtilDate(rangeDates[0].trim()));
+            businessTrip.setEndDate(DateUtility.getUtilDate(rangeDates[1].trim()));
 
-                if(businessTrip.getId()!=null && businessTrip.getStartDate()!=null && businessTrip.getEndDate()!=null){
+            if(businessTrip.getStartDate()!=null && businessTrip.getEndDate()!=null){
+                if(businessTrip.getId()!=null){
                     businessTripDetailRepository.deleteInBatch(businessTripDetailRepository.getBusinessTripDetailsByBusinessTrip_Id(businessTrip.getId()));
-                    Calendar start = Calendar.getInstance();
-                    start.setTime(businessTrip.getStartDate());
-                    Calendar end = Calendar.getInstance();
-                    end.setTime(businessTrip.getEndDate());
-                    end.add(Calendar.DATE, 1);
-
-                    for (Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
-                        businessTripDetailRepository.save(new BusinessTripDetail(businessTrip.getIdentifier().getAttr1(), date, businessTrip, businessTrip.getEmployee()));
-                    }
                 }
+                Calendar start = Calendar.getInstance();
+                start.setTime(businessTrip.getStartDate());
+                Calendar end = Calendar.getInstance();
+                end.setTime(businessTrip.getEndDate());
+                end.add(Calendar.DATE, 1);
+
+                List<BusinessTripDetail> businessTripDetails = new ArrayList<>();
+                for (Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
+                    businessTripDetails.add(new BusinessTripDetail(businessTrip.getIdentifier().getAttr1(), date, businessTrip, businessTrip.getEmployee()));
+                }
+                businessTrip.setBusinessTripDetails(businessTripDetails);
+                businessTripRepository.save(businessTrip);
             }
         }
         return mapPost(businessTrip, binding, redirectAttributes);
@@ -320,29 +320,100 @@ public class HRController extends SkeletonController {
 
     @PostMapping(value = "/illness")
     public String postIllness(@ModelAttribute(Constants.FORM) @Validated Illness illness, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        binding = check(binding, illness.getDateRange(), illness.getEmployee());
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
-            String range = illness.getDateRange();
-            if(range.length()>15){
-                String rangeDates[] = range.split("-");
-                illness.setStartDate(DateUtility.getUtilDate(rangeDates[0].trim()));
-                illness.setEndDate(DateUtility.getUtilDate(rangeDates[1].trim()));
-                illnessRepository.save(illness);
+            String rangeDates[] = illness.getDateRange().split("-");
+            illness.setStartDate(DateUtility.getUtilDate(rangeDates[0].trim()));
+            illness.setEndDate(DateUtility.getUtilDate(rangeDates[1].trim()));
 
-                if(illness.getId()!=null && illness.getStartDate()!=null && illness.getEndDate()!=null){
+            if(illness.getStartDate()!=null && illness.getEndDate()!=null){
+                if(illness.getId()!=null){
                     illnessDetailRepository.deleteInBatch(illnessDetailRepository.getIllnessDetailsByIllness_Id(illness.getId()));
-                    Calendar start = Calendar.getInstance();
-                    start.setTime(illness.getStartDate());
-                    Calendar end = Calendar.getInstance();
-                    end.setTime(illness.getEndDate());
-                    end.add(Calendar.DATE, 1);
-
-                    for (Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
-                        illnessDetailRepository.save(new IllnessDetail(illness.getIdentifier().getAttr1(), date, illness, illness.getEmployee()));
-                    }
                 }
+                Calendar start = Calendar.getInstance();
+                start.setTime(illness.getStartDate());
+                Calendar end = Calendar.getInstance();
+                end.setTime(illness.getEndDate());
+                end.add(Calendar.DATE, 1);
+
+                List<IllnessDetail> illnessDetails = new ArrayList<>();
+                for (Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
+                    illnessDetails.add(new IllnessDetail(illness.getIdentifier().getAttr1(), date, illness, illness.getEmployee()));
+                }
+                illness.setIllnessDetails(illnessDetails);
+                illnessRepository.save(illness);
             }
         }
         return mapPost(illness, binding, redirectAttributes);
     }
+
+    private Advance calculateVacationPrice(Vacation vacation){
+        List<SalaryEmployee> salaryEmployees = salaryEmployeeRepository.getSalaryEmployeesBySalary_ActiveAndEmployee_IdOrderByEmployeeDesc(true, vacation.getEmployee().getId());
+        int count = (salaryEmployees.size()>12?13:salaryEmployees.size())-1;
+        count = count==0?1:count;
+        double sumSalary = 0d;
+
+        String description = vacation.getIdentifier().getName() + " " + DateUtility.getFormattedDate(vacation.getStartDate()) + " - " + DateUtility.getFormattedDate(vacation.getEndDate()) + ". Məzuniyyət günlərinin sayı: " + vacation.getVacationDetails().size();
+        Advance advance = new Advance(
+                dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("vacation-advance", "advance"),
+                vacation.getEmployee(),
+                description,
+                new Date()
+        );
+        List<AdvanceDetail> advanceDetails = new ArrayList<>();
+        for(int i=0; i<count; i++){
+            double salary = lastMonthSalary(salaryEmployees.get(i));
+            sumSalary += salary;
+            advanceDetails.add(new AdvanceDetail(advance, new Date(), salary));
+        }
+        advance.setAdvanceDetails(advanceDetails);
+        double vacationPrice = (sumSalary/30.4)*vacation.getVacationDetails().size();
+        advance.setPayed(vacationPrice);
+        advance.setApprove(true);
+        advance.setApproveDate(new Date());
+        return advance;
+    }
+
+    private double lastMonthSalary(SalaryEmployee salaryEmployee){
+        for(SalaryEmployeeDetail sed: salaryEmployee.getSalaryEmployeeDetails()){
+            if(sed.getKey().equalsIgnoreCase("{total_amount_payable_official}")){
+                return Double.parseDouble(sed.getValue());
+            }
+        }
+        return 0;
+    }
+
+    private BindingResult check(BindingResult binding, String range, Employee employee){
+        String rangeDates[] = range.split("-");
+        Date startDate = DateUtility.getUtilDate(rangeDates[0].trim());
+        Date endDate = DateUtility.getUtilDate(rangeDates[1].trim());
+        Calendar start = Calendar.getInstance();
+        start.setTime(startDate);
+        Calendar end = Calendar.getInstance();
+        end.setTime(endDate);
+        end.add(Calendar.DATE, 1);
+        for (Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
+            List<VacationDetail> vacationDetails = vacationDetailRepository.getVacationDetailsByEmployeeAndVacationDateAndVacation_Active(employee, date, true);
+            if(vacationDetails!=null && vacationDetails.size()>0){
+                FieldError fieldError = new FieldError("dateRange", "dateRange", DateUtility.getFormattedDate(date) + " - tarixdə məzuniyyət mövcuddur");
+                binding.addError(fieldError);
+            }
+
+            List<BusinessTripDetail> businessTripDetails = businessTripDetailRepository.getBusinessTripDetailsByEmployeeAndBusinessTripDateAndBusinessTrip_Active(employee, date, true);
+            if(businessTripDetails!=null && businessTripDetails.size()>0){
+                FieldError fieldError = new FieldError("dateRange", "dateRange", DateUtility.getFormattedDate(date) + " - tarixdə ezamiyyət mövcuddur");
+                binding.addError(fieldError);
+            }
+
+            List<IllnessDetail> illnessDetails = illnessDetailRepository.getIllnessDetailsByEmployeeAndIllnessDateAndIllness_Active(employee, date, true);
+            if(illnessDetails!=null && illnessDetails.size()>0){
+                FieldError fieldError = new FieldError("dateRange", "dateRange", DateUtility.getFormattedDate(date) + " - tarixdə xəstəlik mövcuddur");
+                binding.addError(fieldError);
+            }
+        }
+        return null;
+    }
+
+
 }

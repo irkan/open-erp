@@ -51,7 +51,7 @@ public class BusinessTrip {
     private String description;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "businessTrip")
+    @OneToMany(mappedBy = "businessTrip", cascade = CascadeType.ALL)
     private List<BusinessTripDetail> businessTripDetails;
 
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")

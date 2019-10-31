@@ -11,5 +11,5 @@ import java.util.List;
 
 public interface BusinessTripDetailRepository extends JpaRepository<BusinessTripDetail, Integer> {
     List<BusinessTripDetail> getBusinessTripDetailsByBusinessTrip_Id(int businessTripId);
-    BusinessTripDetail getBusinessTripDetailByEmployeeAndBusinessTripDateAndBusinessTrip_Active(Employee employee, Date businessTripDate, boolean active);
+    List<BusinessTripDetail> getBusinessTripDetailsByEmployeeAndBusinessTripDateAndBusinessTrip_Active(Employee employee, Date businessTripDate, boolean active);
 }

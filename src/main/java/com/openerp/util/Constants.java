@@ -50,6 +50,7 @@ public class Constants {
     public static final String MARITAL_STATUSES = "marital_statuses";
     public static final String SALARY = "salary";
     public static final String SALE_PRICES = "sale_prices";
+    public static final String ADVANCES = "advances";
 
     public static final class STATUS{
         public static final String RESPONSE = "response";

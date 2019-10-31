@@ -10,5 +10,5 @@ import java.util.List;
 
 public interface VacationDetailRepository extends JpaRepository<VacationDetail, Integer> {
     List<VacationDetail> getVacationDetailsByVacation_Id(int vacationId);
-    VacationDetail getVacationDetailByEmployeeAndVacationDateAndVacation_Active(Employee employee, Date vacationDate, boolean active);
+    List<VacationDetail> getVacationDetailsByEmployeeAndVacationDateAndVacation_Active(Employee employee, Date vacationDate, boolean active);
 }

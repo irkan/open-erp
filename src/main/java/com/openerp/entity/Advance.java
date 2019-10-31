@@ -25,8 +25,8 @@ public class Advance {
     private Integer id;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_dictionary_identifier_id", nullable = false)
-    private Dictionary identifier;
+    @JoinColumn(name = "admin_dictionary_advance_id", nullable = false)
+    private Dictionary advance;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hr_employee_id", nullable = false)
@@ -35,7 +35,7 @@ public class Advance {
     @Column(name = "payed", columnDefinition="Decimal(10,2) default 0")
     private double payed=0d;
 
-    @Pattern(regexp=".{0,250}",message="Maksimum 50 simvol ola bilər")
+    @Pattern(regexp=".{0,250}",message="Maksimum 250 simvol ola bilər")
     @Column(name = "description")
     private String description;
 
@@ -44,8 +44,8 @@ public class Advance {
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date calculateDate=new Date();
 
-    @Column(name = "is_approve", nullable = false, columnDefinition="boolean default true")
-    private Boolean approve = true;
+    @Column(name = "is_approve", nullable = false, columnDefinition="boolean default false")
+    private Boolean approve = false;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "approve_date")
@@ -62,12 +62,13 @@ public class Advance {
     @JoinColumn(name = "created_by_admin_user_id")
     private User createdUser;
 
-    public Advance(Dictionary identifier, Employee employee, @Pattern(regexp = ".{0,250}", message = "Maksimum 50 simvol ola bilər") String description, Date calculateDate, double payed, Boolean approve) {
-        this.identifier = identifier;
+    @OneToMany(mappedBy = "advance")
+    private List<AdvanceDetail> advanceDetails;
+
+    public Advance(Dictionary advance, Employee employee, @Pattern(regexp = ".{0,250}", message = "Maksimum 50 simvol ola bilər") String description, Date calculateDate) {
+        this.advance = advance;
         this.employee = employee;
         this.description = description;
         this.calculateDate = calculateDate;
-        this.payed = payed;
-        this.approve = approve;
     }
 }

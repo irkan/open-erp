@@ -36,16 +36,16 @@ public final class StaticUtils {
         return null;
     }
 
-    public static VacationDetail getVacationDetailByEmployeeAndVacationDateAndVacation_Active(Employee employee, Date vacationDate, boolean active) {
-        return vacationDetailRepository.getVacationDetailByEmployeeAndVacationDateAndVacation_Active(employee, vacationDate, active);
+    public static List<VacationDetail> getVacationDetailsByEmployeeAndVacationDateAndVacation_Active(Employee employee, Date vacationDate, boolean active) {
+        return vacationDetailRepository.getVacationDetailsByEmployeeAndVacationDateAndVacation_Active(employee, vacationDate, active);
     }
 
-    public static BusinessTripDetail getBusinessTripDetailByEmployeeAndBusinessTripDateAndBusinessTrip_Active(Employee employee, Date businessTripDate, boolean active) {
-        return businessTripDetailRepository.getBusinessTripDetailByEmployeeAndBusinessTripDateAndBusinessTrip_Active(employee, businessTripDate, active);
+    public static List<BusinessTripDetail> getBusinessTripDetailsByEmployeeAndBusinessTripDateAndBusinessTrip_Active(Employee employee, Date businessTripDate, boolean active) {
+        return businessTripDetailRepository.getBusinessTripDetailsByEmployeeAndBusinessTripDateAndBusinessTrip_Active(employee, businessTripDate, active);
     }
 
-    public static IllnessDetail getIllnessDetailByEmployeeAndIllnessDateAndIllness_Active(Employee employee, Date illnessDate, boolean active) {
-        return illnessDetailRepository.getIllnessDetailByEmployeeAndIllnessDateAndIllness_Active(employee, illnessDate, active);
+    public static List<IllnessDetail> getIllnessDetailsByEmployeeAndIllnessDateAndIllness_Active(Employee employee, Date illnessDate, boolean active) {
+        return illnessDetailRepository.getIllnessDetailsByEmployeeAndIllnessDateAndIllness_Active(employee, illnessDate, active);
     }
 
     public static List<NonWorkingDay> getNonWorkingDaysByNonWorkingDateAndActiveTrue(Date date) {

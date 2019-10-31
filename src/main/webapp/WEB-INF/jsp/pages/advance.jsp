@@ -121,11 +121,11 @@
                         <form:errors path="employee" cssClass="control-label alert alert-danger" />
                     </div>
                     <div class="form-group">
-                        <form:label path="identifier">İdentifikator</form:label>
-                        <form:select  path="identifier" cssClass="custom-select form-control">
-                            <form:options items="${identifiers}" itemLabel="name" itemValue="id" />
+                        <form:label path="advance">Avans</form:label>
+                        <form:select  path="advance" cssClass="custom-select form-control">
+                            <form:options items="${advances}" itemLabel="name" itemValue="id" />
                         </form:select>
-                        <form:errors path="identifier" cssClass="control-label alert alert-danger" />
+                        <form:errors path="advance" cssClass="control-label alert alert-danger" />
                     </div>
                     <div class="form-group">
                         <form:label path="payed">Məbləğ</form:label>

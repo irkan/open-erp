@@ -51,7 +51,7 @@ public class Illness {
     private String description;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "illness")
+    @OneToMany(mappedBy = "illness", cascade = CascadeType.ALL)
     private List<IllnessDetail> illnessDetails;
 
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")

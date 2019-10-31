@@ -116,6 +116,8 @@ public class DBConfiguration {
             types.add(weekDay);
             DictionaryType salePriceType = new DictionaryType("Satış qiyməti", "sale-price", null);
             types.add(salePriceType);
+            DictionaryType advanceType = new DictionaryType("Avans", "advance", null);
+            types.add(advanceType);
 
             dictionaryTypeRepository.saveAll(types);
 
@@ -355,6 +357,17 @@ public class DBConfiguration {
             dictionaries.add(salePrice2);
             Dictionary salePrice3 = new Dictionary("1699 AZN", "1699", null, salePriceType);
             dictionaries.add(salePrice3);
+            Dictionary advance1 = new Dictionary("Məzuniyyət", "vacation-advance", null, advanceType);
+            dictionaries.add(advance1);
+            Dictionary advance2 = new Dictionary("Ezamiyyət", "business-trip-advance", null, advanceType);
+            dictionaries.add(advance2);
+            Dictionary advance3 = new Dictionary("Xəstəlik", "illness-advance", null, advanceType);
+            dictionaries.add(advance3);
+            Dictionary advance4 = new Dictionary("Bonus - Satışdan", "bonus-sale-advance", null, advanceType);
+            dictionaries.add(advance4);
+            Dictionary advance5 = new Dictionary("Bonus - Gəlirdən", "bonus-revenue-advance", null, advanceType);
+            dictionaries.add(advance5);
+
 
             dictionaryRepository.saveAll(dictionaries);
 
