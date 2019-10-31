@@ -159,7 +159,7 @@
                             <div class="form-group">
                                 <form:label path="person.birthday">Doğum tarixi</form:label>
                                 <div class="input-group date" >
-                                    <form:input path="person.birthday" cssClass="form-control datepicker-element" date="date" placeholder="dd.MM.yyyy"/>
+                                    <form:input path="person.birthday" autocomplete="off" cssClass="form-control datepicker-element" date="date" placeholder="dd.MM.yyyy"/>
                                     <div class="input-group-append">
                                         <span class="input-group-text">
                                             <i class="la la-calendar"></i>
@@ -226,7 +226,7 @@
                                     <div class="form-group">
                                         <form:label path="contractStartDate">İşə başlama tarixi</form:label>
                                         <div class="input-group date" >
-                                            <form:input path="contractStartDate" date="date" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
+                                            <form:input path="contractStartDate" autocomplete="off" date="date" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
                                             <div class="input-group-append">
                                         <span class="input-group-text">
                                             <i class="la la-calendar"></i>

@@ -26,6 +26,17 @@ public class Payment {
     @Column(name = "price", nullable = false, columnDefinition="Decimal(10,2) default 0")
     private double price=0d;
 
+    @DecimalMin(value = "0", message = "Minimum 0 olmalıdır")
+    @Column(name = "last_price", nullable = false, columnDefinition="Decimal(10,2) default 0")
+    private double lastPrice=0d;
+
+    @DecimalMin(value = "0", message = "Minimum 0 olmalıdır")
+    @Column(name = "down", nullable = false, columnDefinition="Decimal(10,2) default 0")
+    private double down=0d;
+
+    @Column(name = "schedule")
+    private int schedule=1;
+
     @Pattern(regexp=".{0,10}", message="Maksimum 10 simvol ola bilər")
     @Column(name = "discount")
     private String discount;

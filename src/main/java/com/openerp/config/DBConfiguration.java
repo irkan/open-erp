@@ -118,6 +118,8 @@ public class DBConfiguration {
             types.add(salePriceType);
             DictionaryType advanceType = new DictionaryType("Avans", "advance", null);
             types.add(advanceType);
+            DictionaryType downPaymentType = new DictionaryType("Ödəniş qrafiki", "payment-schedule", null);
+            types.add(downPaymentType);
 
             dictionaryTypeRepository.saveAll(types);
 
@@ -367,6 +369,28 @@ public class DBConfiguration {
             dictionaries.add(advance4);
             Dictionary advance5 = new Dictionary("Bonus - Gəlirdən", "bonus-revenue-advance", null, advanceType);
             dictionaries.add(advance5);
+            Dictionary downPayment2 = new Dictionary("2 ay", "2", null, downPaymentType);
+            dictionaries.add(downPayment2);
+            Dictionary downPayment3 = new Dictionary("3 ay", "3", null, downPaymentType);
+            dictionaries.add(downPayment3);
+            Dictionary downPayment6 = new Dictionary("6 ay", "6", null, downPaymentType);
+            dictionaries.add(downPayment6);
+            Dictionary downPayment9 = new Dictionary("9 ay", "9", null, downPaymentType);
+            dictionaries.add(downPayment9);
+            Dictionary downPayment12 = new Dictionary("12 ay", "12", null, downPaymentType);
+            dictionaries.add(downPayment12);
+            Dictionary downPayment15 = new Dictionary("15 ay", "15", null, downPaymentType);
+            dictionaries.add(downPayment15);
+            Dictionary downPayment18 = new Dictionary("18 ay", "18", null, downPaymentType);
+            dictionaries.add(downPayment18);
+            Dictionary downPayment21 = new Dictionary("21 ay", "21", null, downPaymentType);
+            dictionaries.add(downPayment21);
+            Dictionary downPayment24 = new Dictionary("24 ay", "24", null, downPaymentType);
+            dictionaries.add(downPayment24);
+            Dictionary downPayment27 = new Dictionary("27 ay", "27", null, downPaymentType);
+            dictionaries.add(downPayment27);
+            Dictionary downPayment30 = new Dictionary("30 ay", "30", null, downPaymentType);
+            dictionaries.add(downPayment30);
 
 
             dictionaryRepository.saveAll(dictionaries);

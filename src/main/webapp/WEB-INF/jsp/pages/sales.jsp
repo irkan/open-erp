@@ -332,7 +332,7 @@
                                     <div class="row">
                                         <div class="col-md-4 offset-md-3">
                                             <form:label path="payment.price">Qiymət</form:label>
-                                            <form:select  path="payment.price" cssClass="custom-select form-control">
+                                            <form:select  path="payment.price" onchange="calculate($(this))" cssClass="custom-select form-control">
                                                 <form:options items="${sale_prices}" itemLabel="name" itemValue="attr1" />
                                             </form:select>
                                             <form:errors path="payment.price" cssClass="control-label alert-danger"/>
@@ -343,19 +343,66 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-5 offset-md-1">
                                             <div class="form-group">
                                                 <form:label path="payment.discount">Endirim dəyəri</form:label>
-                                                <form:input path="payment.discount" cssClass="form-control" readonly="true"/>
+                                                <form:input path="payment.discount" cssClass="form-control" readonly="true" cssStyle="text-align: -webkit-center; text-align: center; font-weight: bold; letter-spacing: 3px;"/>
                                                 <form:errors path="payment.discount" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-5">
                                             <div class="form-group">
                                                 <form:label path="payment.description">Açıqlama</form:label>
-                                                <form:textarea path="payment.description" cssClass="form-control" readonly="true"/>
+                                                <form:input path="payment.description" cssClass="form-control" readonly="true"/>
                                                 <form:errors path="payment.description" cssClass="control-label alert-danger"/>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-10 offset-md-1">
+                                            <div class="alert alert-info alert-elevate" role="alert">
+                                                <div class="alert-icon"><i class="flaticon-warning kt-font-brand kt-font-light"></i></div>
+                                                <div class="alert-text text-center">
+                                                    <div style="font-size: 18px; font-weight: bold; letter-spacing: 2px;">
+                                                        Yekun ödəniləcək məbləğ:
+                                                        <span id="lastPriceLabel">0</span>
+                                                        <span> AZN</span>
+                                                        <form:hidden path="payment.lastPrice"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-7 offset-sm-1">
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <form:label path="payment.down">İlkin ödəniş</form:label>
+                                                        <div class="input-group" >
+                                                            <form:input path="payment.down" cssClass="form-control" placeholder="İlkin ödənişi daxil edin"/>
+                                                            <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <i class="la la-usd"></i>
+                                                    </span>
+                                                            </div>
+                                                        </div>
+                                                        <form:errors path="payment.down" cssClass="alert-danger control-label"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <form:label path="payment.schedule">Ödəniş qrafiki</form:label>
+                                                        <form:select  path="payment.schedule" cssClass="custom-select form-control">
+                                                            <form:options items="${payment_schedules}" itemLabel="name" itemValue="attr1" />
+                                                        </form:select>
+                                                        <form:errors path="payment.schedule" cssClass="control-label alert-danger"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3 text-center">
+                                            <button type="button" class="btn btn-outline-info btn-tallest" style="font-size: 16px;padding-left: 7px; padding-right: 8px;"><i class="fa fa-play"></i> Ödəniş qrafiki yarat</button>
                                         </div>
                                     </div>
                                 </div>
@@ -427,10 +474,30 @@
 </div>
 
 <script>
+    function calculate(element){
+        var price = $(element).val();
+        var discount = $("input[name='payment.discount']").val();
+        if(discount.trim().length>0){
+            var discounts = discount.trim().split("%")
+            if(discounts.length>1){
+                price = price-price*parseFloat(discounts[0])*0.01;
+            } else {
+                price = price-parseFloat(discounts[0]);
+            }
+            price = Math.ceil(price);
+        }
+        $("#lastPriceLabel").text(price);
+        $("input[name='payment.lastPrice']").val(price);
+    }
+
+    $(function(){
+        $("select[name='payment.price']").change();
+    })
+
     function doCash(element, defaultCash){
         if($(element).is(":checked")){
             swal.fire({
-                title: 'Endirimin təsdiq edirsinizmi?',
+                title: 'Endirimi təsdiq edirsinizmi?',
                 html: 'Endirim faiz və ya məbləğini daxil edin',
                 type: 'question',
                 allowEnterKey: true,
@@ -455,9 +522,10 @@
                 footer: '<a href>Məlumatlar yenilənsinmi?</a>'
             }).then(function(result) {
                 $("input[name='payment.discount']").val('');
-                $("textarea[name='payment.description']").val('');
+                $("input[name='payment.description']").val('');
                 if (result.value) {
                     $("input[name='payment.discount']").val($('#sale-value').val());
+                    $("select[name='payment.price']").change();
                     if($('#sale-value').val()!==defaultCash){
                         swal.fire({
                             title: $('#sale-value').val()+' - Səbəbini daxil edin',
@@ -478,7 +546,7 @@
                             footer: '<a href>Məlumatlar yenilənsinmi?</a>'
                         }).then(function(result2){
                             if(result2.value.length>0){
-                                $("textarea[name='payment.description']").val(result2.value);
+                                $("input[name='payment.description']").val(result2.value);
                             }
                         })
 
