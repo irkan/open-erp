@@ -51,6 +51,7 @@
     function submit(form){
         swal.fire({
             text: 'Proses davam edir...',
+            allowOutsideClick: false,
             onOpen: function() {
                 swal.showLoading();
                 $(form).submit();
@@ -177,6 +178,7 @@
             if (result.value) {
                 swal.fire({
                     text: 'Proses davam edir...',
+                    allowOutsideClick: false,
                     onOpen: function() {
                         swal.showLoading();
                         $("#delete-form").submit();

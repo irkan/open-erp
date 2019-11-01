@@ -343,6 +343,7 @@
             if (result.value) {
                 swal.fire({
                     text: 'Proses davam edir...',
+                    allowOutsideClick: false,
                     onOpen: function() {
                         $(form).attr("action", "/payroll/working-hour-record/reload");
                         swal.showLoading();
@@ -372,6 +373,7 @@
             if (result.value) {
                 swal.fire({
                     text: 'Proses davam edir...',
+                    allowOutsideClick: false,
                     onOpen: function() {
                         $(form).attr("action", "/payroll/working-hour-record/approve");
                         swal.showLoading();

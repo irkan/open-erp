@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "sale_payment")
@@ -34,8 +35,13 @@ public class Payment {
     @Column(name = "down", nullable = false, columnDefinition="Decimal(10,2) default 0")
     private double down=0d;
 
-    @Column(name = "schedule")
-    private int schedule=1;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "admin_dictionary_payment_schedule_id")
+    private Dictionary schedule;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "admin_dictionary_payment_period_id")
+    private Dictionary period;
 
     @Pattern(regexp=".{0,10}", message="Maksimum 10 simvol ola bilər")
     @Column(name = "discount")
@@ -50,6 +56,9 @@ public class Payment {
 
     @Column(name = "is_cash", nullable = false, columnDefinition="boolean default false")
     private Boolean cash = false;
+
+    @OneToMany(mappedBy = "payment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Schedule> schedules;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_date", nullable = false)

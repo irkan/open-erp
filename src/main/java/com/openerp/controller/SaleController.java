@@ -5,6 +5,7 @@ import com.openerp.entity.*;
 import com.openerp.util.Constants;
 import com.openerp.util.DateUtility;
 import com.openerp.util.Util;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -54,6 +55,7 @@ public class SaleController extends SkeletonController {
             model.addAttribute(Constants.CITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("city"));
             model.addAttribute(Constants.SALE_PRICES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("sale-price"));
             model.addAttribute(Constants.PAYMENT_SCHEDULES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-schedule"));
+            model.addAttribute(Constants.PAYMENT_PERIODS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-period"));
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Sales());
             }
@@ -68,5 +70,30 @@ public class SaleController extends SkeletonController {
             saleGroupRepository.save(saleGroup);
         }
         return mapPost(saleGroup, binding, redirectAttributes);
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/payment/schedule/{lastPrice}/{down}/{schedule}/{period}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Schedule> getPaymentSchedule(Model model, @PathVariable("lastPrice") double lastPrice, @PathVariable("down") double down, @PathVariable("schedule") int scheduleId, @PathVariable("period") int periodId){
+        try {
+            Dictionary schedule = dictionaryRepository.getDictionaryById(scheduleId);
+            Dictionary period = dictionaryRepository.getDictionaryById(periodId);
+            lastPrice = lastPrice - down;
+            int scheduleCount = Integer.parseInt(schedule.getAttr1());
+            double schedulePrice = Math.ceil(lastPrice/scheduleCount);
+            Date today = new Date();
+            Date startDate = DateUtility.generate(Integer.parseInt(period.getAttr1()), today.getMonth(), today.getYear()+1900);
+            List<Schedule> schedules = new ArrayList<>();
+            Date scheduleDate = DateUtils.addMonths(startDate, 1);
+            for(int i=0; i<scheduleCount; i++){
+                scheduleDate = DateUtils.addMonths(scheduleDate, 1);
+                Schedule schedule1 = new Schedule(null, schedulePrice, scheduleDate);
+                schedules.add(schedule1);
+            }
+            return schedules;
+        } catch (Exception e){
+            log.error(e);
+        }
+        return null;
     }
 }

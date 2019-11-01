@@ -55,7 +55,7 @@
                                         <i class="flaticon-list"></i>
                                     </div>
                                     <div class="kt-wizard-v1__nav-label">
-                                        1. Şəxsi məlumat
+                                        1. Müştəri
                                     </div>
                                 </div>
                             </div>
@@ -82,7 +82,7 @@
                             <div class="kt-wizard-v1__nav-item" data-ktwizard-type="step">
                                 <div class="kt-wizard-v1__nav-body">
                                     <div class="kt-wizard-v1__nav-icon">
-                                        <i class="flaticon-truck"></i>
+                                        <i class="flaticon-price-tag"></i>
                                     </div>
                                     <div class="kt-wizard-v1__nav-label">
                                         4. Ödəmə
@@ -92,10 +92,20 @@
                             <div class="kt-wizard-v1__nav-item" data-ktwizard-type="step">
                                 <div class="kt-wizard-v1__nav-body">
                                     <div class="kt-wizard-v1__nav-icon">
+                                        <i class="flaticon-truck"></i>
+                                    </div>
+                                    <div class="kt-wizard-v1__nav-label">
+                                        5. Satıcı
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="kt-wizard-v1__nav-item" data-ktwizard-type="step">
+                                <div class="kt-wizard-v1__nav-body">
+                                    <div class="kt-wizard-v1__nav-icon">
                                         <i class="flaticon-globe"></i>
                                     </div>
                                     <div class="kt-wizard-v1__nav-label">
-                                        5. Baxış
+                                        6. Baxış
                                     </div>
                                 </div>
                             </div>
@@ -330,19 +340,23 @@
                             <div class="kt-form__section kt-form__section--first">
                                 <div class="kt-wizard-v1__form">
                                     <div class="row">
-                                        <div class="col-md-4 offset-md-3">
+                                        <div class="col-sm-4 offset-sm-3">
                                             <form:label path="payment.price">Qiymət</form:label>
                                             <form:select  path="payment.price" onchange="calculate($(this))" cssClass="custom-select form-control">
                                                 <form:options items="${sale_prices}" itemLabel="name" itemValue="attr1" />
                                             </form:select>
                                             <form:errors path="payment.price" cssClass="control-label alert-danger"/>
                                         </div>
-                                        <div class="col-md-2 text-center">
-                                            <form:label path="payment.cash">&nbsp;</form:label><br/>
-                                            <form:checkbox path="payment.cash" onclick="doCash($(this), '10%')"/>
+                                        <div class="col-sm-3 text-center">
+                                            <div class="form-group mt-3 pt-4">
+                                                <label class="kt-checkbox kt-checkbox--brand">
+                                                    <form:checkbox path="payment.cash" onclick="doCash($(this), '10%')"/> Ödəniş nağd dırmı?
+                                                    <span></span>
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    <div class="row kt-hidden animated zoomIn" id="cash-div">
                                         <div class="col-md-5 offset-md-1">
                                             <div class="form-group">
                                                 <form:label path="payment.discount">Endirim dəyəri</form:label>
@@ -360,7 +374,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-10 offset-md-1">
-                                            <div class="alert alert-info alert-elevate" role="alert">
+                                            <div class="alert alert-info alert-elevate" role="alert" style="padding: 0; padding-left: 1rem; padding-right: 1rem; padding-top: 5px;">
                                                 <div class="alert-icon"><i class="flaticon-warning kt-font-brand kt-font-light"></i></div>
                                                 <div class="alert-text text-center">
                                                     <div style="font-size: 18px; font-weight: bold; letter-spacing: 2px;">
@@ -373,10 +387,10 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    <div class="row animated zoomIn" id="credit-div">
                                         <div class="col-sm-7 offset-sm-1">
                                             <div class="row">
-                                                <div class="col-sm-6">
+                                                <div class="col-sm-4">
                                                     <div class="form-group">
                                                         <form:label path="payment.down">İlkin ödəniş</form:label>
                                                         <div class="input-group" >
@@ -390,19 +404,101 @@
                                                         <form:errors path="payment.down" cssClass="alert-danger control-label"/>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-6">
+                                                <div class="col-sm-4">
                                                     <div class="form-group">
                                                         <form:label path="payment.schedule">Ödəniş qrafiki</form:label>
                                                         <form:select  path="payment.schedule" cssClass="custom-select form-control">
-                                                            <form:options items="${payment_schedules}" itemLabel="name" itemValue="attr1" />
+                                                            <form:options items="${payment_schedules}" itemLabel="name" itemValue="id" />
                                                         </form:select>
                                                         <form:errors path="payment.schedule" cssClass="control-label alert-danger"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <form:label path="payment.period">Ödəniş edilsin</form:label>
+                                                        <form:select  path="payment.period" cssClass="custom-select form-control">
+                                                            <form:options items="${payment_periods}" itemLabel="name" itemValue="id" />
+                                                        </form:select>
+                                                        <form:errors path="payment.period" cssClass="control-label alert-danger"/>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-sm-3 text-center">
-                                            <button type="button" class="btn btn-outline-info btn-tallest" style="font-size: 16px;padding-left: 7px; padding-right: 8px;"><i class="fa fa-play"></i> Ödəniş qrafiki yarat</button>
+                                            <button type="button" class="btn btn-outline-info btn-tallest" style="font-size: 16px;padding-left: 7px; padding-right: 8px;" onclick="schedule($('input[name=\'payment.lastPrice\']'), $('input[name=\'payment.down\']'), $('select[name=\'payment.schedule\']'), $('select[name=\'payment.period\']'))"><i class="fa fa-play"></i> Ödəniş qrafiki yarat</button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-10 offset-sm-1" id="schedule-div">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="kt-wizard-v1__content" data-ktwizard-type="step-content">
+                            <div class="kt-form__section kt-form__section--first">
+                                <div class="kt-wizard-v1__review">
+                                    <div class="kt-wizard-v1__review-item">
+                                        <div class="row">
+                                            <div class="col-md-3 offset-md-1 text-right">
+                                                <div class="kt-wizard-v1__review-title p-2">
+                                                    Konsul
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input type="text" class="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="kt-separator kt-separator--border-dashed kt-separator--space-sm kt-separator--portlet-fit" style="margin: 1rem 0"></div>
+                            <div class="kt-form__section kt-form__section--first">
+                                <div class="kt-wizard-v1__review">
+                                    <div class="kt-wizard-v1__review-item">
+                                        <div class="row">
+                                            <div class="col-md-3 offset-md-1 text-right">
+                                                <div class="kt-wizard-v1__review-title p-2">
+                                                    Ven lider
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input type="text" class="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="kt-separator kt-separator--border-dashed kt-separator--space-sm kt-separator--portlet-fit" style="margin: 1rem 0"></div>
+                            <div class="kt-form__section kt-form__section--first">
+                                <div class="kt-wizard-v1__review">
+                                    <div class="kt-wizard-v1__review-item">
+                                        <div class="row">
+                                            <div class="col-md-3 offset-md-1 text-right">
+                                                <div class="kt-wizard-v1__review-title p-2">
+                                                    Satıcı
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input type="text" class="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="kt-separator kt-separator--border-dashed kt-separator--space-sm kt-separator--portlet-fit" style="margin: 1rem 0"></div>
+                            <div class="kt-form__section kt-form__section--first">
+                                <div class="kt-wizard-v1__review">
+                                    <div class="kt-wizard-v1__review-item">
+                                        <div class="row">
+                                            <div class="col-md-3 offset-md-1 text-right">
+                                                <div class="kt-wizard-v1__review-title p-2">
+                                                    Canavasser
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input type="text" class="form-control" />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -474,6 +570,50 @@
 </div>
 
 <script>
+    function schedule(lastPrice, down, schedule, period){
+        var table='';
+        swal.fire({
+            text: 'Proses davam edir...',
+            allowOutsideClick: false,
+            onOpen: function() {
+                swal.showLoading();
+                $.ajax({
+                    url: '/sale/payment/schedule/' + $(lastPrice).val() + '/' + $(down).val() + '/' + $(schedule).val() + '/' + $(period).val(),
+                    type: 'GET',
+                    dataType: 'json',
+                    beforeSend: function() {
+                        table+="<table class='table table-striped- table-bordered table-hover table-checkable  animated zoomIn' id='schedule-table'><thead><th style='width: 20px;' class='text-center'>№</th><th>Ödəniş tarixi</th><th>Ödəniş məbləği</th></thead>"
+                    },
+                    success: function(data) {
+                        table+="<tbody>";
+                        $.each(data, function(k, v) {
+                            table+="<tr><th>"+(parseInt(k)+1)+"</th><th>"+v.scheduleDate.split(' ')[0]+"</th><th>"+v.amount+" <i style='font-style: italic; font-size: 10px;'>AZN<i></th></tr>";
+                            console.log(k + ' - ' + v)
+                        });
+                        table+="</tbody>";
+                        swal.close();
+                    },
+                    error: function() {
+                        swal.fire({
+                            title: "Xəta baş verdi!",
+                            html: "Əlaqə saxlamağınızı xahiş edirik.",
+                            type: "error",
+                            cancelButtonText: 'Bağla',
+                            cancelButtonColor: '#c40000',
+                            cancelButtonClass: 'btn btn-danger',
+                            footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+                        });
+                    },
+                    complete: function(){
+                        table+="</table>";
+                        $("#schedule-div").html(table);
+                        $("#schedule-table").DataTable();
+                    }
+                })
+            }
+        });
+
+    }
     function calculate(element){
         var price = $(element).val();
         var discount = $("input[name='payment.discount']").val();
@@ -496,6 +636,9 @@
 
     function doCash(element, defaultCash){
         if($(element).is(":checked")){
+            $("#cash-div").removeClass("kt-hidden");
+            $("#credit-div").addClass("kt-hidden");
+            $("#schedule-div").html('');
             swal.fire({
                 title: 'Endirimi təsdiq edirsinizmi?',
                 html: 'Endirim faiz və ya məbləğini daxil edin',
@@ -554,6 +697,9 @@
                 }
             })
 
+        } else {
+            $("#cash-div").addClass("kt-hidden");
+            $("#credit-div").removeClass("kt-hidden");
         }
     }
 
@@ -597,29 +743,28 @@
             validator = formEl.validate({
                 ignore: ":hidden",
                 rules: {
-                    address1: {
+                    /*'customer.person.firstName': {
                         required: true
                     },
-                    postcode: {
+                    'customer.person.lastName': {
                         required: true
                     },
-                    city: {
+                    'customer.person.contact.mobilePhone': {
                         required: true
                     },
-                    state: {
+                    'customer.person.contact.address': {
                         required: true
                     },
-                    country: {
+                    'action.inventory.barcode': {
                         required: true
                     },
-
-                    package: {
+                    'action.inventory.name': {
                         required: true
                     },
-                    weight: {
+                    'action.warehouse.name': {
                         required: true
                     },
-                    width: {
+                    'payment.price': {
                         required: true
                     },
                     height: {
@@ -653,14 +798,14 @@
                     },
                     loccountry: {
                         required: true
-                    },
+                    }*/
                 },
                 invalidHandler: function(event, validator) {
                     KTUtil.scrollTop();
 
                     swal.fire({
                         "title": "",
-                        "text": "There are some errors in your submission. Please correct them.",
+                        "text": "Məlumatı daxil edin!",
                         "type": "error",
                         "confirmButtonClass": "btn btn-secondary"
                     });
@@ -713,6 +858,7 @@
         if($(element).val().trim().length>0){
             swal.fire({
                 text: 'Proses davam edir...',
+                allowOutsideClick: false,
                 onOpen: function() {
                     swal.showLoading();
                     $.ajax({
@@ -753,4 +899,64 @@
     $('#modal-operation').on('shown.bs.modal', function() {
         $(document).off('focusin.modal');
     });
+
+    var KTDatatablesBasicBasic = function() {
+
+        var initTable1 = function() {
+            var table = $('#schedule-table');
+
+            table.DataTable({
+                responsive: true,
+
+                // DOM Layout settings
+                dom: "<'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 dataTables_pager'lp>>",
+
+                lengthMenu: [5, 10, 25, 50, 75, 100, 200],
+
+                pageLength: 25,
+
+                language: {
+                    'lengthMenu': 'Display _MENU_',
+                },
+                order: [[1, 'desc']],
+                columnDefs: [
+                    {
+                        targets: 0,
+                        width: '25px',
+                        className: 'dt-center',
+                        orderable: false
+                    },
+                ],
+            });
+
+            table.on('change', '.kt-group-checkable', function() {
+                var set = $(this).closest('table').find('td:first-child .kt-checkable');
+                var checked = $(this).is(':checked');
+
+                $(set).each(function() {
+                    if (checked) {
+                        $(this).prop('checked', true);
+                        $(this).closest('tr').addClass('active');
+                    }
+                    else {
+                        $(this).prop('checked', false);
+                        $(this).closest('tr').removeClass('active');
+                    }
+                });
+            });
+
+            table.on('change', 'tbody tr .kt-checkbox', function() {
+                $(this).parents('tr').toggleClass('active');
+            });
+        };
+
+        return {
+            init: function() {
+                initTable1();
+            },
+
+        };
+
+    }();
+
 </script>
