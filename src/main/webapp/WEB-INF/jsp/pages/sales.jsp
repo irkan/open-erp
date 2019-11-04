@@ -17,7 +17,115 @@
         <div class="col-lg-12">
             <div class="kt-portlet kt-portlet--mobile">
                 <div class="kt-portlet__body">
-                    Kontenti kodlayın!
+                    <c:choose>
+                        <c:when test="${not empty list}">
+                            <table class="table table-striped- table-bordered table-hover table-checkable" id="group_table">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>İnventar</th>
+                                    <th>Satış tarixi</th>
+                                    <th>Barkod</th>
+                                    <th>Anbar</th>
+                                    <th>Müştəri</th>
+                                    <th>Əlaqə vasitəsi</th>
+                                    <th>Qiymət</th>
+                                    <th>Son qiymət</th>
+                                    <th>İlkin ödəniş</th>
+                                    <th>Qrafik</th>
+                                    <th>Period</th>
+                                    <th>Endirim</th>
+                                    <th>Endirim səbəbi</th>
+                                    <th>Zəmanət müddəti</th>
+                                    <th>Zəmanət bitir</th>
+                                    <th>Ödəniş</th>
+                                    <th>Konsul</th>
+                                    <th>Ven lider</th>
+                                    <th>Diller</th>
+                                    <th>Canvasser</th>
+                                    <th>Əməliyyat</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <c:forEach var="t" items="${list}" varStatus="loop">
+                                    <tr>
+                                        <td><c:out value="${t.id}" /></td>
+                                        <td><c:out value="${t.action.inventory.name}" /></td>
+                                        <td><fmt:formatDate value = "${t.createdDate}" pattern = "dd.MM.yyyy" /></td>
+                                        <th><c:out value="${t.action.inventory.barcode}" /></th>
+                                        <th><c:out value="${t.action.warehouse.name}" /></th>
+                                        <th><c:out value="${t.customer.person.fullName}" /></th>
+                                        <th>
+                                            <c:out value="${t.customer.person.contact.email}" /><br/>
+                                            <c:out value="${t.customer.person.contact.mobilePhone}" />,&nbsp;
+                                            <c:out value="${t.customer.person.contact.homePhone}" /><br/>
+                                            <c:out value="${t.customer.person.contact.city.name}" />,&nbsp;
+                                            <c:out value="${t.customer.person.contact.address}" /><br/>
+                                            <c:out value="${t.customer.person.contact.livingCity.name}" />,&nbsp;
+                                            <c:out value="${t.customer.person.contact.livingAddress}" />
+                                        </th>
+                                        <th><c:out value="${t.payment.price}" /></th>
+                                        <th><c:out value="${t.payment.lastPrice}" /></th>
+                                        <td><c:out value="${t.payment.down}" /></td>
+                                        <td><c:out value="${t.payment.schedule.name}" /></td>
+                                        <td><c:out value="${t.payment.period.name}" /></td>
+                                        <td><c:out value="${t.payment.discount}" /></td>
+                                        <td><c:out value="${t.payment.description}" /></td>
+                                        <td><c:out value="${t.guarantee}" /> ay</td>
+                                        <td><fmt:formatDate value = "${t.guaranteeExpire}" pattern = "dd.MM.yyyy" /></td>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${t.payment.cash}">
+                                                    <span class="kt-font-bold kt-font-success">Nəğd</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span class="kt-font-bold kt-font-danger">Kredit</span>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </td>
+                                        <td><c:out value="${t.console.person.fullName}" /></td>
+                                        <td><c:out value="${t.vanLeader.person.fullName}" /></td>
+                                        <td><c:out value="${t.dealer.person.fullName}" /></td>
+                                        <td><c:out value="${t.canavasser.person.fullName}" /></td>
+                                        <td nowrap class="text-center">
+                                            <%--<c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
+                                            <c:choose>
+                                                <c:when test="${view.status}">
+                                                    <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
+                                                        <i class="la <c:out value="${view.object.icon}"/>"></i>
+                                                    </a>
+                                                </c:when>
+                                            </c:choose>
+                                            <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
+                                            <c:choose>
+                                                <c:when test="${edit.status}">
+                                                    <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                                                        <i class="<c:out value="${edit.object.icon}"/>"></i>
+                                                    </a>
+                                                </c:when>
+                                            </c:choose>
+                                            <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
+                                            <c:choose>
+                                                <c:when test="${delete.status}">
+                                                    <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
+                                                        <i class="<c:out value="${delete.object.icon}"/>"></i>
+                                                    </a>
+                                                </c:when>
+                                            </c:choose>--%>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                                </tbody>
+                            </table>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="row">
+                                <div class="col-md-12 text-center" style="letter-spacing: 10px;">
+                                    Məlumat yoxdur
+                                </div>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
         </div>
@@ -329,7 +437,7 @@
                             <div class="kt-form__section kt-form__section--first">
                                 <div class="kt-wizard-v1__form">
                                     <div class="row">
-                                        <div class="col-sm-4 offset-sm-3">
+                                        <div class="col-sm-4 offset-sm-1">
                                             <form:label path="payment.price">Qiymət</form:label>
                                             <form:select  path="payment.price" onchange="calculate($(this))" cssClass="custom-select form-control">
                                                 <form:options items="${sale_prices}" itemLabel="name" itemValue="attr1" />
@@ -343,6 +451,13 @@
                                                     <span></span>
                                                 </label>
                                             </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <form:label path="guarantee">Zəmanət müddəti</form:label>
+                                            <form:select  path="guarantee" cssClass="custom-select form-control">
+                                                <form:options items="${guarantees}" itemLabel="name" itemValue="attr1" />
+                                            </form:select>
+                                            <form:errors path="guarantee" cssClass="control-label alert-danger"/>
                                         </div>
                                     </div>
                                     <div class="row kt-hidden animated zoomIn" id="cash-div">
@@ -533,7 +648,7 @@
                             <button class="btn btn-secondary btn-md btn-tall btn-wide kt-font-bold kt-font-transform-u" data-ktwizard-type="action-prev">
                                 Geri
                             </button>
-                            <button class="btn btn-success btn-md btn-tall btn-wide kt-font-bold kt-font-transform-u" data-ktwizard-type="action-submit" onclick="submit($('kt_form'))">
+                            <button class="btn btn-success btn-md btn-tall btn-wide kt-font-bold kt-font-transform-u" data-ktwizard-type="action-submit">
                                 Yadda saxla
                             </button>
                             <button class="btn btn-brand btn-md btn-tall btn-wide kt-font-bold kt-font-transform-u" data-ktwizard-type="action-next">
@@ -547,6 +662,8 @@
         </div>
     </div>
 </div>
+
+<script src="<c:url value="/assets/js/demo4/pages/crud/datatables/advanced/row-grouping.js" />" type="text/javascript"></script>
 
 <script>
     $('.select2-single').select2({
@@ -611,7 +728,7 @@
         var price = $(element).val();
         var discount = $("input[name='payment.discount']").val();
         if(discount.trim().length>0){
-            var discounts = discount.trim().split("%")
+            var discounts = discount.trim().split("%");
             if(discounts.length>1){
                 price = price-price*parseFloat(discounts[0])*0.01;
             } else {
@@ -822,10 +939,13 @@
                             KTApp.unprogress(btn);
                             swal.fire({
                                 "title": "",
-                                "text": "The application has been successfully submitted!",
+                                "text": "Əməliyyat uğurla yerinə yetirildi!",
                                 "type": "success",
-                                "confirmButtonClass": "btn btn-secondary"
-                            });
+                                "confirmButtonClass": "btn btn-secondary",
+                                onOpen: function(){
+                                    $('#modal-operation').modal('toggle');
+                                }
+                            })
                         }
                     });
                 }

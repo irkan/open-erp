@@ -53,6 +53,7 @@ public class Constants {
     public static final String ADVANCES = "advances";
     public static final String PAYMENT_SCHEDULES = "payment_schedules";
     public static final String PAYMENT_PERIODS = "payment_periods";
+    public static final String GUARANTEES = "guarantees";
 
     public static final class STATUS{
         public static final String RESPONSE = "response";

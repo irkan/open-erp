@@ -58,6 +58,8 @@ public class SaleController extends SkeletonController {
             model.addAttribute(Constants.SALE_PRICES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("sale-price"));
             model.addAttribute(Constants.PAYMENT_SCHEDULES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-schedule"));
             model.addAttribute(Constants.PAYMENT_PERIODS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-period"));
+            model.addAttribute(Constants.GUARANTEES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("guarantee"));
+            model.addAttribute(Constants.LIST, salesRepository.getSalesByActiveTrue());
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Sales());
             }
@@ -89,7 +91,11 @@ public class SaleController extends SkeletonController {
                 action.setEmployee(oldAction.getEmployee());
                 sales.setAction(action);
             }
-
+            if(sales.getPayment().getCash()){
+                sales.getPayment().setPeriod(null);
+                sales.getPayment().setSchedule(null);
+            }
+            sales.setGuaranteeExpire(Util.guarantee(sales.getGuarantee()));
             salesRepository.save(sales);
 
             if(sales.getPayment()!=null && sales.getPayment().getSchedules()!=null && sales.getPayment().getSchedules().size()>0){

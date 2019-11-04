@@ -423,4 +423,10 @@ public class Util {
         return convertedEmployees;
     }
 
+    public static Date guarantee(int guarantee){
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH, guarantee);
+        return cal.getTime();
+    }
+
 }

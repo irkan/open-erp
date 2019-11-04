@@ -71,7 +71,7 @@ public class Person {
     private User createdUser;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "person")
+    @OneToOne(mappedBy = "person", cascade=CascadeType.ALL)
     private Customer customer;
 
     @JsonIgnore

@@ -95,8 +95,7 @@ public class AccountingController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()) {
             Transaction trn = transactionRepository.getTransactionById(transaction.getId());
-            if (trn.getBranch().getId() == Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getId()){
-                trn.setApprove(true);
+            if (trn.getBranch().getId() == Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getId()){ trn.setApprove(true);
                 trn.setApproveDate(new Date());
                 trn.setPrice(transaction.getPrice());
                 trn.setCurrency(transaction.getCurrency());

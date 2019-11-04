@@ -1,5 +1,6 @@
 package com.openerp.entity;
 
+import com.openerp.util.Util;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -48,6 +49,14 @@ public class Sales {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hr_employee_canavasser_id")
     private Employee canavasser;
+
+    @Column(name = "guarantee", nullable = false)
+    private int guarantee;
+
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    @Column(name = "guarantee_expire", nullable = false)
+    private Date guaranteeExpire = new Date();
 
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;

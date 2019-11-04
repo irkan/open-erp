@@ -122,6 +122,8 @@ public class DBConfiguration {
             types.add(schedulePaymentType);
             DictionaryType periodPaymentType = new DictionaryType("Ödəniş periodu", "payment-period", null);
             types.add(periodPaymentType);
+            DictionaryType guaranteeType = new DictionaryType("Zəmanət müddəti", "guarantee", null);
+            types.add(guaranteeType);
 
             dictionaryTypeRepository.saveAll(types);
 
@@ -411,6 +413,8 @@ public class DBConfiguration {
             dictionaries.add(periodPayment20);
             Dictionary periodPayment25 = new Dictionary("Hər ayın 25-i", "25", null, periodPaymentType);
             dictionaries.add(periodPayment25);
+            Dictionary guarantee24 = new Dictionary("24 ay", "24", null, guaranteeType);
+            dictionaries.add(guarantee24);
 
             dictionaryRepository.saveAll(dictionaries);
 
