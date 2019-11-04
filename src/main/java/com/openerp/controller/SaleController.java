@@ -52,6 +52,7 @@ public class SaleController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new SaleGroup());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.SALES)){
+            model.addAttribute(Constants.EMPLOYEES, employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization_Id(getSessionUser().getEmployee().getOrganization().getId()));
             model.addAttribute(Constants.CITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("city"));
             model.addAttribute(Constants.SALE_PRICES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("sale-price"));
             model.addAttribute(Constants.PAYMENT_SCHEDULES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-schedule"));

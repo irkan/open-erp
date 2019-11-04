@@ -33,6 +33,10 @@ public class Sales {
     @JoinColumn(name = "sale_payment_id", nullable = false)
     private Payment payment;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "hr_employee_console_id")
+    private Employee console;
+
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;
 

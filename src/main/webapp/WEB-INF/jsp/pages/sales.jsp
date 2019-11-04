@@ -445,7 +445,12 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
-                                                <input type="text" class="form-control" />
+                                                <div class="form-group">
+                                                    <form:select  path="payment.period" cssClass="custom-select form-control">
+                                                        <form:options items="${employees}" itemLabel="person.firstName" itemValue="id" />
+                                                    </form:select>
+                                                    <form:errors path="payment.period" cssClass="control-label alert-danger"/>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -475,7 +480,7 @@
                                         <div class="row">
                                             <div class="col-md-3 offset-md-1 text-right">
                                                 <div class="kt-wizard-v1__review-title p-2">
-                                                    Satıcı
+                                                    Diller
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
@@ -586,7 +591,16 @@
                     success: function(data) {
                         table+="<tbody>";
                         $.each(data, function(k, v) {
-                            table+="<tr><th>"+(parseInt(k)+1)+"</th><th>"+v.scheduleDate.split(' ')[0]+"</th><th>"+v.amount+" <i style='font-style: italic; font-size: 10px;'>AZN<i></th></tr>";
+                            table+="<tr>" +
+                                "<th>"+(parseInt(k)+1)+"</th>" +
+                                "<th>" +
+                                "<input type='hidden' name='payment.schedules["+parseInt(k)+"].scheduleDate' /> "+
+                                v.scheduleDate.split(' ')[0]+
+                                "</th>" +
+                                "<th>" +
+                                "<input type='hidden' name='payment.schedules["+parseInt(k)+"].amount' />"+
+                                v.amount+
+                                " <i style='font-style: italic; font-size: 10px;'>AZN<i></th></tr>";
                             console.log(k + ' - ' + v)
                         });
                         table+="</tbody>";
