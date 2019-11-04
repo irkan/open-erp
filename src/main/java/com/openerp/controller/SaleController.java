@@ -2,6 +2,7 @@ package com.openerp.controller;
 
 import com.openerp.domain.Response;
 import com.openerp.entity.*;
+import com.openerp.entity.Dictionary;
 import com.openerp.util.Constants;
 import com.openerp.util.DateUtility;
 import com.openerp.util.Util;
@@ -17,10 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import java.time.YearMonth;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.regex.Pattern;
 
 @Controller
@@ -52,8 +50,18 @@ public class SaleController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new SaleGroup());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.SALES)){
-            model.addAttribute(Constants.EMPLOYEES, employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization_Id(getSessionUser().getEmployee().getOrganization().getId()));
+            List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization_Id(getSessionUser().getEmployee().getOrganization().getId());
+            List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
+            Util.convertedEmployees(employees, positions);
+            model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployees(employees, positions));
             model.addAttribute(Constants.CITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("city"));
+            model.addAttribute(Constants.SALE_PRICES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("sale-price"));
+            model.addAttribute(Constants.PAYMENT_SCHEDULES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-schedule"));
+            model.addAttribute(Constants.PAYMENT_PERIODS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-period"));
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new Sales());
+            }
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.CALCULATOR)){
             model.addAttribute(Constants.SALE_PRICES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("sale-price"));
             model.addAttribute(Constants.PAYMENT_SCHEDULES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-schedule"));
             model.addAttribute(Constants.PAYMENT_PERIODS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-period"));
@@ -62,6 +70,39 @@ public class SaleController extends SkeletonController {
             }
         }
         return "layout";
+    }
+
+    @PostMapping(value = "/sales")
+    public String postSales(@ModelAttribute(Constants.FORM) @Validated Sales sales, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()){
+            Action oldAction =  actionRepository.getActionById(sales.getAction().getId());
+            oldAction.setAmount(oldAction.getAmount()-1);
+
+            if(sales.getId()==null){
+                Action action = new Action();
+                action.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sell", "action"));
+                action.setAmount(1);
+                action.setInventory(oldAction.getInventory());
+                action.setSupplier(oldAction.getSupplier());
+                action.setWarehouse(oldAction.getWarehouse());
+                action.setEmployee(oldAction.getEmployee());
+                sales.setAction(action);
+            }
+
+            salesRepository.save(sales);
+
+            if(sales.getPayment()!=null && sales.getPayment().getSchedules()!=null && sales.getPayment().getSchedules().size()>0){
+                List<Schedule> schedules = sales.getPayment().getSchedules();
+                for(Schedule schedule: schedules){
+                    schedule.setPayment(sales.getPayment());
+                }
+                scheduleRepository.saveAll(schedules);
+            }
+
+            actionRepository.save(oldAction);
+        }
+        return mapPost(sales, binding, redirectAttributes);
     }
 
     @PostMapping(value = "/sale-group")

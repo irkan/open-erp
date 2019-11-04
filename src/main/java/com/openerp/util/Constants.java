@@ -100,5 +100,6 @@ public class Constants {
         public static final String SALARY_EMPLOYEE = "salary-employee";
         public static final String SALES = "sales";
         public static final String CONSOLIDATE = "consolidate";
+        public static final String CALCULATOR = "calculator";
     }
 }

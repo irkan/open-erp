@@ -225,8 +225,8 @@ public class DBConfiguration {
             dictionaries.add(consolidateDic);
             Dictionary returnAction = new Dictionary("Qaytarılma", "return", null, actionType);
             dictionaries.add(returnAction);
-            Dictionary deletionAction = new Dictionary("Silinmə", "deletion", null, actionType);
-            dictionaries.add(deletionAction);
+            Dictionary sellAction = new Dictionary("Satış", "sell", null, actionType);
+            dictionaries.add(sellAction);
             Dictionary cancellationAction = new Dictionary("Ləğv edilmə", "cancellation", null, actionType);
             dictionaries.add(cancellationAction);
             Dictionary customCostAction = new Dictionary("Gömrük", "custom", "expense", actionType);

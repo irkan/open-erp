@@ -21,7 +21,7 @@ public class Customer {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "common_person_id", nullable = false)
     private Person person;
 

@@ -409,4 +409,18 @@ public class Util {
         return "0";
     }
 
+    public static Map<String, List<Employee>> convertedEmployees(List<Employee> employees, List<Dictionary> positions){
+        Map<String, List<Employee>> convertedEmployees = new HashMap<>();
+        for(Dictionary position: positions){
+            List<Employee> items = new ArrayList<>();
+            for(Employee employee: employees){
+                if(position.getAttr1().equalsIgnoreCase(employee.getPosition().getAttr1()) || position.getAttr1().contentEquals(employee.getPosition().getAttr1())){
+                    items.add(employee);
+                }
+            }
+            convertedEmployees.put(position.getName(), items);
+        }
+        return convertedEmployees;
+    }
+
 }

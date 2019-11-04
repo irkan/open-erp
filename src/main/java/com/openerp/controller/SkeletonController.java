@@ -151,6 +151,15 @@ public class SkeletonController {
     SaleGroupEmployeeRepository saleGroupEmployeeRepository;
 
     @Autowired
+    SalesRepository salesRepository;
+
+    @Autowired
+    ScheduleRepository scheduleRepository;
+
+    @Autowired
+    CustomerRepository customerRepository;
+
+    @Autowired
     HttpServletRequest request;
 
     @Autowired

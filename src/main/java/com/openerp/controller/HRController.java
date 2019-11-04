@@ -251,7 +251,7 @@ public class HRController extends SkeletonController {
 
     @PostMapping(value = "/vacation")
     public String postVacation(@ModelAttribute(Constants.FORM) @Validated Vacation vacation, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
-        binding = check(binding, vacation.getDateRange(), vacation .getEmployee());
+        binding = check(binding, vacation.getDateRange(), vacation.getEmployee());
         if(!binding.hasErrors()){
             String rangeDates[] = vacation.getDateRange().split("-");
             vacation.setStartDate(DateUtility.getUtilDate(rangeDates[0].trim()));

@@ -21,21 +21,33 @@ public class Sales {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "crm_customer_id", nullable = false)
     private Customer customer;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "warehouse_action_id")
     private Action action;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "sale_payment_id", nullable = false)
     private Payment payment;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hr_employee_console_id")
     private Employee console;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "hr_employee_van_leader_id")
+    private Employee vanLeader;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "hr_employee_dealer_id")
+    private Employee dealer;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "hr_employee_canavasser_id")
+    private Employee canavasser;
 
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;

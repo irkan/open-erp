@@ -98,16 +98,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="kt-wizard-v1__nav-item" data-ktwizard-type="step">
-                                <div class="kt-wizard-v1__nav-body">
-                                    <div class="kt-wizard-v1__nav-icon">
-                                        <i class="flaticon-globe"></i>
-                                    </div>
-                                    <div class="kt-wizard-v1__nav-label">
-                                        6. Baxış
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -446,10 +436,14 @@
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group">
-                                                    <form:select  path="payment.period" cssClass="custom-select form-control">
-                                                        <form:options items="${employees}" itemLabel="person.firstName" itemValue="id" />
+                                                    <form:select  path="console" cssClass="custom-select form-control select2-single" multiple="single">
+                                                        <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
+                                                            <optgroup label="${itemGroup.key}">
+                                                                <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
+                                                            </optgroup>
+                                                        </c:forEach>
                                                     </form:select>
-                                                    <form:errors path="payment.period" cssClass="control-label alert-danger"/>
+                                                    <form:errors path="console" cssClass="control-label alert-danger"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -467,7 +461,16 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
-                                                <input type="text" class="form-control" />
+                                                <div class="form-group">
+                                                    <form:select  path="vanLeader" cssClass="custom-select form-control select2-single" multiple="single">
+                                                        <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
+                                                            <optgroup label="${itemGroup.key}">
+                                                                <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
+                                                            </optgroup>
+                                                        </c:forEach>
+                                                    </form:select>
+                                                    <form:errors path="vanLeader" cssClass="control-label alert-danger"/>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -484,7 +487,16 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
-                                                <input type="text" class="form-control" />
+                                                <div class="form-group">
+                                                    <form:select  path="dealer" cssClass="custom-select form-control select2-single" multiple="single">
+                                                        <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
+                                                            <optgroup label="${itemGroup.key}">
+                                                                <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
+                                                            </optgroup>
+                                                        </c:forEach>
+                                                    </form:select>
+                                                    <form:errors path="dealer" cssClass="control-label alert-danger"/>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -501,54 +513,17 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
-                                                <input type="text" class="form-control" />
+                                                <div class="form-group">
+                                                    <form:select  path="canavasser" cssClass="custom-select form-control select2-single" multiple="single">
+                                                        <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
+                                                            <optgroup label="${itemGroup.key}">
+                                                                <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
+                                                            </optgroup>
+                                                        </c:forEach>
+                                                    </form:select>
+                                                    <form:errors path="canavasser" cssClass="control-label alert-danger"/>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="kt-wizard-v1__content" data-ktwizard-type="step-content">
-                            <div class="kt-heading kt-heading--md">Review your Details and Submit</div>
-                            <div class="kt-form__section kt-form__section--first">
-                                <div class="kt-wizard-v1__review">
-                                    <div class="kt-wizard-v1__review-item">
-                                        <div class="kt-wizard-v1__review-title">
-                                            Current Address
-                                        </div>
-                                        <div class="kt-wizard-v1__review-content">
-                                            Address Line 1<br />
-                                            Address Line 2<br />
-                                            Melbourne 3000, VIC, Australia
-                                        </div>
-                                    </div>
-                                    <div class="kt-wizard-v1__review-item">
-                                        <div class="kt-wizard-v1__review-title">
-                                            Delivery Details
-                                        </div>
-                                        <div class="kt-wizard-v1__review-content">
-                                            Package: Complete Workstation (Monitor, Computer, Keyboard & Mouse)<br />
-                                            Weight: 25kg<br />
-                                            Dimensions: 110cm (w) x 90cm (h) x 150cm (L)
-                                        </div>
-                                    </div>
-                                    <div class="kt-wizard-v1__review-item">
-                                        <div class="kt-wizard-v1__review-title">
-                                            Delivery Service Type
-                                        </div>
-                                        <div class="kt-wizard-v1__review-content">
-                                            Overnight Delivery with Regular Packaging<br />
-                                            Preferred Morning (8:00AM - 11:00AM) Delivery
-                                        </div>
-                                    </div>
-                                    <div class="kt-wizard-v1__review-item">
-                                        <div class="kt-wizard-v1__review-title">
-                                            Delivery Address
-                                        </div>
-                                        <div class="kt-wizard-v1__review-content">
-                                            Address Line 1<br />
-                                            Address Line 2<br />
-                                            Preston 3072, VIC, Australia
                                         </div>
                                     </div>
                                 </div>
@@ -558,7 +533,7 @@
                             <button class="btn btn-secondary btn-md btn-tall btn-wide kt-font-bold kt-font-transform-u" data-ktwizard-type="action-prev">
                                 Geri
                             </button>
-                            <button class="btn btn-success btn-md btn-tall btn-wide kt-font-bold kt-font-transform-u" data-ktwizard-type="action-submit">
+                            <button class="btn btn-success btn-md btn-tall btn-wide kt-font-bold kt-font-transform-u" data-ktwizard-type="action-submit" onclick="submit($('kt_form'))">
                                 Yadda saxla
                             </button>
                             <button class="btn btn-brand btn-md btn-tall btn-wide kt-font-bold kt-font-transform-u" data-ktwizard-type="action-next">
@@ -574,6 +549,11 @@
 </div>
 
 <script>
+    $('.select2-single').select2({
+        placeholder: "Əməkdaşı seçin",
+        allowClear: true
+    });
+
     function schedule(lastPrice, down, schedule, period){
         var table='';
         swal.fire({
@@ -594,11 +574,11 @@
                             table+="<tr>" +
                                 "<th>"+(parseInt(k)+1)+"</th>" +
                                 "<th>" +
-                                "<input type='hidden' name='payment.schedules["+parseInt(k)+"].scheduleDate' /> "+
+                                "<input type='hidden' name='payment.schedules["+parseInt(k)+"].scheduleDate'  value='"+v.scheduleDate.split(' ')[0]+"'/> "+
                                 v.scheduleDate.split(' ')[0]+
                                 "</th>" +
                                 "<th>" +
-                                "<input type='hidden' name='payment.schedules["+parseInt(k)+"].amount' />"+
+                                "<input type='hidden' name='payment.schedules["+parseInt(k)+"].amount' value='"+v.amount+"' />"+
                                 v.amount+
                                 " <i style='font-style: italic; font-size: 10px;'>AZN<i></th></tr>";
                             console.log(k + ' - ' + v)

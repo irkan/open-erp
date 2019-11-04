@@ -57,7 +57,7 @@ public class Payment {
     @Column(name = "is_cash", nullable = false, columnDefinition="boolean default false")
     private Boolean cash = false;
 
-    @OneToMany(mappedBy = "payment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "payment", fetch = FetchType.LAZY)
     private List<Schedule> schedules;
 
     @Temporal(TemporalType.TIMESTAMP)
