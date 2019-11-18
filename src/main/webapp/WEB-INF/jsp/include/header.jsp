@@ -6,12 +6,14 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <title>${sessionScope.module_description}</title>
 <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <meta name="description" content="Latest updates and statistic charts">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<spring:eval expression="@environment.getProperty('logo.name')" var="logo" />
 <%--<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700">--%>
 <%--<link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap&subset=devanagari,latin-ext" rel="stylesheet">--%>
 <%@include file="font.jsp" %>
@@ -48,4 +50,4 @@
 <link href="<c:url value="/assets/css/demo4/style.bundle.css" />" rel="stylesheet" type="text/css"/>
 <link href="<c:url value="/assets/vendors/general/animate.css/animate.css" />" rel="stylesheet" type="text/css"/>
 <link href="<c:url value="/assets/css/custom.css" />" rel="stylesheet" type="text/css"/>
-<link rel="shortcut icon" href="<c:url value="/assets/media/logos/logo_sual_32_T28_icon.ico" />"/>
+<link rel="shortcut icon" href="<c:url value="/assets/media/logos/${logo}-favicon.ico" />"/>

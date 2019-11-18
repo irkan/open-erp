@@ -7,7 +7,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="utl" uri="/WEB-INF/tld/Util.tld" %>
@@ -17,9 +17,9 @@
     <div class="kt-container ">
         <div class="kt-header__brand   kt-grid__item" id="kt_header_brand">
             <a class="kt-header__brand-logo" href="#">
-                <img alt="Logo" src="<c:url value="/assets/media/logos/logo-sual-40.png" />"
+                <img alt="Logo" src="<c:url value="/assets/media/logos/${logo}-40.png" />"
                      class="kt-header__brand-logo-default"/>
-                <img alt="Logo" src="<c:url value="/assets/media/logos/logo-sual-32.png" />"
+                <img alt="Logo" src="<c:url value="/assets/media/logos/${logo}-32.png" />"
                      class="kt-header__brand-logo-sticky"/>
             </a>
         </div>

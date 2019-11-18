@@ -506,6 +506,8 @@ public class DBConfiguration {
             modules.add(collect);
             Module paymentRegulator = new Module("Ödəniş requlyatoru", "Ödəniş requlyatoru", "payment-regulator", "flaticon-whatsapp", collect);
             modules.add(paymentRegulator);
+            Module idgroup = new Module("İD Qrup", "Daxili sistem və inteqrasyalar", "idgroup", "flaticon2-cardiogram", null);
+            modules.add(idgroup);
 
             moduleRepository.saveAll(modules);
 

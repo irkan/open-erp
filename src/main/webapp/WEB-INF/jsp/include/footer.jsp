@@ -5,7 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <div class="kt-footer  kt-footer--extended  kt-grid__item" id="kt_footer"
      style="background-image: url('<c:url value="/assets/media/bg/bg-2.jpg" />');">
     <div class="kt-footer__bottom">

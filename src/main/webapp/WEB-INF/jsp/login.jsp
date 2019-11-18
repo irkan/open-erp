@@ -1,6 +1,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<jsp:useBean id="random" class="java.util.Random" scope="application"/>
+<spring:eval expression="@environment.getProperty('logo.name')" var="logo" />
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,7 +17,7 @@
     <link href="<c:url value="/assets/vendors/custom/vendors/flaticon/flaticon.css" />" rel="stylesheet" type="text/css"/>
     <link href="<c:url value="/assets/vendors/custom/vendors/flaticon2/flaticon.css" />" rel="stylesheet" type="text/css"/>
 
-    <link rel="shortcut icon" href="<c:url value="/assets/media/logos/logo_sual_32_T28_icon.ico" />"/>
+    <link rel="shortcut icon" href="<c:url value="/assets/media/logos/${logo}-favicon.ico" />"/>
     <style>
         body {
             margin: 0;
@@ -78,17 +80,17 @@
 <div id="login-content" class="kt-grid kt-grid--ver kt-grid--root kt-page">
     <div class="kt-grid kt-grid--hor kt-grid--root kt-login kt-login--v2 kt-login--signin" id="kt_login">
         <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor"
-             style="background-image: url('<c:url value="/assets/media/bg/bg-1.jpg"/>');">
+             style="background-image: url('<c:url value="/assets/media/bg/bg-${random.nextInt(22)+1}.jpg"/>'); background-size: cover;">
             <div class="kt-grid__item kt-grid__item--fluid kt-login__wrapper">
                 <div class="kt-login__container">
                     <div class="kt-login__logo">
                         <a href="#">
-                            <img src="<c:url value="/assets/media/logos/logo-sual.png"/>">
+                            <img src="<c:url value="/assets/media/logos/${logo}-82.png"/>">
                         </a>
                     </div>
                     <div class="kt-login__signin">
                         <div class="kt-login__head">
-                            <h3 class="kt-login__title">Sistemə daxil olun</h3>
+                            <h3 class="kt-login__title" style="letter-spacing: 7px;text-transform: uppercase">Sİstemə gİrİş</h3>
                         </div>
                         <form class="kt-form" method="post" action="/login">
                             <c:if test="${error eq 'true'}">
@@ -198,9 +200,6 @@
         requestAnimationFrame(update);
     };
     requestAnimationFrame(update);
-    ;
-
-
 </script>
 </body>
 </html>
