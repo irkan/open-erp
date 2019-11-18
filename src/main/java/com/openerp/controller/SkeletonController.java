@@ -151,6 +151,9 @@ public class SkeletonController {
     PaymentRepository paymentRepository;
 
     @Autowired
+    PaymentRegulatorNoteRepository paymentRegulatorNoteRepository;
+
+    @Autowired
     ScheduleRepository scheduleRepository;
 
     @Autowired

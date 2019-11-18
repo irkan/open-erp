@@ -124,6 +124,8 @@ public class DBConfiguration {
             types.add(periodPaymentType);
             DictionaryType guaranteeType = new DictionaryType("Zəmanət müddəti", "guarantee", null);
             types.add(guaranteeType);
+            DictionaryType contactChannelType = new DictionaryType("Əlaqə kanalı", "contact-channel", null);
+            types.add(contactChannelType);
 
             dictionaryTypeRepository.saveAll(types);
 
@@ -415,6 +417,12 @@ public class DBConfiguration {
             dictionaries.add(periodPayment25);
             Dictionary guarantee24 = new Dictionary("24 ay", "24", null, guaranteeType);
             dictionaries.add(guarantee24);
+            Dictionary contactChannel1 = new Dictionary("Zəng", "call", null, contactChannelType);
+            dictionaries.add(contactChannel1);
+            Dictionary contactChannel2 = new Dictionary("Whatsapp", "whatsapp", null, contactChannelType);
+            dictionaries.add(contactChannel2);
+            Dictionary contactChannel3 = new Dictionary("Email", "Email", null, contactChannelType);
+            dictionaries.add(contactChannel3);
 
             dictionaryRepository.saveAll(dictionaries);
 
@@ -504,8 +512,10 @@ public class DBConfiguration {
             modules.add(invoice);
             Module collect = new Module("Yığım", "Yığımların idarə edilməsi", "collect", "flaticon2-cardiogram", null);
             modules.add(collect);
-            Module paymentRegulator = new Module("Ödəniş requlyatoru", "Ödəniş requlyatoru", "payment-regulator", "flaticon-whatsapp", collect);
+            Module paymentRegulator = new Module("Ödəniş requlyatoru", "Ödəniş requlyatoru", "payment-regulator", "flaticon-book", collect);
             modules.add(paymentRegulator);
+            Module paymentRegulatorNote = new Module("Əlaqə tarixçəsi", "Əlaqə tarixçəsi", "payment-regulator-note", "flaticon-whatsapp", paymentRegulator);
+            modules.add(paymentRegulatorNote);
             Module idgroup = new Module("İD Qrup", "Daxili sistem və inteqrasiyalar", "idgroup", "flaticon2-analytics-2", null);
             modules.add(idgroup);
             Module item = new Module("İnventar", "İnventar", "item", "flaticon2-open-box", idgroup);
@@ -603,6 +613,8 @@ public class DBConfiguration {
             moduleOperations.add(createModuleOperation25);
             ModuleOperation createModuleOperation26 = new ModuleOperation(item, create, null);
             moduleOperations.add(createModuleOperation26);
+            ModuleOperation createModuleOperation27 = new ModuleOperation(paymentRegulatorNote, create, null);
+            moduleOperations.add(createModuleOperation27);
 
 
             ModuleOperation editModuleOperation1 = new ModuleOperation(subModule1, edit, null);
@@ -649,6 +661,8 @@ public class DBConfiguration {
             moduleOperations.add(editModuleOperation25);
             ModuleOperation editModuleOperation26 = new ModuleOperation(item, edit, null);
             moduleOperations.add(editModuleOperation26);
+            ModuleOperation editModuleOperation27 = new ModuleOperation(paymentRegulatorNote, edit, null);
+            moduleOperations.add(editModuleOperation27);
 
             ModuleOperation deleteModuleOperation1 = new ModuleOperation(subModule1, delete, null);
             moduleOperations.add(deleteModuleOperation1);
@@ -700,6 +714,8 @@ public class DBConfiguration {
             moduleOperations.add(deleteModuleOperation27);
             ModuleOperation deleteModuleOperation28 = new ModuleOperation(item, delete, null);
             moduleOperations.add(deleteModuleOperation28);
+            ModuleOperation deleteModuleOperation29 = new ModuleOperation(paymentRegulatorNote, delete, null);
+            moduleOperations.add(deleteModuleOperation29);
 
             ModuleOperation viewModuleOperation6 = new ModuleOperation(subModule6, view, null);
             moduleOperations.add(viewModuleOperation6);
@@ -934,6 +950,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, createModuleOperation24));
             userModuleOperations.add(new UserModuleOperation(user, createModuleOperation25));
             userModuleOperations.add(new UserModuleOperation(user, createModuleOperation26));
+            userModuleOperations.add(new UserModuleOperation(user, createModuleOperation27));
 
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation2));
@@ -957,6 +974,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation24));
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation25));
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation26));
+            userModuleOperations.add(new UserModuleOperation(user, editModuleOperation27));
 
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation2));
@@ -983,6 +1001,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation26));
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation27));
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation28));
+            userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation29));
 
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation2));

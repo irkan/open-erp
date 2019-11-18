@@ -42,7 +42,31 @@ public class CollectController extends SkeletonController {
             }
         } else if(page.equalsIgnoreCase(Constants.ROUTE.PAYMENT_REGULATOR_DETAIL)){
             model.addAttribute(Constants.LIST, scheduleRepository.getScheduleDetails(new Date(), Integer.parseInt(data.get())));
+        } if(page.equalsIgnoreCase(Constants.ROUTE.PAYMENT_REGULATOR_NOTE)){
+            List<PaymentRegulatorNote> paymentRegulatorNotes = new ArrayList<>();
+            int paymentId = 0;
+            if(data.equals(Optional.empty())){
+                paymentRegulatorNotes = paymentRegulatorNoteRepository.getPaymentRegulatorNotesByActiveTrue();
+            } else {
+                paymentRegulatorNotes = paymentRegulatorNoteRepository.getPaymentRegulatorNotesByActiveTrueAndPayment_Id(Integer.parseInt(data.get()));
+                paymentId = Integer.parseInt(data.get());
+            }
+            model.addAttribute(Constants.LIST, paymentRegulatorNotes);
+            model.addAttribute(Constants.PAYMENT_ID, paymentId);
+            model.addAttribute(Constants.CONTACT_CHANNELS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("contact-channel"));
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new PaymentRegulatorNote());
+            }
         }
         return "layout";
+    }
+
+    @PostMapping(value = "/payment-regulator-note")
+    public String postShortenedWorkingDay(@ModelAttribute(Constants.FORM) @Validated PaymentRegulatorNote paymentRegulatorNote, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()){
+            paymentRegulatorNoteRepository.save(paymentRegulatorNote);
+        }
+        return mapPost(paymentRegulatorNote, binding, redirectAttributes);
     }
 }

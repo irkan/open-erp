@@ -29,9 +29,10 @@
                                     <th>İnventar</th>
                                     <th>Ödəniş tarixi</th>
                                     <th>Gecikir</th>
-                                    <th>Qrafik üzrə</th>
-                                    <th>Ödənilib</th>
-                                    <th>Qalıq</th>
+                                    <th>Qrafik</th>
+                                    <th>Borc</th>
+                                    <th>Satış</th>
+                                    <th>Sonuncu qeyd</th>
                                     <th>Prioritetlik</th>
                                     <th>Əməliyyat</th>
                                 </tr>
@@ -66,13 +67,31 @@
                                                 <c:out value = "${days}" /> gün
                                             </span>
                                         </th>
-                                        <th><c:out value="${t.amount}" /> AZN</th>
-                                        <th><c:out value="${t.payableAmount}" /> AZN</th>
+                                        <th>Qrafik üzrə: <c:out value="${t.amount}" /> AZN<br/>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ödənilib: <c:out value="${t.payableAmount}" /> AZN
+                                        </th>
                                         <th>
                                             <span class="kt-font-bold kt-font-danger">
                                                     <c:out value="${t.payableAmount-t.amount}" /> AZN
                                             </span>
                                         </th>
+                                        <th>
+                                            Qiymət: <c:out value="${t.payment.lastPrice}" /> AZN<br/>
+                                            Ödənilib: <c:out value="${t.payment.down}" /> AZN<br/>
+                                            Qalıq: <c:out value="${t.payment.lastPrice-t.payment.down}" /> AZN
+                                        </th>
+                                        <td>
+                                            <c:forEach var="n" items="${t.payment.paymentRegulatorNotes}" varStatus="lop">
+                                                <c:if test="${lop.index==(t.payment.paymentRegulatorNotes.size()-1)}">
+                                                    <span style="font-weight: bold"><c:out value="${n.contactChannel.name}"/>,
+                                                    <fmt:formatDate value = "${n.createdDate}" pattern = "dd.MM.yyyy" />,
+                                                    <fmt:formatDate value = "${n.nextContactDate}" pattern = "dd.MM.yyyy" /></span>
+                                                    <c:if test="${not empty n.description}">
+                                                        <br/><c:out value="${n.description}"/>
+                                                    </c:if>
+                                                </c:if>
+                                            </c:forEach>
+                                        </td>
                                         <td>
                                             <div id="score-rating-<c:out value="${loop.index}" />" style="width: 130px;"></div>
                                             <script>
@@ -84,6 +103,14 @@
                                             </script>
                                         </td>
                                         <td nowrap class="text-center">
+                                            <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
+                                            <c:choose>
+                                                <c:when test="${view.status}">
+                                                    <a href="/collect/payment-regulator-note/<c:out value="${t.payment.id}"/>" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Qeydlər">
+                                                        <i class="la <c:out value="${view.object.icon}"/>"></i>
+                                                    </a>
+                                                </c:when>
+                                            </c:choose>
                                             <c:set var="detail" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'detail')}"/>
                                             <c:choose>
                                                 <c:when test="${detail.status}">

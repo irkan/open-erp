@@ -124,6 +124,10 @@ public class DeleteController extends SkeletonController {
             Item item = itemRepository.getItemById(Integer.parseInt(id));
             item.setActive(false);
             itemRepository.save(item);
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.PAYMENT_REGULATOR_NOTE)){
+            PaymentRegulatorNote paymentRegulatorNote = paymentRegulatorNoteRepository.getPaymentRegulatorNoteById(Integer.parseInt(id));
+            paymentRegulatorNote.setActive(false);
+            paymentRegulatorNoteRepository.save(paymentRegulatorNote);
         }
         return "redirect:/"+parent+"/"+path;
     }

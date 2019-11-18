@@ -5,6 +5,8 @@ import jdk.nashorn.internal.ir.annotations.Ignore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
 
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
@@ -61,6 +63,9 @@ public class Payment {
 
     @OneToMany(mappedBy = "payment", fetch = FetchType.LAZY)
     private List<Schedule> schedules;
+
+    @OneToMany(mappedBy = "payment", fetch = FetchType.LAZY)
+    private List<PaymentRegulatorNote> paymentRegulatorNotes;
 
     @JsonIgnore
     @OneToOne(mappedBy = "payment")

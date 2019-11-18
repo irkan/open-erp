@@ -54,6 +54,8 @@ public class Constants {
     public static final String PAYMENT_SCHEDULES = "payment_schedules";
     public static final String PAYMENT_PERIODS = "payment_periods";
     public static final String GUARANTEES = "guarantees";
+    public static final String CONTACT_CHANNELS = "contact_channels";
+    public static final String PAYMENT_ID = "payment_id";
 
     public static final class STATUS{
         public static final String RESPONSE = "response";
@@ -104,5 +106,6 @@ public class Constants {
         public static final String PAYMENT_REGULATOR = "payment-regulator";
         public static final String PAYMENT_REGULATOR_DETAIL = "payment-regulator-detail";
         public static final String ITEM = "item";
+        public static final String PAYMENT_REGULATOR_NOTE = "payment-regulator-note";
     }
 }

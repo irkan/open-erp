@@ -13,7 +13,7 @@
             <div class="kt-footer__wrapper">
                 <div class="kt-footer__logo">
                     <a class="kt-header__brand-logo" href="#">
-                        <img alt="Logo" src="<c:url value="/assets/media/logos/logo-sual-32.png" />"
+                        <img alt="Logo" src="<c:url value="/assets/media/logos/${logo}-32.png" />"
                              class="kt-header__brand-logo-sticky">
                     </a>
                     <div class="kt-footer__copyright">
