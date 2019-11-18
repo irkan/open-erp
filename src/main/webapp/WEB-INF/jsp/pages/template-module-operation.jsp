@@ -50,7 +50,16 @@
                                                 <tr>
                                                     <td>${loop.index + 1}</td>
                                                     <td class="text-right"><span><c:out value="${m.name}" /></span><i class="icon-custom <c:out value="${m.icon}" />"></i></td>
-                                                    <td><c:out value="${m.module.name}" /></td>
+                                                    <td>
+                                                        <c:choose>
+                                                            <c:when test="${empty m.module.module}">
+                                                                <c:out value="${m.module.name}" />
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <c:out value="${m.module.module.name}" />
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </td>
                                                     <td class="text-center" style="width: 8px; background-color: #f7f8fa">
                                                         <label class="kt-checkbox kt-checkbox--brand">
                                                             <input type="checkbox" onclick="checkedRow(this)">

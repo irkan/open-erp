@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import com.openerp.entity.Item;
 import com.openerp.entity.NonWorkingDay;
 import com.openerp.entity.ShortenedWorkingDay;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -90,6 +91,27 @@ public class ReadWriteExcelFile {
 		wb.write(fileOut);
 		fileOut.flush();
 		fileOut.close();
+	}
+
+	public static List<Item> readXLSXFileItems(InputStream inputStream) throws IOException {
+		XSSFWorkbook  wb = new XSSFWorkbook(inputStream);
+		XSSFSheet sheet = wb.getSheetAt(0);
+		XSSFRow row;
+		Iterator rows = sheet.rowIterator();
+		List<Item> items = new ArrayList<>();
+		while (rows.hasNext()) {
+			row=(XSSFRow) rows.next();
+			if(row.getRowNum()>0){
+				Item item = new Item();
+				item.setBarcode(row.getCell(0).getStringCellValue());
+				item.setName(row.getCell(1).getStringCellValue());
+				item.setDescription(row.getCell(2).getStringCellValue());
+				item.setAmount((int)row.getCell(3).getNumericCellValue());
+				item.setPrice((double) row.getCell(4).getNumericCellValue());
+				items.add(item);
+			}
+		}
+		return items;
 	}
 
 	public static List<ShortenedWorkingDay> readXLSXFileShortenedWorkingDays(InputStream inputStream) throws IOException {

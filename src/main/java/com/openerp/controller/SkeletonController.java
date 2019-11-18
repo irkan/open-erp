@@ -157,6 +157,9 @@ public class SkeletonController {
     CustomerRepository customerRepository;
 
     @Autowired
+    ItemRepository itemRepository;
+
+    @Autowired
     HttpServletRequest request;
 
     @Autowired

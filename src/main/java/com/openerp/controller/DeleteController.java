@@ -120,6 +120,10 @@ public class DeleteController extends SkeletonController {
             action.setActive(false);
             actionRepository.save(action);
             return "redirect:/"+parent+"/"+path+"/"+action.getInventory().getId();
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.ITEM)){
+            Item item = itemRepository.getItemById(Integer.parseInt(id));
+            item.setActive(false);
+            itemRepository.save(item);
         }
         return "redirect:/"+parent+"/"+path;
     }

@@ -23,6 +23,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Util {
     public static Object check(Object object){
@@ -89,13 +90,24 @@ public class Util {
         return newList;
     }
 
-    public static <Module> ArrayList<Module> removeDuplicateModules(List<ModuleOperation> list) {
-        ArrayList<Module> newList = new ArrayList<>();
+    public static List<Module> removeDuplicateModules(List<ModuleOperation> list) {
+        List<Module> newList = new ArrayList<>();
         for (ModuleOperation element : list) {
             if (!newList.contains(element.getModule())) {
                 newList.add((Module) element.getModule());
             }
         }
+
+        Collections.sort(newList, new Comparator<Module>() {
+            @Override
+            public int compare(Module u1, Module u2) {
+                return u1.getModule().getName().compareTo(u2.getName());
+            }
+        });
+
+        /*List<Module> sortedModules = newList.stream()
+                .sorted(Comparator.comparing(Module::getName))
+                .collect(Collectors.toList());*/
         return newList;
     }
 
