@@ -94,20 +94,9 @@ public class Util {
         List<Module> newList = new ArrayList<>();
         for (ModuleOperation element : list) {
             if (!newList.contains(element.getModule())) {
-                newList.add((Module) element.getModule());
+                newList.add(element.getModule());
             }
         }
-
-        Collections.sort(newList, new Comparator<Module>() {
-            @Override
-            public int compare(Module u1, Module u2) {
-                return u1.getModule().getName().compareTo(u2.getName());
-            }
-        });
-
-        /*List<Module> sortedModules = newList.stream()
-                .sorted(Comparator.comparing(Module::getName))
-                .collect(Collectors.toList());*/
         return newList;
     }
 

@@ -35,7 +35,9 @@
                                     <thead>
                                     <tr style="height: 190px;">
                                         <td style="width: 15px;"></td>
-                                        <td colspan="3" style="width: 25%"></td>
+                                        <td style="width: 25%;"></td>
+                                        <td></td>
+                                        <td style="width: 20px"></td>
                                         <c:forEach var="t" items="${operations}" varStatus="loop">
                                             <td nowrap style="vertical-align: bottom;">
                                                 <div class="rotate" style="width: 30px;"><c:out value="${t.name}" /></div><br/><i class="icon-custom <c:out value="${t.icon}" />"></i>
@@ -49,7 +51,7 @@
                                             <c:when test="${not empty m.module}">
                                                 <tr>
                                                     <td>${loop.index + 1}</td>
-                                                    <td class="text-right"><span><c:out value="${m.name}" /></span><i class="icon-custom <c:out value="${m.icon}" />"></i></td>
+                                                    <td class="text-right"><div style="width: 100%; min-width: 150px;"><span><c:out value="${m.name}" /></span><i class="icon-custom <c:out value="${m.icon}" />"></i></div></td>
                                                     <td>
                                                         <c:choose>
                                                             <c:when test="${empty m.module.module}">
@@ -111,36 +113,11 @@
     </div>
 </div>
 
+<script src="<c:url value="/assets/js/demo4/pages/crud/datatables/advanced/row-grouping.js" />" type="text/javascript"></script>
+
 <script>
-    $(function(){
-        $('#group_table').DataTable({
-            responsive: true,
-            pageLength: 100,
-            autoWidth: false,
-            order: [[2, 'asc']],
-            drawCallback: function(settings) {
-                var api = this.api();
-                var rows = api.rows({page: 'current'}).nodes();
-                var last = null;
-
-                api.column(2, {page: 'current'}).data().each(function(group, i) {
-                    if (last !== group) {
-                        $(rows).eq(i).before(
-                            '<tr class="group"><td colspan="30">' + group + '</td></tr>'
-                        );
-                        last = group;
-                    }
-                });
-            },
-            columnDefs: [
-                {targets: [2], visible: false}
-            ],
-            ordering: false
-        })
-    });
-
     function checkedRow(element){
-        let row = $(element).closest("tr");
+        var row = $(element).closest("tr");
         if($(element).prop("checked") == true){
             $(row).find('input[type="checkbox"]').each(function(i, chk) {
                 $(chk).attr('checked', 'checked');
