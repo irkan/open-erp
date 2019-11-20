@@ -126,6 +126,8 @@ public class DBConfiguration {
             types.add(guaranteeType);
             DictionaryType contactChannelType = new DictionaryType("Əlaqə kanalı", "contact-channel", null);
             types.add(contactChannelType);
+            DictionaryType paymentChannelType = new DictionaryType("Ödəniş kanalı", "payment-channel", null);
+            types.add(paymentChannelType);
 
             dictionaryTypeRepository.saveAll(types);
 
@@ -171,7 +173,7 @@ public class DBConfiguration {
             dictionaries.add(position8);
             Dictionary position9 = new Dictionary("Usta", "Master", null, positionType);
             dictionaries.add(position9);
-            Dictionary position10 = new Dictionary("Baş usta", "Head master", null, positionType);
+            Dictionary position10 = new Dictionary("Yığımçı", "Collector", null, positionType);
             dictionaries.add(position10);
             Dictionary position11 = new Dictionary("Ven lider", "Van lead", null, positionType);
             dictionaries.add(position11);
@@ -423,6 +425,10 @@ public class DBConfiguration {
             dictionaries.add(contactChannel2);
             Dictionary contactChannel3 = new Dictionary("Email", "Email", null, contactChannelType);
             dictionaries.add(contactChannel3);
+            Dictionary paymentChannel1 = new Dictionary("Nağd", "cash", null, paymentChannelType);
+            dictionaries.add(paymentChannel1);
+            Dictionary paymentChannel2 = new Dictionary("MilliÖN", "million", null, paymentChannelType);
+            dictionaries.add(paymentChannel2);
 
             dictionaryRepository.saveAll(dictionaries);
 
@@ -801,6 +807,8 @@ public class DBConfiguration {
             moduleOperations.add(approveModuleOperation5);
             ModuleOperation approveModuleOperation6 = new ModuleOperation(action, approve, null);
             moduleOperations.add(approveModuleOperation6);
+            ModuleOperation approveModuleOperation7 = new ModuleOperation(invoice, approve, null);
+            moduleOperations.add(approveModuleOperation7);
 
             ModuleOperation uploadModuleOperation1 = new ModuleOperation(nonWorkingDay, upload, null);
             moduleOperations.add(uploadModuleOperation1);
@@ -836,6 +844,8 @@ public class DBConfiguration {
 
             ModuleOperation consolidateModuleOperation1 = new ModuleOperation(action, consolidateOperation, null);
             moduleOperations.add(consolidateModuleOperation1);
+            ModuleOperation consolidateModuleOperation2 = new ModuleOperation(invoice, consolidateOperation, null);
+            moduleOperations.add(consolidateModuleOperation2);
 
             ModuleOperation returnModuleOperation1 = new ModuleOperation(action, returnOperation, null);
             moduleOperations.add(returnModuleOperation1);
@@ -1046,6 +1056,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, approveModuleOperation4));
             userModuleOperations.add(new UserModuleOperation(user, approveModuleOperation5));
             userModuleOperations.add(new UserModuleOperation(user, approveModuleOperation6));
+            userModuleOperations.add(new UserModuleOperation(user, approveModuleOperation7));
 
             userModuleOperations.add(new UserModuleOperation(user, uploadModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, uploadModuleOperation2));
@@ -1068,6 +1079,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, transferModuleOperation1));
 
             userModuleOperations.add(new UserModuleOperation(user, consolidateModuleOperation1));
+            userModuleOperations.add(new UserModuleOperation(user, consolidateModuleOperation2));
 
             userModuleOperations.add(new UserModuleOperation(user, returnModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, returnModuleOperation2));
