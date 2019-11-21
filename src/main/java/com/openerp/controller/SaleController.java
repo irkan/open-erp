@@ -94,7 +94,7 @@ public class SaleController extends SkeletonController {
                 sales.getPayment().setPeriod(null);
                 sales.getPayment().setSchedule(null);
             }
-            sales.setGuaranteeExpire(Util.guarantee(sales.getGuarantee()));
+            sales.setGuaranteeExpire(Util.guarantee(sales.getSaleDate()==null?new Date():sales.getSaleDate(), sales.getGuarantee()));
             salesRepository.save(sales);
 
             if(sales.getPayment()!=null && sales.getPayment().getSchedules()!=null && sales.getPayment().getSchedules().size()>0){
@@ -172,5 +172,16 @@ public class SaleController extends SkeletonController {
             invoiceRepository.save(invc);
         }
         return mapPost(invc, binding, redirectAttributes, "/sale/invoice/");
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/sales/check/{saleId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Sales getSalesCheck(@PathVariable("saleId") String saleId){
+        try {
+             return salesRepository.getSalesByIdAndActiveTrue(Integer.parseInt(saleId));
+        } catch (Exception e){
+            log.error(e);
+        }
+        return null;
     }
 }

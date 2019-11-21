@@ -51,7 +51,7 @@
                                     <tr>
                                         <td><c:out value="${t.id}" /></td>
                                         <td><c:out value="${t.action.inventory.name}" /></td>
-                                        <td><fmt:formatDate value = "${t.createdDate}" pattern = "dd.MM.yyyy" /></td>
+                                        <td><fmt:formatDate value = "${t.saleDate}" pattern = "dd.MM.yyyy" /></td>
                                         <th><c:out value="${t.action.inventory.barcode}" /></th>
                                         <th><c:out value="${t.action.warehouse.name}" /></th>
                                         <th><c:out value="${t.customer.person.fullName}" /></th>
@@ -227,6 +227,22 @@
                         <div class="kt-wizard-v1__content" data-ktwizard-type="step-content" data-ktwizard-state="current">
                             <div class="kt-form__section kt-form__section--first">
                                 <div class="kt-wizard-v1__form">
+                                    <div class="row">
+                                        <div class="col-md-4 offset-md-4">
+                                            <div class="form-group">
+                                                <form:label path="saleDate">Satış tarixi</form:label>
+                                                <div class="input-group date" >
+                                                    <form:input path="saleDate" cssClass="form-control datepicker-element" date="date" placeholder="dd.MM.yyyy"/>
+                                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-calendar"></i>
+                                        </span>
+                                                    </div>
+                                                </div>
+                                                <form:errors path="saleDate" cssClass="control-label alert-danger" />
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group">

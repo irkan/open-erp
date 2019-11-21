@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface SalesRepository extends JpaRepository<Sales, Integer> {
     List<Sales> getSalesByActiveTrue();
+    Sales getSalesByIdAndActiveTrue(int salesId);
 }

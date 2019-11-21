@@ -37,7 +37,7 @@
                                     <tr>
                                         <td><c:out value="${t.id}" /></td>
                                         <td>
-                                            <span style="font-weight: bold; font-size: 16px;">kod: <c:out value="${t.sales.id}" />, <c:out value="${t.sales.customer.person.fullName}" /></span><br/>
+                                            <span style="font-weight: bold; font-size: 16px;">SN: <c:out value="${t.sales.id}" />, <c:out value="${t.sales.customer.person.fullName}" /></span><br/>
                                             <c:out value="${t.sales.action.inventory.name}" />, <c:out value="${t.sales.action.inventory.barcode}" />
                                         </td>
                                         <td>
@@ -121,6 +121,18 @@
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form" method="post" action="/sale/invoice" cssClass="form-group">
                     <form:hidden path="id"/>
+                    <div class="form-group">
+                        <form:label path="sales">Satış nömrəsi</form:label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" style="background-color: white; border-right: none;"><i class="la la-search"></i></span>
+                            </div>
+                            <form:input path="sales" class="form-control" placeholder="Satış nömrəsini daxil edin..." style="border-left: none;" />
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button" onclick="checkSales($('form').find('#sales'))">Yoxla</button>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <form:label path="price">Qiyməti</form:label>
                         <div class="input-group" >
@@ -210,6 +222,66 @@
             console.error(e);
         }
     }
+
+    function checkSales(element){
+        console.log($(element).val())
+        if($(element).val().trim().length>0){
+            swal.fire({
+                text: 'Proses davam edir...',
+                allowOutsideClick: false,
+                onOpen: function() {
+                    swal.showLoading();
+                    $.ajax({
+                        url: '/sale/sales/check/'+$(element).val(),
+                        type: 'GET',
+                        dataType: 'json',
+                        beforeSend: function() {
+
+                        },
+                        success: function(data) {
+                            console.log(data);
+                            alert(data);
+                            alert(data.length);
+                            swal.close();
+                            if(data.length>0){
+                                swal.fire({
+                                    title: "Məlumat tapıldı!",
+                                    html: "Əlaqə saxlamağınızı xahiş edirik.",
+                                    type: "info",
+                                    cancelButtonText: 'Bağla',
+                                    cancelButtonClass: 'btn btn-info',
+                                    footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+                                });
+                            } else {
+                                swal.fire({
+                                    title: "Məlumat tapılmadı!",
+                                    html: "Satış kodunu doğru daxil edin!",
+                                    type: "error",
+                                    cancelButtonText: 'Bağla',
+                                    cancelButtonColor: '#c40000',
+                                    cancelButtonClass: 'btn btn-danger',
+                                    footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+                                });
+                            }
+                        },
+                        error: function() {
+                            swal.fire({
+                                title: "Xəta baş verdi!",
+                                html: "Əlaqə saxlamağınızı xahiş edirik.",
+                                type: "error",
+                                cancelButtonText: 'Bağla',
+                                cancelButtonColor: '#c40000',
+                                cancelButtonClass: 'btn btn-danger',
+                                footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+                            });
+                        }
+                    })
+                }
+            });
+        }
+    }
 </script>
+
+
 
 

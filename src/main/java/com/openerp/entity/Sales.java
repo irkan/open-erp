@@ -24,12 +24,10 @@ public class Sales {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
-    @JsonIgnore
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "crm_customer_id", nullable = false)
     private Customer customer;
 
-    @JsonIgnore
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "warehouse_action_id")
     private Action action;
@@ -65,6 +63,11 @@ public class Sales {
 
     @Column(name = "guarantee", nullable = false)
     private int guarantee;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "sale_date", nullable = false)
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    private Date saleDate = new Date();
 
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd.MM.yyyy")

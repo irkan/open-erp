@@ -426,8 +426,9 @@ public class Util {
         return convertedEmployees;
     }
 
-    public static Date guarantee(int guarantee){
+    public static Date guarantee(Date saleDate, int guarantee){
         Calendar cal = Calendar.getInstance();
+        cal.setTime(saleDate);
         cal.add(Calendar.MONTH, guarantee);
         return cal.getTime();
     }
