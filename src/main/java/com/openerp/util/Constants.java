@@ -107,5 +107,6 @@ public class Constants {
         public static final String PAYMENT_REGULATOR_DETAIL = "payment-regulator-detail";
         public static final String ITEM = "item";
         public static final String PAYMENT_REGULATOR_NOTE = "payment-regulator-note";
+        public static final String INVOICE = "invoice";
     }
 }

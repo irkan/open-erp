@@ -22,7 +22,7 @@
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="group_table">
                                 <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>Kod</th>
                                     <th>İnventar</th>
                                     <th>Satış tarixi</th>
                                     <th>Barkod</th>

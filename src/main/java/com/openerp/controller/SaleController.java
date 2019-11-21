@@ -5,7 +5,7 @@ import com.openerp.entity.*;
 import com.openerp.entity.Dictionary;
 import com.openerp.util.Constants;
 import com.openerp.util.DateUtility;
-import com.openerp.util.Util;
+import com.openerp.util.*;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -14,12 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import java.time.YearMonth;
 import java.util.*;
-import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("/sale")
@@ -39,7 +34,7 @@ public class SaleController extends SkeletonController {
         session.setAttribute(Constants.MODULE_DESCRIPTION, description);
 
         if (page.equalsIgnoreCase(Constants.ROUTE.SALES)){
-            List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization_Id(getSessionUser().getEmployee().getOrganization().getId());
+            List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization_Id(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getId());
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
             Util.convertedEmployees(employees, positions);
             model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployees(employees, positions));
@@ -51,6 +46,21 @@ public class SaleController extends SkeletonController {
             model.addAttribute(Constants.LIST, salesRepository.getSalesByActiveTrue());
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Sales());
+            }
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.INVOICE)){
+            List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization_Id(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getId());
+            List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
+            Util.convertedEmployees(employees, positions);
+            model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployees(employees, positions));
+            List<Invoice> invoices;
+            if(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getOrganization()==null){
+                invoices = invoiceRepository.getInvoicesByActiveTrueOrderByInvoiceDateDesc();
+            } else {
+                invoices = invoiceRepository.getInvoicesByActiveTrueAndOrganizationOrderByInvoiceDateDesc(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()));
+            }
+            model.addAttribute(Constants.LIST, invoices);
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new Invoice());
             }
         } else if(page.equalsIgnoreCase(Constants.ROUTE.CALCULATOR)){
             model.addAttribute(Constants.SALE_PRICES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("sale-price"));
@@ -96,6 +106,23 @@ public class SaleController extends SkeletonController {
             }
 
             actionRepository.save(oldAction);
+
+            double invoicePrice = 0d;
+            if(sales.getPayment().getCash()){
+                invoicePrice = sales.getPayment().getLastPrice();
+            } else {
+                invoicePrice = sales.getPayment().getDown();
+            }
+
+            if(invoicePrice>0){
+                Invoice invoice = new Invoice();
+                invoice.setSales(sales);
+                invoice.setApprove(false);
+                invoice.setPrice(invoicePrice);
+                invoice.setOrganization(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()));
+                invoice.setDescription("Satışdan əldə edilən ödəniş " + invoicePrice + " AZN");
+                invoiceRepository.save(invoice);
+            }
         }
         return mapPost(sales, binding, redirectAttributes);
     }
@@ -123,5 +150,27 @@ public class SaleController extends SkeletonController {
             log.error(e);
         }
         return null;
+    }
+
+    @PostMapping(value = "/invoice")
+    public String postInvoice(@ModelAttribute(Constants.FORM) @Validated Invoice invoice, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()){
+            invoiceRepository.save(invoice);
+        }
+        return mapPost(invoice, binding, redirectAttributes);
+    }
+
+    @PostMapping(value = "/invoice/consolidate")
+    public String postInvoiceConsolidate(@ModelAttribute(Constants.FORM) @Validated Invoice invoice, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        Invoice invc = invoiceRepository.getInvoiceById(invoice.getId());
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()) {
+            invc.setCollector(invoice.getCollector());
+            invc.setChannelReferenceCode(String.valueOf(invoice.getId()));
+            invc.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
+            invoiceRepository.save(invc);
+        }
+        return mapPost(invc, binding, redirectAttributes, "/sale/invoice/");
     }
 }
