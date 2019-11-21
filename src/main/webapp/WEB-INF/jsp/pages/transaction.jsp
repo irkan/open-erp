@@ -43,17 +43,20 @@
                                         <td>${loop.index + 1}</td>
                                         <td><c:out value="${t.id}" /></td>
                                         <td><c:out value="${t.action.name}" /></td>
-                                        <td><c:out value="${t.branch.name}" /></td>
+                                        <td><div style="width: 90px;"><c:out value="${t.branch.name}" /></div></td>
                                         <td><c:out value="${t.account.accountNumber}" /></td>
                                         <td><c:out value="${t.description}" /></td>
                                         <td><fmt:formatDate value = "${t.createdDate}" pattern = "dd.MM.yyyy" /></td>
                                         <td><c:out value="${t.amount}" /> ədəd</td>
                                         <td>
-                                            <span><c:out value="${t.price}" /></span>
-                                            <span class="kt-font-bold font-italic font-size-10px"><c:out value="${t.currency}" /></span>
+                                            <div style="width: 65px;">
+                                                <span><c:out value="${t.price}" /></span>
+                                                <span class="kt-font-bold font-italic font-size-10px"><c:out value="${t.currency}" /></span>
+                                            </div>
                                         </td>
                                         <td><c:out value="${t.rate}" /></td>
                                         <td>
+                                            <div style="width: 75px;">
                                             <c:choose>
                                                 <c:when test="${t.debt and t.sumPrice!=0}">
                                                     <span class="kt-font-bold kt-font-success"><c:out value="${t.sumPrice}" /></span>
@@ -67,6 +70,7 @@
                                                     <span class="kt-font-bold"><c:out value="${t.sumPrice}" /></span>
                                                 </c:otherwise>
                                             </c:choose>
+                                            </div>
                                         </td>
                                         <td><c:out value="${t.balance}" /></td>
                                         <td nowrap class="text-center">

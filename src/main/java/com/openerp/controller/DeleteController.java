@@ -2,7 +2,7 @@ package com.openerp.controller;
 
 import com.openerp.entity.*;
 import com.openerp.util.Constants;
-import com.openerp.util.Util;
+import com.openerp.util.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -119,6 +119,12 @@ public class DeleteController extends SkeletonController {
             Action action = actionRepository.getActionById(Integer.parseInt(id));
             action.setActive(false);
             actionRepository.save(action);
+            List<Action> actions = actionRepository.getActionsByActiveTrueAndInventory_IdAndInventory_ActiveAndActionOrderByIdDesc(action.getInventory().getId(), true, dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("buy", "action"));
+            if(actions.size()>0){
+                Action returnAction = actions.get(0);
+                returnAction.setAmount(returnAction.getAmount()+action.getAmount());
+                actionRepository.save(returnAction);
+            }
             return "redirect:/"+parent+"/"+path+"/"+action.getInventory().getId();
         } else if(path.equalsIgnoreCase(Constants.ROUTE.ITEM)){
             Item item = itemRepository.getItemById(Integer.parseInt(id));

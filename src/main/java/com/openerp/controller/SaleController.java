@@ -121,7 +121,11 @@ public class SaleController extends SkeletonController {
                 invoice.setPrice(invoicePrice);
                 invoice.setOrganization(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()));
                 invoice.setDescription("Satışdan əldə edilən ödəniş " + invoicePrice + " AZN");
+                invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
                 invoiceRepository.save(invoice);
+                invoice.setChannelReferenceCode(String.valueOf(invoice.getId()));
+                invoiceRepository.save(invoice);
+
             }
         }
         return mapPost(sales, binding, redirectAttributes);
@@ -167,8 +171,6 @@ public class SaleController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()) {
             invc.setCollector(invoice.getCollector());
-            invc.setChannelReferenceCode(String.valueOf(invoice.getId()));
-            invc.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
             invoiceRepository.save(invc);
         }
         return mapPost(invc, binding, redirectAttributes, "/sale/invoice/");
@@ -183,5 +185,36 @@ public class SaleController extends SkeletonController {
             log.error(e);
         }
         return null;
+    }
+
+    @PostMapping(value = "/invoice/approve")
+    public String postInvoiceApprove(@ModelAttribute(Constants.FORM) @Validated Invoice invoice, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        Invoice invc = invoiceRepository.getInvoiceById(invoice.getId());
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()) {
+            invc.setApprove(true);
+            invc.setApproveDate(new Date());
+            invoiceRepository.save(invc);
+
+            Transaction transaction = new Transaction();
+            transaction.setApprove(false);
+            transaction.setAmount(1);
+            transaction.setDebt(true);
+            transaction.setInventory(invc.getSales().getAction().getInventory());
+            transaction.setBranch(invc.getOrganization());
+            transaction.setPrice(invc.getPrice());
+            transaction.setCurrency("AZN");
+            transaction.setRate(getRate(transaction.getCurrency()));
+            double sumPrice = transaction.getAmount() * transaction.getPrice() * transaction.getRate();
+            transaction.setSumPrice(sumPrice);
+            transaction.setAction(invc.getSales().getAction().getAction());
+            transaction.setDescription("Satış, Kod: "+invc.getSales().getId() + " -> "
+                    + invc.getSales().getCustomer().getPerson().getFullName() + " -> "
+                    + " barkod: " + invc.getSales().getAction().getInventory().getName()
+                    + " " + invc.getSales().getAction().getInventory().getBarcode()
+            );
+            transactionRepository.save(transaction);
+        }
+        return mapPost(invc, binding, redirectAttributes, "/sale/invoice/");
     }
 }

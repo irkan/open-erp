@@ -59,9 +59,11 @@
                                             <c:set var="approve" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
                                             <c:choose>
                                                 <c:when test="${approve.status}">
-                                                    <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${approve.object.name}"/>">
-                                                        <i class="la <c:out value="${approve.object.icon}"/>"></i>
-                                                    </a>
+                                                    <c:if test="${!t.approve}">
+                                                        <a href="javascript:approve($('#form-approve'), '<c:out value="${utl:toJson(t)}" />', 'approve-modal');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${approve.object.name}"/>">
+                                                            <i class="<c:out value="${approve.object.icon}"/>"></i>
+                                                        </a>
+                                                    </c:if>
                                                 </c:when>
                                             </c:choose>
                                             <c:set var="consolidate" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'consolidate')}"/>
@@ -172,6 +174,33 @@
     </div>
 </div>
 
+<div class="modal fade" id="approve-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Təsdiq</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form:form modelAttribute="form" id="form-approve" method="post" action="/sale/invoice/approve" cssClass="form-group">
+                    <form:hidden path="id"/>
+                    <div class="form-group">
+                        <form:label path="description">Açıqlama</form:label>
+                        <form:textarea path="description" cssClass="form-control"/>
+                        <form:errors path="description" cssClass="alert-danger control-label"/>
+                    </div>
+                </form:form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="submit($('#form-approve'));">Bəli, təsdiq edirəm!</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="consolidate-modal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
@@ -223,6 +252,21 @@
         }
     }
 
+    function approve(form, data, modal){
+        try {
+            data = data.replace(/\&#034;/g, '"');
+            var obj = jQuery.parseJSON(data);
+            console.log(obj);
+            $(form).find("#id").val(obj["id"]);
+            if(obj["collector"]!=null){
+                $("#collector option[value="+obj["collector"]["id"]+"]").attr("selected", "selected");
+            }
+            $('#' + modal).modal('toggle');
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
     function checkSales(element){
         console.log($(element).val())
         if($(element).val().trim().length>0){
@@ -240,34 +284,20 @@
                         },
                         success: function(data) {
                             console.log(data);
-                            alert(data);
-                            alert(data.length);
                             swal.close();
-                            if(data.length>0){
-                                swal.fire({
-                                    title: "Məlumat tapıldı!",
-                                    html: "Əlaqə saxlamağınızı xahiş edirik.",
-                                    type: "info",
-                                    cancelButtonText: 'Bağla',
-                                    cancelButtonClass: 'btn btn-info',
-                                    footer: '<a href>Məlumatlar yenilənsinmi?</a>'
-                                });
-                            } else {
-                                swal.fire({
-                                    title: "Məlumat tapılmadı!",
-                                    html: "Satış kodunu doğru daxil edin!",
-                                    type: "error",
-                                    cancelButtonText: 'Bağla',
-                                    cancelButtonColor: '#c40000',
-                                    cancelButtonClass: 'btn btn-danger',
-                                    footer: '<a href>Məlumatlar yenilənsinmi?</a>'
-                                });
-                            }
+                            swal.fire({
+                                title: data.id + ". " + data.customer.person.firstName + " " + data.customer.person.lastName,
+                                html: data.action.inventory.name + "<br/>" + data.action.inventory.barcode,
+                                type: "info",
+                                cancelButtonText: 'Bağla',
+                                cancelButtonClass: 'btn btn-info',
+                                footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+                            });
                         },
                         error: function() {
                             swal.fire({
-                                title: "Xəta baş verdi!",
-                                html: "Əlaqə saxlamağınızı xahiş edirik.",
+                                title: "Məlumat tapılmadı!",
+                                html: "Satış kodu səhvdir!",
                                 type: "error",
                                 cancelButtonText: 'Bağla',
                                 cancelButtonColor: '#c40000',
