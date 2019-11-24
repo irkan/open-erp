@@ -32,7 +32,6 @@ public class Sales {
     @JoinColumn(name = "warehouse_action_id")
     private Action action;
 
-    @JsonIgnore
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "sale_payment_id", nullable = false)
     private Payment payment;

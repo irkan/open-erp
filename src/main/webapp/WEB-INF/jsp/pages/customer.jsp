@@ -35,7 +35,7 @@
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${list}" varStatus="loop">
-                                    <tr>
+                                    <tr data="<c:out value="${utl:toJson(t)}" />">
                                         <td><c:out value="${t.id}"/></td>
                                         <th>
                                             <c:if test="${t.troubled}">
@@ -157,16 +157,14 @@
                     <div class="row">
                         <div class="col-md-12 bg-light">
                             <div class="row">
-                                <div class="col-md-4 pt-2">
-                                    <div class="form-group">
+                                <div class="col-md-4">
+                                    <div class="form-group pt-md-5">
                                         <label class="kt-checkbox kt-checkbox--brand">
                                             <form:checkbox path="troubled"/> Problemli müştəridirmi?
                                             <span></span>
                                         </label>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row" style="margin-top: -4px;">
                                 <div class="col-md-8">
                                     <div class="form-group">
                                         <form:label path="description">Açıqlama</form:label>
@@ -285,8 +283,14 @@
     </div>
 </div>
 
-<script src="<c:url value="/assets/js/demo4/pages/crud/datatables/advanced/row-grouping.js" />"
-        type="text/javascript"></script>
+<script src="<c:url value="/assets/js/demo4/pages/crud/datatables/advanced/row-grouping.js" />"  type="text/javascript"></script>
+<script>
+    <c:if test="${edit.status}">
+        $('#group_table tbody').on('dblclick', 'tr', function () {
+            edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
+        });
+    </c:if>
+</script>
 
 
 

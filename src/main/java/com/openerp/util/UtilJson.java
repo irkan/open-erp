@@ -10,6 +10,6 @@ import java.io.IOException;
 public class UtilJson {
     public static String toJson(Object value) throws JsonGenerationException, JsonMappingException, IOException {
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsString(value);
+        return mapper.writeValueAsString(value).replaceAll("'", " ");
     }
 }

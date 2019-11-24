@@ -34,7 +34,6 @@ public class Invoice {
     @JoinColumn(name = "admin_dictionary_payment_channel_id")
     private Dictionary paymentChannel;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sale_sales_id")
     private Sales sales;

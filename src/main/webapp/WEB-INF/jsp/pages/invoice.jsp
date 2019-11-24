@@ -140,33 +140,39 @@
                             </div>
                             <form:input path="sales" class="form-control" placeholder="Satış nömrəsini daxil edin..." style="border-left: none;" />
                             <div class="input-group-append">
-                                <button class="btn btn-primary" type="button" onclick="checkSales($('form').find('#sales'))">Yoxla</button>
+                                <button class="btn btn-primary" type="button" onclick="checkSales($('form').find('input[name=\'sales\']'))">Yoxla</button>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <form:label path="price">Qiyməti</form:label>
-                        <div class="input-group" >
-                            <form:input path="price" cssClass="form-control" placeholder="Qiyməti daxil edin"/>
-                            <div class="input-group-append">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <form:label path="price">Qiyməti</form:label>
+                                <div class="input-group" >
+                                    <form:input path="price" cssClass="form-control" placeholder="Qiyməti daxil edin"/>
+                                    <div class="input-group-append">
                                                     <span class="input-group-text">
                                                         <i class="la la-usd"></i>
                                                     </span>
+                                    </div>
+                                </div>
+                                <form:errors path="price" cssClass="alert-danger control-label"/>
                             </div>
                         </div>
-                        <form:errors path="price" cssClass="alert-danger control-label"/>
-                    </div>
-                    <div class="form-group">
-                        <form:label path="invoiceDate">Hesab-faktura tarixi</form:label>
-                        <div class="input-group date" >
-                            <form:input path="invoiceDate" autocomplete="off" date="date" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
-                            <div class="input-group-append">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <form:label path="invoiceDate">Hesab-faktura tarixi</form:label>
+                                <div class="input-group date" >
+                                    <form:input path="invoiceDate" autocomplete="off" date="date" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
+                                    <div class="input-group-append">
                                     <span class="input-group-text">
                                         <i class="la la-calendar"></i>
                                     </span>
+                                    </div>
+                                </div>
+                                <form:errors path="invoiceDate" cssClass="control-label alert-danger" />
                             </div>
                         </div>
-                        <form:errors path="invoiceDate" cssClass="control-label alert-danger" />
                     </div>
                     <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>

@@ -160,7 +160,21 @@ public class SaleController extends SkeletonController {
     public String postInvoice(@ModelAttribute(Constants.FORM) @Validated Invoice invoice, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
-            invoiceRepository.save(invoice);
+            Invoice invc;
+            if(invoice.getId()==null){
+                invoice.setDescription("Satışdan əldə edilən ödəniş " + invoice.getPrice() + " AZN");
+                invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
+                invc = invoice;
+            } else {
+                invc = invoiceRepository.getInvoiceById(invoice.getId());
+                invc.setSales(invoice.getSales());
+                invc.setPrice(invoice.getPrice());
+                invc.setInvoiceDate(invoice.getInvoiceDate());
+                invc.setDescription(invoice.getDescription());
+            }
+            invoiceRepository.save(invc);
+            invc.setChannelReferenceCode(String.valueOf(invc.getId()));
+            invoiceRepository.save(invc);
         }
         return mapPost(invoice, binding, redirectAttributes);
     }
