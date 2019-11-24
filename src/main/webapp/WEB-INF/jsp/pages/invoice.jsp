@@ -37,7 +37,8 @@
                                     <tr>
                                         <td><c:out value="${t.id}" /></td>
                                         <td>
-                                            <span style="font-weight: bold; font-size: 16px;">SN: <c:out value="${t.sales.id}" />, <c:out value="${t.sales.customer.person.fullName}" /></span><br/>
+                                            Satış nömrəsi: <c:out value="${t.sales.id}" />, Müştəri kodu: <c:out value="${t.sales.customer.id}" /><br/>
+                                            <span style="font-weight: bold; font-size: 16px;"><c:out value="${t.sales.customer.person.fullName}" /></span><br/>
                                             <c:out value="${t.sales.action.inventory.name}" />, <c:out value="${t.sales.action.inventory.barcode}" />
                                         </td>
                                         <td>
@@ -87,6 +88,14 @@
                                                 <c:when test="${delete.status}">
                                                     <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.description}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
                                                         <i class="<c:out value="${delete.object.icon}"/>"></i>
+                                                    </a>
+                                                </c:when>
+                                            </c:choose>
+                                            <c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
+                                            <c:choose>
+                                                <c:when test="${export.status}">
+                                                    <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.description}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Hesab-fakturanın çapı">
+                                                        <i class="<c:out value="${export.object.icon}"/>"></i>
                                                     </a>
                                                 </c:when>
                                             </c:choose>

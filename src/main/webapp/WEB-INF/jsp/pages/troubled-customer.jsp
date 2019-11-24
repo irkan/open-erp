@@ -6,8 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="utl" uri="/WEB-INF/tld/Util.tld"%>
@@ -40,7 +39,7 @@
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${list}" varStatus="loop">
-                                    <c:if test="${!t.payment.sales.customer.troubled}">
+                                    <c:if test="${t.payment.sales.customer.troubled}">
                                         <tr>
                                             <td>${loop.index + 1}</td>
                                             <td>
@@ -108,7 +107,7 @@
                                                 <c:set var="transfer" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'transfer')}"/>
                                                 <c:choose>
                                                     <c:when test="${transfer.status}">
-                                                        <a href="javascript:transfer($('#form'), 'transfer-modal-operation', '<c:out value="${t.payment.sales.id}" />', '<c:out value="${t.amount-t.payableAmount}" />')" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
+                                                        <a href="javascript:transfer($('#form'), 'transfer-modal-operation', '<c:out value="${t.payment.sales.id}" />', '<c:out value="${t.amount-t.payableAmount}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
                                                             <i class="<c:out value="${transfer.object.icon}"/>"></i>
                                                         </a>
                                                     </c:when>
@@ -161,13 +160,13 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="form" method="post" action="/collect/payment-regulator/transfer" class="form-group">
+                <form id="form" method="post" action="/collect/troubled-customer/transfer" class="form-group">
                     <input type="hidden" name="sale" id="sale"/>
                     <div class="form-group">
                         <label for="transfer">Haraya?</label>
                         <select class="custom-select form-control" name="transfer" id="transfer">
                             <option value="1">Hesab-fakturaya</option>
-                            <option value="2">Problemli müştərilərə</option>
+                            <option value="3">Ödəniş requlyatoruna</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -188,7 +187,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="submit($('#form'));">Yadda saxla</button>
+                <button type="button" class="btn btn-primary" onclick="submit($('#form'));">İcra et</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
             </div>
         </div>

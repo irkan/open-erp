@@ -25,10 +25,7 @@
                                     <th>Kod</th>
                                     <th>İnventar</th>
                                     <th>Satış tarixi</th>
-                                    <th>Barkod</th>
-                                    <th>Anbar</th>
                                     <th>Müştəri</th>
-                                    <th>Əlaqə vasitəsi</th>
                                     <th>Qiymət</th>
                                     <th>Son qiymət</th>
                                     <th>İlkin ödəniş</th>
@@ -50,12 +47,15 @@
                                 <c:forEach var="t" items="${list}" varStatus="loop">
                                     <tr>
                                         <td><c:out value="${t.id}" /></td>
-                                        <td><c:out value="${t.action.inventory.name}" /></td>
-                                        <td><fmt:formatDate value = "${t.saleDate}" pattern = "dd.MM.yyyy" /></td>
-                                        <th><c:out value="${t.action.inventory.barcode}" /></th>
-                                        <th><c:out value="${t.action.warehouse.name}" /></th>
-                                        <th><c:out value="${t.customer.person.fullName}" /></th>
                                         <th>
+                                            <c:out value="${t.action.inventory.name}" /><br/>
+                                            <c:out value="${t.action.inventory.barcode}" /><br/>
+                                            <c:out value="${t.action.warehouse.name}" />
+                                        </th>
+                                        <td><fmt:formatDate value = "${t.saleDate}" pattern = "dd.MM.yyyy" /></td>
+                                        <th>
+                                            <c:out value="${t.customer.person.fullName}" /><br/>
+                                            Müştəri kodu: <c:out value="${t.customer.id}" />
                                             <c:if test="${not empty t.customer.person.contact.email}">
                                                 <c:out value="${t.customer.person.contact.email}" /><br/>
                                             </c:if>
@@ -228,7 +228,21 @@
                             <div class="kt-form__section kt-form__section--first">
                                 <div class="kt-wizard-v1__form">
                                     <div class="row">
-                                        <div class="col-md-4 offset-md-4">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <form:label path="customer">Müştəri kodu</form:label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" style="background-color: white; border-right: none;"><i class="la la-search"></i></span>
+                                                    </div>
+                                                    <form:input path="customer" autocomplete="false" class="form-control" placeholder="Müştəri kodunu daxil edin..." style="border-left: none;" />
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-primary" type="button" onclick="findCustomer($('input[name=\'customer\']'))">Müştərini axtar</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 offset-md-2">
                                             <div class="form-group">
                                                 <form:label path="saleDate">Satış tarixi</form:label>
                                                 <div class="input-group date" >
@@ -995,6 +1009,52 @@
     jQuery(document).ready(function() {
         KTWizard1.init();
     });
+
+    function findCustomer(element){
+        if($(element).val().trim().length>0){
+            swal.fire({
+                text: 'Proses davam edir...',
+                allowOutsideClick: false,
+                onOpen: function() {
+                    swal.showLoading();
+                    $.ajax({
+                        url: '/crm/customer/'+$(element).val(),
+                        type: 'GET',
+                        dataType: 'json',
+                        beforeSend: function() {
+                            $("input[name='customer.person.firstName']").val('');
+                            $("input[name='customer.person.lastName']").val('');
+                            $("input[name='customer.person.fatherName']").val('');
+                            $("input[name='customer.person.birthday']").val('');
+                            $("input[name='customer.person.idCardSerialNumber']").val('');
+                            $("input[name='customer.person.idCardPinCode']").val('');
+                        },
+                        success: function(customer) {
+                            console.log(customer);
+                            $("input[name='customer.person.firstName']").val(customer.person.firstName);
+                            $("input[name='customer.person.lastName']").val(customer.person.lastName);
+                            $("input[name='customer.person.fatherName']").val(customer.person.fatherName);
+                            $("input[name='customer.person.birthday']").val(customer.person.birthday);
+                            $("input[name='customer.person.idCardSerialNumber']").val(customer.person.idCardSerialNumber);
+                            $("input[name='customer.person.idCardPinCode']").val(customer.person.idCardPinCode);
+                            swal.close();
+                        },
+                        error: function() {
+                            swal.fire({
+                                title: "Müştəri tapılmadı!",
+                                html: "Müştəri kodunun doğruluğunu yoxlayın.",
+                                type: "error",
+                                cancelButtonText: 'Bağla',
+                                cancelButtonColor: '#c40000',
+                                cancelButtonClass: 'btn btn-danger',
+                                footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+                            });
+                        }
+                    })
+                }
+            });
+        }
+    }
 
     function findInventory(element){
         if($(element).val().trim().length>0){

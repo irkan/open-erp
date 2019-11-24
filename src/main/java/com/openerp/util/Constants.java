@@ -108,5 +108,7 @@ public class Constants {
         public static final String ITEM = "item";
         public static final String PAYMENT_REGULATOR_NOTE = "payment-regulator-note";
         public static final String INVOICE = "invoice";
+        public static final String TROUBLED_CUSTOMER = "troubled-customer";
+        public static final String CUSTOMER = "customer";
     }
 }
