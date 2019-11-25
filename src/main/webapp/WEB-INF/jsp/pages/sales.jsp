@@ -22,9 +22,10 @@
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="group_table">
                                 <thead>
                                 <tr>
+                                    <th>Əməliyyat</th>
                                     <th>Kod</th>
-                                    <th>İnventar</th>
                                     <th>Satış tarixi</th>
+                                    <th>İnventar</th>
                                     <th>Müştəri</th>
                                     <th>Qiymət</th>
                                     <th>Son qiymət</th>
@@ -36,23 +37,53 @@
                                     <th>Zəmanət müddəti</th>
                                     <th>Zəmanət bitir</th>
                                     <th>Ödəniş</th>
-                                    <th>Konsul</th>
-                                    <th>Ven lider</th>
-                                    <th>Diller</th>
-                                    <th>Canvasser</th>
-                                    <th>Əməliyyat</th>
+                                    <th>Satış komandası</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${list}" varStatus="loop">
                                     <tr>
+                                        <td nowrap class="text-center">
+                                            <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
+                                            <c:choose>
+                                                <c:when test="${view.status}">
+                                                    <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
+                                                        <i class="la <c:out value="${view.object.icon}"/>"></i>
+                                                    </a>
+                                                </c:when>
+                                            </c:choose>
+                                            <c:set var="detail" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'detail')}"/>
+                                            <c:choose>
+                                                <c:when test="${detail.status}">
+                                                    <a href="/collect/payment-regulator-detail/<c:out value="${t.payment.id}"/>" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${detail.object.name}"/>">
+                                                        <i class="la <c:out value="${detail.object.icon}"/>"></i>
+                                                    </a>
+                                                </c:when>
+                                            </c:choose>
+                                            <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
+                                            <c:choose>
+                                                <c:when test="${edit.status}">
+                                                    <a href="javascript:edit($('#kt_form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                                                        <i class="<c:out value="${edit.object.icon}"/>"></i>
+                                                    </a>
+                                                </c:when>
+                                            </c:choose>
+                                            <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
+                                            <c:choose>
+                                                <c:when test="${delete.status}">
+                                                    <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.action.inventory.name}" /> <br/> <c:out value="${t.customer.person.fullName}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
+                                                        <i class="<c:out value="${delete.object.icon}"/>"></i>
+                                                    </a>
+                                                </c:when>
+                                            </c:choose>
+                                        </td>
                                         <td><c:out value="${t.id}" /></td>
+                                        <td><fmt:formatDate value = "${t.saleDate}" pattern = "dd.MM.yyyy" /></td>
                                         <th>
                                             <c:out value="${t.action.inventory.name}" /><br/>
                                             <c:out value="${t.action.inventory.barcode}" /><br/>
                                             <c:out value="${t.action.warehouse.name}" />
                                         </th>
-                                        <td><fmt:formatDate value = "${t.saleDate}" pattern = "dd.MM.yyyy" /></td>
                                         <th>
                                             <c:out value="${t.customer.person.fullName}" /><br/>
                                             Müştəri kodu: <c:out value="${t.customer.id}" />
@@ -93,35 +124,11 @@
                                                 </c:otherwise>
                                             </c:choose>
                                         </td>
-                                        <td><c:out value="${t.console.person.fullName}" /></td>
-                                        <td><c:out value="${t.vanLeader.person.fullName}" /></td>
-                                        <td><c:out value="${t.dealer.person.fullName}" /></td>
-                                        <td><c:out value="${t.canavasser.person.fullName}" /></td>
-                                        <td nowrap class="text-center">
-                                            <%--<c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
-                                            <c:choose>
-                                                <c:when test="${view.status}">
-                                                    <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
-                                                        <i class="la <c:out value="${view.object.icon}"/>"></i>
-                                                    </a>
-                                                </c:when>
-                                            </c:choose>
-                                            <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
-                                            <c:choose>
-                                                <c:when test="${edit.status}">
-                                                    <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
-                                                        <i class="<c:out value="${edit.object.icon}"/>"></i>
-                                                    </a>
-                                                </c:when>
-                                            </c:choose>
-                                            <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
-                                            <c:choose>
-                                                <c:when test="${delete.status}">
-                                                    <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
-                                                        <i class="<c:out value="${delete.object.icon}"/>"></i>
-                                                    </a>
-                                                </c:when>
-                                            </c:choose>--%>
+                                        <td>
+                                            Konsul: <c:out value="${t.console.person.fullName}" /><br/>
+                                            Ven lider: <c:out value="${t.vanLeader.person.fullName}" /><br/>
+                                            Diller: <c:out value="${t.dealer.person.fullName}" /><br/>
+                                            Canvasser: <c:out value="${t.canavasser.person.fullName}" />
                                         </td>
                                     </tr>
                                 </c:forEach>

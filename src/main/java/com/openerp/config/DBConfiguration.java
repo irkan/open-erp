@@ -769,6 +769,8 @@ public class DBConfiguration {
             moduleOperations.add(viewModuleOperation21);
             ModuleOperation viewModuleOperation22 = new ModuleOperation(troubledCustomer, view, null);
             moduleOperations.add(viewModuleOperation22);
+            ModuleOperation viewModuleOperation23 = new ModuleOperation(sales, view, null);
+            moduleOperations.add(viewModuleOperation23);
 
             ModuleOperation exportModuleOperation1 = new ModuleOperation(subModule1, export, null);
             moduleOperations.add(exportModuleOperation1);
@@ -886,6 +888,8 @@ public class DBConfiguration {
             moduleOperations.add(detailModuleOperation2);
             ModuleOperation detailModuleOperation3 = new ModuleOperation(troubledCustomer, detail, null);
             moduleOperations.add(detailModuleOperation3);
+            ModuleOperation detailModuleOperation4 = new ModuleOperation(sales, detail, null);
+            moduleOperations.add(detailModuleOperation4);
 
             moduleOperationRepository.saveAll(moduleOperations);
 
@@ -1080,6 +1084,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation20));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation21));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation22));
+            userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation23));
 
             userModuleOperations.add(new UserModuleOperation(user, approveModuleOperation3));
             userModuleOperations.add(new UserModuleOperation(user, approveModuleOperation4));
@@ -1122,6 +1127,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, detailModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, detailModuleOperation2));
             userModuleOperations.add(new UserModuleOperation(user, detailModuleOperation3));
+            userModuleOperations.add(new UserModuleOperation(user, detailModuleOperation4));
 
             userModuleOperationRepository.saveAll(userModuleOperations);
 
