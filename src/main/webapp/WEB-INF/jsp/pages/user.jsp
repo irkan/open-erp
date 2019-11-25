@@ -222,5 +222,6 @@
     $(function(){
         $('.selectpicker').selectpicker();
     });
+
 </script>
 

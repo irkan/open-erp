@@ -150,4 +150,9 @@
         $("#form").attr("action", "/admin/user-module-operation");
         submit($("#form"));
     }
+    <c:if test="${edit.status}">
+    $('#group_table tbody').on('dblclick', 'tr', function () {
+        edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
+    });
+    </c:if>
 </script>

@@ -34,7 +34,7 @@
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${list}" varStatus="loop">
-                                    <tr>
+                                    <tr data="<c:out value="${utl:toJson(t)}" />">
                                         <td><c:out value="${t.id}" /></td>
                                         <td>
                                             Satış nömrəsi: <c:out value="${t.sales.id}" />, Müştəri kodu: <c:out value="${t.sales.customer.id}" /><br/>
@@ -325,6 +325,11 @@
             });
         }
     }
+    <c:if test="${edit.status}">
+    $('#group_table tbody').on('dblclick', 'tr', function () {
+        edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
+    });
+    </c:if>
 </script>
 
 
