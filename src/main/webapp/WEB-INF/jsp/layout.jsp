@@ -139,6 +139,18 @@
             } else {
                 value = obj[name[0]][name[1]][name[2]];
             }
+        } else if(name.length===4){
+            if(getIndex(name[0])!=null){
+                value = obj[getName(name[0])][getIndex(name[0])][name[1]][name[2]][name[3]];
+            } else if(getIndex(name[1])!=null){
+                value = obj[name[0]][getName(name[1])][getIndex(name[1])][name[2]][name[3]];
+            } else if(getIndex(name[2])!=null){
+                value = obj[name[0]][name[1]][getName(name[2])][getIndex(name[2])][name[3]];
+            } else if(getIndex(name[3])!=null){
+                value = obj[name[0]][name[1]][name[2]][getName(name[3])][getIndex(name[3])];
+            } else {
+                value = obj[name[0]][name[1]][name[2]][name[3]];
+            }
         }
         return value;
     }

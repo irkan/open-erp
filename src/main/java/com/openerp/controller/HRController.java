@@ -412,7 +412,7 @@ public class HRController extends SkeletonController {
                 binding.addError(fieldError);
             }
         }
-        return null;
+        return binding;
     }
 
 

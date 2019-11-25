@@ -47,7 +47,7 @@
                                             <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
                                             <c:choose>
                                                 <c:when test="${view.status}">
-                                                    <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
+                                                    <a href="/collect/payment-regulator-note/<c:out value="${t.payment.id}"/>" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Qeydlər">
                                                         <i class="la <c:out value="${view.object.icon}"/>"></i>
                                                     </a>
                                                 </c:when>
@@ -1163,9 +1163,7 @@
             init: function() {
                 initTable1();
             },
-
         };
-
     }();
 
 </script>
