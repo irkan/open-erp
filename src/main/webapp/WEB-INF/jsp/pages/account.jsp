@@ -37,7 +37,7 @@
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${list}" varStatus="loop">
-                                    <tr>
+                                    <tr data="<c:out value="${utl:toJson(t)}" />">
                                         <td>${loop.index + 1}</td>
                                         <td><c:out value="${t.id}" /></td>
                                         <td><c:out value="${t.organization.name}"/></td>
@@ -183,5 +183,13 @@
         </div>
     </div>
 </div>
+
+<script>
+    <c:if test="${edit.status}">
+    $('#group_table tbody').on('dblclick', 'tr', function () {
+        edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
+    });
+    </c:if>
+</script>
 
 <script src="<c:url value="/assets/js/demo4/pages/crud/datatables/advanced/row-grouping.js" />" type="text/javascript"></script>

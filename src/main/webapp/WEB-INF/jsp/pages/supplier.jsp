@@ -36,7 +36,7 @@
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${list}" varStatus="loop">
-                                    <tr>
+                                    <tr data="<c:out value="${utl:toJson(t)}" />">
                                         <td>${loop.index + 1}</td>
                                         <td><c:out value="${t.id}" /></td>
                                         <td><c:out value="${t.name}" /></td>
@@ -252,6 +252,14 @@
         </div>
     </div>
 </div>
+
+<script>
+    <c:if test="${edit.status}">
+    $('#kt_table_1 tbody').on('dblclick', 'tr', function () {
+        edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
+    });
+    </c:if>
+</script>
 
 
 

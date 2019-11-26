@@ -42,7 +42,7 @@
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${list}" varStatus="loop">
-                                    <tr>
+                                    <tr data="<c:out value="${utl:toJson(t)}" />">
                                         <td nowrap class="text-center">
                                             <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
                                             <c:choose>
@@ -1167,3 +1167,11 @@
     }();
 
 </script>
+
+<script>
+<c:if test="${edit.status}">
+    $('#group_table tbody').on('dblclick', 'tr', function () {
+    edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
+    });
+</c:if>
+    </script>

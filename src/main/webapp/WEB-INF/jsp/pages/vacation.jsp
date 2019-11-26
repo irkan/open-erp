@@ -35,7 +35,7 @@
     </thead>
     <tbody>
     <c:forEach var="t" items="${list}" varStatus="loop">
-        <tr>
+        <tr data="<c:out value="${utl:toJson(t)}" />">
             <td>${loop.index + 1}</td>
             <td><c:out value="${t.id}" /></td>
             <th><c:out value="${t.employee.person.firstName}"/> <c:out value="${t.employee.person.lastName}"/>
@@ -149,5 +149,13 @@
     }, function(start, end, label) {
         $('#date-range-picker .form-control').val( start.format('DD.MM.YYYY') + ' - ' + end.format('DD.MM.YYYY'));
     });
+</script>
+
+<script>
+    <c:if test="${edit.status}">
+    $('#kt_table_1 tbody').on('dblclick', 'tr', function () {
+        edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
+    });
+    </c:if>
 </script>
 
