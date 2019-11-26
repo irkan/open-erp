@@ -40,7 +40,9 @@
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${list}" varStatus="loop">
-                                    <c:if test="${!t.payment.sales.customer.troubled}">
+                                    <c:set var="now" value="<%=new Date().getTime()%>"/>
+                                    <fmt:parseNumber var = "days" integerOnly = "true" type = "number" value = "${(now-t.scheduleDate.time)/86400000}" />
+                                    <c:if test="${days le configuration_troubled_customer}">
                                         <tr>
                                             <td>${loop.index + 1}</td>
                                             <td>
@@ -64,8 +66,6 @@
                                             <td><fmt:formatDate value = "${t.scheduleDate}" pattern = "dd.MM.yyyy" /></td>
                                             <th>
                                             <span class="kt-font-bold kt-font-info">
-                                                <c:set var="now" value="<%=new Date().getTime()%>"/>
-                                                <fmt:parseNumber var = "days" integerOnly = "true" type = "number" value = "${(now-t.scheduleDate.time)/86400000}" />
                                                 <c:out value = "${days}" /> gün
                                             </span>
                                             </th>

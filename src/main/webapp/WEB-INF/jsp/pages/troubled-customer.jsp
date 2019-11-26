@@ -39,7 +39,9 @@
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${list}" varStatus="loop">
-                                    <c:if test="${t.payment.sales.customer.troubled}">
+                                    <c:set var="now" value="<%=new Date().getTime()%>"/>
+                                    <fmt:parseNumber var = "days" integerOnly = "true" type = "number" value = "${(now-t.scheduleDate.time)/86400000}" />
+                                    <c:if test="${days gt configuration_troubled_customer}">
                                         <tr>
                                             <td>${loop.index + 1}</td>
                                             <td>
@@ -154,7 +156,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Göndər</h5>
+                <h5 class="modal-title">Hesab fakturaya göndər</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -162,13 +164,6 @@
             <div class="modal-body">
                 <form id="form" method="post" action="/collect/troubled-customer/transfer" class="form-group">
                     <input type="hidden" name="sale" id="sale"/>
-                    <div class="form-group">
-                        <label for="transfer">Haraya?</label>
-                        <select class="custom-select form-control" name="transfer" id="transfer">
-                            <option value="1">Hesab-fakturaya</option>
-                            <option value="3">Ödəniş requlyatoruna</option>
-                        </select>
-                    </div>
                     <div class="form-group">
                         <label for="price">Qiyməti</label>
                         <div class="input-group" >

@@ -166,6 +166,9 @@ public class SkeletonController {
     InvoiceRepository invoiceRepository;
 
     @Autowired
+    ConfigurationRepository configurationRepository;
+
+    @Autowired
     HttpServletRequest request;
 
     @Autowired

@@ -26,7 +26,7 @@
                                 <tr>
                                     <th>KOD</th>
                                     <th>Ad</th>
-                                    <th>Problemlimidir?</th>
+                                    <th>Şəhər</th>
                                     <th>Doğum tarixi</th>
                                     <th>Ş.v - nin seriya nömrəsi</th>
                                     <th>Ş.v - nin pin kodu</th>
@@ -38,24 +38,11 @@
                                     <tr data="<c:out value="${utl:toJson(t)}" />">
                                         <td><c:out value="${t.id}"/></td>
                                         <th>
-                                            <c:if test="${t.troubled}">
-                                                <span class="kt-font-bold kt-font-danger">
-                                            </c:if>
                                             <c:out value="${t.person.firstName}"/> <c:out value="${t.person.lastName}"/> <c:out
                                                 value="${t.person.fatherName}"/>
-                                            <c:if test="${t.troubled}">
-                                                </span>
-                                            </c:if>
                                         </th>
                                         <th>
-                                            <c:choose>
-                                                <c:when test="${troubled}">
-                                                    Problemli müştərilər
-                                                </c:when>
-                                                <c:otherwise>
-                                                    Müştərilər
-                                                </c:otherwise>
-                                            </c:choose>
+                                            <c:out value="${t.person.contact.city.name}"/>
                                         </th>
                                         <td><fmt:formatDate value="${t.person.birthday}" pattern="dd.MM.yyyy"/></td>
                                         <td><c:out value="${t.person.idCardSerialNumber}"/></td>
@@ -157,15 +144,7 @@
                     <div class="row">
                         <div class="col-md-12 bg-light">
                             <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group pt-md-5">
-                                        <label class="kt-checkbox kt-checkbox--brand">
-                                            <form:checkbox path="troubled"/> Problemli müştəridirmi?
-                                            <span></span>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-8">
+                                <div class="col-md-10 offset-md-1">
                                     <div class="form-group">
                                         <form:label path="description">Açıqlama</form:label>
                                         <form:textarea path="description" cssClass="form-control"/>

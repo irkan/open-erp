@@ -36,6 +36,7 @@ public class CollectController extends SkeletonController {
 
         if(page.equalsIgnoreCase(Constants.ROUTE.PAYMENT_REGULATOR) ||
                 page.equalsIgnoreCase(Constants.ROUTE.TROUBLED_CUSTOMER)){
+            model.addAttribute(Constants.CONFIGURATION_TROUBLED_CUSTOMER, configurationRepository.getConfigurationByKey("troubled_customer").getAttribute());
             List<Schedule> schedules = scheduleRepository.getSchedules(new Date());
             model.addAttribute(Constants.LIST, Util.convertPaymentSchedule(schedules));
         } else if(page.equalsIgnoreCase(Constants.ROUTE.PAYMENT_REGULATOR_DETAIL)){
@@ -69,32 +70,24 @@ public class CollectController extends SkeletonController {
     }
 
     @PostMapping(value = "/payment-regulator/transfer")
-    public String postPaymentRegulatorTransfer(@RequestParam(value = "transfer") String transfer,
-                                               @RequestParam(value = "sale", defaultValue = "0") String sale,
+    public String postPaymentRegulatorTransfer(@RequestParam(value = "sale", defaultValue = "0") String sale,
                                                @RequestParam(value = "price", defaultValue = "0") String price,
                                                @RequestParam(value = "description") String description,
                                                RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(null, Constants.TEXT.SUCCESS));
         Sales sales = salesRepository.getSalesByIdAndActiveTrue(Integer.parseInt(sale));
-        String desc = "";
-        if (transfer.equalsIgnoreCase("1")){
-            Invoice invoice = new Invoice();
-            invoice.setSales(sales);
-            invoice.setApprove(false);
-            invoice.setPrice(Double.parseDouble(price));
-            invoice.setDescription(description);
-            invoice.setOrganization(Util.getUserBranch(sales.getAction().getWarehouse()));
-            invoice.setDescription("Satışdan əldə edilən ödəniş " + invoice.getPrice() + " AZN");
-            invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
-            invoiceRepository.save(invoice);
-            invoice.setChannelReferenceCode(String.valueOf(invoice.getId()));
-            invoiceRepository.save(invoice);
-            desc = "Hesab faktura yaradıldı: " + invoice.getId();
-        } else if(transfer.equalsIgnoreCase("2")){
-            sales.getCustomer().setTroubled(true);
-            salesRepository.save(sales);
-            desc = "Problemli müştərilərə göndərildi: " + DateUtility.getFormattedDateTime(new Date());
-        }
+        Invoice invoice = new Invoice();
+        invoice.setSales(sales);
+        invoice.setApprove(false);
+        invoice.setPrice(Double.parseDouble(price));
+        invoice.setDescription(description);
+        invoice.setOrganization(Util.getUserBranch(sales.getAction().getWarehouse()));
+        invoice.setDescription("Satışdan əldə edilən ödəniş " + invoice.getPrice() + " AZN");
+        invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
+        invoiceRepository.save(invoice);
+        invoice.setChannelReferenceCode(String.valueOf(invoice.getId()));
+        invoiceRepository.save(invoice);
+        String desc = "Hesab faktura yaradıldı: " + invoice.getId();
         if(sales!=null){
             PaymentRegulatorNote paymentRegulatorNote = new PaymentRegulatorNote();
             paymentRegulatorNote.setDescription(desc);
@@ -105,30 +98,22 @@ public class CollectController extends SkeletonController {
     }
 
     @PostMapping(value = "/troubled-customer/transfer")
-    public String postTroubledCustomerTransfer(@RequestParam(value = "transfer") String transfer,
-                                               @RequestParam(value = "sale", defaultValue = "0") String sale,
+    public String postTroubledCustomerTransfer(@RequestParam(value = "sale", defaultValue = "0") String sale,
                                                @RequestParam(value = "price", defaultValue = "0") String price,
                                                @RequestParam(value = "description") String description,
                                                RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(null, Constants.TEXT.SUCCESS));
         Sales sales = salesRepository.getSalesByIdAndActiveTrue(Integer.parseInt(sale));
-        String desc = "";
-        if (transfer.equalsIgnoreCase("1")){
-            Invoice invoice = new Invoice();
-            invoice.setSales(sales);
-            invoice.setApprove(false);
-            invoice.setPrice(Double.parseDouble(price));
-            invoice.setDescription(description);
-            invoice.setOrganization(Util.getUserBranch(sales.getAction().getWarehouse()));
-            invoice.setDescription("Satışdan əldə edilən ödəniş " + invoice.getPrice() + " AZN");
-            invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
-            invoiceRepository.save(invoice);
-            desc = "Hesab faktura yaradıldı: " + invoice.getId();
-        } else if(transfer.equalsIgnoreCase("3")){
-            sales.getCustomer().setTroubled(false);
-            salesRepository.save(sales);
-            desc = "Ödəniş requlyatoruna göndərildi: " + DateUtility.getFormattedDateTime(new Date());
-        }
+        Invoice invoice = new Invoice();
+        invoice.setSales(sales);
+        invoice.setApprove(false);
+        invoice.setPrice(Double.parseDouble(price));
+        invoice.setDescription(description);
+        invoice.setOrganization(Util.getUserBranch(sales.getAction().getWarehouse()));
+        invoice.setDescription("Satışdan əldə edilən ödəniş " + invoice.getPrice() + " AZN");
+        invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
+        invoiceRepository.save(invoice);
+        String desc = "Hesab faktura yaradıldı: " + invoice.getId();
         if(sales!=null){
             PaymentRegulatorNote paymentRegulatorNote = new PaymentRegulatorNote();
             paymentRegulatorNote.setDescription(desc);

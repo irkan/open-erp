@@ -138,6 +138,10 @@ public class DeleteController extends SkeletonController {
             Customer customer = customerRepository.getCustomerByIdAndActiveTrue(Integer.parseInt(id));
             customer.setActive(false);
             customerRepository.save(customer);
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.CONFIGURATION)){
+            Configuration configuration = configurationRepository.getConfigurationById(Integer.parseInt(id));
+            configuration.setActive(false);
+            configurationRepository.save(configuration);
         }
         return "redirect:/"+parent+"/"+path;
     }

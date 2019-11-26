@@ -97,6 +97,11 @@ public class AdministratorController extends SkeletonController {
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new CurrencyRate());
             }
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.CONFIGURATION)){
+            model.addAttribute(Constants.LIST, configurationRepository.getConfigurationsByActiveTrue());
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new Configuration());
+            }
         }
         return "layout";
     }
@@ -265,5 +270,14 @@ public class AdministratorController extends SkeletonController {
         currencyRateRepository.deleteAll();
         currencyRateRepository.saveAll(Util.getCurrenciesRate(cbarCurrenciesEndpoint));
         return mapPost(currencyRate, binding, redirectAttributes);
+    }
+
+    @PostMapping(value = "/configuration")
+    public String postConfiguration(@ModelAttribute(Constants.FORM) @Validated Configuration configuration, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()){
+            configurationRepository.save(configuration);
+        }
+        return mapPost(configuration, binding, redirectAttributes);
     }
 }

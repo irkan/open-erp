@@ -56,6 +56,7 @@ public class Constants {
     public static final String GUARANTEES = "guarantees";
     public static final String CONTACT_CHANNELS = "contact_channels";
     public static final String PAYMENT_ID = "payment_id";
+    public static final String CONFIGURATION_TROUBLED_CUSTOMER = "configuration_troubled_customer";
 
     public static final class STATUS{
         public static final String RESPONSE = "response";
@@ -110,5 +111,6 @@ public class Constants {
         public static final String INVOICE = "invoice";
         public static final String TROUBLED_CUSTOMER = "troubled-customer";
         public static final String CUSTOMER = "customer";
+        public static final String CONFIGURATION = "configuration";
     }
 }

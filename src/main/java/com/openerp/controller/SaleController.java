@@ -132,16 +132,16 @@ public class SaleController extends SkeletonController {
     }
 
     @ResponseBody
-    @GetMapping(value = "/payment/schedule/{lastPrice}/{down}/{schedule}/{period}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Schedule> getPaymentSchedule(Model model, @PathVariable("lastPrice") double lastPrice, @PathVariable("down") double down, @PathVariable("schedule") int scheduleId, @PathVariable("period") int periodId){
+    @GetMapping(value = "/payment/schedule/{lastPrice}/{down}/{schedule}/{period}/{saleDate}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Schedule> getPaymentSchedule(Model model, @PathVariable("lastPrice") double lastPrice, @PathVariable("down") double down, @PathVariable("schedule") int scheduleId, @PathVariable("period") int periodId, @PathVariable(name = "saleDate", value = "") String saleDate){
         try {
             Dictionary schedule = dictionaryRepository.getDictionaryById(scheduleId);
             Dictionary period = dictionaryRepository.getDictionaryById(periodId);
             lastPrice = lastPrice - down;
             int scheduleCount = Integer.parseInt(schedule.getAttr1());
             double schedulePrice = Math.ceil(lastPrice/scheduleCount);
-            Date today = new Date();
-            Date startDate = DateUtility.generate(Integer.parseInt(period.getAttr1()), today.getMonth(), today.getYear()+1900);
+            Date saleDt = saleDate.trim().length()>0?DateUtility.getUtilDate(saleDate):new Date();
+            Date startDate = DateUtility.generate(Integer.parseInt(period.getAttr1()), saleDt.getMonth(), saleDt.getYear()+1900);
             List<Schedule> schedules = new ArrayList<>();
             Date scheduleDate = DateUtils.addMonths(startDate, 1);
             for(int i=0; i<scheduleCount; i++){

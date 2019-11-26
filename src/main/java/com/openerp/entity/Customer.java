@@ -31,9 +31,6 @@ public class Customer {
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date contractDate = new Date();
 
-    @Column(name = "is_troubled", nullable = false, columnDefinition="boolean default false")
-    private Boolean troubled = false;
-
     @Pattern(regexp=".{0,250}", message="Maksimum 250 simvol ola bilər")
     @Column(name = "description")
     private String description;
