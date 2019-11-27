@@ -66,6 +66,9 @@ public class Invoice {
     @Column(name = "approve_date")
     private Date approveDate;
 
+    @Column(name = "is_advance", nullable = false, columnDefinition="boolean default false")
+    private Boolean advance = false;
+
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;
 

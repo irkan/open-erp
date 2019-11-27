@@ -310,13 +310,13 @@ public class DBConfiguration {
             dictionaries.add(employeePayrollDetail6);
             Dictionary employeePayrollDetail7 = new Dictionary("Əlavə məzuniyyət günlərinin sayı", "{additional_vacation_days}", "0", employeePayrollDetailType);
             dictionaries.add(employeePayrollDetail7);
-            Dictionary employeeSaleDetail1 = new Dictionary("Canavasser", "{canavasser}", "{sale_price}>1698?30:25", employeeSaleDetailType);
+            Dictionary employeeSaleDetail1 = new Dictionary("Canvasser", "{canvasser}", "{sale_price}>1698?30:25", employeeSaleDetailType);
             dictionaries.add(employeeSaleDetail1);
             Dictionary employeeSaleDetail2 = new Dictionary("Diller", "{dealer}", "{sale_price}>1698?120:100", employeeSaleDetailType);
             dictionaries.add(employeeSaleDetail2);
             Dictionary employeeSaleDetail3 = new Dictionary("Ven lider", "{van_leader}", "{sale_price}>1698?50:40", employeeSaleDetailType);
             dictionaries.add(employeeSaleDetail3);
-            Dictionary employeeSaleDetail4 = new Dictionary("Konsul", "{counsul}", "30", employeeSaleDetailType);
+            Dictionary employeeSaleDetail4 = new Dictionary("Konsul", "{consul}", "30", employeeSaleDetailType);
             dictionaries.add(employeeSaleDetail4);
             Dictionary identifier6 = new Dictionary("İş Günü", "İG", null, identifierType);
             dictionaries.add(identifier6);

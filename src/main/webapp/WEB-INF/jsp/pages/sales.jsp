@@ -671,7 +671,7 @@
                                         <div class="row">
                                             <div class="col-md-3 offset-md-1 text-right">
                                                 <div class="kt-wizard-v1__review-title p-2">
-                                                    Canavasser
+                                                    Canvasser
                                                 </div>
                                             </div>
                                             <div class="col-md-4">

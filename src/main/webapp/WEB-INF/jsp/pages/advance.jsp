@@ -29,6 +29,8 @@
         <th>Məbləğ</th>
         <th>Tarix</th>
         <th>Açıqlama</th>
+        <th>Formul</th>
+        <th>Status</th>
         <th>Əməliyyat</th>
     </tr>
     </thead>
@@ -37,11 +39,27 @@
         <tr data="<c:out value="${utl:toJson(t)}" />">
             <td>${loop.index + 1}</td>
             <td><c:out value="${t.id}" /></td>
-            <td><c:out value="${t.employee.person.fullName}" /></td>
-            <td><c:out value="${t.employee.organization.name}" /></td>
-            <td><c:out value="${t.payed}" /></td>
-            <td><fmt:formatDate value = "${t.calculateDate}" pattern = "dd.MM.yyyy" /></td>
+            <th><div style="width: 160px;"><c:out value="${t.employee.person.fullName}" /></div></th>
+            <td><c:out value="${t.organization.name}" /></td>
+            <th>
+                <div style="width: 65px;">
+                    <span><c:out value="${t.payed}" /></span>
+                    <span class="kt-font-bold font-italic font-size-10px">AZN</span>
+                </div>
+            </th>
+            <th><fmt:formatDate value = "${t.advanceDate}" pattern = "dd.MM.yyyy" /></th>
             <td><c:out value="${t.description}" /></td>
+            <td><c:out value="${t.formula}" /></td>
+            <th class="text-center">
+                <c:choose>
+                    <c:when test="${t.debt}">
+                        <i class="la la-arrow-down kt-font-bold kt-font-success"></i>
+                    </c:when>
+                    <c:when test="${!t.debt}">
+                        <i class="la la-arrow-up kt-font-bold kt-font-danger" style="font-weight: bold;"></i>
+                    </c:when>
+                </c:choose>
+            </th>
             <td nowrap class="text-center">
                 <c:set var="approve" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
                 <c:choose>
@@ -112,7 +130,7 @@
                 <form:form modelAttribute="form" id="form" method="post" action="/payroll/advance" cssClass="form-group">
                     <form:hidden path="id"/>
                     <form:hidden path="approve"/>
-                    <form:hidden path="calculateDate"/>
+                    <form:hidden path="advanceDate"/>
                     <div class="form-group">
                         <form:label path="employee">Əməkdaş</form:label>
                         <form:select  path="employee" cssClass="custom-select form-control">
@@ -206,7 +224,7 @@
         $(modal).find(".modal-title").html('Təsdiq et!');
         $(modal).modal('toggle');
     }
-</script>\
+</script>
 
 <script>
     <c:if test="${edit.status}">

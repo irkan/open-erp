@@ -355,21 +355,16 @@ public class HRController extends SkeletonController {
         double sumSalary = 0d;
 
         String description = vacation.getIdentifier().getName() + " " + DateUtility.getFormattedDate(vacation.getStartDate()) + " - " + DateUtility.getFormattedDate(vacation.getEndDate()) + ". Məzuniyyət günlərinin sayı: " + vacation.getVacationDetails().size();
+        double vacationPrice = (sumSalary/30.4)*vacation.getVacationDetails().size();
         Advance advance = new Advance(
                 dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("vacation-advance", "advance"),
                 vacation.getEmployee(),
+                Util.getUserBranch(vacation.getEmployee().getOrganization()),
                 description,
-                new Date()
+                "",
+                new Date(),
+                vacationPrice
         );
-        List<AdvanceDetail> advanceDetails = new ArrayList<>();
-        for(int i=0; i<count; i++){
-            double salary = lastMonthSalary(salaryEmployees.get(i));
-            sumSalary += salary;
-            advanceDetails.add(new AdvanceDetail(advance, new Date(), salary));
-        }
-        advance.setAdvanceDetails(advanceDetails);
-        double vacationPrice = (sumSalary/30.4)*vacation.getVacationDetails().size();
-        advance.setPayed(vacationPrice);
         advance.setApprove(true);
         advance.setApproveDate(new Date());
         return advance;

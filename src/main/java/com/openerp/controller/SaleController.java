@@ -14,7 +14,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 import java.util.*;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("/sale")
@@ -208,6 +212,8 @@ public class SaleController extends SkeletonController {
         if(!binding.hasErrors()) {
             invc.setApprove(true);
             invc.setApproveDate(new Date());
+            invc.setDescription(invoice.getDescription());
+            invc.setAdvance(invoice.getAdvance());
             invoiceRepository.save(invc);
 
             Transaction transaction = new Transaction();
@@ -228,6 +234,76 @@ public class SaleController extends SkeletonController {
                     + " " + invc.getSales().getAction().getInventory().getBarcode()
             );
             transactionRepository.save(transaction);
+
+
+            if(invc.getSales()!=null && invc.getApprove() && invc.getAdvance()){
+                List<Advance> advances = new ArrayList<>();
+                ScriptEngineManager mgr = new ScriptEngineManager();
+                ScriptEngine engine = mgr.getEngineByName("JavaScript");
+                Dictionary advance = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("bonus-sale-advance", "advance");
+                Sales sales = invc.getSales();
+                String percent = "*0.01";
+                if(sales.getCanavasser()!=null){
+                    EmployeeSaleDetail canvasserSaleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getCanavasser(), "{canvasser}");
+                    String calculated_bonus = canvasserSaleDetail.getValue()
+                            .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
+                            .replaceAll(Pattern.quote("%"), percent);
+                    advances.add(new Advance(advance,
+                            sales.getCanavasser(),
+                            Util.getUserBranch(sales.getCanavasser().getOrganization()),
+                            sales.getId() + " nömrəli satış və " + invoice.getId() + " nömrəli hesab fakturadan əldə edilən bonus. (Canvasser)",
+                            calculated_bonus,
+                            sales.getSaleDate(),
+                            Double.parseDouble(String.valueOf(engine.eval(calculated_bonus)))
+                    ));
+                }
+
+                if(sales.getDealer()!=null){
+                    EmployeeSaleDetail dealerSaleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getDealer(), "{dealer}");
+                    String calculated_bonus = dealerSaleDetail.getValue()
+                            .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
+                            .replaceAll(Pattern.quote("%"), percent);
+                    advances.add(new Advance(advance,
+                            sales.getDealer(),
+                            Util.getUserBranch(sales.getDealer().getOrganization()),
+                            sales.getId() + " nömrəli satış və " + invoice.getId() + " nömrəli hesab fakturadan əldə edilən bonus. (Diller)",
+                            calculated_bonus,
+                            sales.getSaleDate(),
+                            Double.parseDouble(String.valueOf(engine.eval(calculated_bonus)))
+                    ));
+                }
+
+                if(sales.getVanLeader()!=null){
+                    EmployeeSaleDetail vanLeaderSaleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getVanLeader(), "{van_leader}");
+                    String calculated_bonus = vanLeaderSaleDetail.getValue()
+                            .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
+                            .replaceAll(Pattern.quote("%"), percent);
+                    advances.add(new Advance(advance,
+                            sales.getVanLeader(),
+                            Util.getUserBranch(sales.getVanLeader().getOrganization()),
+                            sales.getId() + " nömrəli satış və " + invoice.getId() + " nömrəli hesab fakturadan əldə edilən bonus. (Ven lider)",
+                            calculated_bonus,
+                            sales.getSaleDate(),
+                            Double.parseDouble(String.valueOf(engine.eval(calculated_bonus)))
+                    ));
+                }
+
+                if(sales.getConsole()!=null){
+                    EmployeeSaleDetail consulSaleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getConsole(), "{consul}");
+                    String calculated_bonus = consulSaleDetail.getValue()
+                            .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
+                            .replaceAll(Pattern.quote("%"), percent);
+                    advances.add(new Advance(advance,
+                            sales.getConsole(),
+                            Util.getUserBranch(sales.getConsole().getOrganization()),
+                            sales.getId() + " nömrəli satış və " + invoice.getId() + " nömrəli hesab fakturadan əldə edilən bonus. (Konsul)",
+                            calculated_bonus,
+                            sales.getSaleDate(),
+                            Double.parseDouble(String.valueOf(engine.eval(calculated_bonus)))
+                    ));
+                }
+                advanceRepository.saveAll(advances);
+            }
         }
         return mapPost(invc, binding, redirectAttributes, "/sale/invoice/");
     }

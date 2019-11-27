@@ -1,15 +1,13 @@
 package com.openerp.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "payroll_advance")
@@ -19,8 +17,8 @@ import java.util.List;
 public class Advance {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "hr_sequence")
-    @SequenceGenerator(sequenceName = "aa_hr_sequence", allocationSize = 1, name = "hr_sequence")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "payroll_sequence")
+    @SequenceGenerator(sequenceName = "aa_payroll_sequence", allocationSize = 1, name = "payroll_sequence")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
@@ -32,17 +30,25 @@ public class Advance {
     @JoinColumn(name = "hr_employee_id", nullable = false)
     private Employee employee;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "hr_organization_id")
+    private Organization organization;
+
+    @DecimalMin(value = "0", message = "Minimum 0 olmalıdır")
     @Column(name = "payed", columnDefinition="Decimal(10,2) default 0")
     private double payed=0d;
+
+    @Pattern(regexp=".{0,250}",message="Maksimum 250 simvol ola bilər")
+    @Column(name = "formula")
+    private String formula;
 
     @Pattern(regexp=".{0,250}",message="Maksimum 250 simvol ola bilər")
     @Column(name = "description")
     private String description;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "calculate_date")
-    @DateTimeFormat(pattern = "dd.MM.yyyy")
-    private Date calculateDate=new Date();
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "advance_date")
+    private Date advanceDate=new Date();
 
     @Column(name = "is_approve", nullable = false, columnDefinition="boolean default false")
     private Boolean approve = false;
@@ -50,6 +56,9 @@ public class Advance {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "approve_date")
     private Date approveDate;
+
+    @Column(name = "is_debt", nullable = false, columnDefinition="boolean default true")
+    private Boolean debt = false;
 
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;
@@ -62,13 +71,13 @@ public class Advance {
     @JoinColumn(name = "created_by_admin_user_id")
     private User createdUser;
 
-    @OneToMany(mappedBy = "advance")
-    private List<AdvanceDetail> advanceDetails;
-
-    public Advance(Dictionary advance, Employee employee, @Pattern(regexp = ".{0,250}", message = "Maksimum 50 simvol ola bilər") String description, Date calculateDate) {
+    public Advance(Dictionary advance, Employee employee, Organization organization, @Pattern(regexp = ".{0,250}", message = "Maksimum 50 simvol ola bilər") String description, @Pattern(regexp = ".{0,250}", message = "Maksimum 50 simvol ola bilər") String formula, Date advanceDate, double payed) {
         this.advance = advance;
         this.employee = employee;
+        this.organization = organization;
         this.description = description;
-        this.calculateDate = calculateDate;
+        this.formula = formula;
+        this.advanceDate = advanceDate;
+        this.payed = payed;
     }
 }

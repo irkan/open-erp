@@ -29,6 +29,7 @@
                                     <th>Yığımçı</th>
                                     <th>Kanal</th>
                                     <th>Referans</th>
+                                    <th>Avans</th>
                                     <th>Əməliyyat</th>
                                 </tr>
                                 </thead>
@@ -56,6 +57,11 @@
                                         <td><c:out value="${t.collector.person.fullName}" /></td>
                                         <td><c:out value="${t.paymentChannel.name}" /></td>
                                         <td><c:out value="${t.channelReferenceCode}" /></td>
+                                        <td class="text-center">
+                                            <c:if test="${t.advance}">
+                                                <i class="flaticon2-check-mark kt-font-success"></i>
+                                            </c:if>
+                                        </td>
                                         <td nowrap class="text-center">
                                             <c:set var="approve" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
                                             <c:choose>
@@ -201,6 +207,12 @@
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form-approve" method="post" action="/sale/invoice/approve" cssClass="form-group">
                     <form:hidden path="id"/>
+                    <div class="form-group">
+                        <label class="kt-checkbox kt-checkbox--brand">
+                            <form:checkbox path="advance"/> Avans hesablansınmı?
+                            <span></span>
+                        </label>
+                    </div>
                     <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>
                         <form:textarea path="description" cssClass="form-control"/>
