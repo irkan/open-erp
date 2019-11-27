@@ -576,7 +576,7 @@
                                             </div>
                                         </div>
                                         <div class="col-sm-3 text-center">
-                                            <button type="button" class="btn btn-outline-info btn-tallest" style="font-size: 16px;padding-left: 7px; padding-right: 8px;" onclick="schedule($('input[name=\'payment.lastPrice\']'), $('input[name=\'payment.down\']'), $('select[name=\'payment.schedule\']'), $('select[name=\'payment.period\']'))"><i class="fa fa-play"></i> Ödəniş qrafiki yarat</button>
+                                            <button type="button" class="btn btn-outline-info btn-tallest" style="font-size: 16px;padding-left: 7px; padding-right: 8px;" onclick="schedule($('input[name=\'payment.lastPrice\']'), $('input[name=\'payment.down\']'), $('select[name=\'payment.schedule\']'), $('select[name=\'payment.period\']'), $('input[name=\'saleDate\']'))"><i class="fa fa-play"></i> Ödəniş qrafiki yarat</button>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -718,7 +718,7 @@
         allowClear: true
     });
 
-    function schedule(lastPrice, down, schedule, period){
+    function schedule(lastPrice, down, schedule, period, saleDate){
         var table='';
         swal.fire({
             text: 'Proses davam edir...',
@@ -726,7 +726,7 @@
             onOpen: function() {
                 swal.showLoading();
                 $.ajax({
-                    url: '/sale/payment/schedule/' + $(lastPrice).val() + '/' + $(down).val() + '/' + $(schedule).val() + '/' + $(period).val(),
+                    url: '/sale/payment/schedule/' + $(lastPrice).val() + '/' + $(down).val() + '/' + $(schedule).val() + '/' + $(period).val() + '/' + $(saleDate).val(),
                     type: 'GET',
                     dataType: 'json',
                     beforeSend: function() {
@@ -753,7 +753,7 @@
                     error: function() {
                         swal.fire({
                             title: "Xəta baş verdi!",
-                            html: "İstifadəçinin adına təhkim olunan inventar yoxdur!",
+                            html: "Cədvəl yarana bilmədi!",
                             type: "error",
                             cancelButtonText: 'Bağla',
                             cancelButtonColor: '#c40000',
