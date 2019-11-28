@@ -255,7 +255,7 @@
 
 <script>
     <c:if test="${edit.status}">
-    $('#kt_table_1 tbody').on('dblclick', 'tr', function () {
+    $('#kt_table_1c tbody').on('dblclick', 'tr', function () {
         edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
     });
     </c:if>
