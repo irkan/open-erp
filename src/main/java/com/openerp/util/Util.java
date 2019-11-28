@@ -454,4 +454,45 @@ public class Util {
         }
         return list;
     }
+
+    public static List<Integer> getInvoiceIds(String data){
+        boolean status = true;
+        List<Integer> ids = new ArrayList<>();
+         if(data.trim().length()>0 && data.matches("[0-9\\,\\-\\s]+")){
+            for(String item: data.split(",")){
+                if(item.trim().matches("[0-9\\-\\s]+")){
+                    String[] subItems = item.trim().split("-");
+                    if(subItems.length>2){
+                        System.out.println("Format dogru daxil edilmeyib");
+                        status = false;
+                        break;
+                    }
+                    if(status){
+                        for(String subItem: subItems){
+                            if(!subItem.matches("[0-9\\s]+")){
+                                System.out.println("Format dogru daxil edilmeyib");
+                                status = false;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if(status){
+            for(String item: data.split(",")){
+                String[] subItems = item.trim().split("-");
+                int start = Integer.parseInt(subItems[0].trim());
+                int end = subItems.length==1?Integer.parseInt(subItems[0].trim()):Integer.parseInt(subItems[1].trim());
+                int loopStart = start<=end?start:end;
+                int loopEnd = start<=end?end:start;
+                for(int i=loopStart; i<=loopEnd; i++){
+                    ids.add(i);
+                }
+            }
+        }
+
+        return ids;
+    }
 }

@@ -100,7 +100,7 @@
                                             <c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
                                             <c:choose>
                                                 <c:when test="${export.status}">
-                                                    <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.description}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Hesab-fakturanın çapı">
+                                                    <a href="javascript:exportInvoice($('#form-export-invoice'), '<c:out value="${t.id}" />', 'modal-export-invoice');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Hesab-fakturanın çapı">
                                                         <i class="<c:out value="${export.object.icon}"/>"></i>
                                                     </a>
                                                 </c:when>
@@ -261,6 +261,32 @@
     </div>
 </div>
 
+<div class="modal fade" id="modal-export-invoice" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Hesab faktura</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="form-export-invoice" method="post" action="/export/invoice/" class="form-group">
+                    <div class="form-group">
+                        <label for="data">Hesab faktura nömrəsi</label>
+                        <input type="text" name="data" id="data" class="form-control"/>
+                        <span class="form-text text-muted">Nümunə: 100001,100003-100008,100018</span>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="submit($('#form-export-invoice'));">İcra et</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="<c:url value="/assets/js/demo4/pages/crud/datatables/advanced/row-grouping.js" />" type="text/javascript"></script>
 
 <script>
@@ -273,6 +299,15 @@
             if(obj["collector"]!=null){
                 $("#collector option[value="+obj["collector"]["id"]+"]").attr("selected", "selected");
             }
+            $('#' + modal).modal('toggle');
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    function exportInvoice(form, id, modal){
+        try {
+            $(form).find("#data").val(id);
             $('#' + modal).modal('toggle');
         } catch (e) {
             console.error(e);
