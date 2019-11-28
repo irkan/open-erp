@@ -1166,12 +1166,9 @@
         };
     }();
 
-</script>
-
-<script>
-<c:if test="${edit.status}">
+    <c:if test="${edit.status}">
     $('#group_table tbody').on('dblclick', 'tr', function () {
-    edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
+        edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
     });
-</c:if>
-    </script>
+    </c:if>
+</script>
