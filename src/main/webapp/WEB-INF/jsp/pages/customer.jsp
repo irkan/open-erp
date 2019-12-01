@@ -97,7 +97,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form:form modelAttribute="form" id="form" method="post" action="/hr/employee" cssClass="form-group">
+                <form:form modelAttribute="form" id="form" method="post" action="/crm/customer" cssClass="form-group">
                     <form:input path="id" type="hidden"/>
                     <div class="row">
                         <div class="col-md-3">
@@ -199,6 +199,53 @@
                                     </div>
                                 </div>
                                 <form:errors path="person.contact.homePhone" cssClass="control-label alert-danger"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <form:label path="person.contact.relationalPhoneNumber1">Əlaqəli şəxs nömrəsi #1</form:label>
+                                <div class="input-group">
+                                    <form:input path="person.contact.relationalPhoneNumber1" cssClass="form-control"
+                                                placeholder="505505550"/>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-phone"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <form:errors path="person.contact.relationalPhoneNumber1" cssClass="control-label alert-danger"/>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <form:label path="person.contact.relationalPhoneNumber2">Əlaqəli şəxs nömrəsi #2</form:label>
+                                <div class="input-group">
+                                    <form:input path="person.contact.relationalPhoneNumber2" cssClass="form-control"
+                                                placeholder="505505550"/>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-phone"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <form:errors path="person.contact.relationalPhoneNumber2" cssClass="control-label alert-danger"/>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <form:label path="person.contact.relationalPhoneNumber3">Əlaqəli şəxs nömrəsi #3</form:label>
+                                <div class="input-group">
+                                    <form:input path="person.contact.relationalPhoneNumber3" cssClass="form-control"
+                                                placeholder="505505550"/>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-phone"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <form:errors path="person.contact.relationalPhoneNumber3" cssClass="control-label alert-danger"/>
                             </div>
                         </div>
                     </div>

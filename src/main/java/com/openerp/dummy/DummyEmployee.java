@@ -11,6 +11,10 @@ import java.util.List;
 public class DummyEmployee {
 
     public Employee getEmployee(Person person, List<Dictionary> positions, List<Organization> organizations){
+        Dictionary position = DummyUtil.randomDictionary(positions);
+        if(position.getAttr1().equalsIgnoreCase("Consul")){
+            person.setVoen(DummyUtil.randomVoen());
+        }
         Employee employee = new Employee(
                 person,
                 DummyUtil.randomDictionary(positions),

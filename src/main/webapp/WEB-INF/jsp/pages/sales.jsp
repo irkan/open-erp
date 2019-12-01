@@ -76,6 +76,14 @@
                                                     </a>
                                                 </c:when>
                                             </c:choose>
+                                            <c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
+                                            <c:choose>
+                                                <c:when test="${export.status}">
+                                                    <a href="javascript:exportContract($('#form-export-contract'), '<c:out value="${t.id}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Hesab-fakturanın çapı">
+                                                        <i class="<c:out value="${export.object.icon}"/>"></i>
+                                                    </a>
+                                                </c:when>
+                                            </c:choose>
                                         </td>
                                         <td><c:out value="${t.id}" /></td>
                                         <td><fmt:formatDate value = "${t.saleDate}" pattern = "dd.MM.yyyy" /></td>
@@ -287,7 +295,7 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <form:label path="customer.person.birthday">Doğum tarixi</form:label>
                                                 <div class="input-group date" >
@@ -301,18 +309,25 @@
                                                 <form:errors path="customer.person.birthday" cssClass="control-label alert-danger" />
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <form:label path="customer.person.idCardSerialNumber">Ş.v - nin seriya nömrəsi</form:label>
                                                 <form:input path="customer.person.idCardSerialNumber" cssClass="form-control" placeholder="AA0822304"/>
                                                 <form:errors path="customer.person.idCardSerialNumber" cssClass="control-label alert-danger" />
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <form:label path="customer.person.idCardPinCode">Ş.v - nin pin kodu</form:label>
                                                 <form:input path="customer.person.idCardPinCode" cssClass="form-control" placeholder="Məs: 4HWL0AM"/>
                                                 <form:errors path="customer.person.idCardPinCode" cssClass="control-label alert-danger" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <form:label path="customer.person.voen">VÖEN</form:label>
+                                                <form:input path="customer.person.voen" cssClass="form-control" placeholder="Məs: 0000000000"/>
+                                                <form:errors path="customer.person.voen" cssClass="control-label alert-danger" />
                                             </div>
                                         </div>
                                     </div>
@@ -350,7 +365,7 @@
                                             <div class="form-group">
                                                 <form:label path="customer.person.contact.mobilePhone">Mobil nömrə</form:label>
                                                 <div class="input-group" >
-                                                    <form:input path="customer.person.contact.mobilePhone" cssClass="form-control" placeholder="505505550"/>
+                                                    <form:input path="customer.person.contact.mobilePhone" cssClass="form-control" placeholder="0505505550"/>
                                                     <div class="input-group-append">
                                         <span class="input-group-text">
                                             <i class="la la-phone"></i>
@@ -364,7 +379,7 @@
                                             <div class="form-group">
                                                 <form:label path="customer.person.contact.homePhone">Şəhər nömrəsi</form:label>
                                                 <div class="input-group" >
-                                                    <form:input path="customer.person.contact.homePhone" cssClass="form-control" placeholder="124555050"/>
+                                                    <form:input path="customer.person.contact.homePhone" cssClass="form-control" placeholder="0124555050"/>
                                                     <div class="input-group-append">
                                         <span class="input-group-text">
                                             <i class="la la-phone"></i>
@@ -386,6 +401,50 @@
                                                     </div>
                                                 </div>
                                                 <form:errors path="customer.person.contact.email" cssClass="control-label alert-danger" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <form:label path="customer.person.contact.relationalPhoneNumber1">Əlaqəli şəxs nömrəsi #1</form:label>
+                                                <div class="input-group" >
+                                                    <form:input path="customer.person.contact.relationalPhoneNumber1" cssClass="form-control" placeholder="0505505550"/>
+                                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-phone"></i>
+                                        </span>
+                                                    </div>
+                                                </div>
+                                                <form:errors path="customer.person.contact.relationalPhoneNumber1" cssClass="control-label alert-danger" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <form:label path="customer.person.contact.relationalPhoneNumber2">Əlaqəli şəxs nömrəsi #2</form:label>
+                                                <div class="input-group" >
+                                                    <form:input path="customer.person.contact.relationalPhoneNumber2" cssClass="form-control" placeholder="0505505550"/>
+                                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-phone"></i>
+                                        </span>
+                                                    </div>
+                                                </div>
+                                                <form:errors path="customer.person.contact.relationalPhoneNumber2" cssClass="control-label alert-danger" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <form:label path="customer.person.contact.relationalPhoneNumber3">Əlaqəli şəxs nömrəsi #3</form:label>
+                                                <div class="input-group" >
+                                                    <form:input path="customer.person.contact.relationalPhoneNumber3" cssClass="form-control" placeholder="0505505550"/>
+                                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-phone"></i>
+                                        </span>
+                                                    </div>
+                                                </div>
+                                                <form:errors path="customer.person.contact.relationalPhoneNumber3" cssClass="control-label alert-danger" />
                                             </div>
                                         </div>
                                     </div>
@@ -709,6 +768,10 @@
         </div>
     </div>
 </div>
+
+<form id="form-export-contract" method="post" action="/export/sale/contract" style="display: none">
+    <input type="hidden" name="data" />
+</form>
 
 <script src="<c:url value="/assets/js/demo4/pages/crud/datatables/advanced/row-grouping.js" />" type="text/javascript"></script>
 
@@ -1171,4 +1234,13 @@
         edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
     });
     </c:if>
+
+    function exportContract(form, data){
+        try {
+            $(form).find("input[name='data']").val(id);
+            submit(form);
+        } catch (e) {
+            console.error(e);
+        }
+    }
 </script>

@@ -9,11 +9,16 @@ import java.util.Map;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 
+import com.openerp.entity.Dictionary;
+import com.openerp.entity.Sales;
+import com.openerp.repository.ConfigurationRepository;
+import com.openerp.repository.DictionaryRepository;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.wml.ContentAccessor;
 import org.docx4j.wml.Text;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 
 public class Docx4j {
 
@@ -38,6 +43,40 @@ public class Docx4j {
         });
 
         docx4j.writeDocxToStream(template, filePath+"Hello2.docx");
+    }
+
+    public static File generateContract(ResourceLoader resourceLoader, Sales sales, ConfigurationRepository configurationRepository, DictionaryRepository dictionaryRepository) throws IOException, Docx4JException {
+        Resource resource = resourceLoader.getResource("classpath:/template/sale-contract.docx");
+        List<Dictionary> months = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("month");
+        List<Dictionary> digits = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("digit");
+
+        String filePath = "C:\\Users\\i.ahmadov\\Downloads\\";
+        String file = "mezun_emri.docx";
+
+        Docx4j docx4j = new Docx4j();
+        WordprocessingMLPackage template = docx4j.getTemplate(resource.getFile().getPath());
+
+        List<Object> texts = getAllElementFromObject(
+                template.getMainDocumentPart(), Text.class);
+        searchAndReplace(texts, new HashMap<String, String>(){
+            {
+                this.put("${contract_number}", String.valueOf(sales.getId()));
+                this.put("${contract_date}", DateUtility.generateContractDate(sales.getSaleDate(), months));
+                this.put("${consul_full_name}", Util.getPersonLFF(sales.getConsole().getPerson()));
+                this.put("${consul_voen}", sales.getConsole().getPerson().getVoen());
+                this.put("${customer_full_name}",  Util.getPersonLFF(sales.getCustomer().getPerson()));
+                this.put("${inventory_barcode}",  sales.getAction().getInventory().getBarcode());
+                this.put("${sale_price}",  String.valueOf(sales.getPayment().getLastPrice()));
+                this.put("${sale_price_in_word}",  Util.getDigitInWord(String.valueOf(sales.getPayment().getLastPrice()), digits));
+            }
+            @Override
+            public String get(Object key) {
+                return super.get(key);
+            }
+        });
+
+        docx4j.writeDocxToStream(template, filePath+"Hello2.docx");
+        return new File(filePath+"Hello2.docx");
     }
 
     public static File generateDocument(Resource resource, String data, String exportPath) throws IOException, Docx4JException {

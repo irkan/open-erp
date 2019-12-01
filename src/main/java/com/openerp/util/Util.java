@@ -495,4 +495,42 @@ public class Util {
 
         return ids;
     }
+
+    public static String getPersonLFF(Person person){
+        return person.getLastName() + " " + person.getFirstName() + " " + (person.getFatherName()!=null?person.getFatherName():"");
+    }
+
+    public static String getDigitInWord(String digit, List<Dictionary> digits){
+        String digitInWord = "";
+        if(digit.matches("[0-9]\\s,\\.")){
+            String[] dgts = digit.split(".");
+            if(dgts[0].length()==1){ //teklik
+                digitInWord = getDigit(dgts[0], digits);
+            } else if(dgts[0].length()==2){ //onluq
+                digitInWord = getDigit(dgts[0], digits);
+            } else if(dgts[0].length()==3){ //yuzluk
+                digitInWord = getDigit(dgts[0], digits);
+            } else if(dgts[0].length()==4){ //minlik
+                digitInWord = getDigit(dgts[0], digits);
+            } else if(dgts[0].length()==5){ //on minlik
+                digitInWord = getDigit(dgts[0], digits);
+            } else if(dgts[0].length()==6){ //yuz minlik
+                digitInWord = getDigit(dgts[0], digits);
+            }
+
+            if(dgts.length>0){
+                //qepik hisse
+            }
+        }
+        return digitInWord;
+    }
+
+    private static String getDigit(String digit, List<Dictionary> digits){
+        for(Dictionary object: digits){
+            if(object.getAttr1().equalsIgnoreCase(digit)){
+                return object.getAttr2();
+            }
+        }
+        return "";
+    }
 }

@@ -85,6 +85,7 @@ public class DBConfiguration {
             configurations.add(new Configuration("Qaynar xətt", "company_hot_line", "+994 55 546 06 61", "Şirkətin qaynar xətt nömrəsi"));
             configurations.add(new Configuration("Telefon", "company_telephone", "+994 12 480 10 76", "Şirkətin telefon nömrəsi"));
             configurations.add(new Configuration("Mobil", "company_mobile", "+994 55 546 06 61", "Şirkətin mobil nömrəsi"));
+            configurations.add(new Configuration("Email", "company_email", "sual.office@gmail.com", "Şirkətin email ünvanı"));
             configurationRepository.saveAll(configurations);
 
             List<DictionaryType> types = new ArrayList<>();
@@ -140,6 +141,10 @@ public class DBConfiguration {
             types.add(contactChannelType);
             DictionaryType paymentChannelType = new DictionaryType("Ödəniş kanalı", "payment-channel", null);
             types.add(paymentChannelType);
+            DictionaryType digitType = new DictionaryType("Rəqəm", "digit", null);
+            types.add(digitType);
+            DictionaryType monthType = new DictionaryType("Ay", "month", null);
+            types.add(digitType);
 
             dictionaryTypeRepository.saveAll(types);
 
@@ -443,6 +448,77 @@ public class DBConfiguration {
             dictionaries.add(paymentChannel1);
             Dictionary paymentChannel2 = new Dictionary("MilliÖN", "million", null, paymentChannelType);
             dictionaries.add(paymentChannel2);
+            Dictionary digit0 = new Dictionary("Sıfır", "0", "sıfır", digitType);
+            dictionaries.add(digit0);
+            Dictionary digit1 = new Dictionary("Bir", "1", "bir", digitType);
+            dictionaries.add(digit1);
+            Dictionary digit2 = new Dictionary("İki", "2", "iki", digitType);
+            dictionaries.add(digit2);
+            Dictionary digit3 = new Dictionary("Üç", "3", "üç", digitType);
+            dictionaries.add(digit3);
+            Dictionary digit4 = new Dictionary("Dörd", "4", "dörd", digitType);
+            dictionaries.add(digit4);
+            Dictionary digit5 = new Dictionary("Beş", "5", "beş", digitType);
+            dictionaries.add(digit5);
+            Dictionary digit6 = new Dictionary("Altı", "6", "altı", digitType);
+            dictionaries.add(digit6);
+            Dictionary digit7 = new Dictionary("Yeddi", "7", "yeddi", digitType);
+            dictionaries.add(digit7);
+            Dictionary digit8 = new Dictionary("Səkkiz", "8", "səkkiz", digitType);
+            dictionaries.add(digit8);
+            Dictionary digit9 = new Dictionary("Doqquz", "9", "doqquz", digitType);
+            dictionaries.add(digit9);
+            Dictionary digit10 = new Dictionary("On", "10", "on", digitType);
+            dictionaries.add(digit10);
+            Dictionary digit20 = new Dictionary("İyirmi", "20", "iyirmi", digitType);
+            dictionaries.add(digit20);
+            Dictionary digit30 = new Dictionary("Otuz", "30", "otuz", digitType);
+            dictionaries.add(digit30);
+            Dictionary digit40 = new Dictionary("Qırx", "40", "qırx", digitType);
+            dictionaries.add(digit40);
+            Dictionary digit50 = new Dictionary("Əlli", "50", "əlli", digitType);
+            dictionaries.add(digit50);
+            Dictionary digit60 = new Dictionary("Altmış", "60", "altmış", digitType);
+            dictionaries.add(digit60);
+            Dictionary digit70 = new Dictionary("Yetmiş", "70", "yetmiş", digitType);
+            dictionaries.add(digit70);
+            Dictionary digit80 = new Dictionary("Səksən", "80", "səksən", digitType);
+            dictionaries.add(digit80);
+            Dictionary digit90 = new Dictionary("Doxsan", "90", "doxsan", digitType);
+            dictionaries.add(digit90);
+            Dictionary digit100 = new Dictionary("Yüz", "100", "yüz", digitType);
+            dictionaries.add(digit100);
+            Dictionary digit1000 = new Dictionary("Min", "1000", "min", digitType);
+            dictionaries.add(digit1000);
+            Dictionary digit1000000 = new Dictionary("Milyon", "1000000", "milyon", digitType);
+            dictionaries.add(digit1000000);
+            Dictionary digit1000000000 = new Dictionary("Milyard", "1000000000", "milyard", digitType);
+            dictionaries.add(digit1000000000);
+            Dictionary month1 = new Dictionary("Yanvar", "january", "1", monthType);
+            dictionaries.add(month1);
+            Dictionary month2 = new Dictionary("Fevral", "february", "2", monthType);
+            dictionaries.add(month2);
+            Dictionary month3 = new Dictionary("Mart", "march", "3", monthType);
+            dictionaries.add(month3);
+            Dictionary month4 = new Dictionary("Aprel", "april", "4", monthType);
+            dictionaries.add(month4);
+            Dictionary month5 = new Dictionary("May", "may", "5", monthType);
+            dictionaries.add(month5);
+            Dictionary month6 = new Dictionary("İyun", "june", "6", monthType);
+            dictionaries.add(month6);
+            Dictionary month7 = new Dictionary("İyul", "jule", "7", monthType);
+            dictionaries.add(month7);
+            Dictionary month8 = new Dictionary("Avqust", "august", "8", monthType);
+            dictionaries.add(month8);
+            Dictionary month9 = new Dictionary("Sentyabr", "september", "9", monthType);
+            dictionaries.add(month9);
+            Dictionary month10 = new Dictionary("Oktyabr", "october", "10", monthType);
+            dictionaries.add(month10);
+            Dictionary month11 = new Dictionary("Noyabr", "november", "11", monthType);
+            dictionaries.add(month11);
+            Dictionary month12 = new Dictionary("Dekabr", "december", "12", monthType);
+            dictionaries.add(month12);
+
 
             dictionaryRepository.saveAll(dictionaries);
 

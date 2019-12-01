@@ -59,6 +59,9 @@ public class Person {
     @Column(name = "id_card_serial_number")
     private String idCardSerialNumber;
 
+    @Column(name = "voen")
+    private String voen;
+
     @Column(name = "is_disability", nullable = false, columnDefinition="boolean default false")
     private Boolean disability = false;
 

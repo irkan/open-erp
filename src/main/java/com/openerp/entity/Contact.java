@@ -27,6 +27,15 @@ public class Contact {
     @Column(name = "home_phone")
     private String homePhone;
 
+    @Column(name = "relational_phone_number_1")
+    private String relationalPhoneNumber1;
+
+    @Column(name = "relational_phone_number_2")
+    private String relationalPhoneNumber2;
+
+    @Column(name = "relational_phone_number_3")
+    private String relationalPhoneNumber3;
+
     @Email(message = "Doğru email ünvan daxil edin")
     @Column(name = "email")
     private String email;

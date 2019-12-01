@@ -110,6 +110,16 @@ public class DummyUtil {
         return "AA" + sb.toString();
     }
 
+    public static String randomVoen(){
+        String AlphaNumericString = "0123456789";
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 10; i++) {
+            int index = (int)(AlphaNumericString.length() * Math.random());
+            sb.append(AlphaNumericString.charAt(index));
+        }
+        return "AA" + sb.toString();
+    }
+
     public static String randomBankAccountNumber(){
         String AlphaString = "AZNUSDERGBPTL";
         String NumericString = "0123456789";

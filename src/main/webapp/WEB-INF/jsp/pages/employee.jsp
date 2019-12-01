@@ -198,6 +198,29 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <form:label path="person.idCardSerialNumber">Ş.v - nin seriya nömrəsi</form:label>
+                                <form:input path="person.idCardSerialNumber" cssClass="form-control" placeholder="AA0822304"/>
+                                <form:errors path="person.idCardSerialNumber" cssClass="control-label alert-danger" />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <form:label path="person.idCardPinCode">Ş.v - nin pin kodu</form:label>
+                                <form:input path="person.idCardPinCode" cssClass="form-control" placeholder="Məs: 4HWL0AM"/>
+                                <form:errors path="person.idCardPinCode" cssClass="control-label alert-danger" />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <form:label path="person.voen">VÖEN</form:label>
+                                <form:input path="person.voen" cssClass="form-control" placeholder="Məs: 0000000000"/>
+                                <form:errors path="person.voen" cssClass="control-label alert-danger" />
+                            </div>
+                        </div>
+                    </div>
                     <hr style="width: 100%"/>
                     <div class="row">
                         <div class="col-md-7">

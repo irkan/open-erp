@@ -1,11 +1,13 @@
 package com.openerp.util;
 
+import com.openerp.entity.Dictionary;
 import org.apache.log4j.Logger;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class DateUtility {
     private static final Logger log = Logger.getLogger(DateUtility.class);
@@ -81,5 +83,17 @@ public class DateUtility {
 
     public static String generateStringDate(int day, int month, int year){
         return (day > 9 ? day : "0" + day) + "." + (month > 9 ? month : "0" + month) + "." + year;
+    }
+
+    public static String generateContractDate(Date contractDate, List<Dictionary> months){
+        String monthName = "";
+        for(Dictionary month: months){
+            if(contractDate.getMonth()==Integer.parseInt(month.getAttr2())){
+                monthName = month.getName();
+                break;
+            }
+        }
+        return "«"+contractDate.getDate()+"» " + monthName + " " + (contractDate.getYear()+1900);
+
     }
 }

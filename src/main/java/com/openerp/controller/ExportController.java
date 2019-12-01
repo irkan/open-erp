@@ -2,6 +2,7 @@ package com.openerp.controller;
 
 import com.itextpdf.text.DocumentException;
 import com.openerp.entity.Invoice;
+import com.openerp.entity.Sales;
 import com.openerp.util.Docx4j;
 import com.openerp.util.GeneratePDFFile;
 import com.openerp.util.Util;
@@ -50,6 +51,21 @@ public class ExportController extends SkeletonController {
         List<Integer> invoiceIds = Util.getInvoiceIds(data);
         List<Invoice> invoices = invoiceRepository.getInvoicesByActiveTrueAndApproveTrueAndIdIn(invoiceIds);
         File file = GeneratePDFFile.generateInvoice(invoices, resourceLoader, configurationRepository);
+        InputStreamResource resourceIS = new InputStreamResource(new FileInputStream(file));
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=invoice-" + file.getName())
+                .contentLength(file.length())
+                .contentType(MediaType.parseMediaType(MediaType.APPLICATION_PDF_VALUE))
+                .body(resourceIS);
+    }
+
+    @RequestMapping(value = "/sale/contract", method = RequestMethod.POST)
+    public ResponseEntity<Resource> generateContract(@RequestParam(name = "data", value = "") String data) throws IOException, Docx4JException, DocumentException {
+
+        Sales sales = salesRepository.getSalesByIdAndActiveTrue(Integer.parseInt(data));
+
+        File file = Docx4j.generateContract(resourceLoader,sales,configurationRepository,dictionaryRepository);
+
         InputStreamResource resourceIS = new InputStreamResource(new FileInputStream(file));
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=invoice-" + file.getName())

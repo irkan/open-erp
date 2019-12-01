@@ -47,6 +47,15 @@ public class CRMController extends SkeletonController {
         return "layout";
     }
 
+    @PostMapping(value = "/customer")
+    public String postAdvanceApprove(@ModelAttribute(Constants.FORM) @Validated Customer customer, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()){
+            customerRepository.save(customer);
+        }
+        return mapPost(customer, binding, redirectAttributes);
+    }
+
     @ResponseBody
     @GetMapping(value = "/customer/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Customer findCustomer(@PathVariable("id") String id){
