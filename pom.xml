@@ -115,7 +115,19 @@
 			<artifactId>itextpdf</artifactId>
 			<version>5.5.13.1</version>
 		</dependency>
-	</dependencies>
+		<!-- https://mvnrepository.com/artifact/com.itextpdf/layout -->
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>layout</artifactId>
+			<version>7.1.8</version>
+		</dependency>
+        <!-- https://mvnrepository.com/artifact/com.itextpdf/io -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>io</artifactId>
+            <version>7.1.8</version>
+        </dependency>
+    </dependencies>
 
 	<build>
 		<plugins>

@@ -1,5 +1,6 @@
 package com.openerp.controller;
 
+import com.itextpdf.text.DocumentException;
 import com.openerp.entity.Invoice;
 import com.openerp.util.Docx4j;
 import com.openerp.util.GeneratePDFFile;
@@ -45,10 +46,10 @@ public class ExportController extends SkeletonController {
     }
 
     @RequestMapping(value = "/invoice", method = RequestMethod.POST)
-    public ResponseEntity<Resource> generateInvoice(@RequestParam(name = "data", value = "") String data) throws IOException, Docx4JException {
+    public ResponseEntity<Resource> generateInvoice(@RequestParam(name = "data", value = "") String data) throws IOException, Docx4JException, DocumentException {
         List<Integer> invoiceIds = Util.getInvoiceIds(data);
         List<Invoice> invoices = invoiceRepository.getInvoicesByActiveTrueAndApproveTrueAndIdIn(invoiceIds);
-        File file = GeneratePDFFile.generateInvoice(invoices);
+        File file = GeneratePDFFile.generateInvoice(invoices, resourceLoader, configurationRepository);
         InputStreamResource resourceIS = new InputStreamResource(new FileInputStream(file));
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=invoice-" + file.getName())

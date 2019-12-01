@@ -80,6 +80,11 @@ public class DBConfiguration {
         try{
             List<Configuration> configurations = new ArrayList<>();
             configurations.add(new Configuration("Problemli müştəri", "troubled_customer", "60", "Gecikmə 60 gündən çox olduqda müştəri problemli sayılır"));
+            configurations.add(new Configuration("Hesab-faktura sayı", "invoice_count", "2", "Eyni hesab-fakturanın çap formasındakı sayı"));
+            configurations.add(new Configuration("Şirkərin adı", "company_name", "Sual", "Şirkətin adı"));
+            configurations.add(new Configuration("Qaynar xətt", "company_hot_line", "+994 55 546 06 61", "Şirkətin qaynar xətt nömrəsi"));
+            configurations.add(new Configuration("Telefon", "company_telephone", "+994 12 480 10 76", "Şirkətin telefon nömrəsi"));
+            configurations.add(new Configuration("Mobil", "company_mobile", "+994 55 546 06 61", "Şirkətin mobil nömrəsi"));
             configurationRepository.saveAll(configurations);
 
             List<DictionaryType> types = new ArrayList<>();
