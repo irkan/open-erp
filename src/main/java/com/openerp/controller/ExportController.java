@@ -70,7 +70,7 @@ public class ExportController extends SkeletonController {
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=invoice-" + file.getName())
                 .contentLength(file.length())
-                .contentType(MediaType.parseMediaType(MediaType.APPLICATION_PDF_VALUE))
+                .contentType(MediaType.parseMediaType(MediaType.APPLICATION_OCTET_STREAM_VALUE))
                 .body(resourceIS);
     }
 }

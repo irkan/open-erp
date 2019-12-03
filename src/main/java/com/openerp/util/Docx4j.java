@@ -1,10 +1,7 @@
 package com.openerp.util;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
@@ -50,8 +47,7 @@ public class Docx4j {
         List<Dictionary> months = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("month");
         List<Dictionary> digits = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("digit");
 
-        String filePath = "C:\\Users\\i.ahmadov\\Downloads\\";
-        String file = "mezun_emri.docx";
+        String filePath = "sale-contract-"+sales.getId()+"-"+(new Date()).getTime() +".docx";
 
         Docx4j docx4j = new Docx4j();
         WordprocessingMLPackage template = docx4j.getTemplate(resource.getFile().getPath());
@@ -64,10 +60,20 @@ public class Docx4j {
                 this.put("${contract_date}", DateUtility.generateContractDate(sales.getSaleDate(), months));
                 this.put("${consul_full_name}", Util.getPersonLFF(sales.getConsole().getPerson()));
                 this.put("${consul_voen}", sales.getConsole().getPerson().getVoen());
+                this.put("${consul_id_card_serial_number}", sales.getConsole().getPerson().getIdCardSerialNumber());
+               // this.put("${consul_contact_address}", sales.get);
                 this.put("${customer_full_name}",  Util.getPersonLFF(sales.getCustomer().getPerson()));
                 this.put("${inventory_barcode}",  sales.getAction().getInventory().getBarcode());
                 this.put("${sale_price}",  String.valueOf(sales.getPayment().getLastPrice()));
                 this.put("${sale_price_in_word}",  Util.getDigitInWord(String.valueOf(sales.getPayment().getLastPrice()), digits));
+                this.put("${down_payment}",  String.valueOf(sales.getPayment().getDown()));
+                this.put("${down_payment_in_word}",  Util.getDigitInWord(String.valueOf(sales.getPayment().getDown()), digits));
+                this.put("${remain_payment_price}",  String.valueOf(sales.getPayment().getDown()));
+                this.put("${remain_payment_price_in_word}",  Util.getDigitInWord(String.valueOf(sales.getPayment().getDown()), digits));
+                this.put("${period_payment_price}",  String.valueOf(sales.getPayment().getSchedules().get(0).getAmount()));
+                this.put("${period_payment_price_in_word}",  Util.getDigitInWord(String.valueOf(sales.getPayment().getSchedules().get(0).getAmount()), digits));
+                this.put("${period_payment_count}",  String.valueOf(sales.getPayment().getPeriod().getName()));
+                this.put("${period_payment}",  String.valueOf(sales.getPayment().getSchedule().getName()));
             }
             @Override
             public String get(Object key) {
@@ -75,8 +81,8 @@ public class Docx4j {
             }
         });
 
-        docx4j.writeDocxToStream(template, filePath+"Hello2.docx");
-        return new File(filePath+"Hello2.docx");
+        docx4j.writeDocxToStream(template, filePath);
+        return new File(filePath);
     }
 
     public static File generateDocument(Resource resource, String data, String exportPath) throws IOException, Docx4JException {

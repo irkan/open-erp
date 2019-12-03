@@ -144,7 +144,7 @@ public class DBConfiguration {
             DictionaryType digitType = new DictionaryType("Rəqəm", "digit", null);
             types.add(digitType);
             DictionaryType monthType = new DictionaryType("Ay", "month", null);
-            types.add(digitType);
+            types.add(monthType);
 
             dictionaryTypeRepository.saveAll(types);
 
@@ -518,7 +518,6 @@ public class DBConfiguration {
             dictionaries.add(month11);
             Dictionary month12 = new Dictionary("Dekabr", "december", "12", monthType);
             dictionaries.add(month12);
-
 
             dictionaryRepository.saveAll(dictionaries);
 

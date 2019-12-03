@@ -102,8 +102,17 @@
                                                 <c:out value="${t.customer.person.contact.mobilePhone}" />&nbsp;
                                             </c:if>
                                             <c:if test="${not empty t.customer.person.contact.homePhone}">
-                                                <c:out value="${t.customer.person.contact.homePhone}" /><br/>
+                                                <c:out value="${t.customer.person.contact.homePhone}" />
                                             </c:if>
+                                            <c:if test="${not empty t.customer.person.contact.relationalPhoneNumber1}">
+                                                <c:out value="${t.customer.person.contact.relationalPhoneNumber1}" />
+                                            </c:if>
+                                            <c:if test="${not empty t.customer.person.contact.relationalPhoneNumber2}">
+                                                <c:out value="${t.customer.person.contact.relationalPhoneNumber2}" />
+                                            </c:if>
+                                            <c:if test="${not empty t.customer.person.contact.relationalPhoneNumber2}">
+                                                <c:out value="${t.customer.person.contact.relationalPhoneNumber2}" />
+                                            </c:if><br/>
                                             <c:if test="${not empty t.customer.person.contact.address}">
                                                 <c:out value="${t.customer.person.contact.city.name}" />,&nbsp;
                                                 <c:out value="${t.customer.person.contact.address}" /><br/>
@@ -1237,7 +1246,7 @@
 
     function exportContract(form, data){
         try {
-            $(form).find("input[name='data']").val(id);
+            $(form).find("input[name='data']").val(data);
             submit(form);
         } catch (e) {
             console.error(e);
