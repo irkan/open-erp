@@ -5,6 +5,7 @@ import com.openerp.entity.*;
 import com.openerp.entity.Dictionary;
 import net.emaze.dysfunctional.Groups;
 import net.emaze.dysfunctional.dispatching.delegates.Pluck;
+import org.apache.log4j.Logger;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -24,6 +25,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 public class Util {
+    private static final Logger log = Logger.getLogger(Util.class);
     public static Object check(Object object){
         try{
             if(object!=null)
@@ -500,37 +502,24 @@ public class Util {
         return person.getLastName() + " " + person.getFirstName() + " " + (person.getFatherName()!=null?person.getFatherName():"");
     }
 
-    public static String getDigitInWord(String digit, List<Dictionary> digits){
+    public static String getDigitInWord(String digit){
         String digitInWord = "";
-        if(digit.matches("[0-9]\\s,\\.")){
-            String[] dgts = digit.split(".");
-            if(dgts[0].length()==1){ //teklik
-                digitInWord = getDigit(dgts[0], digits);
-            } else if(dgts[0].length()==2){ //onluq
-                digitInWord = getDigit(dgts[0], digits);
-            } else if(dgts[0].length()==3){ //yuzluk
-                digitInWord = getDigit(dgts[0], digits);
-            } else if(dgts[0].length()==4){ //minlik
-                digitInWord = getDigit(dgts[0], digits);
-            } else if(dgts[0].length()==5){ //on minlik
-                digitInWord = getDigit(dgts[0], digits);
-            } else if(dgts[0].length()==6){ //yuz minlik
-                digitInWord = getDigit(dgts[0], digits);
-            }
-
-            if(dgts.length>0){
-                //qepik hisse
+        if(digit.matches("[0-9\\s\\.]+")){
+            String[] dgts = digit.split(Pattern.quote("."));
+            IntToAZE intToAZE = new IntToAZE();
+            try {
+                digitInWord += intToAZE.aze(Integer.parseInt(dgts[0]));
+                digitInWord += " manat";
+                if(dgts.length>0) {
+                    if(Integer.parseInt(dgts[1])>0){
+                        digitInWord += intToAZE.aze(Integer.parseInt(dgts[1]));
+                        digitInWord += " qəpik";
+                    }
+                }
+            } catch (Exception e) {
+                log.error(e);
             }
         }
         return digitInWord;
-    }
-
-    private static String getDigit(String digit, List<Dictionary> digits){
-        for(Dictionary object: digits){
-            if(object.getAttr1().equalsIgnoreCase(digit)){
-                return object.getAttr2();
-            }
-        }
-        return "";
     }
 }

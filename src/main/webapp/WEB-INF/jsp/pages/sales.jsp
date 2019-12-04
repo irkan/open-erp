@@ -1059,21 +1059,13 @@
                     formEl.ajaxSubmit({
                         success: function() {
                             KTApp.unprogress(btn);
-                            swal.fire({
-                                "title": "",
-                                "text": "Əməliyyat uğurla yerinə yetirildi!",
-                                "type": "success",
-                                "confirmButtonClass": "btn btn-secondary",
-                                onOpen: function(){
-                                    $('#modal-operation').modal('toggle');
-                                }
-                            })
+                            toastr.success("Əməliyyat uğurla yerinə yetirildi!");
+                            location.reload();
                         }
                     });
                 }
             });
-        }
-
+        };
         return {
             init: function() {
                 wizardEl = KTUtil.get('kt_wizard_v1');

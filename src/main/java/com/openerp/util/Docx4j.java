@@ -45,7 +45,6 @@ public class Docx4j {
     public static File generateContract(ResourceLoader resourceLoader, Sales sales, ConfigurationRepository configurationRepository, DictionaryRepository dictionaryRepository) throws IOException, Docx4JException {
         Resource resource = resourceLoader.getResource("classpath:/template/sale-contract.docx");
         List<Dictionary> months = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("month");
-        List<Dictionary> digits = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("digit");
 
         String filePath = "sale-contract-"+sales.getId()+"-"+(new Date()).getTime() +".docx";
 
@@ -65,13 +64,13 @@ public class Docx4j {
                 this.put("${customer_full_name}",  Util.getPersonLFF(sales.getCustomer().getPerson()));
                 this.put("${inventory_barcode}",  sales.getAction().getInventory().getBarcode());
                 this.put("${sale_price}",  String.valueOf(sales.getPayment().getLastPrice()));
-                this.put("${sale_price_in_word}",  Util.getDigitInWord(String.valueOf(sales.getPayment().getLastPrice()), digits));
+                this.put("${sale_price_in_word}",  Util.getDigitInWord(String.valueOf(sales.getPayment().getLastPrice())));
                 this.put("${down_payment}",  String.valueOf(sales.getPayment().getDown()));
-                this.put("${down_payment_in_word}",  Util.getDigitInWord(String.valueOf(sales.getPayment().getDown()), digits));
+                this.put("${down_payment_in_word}",  Util.getDigitInWord(String.valueOf(sales.getPayment().getDown())));
                 this.put("${remain_payment_price}",  String.valueOf(sales.getPayment().getDown()));
-                this.put("${remain_payment_price_in_word}",  Util.getDigitInWord(String.valueOf(sales.getPayment().getDown()), digits));
+                this.put("${remain_payment_price_in_word}",  Util.getDigitInWord(String.valueOf(sales.getPayment().getDown())));
                 this.put("${period_payment_price}",  String.valueOf(sales.getPayment().getSchedules().get(0).getAmount()));
-                this.put("${period_payment_price_in_word}",  Util.getDigitInWord(String.valueOf(sales.getPayment().getSchedules().get(0).getAmount()), digits));
+                this.put("${period_payment_price_in_word}",  Util.getDigitInWord(String.valueOf(sales.getPayment().getSchedules().get(0).getAmount())));
                 this.put("${period_payment_count}",  String.valueOf(sales.getPayment().getPeriod().getName()));
                 this.put("${period_payment}",  String.valueOf(sales.getPayment().getSchedule().getName()));
             }

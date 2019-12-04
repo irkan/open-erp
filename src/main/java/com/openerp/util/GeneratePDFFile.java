@@ -52,6 +52,13 @@ public class GeneratePDFFile {
             timesbi.setSubset(true);
             PdfFont timesi = PdfFontFactory.createFont(resourceLoader.getResource("classpath:/fonts/timesi.ttf").getFile().getPath(), BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             timesi.setSubset(true);
+            if(invoices.size()==0){
+                Paragraph paragraph = new Paragraph("Hesab-faktura tapılmadı!");
+                paragraph.setFont(timesbd);
+                paragraph.setFontSize(30);
+                paragraph.setTextAlignment(TextAlignment.CENTER);
+                document.add(paragraph);
+            }
             for(Invoice invoice: invoices){
                 for(int i=0; i<Integer.parseInt(invoiceCount); i++){
                     try {
@@ -222,10 +229,11 @@ public class GeneratePDFFile {
                                 .setHorizontalAlignment(HorizontalAlignment.RIGHT)
                                 .setTextAlignment(TextAlignment.RIGHT);
                         table.addCell(cell);
+                        IntToAZE intToAZE = new IntToAZE();
                         cell = new Cell(1, 3)
                                 .setFont(timesbd)
                                 .setBorder(Border.NO_BORDER)
-                                .add(new Paragraph(invoice.getPrice() + " AZN"))
+                                .add(new Paragraph(invoice.getPrice() + " AZN" + " ("+Util.getDigitInWord(String.valueOf(invoice.getPrice()))+")"))
                                 .setVerticalAlignment(VerticalAlignment.MIDDLE)
                                 .setHorizontalAlignment(HorizontalAlignment.RIGHT);
                         table.addCell(cell);
