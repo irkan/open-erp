@@ -40,8 +40,7 @@ public class SaleController extends SkeletonController {
         if (page.equalsIgnoreCase(Constants.ROUTE.SALES)){
             List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization_Id(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getId());
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
-            Util.convertedEmployees(employees, positions);
-            model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployees(employees, positions));
+            model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployeesByPosition(employees, positions));
             model.addAttribute(Constants.CITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("city"));
             model.addAttribute(Constants.SALE_PRICES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("sale-price"));
             model.addAttribute(Constants.PAYMENT_SCHEDULES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-schedule"));
@@ -54,8 +53,8 @@ public class SaleController extends SkeletonController {
         } else if (page.equalsIgnoreCase(Constants.ROUTE.INVOICE)){
             List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization_Id(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getId());
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
-            Util.convertedEmployees(employees, positions);
-            model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployees(employees, positions));
+            Util.convertedEmployeesByPosition(employees, positions);
+            model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployeesByPosition(employees, positions));
             List<Invoice> invoices;
             if(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getOrganization()==null){
                 invoices = invoiceRepository.getInvoicesByActiveTrueOrderByInvoiceDateDesc();
@@ -90,7 +89,7 @@ public class SaleController extends SkeletonController {
                 action.setAmount(1);
                 action.setInventory(oldAction.getInventory());
                 action.setSupplier(oldAction.getSupplier());
-                action.setWarehouse(oldAction.getWarehouse());
+                action.setOrganization(oldAction.getOrganization());
                 action.setEmployee(oldAction.getEmployee());
                 sales.setAction(action);
             }
@@ -221,7 +220,7 @@ public class SaleController extends SkeletonController {
             transaction.setAmount(1);
             transaction.setDebt(true);
             transaction.setInventory(invc.getSales().getAction().getInventory());
-            transaction.setBranch(invc.getOrganization());
+            transaction.setOrganization(invc.getOrganization());
             transaction.setPrice(invc.getPrice());
             transaction.setCurrency("AZN");
             transaction.setRate(getRate(transaction.getCurrency()));

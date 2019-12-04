@@ -9,5 +9,5 @@ import java.util.List;
 public interface TransactionRepository extends JpaRepository<Transaction, Integer> {
     Transaction getTransactionById(int id);
     List<Transaction> getTransactionsByOrderByApproveDescCreatedDateDesc();
-    List<Transaction> getTransactionsByBranchOrderByApproveDescCreatedDateDesc(Organization organization);
+    List<Transaction> getTransactionsByOrganizationOrderByApproveDescCreatedDateDesc(Organization organization);
 }

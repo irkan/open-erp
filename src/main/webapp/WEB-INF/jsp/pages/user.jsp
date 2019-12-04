@@ -131,11 +131,14 @@
                 <form:form modelAttribute="form" id="form" method="post" action="/admin/user" cssClass="form-group">
                     <div class="form-group">
                         <form:label path="employee">Əməkdaş</form:label>
-                        <form:select  path="employee" cssClass="custom-select form-control">
-                            <form:options itemLabel="Əməkdaşı seçin" itemValue="0" disabled="true" />
-                            <form:options items="${employees}" itemLabel="person.fullName" itemValue="id" />
+                        <form:select  path="employee" cssClass="custom-select form-control select2-single" multiple="single">
+                            <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
+                                <optgroup label="${itemGroup.key}">
+                                    <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
+                                </optgroup>
+                            </c:forEach>
                         </form:select>
-                        <form:errors path="employee" cssClass="control-label alert alert-danger" />
+                        <form:errors path="employee" cssClass="control-label alert-danger"/>
                     </div>
                     <div class="form-group">
                         <form:label path="username">İstifadəçi adı</form:label>
@@ -192,6 +195,10 @@
 </div>
 
 <script>
+    $('.select2-single').select2({
+        placeholder: "Əməkdaşı seçin",
+        allowClear: true
+    });
     function getSelect(element, url, filledComponentId){
         $.ajax({
             url: url+$(element).val(),

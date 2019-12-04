@@ -36,10 +36,19 @@
     </thead>
     <tbody>
     <c:forEach var="t" items="${list}" varStatus="loop">
-        <tr data="<c:out value="${utl:toJson(t)}" />">
+
+
+
+
+
+        <tr data="<c:out value="${utl:toJson(t)}" />"
+            <c:if test="${t.action.attr1=='send' or t.action.attr1=='sell'}">
+                style="background-color: #ffeaf1 !important"
+            </c:if>
+        >
             <td>${loop.index + 1}</td>
             <td><c:out value="${t.id}" /></td>
-            <td><c:out value="${t.warehouse.name}" /></td>
+            <td><c:out value="${t.organization.name}" /></td>
             <td><c:out value="${t.action.name}" /></td>
             <td><c:out value="${t.supplier.name}" /></td>
             <td><c:out value="${t.inventory.name}" /></td>
@@ -59,7 +68,7 @@
                 <c:choose>
                     <c:when test="${approve.status}">
                         <c:if test="${!t.approve}">
-                            <a href="javascript:approve($('#transfer-approve-form'), $('#transfer-approve-modal'), '<c:out value="${t.id}" />', '<c:out value="${t.inventory.id}" />', '<c:out value="${t.inventory.name}" />', '<c:out value="${t.inventory.barcode}" />', '<c:out value="${t.warehouse.name}" />', '<c:out value="${t.action.name}" />', '<c:out value="${t.supplier.name}" />', '<c:out value="${t.amount}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${approve.object.name}"/>">
+                            <a href="javascript:approve($('#transfer-approve-form'), $('#transfer-approve-modal'), '<c:out value="${t.id}" />', '<c:out value="${t.inventory.id}" />', '<c:out value="${t.inventory.name}" />', '<c:out value="${t.inventory.barcode}" />', '<c:out value="${t.organization.name}" />', '<c:out value="${t.action.name}" />', '<c:out value="${t.supplier.name}" />', '<c:out value="${t.amount}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${approve.object.name}"/>">
                                 <i class="<c:out value="${approve.object.icon}"/>"></i>
                             </a>
                         </c:if>
@@ -106,7 +115,7 @@
                 <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
                 <c:choose>
                     <c:when test="${delete.status}">
-                        <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.action.name}" /> / <c:out value="${t.warehouse.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
+                        <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.action.name}" /> / <c:out value="${t.organization.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
                             <i class="<c:out value="${delete.object.icon}"/>"></i>
                         </a>
                     </c:when>
@@ -148,17 +157,17 @@
                     <input type="hidden" name="inventory"/>
                     <input type="hidden" name="action"/>
                     <input type="hidden" name="supplier"/>
-                    <input type="hidden" name="fromWarehouse"/>
+                    <input type="hidden" name="fromOrganization"/>
                     <div class="form-group">
                         <label for="from">Haradan?</label>
                         <input name="from" id="from" class="form-control" readonly/>
                     </div>
                     <div class="form-group">
-                        <form:label path="warehouse">Haraya?</form:label>
-                        <form:select  path="warehouse" cssClass="custom-select form-control">
-                            <form:options items="${warehouses}" itemLabel="name" itemValue="id" />
+                        <form:label path="organization">Haraya?</form:label>
+                        <form:select  path="organization" cssClass="custom-select form-control">
+                            <form:options items="${organizations}" itemLabel="name" itemValue="id" />
                         </form:select>
-                        <form:errors path="warehouse" cssClass="alert-danger"/>
+                        <form:errors path="organization" cssClass="alert-danger"/>
                     </div>
                     <div class="form-group">
                         <form:label path="amount">Say</form:label>
@@ -281,7 +290,7 @@
                         <form:select  path="employee" cssClass="custom-select form-control">
                             <form:options items="${employees}" itemLabel="person.fullName" itemValue="id" />
                         </form:select>
-                        <form:errors path="warehouse" cssClass="alert-danger"/>
+                        <form:errors path="employee" cssClass="alert-danger"/>
                     </div>
                     <div class="form-group">
                         <form:label path="amount">Say</form:label>
@@ -352,8 +361,8 @@
             data = data.replace(/\&#034;/g, '"');
             var obj = jQuery.parseJSON(data);
             console.log(obj);
-            $(form).find("input[name='from']").val(obj["warehouse"]["name"]);
-            $(form).find("input[name='fromWarehouse']").val(obj["warehouse"]["id"]);
+            $(form).find("input[name='from']").val(obj["organization"]["name"]);
+            $(form).find("input[name='fromOrganization']").val(obj["organization"]["id"]);
             $(form).find("input[name='id']").val(obj["id"]);
             $(form).find("input[name='inventory']").val(obj["inventory"]["id"]);
             $(form).find("input[name='action']").val(obj["action"]["id"]);
@@ -378,7 +387,7 @@
             $(form).find("#id").val(obj["id"]);
             $(form).find("#inventory_name").text(obj["inventory"]["name"]);
             $(form).find("#barcode_label").text(obj["inventory"]["barcode"]);
-            $(form).find("#warehouse_label").text(obj["warehouse"]["name"]);
+            $(form).find("#warehouse_label").text(obj["organization"]["name"]);
             $('#' + modal).modal('toggle');
         } catch (e) {
             console.error(e);
@@ -407,7 +416,7 @@
             $(form).find("#id").val(obj["id"]);
             $(form).find("#inventory_name").text(obj["inventory"]["name"]);
             $(form).find("#barcode_label").text(obj["inventory"]["barcode"]);
-            $(form).find("#warehouse_label").text(obj["warehouse"]["name"]);
+            $(form).find("#warehouse_label").text(obj["organization"]["name"]);
             $('#' + modal).modal('toggle');
         } catch (e) {
             console.error(e);

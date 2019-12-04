@@ -76,6 +76,14 @@ public class Employee {
     @OneToOne(mappedBy = "employee")
     private User user;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_date", nullable = false)
+    private Date createdDate = new Date();
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "created_by_admin_user_id")
+    private User createdUser;
+
     public Employee(Person person, Dictionary position, Date contractStartDate, Date contractEndDate, Organization organization) {
         this.person = person;
         this.position = position;

@@ -81,7 +81,7 @@ public class CollectController extends SkeletonController {
         invoice.setApprove(false);
         invoice.setPrice(Double.parseDouble(price));
         invoice.setDescription(description);
-        invoice.setOrganization(Util.getUserBranch(sales.getAction().getWarehouse()));
+        invoice.setOrganization(Util.getUserBranch(sales.getAction().getOrganization()));
         invoice.setDescription("Satışdan əldə edilən ödəniş " + invoice.getPrice() + " AZN");
         invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
         invoiceRepository.save(invoice);
@@ -109,7 +109,7 @@ public class CollectController extends SkeletonController {
         invoice.setApprove(false);
         invoice.setPrice(Double.parseDouble(price));
         invoice.setDescription(description);
-        invoice.setOrganization(Util.getUserBranch(sales.getAction().getWarehouse()));
+        invoice.setOrganization(Util.getUserBranch(sales.getAction().getOrganization()));
         invoice.setDescription("Satışdan əldə edilən ödəniş " + invoice.getPrice() + " AZN");
         invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
         invoiceRepository.save(invoice);

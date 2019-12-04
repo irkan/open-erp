@@ -50,7 +50,7 @@ public class AccountingController extends SkeletonController {
             if(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getOrganization()==null){
                 transactions = transactionRepository.getTransactionsByOrderByApproveDescCreatedDateDesc();
             } else {
-                transactions = transactionRepository.getTransactionsByBranchOrderByApproveDescCreatedDateDesc(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()));
+                transactions = transactionRepository.getTransactionsByOrganizationOrderByApproveDescCreatedDateDesc(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()));
             }
             model.addAttribute(Constants.LIST, transactions);
             if(!model.containsAttribute(Constants.FORM)){
@@ -95,7 +95,7 @@ public class AccountingController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()) {
             Transaction trn = transactionRepository.getTransactionById(transaction.getId());
-            if (trn.getBranch().getId() == Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getId()){ trn.setApprove(true);
+            if (trn.getOrganization().getId() == Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getId()){ trn.setApprove(true);
                 trn.setApproveDate(new Date());
                 trn.setPrice(transaction.getPrice());
                 trn.setCurrency(transaction.getCurrency());
@@ -109,23 +109,23 @@ public class AccountingController extends SkeletonController {
                     for (int expense : expenses) {
                         Dictionary action = dictionaryRepository.getDictionaryById(expense);
                         String description = action.getName() + ", " + trn.getDescription();
-                        Transaction transaction1 = new Transaction(trn.getBranch(), trn.getInventory(), action, description, false, trn);
+                        Transaction transaction1 = new Transaction(trn.getOrganization(), trn.getInventory(), action, description, false, trn);
                         transactionRepository.save(transaction1);
                     }
                 }
 
-                Financing financing = financingRepository.getFinancingByActiveTrueAndInventory(trn.getInventory());
+                Financing financing = financingRepository.getFinancingByActiveTrueAndInventoryAndOrganization(trn.getInventory(), trn.getOrganization());
 
                 Double financingPrice = calculateFinancing(trn, inventoryRepository);
                 if (financing != null) {
                     financing.setPrice(financingPrice);
                 } else {
-                    financing = new Financing(trn.getInventory(), financingPrice);
+                    financing = new Financing(trn.getInventory(), financingPrice, trn.getOrganization());
                 }
                 financingRepository.save(financing);
             } else {
                 List<String> messages = new ArrayList<>();
-                messages.add("Təsdiqləmə əməliyyatı " + Util.getUserBranch(trn.getBranch()).getName() + " tərəfindən edilməlidir!");
+                messages.add("Təsdiqləmə əməliyyatı " + Util.getUserBranch(trn.getOrganization()).getName() + " tərəfindən edilməlidir!");
                 redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, new Response(Constants.STATUS.ERROR, messages));
             }
         }

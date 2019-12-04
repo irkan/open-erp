@@ -24,6 +24,10 @@ public class Financing {
     @JoinColumn(name = "warehouse_inventory_id")
     private Inventory inventory;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "warehouse_organization_id")
+    private Organization organization;
+
     @Column(name="financing")
     private double price=0d;
 
@@ -42,7 +46,7 @@ public class Financing {
     @JoinColumn(name = "created_by_admin_user_id")
     private User createdUser;
 
-    public Financing(Inventory inventory, double price) {
+    public Financing(Inventory inventory, double price, Organization organization) {
         this.inventory = inventory;
         this.price = price;
     }

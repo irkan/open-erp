@@ -52,15 +52,6 @@ public class Util {
         return moduleMap;
     }
 
-    public static Organization findWarehouse(List<Organization> organizations){
-        for(Organization organization: organizations){
-            if(organization.getOrganizationType().getAttr1().equalsIgnoreCase("warehouse")){
-                return organization;
-            }
-        }
-        return null;
-    }
-
     public static Organization getUserBranch(Organization organization){
         if(organization.getOrganizationType().getAttr1().equalsIgnoreCase("branch")){
             return organization;
@@ -72,10 +63,16 @@ public class Util {
         return null;
     }
 
-    public static int calculateInventoryAmount(List<Action> actions){
+    public static int calculateInventoryAmount(List<Action> actions, int organizationId){
         int amount = 0;
         for(Action action: actions){
-            amount+=action.getAmount();
+            if(action.getAction().getAttr1().equalsIgnoreCase("send") && !action.getApprove()){
+                amount+=action.getAmount();
+            } else if(action.getAction().getAttr1().equalsIgnoreCase("buy")){
+                amount+=action.getAmount();
+            } else if(action.getAction().getAttr1().equalsIgnoreCase("consolidate")){
+                amount+=action.getAmount();
+            }
         }
         return amount;
     }
@@ -412,7 +409,7 @@ public class Util {
         return "0";
     }
 
-    public static Map<String, List<Employee>> convertedEmployees(List<Employee> employees, List<Dictionary> positions){
+    public static Map<String, List<Employee>> convertedEmployeesByPosition(List<Employee> employees, List<Dictionary> positions){
         Map<String, List<Employee>> convertedEmployees = new HashMap<>();
         for(Dictionary position: positions){
             List<Employee> items = new ArrayList<>();
@@ -422,6 +419,20 @@ public class Util {
                 }
             }
             convertedEmployees.put(position.getName(), items);
+        }
+        return convertedEmployees;
+    }
+
+    public static Map<String, List<Employee>> convertedEmployeesByOrganization(List<Employee> employees, List<Organization> organizations){
+        Map<String, List<Employee>> convertedEmployees = new HashMap<>();
+        for(Organization organization: organizations){
+            List<Employee> items = new ArrayList<>();
+            for(Employee employee: employees){
+                if(organization.getId().intValue()==employee.getOrganization().getId().intValue()){
+                    items.add(employee);
+                }
+            }
+            convertedEmployees.put(organization.getName(), items);
         }
         return convertedEmployees;
     }

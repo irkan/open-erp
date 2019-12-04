@@ -30,7 +30,7 @@
                                     <th>Barkod</th>
                                     <th>Vəziyyət</th>
                                     <th>Miqdar</th>
-                                    <th>Anbar</th>
+                                    <th>Flial</th>
                                     <th>Tədarükçü</th>
                                     <th>Status</th>
                                     <th>Əməliyyat</th>
@@ -64,9 +64,9 @@
                                                 </c:otherwise>
                                             </c:choose>
                                         </td>
-                                        <td><c:out value="${utl:calculateInventoryAmount(t.actions)}"/> ədəd
+                                        <td><c:out value="${utl:calculateInventoryAmount(t.actions, sessionScope.user.employee.organization.id)}"/> ədəd
                                         </td>
-                                        <td><c:out value="${t.actions.get(0).warehouse.name}" /></td>
+                                        <td><c:out value="${t.actions.get(0).organization.name}" /></td>
                                         <td><c:out value="${t.actions.get(0).supplier.name}" /></td>
                                         <td>
                                             <span class="kt-badge kt-badge--success kt-badge--dot"></span>
@@ -142,10 +142,10 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <form:label path="action.warehouse.name">Anbar</form:label>
-                                <form:input path="action.warehouse.name" cssClass="form-control" readonly="true"/>
-                                <form:hidden path="action.warehouse.id" cssClass="form-control"/>
-                                <form:errors path="action.warehouse.name" cssClass="alert-danger control-label"/>
+                                <form:label path="action.organization.name">Flial</form:label>
+                                <form:input path="action.organization.name" cssClass="form-control" readonly="true"/>
+                                <form:hidden path="action.organization.id" cssClass="form-control"/>
+                                <form:errors path="action.organization.name" cssClass="alert-danger control-label"/>
                             </div>
                         </div>
                         <div class="col-md-6">

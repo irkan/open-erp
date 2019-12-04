@@ -24,7 +24,7 @@ public class Transaction {
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "hr_organization_id")
-    private Organization branch;
+    private Organization organization;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "warehouse_inventory_id")
@@ -89,8 +89,8 @@ public class Transaction {
     private List<Transaction> children;
 
 
-    public Transaction(Organization branch, Inventory inventory, Dictionary action, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String description, Boolean approve, Transaction transaction) {
-        this.branch = branch;
+    public Transaction(Organization organization, Inventory inventory, Dictionary action, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String description, Boolean approve, Transaction transaction) {
+        this.organization = organization;
         this.inventory = inventory;
         this.action = action;
         this.description = description;

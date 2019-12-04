@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface InventoryRepository extends JpaRepository<Inventory, Integer> {
     List<Inventory> getInventoriesByActiveTrue();
-    List<Inventory> getInventoriesByActiveTrueAndAction_Warehouse_Id(int id);
+    List<Inventory> getInventoriesByActiveTrueAndAction_Organization_Id(int id);
     Inventory getInventoryById(int id);
 }

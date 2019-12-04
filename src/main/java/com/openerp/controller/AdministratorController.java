@@ -67,8 +67,15 @@ public class AdministratorController extends SkeletonController {
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.USER)){
             model.addAttribute(Constants.LANGUAGES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("language"));
-            model.addAttribute(Constants.EMPLOYEES, employeeRepository.getEmployeesByContractEndDateIsNull());
-            model.addAttribute(Constants.LIST, userRepository.getUsersByActiveTrue());
+            List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization_Id(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getId());
+            List<Organization> organizations = organizationRepository.getOrganizationsByActiveTrueAndOrganizationType_Attr1("branch");
+            List<User> users = userRepository.getUsersByActiveTrueAndEmployee_Organization(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()));
+            if(isHeadOffice()){
+                employees = employeeRepository.getEmployeesByContractEndDateIsNull();
+                users = userRepository.getUsersByActiveTrue();
+            }
+            model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployeesByOrganization(employees, organizations));
+            model.addAttribute(Constants.LIST, users);
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new User());
             }

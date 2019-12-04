@@ -945,44 +945,26 @@ public class DBConfiguration {
             Contact headBranchContact = new Contact("503442323", "125656776", "head.office@sual.az", "M.Xiyəbani 194A", baku);
             Organization headBranch = new Organization(headBranchContact,"Baş ofis", "Baş ofis", null, branchOrganization);
             organizations.add(headBranch);
-            Contact headBranchWarehouseContact = new Contact("503442323", "125656776", "head.office@sual.az", null, baku);
-            Organization headBranchWarehouse = new Organization(headBranchWarehouseContact,"Mərkəzi anbar", "Mərkəzi anbar", headBranch, warehouseOrganization);
-            organizations.add(headBranchWarehouse);
 
             Contact khirdalanBranchContact = new Contact("503442323", "125656776", "khirdalan.office@sual.az", "A.Şaiq 33", khirdalan);
             Organization khirdalanBranch = new Organization(khirdalanBranchContact, "Xırdalan flialı", "Xırdalan flialı", headBranch, branchOrganization);
             organizations.add(khirdalanBranch);
-            Contact khirdalanBranchWarehouseContact = new Contact("503442323", "125656776", "head.office@sual.az", null, khirdalan);
-            Organization khirdalanBranchWarehouse = new Organization(khirdalanBranchWarehouseContact,"Xırdalan anbarı", "Xırdalan anbarı", khirdalanBranch, warehouseOrganization);
-            organizations.add(khirdalanBranchWarehouse);
 
             Contact lankaranBranchContact = new Contact("503442323", "125656776", "lankaran.office@sual.az", "X.Natəvan 24B", lankaran);
             Organization lankaranBranch = new Organization(lankaranBranchContact, "Lənkəran flialı", "Lənkəran flialı", headBranch, branchOrganization);
             organizations.add(lankaranBranch);
-            Contact lankaranBranchWarehouseContact = new Contact("503442323", "125656776", "lankaran.office@sual.az", null, lankaran);
-            Organization lankaranBranchWarehouse = new Organization(lankaranBranchWarehouseContact, "Lənkəran anbarı", "Lənkəran anbarı", lankaranBranch, warehouseOrganization);
-            organizations.add(lankaranBranchWarehouse);
 
             Contact ganjaBranchContact = new Contact("503442323", "125656776", "ganja.office@sual.az", "S.Rüstəm 144", ganja);
             Organization ganjaBranch = new Organization(ganjaBranchContact, "Gəncə flialı", "Gəncə flialı", headBranch, branchOrganization);
             organizations.add(ganjaBranch);
-            Contact ganjaBranchWarehouseContact = new Contact("503442323", "125656776", "ganja.office@sual.az", null, ganja);
-            Organization ganjaBranchWarehouse = new Organization(ganjaBranchWarehouseContact, "Gəncə anbarı", "Gəncə anbarı", ganjaBranch, warehouseOrganization);
-            organizations.add(ganjaBranchWarehouse);
 
             Contact khachmazBranchContact = new Contact("503442323", "125656776", "khachmaz.office@sual.az", "M.F.Axundov 32", khachmaz);
             Organization khachmazBranch = new Organization(khachmazBranchContact,"Xaçmaz flialı", "Xaçmaz flialı", headBranch, branchOrganization);
             organizations.add(khachmazBranch);
-            Contact khachmazBranchWarehouseContact = new Contact("503442323", "125656776", "khachmaz.office@sual.az", null, khachmaz);
-            Organization khachmazBranchWarehouse = new Organization(khachmazBranchWarehouseContact,"Xaçmaz anbarı", "Xaçmaz anbarı", khachmazBranch, warehouseOrganization);
-            organizations.add(khachmazBranchWarehouse);
 
             Contact yevlakhBranchContact = new Contact("503442323", "125656776", "yevlakh.office@sual.az", "T.Rəcəbli 784D", yevlakh);
             Organization yevlakhBranch = new Organization(yevlakhBranchContact,"Yevlax flialı", "Yevlax flialı", headBranch, branchOrganization);
             organizations.add(yevlakhBranch);
-            Contact yevlakhBranchWarehouseContact = new Contact("503442323", "125656776", "yevlakh.office@sual.az", null, yevlakh);
-            Organization yevlakhBranchWarehouse = new Organization(yevlakhBranchWarehouseContact,"Yevlax anbarı", "Yevlax anbarı", yevlakhBranch, warehouseOrganization);
-            organizations.add(yevlakhBranchWarehouse);
 
             organizationRepository.saveAll(organizations);
 

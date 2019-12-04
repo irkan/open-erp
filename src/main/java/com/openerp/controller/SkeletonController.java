@@ -4,6 +4,7 @@ import com.openerp.entity.*;
 import com.openerp.service.StaticUtils;
 import com.openerp.util.Constants;
 import com.openerp.repository.*;
+import com.openerp.util.Util;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -189,6 +190,13 @@ public class SkeletonController {
     protected User getSessionUser() {
         HttpSession session = request.getSession();
         return (User) session.getAttribute(Constants.USER);
+    }
+
+    protected boolean isHeadOffice() {
+        if(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getOrganization()==null){
+            return true;
+        }
+        return false;
     }
 
     String mapPost(Object object, BindingResult binding, RedirectAttributes redirectAttributes){

@@ -26,8 +26,8 @@ public class Action {
     private Dictionary action;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_warehouse_organization_id")
-    private Organization warehouse;
+    @JoinColumn(name = "hr_organization_id")
+    private Organization organization;
 
     //@Pattern(regexp="\\d+",message="Say daxil edin")
     @Column(name = "amount")
@@ -63,18 +63,18 @@ public class Action {
     @JoinColumn(name = "created_by_admin_user_id")
     private User createdUser;
 
-    public Action(Organization warehouse) {
-        this.warehouse = warehouse;
+    public Action(Organization organization) {
+        this.organization = organization;
     }
 
-    public Action(Dictionary action, Organization warehouse) {
+    public Action(Dictionary action, Organization organization) {
         this.action = action;
-        this.warehouse = warehouse;
+        this.organization = organization;
     }
 
-    public Action(Dictionary action, Organization warehouse, int amount, Inventory inventory, Supplier supplier, Boolean approve) {
+    public Action(Dictionary action, Organization organization, int amount, Inventory inventory, Supplier supplier, Boolean approve) {
         this.action = action;
-        this.warehouse = warehouse;
+        this.organization = organization;
         this.amount = amount;
         this.inventory = inventory;
         this.supplier = supplier;

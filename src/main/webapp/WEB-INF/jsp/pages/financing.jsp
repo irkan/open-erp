@@ -25,7 +25,9 @@
                                     <th>№</th>
                                     <th>ID</th>
                                     <th>İnventar</th>
+                                    <th>Barkod</th>
                                     <th>Qiymət</th>
+                                    <th>Flial</th>
                                     <th>Tarix</th>
                                 </tr>
                                 </thead>
@@ -35,10 +37,12 @@
                                         <td>${loop.index + 1}</td>
                                         <td><c:out value="${t.id}" /></td>
                                         <td><c:out value="${t.inventory.name}" /></td>
+                                        <td><c:out value="${t.inventory.barcode}" /></td>
                                         <td>
                                             <span><c:out value="${t.price}" /></span>
                                             <span class="kt-font-bold font-italic font-size-10px"><c:out value="${t.currency}" /></span>
                                         </td>
+                                        <td><c:out value="${t.organization.name}" /></td>
                                         <td><fmt:formatDate value = "${t.createdDate}" pattern = "dd.MM.yyyy" /></td>
                                     </tr>
                                 </c:forEach>
