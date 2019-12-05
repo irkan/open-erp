@@ -33,6 +33,10 @@ public class Sales {
     private Action action;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "hr_organization_id", nullable = false)
+    private Organization organization;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "sale_payment_id", nullable = false)
     private Payment payment;
 

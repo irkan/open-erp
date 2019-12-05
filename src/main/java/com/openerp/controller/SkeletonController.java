@@ -170,6 +170,9 @@ public class SkeletonController {
     ConfigurationRepository configurationRepository;
 
     @Autowired
+    NotificationRepository notificationRepository;
+
+    @Autowired
     HttpServletRequest request;
 
     @Autowired

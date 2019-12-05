@@ -92,6 +92,7 @@ public class SaleController extends SkeletonController {
                 action.setOrganization(oldAction.getOrganization());
                 action.setEmployee(oldAction.getEmployee());
                 sales.setAction(action);
+                sales.setOrganization(action.getOrganization());
             }
             if(sales.getPayment().getCash()){
                 sales.getPayment().setPeriod(null);
@@ -122,7 +123,7 @@ public class SaleController extends SkeletonController {
                 invoice.setSales(sales);
                 invoice.setApprove(false);
                 invoice.setPrice(invoicePrice);
-                invoice.setOrganization(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()));
+                invoice.setOrganization(oldAction.getOrganization());
                 invoice.setDescription("Satışdan əldə edilən ödəniş " + invoicePrice + " AZN");
                 invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
                 invoiceRepository.save(invoice);
