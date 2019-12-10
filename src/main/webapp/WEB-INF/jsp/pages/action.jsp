@@ -56,6 +56,14 @@
             <td><fmt:formatDate value = "${t.createdDate}" pattern = "dd.MM.yyyy" /></td>
             <td><c:out value="${t.employee.person.fullName}" /></td>
             <td nowrap class="text-center">
+                <c:set var="return1" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'return')}"/>
+                <c:choose>
+                    <c:when test="${return1.status and t.action.attr1 eq 'consolidate'}">
+                        <a href="javascript:returnOperation($('#form-return'), '<c:out value="${utl:toJson(t)}" />', 'return-modal');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${return1.object.name}"/>">
+                            <i class="<c:out value="${return1.object.icon}"/>"></i>
+                        </a>
+                    </c:when>
+                </c:choose>
                 <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
                 <c:choose>
                     <c:when test="${view.status}">
@@ -66,42 +74,26 @@
                 </c:choose>
                 <c:set var="approve" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
                 <c:choose>
-                    <c:when test="${approve.status}">
-                        <c:if test="${!t.approve}">
-                            <a href="javascript:approve($('#transfer-approve-form'), $('#transfer-approve-modal'), '<c:out value="${t.id}" />', '<c:out value="${t.inventory.id}" />', '<c:out value="${t.inventory.name}" />', '<c:out value="${t.inventory.barcode}" />', '<c:out value="${t.organization.name}" />', '<c:out value="${t.action.name}" />', '<c:out value="${t.supplier.name}" />', '<c:out value="${t.amount}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${approve.object.name}"/>">
-                                <i class="<c:out value="${approve.object.icon}"/>"></i>
-                            </a>
-                        </c:if>
+                    <c:when test="${approve.status and !t.approve}">
+                        <a href="javascript:approve($('#transfer-approve-form'), $('#transfer-approve-modal'), '<c:out value="${t.id}" />', '<c:out value="${t.inventory.id}" />', '<c:out value="${t.inventory.name}" />', '<c:out value="${t.inventory.barcode}" />', '<c:out value="${t.organization.name}" />', '<c:out value="${t.action.name}" />', '<c:out value="${t.supplier.name}" />', '<c:out value="${t.amount}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${approve.object.name}"/>">
+                            <i class="<c:out value="${approve.object.icon}"/>"></i>
+                        </a>
                     </c:when>
                 </c:choose>
                 <c:set var="transfer" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'transfer')}"/>
                 <c:choose>
-                    <c:when test="${transfer.status}">
-                        <c:if test="${t.approve}">
-                            <a href="javascript:transfer($('#form'), '<c:out value="${utl:toJson(t)}" />', 'transfer-modal-operation');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
-                                <i class="<c:out value="${transfer.object.icon}"/>"></i>
-                            </a>
-                        </c:if>
-                    </c:when>
-                </c:choose>
-                <c:set var="return1" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'return')}"/>
-                <c:choose>
-                    <c:when test="${return1.status}">
-                        <c:if test="${t.action.attr1 eq 'consolidate'}">
-                            <a href="javascript:returnOperation($('#form-return'), '<c:out value="${utl:toJson(t)}" />', 'return-modal');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${return1.object.name}"/>">
-                                <i class="<c:out value="${return1.object.icon}"/>"></i>
-                            </a>
-                        </c:if>
+                    <c:when test="${transfer.status and t.approve and !(t.action.attr1 eq 'consolidate')}">
+                        <a href="javascript:transfer($('#form'), '<c:out value="${utl:toJson(t)}" />', 'transfer-modal-operation');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
+                            <i class="<c:out value="${transfer.object.icon}"/>"></i>
+                        </a>
                     </c:when>
                 </c:choose>
                 <c:set var="consolidate" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'consolidate')}"/>
                 <c:choose>
-                    <c:when test="${consolidate.status}">
-                        <c:if test="${t.approve}">
-                            <a href="javascript:consolidate($('#form-consolidate'), '<c:out value="${utl:toJson(t)}" />', 'consolidate-modal');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${consolidate.object.name}"/>">
-                                <i class="<c:out value="${consolidate.object.icon}"/>"></i>
-                            </a>
-                        </c:if>
+                    <c:when test="${consolidate.status and t.approve and !(t.action.attr1 eq 'consolidate')}">
+                        <a href="javascript:consolidate($('#form-consolidate'), '<c:out value="${utl:toJson(t)}" />', 'consolidate-modal');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${consolidate.object.name}"/>">
+                            <i class="<c:out value="${consolidate.object.icon}"/>"></i>
+                        </a>
                     </c:when>
                 </c:choose>
                 <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>

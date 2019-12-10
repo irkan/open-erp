@@ -49,5 +49,6 @@ public class Financing {
     public Financing(Inventory inventory, double price, Organization organization) {
         this.inventory = inventory;
         this.price = price;
+        this.organization = organization;
     }
 }

@@ -64,7 +64,13 @@ public class AccountingController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new Account());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.FINANCING)) {
-            model.addAttribute(Constants.LIST, financingRepository.getFinancingsByActiveTrue());
+            List<Financing> financings;
+            if(isHeadOffice()){
+                financings = financingRepository.getFinancingsByActiveTrueOrderByIdDesc();
+            } else {
+                financings = financingRepository.getFinancingsByActiveTrueAndOrganizationOrderByIdDesc(getUserOrganization());
+            }
+            model.addAttribute(Constants.LIST, financings);
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Financing());
             }
@@ -115,8 +121,8 @@ public class AccountingController extends SkeletonController {
                 }
 
                 Financing financing = financingRepository.getFinancingByActiveTrueAndInventoryAndOrganization(trn.getInventory(), trn.getOrganization());
-
-                Double financingPrice = calculateFinancing(trn, inventoryRepository);
+                Inventory inventory = financing!=null?financing.getInventory():trn.getInventory();
+                Double financingPrice = calculateFinancing(trn, actionRepository, inventory);
                 if (financing != null) {
                     financing.setPrice(financingPrice);
                 } else {
@@ -132,17 +138,19 @@ public class AccountingController extends SkeletonController {
         return mapPost(transaction, binding, redirectAttributes, "/accounting/transaction");
     }
 
-    private static Double calculateFinancing(Transaction transaction, InventoryRepository inventoryRepository){
-        Inventory inventory = inventoryRepository.getInventoryById(transaction.getInventory().getId());
+    private static Double calculateFinancing(Transaction transaction, ActionRepository actionRepository, Inventory inventory){
+        List<Action> actions = actionRepository.getActionsByActiveTrueAndInventory_ActiveAndOrganizationAndInventory(true, transaction.getOrganization(), inventory);
         int amount=0;
-        for(Action action: inventory.getActions()){
+        for(Action action: actions){
+            if(action.getAction().getAttr1().equalsIgnoreCase("buy")
+            || action.getAction().getAttr1().equalsIgnoreCase("send"))
             amount+=action.getAmount();
         }
 
         Transaction parent = transaction.getTransaction()==null?transaction:transaction.getTransaction();
         double sumPrice = parent.getSumPrice();
         for(Transaction trn: parent.getChildren()){
-            sumPrice+=trn.getPrice();
+            sumPrice+=trn.getSumPrice();
         }
         return Double.parseDouble(Util.format(sumPrice/amount));
     }

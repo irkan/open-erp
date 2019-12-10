@@ -26,6 +26,10 @@ public class Action {
     private Dictionary action;
 
     @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "hr_from_organization_id")
+    private Organization fromOrganization;
+
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hr_organization_id")
     private Organization organization;
 

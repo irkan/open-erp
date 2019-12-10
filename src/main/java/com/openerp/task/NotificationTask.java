@@ -66,7 +66,6 @@ public class NotificationTask {
                     notificationRepository.getNotificationsByActiveTrueAndSentFalseAndType_Attr1AndType_DictionaryType_Attr1AndType_Active(
                             "sms", "notification", true
                     )){
-
             }
             log.info("SMS Notification Task End");
         } catch (Exception e){

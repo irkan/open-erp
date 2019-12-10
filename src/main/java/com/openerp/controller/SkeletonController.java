@@ -202,6 +202,10 @@ public class SkeletonController {
         return false;
     }
 
+    protected Organization getUserOrganization() {
+        return getSessionUser().getEmployee().getOrganization();
+    }
+
     String mapPost(Object object, BindingResult binding, RedirectAttributes redirectAttributes){
         redirectAttributes.addFlashAttribute(Constants.FORM_RESULT_BINDING, binding);
         redirectAttributes.addFlashAttribute(Constants.FORM, object);

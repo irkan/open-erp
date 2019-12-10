@@ -8,7 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface FinancingRepository extends JpaRepository<Financing, Integer> {
-    List<Financing> getFinancingsByActiveTrue();
+    List<Financing> getFinancingsByActiveTrueOrderByIdDesc();
+    List<Financing> getFinancingsByActiveTrueAndOrganizationOrderByIdDesc(Organization organization);
     Financing getFinancingById(int id);
     Financing getFinancingByActiveTrueAndInventoryAndOrganization(Inventory inventory, Organization organization);
 }

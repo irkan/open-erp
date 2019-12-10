@@ -43,7 +43,7 @@
                                         <td>${loop.index + 1}</td>
                                         <td><c:out value="${t.id}" /></td>
                                         <td><c:out value="${t.action.name}" /></td>
-                                        <td><div style="width: 90px;"><c:out value="${t.branch.name}" /></div></td>
+                                        <td><div style="width: 90px;"><c:out value="${t.organization.name}" /></div></td>
                                         <td><c:out value="${t.account.accountNumber}" /></td>
                                         <td><c:out value="${t.description}" /></td>
                                         <td><fmt:formatDate value = "${t.createdDate}" pattern = "dd.MM.yyyy" /></td>

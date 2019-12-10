@@ -24,7 +24,7 @@
     <tr>
         <th>№</th>
         <th>ID</th>
-        <th>Anbar</th>
+        <th>Flial</th>
         <th>Hərəkət</th>
         <th>Təchizatçı</th>
         <th>İnventar</th>
@@ -39,7 +39,7 @@
         <tr>
             <td>${loop.index + 1}</td>
             <td><c:out value="${t.id}" /></td>
-            <td><c:out value="${t.warehouse.name}" /></td>
+            <td><c:out value="${t.organization.name}" /></td>
             <td><c:out value="${t.action.name}" /></td>
             <td><c:out value="${t.supplier.name}" /></td>
             <td><c:out value="${t.inventory.name}" /></td>

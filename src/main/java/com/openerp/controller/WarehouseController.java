@@ -41,9 +41,9 @@ public class WarehouseController extends SkeletonController {
         if (page.equalsIgnoreCase(Constants.ROUTE.INVENTORY)) {
             List<Inventory> inventories = null;
             if(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getOrganization()==null){
-                inventories = inventoryRepository.getInventoriesByActiveTrue();
+                inventories = inventoryRepository.getInventoriesByActiveTrueOrderByIdDesc();
             } else {
-                inventories = inventoryRepository.getInventoriesByActiveTrueAndAction_Organization_Id(
+                inventories = inventoryRepository.getInventoriesByActiveTrueAndAction_Organization_IdOrderByIdDesc(
                         getSessionUser().getEmployee().getOrganization().getId()
                 );
             }
@@ -132,13 +132,13 @@ public class WarehouseController extends SkeletonController {
     }
 
     @PostMapping(value = "/action/transfer")
-    public String postActionTransfer(@ModelAttribute(Constants.FORM) @Validated Action action, @RequestParam(name="fromOrganization", defaultValue = "0") int fromOrganizationId, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+    public String postActionTransfer(@ModelAttribute(Constants.FORM) @Validated Action action, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         if(!binding.hasErrors()){
             List<String> messages = new ArrayList<>();
-            if(financingRepository.getFinancingByActiveTrueAndInventoryAndOrganization(action.getInventory(), action.getOrganization())==null){
+            if(financingRepository.getFinancingByActiveTrueAndInventoryAndOrganization(action.getInventory(), action.getFromOrganization())==null){
                 messages.add("Maliyyətləndirmə edilməyib! Alış və qiymətləndirilmə təsdiqlənməlidir!");
             }
-            if(fromOrganizationId==action.getOrganization().getId()){
+            if(action.getFromOrganization().getId().intValue()==action.getOrganization().getId().intValue()){
                 messages.add(action.getOrganization().getName() + " - özündən özünə Göndərmə əməliyyatı edilə bilməz!");
             }
             redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, new Response(Constants.STATUS.ERROR, messages));
@@ -153,6 +153,7 @@ public class WarehouseController extends SkeletonController {
                         action.getInventory(),
                         action.getSupplier(),
                         false);
+                sendAction.setFromOrganization(actn.getOrganization());
                 actionRepository.save(sendAction);
             }
         }
@@ -175,7 +176,7 @@ public class WarehouseController extends SkeletonController {
                     String description = action.getAction().getName()+", "+action.getSupplier().getName()+" -> "+action.getOrganization().getName()+", "+action.getInventory().getName()+", Say: " + action.getAmount() + " ədəd";
                     Organization organization = organizationRepository.getOrganizationByIdAndActiveTrue(action.getOrganization().getId());
                     Transaction transaction = new Transaction(Util.getUserBranch(organization), action.getInventory(), action.getAction(), description, false, null);
-                    Financing financing = financingRepository.getFinancingByActiveTrueAndInventoryAndOrganization(action.getInventory(), action.getOrganization());
+                    Financing financing = financingRepository.getFinancingByActiveTrueAndInventoryAndOrganization(action.getInventory(), action.getFromOrganization());
                     transaction.setAmount(action.getAmount());
                     transaction.setPrice(financing.getPrice());
                     transaction.setCurrency(financing.getCurrency());
