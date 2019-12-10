@@ -31,6 +31,7 @@
         <th>Mesaj</th>
         <th>Açıqlama</th>
         <th>Göndərildi</th>
+        <th>Status</th>
         <th>Əməliyyat</th>
     </tr>
     </thead>
@@ -46,11 +47,21 @@
             <td><c:out value="${t.message}" /></td>
             <td><c:out value="${t.description}" /></td>
             <td><fmt:formatDate value = "${t.sendingDate}" pattern = "dd.MM.yyyy hh:mm:ss" /></td>
+            <td class="text-center">
+                <c:choose>
+                    <c:when test="${t.sent}">
+                        <span class="kt-font-bold kt-font-success"><i class="la la-check"></i></span>
+                    </c:when>
+                    <c:otherwise>
+                        <span class="kt-spinner kt-spinner--md kt-spinner--danger" style="margin-left: -20px;"></span>
+                    </c:otherwise>
+                </c:choose>
+            </td>
             <td nowrap class="text-center">
                 <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
                 <c:choose>
                     <c:when test="${delete.status}">
-                        <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
+                        <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.to}" /><br/><c:out value="${t.subject}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
                             <i class="<c:out value="${delete.object.icon}"/>"></i>
                         </a>
                     </c:when>
@@ -91,13 +102,7 @@
                     <form:input type="hidden" name="id" path="id"/>
                     <form:input type="hidden" name="active" path="active" value="1"/>
                     <div class="form-group">
-                        <c:forEach var="t" items="${notifications}" varStatus="loop">
-                            <label class="kt-checkbox kt-checkbox--brand">
-                                <input type="checkbox" name="type" value="${t.id}"/><c:out value="${t.name}"/>
-                                <span></span>
-                            </label>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        </c:forEach>
+                        <form:radiobuttons items="${notifications}" path="type" itemLabel="name" itemValue="id"/>
                         <form:errors path="type" cssClass="control-label alert alert-danger" />
                     </div>
                     <div class="form-group">

@@ -5,6 +5,7 @@ import com.openerp.entity.*;
 import com.openerp.util.Constants;
 import com.openerp.util.DateUtility;
 import com.openerp.util.Util;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,9 @@ import java.util.regex.Pattern;
 @Controller
 @RequestMapping("/admin")
 public class AdministratorController extends SkeletonController {
+
+    @Value("${spring.mail.username}")
+    String springEmailUserName;
 
     @GetMapping(value = {"/{page}", "/{page}/{data}"})
     public String route(Model model, @PathVariable("page") String page, @PathVariable("data") Optional<String> data, RedirectAttributes redirectAttributes) throws Exception {
@@ -117,6 +121,18 @@ public class AdministratorController extends SkeletonController {
             }
         }
         return "layout";
+    }
+
+    @PostMapping(value = "/notification")
+    public String postNotification(@ModelAttribute(Constants.FORM) @Validated Notification notification, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()){
+            if(notification.getType()!=null && notification.getType().getAttr1().equalsIgnoreCase("email")){
+                notification.setFrom(springEmailUserName);
+            }
+            notificationRepository.save(notification);
+        }
+        return mapPost(notification, binding, redirectAttributes);
     }
 
     @PostMapping(value = "/module")

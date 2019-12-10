@@ -39,9 +39,12 @@ public class Notification {
     @Column(name = "message")
     private String message;
 
-    @Pattern(regexp=".{1,1000}",message="Minimum 1 maksimum 1000 simvol ola bilər")
+    @Pattern(regexp=".{0,1000}",message="Maksimum 1000 simvol ola bilər")
     @Column(name = "description")
     private String description;
+
+    @Column(name = "attachment")
+    private String attachment;
 
     @Column(name = "is_send", nullable = false, columnDefinition="boolean default false")
     private Boolean sent = false;
@@ -61,12 +64,13 @@ public class Notification {
     @JoinColumn(name = "created_by_admin_user_id")
     private User createdUser;
 
-    public Notification(Dictionary type, String from, @Pattern(regexp = ".{4,250}", message = "Minimum 4 maksimum 10 simvol ola bilər") String to, @Pattern(regexp = ".{1,250}", message = "Minimum 1 maksimum 250 simvol ola bilər") String subject, @Pattern(regexp = ".{1,1000}", message = "Minimum 1 maksimum 1000 simvol ola bilər") String message, @Pattern(regexp = ".{1,1000}", message = "Minimum 1 maksimum 1000 simvol ola bilər") String description) {
+    public Notification(Dictionary type, String from, @Pattern(regexp = ".{4,250}", message = "Minimum 4 maksimum 10 simvol ola bilər") String to, @Pattern(regexp = ".{1,250}", message = "Minimum 1 maksimum 250 simvol ola bilər") String subject, @Pattern(regexp = ".{1,1000}", message = "Minimum 1 maksimum 1000 simvol ola bilər") String message, @Pattern(regexp = ".{1,1000}", message = "Minimum 1 maksimum 1000 simvol ola bilər") String description, String attachment) {
         this.type = type;
         this.from = from;
         this.to = to;
         this.subject = subject;
         this.message = message;
         this.description = description;
+        this.attachment = attachment;
     }
 }
