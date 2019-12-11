@@ -25,6 +25,9 @@ public class SkeletonController {
     @Value("${cbar.currencies.endpoint}")
     String cbarCurrenciesEndpoint;
 
+    @Value("${spring.mail.username}")
+    String springEmailUserName;
+
     @Autowired
     UserRepository userRepository;
 
@@ -318,6 +321,21 @@ public class SkeletonController {
             }
         }
         return "İG";
+    }
+
+    public void sendEmail(String emails, String subject, String message, String description){
+        for(String email: emails.split(";")){
+            if(email.matches(Constants.REGEX.REGEX4)){
+                Notification notification = new Notification();
+                notification.setType(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("email", "notification"));
+                notification.setFrom(springEmailUserName);
+                notification.setTo(email);
+                notification.setDescription(description);
+                notification.setSubject(subject);
+                notification.setMessage(message);
+                notificationRepository.save(notification);
+            }
+        }
     }
 
 }

@@ -66,6 +66,14 @@ public class Constants {
         public static final String INFO = "info";
         public static final String SUCCESS = "success";
     }
+
+    public static final class REGEX{
+        public static final String REGEX1 = "[0-9\\,\\-\\s]+";
+        public static final String REGEX2 = "[0-9\\-\\s]+";
+        public static final String REGEX3 = "[0-9\\s]+";
+        public static final String REGEX4 = "^[A-Za-z0-9+_.-]+@(.+)$";;
+    }
+
     public static final class TEXT{
         public static final String SUCCESS = "Proses uğurla icra edildi!";
     }

@@ -471,19 +471,19 @@ public class Util {
     public static List<Integer> getInvoiceIds(String data){
         boolean status = true;
         List<Integer> ids = new ArrayList<>();
-         if(data.trim().length()>0 && data.matches("[0-9\\,\\-\\s]+")){
+         if(data.trim().length()>0 && data.matches(Constants.REGEX.REGEX1)){
             for(String item: data.split(",")){
-                if(item.trim().matches("[0-9\\-\\s]+")){
+                if(item.trim().matches(Constants.REGEX.REGEX2)){
                     String[] subItems = item.trim().split("-");
                     if(subItems.length>2){
-                        System.out.println("Format dogru daxil edilmeyib");
+                        log.error("Format dogru daxil edilmeyib");
                         status = false;
                         break;
                     }
                     if(status){
                         for(String subItem: subItems){
-                            if(!subItem.matches("[0-9\\s]+")){
-                                System.out.println("Format dogru daxil edilmeyib");
+                            if(!subItem.matches(Constants.REGEX.REGEX3)){
+                                log.error("Format dogru daxil edilmeyib");
                                 status = false;
                                 break;
                             }

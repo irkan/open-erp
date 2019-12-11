@@ -31,9 +31,6 @@ import java.util.regex.Pattern;
 @RequestMapping("/admin")
 public class AdministratorController extends SkeletonController {
 
-    @Value("${spring.mail.username}")
-    String springEmailUserName;
-
     @GetMapping(value = {"/{page}", "/{page}/{data}"})
     public String route(Model model, @PathVariable("page") String page, @PathVariable("data") Optional<String> data, RedirectAttributes redirectAttributes) throws Exception {
         session.setAttribute(Constants.PAGE, page);
@@ -188,8 +185,18 @@ public class AdministratorController extends SkeletonController {
     public String postUser(@ModelAttribute(Constants.FORM) @Validated User user, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
+            String password = user.getPassword();
             user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
             userRepository.save(user);
+            String message = "Hörmətli " + user.getEmployee().getPerson().getFirstName() + ",<br/><br/>" +
+                    "Sizin məlumatlarınıza əsasən yeni istifadəçi yaradılmışdır.<br/><br/>" +
+                    "İstifadəçi adınız: "+user.getUsername()+"<br/>" +
+                    "Şifrəniz: "+password+"<br/><br/>";
+            sendEmail(user.getEmployee().getPerson().getContact().getEmail(),
+                    "Yeni istifadəçi!",
+                    message,
+                    null
+            );
         }
         return mapPost(user, binding, redirectAttributes);
     }
