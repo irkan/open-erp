@@ -129,7 +129,6 @@ public class SaleController extends SkeletonController {
                 invoiceRepository.save(invoice);
                 invoice.setChannelReferenceCode(String.valueOf(invoice.getId()));
                 invoiceRepository.save(invoice);
-
             }
         }
         return mapPost(sales, binding, redirectAttributes);

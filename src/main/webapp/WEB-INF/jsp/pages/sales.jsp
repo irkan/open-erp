@@ -28,14 +28,7 @@
                                     <th>İnventar</th>
                                     <th>Müştəri</th>
                                     <th>Qiymət</th>
-                                    <th>Son qiymət</th>
-                                    <th>İlkin ödəniş</th>
                                     <th>Qrafik</th>
-                                    <th>Period</th>
-                                    <th>Endirim</th>
-                                    <th>Endirim səbəbi</th>
-                                    <th>Zəmanət müddəti</th>
-                                    <th>Zəmanət bitir</th>
                                     <th>Ödəniş</th>
                                     <th>Satış komandası</th>
                                 </tr>
@@ -90,7 +83,7 @@
                                         <th>
                                             <c:out value="${t.action.inventory.name}" /><br/>
                                             <c:out value="${t.action.inventory.barcode}" /><br/>
-                                            <c:out value="${t.action.warehouse.name}" />
+                                            <c:out value="${t.action.organization.name}" />
                                         </th>
                                         <th>
                                             <c:out value="${t.customer.person.fullName}" /><br/>
@@ -122,15 +115,19 @@
                                                 <c:out value="${t.customer.person.contact.livingAddress}" />
                                             </c:if>
                                         </th>
-                                        <th><c:out value="${t.payment.price}" /></th>
-                                        <th><c:out value="${t.payment.lastPrice}" /></th>
-                                        <td><c:out value="${t.payment.down}" /></td>
-                                        <td><c:out value="${t.payment.schedule.name}" /></td>
-                                        <td><c:out value="${t.payment.period.name}" /></td>
-                                        <td><c:out value="${t.payment.discount}" /></td>
-                                        <td><c:out value="${t.payment.description}" /></td>
-                                        <td><c:out value="${t.guarantee}" /> ay</td>
-                                        <td><fmt:formatDate value = "${t.guaranteeExpire}" pattern = "dd.MM.yyyy" /></td>
+                                        <th>
+                                            Qiymət: <c:out value="${t.payment.price}" /><br/>
+                                            Endirim: <c:out value="${t.payment.discount}" /><br/>
+                                            Səbəbi: <c:out value="${t.payment.description}" /><br/>
+                                            Son qiymət: <c:out value="${t.payment.lastPrice}" /><br/>
+                                            İlkin ödəniş: <c:out value="${t.payment.down}" />
+                                        </th>
+                                        <td>
+                                            Qrafik: <c:out value="${t.payment.schedule.name}" /><br/>
+                                            Period: <c:out value="${t.payment.period.name}" /><br/>
+                                            Zəmanət müddəti: <c:out value="${t.guarantee}" /> ay<br/>
+                                            Zəmanət bitir: <fmt:formatDate value = "${t.guaranteeExpire}" pattern = "dd.MM.yyyy" />
+                                        </td>
                                         <td>
                                             <c:choose>
                                                 <c:when test="${t.payment.cash}">
@@ -536,8 +533,8 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <form:label path="action.warehouse.name">Anbar</form:label>
-                                                <form:input path="action.warehouse.name" cssClass="form-control" readonly="true"/>
+                                                <form:label path="action.organization.name">Anbar</form:label>
+                                                <form:input path="action.organization.name" cssClass="form-control" readonly="true"/>
                                             </div>
                                         </div>
                                     </div>
@@ -975,7 +972,7 @@
             validator = formEl.validate({
                 ignore: ":hidden",
                 rules: {
-                    /*'customer.person.firstName': {
+                    'customer.person.firstName': {
                         required: true
                     },
                     'customer.person.lastName': {
@@ -984,9 +981,16 @@
                     'customer.person.contact.mobilePhone': {
                         required: true
                     },
+                    'saleDate': {
+                        required: true
+                    },
+                    'birthday': {
+                        required: true
+                    },
                     'customer.person.contact.address': {
                         required: true
                     },
+                    /*
                     'action.inventory.barcode': {
                         required: true
                     },
@@ -1142,14 +1146,14 @@
                             $("input[name='action']").val('');
                             $("input[name='action.inventory.name']").val('');
                             $("textarea[name='action.inventory.description']").val('');
-                            $("input[name='action.warehouse.name']").val('');
+                            $("input[name='action.organization.name']").val('');
                         },
                         success: function(action) {
                             console.log(action);
                             $("input[name='action']").val(action.id);
                             $("input[name='action.inventory.name']").val(action.inventory.name);
                             $("textarea[name='action.inventory.description']").val(action.inventory.description);
-                            $("input[name='action.warehouse.name']").val(action.warehouse.name);
+                            $("input[name='action.organization.name']").val(action.organization.name);
                             swal.close();
                         },
                         error: function() {

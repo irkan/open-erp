@@ -59,7 +59,7 @@
                                             </td>
                                             <td>
                                                 <c:out value="${t.payment.sales.action.inventory.name}" /><br/>
-                                                <c:out value="${t.payment.sales.action.warehouse.name}" /><br/>
+                                                <c:out value="${t.payment.sales.action.organization.name}" /><br/>
                                                 <c:out value="${t.payment.sales.action.inventory.barcode}" />
                                             </td>
                                             <td><fmt:formatDate value = "${t.scheduleDate}" pattern = "dd.MM.yyyy" /></td>

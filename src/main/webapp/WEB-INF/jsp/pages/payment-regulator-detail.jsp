@@ -45,7 +45,7 @@
                                         <c:forEach var="t" items="${list}" varStatus="loop">
                                             <c:if test="${loop.index==0}">
                                                 <c:out value="${t.payment.sales.action.inventory.name}" /><br/>
-                                                <c:out value="${t.payment.sales.action.warehouse.name}" /><br/>
+                                                <c:out value="${t.payment.sales.action.organization.name}" /><br/>
                                                 <c:out value="${t.payment.sales.action.inventory.barcode}" />
                                             </c:if>
                                         </c:forEach>

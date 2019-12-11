@@ -531,14 +531,14 @@ public class DBConfiguration {
             modules.add(dashboard);
             Module currencyRate = new Module("Valyuta kursu", "Valyuta kursu", "currency-rate", "la la-euro", module);
             modules.add(currencyRate);
-            Module account = new Module("Hesab", "Hesab", "account", "la la-bank", accounting);
-            modules.add(account);
             Module transaction = new Module("Tranzaksiya", "Tranzaksiya", "transaction", "la la-money", accounting);
             modules.add(transaction);
+            Module account = new Module("Hesab", "Hesab", "account", "la la-bank", accounting);
+            modules.add(account);
             Module financing = new Module("Maliyyətləndirmə", "Maliyyətləndirmə", "financing", "la la-eur", accounting);
             modules.add(financing);
             Module nonWorkingDay = new Module("Qeyri iş günü", "Qeyri iş günü", "non-working-day", "la la-calendar", module1);
-            modules.add(transaction);
+            modules.add(nonWorkingDay);
             Module shortenedWorkingDay = new Module("Qısaldılmış iş günü", "Qısaldılmış iş günü", "shortened-working-day", "la la-calendar-minus-o", nonWorkingDay);
             modules.add(shortenedWorkingDay);
             Module workAttendance = new Module("İşə davamiyyət", "İşə davamiyyət", "work-attendance", "la la-calendar", module1);
