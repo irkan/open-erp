@@ -33,6 +33,7 @@ public class DateUtility {
     }
 
     public static String getFormattedDateddMMyy(Date date) {
+        date.setYear(date.getYear()-200);
         DateFormat dateFormat = new SimpleDateFormat("ddMMyy");
         return dateFormat.format(date);
     }

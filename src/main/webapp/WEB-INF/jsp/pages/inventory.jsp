@@ -32,7 +32,6 @@
                                     <th>Miqdar</th>
                                     <th>Flial</th>
                                     <th>Tədarükçü</th>
-                                    <th>Status</th>
                                     <th>Əməliyyat</th>
                                 </tr>
                                 </thead>
@@ -68,11 +67,6 @@
                                         </td>
                                         <td><c:out value="${t.actions.get(0).organization.name}" /></td>
                                         <td><c:out value="${t.actions.get(0).supplier.name}" /></td>
-                                        <td>
-                                            <span class="kt-badge kt-badge--success kt-badge--dot"></span>
-                                            <span class="kt-badge kt-badge--success"><i class="flaticon2-checkmark"></i></span>
-                                            <span class="kt-font-bold kt-font-danger">Təsdiqlənməyib</span>
-                                        </td>
                                         <td nowrap class="text-center">
                                             <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
                                             <c:choose>

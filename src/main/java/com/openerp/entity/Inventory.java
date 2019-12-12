@@ -35,7 +35,7 @@ public class Inventory {
     private String description;
 
     @Pattern(regexp=".{0,50}",message="Maksimum 50 simvol ola bilər")
-    @Column(name = "barcode")
+    @Column(name = "barcode", unique = true, nullable = false)
     private String barcode;
 
     @Column(name = "is_old", nullable = false, columnDefinition="boolean default true")
