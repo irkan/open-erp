@@ -40,7 +40,7 @@
                                         <td>
                                             Satış nömrəsi: <c:out value="${t.sales.id}" />, Müştəri kodu: <c:out value="${t.sales.customer.id}" /><br/>
                                             <span style="font-weight: bold; font-size: 16px;"><c:out value="${t.sales.customer.person.fullName}" /></span><br/>
-                                            <c:out value="${t.sales.action.inventory.name}" />, <c:out value="${t.sales.action.inventory.barcode}" />
+                                            <c:out value="${t.sales.salesInventories.get(0).inventory.name}" />, <c:out value="${t.sales.salesInventories.get(0).inventory.barcode}" />
                                         </td>
                                         <td>
                                             <c:choose>
@@ -196,7 +196,7 @@
 </div>
 
 <div class="modal fade" id="approve-modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Təsdiq</h5>
@@ -207,11 +207,15 @@
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form-approve" method="post" action="/sale/invoice/approve" cssClass="form-group">
                     <form:hidden path="id"/>
-                    <div class="form-group">
-                        <label class="kt-checkbox kt-checkbox--brand">
-                            <form:checkbox path="advance"/> Avans hesablansınmı?
-                            <span></span>
-                        </label>
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <div class="form-group">
+                                <label class="kt-checkbox kt-checkbox--brand">
+                                    <input type="checkbox" name="advance" checked/> Avans hesablansınmı?
+                                    <span></span>
+                                </label>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>

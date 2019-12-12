@@ -1,7 +1,6 @@
 package com.openerp.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.openerp.util.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,8 +18,8 @@ import java.util.List;
 public class Sales {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "sale_sequence")
-    @SequenceGenerator(sequenceName = "aa_sale_sequence", initialValue = 100001, allocationSize = 1, name = "sale_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "sale_sales_sequence")
+    @SequenceGenerator(sequenceName = "aa_sale_sales_sequence", initialValue = 100001, allocationSize = 1, name = "sale_sales_sequence")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
@@ -28,11 +27,11 @@ public class Sales {
     @JoinColumn(name = "crm_customer_id", nullable = false)
     private Customer customer;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "warehouse_action_id")
-    private Action action;
+    @JsonIgnore
+    @OneToMany(mappedBy = "sales", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<SalesInventory> salesInventories;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hr_organization_id", nullable = false)
     private Organization organization;
 

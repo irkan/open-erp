@@ -1,6 +1,5 @@
 package com.openerp.controller;
 
-import com.openerp.domain.Response;
 import com.openerp.entity.*;
 import com.openerp.entity.Dictionary;
 import com.openerp.util.Constants;
@@ -80,19 +79,12 @@ public class SaleController extends SkeletonController {
     public String postSales(@ModelAttribute(Constants.FORM) @Validated Sales sales, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
-            Action oldAction =  actionRepository.getActionById(sales.getAction().getId());
-            oldAction.setAmount(oldAction.getAmount()-1);
-
             if(sales.getId()==null){
-                Action action = new Action();
-                action.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sell", "action"));
-                action.setAmount(1);
-                action.setInventory(oldAction.getInventory());
-                action.setSupplier(oldAction.getSupplier());
-                action.setOrganization(oldAction.getOrganization());
-                action.setEmployee(oldAction.getEmployee());
-                sales.setAction(action);
-                sales.setOrganization(action.getOrganization());
+                List<SalesInventory> salesInventories = new ArrayList<>();
+                SalesInventory salesInventory = new SalesInventory(sales.getSalesInventories().get(0).getInventory(), sales);
+                salesInventories.add(salesInventory);
+                sales.setSalesInventories(salesInventories);
+                sales.setOrganization(getUserOrganization());
             }
             if(sales.getPayment().getCash()){
                 sales.getPayment().setPeriod(null);
@@ -101,6 +93,22 @@ public class SaleController extends SkeletonController {
             sales.setGuaranteeExpire(Util.guarantee(sales.getSaleDate()==null?new Date():sales.getSaleDate(), sales.getGuarantee()));
             salesRepository.save(sales);
 
+            List<Action> oldActions = actionRepository.getActionsByActiveTrueAndInventory_ActiveAndInventoryAndEmployeeAndAction_Attr1AndAmountGreaterThanOrderById(true, sales.getSalesInventories().get(0).getInventory(), getSessionUser().getEmployee(), "consolidate", 0);
+            if(oldActions.size()>0){
+                Action action = new Action();
+                action.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sell", "action"));
+                action.setAmount(1);
+                action.setInventory(sales.getSalesInventories().get(0).getInventory());
+                action.setOrganization(sales.getOrganization());
+                action.setEmployee(getSessionUser().getEmployee());
+                action.setSupplier(oldActions.get(0).getSupplier());
+                actionRepository.save(action);
+
+                Action oldAction = oldActions.get(0);
+                oldAction.setAmount(oldAction.getAmount()-1);
+                actionRepository.save(oldAction);
+            }
+
             if(sales.getPayment()!=null && sales.getPayment().getSchedules()!=null && sales.getPayment().getSchedules().size()>0){
                 List<Schedule> schedules = sales.getPayment().getSchedules();
                 for(Schedule schedule: schedules){
@@ -108,8 +116,6 @@ public class SaleController extends SkeletonController {
                 }
                 scheduleRepository.saveAll(schedules);
             }
-
-            actionRepository.save(oldAction);
 
             double invoicePrice = 0d;
             if(sales.getPayment().getCash()){
@@ -123,7 +129,7 @@ public class SaleController extends SkeletonController {
                 invoice.setSales(sales);
                 invoice.setApprove(false);
                 invoice.setPrice(invoicePrice);
-                invoice.setOrganization(oldAction.getOrganization());
+                invoice.setOrganization(sales.getOrganization());
                 invoice.setDescription("Satışdan əldə edilən ödəniş " + invoicePrice + " AZN");
                 invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
                 invoiceRepository.save(invoice);
@@ -219,18 +225,18 @@ public class SaleController extends SkeletonController {
             transaction.setApprove(false);
             transaction.setAmount(1);
             transaction.setDebt(true);
-            transaction.setInventory(invc.getSales().getAction().getInventory());
+            transaction.setInventory(invc.getSales().getSalesInventories().get(0).getInventory());
             transaction.setOrganization(invc.getOrganization());
             transaction.setPrice(invc.getPrice());
             transaction.setCurrency("AZN");
             transaction.setRate(getRate(transaction.getCurrency()));
             double sumPrice = transaction.getAmount() * transaction.getPrice() * transaction.getRate();
             transaction.setSumPrice(sumPrice);
-            transaction.setAction(invc.getSales().getAction().getAction());
+            transaction.setAction(invc.getSales().getSalesInventories().get(0).getInventory().getActions().get(0).getAction()); //burda duzelis edilmelidir
             transaction.setDescription("Satış, Kod: "+invc.getSales().getId() + " -> "
                     + invc.getSales().getCustomer().getPerson().getFullName() + " -> "
-                    + " barkod: " + invc.getSales().getAction().getInventory().getName()
-                    + " " + invc.getSales().getAction().getInventory().getBarcode()
+                    + " barkod: " + invc.getSales().getSalesInventories().get(0).getInventory().getName()
+                    + " " + invc.getSales().getSalesInventories().get(0).getInventory().getBarcode()
             );
             transactionRepository.save(transaction);
 

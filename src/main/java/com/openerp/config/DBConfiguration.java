@@ -567,7 +567,7 @@ public class DBConfiguration {
             modules.add(calculator);
             Module invoice = new Module("Hesab-faktura", "Hesab-faktura", "invoice", "flaticon2-group", sale);
             modules.add(invoice);
-            Module collect = new Module("Yığım", "Yığımların idarə edilməsi", "collect", "flaticon2-cardiogram", null);
+            Module collect = new Module("Yığım & Servis", "Yığımların idarə edilməsi", "collect", "flaticon2-cardiogram", null);
             modules.add(collect);
             Module paymentRegulator = new Module("Ödəniş requlyatoru", "Ödəniş requlyatoru", "payment-regulator", "flaticon-book", collect);
             modules.add(paymentRegulator);

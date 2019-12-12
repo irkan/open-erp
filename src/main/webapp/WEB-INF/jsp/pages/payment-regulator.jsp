@@ -59,9 +59,9 @@
                                                 </c:if>
                                             </td>
                                             <td>
-                                                <c:out value="${t.payment.sales.action.inventory.name}" /><br/>
-                                                <c:out value="${t.payment.sales.action.warehouse.name}" /><br/>
-                                                <c:out value="${t.payment.sales.action.inventory.barcode}" />
+                                                <c:out value="${t.payment.sales.salesInventories.get(0).inventory.name}" /><br/>
+                                                <c:out value="${t.payment.sales.salesInventories.get(0).inventory.barcode}" /><br/>
+                                                <c:out value="${t.payment.sales.salesInventories.get(0).inventory.description}" />
                                             </td>
                                             <td><fmt:formatDate value = "${t.scheduleDate}" pattern = "dd.MM.yyyy" /></td>
                                             <th>

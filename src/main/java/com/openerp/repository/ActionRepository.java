@@ -15,5 +15,6 @@ public interface ActionRepository extends JpaRepository<Action, Integer> {
     List<Action> getActionsByActiveTrueAndInventory_ActiveAndOrganization(boolean inventoryActive, Organization organization);
     List<Action> getActionsByActiveTrueAndInventory_ActiveAndOrganizationAndInventory(boolean inventoryActive, Organization organization, Inventory inventory);
     List<Action> getActionsByActiveTrueAndInventory_BarcodeAndEmployeeAndInventory_Active(String barcode, Employee employee, boolean active);
+    List<Action> getActionsByActiveTrueAndInventory_ActiveAndInventoryAndEmployeeAndAction_Attr1AndAmountGreaterThanOrderById(boolean active, Inventory inventory, Employee employee, String actionAttribute, int amount);
     Action getActionById(int id);
 }

@@ -62,7 +62,7 @@ public class Docx4j {
                 this.put("${consul_id_card_serial_number}", sales.getConsole().getPerson().getIdCardSerialNumber());
                // this.put("${consul_contact_address}", sales.get);
                 this.put("${customer_full_name}",  Util.getPersonLFF(sales.getCustomer().getPerson()));
-                this.put("${inventory_barcode}",  sales.getAction().getInventory().getBarcode());
+                this.put("${inventory_barcode}",  sales.getSalesInventories().get(0).getInventory().getBarcode());
                 this.put("${sale_price}",  String.valueOf(sales.getPayment().getLastPrice()));
                 this.put("${sale_price_in_word}",  Util.getDigitInWord(String.valueOf(sales.getPayment().getLastPrice())));
                 this.put("${down_payment}",  String.valueOf(sales.getPayment().getDown()));

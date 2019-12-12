@@ -152,6 +152,9 @@ public class SkeletonController {
     SalesRepository salesRepository;
 
     @Autowired
+    SalesInventoryRepository salesInventoryRepository;
+
+    @Autowired
     PaymentRepository paymentRepository;
 
     @Autowired

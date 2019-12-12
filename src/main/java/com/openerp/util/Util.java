@@ -137,7 +137,7 @@ public class Util {
     }
 
     public static String generateBarcode(int groupId){
-        return DateUtility.getFormattedDateddMMyy(new Date())+"-"+groupId+"-"+RandomString.getNumeric(2);
+        return DateUtility.getFormattedDateddMMyy(new Date())+"-"+groupId+"-"+RandomString.getNumeric(3);
     }
 
     public static Module findParentModule(Module module){

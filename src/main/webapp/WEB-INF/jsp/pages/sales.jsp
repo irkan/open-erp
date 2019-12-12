@@ -64,7 +64,7 @@
                                             <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
                                             <c:choose>
                                                 <c:when test="${delete.status}">
-                                                    <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.action.inventory.name}" /> <br/> <c:out value="${t.customer.person.fullName}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
+                                                    <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.salesInventories.get(0).inventory.name}" /> <br/> <c:out value="${t.customer.person.fullName}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
                                                         <i class="<c:out value="${delete.object.icon}"/>"></i>
                                                     </a>
                                                 </c:when>
@@ -81,9 +81,9 @@
                                         <td><c:out value="${t.id}" /></td>
                                         <td><fmt:formatDate value = "${t.saleDate}" pattern = "dd.MM.yyyy" /></td>
                                         <th>
-                                            <c:out value="${t.action.inventory.name}" /><br/>
-                                            <c:out value="${t.action.inventory.barcode}" /><br/>
-                                            <c:out value="${t.action.organization.name}" />
+                                            <c:out value="${t.salesInventories.get(0).inventory.name}" /><br/>
+                                            <c:out value="${t.salesInventories.get(0).inventory.barcode}" /><br/>
+                                            <c:out value="${t.salesInventories.get(0).inventory.description}" />
                                         </th>
                                         <th>
                                             <c:out value="${t.customer.person.fullName}" /><br/>
@@ -117,10 +117,16 @@
                                         </th>
                                         <th>
                                             Qiymət: <c:out value="${t.payment.price}" /><br/>
-                                            Endirim: <c:out value="${t.payment.discount}" /><br/>
-                                            Səbəbi: <c:out value="${t.payment.description}" /><br/>
-                                            Son qiymət: <c:out value="${t.payment.lastPrice}" /><br/>
-                                            İlkin ödəniş: <c:out value="${t.payment.down}" />
+                                            <c:if test="${not empty t.payment.discount}">
+                                                Endirim: <c:out value="${t.payment.discount}" /><br/>
+                                            </c:if>
+                                            <c:if test="${not empty t.payment.description}">
+                                                Səbəbi: <c:out value="${t.payment.description}" /><br/>
+                                            </c:if>
+                                            <c:if test="${t.payment.down>0}">
+                                                İlkin ödəniş: <c:out value="${t.payment.down}" /><br/>
+                                            </c:if>
+                                            Son qiymət: <c:out value="${t.payment.lastPrice}" />
                                         </th>
                                         <td>
                                             Qrafik: <c:out value="${t.payment.schedule.name}" /><br/>
@@ -510,37 +516,35 @@
                                 <div class="kt-wizard-v1__form">
                                     <div class="row">
                                         <div class="col-sm-8 offset-sm-2">
-                                            <form:hidden path="action" cssClass="form-control"/>
+                                            <input type="hidden" name="salesInventories[0].inventory" class="form-control"/>
                                             <div class="form-group">
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text" style="background-color: white; border-right: none;"><i class="la la-search"></i></span>
                                                     </div>
-                                                    <form:input path="action.inventory.barcode" class="form-control" placeholder="Barkodu daxil edin..." style="border-left: none;" />
+                                                    <input type="text" name="salesInventories[0].inventory.barcode" class="form-control" placeholder="Barkodu daxil edin..." style="border-left: none;" />
                                                     <div class="input-group-append">
-                                                        <button class="btn btn-primary" type="button" onclick="findInventory($('input[name=\'action.inventory.barcode\']'))">İnventar axtar</button>
+                                                        <button class="btn btn-primary" type="button" onclick="findInventory($('input[name=\'salesInventories[0].inventory.barcode\']'))">İnventar axtar</button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-8 offset-md-2">
                                             <div class="form-group">
-                                                <form:label path="action.inventory.name">İnventar</form:label>
-                                                <form:input path="action.inventory.name" cssClass="form-control" readonly="true"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <form:label path="action.organization.name">Anbar</form:label>
-                                                <form:input path="action.organization.name" cssClass="form-control" readonly="true"/>
+                                                <label>İnventar</label>
+                                                <input name="salesInventories[0].inventory.name" class="form-control" readonly="true"/>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <form:label path="action.inventory.description">Açıqlama</form:label>
-                                        <form:textarea path="action.inventory.description" cssClass="form-control" readonly="true"/>
+                                    <div class="row">
+                                        <div class="col-md-8 offset-md-2">
+                                            <div class="form-group">
+                                                <label>Açıqlama</label>
+                                                <textarea name="salesInventories[0].inventory.description" class="form-control" readonly="true"></textarea>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1139,21 +1143,19 @@
                 onOpen: function() {
                     swal.showLoading();
                     $.ajax({
-                        url: '/warehouse/inventory/action/'+$(element).val(),
+                        url: '/warehouse/inventory/'+$(element).val(),
                         type: 'GET',
                         dataType: 'json',
                         beforeSend: function() {
-                            $("input[name='action']").val('');
-                            $("input[name='action.inventory.name']").val('');
-                            $("textarea[name='action.inventory.description']").val('');
-                            $("input[name='action.organization.name']").val('');
+                            $("input[name='salesInventories[0].inventory']").val('');
+                            $("input[name='salesInventories[0].inventory.name']").val('');
+                            $("textarea[name='salesInventories[0].inventory.description']").val('');
                         },
-                        success: function(action) {
-                            console.log(action);
-                            $("input[name='action']").val(action.id);
-                            $("input[name='action.inventory.name']").val(action.inventory.name);
-                            $("textarea[name='action.inventory.description']").val(action.inventory.description);
-                            $("input[name='action.organization.name']").val(action.organization.name);
+                        success: function(inventory) {
+                            console.log(inventory);
+                            $("input[name='salesInventories[0].inventory']").val(inventory.id);
+                            $("input[name='salesInventories[0].inventory.name']").val(inventory.name);
+                            $("textarea[name='salesInventories[0].inventory.description']").val(inventory.description);
                             swal.close();
                         },
                         error: function() {
