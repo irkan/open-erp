@@ -62,4 +62,9 @@ public class Organization implements Serializable {
         this.organization = organization;
         this.organizationType = organizationType;
     }
+
+    public Organization(@Pattern(regexp = ".{2,50}", message = "Minimum 2 maksimum 50 simvol ola bilər") String name, @Pattern(regexp = ".{0,255}", message = "Maksimum 255 simvol ola bilər") String description) {
+        this.name = name;
+        this.description = description;
+    }
 }

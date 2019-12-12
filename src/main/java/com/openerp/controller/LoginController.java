@@ -1,6 +1,7 @@
 package com.openerp.controller;
 
 import com.openerp.entity.Module;
+import com.openerp.entity.Organization;
 import com.openerp.entity.User;
 import com.openerp.entity.UserModuleOperation;
 import com.openerp.util.Constants;
@@ -56,6 +57,7 @@ public class LoginController extends SkeletonController {
         if(parentModules.size()>0){
             session.setAttribute(Constants.USER, user);
             session.setAttribute(Constants.PAGE, "module");
+            session.setAttribute(Constants.ORGANIZATIONS, getOrganization());
             session.setAttribute(Constants.PARENT_MODULES_MAP, Util.convertParentModulesMap(parentModules));
             session.setAttribute(Constants.PARENT_MODULES, parentModules);
             session.setAttribute(Constants.VACATION_DETAIL_REPOSITORY, vacationDetailRepository);
@@ -64,5 +66,17 @@ public class LoginController extends SkeletonController {
         model.addAttribute("error", "true");
         model.addAttribute(Constants.MESSAGE, "Sistemdən istifadə icazələri ilə təmin edilməmisiniz!");
         return "login";
+    }
+
+    protected List<Organization> getOrganization() {
+        List<Organization> organizations = new ArrayList<>();
+        organizations.add(getUserOrganization());
+        for(Organization organization: getUserOrganization().getChildren()){
+            organizations.add(organization);
+        }
+        if(organizations.size()>1){
+            organizations.add(new Organization("Bütün strukturlar", "Bütün strukturlar üzrə"));
+        }
+        return organizations;
     }
 }
