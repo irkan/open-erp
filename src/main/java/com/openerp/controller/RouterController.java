@@ -50,6 +50,9 @@ public class RouterController extends SkeletonController {
                 break;
             }
         }
+        if(!id.equals(Optional.empty())){
+            session.setAttribute(Constants.ORGANIZATION, organizationRepository.getOrganizationByIdAndActiveTrue(Integer.parseInt(id.get())));
+        }
         session.setAttribute(Constants.MODULE_DESCRIPTION, description);
         return "redirect:/"+path1+"/"+path2+(!data.equals(Optional.empty())?("/"+data.toString().trim()):"");
     }

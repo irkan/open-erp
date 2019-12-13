@@ -146,7 +146,7 @@
                                             <c:if test="${t.id==sessionScope.organization.id}">
                                                 <c:set var="hover" value="a-link-active"/>
                                             </c:if>
-                                            <a href="${baseURL}/${req.contextPath}/org/<c:out value="${t.id}"/>" class="kt-notification-v2__item <c:out value="${hover}"/>">
+                                            <a href="/route/sub/admin/${sessionScope.page}/org/<c:out value="${t.id}"/>" class="kt-notification-v2__item <c:out value="${hover}"/>">
                                                 <div class="kt-notification-v2__item-icon">
                                                     <i class="flaticon2-box kt-font-danger"></i>
                                                 </div>
