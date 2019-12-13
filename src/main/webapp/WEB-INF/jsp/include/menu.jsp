@@ -138,12 +138,15 @@
                                 <div class="kt-notification kt-margin-t-10 kt-margin-b-10 kt-scroll"
                                      data-scroll="true" data-height="300" data-mobile-height="300">
                                     <div class="kt-notification-v2">
+                                        <c:set var="req" value="${pageContext.request}" />
+                                        <c:set var="baseURL" value="${fn:replace(req.requestURL, fn:substring(req.requestURI, 1, fn:length(req.requestURI)), req.contextPath)}" />
+<%--                                        <c:url var="myUrl" value="${baseURL}/${MyID}"/>--%>
                                         <c:forEach var="t" items="${sessionScope.organizations}" varStatus="loop">
                                             <c:set var="hover" value=""/>
                                             <c:if test="${t.id==sessionScope.organization.id}">
                                                 <c:set var="hover" value="a-link-active"/>
                                             </c:if>
-                                            <a href="#" class="kt-notification-v2__item <c:out value="${hover}"/>">
+                                            <a href="${baseURL}/${req.contextPath}/org/<c:out value="${t.id}"/>" class="kt-notification-v2__item <c:out value="${hover}"/>">
                                                 <div class="kt-notification-v2__item-icon">
                                                     <i class="flaticon2-box kt-font-danger"></i>
                                                 </div>

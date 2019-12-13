@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/route")
@@ -38,8 +39,8 @@ public class RouterController extends SkeletonController {
         return "redirect:sub/"+path+"/"+modules.get(0).getPath();
     }
 
-    @GetMapping(value = "/sub/{path1}/{path2}")
-    public String getSubModules(@PathVariable("path1") String path1, @PathVariable("path2") String path2) throws Exception {
+    @GetMapping(value = {"/sub/{path1}/{path2}", "/sub/{path1}/{path2}/{data}", "/sub/{path1}/{path2}/org/{id}", "/sub/{path1}/{path2}/{data}/org/{id}"})
+    public String getSubModules(@PathVariable("path1") String path1, @PathVariable("path2") String path2, @PathVariable("data") Optional<String> data, @PathVariable("id") Optional<String> id) throws Exception {
         session.setAttribute(Constants.PAGE, path2);
         String description = "";
         List<Module> moduleList = (List<Module>) session.getAttribute(Constants.MODULES);
@@ -50,6 +51,6 @@ public class RouterController extends SkeletonController {
             }
         }
         session.setAttribute(Constants.MODULE_DESCRIPTION, description);
-        return "redirect:/"+path1+"/"+path2;
+        return "redirect:/"+path1+"/"+path2+(!data.equals(Optional.empty())?("/"+data.toString().trim()):"");
     }
 }
