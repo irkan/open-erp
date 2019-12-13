@@ -27,16 +27,6 @@ public class PayrollController extends SkeletonController {
 
     @GetMapping(value = {"/{page}", "/{page}/{data}"})
     public String route(Model model, @PathVariable("page") String page, @PathVariable("data") Optional<String> data, RedirectAttributes redirectAttributes) throws Exception {
-        session.setAttribute(Constants.PAGE, page);
-        String description = "";
-        List<Module> moduleList = (List<Module>) session.getAttribute(Constants.MODULES);
-        for(Module m: moduleList){
-            if(m.getPath().equalsIgnoreCase(page)){
-                description = m.getDescription();
-                break;
-            }
-        }
-        session.setAttribute(Constants.MODULE_DESCRIPTION, description);
 
         if (page.equalsIgnoreCase(Constants.ROUTE.WORKING_HOUR_RECORD)){
             model.addAttribute(Constants.IDENTIFIERS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("identifier"));

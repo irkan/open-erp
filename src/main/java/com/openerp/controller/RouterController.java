@@ -15,7 +15,7 @@ import java.util.List;
 public class RouterController extends SkeletonController {
 
     @GetMapping(value = "/{path}")
-    public String getSubModules(@PathVariable("path") String path) throws Exception {
+    public String getModules(@PathVariable("path") String path) throws Exception {
         User user = getSessionUser();
         List<Module> modules = new ArrayList<>();
         Module parent = null;
@@ -35,6 +35,21 @@ public class RouterController extends SkeletonController {
         }
         session.setAttribute(Constants.PARENT, parent);
         session.setAttribute(Constants.MODULES, modules);
-        return "redirect:/"+path+"/"+modules.get(0).getPath();
+        return "redirect:sub/"+path+"/"+modules.get(0).getPath();
+    }
+
+    @GetMapping(value = "/sub/{path1}/{path2}")
+    public String getSubModules(@PathVariable("path1") String path1, @PathVariable("path2") String path2) throws Exception {
+        session.setAttribute(Constants.PAGE, path2);
+        String description = "";
+        List<Module> moduleList = (List<Module>) session.getAttribute(Constants.MODULES);
+        for(Module m: moduleList){
+            if(m.getPath().equalsIgnoreCase(path2)){
+                description = m.getDescription();
+                break;
+            }
+        }
+        session.setAttribute(Constants.MODULE_DESCRIPTION, description);
+        return "redirect:/"+path1+"/"+path2;
     }
 }

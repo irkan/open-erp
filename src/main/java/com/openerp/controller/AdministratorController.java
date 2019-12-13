@@ -33,7 +33,7 @@ public class AdministratorController extends SkeletonController {
 
     @GetMapping(value = {"/{page}", "/{page}/{data}"})
     public String route(Model model, @PathVariable("page") String page, @PathVariable("data") Optional<String> data, RedirectAttributes redirectAttributes) throws Exception {
-        session.setAttribute(Constants.PAGE, page);
+        /*session.setAttribute(Constants.PAGE, page);
         String description = "";
         List<Module> moduleList = (List<Module>) session.getAttribute(Constants.MODULES);
         for(Module m: moduleList){
@@ -42,7 +42,7 @@ public class AdministratorController extends SkeletonController {
                 break;
             }
         }
-        session.setAttribute(Constants.MODULE_DESCRIPTION, description);
+        session.setAttribute(Constants.MODULE_DESCRIPTION, description);*/
 
         if (page.equalsIgnoreCase(Constants.ROUTE.MODULE)) {
             model.addAttribute(Constants.PARENTS, moduleRepository.findAllByModuleIsNullAndActiveTrue());
