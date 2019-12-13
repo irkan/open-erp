@@ -94,3 +94,7 @@ input[type="checkbox"]{
     -webkit-transform: rotate(-90.0deg);  /* Safari 3.1+, Chrome */
     transform: rotate(-90.0deg);  /* Standard */
 }
+
+.a-link-active {
+    background-color: #F7F8FA;
+}

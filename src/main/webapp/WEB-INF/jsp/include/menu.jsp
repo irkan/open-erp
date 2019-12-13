@@ -136,10 +136,14 @@
                             <div class="tab-pane active show active"
                                  role="tabpanel">
                                 <div class="kt-notification kt-margin-t-10 kt-margin-b-10 kt-scroll"
-                                     data-scroll="true" data-height="300" data-mobile-height="200">
+                                     data-scroll="true" data-height="300" data-mobile-height="300">
                                     <div class="kt-notification-v2">
                                         <c:forEach var="t" items="${sessionScope.organizations}" varStatus="loop">
-                                            <a href="#" class="kt-notification-v2__item">
+                                            <c:set var="hover" value=""/>
+                                            <c:if test="${t.id==sessionScope.organization.id}">
+                                                <c:set var="hover" value="a-link-active"/>
+                                            </c:if>
+                                            <a href="#" class="kt-notification-v2__item <c:out value="${hover}"/>">
                                                 <div class="kt-notification-v2__item-icon">
                                                     <i class="flaticon2-box kt-font-danger"></i>
                                                 </div>

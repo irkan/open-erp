@@ -26457,7 +26457,7 @@ body.swal2-height-auto {
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
-    padding: 1rem;
+    padding: 0.6rem;
     text-decoration: none;
     -webkit-transition: all 0.3s;
     transition: all 0.3s; }
@@ -26472,9 +26472,9 @@ body.swal2-height-auto {
       -ms-flex-align: center;
       align-items: center;
       background-color: #f7f8fa;
-      height: 50px;
-      width: 50px;
-      min-width: 50px;
+      height: 40px;
+      width: 40px;
+      min-width: 40px;
       border-radius: 50%; }
       .kt-notification-v2 .kt-notification-v2__item .kt-notification-v2__item-icon i {
         font-size: 1.5rem; }

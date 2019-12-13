@@ -57,6 +57,7 @@ public class LoginController extends SkeletonController {
         if(parentModules.size()>0){
             session.setAttribute(Constants.USER, user);
             session.setAttribute(Constants.PAGE, "module");
+            session.setAttribute(Constants.ORGANIZATION, getUserOrganization());
             session.setAttribute(Constants.ORGANIZATIONS, getOrganization());
             session.setAttribute(Constants.PARENT_MODULES_MAP, Util.convertParentModulesMap(parentModules));
             session.setAttribute(Constants.PARENT_MODULES, parentModules);

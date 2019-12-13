@@ -58,6 +58,7 @@ public class Constants {
     public static final String PAYMENT_ID = "payment_id";
     public static final String CONFIGURATION_TROUBLED_CUSTOMER = "configuration_troubled_customer";
     public static final String NOTIFICATIONS = "notifications";
+    public static final String ORGANIZATION = "organization";
 
     public static final class STATUS{
         public static final String RESPONSE = "response";
