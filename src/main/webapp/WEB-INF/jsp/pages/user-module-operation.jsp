@@ -16,32 +16,33 @@
         <div class="col-lg-12">
             <div class="kt-portlet kt-portlet--mobile">
                 <div class="kt-portlet__body">
-                    <form:form modelAttribute="form" id="form" method="post" action="/admin/get-user-template" cssClass="form-group">
+                    <form:form modelAttribute="form" id="form" method="post" action="/admin/user-module-operation" cssClass="form-group">
                         <div class="row">
                             <div class="col-md-3 offset-md-3">
-                                <select class="custom-select form-control" name="template" id="template" onchange="this.form.submit()">
+                                <select class="custom-select form-control" name="template" id="template" onchange="getTemplateModuleOperation($(this).val())">
                                     <option value="0">Şablondan seçin</option>
                                 <c:forEach var="t" items="${templates}" varStatus="loop">
-                                    <c:choose>
-                                        <c:when test="${template_id==t.id}">
-                                            <option value="${t.id}" selected>${t.name}</option>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <option value="${t.id}">${t.name}</option>
-                                        </c:otherwise>
-                                    </c:choose>
-
+                                    <option value="${t.id}">${t.name}</option>
                                 </c:forEach>
                                 </select>
                             </div>
                             <div class="col-md-3">
-                                <form:select  path="user" cssClass="custom-select form-control" onchange="this.form.submit()">
+                                <form:select  path="user" cssClass="custom-select form-control" onchange="getUserModuleOperation($(this).val())">
                                     <form:option value="0" label="İstifadəçini seçin"/>
                                     <form:options items="${users}" itemLabel="employee.person.fullName" itemValue="id"  />
                                 </form:select>
                             </div>
                             <div class="col-md-2 offset-md-1 text-right">
                                 <button onclick="save()" class="btn btn-primary">Yadda saxla</button>
+                            </div>
+                        </div>
+                        <hr style="width: 100%"/>
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                <%--<label class="kt-checkbox kt-checkbox--brand">
+                                    <form:checkbox path="user.userDetail.administrator"/> Administratormu?
+                                    <span></span>
+                                </label>--%>
                             </div>
                         </div>
                         <hr style="width: 100%"/>
@@ -155,4 +156,90 @@
         edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
     });
     </c:if>
+
+    function getTemplateModuleOperation(id){
+        var table='';
+        swal.fire({
+            text: 'Proses davam edir...',
+            allowOutsideClick: false,
+            onOpen: function() {
+                swal.showLoading();
+                $.ajax({
+                    url: '/admin/get-template-module-operation/' + id,
+                    type: 'GET',
+                    dataType: 'json',
+                    beforeSend: function() {
+                        $('input[type=checkbox]').prop('checked', false);
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        $.each(data, function(k, v) {
+                            $('input[type=checkbox][value="'+v.moduleOperation.id+'"]').prop('checked', true);
+                            $('input[type=checkbox][value="'+v.moduleOperation.id+'"]').parent().find("span").addClass(":after");
+                            console.log(k + ' - ' + v)
+                            console.log(v.moduleOperation.id)
+                        });
+                        swal.close();
+                    },
+                    error: function() {
+                        swal.fire({
+                            title: "Xəta baş verdi!",
+                            html: "Cədvəl yarana bilmədi!",
+                            type: "error",
+                            cancelButtonText: 'Bağla',
+                            cancelButtonColor: '#c40000',
+                            cancelButtonClass: 'btn btn-danger',
+                            footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+                        });
+                    },
+                    complete: function(){
+                    }
+                })
+            }
+        });
+
+    }
+
+    function getUserModuleOperation(id){
+        var table='';
+        swal.fire({
+            text: 'Proses davam edir...',
+            allowOutsideClick: false,
+            onOpen: function() {
+                swal.showLoading();
+                $.ajax({
+                    url: '/admin/get-user-module-operation/' + id,
+                    type: 'GET',
+                    dataType: 'json',
+                    beforeSend: function() {
+                        $('input[type=checkbox]').prop('checked', false);
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        $.each(data, function(k, v) {
+                            $('input[type=checkbox][value="'+v.moduleOperation.id+'"]').prop('checked', true);
+                            $('input[type=checkbox][value="'+v.moduleOperation.id+'"]').parent().find("span").addClass(":after");
+                            console.log(k + ' - ' + v)
+                            console.log(v.moduleOperation.id)
+                        });
+                        swal.close();
+                    },
+                    error: function() {
+                        swal.fire({
+                            title: "Xəta baş verdi!",
+                            html: "Cədvəl yarana bilmədi!",
+                            type: "error",
+                            cancelButtonText: 'Bağla',
+                            cancelButtonColor: '#c40000',
+                            cancelButtonClass: 'btn btn-danger',
+                            footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+                        });
+                    },
+                    complete: function(){
+                    }
+                })
+            }
+        });
+
+    }
 </script>

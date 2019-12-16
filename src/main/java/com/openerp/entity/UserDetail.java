@@ -28,6 +28,9 @@ public class UserDetail {
     @Column(name = "language")
     private String language;
 
+    @Column(name = "is_administrator", nullable = false, columnDefinition="boolean default false")
+    private Boolean administrator = false;
+
     public UserDetail(String language) {
         this.language = language;
     }
@@ -36,5 +39,10 @@ public class UserDetail {
         this.emailNotification = emailNotification;
         this.smsNotification = smsNotification;
         this.language = language;
+    }
+
+    public UserDetail(String language, Boolean administrator) {
+        this.language = language;
+        this.administrator = administrator;
     }
 }

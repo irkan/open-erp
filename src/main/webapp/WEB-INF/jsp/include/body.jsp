@@ -14,7 +14,7 @@
         <div class="kt-subheader   kt-grid__item" id="kt_subheader">
             <div class="kt-container ">
                 <div class="kt-subheader__main">
-                    <h3 class="kt-subheader__title">${sessionScope.module_description}</h3>
+                    <h3 class="kt-subheader__title"><c:out value="${module_description}" /></h3>
 
 
                 </div>
@@ -92,6 +92,6 @@
                 </div>
             </div>
         </div>
-        <jsp:include page="pages/${sessionScope.page}.jsp" ></jsp:include>
+        <jsp:include page="pages/${page}.jsp" ></jsp:include>
     </div>
 </div>

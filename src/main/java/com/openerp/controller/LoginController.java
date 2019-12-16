@@ -12,6 +12,7 @@ import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,8 @@ public class LoginController extends SkeletonController {
 
     @PostMapping(value = "/login")
     public String loginDo(Model model, @RequestParam(name="username") String username,
-                                @RequestParam(name="password") String password) throws Exception {
+                                @RequestParam(name="password") String password,
+                                RedirectAttributes redirectAttributes) throws Exception {
         User user = userRepository.findByUsernameAndPasswordAndActiveTrue(username, DigestUtils.md5DigestAsHex(password.getBytes()));
         if(user==null){
             model.addAttribute("error", "true");
@@ -56,9 +58,9 @@ public class LoginController extends SkeletonController {
         }
         if(parentModules.size()>0){
             session.setAttribute(Constants.USER, user);
-            session.setAttribute(Constants.PAGE, "module");
+            redirectAttributes.addFlashAttribute(Constants.PAGE, "module");
             session.setAttribute(Constants.ORGANIZATION, getUserOrganization());
-            session.setAttribute(Constants.ORGANIZATIONS, getOrganization());
+            session.setAttribute(Constants.ORGANIZATIONS, getOrganization(user.getUserDetail().getAdministrator()));
             session.setAttribute(Constants.PARENT_MODULES_MAP, Util.convertParentModulesMap(parentModules));
             session.setAttribute(Constants.PARENT_MODULES, parentModules);
             session.setAttribute(Constants.VACATION_DETAIL_REPOSITORY, vacationDetailRepository);
@@ -69,14 +71,18 @@ public class LoginController extends SkeletonController {
         return "login";
     }
 
-    protected List<Organization> getOrganization() {
+    protected List<Organization> getOrganization(boolean administrator) {
         List<Organization> organizations = new ArrayList<>();
-        organizations.add(getUserOrganization());
-        for(Organization organization: getUserOrganization().getChildren()){
-            organizations.add(organization);
-        }
-        if(organizations.size()>1){
-            organizations.add(new Organization("Bütün strukturlar", "Bütün strukturlar üzrə"));
+        if(administrator){
+            organizations.add(getUserOrganization());
+            for(Organization organization: getUserOrganization().getChildren()){
+                organizations.add(organization);
+            }
+            if(organizations.size()>1){
+                organizations.add(new Organization("Bütün strukturlar", "Bütün strukturlar üzrə"));
+            }
+        } else {
+            organizations.add(getUserOrganization());
         }
         return organizations;
     }

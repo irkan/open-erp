@@ -42,7 +42,7 @@ public class AdministratorController extends SkeletonController {
                 break;
             }
         }
-        session.setAttribute(Constants.MODULE_DESCRIPTION, description);*/
+        session.setAttribute(Constants.page.description, description);*/
 
         if (page.equalsIgnoreCase(Constants.ROUTE.MODULE)) {
             model.addAttribute(Constants.PARENTS, moduleRepository.findAllByModuleIsNullAndActiveTrue());
@@ -216,7 +216,7 @@ public class AdministratorController extends SkeletonController {
         model.addAttribute(Constants.FORM, userModuleOperation);
         model.addAttribute(Constants.TEMPLATE_ID, templateId);
         if(!binding.hasErrors() && userModuleOperation.getUser()!=null){
-            List<UserModuleOperation> userModuleOperations = userModuleOperationRepository.findAllByUser_Id(userModuleOperation.getUser().getId());
+            List<UserModuleOperation> userModuleOperations = userModuleOperationRepository.getUserModuleOperationsByUser_IdAndUser_Active(userModuleOperation.getUser().getId(), true);
             userModuleOperationRepository.deleteInBatch(userModuleOperations);
             for (ModuleOperation mo: userModuleOperation.getModuleOperations()){
                 mo.setModuleOperations(null);
@@ -249,21 +249,16 @@ public class AdministratorController extends SkeletonController {
         return "layout";
     }
 
-    @PostMapping(value = "/get-user-template")
-    public String postGetUserTemplate(Model model, @ModelAttribute(Constants.FORM) @Validated UserModuleOperation userModuleOperation,
-                                      @RequestParam(name="template", required = false, defaultValue = "0") int templateId,
-                                      @RequestParam(name="user", required = false, defaultValue = "0") int userId) throws Exception {
-        model.addAttribute(Constants.FORM, userModuleOperation);
-        model.addAttribute(Constants.USERS, userRepository.findAll());
-        List<ModuleOperation>  list = moduleOperationRepository.findAll();
-        model.addAttribute(Constants.MODULES, Util.removeDuplicateModules(list));
-        model.addAttribute(Constants.OPERATIONS, Util.removeDuplicateOperations(list));
-        model.addAttribute(Constants.LIST, list);
-        model.addAttribute(Constants.TEMPLATE_ID, templateId);
-        model.addAttribute(Constants.TEMPLATES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("template"));
-        model.addAttribute(Constants.TEMPLATE_MODULE_OPERATIONS, templateModuleOperationRepository.findAllByTemplate_Id(templateId));
-        model.addAttribute(Constants.USER_MODULE_OPERATIONS,  userModuleOperationRepository.findAllByUser_Id(userId));
-        return "layout";
+    @ResponseBody
+    @GetMapping(value = "/get-user-module-operation/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<UserModuleOperation> postGetUserModuleOperation(@PathVariable("id") int id) throws Exception {
+        return userModuleOperationRepository.getUserModuleOperationsByUser_IdAndUser_Active(id, true);
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/get-template-module-operation/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<TemplateModuleOperation> postGetTemplateModuleOperation(@PathVariable("id") int id) throws Exception {
+        return templateModuleOperationRepository.findAllByTemplate_Id(id);
     }
 
     @PostMapping(value = "/template-module-operation")

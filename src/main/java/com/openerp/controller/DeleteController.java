@@ -69,7 +69,7 @@ public class DeleteController extends SkeletonController {
         } else if(path.equalsIgnoreCase(Constants.ROUTE.USER_MODULE_OPERATION)){
             User userObject = userRepository.getUserByActiveTrueAndId(Integer.parseInt(id));
             userRepository.save(userObject);
-            List<UserModuleOperation> userModuleOperations = userModuleOperationRepository.findAllByUser_Id(user.getId());
+            List<UserModuleOperation> userModuleOperations = userModuleOperationRepository.getUserModuleOperationsByUser_IdAndUser_Active(user.getId(), true);
             userModuleOperationRepository.deleteInBatch(userModuleOperations);
         } else if(path.equalsIgnoreCase(Constants.ROUTE.EMPLOYEE)){
             employeeRepository.deleteById(Integer.parseInt(id));

@@ -1000,7 +1000,7 @@ public class DBConfiguration {
             employeeRepository.save(employee0);
 
 
-            User user = new User(defaultAdminUsername, DigestUtils.md5DigestAsHex("admin".getBytes()), employee0, new UserDetail("az"));
+            User user = new User(defaultAdminUsername, DigestUtils.md5DigestAsHex("admin".getBytes()), employee0, new UserDetail("az", true));
 
             userRepository.save(user);
 

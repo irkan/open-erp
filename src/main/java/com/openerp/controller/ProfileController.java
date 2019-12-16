@@ -27,7 +27,6 @@ public class ProfileController extends SkeletonController {
     public String profile(){
         session.setAttribute(Constants.PAGE, Constants.ROUTE.PROFILE);
         session.setAttribute(Constants.PROFILE_SUB_PAGE, "profile/overview");
-        session.setAttribute(Constants.MODULE_DESCRIPTION, "");
         return "layout";
     }
 

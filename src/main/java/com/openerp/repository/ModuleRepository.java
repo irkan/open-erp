@@ -10,4 +10,5 @@ public interface ModuleRepository extends JpaRepository<Module, Integer> {
     List<Module> findAllByModuleIsNullAndActiveTrue();
     Module getModuleById(int id);
     List<Module> getModulesByActiveTrue();
+    List<Module> getModulesByActiveTrueAndPath(String path);
 }
