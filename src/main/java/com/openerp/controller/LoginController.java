@@ -60,6 +60,7 @@ public class LoginController extends SkeletonController {
             session.setAttribute(Constants.USER, user);
             redirectAttributes.addFlashAttribute(Constants.PAGE, "module");
             session.setAttribute(Constants.ORGANIZATION, getUserOrganization());
+            session.setAttribute(Constants.ORGANIZATION_SELECTED, getUserOrganization());
             session.setAttribute(Constants.ORGANIZATIONS, getOrganization(user.getUserDetail().getAdministrator()));
             session.setAttribute(Constants.PARENT_MODULES_MAP, Util.convertParentModulesMap(parentModules));
             session.setAttribute(Constants.PARENT_MODULES, parentModules);
@@ -79,7 +80,9 @@ public class LoginController extends SkeletonController {
                 organizations.add(organization);
             }
             if(organizations.size()>1){
-                organizations.add(new Organization("Bütün strukturlar", "Bütün strukturlar üzrə"));
+                Organization organization = new Organization("Bütün fliallar", "Bütün fliallar üzrə");
+                organization.setId(0);
+                organizations.add(organization);
             }
         } else {
             organizations.add(getUserOrganization());

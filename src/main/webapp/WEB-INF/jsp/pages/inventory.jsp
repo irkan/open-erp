@@ -63,7 +63,7 @@
                                                 </c:otherwise>
                                             </c:choose>
                                         </td>
-                                        <td><c:out value="${utl:calculateInventoryAmount(t.actions, sessionScope.user.employee.organization.id)}"/> ədəd
+                                        <td><c:out value="${utl:calculateInventoryAmount(t.actions, sessionScope.organization.id)}"/> ədəd
                                         </td>
                                         <td><c:out value="${t.actions.get(0).organization.name}" /></td>
                                         <td><c:out value="${t.actions.get(0).supplier.name}" /></td>

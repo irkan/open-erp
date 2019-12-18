@@ -22,9 +22,9 @@
 <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
     <thead>
     <tr>
-        <th>№</th>
         <th>ID</th>
         <th>Tip</th>
+        <th>Struktur</th>
         <th>Kimdən</th>
         <th>Kimə</th>
         <th>Başlıq</th>
@@ -38,13 +38,13 @@
     <tbody>
     <c:forEach var="t" items="${list}" varStatus="loop">
         <tr data="<c:out value="${utl:toJson(t)}" />">
-            <td>${loop.index + 1}</td>
-            <td><c:out value="${t.id}" /></td>
+            <th><c:out value="${t.id}" /></th>
             <td><c:out value="${t.type.name}" /></td>
+            <td><c:out value="${t.organization.name}" /></td>
             <td><c:out value="${t.from}" /></td>
             <td><c:out value="${t.to}" /></td>
-            <td><c:out value="${t.subject}" /></td>
-            <td><c:out value="${t.message}" /></td>
+            <td><c:out value="${t.subject}" escapeXml="false" /></td>
+            <th><c:out value="${t.message}" escapeXml="false" /></th>
             <td><c:out value="${t.description}" /></td>
             <td><fmt:formatDate value = "${t.sendingDate}" pattern = "dd.MM.yyyy hh:mm:ss" /></td>
             <td class="text-center">

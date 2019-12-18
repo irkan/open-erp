@@ -495,6 +495,8 @@ public class DBConfiguration {
             modules.add(subModule3);
             Module configuration = new Module("Sazlama", "Sazlama", "configuration", "flaticon-settings", module);
             modules.add(configuration);
+            Module currencyRate = new Module("Valyuta kursu", "Valyuta kursu", "currency-rate", "la la-euro", configuration);
+            modules.add(currencyRate);
             Module subModule5 = new Module("İstifadəçi", "İstifadəçi", "user", "flaticon-users", module);
             modules.add(subModule5);
             Module subModule9 = new Module("İstifadəçi icazəsi", "İstifadəçi icazəsi", "user-module-operation", "flaticon-clipboard", subModule5);
@@ -529,8 +531,6 @@ public class DBConfiguration {
             modules.add(accounting);
             Module dashboard = new Module("Panel", "Qrafik status", "dashboard", "flaticon-analytics", null);
             modules.add(dashboard);
-            Module currencyRate = new Module("Valyuta kursu", "Valyuta kursu", "currency-rate", "la la-euro", module);
-            modules.add(currencyRate);
             Module transaction = new Module("Tranzaksiya", "Tranzaksiya", "transaction", "la la-money", accounting);
             modules.add(transaction);
             Module account = new Module("Hesab", "Hesab", "account", "la la-bank", accounting);

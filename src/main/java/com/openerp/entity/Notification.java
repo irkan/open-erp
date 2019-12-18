@@ -21,6 +21,10 @@ public class Notification {
     private Integer id;
 
     @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "hr_organization_id")
+    private Organization organization;
+
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "admin_dictionary_notification_id")
     private Dictionary type;
 
@@ -64,8 +68,9 @@ public class Notification {
     @JoinColumn(name = "created_by_admin_user_id")
     private User createdUser;
 
-    public Notification(Dictionary type, String from, @Pattern(regexp = ".{4,250}", message = "Minimum 4 maksimum 10 simvol ola bilər") String to, @Pattern(regexp = ".{1,250}", message = "Minimum 1 maksimum 250 simvol ola bilər") String subject, @Pattern(regexp = ".{1,1000}", message = "Minimum 1 maksimum 1000 simvol ola bilər") String message, @Pattern(regexp = ".{1,1000}", message = "Minimum 1 maksimum 1000 simvol ola bilər") String description, String attachment) {
+    public Notification(Dictionary type, Organization organization, String from, @Pattern(regexp = ".{4,250}", message = "Minimum 4 maksimum 10 simvol ola bilər") String to, @Pattern(regexp = ".{1,250}", message = "Minimum 1 maksimum 250 simvol ola bilər") String subject, @Pattern(regexp = ".{1,1000}", message = "Minimum 1 maksimum 1000 simvol ola bilər") String message, @Pattern(regexp = ".{1,1000}", message = "Minimum 1 maksimum 1000 simvol ola bilər") String description, String attachment) {
         this.type = type;
+        this.organization = organization;
         this.from = from;
         this.to = to;
         this.subject = subject;

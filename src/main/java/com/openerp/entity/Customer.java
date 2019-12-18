@@ -26,6 +26,10 @@ public class Customer {
     @JoinColumn(name = "common_person_id", nullable = false)
     private Person person;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "hr_organization_id", nullable = false)
+    private Organization organization;
+
     @Temporal(TemporalType.DATE)
     @Column(name = "contract_date")
     @DateTimeFormat(pattern = "dd.MM.yyyy")

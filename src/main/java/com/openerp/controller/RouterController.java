@@ -1,5 +1,6 @@
 package com.openerp.controller;
 
+import com.openerp.entity.Organization;
 import com.openerp.entity.User;
 import com.openerp.entity.UserModuleOperation;
 import com.openerp.util.Constants;
@@ -60,7 +61,19 @@ public class RouterController extends SkeletonController {
             }
         }
         if(!id.equals(Optional.empty())){
-            session.setAttribute(Constants.ORGANIZATION, organizationRepository.getOrganizationByIdAndActiveTrue(Integer.parseInt(id.get())));
+            Organization organization = organizationRepository.getOrganizationByIdAndActiveTrue(Integer.parseInt(id.get()));
+            if(organization!=null){
+                session.setAttribute(Constants.ORGANIZATION, organization);
+            } else {
+                List<Organization> organizations = (List<Organization>)session.getAttribute(Constants.ORGANIZATIONS);
+                for(Organization org: organizations){
+                    if(org.getId()==Integer.parseInt(id.get())){
+                        organization = org;
+                        break;
+                    }
+                }
+            }
+            session.setAttribute(Constants.ORGANIZATION_SELECTED, organization);
         }
         redirectAttributes.addFlashAttribute(Constants.MODULE_DESCRIPTION, description);
         return "redirect:/"+path1+"/"+path2+(!data.equals(Optional.empty())?("/"+data.toString().trim()):"");

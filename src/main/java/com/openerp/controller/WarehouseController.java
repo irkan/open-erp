@@ -27,14 +27,13 @@ public class WarehouseController extends SkeletonController {
 
     @GetMapping(value = {"/{page}", "/{page}/{data}"})
     public String route(Model model, @PathVariable("page") String page, @PathVariable("data") Optional<String> data, RedirectAttributes redirectAttributes) throws Exception {
-
         if (page.equalsIgnoreCase(Constants.ROUTE.INVENTORY)) {
             List<Inventory> inventories = null;
-            if(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getOrganization()==null){
+            if(canViewAll()){
                 inventories = inventoryRepository.getInventoriesByActiveTrueOrderByIdDesc();
             } else {
-                inventories = inventoryRepository.getInventoriesByActiveTrueAndAction_Organization_IdOrderByIdDesc(
-                        getSessionUser().getEmployee().getOrganization().getId()
+                inventories = inventoryRepository.findDistinctByActiveTrueAndActions_Organization_IdOrderByIdDesc(
+                        getSessionOrganization().getId()
                 );
             }
             model.addAttribute(Constants.LIST, inventories);
@@ -42,30 +41,32 @@ public class WarehouseController extends SkeletonController {
             model.addAttribute(Constants.INVENTORY_GROUPS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("inventory-group"));
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Inventory(new Action(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("buy", "action"),
-                        getSessionUser().getEmployee().getOrganization())));
+                        getSessionOrganization())));
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.ACTION)) {
             model.addAttribute(Constants.ORGANIZATIONS, organizationRepository.getOrganizationsByActiveTrueAndOrganizationType_Attr1("branch"));
             List<Action> actions = null;
             if(!data.equals(Optional.empty())){
-                if(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getOrganization()==null){
+                if(canViewAll()){
                     actions = actionRepository.getActionsByActiveTrueAndInventory_IdAndInventory_Active(Integer.parseInt(data.get()), true);
                 } else {
-                    actions = actionRepository.getActionsByActiveTrueAndInventory_IdAndInventory_ActiveAndOrganization(Integer.parseInt(data.get()), true, getSessionUser().getEmployee().getOrganization());
+                    actions = actionRepository.getActionsByActiveTrueAndInventory_IdAndInventory_ActiveAndOrganization(Integer.parseInt(data.get()), true, getSessionOrganization());
+                    actions.addAll(actionRepository.getActionsByActiveTrueAndInventory_IdAndInventory_ActiveAndFromOrganizationAndApproveFalse(Integer.parseInt(data.get()), true, getSessionOrganization()));
                 }
             } else {
-                if(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getOrganization()==null){
+                if(canViewAll()){
                     actions = actionRepository.getActionsByActiveTrueAndInventory_Active(true);
                 } else {
-                    actions = actionRepository.getActionsByActiveTrueAndInventory_ActiveAndOrganization(true, getSessionUser().getEmployee().getOrganization());
+                    actions = actionRepository.getActionsByActiveTrueAndInventory_ActiveAndOrganization(true, getSessionOrganization());
+                    actions.addAll(actionRepository.getActionsByActiveTrueAndInventory_ActiveAndFromOrganizationAndApproveFalse(true, getSessionOrganization()));
                 }
             }
 
             List<Employee> employees;
-            if(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getOrganization()==null){
-                employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization_Id(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getId());
-            } else {
+            if(canViewAll()){
                 employees = employeeRepository.getEmployeesByContractEndDateIsNull();
+            } else {
+                employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization_Id(getSessionOrganization().getId());
             }
             model.addAttribute(Constants.EMPLOYEES, employees);
 
@@ -82,7 +83,12 @@ public class WarehouseController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new Supplier());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.CONSOLIDATE)) {
-            List<Action> actions = actionRepository.getActionsByActiveTrueAndInventory_ActiveAndEmployee_Id(true, getSessionUser().getEmployee().getId());
+            List<Action> actions;
+            if(canViewAll()){
+                actions = actionRepository.getActionsByActiveTrueAndInventory_ActiveAndAction_Attr1AndAction_DictionaryType_Attr1(true,  "consolidate", "action");
+            } else {
+                actions = actionRepository.getActionsByActiveTrueAndInventory_ActiveAndAction_Attr1AndAction_DictionaryType_Attr1AndEmployee(true,  "consolidate", "action", getSessionUser().getEmployee());
+            }
             model.addAttribute(Constants.LIST, actions);
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Action());

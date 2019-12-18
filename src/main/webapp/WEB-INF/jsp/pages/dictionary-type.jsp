@@ -35,8 +35,8 @@
         <tr data="<c:out value="${utl:toJson(t)}" />">
             <td>${loop.index + 1}</td>
             <td><c:out value="${t.id}" /> <%--${utl:toJson(t)}--%></td>
-            <td><c:out value="${t.name}" /></td>
-            <td><c:out value="${t.attr1}" /></td>
+            <th><c:out value="${t.name}" /></th>
+            <th><c:out value="${t.attr1}" /></th>
             <td><c:out value="${t.attr2}" /></td>
             <td nowrap class="text-center">
                 <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>

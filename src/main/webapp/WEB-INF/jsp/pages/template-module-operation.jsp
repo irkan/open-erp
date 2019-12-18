@@ -16,16 +16,16 @@
         <div class="col-lg-12">
             <div class="kt-portlet kt-portlet--mobile">
                 <div class="kt-portlet__body">
-                    <form:form modelAttribute="form" id="form" method="post" action="/admin/get-template" cssClass="form-group">
+                    <form:form modelAttribute="form" id="form" method="post" action="/admin/template-module-operation" cssClass="form-group">
                         <div class="row">
                             <div class="col-md-4 offset-md-4">
-                                <form:select  path="template" cssClass="custom-select form-control" onchange="this.form.submit()">
+                                <form:select  path="template" cssClass="custom-select form-control" onchange="getTemplateModuleOperation($(this).val())">
                                     <form:option value="0" label="Şablonu seçin"/>
                                     <form:options items="${templates}" itemLabel="name" itemValue="id"  />
                                 </form:select>
                             </div>
                             <div class="col-md-2 offset-md-2 text-right">
-                                <button onclick="save()" class="btn btn-primary">Yadda saxla</button>
+                                <a href="#" onclick="save()" class="btn btn-primary">Yadda saxla</a>
                             </div>
                         </div>
                         <hr style="width: 100%"/>
@@ -76,13 +76,13 @@
                                                                         <c:when test="${status.status}">
                                                                             <label class="kt-checkbox kt-checkbox--brand">
                                                                                 <form:checkbox path="moduleOperations" value="${status.object}" checked="checked"/>
-                                                                                <span style="top: -11px"></span>
+                                                                                <span style="top: -11px; left: 4px"></span>
                                                                             </label>
                                                                         </c:when>
                                                                         <c:otherwise>
                                                                             <label class="kt-checkbox kt-checkbox--brand">
                                                                                 <form:checkbox path="moduleOperations" value="${status.object}"/>
-                                                                                <span style="top: -11px"></span>
+                                                                                <span style="top: -11px; left: 4px"></span>
                                                                             </label>
                                                                         </c:otherwise>
                                                                     </c:choose>
@@ -120,17 +120,72 @@
         var row = $(element).closest("tr");
         if($(element).prop("checked") == true){
             $(row).find('input[type="checkbox"]').each(function(i, chk) {
-                $(chk).attr('checked', 'checked');
+                $(chk).prop('checked', true);
+                $(chk).addClass(":after");
             });
         } else {
             $(row).find('input[type="checkbox"]').each(function(i, chk) {
-                $(chk).removeAttr('checked', 'checked');
+                $(chk).prop('checked', false);
+                $(chk).removeClass(":after");
             });
         }
     }
-    
-    function save() {
-        $("#form").attr("action", "/admin/template-module-operation");
-        submit($("#form"));
+
+    function getTemplateModuleOperation(id){
+        swal.fire({
+            text: 'Proses davam edir...',
+            allowOutsideClick: false,
+            onOpen: function() {
+                swal.showLoading();
+                $.ajax({
+                    url: '/admin/get-template-module-operation/' + id,
+                    type: 'GET',
+                    dataType: 'json',
+                    beforeSend: function() {
+                        $('input[type=checkbox]').prop('checked', false);
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        $.each(data, function(k, v) {
+                            $('input[type=checkbox][value="'+v.moduleOperation.id+'"]').prop('checked', true);
+                            $('input[type=checkbox][value="'+v.moduleOperation.id+'"]').parent().find("span").addClass(":after");
+                            console.log(k + ' - ' + v)
+                            console.log(v.moduleOperation.id)
+                        });
+                        swal.close();
+                    },
+                    error: function() {
+                        swal.fire({
+                            title: "Xəta baş verdi!",
+                            html: "Məlumat tapılmadı!",
+                            type: "error",
+                            cancelButtonText: 'Bağla',
+                            cancelButtonColor: '#c40000',
+                            cancelButtonClass: 'btn btn-danger',
+                            footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+                        });
+                    },
+                    complete: function(){
+                    }
+                })
+            }
+        });
     }
+
+    function save() {
+        if(parseInt($("#template").val())>0){
+            submit($("#form"));
+        } else {
+            swal.fire({
+                title: "Xəta baş verdi!",
+                html: "Şablon seçilməyib!",
+                type: "error",
+                cancelButtonText: 'Bağla',
+                cancelButtonColor: '#c40000',
+                cancelButtonClass: 'btn btn-danger',
+                footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+            });
+        }
+    }
+
 </script>

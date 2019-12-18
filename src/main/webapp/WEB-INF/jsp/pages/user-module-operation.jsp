@@ -33,16 +33,16 @@
                                 </form:select>
                             </div>
                             <div class="col-md-2 offset-md-1 text-right">
-                                <button onclick="save()" class="btn btn-primary">Yadda saxla</button>
+                                <a href="#" onclick="save()" class="btn btn-primary">Yadda saxla</a>
                             </div>
                         </div>
                         <hr style="width: 100%"/>
-                        <div class="row">
-                            <div class="col-md-12 text-center">
-                                <%--<label class="kt-checkbox kt-checkbox--brand">
+                        <div class="row" style="background-color: #ebf9e4">
+                            <div class="col-md-12 text-center pt-2">
+                                <label class="kt-checkbox kt-checkbox--brand">
                                     <form:checkbox path="user.userDetail.administrator"/> Administratormu?
                                     <span></span>
-                                </label>--%>
+                                </label>
                             </div>
                         </div>
                         <hr style="width: 100%"/>
@@ -82,7 +82,7 @@
                                                     <td class="text-center" style="width: 8px; background-color: #f7f8fa">
                                                         <label class="kt-checkbox kt-checkbox--brand">
                                                             <input type="checkbox" onclick="checkedRow(this)">
-                                                            <span style="top: -11px; left: -7px;"></span>
+                                                            <span style="top: -11px; left: 5px;"></span>
                                                         </label></td>
                                                     <c:forEach var="o" items="${operations}" varStatus="loop">
                                                         <td class="text-center">
@@ -93,13 +93,13 @@
                                                                         <c:when test="${status.status}">
                                                                             <label class="kt-checkbox kt-checkbox--brand">
                                                                                 <form:checkbox path="moduleOperations" value="${status.object}" checked="checked"/>
-                                                                                <span style="top: -11px"></span>
+                                                                                <span style="top: -11px; left: 4px"></span>
                                                                             </label>
                                                                         </c:when>
                                                                         <c:otherwise>
                                                                             <label class="kt-checkbox kt-checkbox--brand">
                                                                                 <form:checkbox path="moduleOperations" value="${status.object}"/>
-                                                                                <span style="top: -11px"></span>
+                                                                                <span style="top: -11px; left: 4px"></span>
                                                                             </label>
                                                                         </c:otherwise>
                                                                     </c:choose>
@@ -138,27 +138,64 @@
         var row = $(element).closest("tr");
         if($(element).prop("checked") == true){
             $(row).find('input[type="checkbox"]').each(function(i, chk) {
-                $(chk).attr('checked', 'checked');
+                $(chk).prop('checked', true);
+                $(chk).addClass(":after");
             });
         } else {
             $(row).find('input[type="checkbox"]').each(function(i, chk) {
-                $(chk).removeAttr('checked', 'checked');
+                $(chk).prop('checked', false);
+                $(chk).removeClass(":after");
             });
         }
     }
 
     function save() {
-        $("#form").attr("action", "/admin/user-module-operation");
-        submit($("#form"));
+        if(parseInt($("#user").val())>0){
+            submit($("#form"));
+        } else {
+            swal.fire({
+                title: "Xəta baş verdi!",
+                html: "İstifadəçi seçilməyib!",
+                type: "error",
+                cancelButtonText: 'Bağla',
+                cancelButtonColor: '#c40000',
+                cancelButtonClass: 'btn btn-danger',
+                footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+            });
+        }
     }
-    <c:if test="${edit.status}">
-    $('#group_table tbody').on('dblclick', 'tr', function () {
-        edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
-    });
-    </c:if>
+
+    function getUserDetail(id){
+        $.ajax({
+            url: '/admin/get-user-detail/' + id,
+            type: 'GET',
+            dataType: 'json',
+            beforeSend: function() {
+                $('input[type=checkbox][name="user.userDetail.administrator"]').prop('checked', false);
+            },
+            success: function(data) {
+                console.log(data);
+                if(data.administrator){
+                    $('input[type=checkbox][name="user.userDetail.administrator"]').prop('checked', true);
+                }
+            },
+            error: function() {
+                swal.fire({
+                    title: "Xəta baş verdi!",
+                    html: "Məlumat tapılmadı!",
+                    type: "error",
+                    cancelButtonText: 'Bağla',
+                    cancelButtonColor: '#c40000',
+                    cancelButtonClass: 'btn btn-danger',
+                    footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+                });
+            },
+            complete: function(){
+            }
+        })
+    }
 
     function getTemplateModuleOperation(id){
-        var table='';
         swal.fire({
             text: 'Proses davam edir...',
             allowOutsideClick: false,
@@ -184,7 +221,7 @@
                     error: function() {
                         swal.fire({
                             title: "Xəta baş verdi!",
-                            html: "Cədvəl yarana bilmədi!",
+                            html: "Məlumat tapılmadı!",
                             type: "error",
                             cancelButtonText: 'Bağla',
                             cancelButtonColor: '#c40000',
@@ -197,11 +234,9 @@
                 })
             }
         });
-
     }
 
     function getUserModuleOperation(id){
-        var table='';
         swal.fire({
             text: 'Proses davam edir...',
             allowOutsideClick: false,
@@ -227,7 +262,7 @@
                     error: function() {
                         swal.fire({
                             title: "Xəta baş verdi!",
-                            html: "Cədvəl yarana bilmədi!",
+                            html: "Məlumat tapılmadı!",
                             type: "error",
                             cancelButtonText: 'Bağla',
                             cancelButtonColor: '#c40000',
@@ -236,6 +271,7 @@
                         });
                     },
                     complete: function(){
+                        getUserDetail(id)
                     }
                 })
             }

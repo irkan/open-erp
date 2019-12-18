@@ -66,11 +66,11 @@ public class Util {
     public static int calculateInventoryAmount(List<Action> actions, int organizationId){
         int amount = 0;
         for(Action action: actions){
-            if(action.getAction().getAttr1().equalsIgnoreCase("send") && !action.getApprove()){
+            if(action.getAction().getAttr1().equalsIgnoreCase("send") && (!action.getApprove() && action.getFromOrganization().getId()==organizationId || organizationId==0)){
                 amount+=action.getAmount();
-            } else if(action.getAction().getAttr1().equalsIgnoreCase("buy")){
+            } else if(action.getAction().getAttr1().equalsIgnoreCase("buy") && (action.getOrganization().getId()==organizationId || organizationId==0)){
                 amount+=action.getAmount();
-            } else if(action.getAction().getAttr1().equalsIgnoreCase("consolidate")){
+            } else if(action.getAction().getAttr1().equalsIgnoreCase("consolidate") && (action.getOrganization().getId()==organizationId || organizationId==0)){
                 amount+=action.getAmount();
             }
         }

@@ -41,7 +41,13 @@ public class HRController extends SkeletonController {
             model.addAttribute(Constants.MARITAL_STATUSES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("marital-status"));
             model.addAttribute(Constants.WEEK_DAYS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("week-day"));
             model.addAttribute(Constants.ORGANIZATIONS, organizationRepository.getOrganizationsByActiveTrue());
-            model.addAttribute(Constants.LIST, employeeRepository.getEmployeesByContractEndDateIsNull());
+            List<Employee> employees;
+            if(canViewAll()){
+                employees = employeeRepository.getEmployeesByContractEndDateIsNull();
+            } else {
+                employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization_Id(getSessionOrganization().getId());
+            }
+            model.addAttribute(Constants.LIST, employees);
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Employee());
             }

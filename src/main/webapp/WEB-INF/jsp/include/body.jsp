@@ -15,8 +15,12 @@
             <div class="kt-container ">
                 <div class="kt-subheader__main">
                     <h3 class="kt-subheader__title"><c:out value="${module_description}" /></h3>
-
-
+                </div>
+                <div class="kt-subheader__main">
+                    <h3 class="kt-subheader__title">
+                        <span><c:out value="${sessionScope.organization_selected.name}"/></span>&nbsp;
+                        <span>(<c:out value="${sessionScope.organization.name}"/>)</span>
+                    </h3>
                 </div>
                 <div class="kt-subheader__toolbar">
                     <div class="kt-subheader__wrapper">

@@ -23,13 +23,18 @@ public class CRMController extends SkeletonController {
 
     @GetMapping(value = {"/{page}", "/{page}/{data}"})
     public String route(Model model, @PathVariable("page") String page, @PathVariable("data") Optional<String> data, RedirectAttributes redirectAttributes) throws Exception {
-
         if (page.equalsIgnoreCase(Constants.ROUTE.CUSTOMER)){
             model.addAttribute(Constants.CITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("city"));
             model.addAttribute(Constants.NATIONALITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("nationality"));
             model.addAttribute(Constants.GENDERS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("gender"));
             model.addAttribute(Constants.MARITAL_STATUSES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("marital-status"));
-            model.addAttribute(Constants.LIST, customerRepository.getCustomersByActiveTrue());
+            List<Customer> customers;
+            if(canViewAll()){
+                customers = customerRepository.getCustomersByActiveTrue();
+            } else {
+                customers = customerRepository.getCustomersByActiveTrueAndOrganization(getSessionOrganization());
+            }
+            model.addAttribute(Constants.LIST, customers);
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Customer());
             }

@@ -34,9 +34,9 @@
                                 <c:forEach var="t" items="${list}" varStatus="loop">
                                      <tr data="<c:out value="${utl:toJson(t)}" />">
                                         <td><c:out value="${t.id}" /></td>
-                                        <td><c:out value="${t.name}" /></td>
+                                        <th><c:out value="${t.name}" /></th>
                                         <th><c:out value="${t.dictionaryType.name}" /></th>
-                                        <td><c:out value="${t.attr1}" /></td>
+                                        <th><c:out value="${t.attr1}" /></th>
                                         <td><c:out value="${t.attr2}" /></td>
                                         <td nowrap class="text-center">
                                             <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>

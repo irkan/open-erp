@@ -33,17 +33,6 @@ public class AdministratorController extends SkeletonController {
 
     @GetMapping(value = {"/{page}", "/{page}/{data}"})
     public String route(Model model, @PathVariable("page") String page, @PathVariable("data") Optional<String> data, RedirectAttributes redirectAttributes) throws Exception {
-        /*session.setAttribute(Constants.PAGE, page);
-        String description = "";
-        List<Module> moduleList = (List<Module>) session.getAttribute(Constants.MODULES);
-        for(Module m: moduleList){
-            if(m.getPath().equalsIgnoreCase(page)){
-                description = m.getDescription();
-                break;
-            }
-        }
-        session.setAttribute(Constants.page.description, description);*/
-
         if (page.equalsIgnoreCase(Constants.ROUTE.MODULE)) {
             model.addAttribute(Constants.PARENTS, moduleRepository.findAllByModuleIsNullAndActiveTrue());
             model.addAttribute(Constants.LIST, moduleRepository.getModulesByActiveTrue());
@@ -68,12 +57,15 @@ public class AdministratorController extends SkeletonController {
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.USER)){
             model.addAttribute(Constants.LANGUAGES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("language"));
-            List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization_Id(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getId());
+            List<Employee> employees;
             List<Organization> organizations = organizationRepository.getOrganizationsByActiveTrueAndOrganizationType_Attr1("branch");
-            List<User> users = userRepository.getUsersByActiveTrueAndEmployee_Organization(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()));
-            if(isHeadOffice()){
+            List<User> users;
+            if(canViewAll()){
                 employees = employeeRepository.getEmployeesByContractEndDateIsNull();
                 users = userRepository.getUsersByActiveTrue();
+            } else {
+                employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization_Id(getSessionOrganization().getId());
+                users = userRepository.getUsersByActiveTrueAndEmployee_Organization(getSessionOrganization());
             }
             model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployeesByOrganization(employees, organizations));
             model.addAttribute(Constants.LIST, users);
@@ -112,7 +104,13 @@ public class AdministratorController extends SkeletonController {
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.NOTIFICATION)){
             model.addAttribute(Constants.NOTIFICATIONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("notification"));
-            model.addAttribute(Constants.LIST, notificationRepository.getNotificationsByActiveTrue());
+            List<Notification> notifications;
+            if(canViewAll()){
+                notifications = notificationRepository.getNotificationsByActiveTrue();
+            } else {
+                notifications = notificationRepository.getNotificationsByActiveTrueAndOrganization(getSessionOrganization());
+            }
+            model.addAttribute(Constants.LIST, notifications);
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Notification());
             }
@@ -192,7 +190,7 @@ public class AdministratorController extends SkeletonController {
                     "Sizin məlumatlarınıza əsasən yeni istifadəçi yaradılmışdır.<br/><br/>" +
                     "İstifadəçi adınız: "+user.getUsername()+"<br/>" +
                     "Şifrəniz: "+password+"<br/><br/>";
-            sendEmail(user.getEmployee().getPerson().getContact().getEmail(),
+            sendEmail(user.getEmployee().getOrganization(), user.getEmployee().getPerson().getContact().getEmail(),
                     "Yeni istifadəçi!",
                     message,
                     null
@@ -211,10 +209,7 @@ public class AdministratorController extends SkeletonController {
     }
 
     @PostMapping(value = "/user-module-operation")
-    public String postUserAccess(Model model, @ModelAttribute(Constants.FORM) @Validated UserModuleOperation userModuleOperation,
-                                 @RequestParam(name="template", required = false, defaultValue = "0") int templateId, BindingResult binding) throws Exception {
-        model.addAttribute(Constants.FORM, userModuleOperation);
-        model.addAttribute(Constants.TEMPLATE_ID, templateId);
+    public String postUserAccess(@ModelAttribute(Constants.FORM) @Validated UserModuleOperation userModuleOperation, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         if(!binding.hasErrors() && userModuleOperation.getUser()!=null){
             List<UserModuleOperation> userModuleOperations = userModuleOperationRepository.getUserModuleOperationsByUser_IdAndUser_Active(userModuleOperation.getUser().getId(), true);
             userModuleOperationRepository.deleteInBatch(userModuleOperations);
@@ -222,50 +217,33 @@ public class AdministratorController extends SkeletonController {
                 mo.setModuleOperations(null);
                 userModuleOperationRepository.save(new UserModuleOperation(userModuleOperation.getUser(), mo));
             }
-            model.addAttribute(Constants.FORM, new UserModuleOperation());
-            model.addAttribute(Constants.TEMPLATE_ID, 0);
+            userDetailRepository.save(userModuleOperation.getUser().getUserDetail());
         }
-        model.addAttribute(Constants.USERS, userRepository.findAll());
-        List<ModuleOperation>  list = moduleOperationRepository.findAll();
-        model.addAttribute(Constants.MODULES, Util.removeDuplicateModules(list));
-        model.addAttribute(Constants.OPERATIONS, Util.removeDuplicateOperations(list));
-        model.addAttribute(Constants.LIST, list);
-        model.addAttribute(Constants.TEMPLATES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("template"));
-        model.addAttribute(Constants.TEMPLATE_MODULE_OPERATIONS, templateModuleOperationRepository.findAllByTemplate_Id(templateId));
-        return "layout";
-    }
-
-    @PostMapping(value = "/get-template")
-    public String postGetTemplate(Model model, @ModelAttribute(Constants.FORM) @Validated TemplateModuleOperation templateModuleOperation) throws Exception {
-        model.addAttribute(Constants.FORM, templateModuleOperation);
-        model.addAttribute(Constants.USERS, userRepository.findAll());
-        List<ModuleOperation>  list = moduleOperationRepository.findAll();
-        model.addAttribute(Constants.MODULES, Util.removeDuplicateModules(list));
-        model.addAttribute(Constants.OPERATIONS, Util.removeDuplicateOperations(list));
-        model.addAttribute(Constants.LIST, list);
-        model.addAttribute(Constants.TEMPLATES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("template"));
-        Dictionary template = templateModuleOperation.getTemplate();
-        model.addAttribute(Constants.TEMPLATE_MODULE_OPERATIONS, templateModuleOperationRepository.findAllByTemplate_Id(template!=null?template.getId():0));
-        return "layout";
+        return mapPost(userModuleOperation, binding, redirectAttributes);
     }
 
     @ResponseBody
     @GetMapping(value = "/get-user-module-operation/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<UserModuleOperation> postGetUserModuleOperation(@PathVariable("id") int id) throws Exception {
+    public List<UserModuleOperation> getUserModuleOperation(@PathVariable("id") int id) throws Exception {
         return userModuleOperationRepository.getUserModuleOperationsByUser_IdAndUser_Active(id, true);
     }
 
     @ResponseBody
     @GetMapping(value = "/get-template-module-operation/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<TemplateModuleOperation> postGetTemplateModuleOperation(@PathVariable("id") int id) throws Exception {
-        return templateModuleOperationRepository.findAllByTemplate_Id(id);
+    public List<TemplateModuleOperation> getTemplateModuleOperation(@PathVariable("id") int id) throws Exception {
+        return templateModuleOperationRepository.getTemplateModuleOperationsByTemplate_Id(id);
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/get-user-detail/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public UserDetail postGetUserDetail(@PathVariable("id") int id) throws Exception {
+        return userRepository.getUserByActiveTrueAndId(id).getUserDetail();
     }
 
     @PostMapping(value = "/template-module-operation")
-    public String postTemplateModuleOperation(Model model, @ModelAttribute(Constants.FORM) @Validated TemplateModuleOperation templateModuleOperation, BindingResult binding) throws Exception {
-        model.addAttribute(Constants.FORM, templateModuleOperation);
+    public String postTemplateModuleOperation(Model model, @ModelAttribute(Constants.FORM) @Validated TemplateModuleOperation templateModuleOperation, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         Dictionary template = templateModuleOperation.getTemplate();
-        List<TemplateModuleOperation> templateModuleOperations = templateModuleOperationRepository.findAllByTemplate_Id(template!=null?template.getId():0);
+        List<TemplateModuleOperation> templateModuleOperations = templateModuleOperationRepository.getTemplateModuleOperationsByTemplate_Id(template!=null?template.getId():0);
         if(!binding.hasErrors() && template!=null){
             templateModuleOperationRepository.deleteInBatch(templateModuleOperations);
             for (ModuleOperation mo: templateModuleOperation.getModuleOperations()){
@@ -274,14 +252,7 @@ public class AdministratorController extends SkeletonController {
             }
             model.addAttribute(Constants.FORM, new TemplateModuleOperation());
         }
-        model.addAttribute(Constants.USERS, userRepository.findAll());
-        List<ModuleOperation>  list = moduleOperationRepository.findAll();
-        model.addAttribute(Constants.MODULES, Util.removeDuplicateModules(list));
-        model.addAttribute(Constants.OPERATIONS, Util.removeDuplicateOperations(list));
-        model.addAttribute(Constants.LIST, list);
-        model.addAttribute(Constants.TEMPLATES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("template"));
-        model.addAttribute(Constants.TEMPLATE_MODULE_OPERATIONS, templateModuleOperations);
-        return "layout";
+        return mapPost(templateModuleOperation, binding, redirectAttributes);
     }
 
     @ResponseBody

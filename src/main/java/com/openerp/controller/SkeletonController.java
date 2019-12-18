@@ -201,16 +201,33 @@ public class SkeletonController {
         return (User) session.getAttribute(Constants.USER);
     }
 
-    protected boolean isHeadOffice() {
+    boolean isHeadOffice() {
         if(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getOrganization()==null){
             return true;
         }
         return false;
     }
 
-    protected Organization getUserOrganization() {
+    Organization getUserOrganization() {
         return getSessionUser().getEmployee().getOrganization();
     }
+
+    Organization getSessionOrganization() {
+        Organization organization = (Organization) session.getAttribute(Constants.ORGANIZATION);
+        if(organization==null || organization.getId().intValue()==0){
+            organization = getUserOrganization();
+        }
+        return organization;
+    }
+
+    boolean canViewAll(){
+        Organization organization = (Organization) session.getAttribute(Constants.ORGANIZATION_SELECTED);
+        if(organization==null || organization.getId().intValue()==0){
+            return true;
+        }
+        return false;
+    }
+
 
     String mapPost(Object object, BindingResult binding, RedirectAttributes redirectAttributes){
         redirectAttributes.addFlashAttribute(Constants.FORM_RESULT_BINDING, binding);
@@ -326,11 +343,12 @@ public class SkeletonController {
         return "İG";
     }
 
-    public void sendEmail(String emails, String subject, String message, String description){
+    public void sendEmail(Organization organization, String emails, String subject, String message, String description){
         for(String email: emails.split(";")){
             if(email.matches(Constants.REGEX.REGEX4)){
                 Notification notification = new Notification();
                 notification.setType(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("email", "notification"));
+                notification.setOrganization(organization);
                 notification.setFrom(springEmailUserName);
                 notification.setTo(email);
                 notification.setDescription(description);

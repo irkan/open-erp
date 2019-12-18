@@ -1,6 +1,7 @@
 package com.openerp.repository;
 
 import com.openerp.entity.Employee;
+import com.openerp.entity.Organization;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Date;

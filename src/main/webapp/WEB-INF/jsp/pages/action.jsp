@@ -24,7 +24,7 @@
     <tr>
         <th>№</th>
         <th>ID</th>
-        <th>Anbar</th>
+        <th>Flial</th>
         <th>Hərəkət</th>
         <th>Təchizatçı</th>
         <th>İnventar</th>
@@ -206,7 +206,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-6 text-right">
-                            <label>Anbar</label>
+                            <label>Flial</label>
                         </div>
                         <div class="col-sm-6">
                             <label id="warehouse_label"></label>

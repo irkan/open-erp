@@ -25,6 +25,7 @@
                                 <thead>
                                 <tr>
                                     <th>KOD</th>
+                                    <th>Struktur</th>
                                     <th>Ad</th>
                                     <th>Şəhər</th>
                                     <th>Doğum tarixi</th>
@@ -36,6 +37,7 @@
                                 <tbody>
                                 <c:forEach var="t" items="${list}" varStatus="loop">
                                     <tr data="<c:out value="${utl:toJson(t)}" />">
+                                        <td><c:out value="${t.id}"/></td>
                                         <td><c:out value="${t.id}"/></td>
                                         <th>
                                             <c:out value="${t.person.firstName}"/> <c:out value="${t.person.lastName}"/> <c:out
@@ -99,6 +101,7 @@
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form" method="post" action="/crm/customer" cssClass="form-group">
                     <form:input path="id" type="hidden"/>
+                    <form:input path="organization" type="hidden" value="${sessionScope.organization.id}"/>
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
