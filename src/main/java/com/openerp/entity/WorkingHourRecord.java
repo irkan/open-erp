@@ -32,8 +32,8 @@ public class WorkingHourRecord {
     private int year=(new Date()).getYear()+1900;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_branch_organization_id")
-    private Organization branch;
+    @JoinColumn(name = "hr_organization_id")
+    private Organization organization;
 
     @OneToMany(mappedBy = "workingHourRecord")
     private List<WorkingHourRecordEmployee> workingHourRecordEmployees;
@@ -60,13 +60,13 @@ public class WorkingHourRecord {
     @JoinColumn(name = "created_by_admin_user_id")
     private User createdUser;
 
-    public WorkingHourRecord(int month, int year, Organization branch) {
+    public WorkingHourRecord(int month, int year, Organization organization) {
         this.month = month;
         this.year = year;
-        this.branch = branch;
+        this.organization = organization;
     }
 
-    public WorkingHourRecord(Organization branch) {
-        this.branch = branch;
+    public WorkingHourRecord(Organization organization) {
+        this.organization = organization;
     }
 }

@@ -66,7 +66,7 @@ public class WarehouseController extends SkeletonController {
             if(canViewAll()){
                 employees = employeeRepository.getEmployeesByContractEndDateIsNull();
             } else {
-                employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization_Id(getSessionOrganization().getId());
+                employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization());
             }
             model.addAttribute(Constants.EMPLOYEES, employees);
 

@@ -812,8 +812,6 @@ public class DBConfiguration {
             moduleOperations.add(viewModuleOperation14);
             ModuleOperation viewModuleOperation15 = new ModuleOperation(currencyRate, view, null);
             moduleOperations.add(viewModuleOperation15);
-            ModuleOperation viewModuleOperation16 = new ModuleOperation(transaction, view, null);
-            moduleOperations.add(viewModuleOperation16);
             ModuleOperation viewModuleOperation17 = new ModuleOperation(workAttendance, view, null);
             moduleOperations.add(viewModuleOperation17);
             ModuleOperation viewModuleOperation18 = new ModuleOperation(workingHourRecord, view, null);
@@ -1123,7 +1121,6 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation13));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation14));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation15));
-            userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation16));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation17));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation18));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation19));

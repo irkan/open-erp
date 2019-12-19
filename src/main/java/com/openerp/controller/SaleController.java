@@ -27,7 +27,7 @@ public class SaleController extends SkeletonController {
     public String route(Model model, @PathVariable("page") String page, @PathVariable("data") Optional<String> data, RedirectAttributes redirectAttributes) throws Exception {
 
         if (page.equalsIgnoreCase(Constants.ROUTE.SALES)){
-            List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization_Id(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getId());
+            List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization());
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
             model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployeesByPosition(employees, positions));
             model.addAttribute(Constants.CITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("city"));
@@ -35,20 +35,26 @@ public class SaleController extends SkeletonController {
             model.addAttribute(Constants.PAYMENT_SCHEDULES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-schedule"));
             model.addAttribute(Constants.PAYMENT_PERIODS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-period"));
             model.addAttribute(Constants.GUARANTEES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("guarantee"));
-            model.addAttribute(Constants.LIST, salesRepository.getSalesByActiveTrue());
+            List<Sales> sales;
+            if(canViewAll()){
+                sales = salesRepository.getSalesByActiveTrueOrderByIdDesc();
+            } else {
+                sales = salesRepository.getSalesByActiveTrueAndOrganizationOrderByIdDesc(getSessionOrganization());
+            }
+            model.addAttribute(Constants.LIST, sales);
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Sales());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.INVOICE)){
-            List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization_Id(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getId());
+            List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization());
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
             Util.convertedEmployeesByPosition(employees, positions);
             model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployeesByPosition(employees, positions));
             List<Invoice> invoices;
-            if(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getOrganization()==null){
+            if(canViewAll()){
                 invoices = invoiceRepository.getInvoicesByActiveTrueOrderByInvoiceDateDesc();
             } else {
-                invoices = invoiceRepository.getInvoicesByActiveTrueAndOrganizationOrderByInvoiceDateDesc(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()));
+                invoices = invoiceRepository.getInvoicesByActiveTrueAndOrganizationOrderByInvoiceDateDesc(getSessionOrganization());
             }
             model.addAttribute(Constants.LIST, invoices);
             if(!model.containsAttribute(Constants.FORM)){
@@ -74,7 +80,6 @@ public class SaleController extends SkeletonController {
                 SalesInventory salesInventory = new SalesInventory(sales.getSalesInventories().get(0).getInventory(), sales);
                 salesInventories.add(salesInventory);
                 sales.setSalesInventories(salesInventories);
-                sales.setOrganization(getUserOrganization());
             }
             if(sales.getPayment().getCash()){
                 sales.getPayment().setPeriod(null);

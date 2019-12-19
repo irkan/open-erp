@@ -64,7 +64,7 @@ public class AdministratorController extends SkeletonController {
                 employees = employeeRepository.getEmployeesByContractEndDateIsNull();
                 users = userRepository.getUsersByActiveTrue();
             } else {
-                employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization_Id(getSessionOrganization().getId());
+                employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization());
                 users = userRepository.getUsersByActiveTrueAndEmployee_Organization(getSessionOrganization());
             }
             model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployeesByOrganization(employees, organizations));
@@ -260,7 +260,7 @@ public class AdministratorController extends SkeletonController {
     public List<Employee> getEmployees(@PathVariable("organizationId") int organizationId) {
         List<Employee> employees = new ArrayList<>();
         try{
-            employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization_Id(organizationId);
+            employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(organizationRepository.getOrganizationByIdAndActiveTrue(organizationId));
         } catch (Exception e){
             e.printStackTrace();
         }

@@ -27,18 +27,13 @@ public class PayrollController extends SkeletonController {
 
     @GetMapping(value = {"/{page}", "/{page}/{data}"})
     public String route(Model model, @PathVariable("page") String page, @PathVariable("data") Optional<String> data, RedirectAttributes redirectAttributes) throws Exception {
-
         if (page.equalsIgnoreCase(Constants.ROUTE.WORKING_HOUR_RECORD)){
             model.addAttribute(Constants.IDENTIFIERS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("identifier"));
-            model.addAttribute(Constants.BRANCHES, organizationRepository.getOrganizationsByActiveTrueAndOrganizationType_Attr1("branch"));
             if(!model.containsAttribute(Constants.YEAR_MONTH)){
                 model.addAttribute(Constants.YEAR_MONTH, DateUtility.getYearMonth(new Date()));
             }
-            if(!model.containsAttribute(Constants.BRANCH_ID)){
-                model.addAttribute(Constants.BRANCH_ID, getSessionUser().getEmployee().getOrganization().getId());
-            }
             if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new WorkingHourRecord(Util.getUserBranch(getSessionUser().getEmployee().getOrganization())));
+                model.addAttribute(Constants.FORM, new WorkingHourRecord(getSessionOrganization()));
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.PAYROLL_CONFIGURATION)){
             model.addAttribute(Constants.FORMULA_TYPES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("formula-type"));
@@ -48,18 +43,20 @@ public class PayrollController extends SkeletonController {
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.ADVANCE)){
             model.addAttribute(Constants.ADVANCES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("advance"));
-            model.addAttribute(Constants.LIST, advanceRepository.getAdvancesByActiveTrue());
-            model.addAttribute(Constants.EMPLOYEES, employeeRepository.getEmployeesByContractEndDateIsNull());
+            model.addAttribute(Constants.EMPLOYEES, employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization()));
+            List<Advance> advances;
+            if(canViewAll()){
+                advances = advanceRepository.getAdvancesByActiveTrueOrderByIdDesc();
+            } else {
+                advances = advanceRepository.getAdvancesByActiveTrueAndOrganizationOrderByIdDesc(getSessionOrganization());
+            }
+            model.addAttribute(Constants.LIST, advances);
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Advance());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.SALARY)){
-            model.addAttribute(Constants.BRANCHES, organizationRepository.getOrganizationsByActiveTrueAndOrganizationType_Attr1("branch"));
-            if(!model.containsAttribute(Constants.BRANCH_ID)){
-                model.addAttribute(Constants.BRANCH_ID, getSessionUser().getEmployee().getOrganization().getId());
-            }
             if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new Salary(new WorkingHourRecord(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()))));
+                model.addAttribute(Constants.FORM, new Salary(new WorkingHourRecord(getSessionOrganization())));
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.SALARY_EMPLOYEE)){
             List<SalaryEmployee> salaryEmployees = salaryEmployeeRepository.getSalaryEmployeesBySalary_ActiveAndEmployee_IdOrderByEmployeeDesc(true, Integer.parseInt(data.get()));
@@ -89,12 +86,12 @@ public class PayrollController extends SkeletonController {
                 workingHourRecord.setYear(year);
                 workingHourRecord.setMonth(month);
                 redirectAttributes.addFlashAttribute(Constants.DAYS_IN_MONTH, daysInMonth);
-                whr = workingHourRecordRepository.getWorkingHourRecordByActiveTrueAndMonthAndYearAndBranch_Id(workingHourRecord.getMonth(), workingHourRecord.getYear(), workingHourRecord.getBranch().getId());
+                whr = workingHourRecordRepository.getWorkingHourRecordByActiveTrueAndMonthAndYearAndOrganization(workingHourRecord.getMonth(), workingHourRecord.getYear(), workingHourRecord.getOrganization());
                 if(whr ==null){
-                    WorkingHourRecord owhr = workingHourRecordRepository.getWorkingHourRecordByActiveTrueAndMonthAndYearAndBranch_Id(workingHourRecord.getMonth()-1, workingHourRecord.getYear(), workingHourRecord.getBranch().getId());
+                    WorkingHourRecord owhr = workingHourRecordRepository.getWorkingHourRecordByActiveTrueAndMonthAndYearAndOrganization(workingHourRecord.getMonth()-1, workingHourRecord.getYear(), workingHourRecord.getOrganization());
                     workingHourRecord.setId(null);
                     workingHourRecordRepository.save(workingHourRecord);
-                    List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization_Id(workingHourRecord.getBranch().getId());
+                    List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(workingHourRecord.getOrganization());
                     List<WorkingHourRecordEmployee> workingHourRecordEmployees = new ArrayList<>();
                     List<Dictionary> identifiers = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("identifier");
                     for(Employee employee: employees){
@@ -119,7 +116,7 @@ public class PayrollController extends SkeletonController {
                     }
                     workingHourRecord.setWorkingHourRecordEmployees(workingHourRecordEmployees);
                 }
-                whr = workingHourRecordRepository.getWorkingHourRecordByActiveTrueAndMonthAndYearAndBranch_Id(workingHourRecord.getMonth(), workingHourRecord.getYear(), workingHourRecord.getBranch().getId());
+                whr = workingHourRecordRepository.getWorkingHourRecordByActiveTrueAndMonthAndYearAndOrganization(workingHourRecord.getMonth(), workingHourRecord.getYear(), workingHourRecord.getOrganization());
                 whr.setWorkingHourRecordEmployees(workingHourRecordEmployeeRepository.getWorkingHourRecordEmployeesByWorkingHourRecord_Id(whr.getId()));
                 for(WorkingHourRecordEmployee whre: whr.getWorkingHourRecordEmployees()){
                     whre.setWorkingHourRecordEmployeeDayCalculations(workingHourRecordEmployeeDayCalculationRepository.getWorkingHourRecordEmployeeDayCalculationsByWorkingHourRecordEmployee(whre));
@@ -248,7 +245,7 @@ public class PayrollController extends SkeletonController {
                 salary.getWorkingHourRecord().setYear(year);
                 salary.getWorkingHourRecord().setMonth(month);
                 redirectAttributes.addFlashAttribute(Constants.DAYS_IN_MONTH, daysInMonth);
-                whr = workingHourRecordRepository.getWorkingHourRecordByActiveTrueAndMonthAndYearAndBranch_Id(salary.getWorkingHourRecord().getMonth(), salary.getWorkingHourRecord().getYear(), salary.getWorkingHourRecord().getBranch().getId());
+                whr = workingHourRecordRepository.getWorkingHourRecordByActiveTrueAndMonthAndYearAndOrganization(salary.getWorkingHourRecord().getMonth(), salary.getWorkingHourRecord().getYear(), salary.getWorkingHourRecord().getOrganization());
                 List<String> messages = new ArrayList<>();
                 if(whr==null){
                     messages.add("İş vaxtının uçotu cədvəli tapılmadı!");

@@ -32,7 +32,7 @@ public class Sales {
     private List<SalesInventory> salesInventories;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_organization_id", nullable = false)
+    @JoinColumn(name = "hr_organization_id")
     private Organization organization;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

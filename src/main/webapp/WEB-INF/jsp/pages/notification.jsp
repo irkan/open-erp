@@ -99,8 +99,9 @@
             </div>
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form" method="post" action="/admin/notification" cssClass="form-group">
-                    <form:input type="hidden" name="id" path="id"/>
-                    <form:input type="hidden" name="active" path="active" value="1"/>
+                    <form:hidden path="id"/>
+                    <form:hidden path="active" value="1"/>
+                    <form:hidden path="organization" value="${sessionScope.organization.id}"/>
                     <div class="form-group">
                         <form:radiobuttons items="${notifications}" path="type" itemLabel="name" itemValue="id"/>
                         <form:errors path="type" cssClass="control-label alert alert-danger" />

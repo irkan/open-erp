@@ -30,16 +30,13 @@ public class AccountingController extends SkeletonController {
     public String route(Model model, @PathVariable("page") String page, @PathVariable("data") Optional<String> data, RedirectAttributes redirectAttributes) throws Exception {
         if (page.equalsIgnoreCase(Constants.ROUTE.TRANSACTION)) {
             model.addAttribute(Constants.CURRENCIES,  dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("currency"));
-            model.addAttribute(Constants.ACCOUNTS,
-                    accountRepository.getAccountsByActiveTrueAndOrganization(
-                            Util.getUserBranch(getSessionUser().getEmployee().getOrganization())));
+            model.addAttribute(Constants.ACCOUNTS, accountRepository.getAccountsByActiveTrueAndOrganization(getSessionOrganization()));
             model.addAttribute(Constants.EXPENSES, dictionaryRepository.getDictionariesByActiveTrueAndAttr2AndDictionaryType_Attr1("expense", "action"));
-
-            List<Transaction> transactions = null;
-            if(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getOrganization()==null){
+            List<Transaction> transactions;
+            if(canViewAll()){
                 transactions = transactionRepository.getTransactionsByOrderByApproveDescCreatedDateDesc();
             } else {
-                transactions = transactionRepository.getTransactionsByOrganizationOrderByApproveDescCreatedDateDesc(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()));
+                transactions = transactionRepository.getTransactionsByOrganizationOrderByApproveDescCreatedDateDesc(getSessionOrganization());
             }
             model.addAttribute(Constants.LIST, transactions);
             if(!model.containsAttribute(Constants.FORM)){
@@ -48,16 +45,22 @@ public class AccountingController extends SkeletonController {
         } else if (page.equalsIgnoreCase(Constants.ROUTE.ACCOUNT)) {
             model.addAttribute(Constants.ORGANIZATIONS, organizationRepository.getOrganizationsByActiveTrueAndOrganizationType_Attr1("branch"));
             model.addAttribute(Constants.CURRENCIES,  dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("currency"));
-            model.addAttribute(Constants.LIST, accountRepository.getAccountsByActiveTrue());
+            List<Account> accounts;
+            if(canViewAll()){
+                accounts = accountRepository.getAccountsByActiveTrue();
+            } else {
+                accounts = accountRepository.getAccountsByActiveTrueAndOrganization(getSessionOrganization());
+            }
+            model.addAttribute(Constants.LIST, accounts);
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Account());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.FINANCING)) {
             List<Financing> financings;
-            if(isHeadOffice()){
+            if(canViewAll()){
                 financings = financingRepository.getFinancingsByActiveTrueOrderByIdDesc();
             } else {
-                financings = financingRepository.getFinancingsByActiveTrueAndOrganizationOrderByIdDesc(getUserOrganization());
+                financings = financingRepository.getFinancingsByActiveTrueAndOrganizationOrderByIdDesc(getSessionOrganization());
             }
             model.addAttribute(Constants.LIST, financings);
             if(!model.containsAttribute(Constants.FORM)){

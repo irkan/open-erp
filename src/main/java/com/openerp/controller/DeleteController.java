@@ -142,6 +142,8 @@ public class DeleteController extends SkeletonController {
             Configuration configuration = configurationRepository.getConfigurationById(Integer.parseInt(id));
             configuration.setActive(false);
             configurationRepository.save(configuration);
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.NOTIFICATION)){
+            notificationRepository.delete(notificationRepository.getNotificationById(Integer.parseInt(id)));
         }
         return "redirect:/"+parent+"/"+path;
     }

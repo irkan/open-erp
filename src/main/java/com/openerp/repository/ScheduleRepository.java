@@ -12,6 +12,9 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Integer> {
     @Query(value = "from Schedule t where t.invoicing='false' and t.amount>t.payableAmount and t.scheduleDate<:current order by t.id desc")
     List<Schedule> getSchedules(@Param("current") Date current);
 
+    @Query(value = "from Schedule t inner join t.payment p inner join p.sales s where t.invoicing='false' and t.amount>t.payableAmount and t.scheduleDate<:current order by t.id desc")
+    List<Schedule> getSchedules1(@Param("current") Date current);
+
     @Query(value = "from Schedule t where t.invoicing='false' and t.amount>t.payableAmount and t.scheduleDate<:current and t.payment.id=:paymentId order by t.id")
     List<Schedule> getScheduleDetails(@Param("current") Date current, @Param("paymentId") Integer paymentId);
 

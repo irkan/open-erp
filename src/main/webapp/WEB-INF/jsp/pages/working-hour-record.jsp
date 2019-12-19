@@ -28,25 +28,14 @@
             <div class="kt-portlet kt-portlet--mobile">
                 <form:form modelAttribute="form" id="form" method="post" action="/payroll/working-hour-record" cssClass="form-group">
                     <input name="id" type="hidden" value="<c:out value="${form.id}"/>" />
+                    <input name="organization" type="hidden" value="<c:out value="${sessionScope.organization.id}"/>" />
                 <c:set var="search" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'search')}"/>
                 <c:choose>
                     <c:when test="${search.status}">
                         <div class="kt-portlet__head kt-portlet__head--lg">
                             <div class="kt-portlet__head-title" style="width: 100%">
                                 <div class="row">
-                                    <div class="col-sm-2">
-                                        <div class="form-group">
-                                            <form:label path="branch">&nbsp;</form:label>
-                                            <form:select  path="branch" cssClass="custom-select form-control">
-                                                <c:forEach var="t" items="${branches}" varStatus="loop">
-                                                    <c:set var="selected" value="${t.id==form.branch.id?'selected':''}"/>
-                                                    <option value="<c:out value="${t.id}"/>" <c:out value="${selected}"/>><c:out value="${t.name}"/></option>
-                                                </c:forEach>
-                                            </form:select>
-                                            <form:errors path="branch" cssClass="control-label alert alert-danger" />
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-3">
                                         <div class="form-group">
                                             <label>&nbsp;</label>
                                             <input name="monthYear" class="form-control" type="month" value="<c:out value="${form.monthYear}"/>" />
