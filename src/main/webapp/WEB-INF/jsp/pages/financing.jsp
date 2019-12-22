@@ -94,7 +94,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form:form modelAttribute="form" id="form" method="post" action="/account/financing" cssClass="form-group">
+                <form:form modelAttribute="form" id="form" method="post" action="/accounting/financing" cssClass="form-group">
                     <form:input type="hidden" path="id"/>
                     <form:input type="hidden" path="active" value="1"/>
                     <div class="form-group">

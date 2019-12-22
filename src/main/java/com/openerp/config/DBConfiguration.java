@@ -262,6 +262,8 @@ public class DBConfiguration {
             dictionaries.add(taxExpenseAction);
             Dictionary insuranceExpenseAction = new Dictionary("Sığorta", "insurance", "expense", actionType);
             dictionaries.add(insuranceExpenseAction);
+            Dictionary otherExpenseAction = new Dictionary("Digər", "other", "expense", actionType);
+            dictionaries.add(otherExpenseAction);
             Dictionary reason1 = new Dictionary("Xarabdır", "break", null, reasonType);
             dictionaries.add(reason1);
             Dictionary inventoryGroup1 = new Dictionary("İnventar qrup #1", "group1", null, inventoryGroupType);

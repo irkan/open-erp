@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -22,7 +23,7 @@ public class Transaction {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hr_organization_id")
     private Organization organization;
 
@@ -69,10 +70,12 @@ public class Transaction {
     private Boolean approve = true;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "dd.MM.yyyy hh:mm:ss")
     @Column(name = "approve_date")
     private Date approveDate;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "dd.MM.yyyy hh:mm:ss")
     @Column(name = "created_date", nullable = false)
     private Date createdDate = new Date();
 

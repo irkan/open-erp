@@ -92,6 +92,12 @@ public class AccountingController extends SkeletonController {
     public String postTransaction(@ModelAttribute(Constants.FORM) @Validated Transaction transaction, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
+            transaction.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("other", "action"));
+            transaction.setAmount(1);
+            transaction.setOrganization(getSessionOrganization());
+            transaction.setCurrency(transaction.getAccount().getCurrency());
+            transaction.setRate(currencyRateRepository.getCurrencyRateByCode(transaction.getCurrency()).getValue());
+            transaction.setSumPrice(transaction.getPrice()*transaction.getAmount()*transaction.getRate());
             transactionRepository.save(transaction);
         }
         return mapPost(transaction, binding, redirectAttributes);

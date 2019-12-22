@@ -130,7 +130,7 @@
 </div>
 
 <div class="modal fade" id="modal-operation" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"></h5>
@@ -142,8 +142,51 @@
                 <form:form modelAttribute="form" id="form" method="post" action="/accounting/transaction" cssClass="form-group">
                     <form:hidden path="id"/>
                     <div class="form-group">
+                        <form:label path="account">Hesab</form:label>
+                        <form:select  path="account" cssClass="custom-select form-control">
+                            <form:options items="${accounts}" itemLabel="accountNumberWithCurrency" itemValue="id" />
+                        </form:select>
+                        <form:errors path="account" cssClass="alert-danger control-label"/>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="createdDate">Tarix</form:label>
+                        <div class="input-group date" >
+                            <form:input path="createdDate" cssClass="form-control datepicker-element" date="date" placeholder="dd.MM.yyyy"/>
+                            <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-calendar"></i>
+                                        </span>
+                            </div>
+                        </div>
+                        <form:errors path="createdDate" cssClass="control-label alert-danger" />
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <form:label path="price">Məbləğ</form:label>
+                                <div class="input-group" >
+                                    <form:input path="price" cssClass="form-control" placeholder="Balansı daxil edin"/>
+                                    <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="la la-usd"></i>
+                                </span>
+                                    </div>
+                                </div>
+                                <form:errors path="price" cssClass="alert-danger control-label"/>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group pt-4">
+                                <label class="kt-checkbox kt-checkbox--brand">
+                                    <form:checkbox path="debt"/> Debt
+                                    <span></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>
-                        <form:input path="description" cssClass="form-control"/>
+                        <form:textarea path="description" cssClass="form-control"></form:textarea>
                         <form:errors path="description" cssClass="alert-danger control-label"/>
                     </div>
                 </form:form>

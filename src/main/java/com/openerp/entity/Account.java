@@ -73,4 +73,8 @@ public class Account {
         this.currency = currency;
         this.description = description;
     }
+
+    public String getAccountNumberWithCurrency() {
+        return currency + " | " + accountNumber;
+    }
 }
