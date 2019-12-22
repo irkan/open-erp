@@ -79,6 +79,15 @@ public class AccountingController extends SkeletonController {
         return mapPost(account, binding, redirectAttributes);
     }
 
+    @PostMapping(value = "/financing")
+    public String postFinancing(@ModelAttribute(Constants.FORM) @Validated Financing financing, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()){
+            financingRepository.save(financing);
+        }
+        return mapPost(financing, binding, redirectAttributes);
+    }
+
     @PostMapping(value = "/transaction")
     public String postTransaction(@ModelAttribute(Constants.FORM) @Validated Transaction transaction, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
@@ -135,7 +144,7 @@ public class AccountingController extends SkeletonController {
         int amount=0;
         for(Action action: actions){
             if(action.getAction().getAttr1().equalsIgnoreCase("buy")
-            || action.getAction().getAttr1().equalsIgnoreCase("send"))
+            || action.getAction().getAttr1().equalsIgnoreCase("accept"))
             amount+=action.getAmount();
         }
 

@@ -27,7 +27,12 @@ public class CollectController extends SkeletonController {
         if(page.equalsIgnoreCase(Constants.ROUTE.PAYMENT_REGULATOR) ||
                 page.equalsIgnoreCase(Constants.ROUTE.TROUBLED_CUSTOMER)){
             model.addAttribute(Constants.CONFIGURATION_TROUBLED_CUSTOMER, configurationRepository.getConfigurationByKey("troubled_customer").getAttribute());
-            List<Schedule> schedules = scheduleRepository.getSchedules1(new Date());
+            List<Schedule> schedules;
+            if(canViewAll()){
+                schedules = scheduleRepository.getSchedules(new Date());
+            } else {
+                schedules = scheduleRepository.getSchedulesByOrganization(new Date(), getSessionOrganization());
+            }
             model.addAttribute(Constants.LIST, Util.convertPaymentSchedule(schedules));
         } else if(page.equalsIgnoreCase(Constants.ROUTE.PAYMENT_REGULATOR_DETAIL)){
             model.addAttribute(Constants.LIST, scheduleRepository.getScheduleDetails(new Date(), Integer.parseInt(data.get())));

@@ -24,8 +24,9 @@
     <tr>
         <th>№</th>
         <th>ID</th>
-        <th>Flial</th>
         <th>Hərəkət</th>
+        <th>Flial#1</th>
+        <th>Flial#2</th>
         <th>Təchizatçı</th>
         <th>İnventar</th>
         <th>Miqdar</th>
@@ -37,10 +38,6 @@
     <tbody>
     <c:forEach var="t" items="${list}" varStatus="loop">
 
-
-
-
-
         <tr data="<c:out value="${utl:toJson(t)}" />"
             <c:if test="${t.action.attr1=='send' or t.action.attr1=='sell'}">
                 style="background-color: #ffeaf1 !important"
@@ -48,15 +45,16 @@
         >
             <td>${loop.index + 1}</td>
             <td><c:out value="${t.id}" /></td>
-            <td><c:out value="${t.organization.name}" /></td>
             <td><c:out value="${t.action.name}" /></td>
+            <td><c:out value="${t.organization.name}" /></td>
+            <td><c:out value="${t.fromOrganization.name}" /></td>
             <td><c:out value="${t.supplier.name}" /></td>
             <td><c:out value="${t.inventory.name}" /></td>
             <td><c:out value="${t.amount}" /></td>
             <td><fmt:formatDate value = "${t.createdDate}" pattern = "dd.MM.yyyy" /></td>
             <td><c:out value="${t.employee.person.fullName}" /></td>
             <td nowrap class="text-center">
-                <c:if test="${!(t.action.attr1 eq 'sell')}">
+                <c:if test="${!(t.action.attr1 eq 'sell') and !(t.action.attr1 eq 'send' and t.approve)}">
                     <c:set var="return1" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'return')}"/>
                     <c:choose>
                         <c:when test="${return1.status and t.action.attr1 eq 'consolidate'}">
@@ -83,7 +81,7 @@
                     </c:choose>
                     <c:set var="transfer" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'transfer')}"/>
                     <c:choose>
-                        <c:when test="${transfer.status and t.approve and !(t.action.attr1 eq 'consolidate')}">
+                        <c:when test="${transfer.status and t.approve and !(t.action.attr1 eq 'consolidate') and t.amount gt 0}">
                             <a href="javascript:transfer($('#form'), '<c:out value="${utl:toJson(t)}" />', 'transfer-modal-operation');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
                                 <i class="<c:out value="${transfer.object.icon}"/>"></i>
                             </a>
@@ -91,7 +89,7 @@
                     </c:choose>
                     <c:set var="consolidate" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'consolidate')}"/>
                     <c:choose>
-                        <c:when test="${consolidate.status and t.approve and !(t.action.attr1 eq 'consolidate')}">
+                        <c:when test="${consolidate.status and t.approve and !(t.action.attr1 eq 'consolidate') and t.amount gt 0}">
                             <a href="javascript:consolidate($('#form-consolidate'), '<c:out value="${utl:toJson(t)}" />', 'consolidate-modal');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${consolidate.object.name}"/>">
                                 <i class="<c:out value="${consolidate.object.icon}"/>"></i>
                             </a>

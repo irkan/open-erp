@@ -30,18 +30,18 @@ public class Action {
     private Organization fromOrganization;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_organization_id")
+    @JoinColumn(name = "hr_organization_id", nullable = false)
     private Organization organization;
 
     //@Pattern(regexp="\\d+",message="Say daxil edin")
     @Column(name = "amount")
     private int amount=1;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "warehouse_inventory_id")
     private Inventory inventory;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "warehouse_supplier_id")
     private Supplier supplier;
 
@@ -52,7 +52,7 @@ public class Action {
     @Column(name = "approve_date")
     private Date approveDate;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hr_employee_id")
     private Employee employee;
 

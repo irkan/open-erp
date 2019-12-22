@@ -1,5 +1,6 @@
 package com.openerp.repository;
 
+import com.openerp.entity.Inventory;
 import com.openerp.entity.Organization;
 import com.openerp.entity.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,4 +11,5 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
     Transaction getTransactionById(int id);
     List<Transaction> getTransactionsByOrderByApproveDescCreatedDateDesc();
     List<Transaction> getTransactionsByOrganizationOrderByApproveDescCreatedDateDesc(Organization organization);
+    List<Transaction> getTransactionsByInventoryAndApproveFalseAndOrganization(Inventory inventory, Organization organization);
 }

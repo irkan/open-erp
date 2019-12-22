@@ -244,6 +244,8 @@ public class DBConfiguration {
             dictionaries.add(moveAction);
             Dictionary sendAction = new Dictionary("Göndərmə", "send", null, actionType);
             dictionaries.add(sendAction);
+            Dictionary acceptAction = new Dictionary("Qəbul edilmə", "accept", null, actionType);
+            dictionaries.add(acceptAction);
             Dictionary buyAction = new Dictionary("Alış", "buy", null, actionType);
             dictionaries.add(buyAction);
             Dictionary consolidateDic = new Dictionary("Təhkim edilmə", "consolidate", null, actionType);
@@ -489,10 +491,10 @@ public class DBConfiguration {
             modules.add(subModule1);
             Module subModule4 = new Module("Əməliyyat", "Əməliyyat", "operation", "flaticon-interface-7", subModule8);
             modules.add(subModule4);
-            Module subModule2 = new Module("Sorğu", "Sorğu", "dictionary", "flaticon-folder-1", module);
-            modules.add(subModule2);
-            Module subModule3 = new Module("Sorğu tipi", "Sorğu tipi", "dictionary-type", "flaticon-layers", subModule2);
-            modules.add(subModule3);
+            Module dictionary = new Module("Sorğu", "Sorğu", "dictionary", "flaticon-folder-1", module);
+            modules.add(dictionary);
+            Module dictionaryType = new Module("Sorğu tipi", "Sorğu tipi", "dictionary-type", "flaticon-layers", dictionary);
+            modules.add(dictionaryType);
             Module configuration = new Module("Sazlama", "Sazlama", "configuration", "flaticon-settings", module);
             modules.add(configuration);
             Module currencyRate = new Module("Valyuta kursu", "Valyuta kursu", "currency-rate", "la la-euro", configuration);
@@ -525,7 +527,7 @@ public class DBConfiguration {
             modules.add(consolidate);
             Module action = new Module("Hərəkət", "Hərəkət", "action", "flaticon2-delivery-truck", inventory);
             modules.add(action);
-            Module supplier = new Module("Tədarükçü", "Tədarükçü", "supplier", "flaticon-network", warehouse);
+            Module supplier = new Module("Təchizatçı", "Təchizatçı", "supplier", "flaticon-network", warehouse);
             modules.add(supplier);
             Module accounting = new Module("Mühasibatlıq", "Mühasibatlıq", "accounting", "flaticon2-line-chart", null);
             modules.add(accounting);
@@ -632,9 +634,9 @@ public class DBConfiguration {
 
             ModuleOperation createModuleOperation1 = new ModuleOperation(subModule1, create, null);
             moduleOperations.add(createModuleOperation1);
-            ModuleOperation createModuleOperation2 = new ModuleOperation(subModule2, create, null);
+            ModuleOperation createModuleOperation2 = new ModuleOperation(dictionary, create, null);
             moduleOperations.add(createModuleOperation2);
-            ModuleOperation createModuleOperation3 = new ModuleOperation(subModule3, create, null);
+            ModuleOperation createModuleOperation3 = new ModuleOperation(dictionaryType, create, null);
             moduleOperations.add(createModuleOperation3);
             ModuleOperation createModuleOperation4 = new ModuleOperation(subModule4, create, null);
             moduleOperations.add(createModuleOperation4);
@@ -686,9 +688,9 @@ public class DBConfiguration {
 
             ModuleOperation editModuleOperation1 = new ModuleOperation(subModule1, edit, null);
             moduleOperations.add(editModuleOperation1);
-            ModuleOperation editModuleOperation2 = new ModuleOperation(subModule2, edit, null);
+            ModuleOperation editModuleOperation2 = new ModuleOperation(dictionary, edit, null);
             moduleOperations.add(editModuleOperation2);
-            ModuleOperation editModuleOperation3 = new ModuleOperation(subModule3, edit, null);
+            ModuleOperation editModuleOperation3 = new ModuleOperation(dictionaryType, edit, null);
             moduleOperations.add(editModuleOperation3);
             ModuleOperation editModuleOperation4 = new ModuleOperation(subModule4, edit, null);
             moduleOperations.add(editModuleOperation4);
@@ -734,12 +736,14 @@ public class DBConfiguration {
             moduleOperations.add(editModuleOperation28);
             ModuleOperation editModuleOperation29 = new ModuleOperation(configuration, edit, null);
             moduleOperations.add(editModuleOperation29);
+            ModuleOperation editModuleOperation30 = new ModuleOperation(financing, edit, null);
+            moduleOperations.add(editModuleOperation30);
 
             ModuleOperation deleteModuleOperation1 = new ModuleOperation(subModule1, delete, null);
             moduleOperations.add(deleteModuleOperation1);
-            ModuleOperation deleteModuleOperation2 = new ModuleOperation(subModule2, delete, null);
+            ModuleOperation deleteModuleOperation2 = new ModuleOperation(dictionary, delete, null);
             moduleOperations.add(deleteModuleOperation2);
-            ModuleOperation deleteModuleOperation3 = new ModuleOperation(subModule3, delete, null);
+            ModuleOperation deleteModuleOperation3 = new ModuleOperation(dictionaryType, delete, null);
             moduleOperations.add(deleteModuleOperation3);
             ModuleOperation deleteModuleOperation4 = new ModuleOperation(subModule4, delete, null);
             moduleOperations.add(deleteModuleOperation4);
@@ -793,6 +797,8 @@ public class DBConfiguration {
             moduleOperations.add(deleteModuleOperation31);
             ModuleOperation deleteModuleOperation32 = new ModuleOperation(notification, delete, null);
             moduleOperations.add(deleteModuleOperation32);
+            ModuleOperation deleteModuleOperation33 = new ModuleOperation(financing, delete, null);
+            moduleOperations.add(deleteModuleOperation33);
 
             ModuleOperation viewModuleOperation6 = new ModuleOperation(subModule6, view, null);
             moduleOperations.add(viewModuleOperation6);
@@ -827,9 +833,9 @@ public class DBConfiguration {
 
             ModuleOperation exportModuleOperation1 = new ModuleOperation(subModule1, export, null);
             moduleOperations.add(exportModuleOperation1);
-            ModuleOperation exportModuleOperation2 = new ModuleOperation(subModule2, export, null);
+            ModuleOperation exportModuleOperation2 = new ModuleOperation(dictionary, export, null);
             moduleOperations.add(exportModuleOperation2);
-            ModuleOperation exportModuleOperation3 = new ModuleOperation(subModule3, export, null);
+            ModuleOperation exportModuleOperation3 = new ModuleOperation(dictionaryType, export, null);
             moduleOperations.add(exportModuleOperation3);
             ModuleOperation exportModuleOperation4 = new ModuleOperation(subModule4, export, null);
             moduleOperations.add(exportModuleOperation4);
@@ -980,15 +986,15 @@ public class DBConfiguration {
             Person person = new Person(contact1, "İrkan", "Əhmədov", "Əflatun", DateUtility.getUtilDate("25.09.1989"), male, azerbaijanNationality, married, "4HWL0AM", "AA0844002", false, null);
             Employee employee0 = new Employee(person, position1, new Date(), null, headBranch);
             List<EmployeePayrollDetail> employeePayrollDetails = new ArrayList<>();
-            for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-payroll-field")){
-                EmployeePayrollDetail employeePayrollDetail = new EmployeePayrollDetail(employee0, dictionary, dictionary.getAttr1(), dictionary.getAttr2());
+            for(Dictionary dictionary1: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-payroll-field")){
+                EmployeePayrollDetail employeePayrollDetail = new EmployeePayrollDetail(employee0, dictionary1, dictionary1.getAttr1(), dictionary1.getAttr2());
                 employeePayrollDetails.add(employeePayrollDetail);
             }
             employee0.setEmployeePayrollDetails(employeePayrollDetails);
 
             List<EmployeeSaleDetail> employeeSaleDetails = new ArrayList<>();
-            for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-sale-field")){
-                EmployeeSaleDetail employeeSaleDetail = new EmployeeSaleDetail(employee0, dictionary, dictionary.getAttr1(), dictionary.getAttr2());
+            for(Dictionary dictionary1: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-sale-field")){
+                EmployeeSaleDetail employeeSaleDetail = new EmployeeSaleDetail(employee0, dictionary1, dictionary1.getAttr1(), dictionary1.getAttr2());
                 employeeSaleDetails.add(employeeSaleDetail);
             }
             employee0.setEmployeeSaleDetails(employeeSaleDetails);
@@ -1054,6 +1060,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation27));
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation28));
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation29));
+            userModuleOperations.add(new UserModuleOperation(user, editModuleOperation30));
 
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation2));
@@ -1084,6 +1091,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation30));
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation31));
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation32));
+            userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation33));
 
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation2));

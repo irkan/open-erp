@@ -39,14 +39,6 @@
                                         <th><c:out value="${t.attr1}" /></th>
                                         <td><c:out value="${t.attr2}" /></td>
                                         <td nowrap class="text-center">
-                                            <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
-                                            <c:choose>
-                                                <c:when test="${view.status}">
-                                                    <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
-                                                        <i class="la <c:out value="${view.object.icon}"/>"></i>
-                                                    </a>
-                                                </c:when>
-                                            </c:choose>
                                             <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
                                             <c:choose>
                                                 <c:when test="${edit.status}">

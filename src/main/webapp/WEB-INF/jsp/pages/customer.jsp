@@ -26,7 +26,7 @@
                                 <tr>
                                     <th>KOD</th>
                                     <th>Struktur</th>
-                                    <th>Ad</th>
+                                    <th>Ad Soyad Ata adı</th>
                                     <th>Şəhər</th>
                                     <th>Doğum tarixi</th>
                                     <th>Ş.v - nin seriya nömrəsi</th>
@@ -38,11 +38,11 @@
                                 <c:forEach var="t" items="${list}" varStatus="loop">
                                     <tr data="<c:out value="${utl:toJson(t)}" />">
                                         <td><c:out value="${t.id}"/></td>
-                                        <td><c:out value="${t.id}"/></td>
                                         <th>
                                             <c:out value="${t.person.firstName}"/> <c:out value="${t.person.lastName}"/> <c:out
                                                 value="${t.person.fatherName}"/>
                                         </th>
+                                        <td><c:out value="${t.organization.name}"/></td>
                                         <th>
                                             <c:out value="${t.person.contact.city.name}"/>
                                         </th>

@@ -35,6 +35,13 @@
         </function-signature>
     </function>
     <function>
+        <name>calculateApproveOperationCount</name>
+        <function-class>com.openerp.util.Util</function-class>
+        <function-signature>
+            int calculateApproveOperationCount(java.util.List, int)
+        </function-signature>
+    </function>
+    <function>
         <name>identify</name>
         <function-class>com.openerp.controller.SkeletonController</function-class>
         <function-signature>

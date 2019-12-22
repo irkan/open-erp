@@ -30,8 +30,7 @@
                                     <th>Barkod</th>
                                     <th>Vəziyyət</th>
                                     <th>Miqdar</th>
-                                    <th>Flial</th>
-                                    <th>Tədarükçü</th>
+                                    <th>Təsdiq gözləyir</th>
                                     <th>Əməliyyat</th>
                                 </tr>
                                 </thead>
@@ -64,9 +63,12 @@
                                             </c:choose>
                                         </td>
                                         <td><c:out value="${utl:calculateInventoryAmount(t.actions, sessionScope.organization.id)}"/> ədəd
+                                        <td class="text-center">
+                                            <c:set var="approveCount" value="${utl:calculateApproveOperationCount(t.actions, sessionScope.organization.id)}"/>
+                                            <c:if test="${approveCount gt 0}">
+                                                <c:out value="${approveCount}"/> əməliyyat
+                                            </c:if>
                                         </td>
-                                        <td><c:out value="${t.actions.get(0).organization.name}" /></td>
-                                        <td><c:out value="${t.actions.get(0).supplier.name}" /></td>
                                         <td nowrap class="text-center">
                                             <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
                                             <c:choose>

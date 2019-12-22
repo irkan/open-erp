@@ -32,9 +32,15 @@ public class WarehouseController extends SkeletonController {
             if(canViewAll()){
                 inventories = inventoryRepository.getInventoriesByActiveTrueOrderByIdDesc();
             } else {
-                inventories = inventoryRepository.findDistinctByActiveTrueAndActions_Organization_IdOrderByIdDesc(
+                inventories = inventoryRepository.findDistinctByActiveTrueAndActions_Organization_IdOrActions_FromOrganization_IdOrderByIdDesc(
+                        getSessionOrganization().getId(),
                         getSessionOrganization().getId()
                 );
+                /*inventories.addAll(
+                        inventoryRepository.findDistinctByActiveTrueAndActions_FromOrganization_IdOrderByIdDesc(
+                                getSessionOrganization().getId()
+                        )
+                );*/
             }
             model.addAttribute(Constants.LIST, inventories);
             model.addAttribute(Constants.SUPPLIERS, supplierRepository.getSuppliersByActiveTrue());
@@ -51,7 +57,7 @@ public class WarehouseController extends SkeletonController {
                     actions = actionRepository.getActionsByActiveTrueAndInventory_IdAndInventory_Active(Integer.parseInt(data.get()), true);
                 } else {
                     actions = actionRepository.getActionsByActiveTrueAndInventory_IdAndInventory_ActiveAndOrganization(Integer.parseInt(data.get()), true, getSessionOrganization());
-                    actions.addAll(actionRepository.getActionsByActiveTrueAndInventory_IdAndInventory_ActiveAndFromOrganizationAndApproveFalse(Integer.parseInt(data.get()), true, getSessionOrganization()));
+                    actions.addAll(actionRepository.getActionsByActiveTrueAndInventory_IdAndInventory_ActiveAndFromOrganization(Integer.parseInt(data.get()), true, getSessionOrganization()));
                 }
             } else {
                 if(canViewAll()){
@@ -131,8 +137,19 @@ public class WarehouseController extends SkeletonController {
     public String postActionTransfer(@ModelAttribute(Constants.FORM) @Validated Action action, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         if(!binding.hasErrors()){
             List<String> messages = new ArrayList<>();
-            if(financingRepository.getFinancingByActiveTrueAndInventoryAndOrganization(action.getInventory(), action.getFromOrganization())==null){
-                messages.add("Maliyyətləndirmə edilməyib! Alış və qiymətləndirilmə təsdiqlənməlidir!");
+            List<Transaction> transactions = transactionRepository.getTransactionsByInventoryAndApproveFalseAndOrganization(action.getInventory(), action.getOrganization());
+            if(action.getFromOrganization()!=null){
+                transactions.addAll(
+                        transactionRepository.getTransactionsByInventoryAndApproveFalseAndOrganization(action.getInventory(), action.getFromOrganization())
+                );
+            }
+
+            if(transactions.size()>0){
+                String transactionIds="";
+                for(Transaction transaction: transactions){
+                    transactionIds += transaction.getId() + ", ";
+                }
+                messages.add("Əməliyyatın icrası üçün " + transactionIds + " nömrəli tranzaksiyalar təsdiqlənməlidir!");
             }
             if(action.getFromOrganization().getId().intValue()==action.getOrganization().getId().intValue()){
                 messages.add(action.getOrganization().getName() + " - özündən özünə Göndərmə əməliyyatı edilə bilməz!");
@@ -144,12 +161,12 @@ public class WarehouseController extends SkeletonController {
                 actionRepository.save(actn);
 
                 Action sendAction = new Action(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("send", "action"),
-                        action.getOrganization(),
+                        actn.getOrganization(),
                         action.getAmount(),
                         action.getInventory(),
                         action.getSupplier(),
                         false);
-                sendAction.setFromOrganization(actn.getOrganization());
+                sendAction.setFromOrganization(action.getOrganization());
                 actionRepository.save(sendAction);
             }
         }
@@ -161,25 +178,34 @@ public class WarehouseController extends SkeletonController {
         if(!binding.hasErrors()){
             Response response = null;
             action = actionRepository.getActionById(action.getId());
-            if (Util.getUserBranch(action.getOrganization()).getId() != Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getId()){
+            if (action.getFromOrganization().getId() != getSessionOrganization().getId()){
                 List<String> messages = new ArrayList<>();
-                messages.add("Təsdiqləmə əməliyyatı " + Util.getUserBranch(action.getOrganization()).getName() + " tərəfindən edilməlidir!");
+                messages.add("Təsdiqləmə əməliyyatı " + action.getFromOrganization().getName() + " tərəfindən edilməlidir!");
                 response = new Response(Constants.STATUS.ERROR, messages);
                 redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, response);
             }
             if(response==null){
                 if(action.getAction().getAttr1().equalsIgnoreCase("send")){
-                    String description = action.getAction().getName()+", "+action.getSupplier().getName()+" -> "+action.getOrganization().getName()+", "+action.getInventory().getName()+", Say: " + action.getAmount() + " ədəd";
-                    Organization organization = organizationRepository.getOrganizationByIdAndActiveTrue(action.getOrganization().getId());
-                    Transaction transaction = new Transaction(Util.getUserBranch(organization), action.getInventory(), action.getAction(), description, false, null);
-                    Financing financing = financingRepository.getFinancingByActiveTrueAndInventoryAndOrganization(action.getInventory(), action.getFromOrganization());
-                    transaction.setAmount(action.getAmount());
+                    Action acceptAction = new Action(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("accept", "action"),
+                            action.getFromOrganization(),
+                            action.getAmount(),
+                            action.getInventory(),
+                            action.getSupplier(),
+                            true);
+                    acceptAction.setFromOrganization(action.getOrganization());
+
+                    actionRepository.save(acceptAction);
+
+                    String description = acceptAction.getAction().getName()+", "+acceptAction.getSupplier().getName()+" -> "+acceptAction.getOrganization().getName()+", "+acceptAction.getInventory().getName()+", Say: " + acceptAction.getAmount() + " ədəd";
+                    Transaction transaction = new Transaction(acceptAction.getOrganization(), acceptAction.getInventory(), acceptAction.getAction(), description, false, null);
+                    Financing financing = financingRepository.getFinancingByActiveTrueAndInventoryAndOrganization(action.getInventory(), action.getOrganization());
+                    transaction.setAmount(acceptAction.getAmount());
                     transaction.setPrice(financing.getPrice());
                     transaction.setCurrency(financing.getCurrency());
                     transaction.setRate(1d);
                     transactionRepository.save(transaction);
                 }
-                action.setApprove(!action.getApprove());
+                action.setApprove(true);
                 action.setApproveDate(new Date());
                 actionRepository.save(action);
             }
