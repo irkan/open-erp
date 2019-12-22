@@ -252,6 +252,7 @@
                 <form:form modelAttribute="form" id="kt_form" method="post" action="/sale/sales" cssClass="form-group kt-form">
                     <form:hidden path="id"/>
                     <input type="hidden" name="organization" value="<c:out value="${sessionScope.organization.id}"/>"/>
+                    <input type="hidden" name="customer.organization" value="<c:out value="${sessionScope.organization.id}"/>"/>
 
                         <div class="kt-wizard-v1__content" data-ktwizard-type="step-content" data-ktwizard-state="current">
                             <div class="kt-form__section kt-form__section--first">

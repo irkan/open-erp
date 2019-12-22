@@ -261,6 +261,10 @@ public class WarehouseController extends SkeletonController {
     @ResponseBody
     @GetMapping(value = "/inventory/{barcode}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Inventory findInventory(@PathVariable("barcode") String barcode){
-        return inventoryRepository.getInventoryByBarcodeAndActiveTrue(barcode);
+        List<Action> actions = actionRepository.getActionsByActiveTrueAndInventory_BarcodeAndEmployeeAndInventory_ActiveAndAction_Attr1AndAmountGreaterThan(barcode, getSessionUser().getEmployee(), true, "consolidate", 0);
+        if(actions.size()>0){
+            return actions.get(0).getInventory();
+        }
+        return null;
     }
 }
