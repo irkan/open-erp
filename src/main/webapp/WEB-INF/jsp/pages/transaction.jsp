@@ -151,7 +151,7 @@
                     <div class="form-group">
                         <form:label path="createdDate">Tarix</form:label>
                         <div class="input-group date" >
-                            <form:input path="createdDate" cssClass="form-control datepicker-element" date="date" placeholder="dd.MM.yyyy"/>
+                            <form:input path="createdDate" cssClass="form-control datetimepicker-element" date="date" placeholder="dd.MM.yyyy hh:mm"/>
                             <div class="input-group-append">
                                         <span class="input-group-text">
                                             <i class="la la-calendar"></i>

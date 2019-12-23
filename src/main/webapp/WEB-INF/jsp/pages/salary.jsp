@@ -93,7 +93,7 @@
                                 <c:forEach var="t" items="${form.salaryEmployees}" varStatus="loop">
                                     <tr data="<c:out value="${utl:toJson(t)}" />">
                                         <td><c:out value="${t.id}" /></td>
-                                        <td><div style="width: 190px"><c:out value="${t.workingHourRecordEmployee.fullName}" /></div></td>
+                                        <th><div style="width: 190px"><c:out value="${t.workingHourRecordEmployee.fullName}" /></div></th>
                                         <td>
                                             <c:forEach var="p" items="${t.salaryEmployeeDetails}" varStatus="loop">
                                                 <c:if test="${p.key eq '{gross_salary}'}">
@@ -122,20 +122,20 @@
                                                 </c:if>
                                             </c:forEach>
                                         </td>
-                                        <td>
+                                        <th>
                                             <c:forEach var="p" items="${t.salaryEmployeeDetails}" varStatus="loop">
                                                 <c:if test="${p.key eq '{total_amount_payable_official}'}">
                                                     <c:out value="${p.value}" />
                                                 </c:if>
                                             </c:forEach>
-                                        </td>
-                                        <td>
+                                        </th>
+                                        <th>
                                             <c:forEach var="p" items="${t.salaryEmployeeDetails}" varStatus="loop">
                                                 <c:if test="${p.key eq '{total_amount_payable_non_official}'}">
                                                     <c:out value="${p.value}" />
                                                 </c:if>
                                             </c:forEach>
-                                        </td>
+                                        </th>
                                         <td nowrap class="text-center">
                                             <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
                                             <c:choose>

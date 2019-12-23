@@ -77,4 +77,5 @@
 <script src="<c:url value="/assets/vendors/custom/gmaps/gmaps.js" />" type="text/javascript"></script>
 <script src="<c:url value="/assets/vendors/custom/datatables/datatables.bundle.js" />" type="text/javascript"></script>
 <script src="<c:url value="/assets/js/demo4/pages/crud/forms/widgets/bootstrap-datepicker.js" />" type="text/javascript"></script>
+<script src="<c:url value="/assets/js/demo4/pages/crud/forms/widgets/bootstrap-datetimepicker.js" />" type="text/javascript"></script>
 <script src="<c:url value="/assets/js/demo4/pages/crud/datatables/basic/basic.js" />" type="text/javascript"></script>

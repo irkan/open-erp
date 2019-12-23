@@ -27,17 +27,17 @@ public class DummyUtil {
     public static String randomSalary(){
         DecimalFormat df = new DecimalFormat("#");
         df.setRoundingMode(RoundingMode.CEILING);
-        double leftLimit = 1400D;
-        double rightLimit = 6300D;
-        return df.format(leftLimit + new Random().nextDouble() * (rightLimit - leftLimit)).replace(",", ".");
+        double leftLimit = 14D;
+        double rightLimit = 63D;
+        return df.format((leftLimit + new Random().nextDouble() * (rightLimit - leftLimit))*100).replace(",", ".");
     }
 
     public static String randomGrossSalary(){
         DecimalFormat df = new DecimalFormat("#");
         df.setRoundingMode(RoundingMode.CEILING);
-        double leftLimit = 250D;
-        double rightLimit = 1000D;
-        return df.format(leftLimit + new Random().nextDouble() * (rightLimit - leftLimit)).replace(",", ".");
+        double leftLimit = 2.5D;
+        double rightLimit = 10D;
+        return df.format((leftLimit + new Random().nextDouble() * (rightLimit - leftLimit))*100).replace(",", ".");
     }
 
     public static String randomPreviousWorkExperience(){

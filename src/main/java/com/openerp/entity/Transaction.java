@@ -70,12 +70,17 @@ public class Transaction {
     private Boolean approve = true;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(pattern = "dd.MM.yyyy hh:mm:ss")
+    @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+    @Column(name = "transaction_date", nullable = false)
+    private Date transactionDate = new Date();
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
     @Column(name = "approve_date")
     private Date approveDate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(pattern = "dd.MM.yyyy hh:mm:ss")
+    @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
     @Column(name = "created_date", nullable = false)
     private Date createdDate = new Date();
 

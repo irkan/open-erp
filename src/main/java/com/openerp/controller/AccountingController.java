@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.DigestUtils;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -90,13 +91,17 @@ public class AccountingController extends SkeletonController {
 
     @PostMapping(value = "/transaction")
     public String postTransaction(@ModelAttribute(Constants.FORM) @Validated Transaction transaction, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        if(!transaction.getAccount().getCurrency().equalsIgnoreCase("AZN") && currencyRateRepository.getCurrencyRateByCode(transaction.getAccount().getCurrency())==null){
+            FieldError fieldError = new FieldError("account", "account", transaction.getAccount().getCurrency() + " valyutasına uyğun kurs tapılmadı!");
+            binding.addError(fieldError);
+        }
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             transaction.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("other", "action"));
             transaction.setAmount(1);
             transaction.setOrganization(getSessionOrganization());
             transaction.setCurrency(transaction.getAccount().getCurrency());
-            transaction.setRate(currencyRateRepository.getCurrencyRateByCode(transaction.getCurrency()).getValue());
+            transaction.setRate(transaction.getAccount().getCurrency().equalsIgnoreCase("AZN")?1:currencyRateRepository.getCurrencyRateByCode(transaction.getCurrency()).getValue());
             transaction.setSumPrice(transaction.getPrice()*transaction.getAmount()*transaction.getRate());
             transactionRepository.save(transaction);
             balance(transaction);
