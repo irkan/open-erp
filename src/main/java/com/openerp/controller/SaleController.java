@@ -235,7 +235,6 @@ public class SaleController extends SkeletonController {
             );
             transactionRepository.save(transaction);
 
-
             if(invc.getSales()!=null && invc.getApprove() && invc.getAdvance()){
                 List<Advance> advances = new ArrayList<>();
                 ScriptEngineManager mgr = new ScriptEngineManager();

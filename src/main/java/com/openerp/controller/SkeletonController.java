@@ -343,7 +343,7 @@ public class SkeletonController {
         return "İG";
     }
 
-    public void sendEmail(Organization organization, String emails, String subject, String message, String description){
+    void sendEmail(Organization organization, String emails, String subject, String message, String description){
         for(String email: emails.split(";")){
             if(email.matches(Constants.REGEX.REGEX4)){
                 Notification notification = new Notification();
@@ -359,4 +359,12 @@ public class SkeletonController {
         }
     }
 
+    void balance(Transaction transaction){
+        Account account = accountRepository.getAccountById(transaction.getAccount().getId());
+        double balance = account.getBalance() + (transaction.getDebt()?transaction.getSumPrice():-1*transaction.getSumPrice());
+        account.setBalance(balance);
+        accountRepository.save(account);
+        transaction.setBalance(account.getBalance());
+        transactionRepository.save(transaction);
+    }
 }

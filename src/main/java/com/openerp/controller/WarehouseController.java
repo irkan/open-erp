@@ -204,6 +204,7 @@ public class WarehouseController extends SkeletonController {
                     transaction.setCurrency(financing.getCurrency());
                     transaction.setRate(1d);
                     transactionRepository.save(transaction);
+                    balance(transaction);
                 }
                 action.setApprove(true);
                 action.setApproveDate(new Date());

@@ -257,7 +257,7 @@
                                         <input type="checkbox" name="expense" value="${t.id}"/><c:out value="${t.name}"/>
                                         <span></span>
                                     </label>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 </c:forEach>
                             </div>
                         </div>

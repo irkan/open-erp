@@ -99,6 +99,7 @@ public class AccountingController extends SkeletonController {
             transaction.setRate(currencyRateRepository.getCurrencyRateByCode(transaction.getCurrency()).getValue());
             transaction.setSumPrice(transaction.getPrice()*transaction.getAmount()*transaction.getRate());
             transactionRepository.save(transaction);
+            balance(transaction);
         }
         return mapPost(transaction, binding, redirectAttributes);
     }
@@ -117,6 +118,7 @@ public class AccountingController extends SkeletonController {
                 trn.setSumPrice(sumPrice);
                 trn.setAccount(transaction.getAccount());
                 transactionRepository.save(trn);
+                balance(trn);
 
                 if (expenses != null) {
                     for (int expense : expenses) {
