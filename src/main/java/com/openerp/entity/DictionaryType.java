@@ -43,4 +43,16 @@ public class DictionaryType {
         this.attr1 = attr1;
         this.attr2 = attr2;
     }
+
+    @Override
+    public String toString() {
+        return "DictionaryType{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", attr1='" + attr1 + '\'' +
+                ", attr2='" + attr2 + '\'' +
+                ", active=" + active +
+                ", dictionaries=" + dictionaries +
+                '}';
+    }
 }

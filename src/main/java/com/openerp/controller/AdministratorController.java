@@ -166,6 +166,7 @@ public class AdministratorController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             dictionaryTypeRepository.save(dictionaryType);
+            log("admin_dictionary_type", "create/edit", dictionaryType.getId(), dictionaryType.toString());
         }
         return mapPost(dictionaryType, binding, redirectAttributes);
     }

@@ -8,7 +8,9 @@ import com.openerp.util.Util;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -177,6 +179,9 @@ public class SkeletonController {
 
     @Autowired
     NotificationRepository notificationRepository;
+
+    @Autowired
+    LogRepository logRepository;
 
     @Autowired
     HttpServletRequest request;
@@ -366,5 +371,9 @@ public class SkeletonController {
         accountRepository.save(account);
         transaction.setBalance(account.getBalance());
         transactionRepository.save(transaction);
+    }
+
+    void log(String tableName, String operation, int rowId, String encapsulate){
+        logRepository.save(new Log(tableName, operation, rowId, encapsulate, getSessionUser().getUsername()));
     }
 }
