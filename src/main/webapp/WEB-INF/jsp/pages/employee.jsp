@@ -21,6 +21,10 @@
 
 <c:choose>
     <c:when test="${not empty list}">
+        <c:set var="payroll" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'payroll')}"/>
+        <c:set var="sale" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'sale')}"/>
+        <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
+        <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
 <table class="table table-striped- table-bordered table-hover table-checkable" id="group_table">
     <thead>
     <tr>
@@ -58,46 +62,33 @@
                 </c:otherwise>
             </c:choose>
             <td nowrap class="text-center">
-                <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
-                <c:choose>
-                    <c:when test="${view.status}">
-                        <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
-                            <i class="la <c:out value="${view.object.icon}"/>"></i>
-                        </a>
-                    </c:when>
-                </c:choose>
-                <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
-                <c:choose>
-                    <c:when test="${edit.status}">
-                        <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
-                            <i class="<c:out value="${edit.object.icon}"/>"></i>
-                        </a>
-                    </c:when>
-                </c:choose>
-                <c:set var="payroll" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'payroll')}"/>
-                <c:choose>
-                    <c:when test="${payroll.status}">
-                        <a href="javascript:edit($('#form-payroll'), '<c:out value="${utl:toJson(t)}" />', 'modal-payroll', '<c:out value="${payroll.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${payroll.object.name}"/>">
-                            <i class="<c:out value="${payroll.object.icon}"/>"></i>
-                        </a>
-                    </c:when>
-                </c:choose>
-                <c:set var="sale" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'sale')}"/>
-                <c:choose>
-                    <c:when test="${sale.status}">
-                        <a href="javascript:edit($('#form-sale'), '<c:out value="${utl:toJson(t)}" />', 'modal-sale', '<c:out value="${sale.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${sale.object.name}"/>">
-                            <i class="<c:out value="${sale.object.icon}"/>"></i>
-                        </a>
-                    </c:when>
-                </c:choose>
-                <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
-                <c:choose>
-                    <c:when test="${delete.status}">
-                        <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.person.firstName}"/> <c:out value="${t.person.lastName}"/> <c:out value="${t.person.fatherName}"/>');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
-                            <i class="<c:out value="${delete.object.icon}"/>"></i>
-                        </a>
-                    </c:when>
-                </c:choose>
+                <span class="dropdown">
+                    <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
+                      <i class="la la-ellipsis-h"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <c:if test="${payroll.status}">
+                            <a href="javascript:edit($('#form-payroll'), '<c:out value="${utl:toJson(t)}" />', 'modal-payroll', '<c:out value="${payroll.object.name}" />');" class="dropdown-item" title="<c:out value="${payroll.object.name}"/>">
+                                <i class="<c:out value="${payroll.object.icon}"/>"></i> <c:out value="${payroll.object.name}"/>
+                            </a>
+                        </c:if>
+                        <c:if test="${sale.status}">
+                            <a href="javascript:edit($('#form-sale'), '<c:out value="${utl:toJson(t)}" />', 'modal-sale', '<c:out value="${sale.object.name}" />');" class="dropdown-item" title="<c:out value="${sale.object.name}"/>">
+                                <i class="<c:out value="${sale.object.icon}"/>"></i> <c:out value="${sale.object.name}"/>
+                            </a>
+                        </c:if>
+                        <c:if test="${delete.status}">
+                            <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.person.firstName}"/> <c:out value="${t.person.lastName}"/> <c:out value="${t.person.fatherName}"/>');" class="dropdown-item" title="<c:out value="${delete.object.name}"/>">
+                                <i class="<c:out value="${delete.object.icon}"/>"></i> <c:out value="${delete.object.name}"/>
+                            </a>
+                        </c:if>
+                    </div>
+                </span>
+                <c:if test="${edit.status}">
+                    <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                        <i class="<c:out value="${edit.object.icon}"/>"></i>
+                    </a>
+                </c:if>
             </td>
         </tr>
     </c:forEach>

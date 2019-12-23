@@ -804,8 +804,6 @@ public class DBConfiguration {
 
             ModuleOperation viewModuleOperation6 = new ModuleOperation(subModule6, view, null);
             moduleOperations.add(viewModuleOperation6);
-            ModuleOperation viewModuleOperation7 = new ModuleOperation(employee, view, null);
-            moduleOperations.add(viewModuleOperation7);
             ModuleOperation viewModuleOperation9 = new ModuleOperation(subModule9, view, null);
             moduleOperations.add(viewModuleOperation9);
             ModuleOperation viewModuleOperation10 = new ModuleOperation(subModule10, view, null);
@@ -1121,7 +1119,6 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation26));
 
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation6));
-            userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation7));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation9));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation10));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation11));

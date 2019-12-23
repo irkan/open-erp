@@ -28,7 +28,7 @@
                                     <th>Flial</th>
                                     <th>Hesab nömrəsi</th>
                                     <th>Açıqlama</th>
-                                    <th>Tarix</th>
+                                    <th>Tarix/Vaxt</th>
                                     <th>Miqdar</th>
                                     <th>Qiymət</th>
                                     <th>Kurs</th>
@@ -46,7 +46,7 @@
                                         <td><div style="width: 90px;"><c:out value="${t.organization.name}" /></div></td>
                                         <td><c:out value="${t.account.accountNumber}" /></td>
                                         <td><c:out value="${t.description}" /></td>
-                                        <td><fmt:formatDate value = "${t.createdDate}" pattern = "dd.MM.yyyy" /></td>
+                                        <td><fmt:formatDate value = "${t.transactionDate}" pattern = "dd.MM.yyyy HH:mm:ss" /></td>
                                         <td><c:out value="${t.amount}" /> ədəd</td>
                                         <td>
                                             <div style="width: 65px;">
@@ -149,16 +149,16 @@
                         <form:errors path="account" cssClass="alert-danger control-label"/>
                     </div>
                     <div class="form-group">
-                        <form:label path="createdDate">Tarix</form:label>
+                        <form:label path="transactionDate">Tarix</form:label>
                         <div class="input-group date" >
-                            <form:input path="createdDate" cssClass="form-control datetimepicker-element" date="date" placeholder="dd.MM.yyyy hh:mm"/>
+                            <form:input path="transactionDate" cssClass="form-control datetimepicker-element" date="date" placeholder="dd.MM.yyyy hh:mm"/>
                             <div class="input-group-append">
                                         <span class="input-group-text">
                                             <i class="la la-calendar"></i>
                                         </span>
                             </div>
                         </div>
-                        <form:errors path="createdDate" cssClass="control-label alert-danger" />
+                        <form:errors path="transactionDate" cssClass="control-label alert-danger" />
                     </div>
                     <div class="row">
                         <div class="col-md-8">
