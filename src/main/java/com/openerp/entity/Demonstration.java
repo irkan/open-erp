@@ -42,10 +42,6 @@ public class Demonstration {
     @Column(name = "amount", nullable = false)
     private int amount=1;
 
-    @DecimalMin(value = "0", message = "Minimum 0 olmalıdır")
-    @Column(name = "price", nullable = false, columnDefinition="Decimal(10,2) default 0")
-    private double price=0d;
-
     @Pattern(regexp=".{0,250}", message="Maksimum 250 simvol ola bilər")
     @Column(name = "description")
     private String description;

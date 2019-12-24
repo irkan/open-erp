@@ -27,8 +27,8 @@
                                     <th>ID</th>
                                     <th>Struktur</th>
                                     <th>Tarix</th>
+                                    <th>Əməkdaş</th>
                                     <th>Say</th>
-                                    <th>Məbləğ</th>
                                     <th>Açıqlama</th>
                                     <th>Yaradılma tarixi</th>
                                     <th>Əməliyyat</th>
@@ -40,10 +40,10 @@
                                          <td><c:out value="${t.id}" /></td>
                                          <th><c:out value="${t.organization.name}" /></th>
                                          <th><fmt:formatDate value = "${t.demonstrateDate}" pattern = "dd.MM.yyyy" /></th>
+                                         <th><c:out value="${t.employee.person.fullName}" /></th>
                                          <td><c:out value="${t.amount}" /></td>
-                                         <td><c:out value="${t.price}" /></td>
                                          <td><c:out value="${t.description}" /></td>
-                                         <td><fmt:formatDate value = "${t.createDate}" pattern = "dd.MM.yyyy HH:mm" /></td>
+                                         <td><fmt:formatDate value = "${t.createdDate}" pattern = "dd.MM.yyyy HH:mm" /></td>
                                          <td nowrap class="text-center">
                                              <c:if test="${detail.status}">
                                                  <a href="/sale/demonstration-detail/<c:out value="${t.employee.id}"/>" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${detail.object.name}"/>">
@@ -51,7 +51,7 @@
                                                  </a>
                                              </c:if>
                                              <c:if test="${delete.status}">
-                                                 <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
+                                                 <a href="javascript:deleteData('<c:out value="${t.id}" />', '<fmt:formatDate value = "${t.demonstrateDate}" pattern = "dd.MM.yyyy" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
                                                      <i class="<c:out value="${delete.object.icon}"/>"></i>
                                                  </a>
                                              </c:if>
@@ -88,6 +88,7 @@
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form" method="post" action="/sale/demonstration" cssClass="form-group">
                     <form:hidden path="id"/>
+                    <input type="hidden" name="organization" value="<c:out value="${sessionScope.organization.id}"/>"/>
                     <div class="form-group">
                         <form:label path="employee">Əməkdaş</form:label>
                         <form:select  path="employee" cssClass="custom-select form-control select2-single" multiple="single">
@@ -122,18 +123,6 @@
                             </div>
                         </div>
                         <form:errors path="amount" cssClass="control-label alert-danger" />
-                    </div>
-                    <div class="form-group">
-                        <form:label path="price">Məbləğ</form:label>
-                        <div class="input-group" >
-                            <form:input path="price" cssClass="form-control" placeholder="Balansı daxil edin"/>
-                            <div class="input-group-append">
-                                <span class="input-group-text">
-                                    <i class="la la-usd"></i>
-                                </span>
-                            </div>
-                        </div>
-                        <form:errors path="price" cssClass="alert-danger control-label"/>
                     </div>
                     <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>
