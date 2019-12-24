@@ -324,6 +324,8 @@ public class DBConfiguration {
             dictionaries.add(employeePayrollDetail6);
             Dictionary employeePayrollDetail7 = new Dictionary("Əlavə məzuniyyət günlərinin sayı", "{additional_vacation_days}", "0", employeePayrollDetailType);
             dictionaries.add(employeePayrollDetail7);
+            Dictionary employeePayrollDetail8 = new Dictionary("Nümayiş", "{demonstration}", "1", employeePayrollDetailType);
+            dictionaries.add(employeePayrollDetail8);
             Dictionary employeeSaleDetail1 = new Dictionary("Canvasser", "{canvasser}", "{sale_price}>1698?30:25", employeeSaleDetailType);
             dictionaries.add(employeeSaleDetail1);
             Dictionary employeeSaleDetail2 = new Dictionary("Diller", "{dealer}", "{sale_price}>1698?120:100", employeeSaleDetailType);
@@ -571,6 +573,8 @@ public class DBConfiguration {
             modules.add(calculator);
             Module invoice = new Module("Hesab-faktura", "Hesab-faktura", "invoice", "flaticon2-group", sale);
             modules.add(invoice);
+            Module demonstration = new Module("Nümayiş", "Nümayiş", "demonstration", "flaticon-businesswoman", sale);
+            modules.add(demonstration);
             Module collect = new Module("Yığım & Servis", "Yığımların idarə edilməsi", "collect", "flaticon2-cardiogram", null);
             modules.add(collect);
             Module paymentRegulator = new Module("Ödəniş requlyatoru", "Ödəniş requlyatoru", "payment-regulator", "flaticon-book", collect);
@@ -686,6 +690,8 @@ public class DBConfiguration {
             moduleOperations.add(createModuleOperation29);
             ModuleOperation createModuleOperation30 = new ModuleOperation(notification, create, null);
             moduleOperations.add(createModuleOperation30);
+            ModuleOperation createModuleOperation31 = new ModuleOperation(demonstration, create, null);
+            moduleOperations.add(createModuleOperation31);
 
 
             ModuleOperation editModuleOperation1 = new ModuleOperation(subModule1, edit, null);
@@ -801,6 +807,8 @@ public class DBConfiguration {
             moduleOperations.add(deleteModuleOperation32);
             ModuleOperation deleteModuleOperation33 = new ModuleOperation(financing, delete, null);
             moduleOperations.add(deleteModuleOperation33);
+            ModuleOperation deleteModuleOperation34 = new ModuleOperation(demonstration, delete, null);
+            moduleOperations.add(deleteModuleOperation34);
 
             ModuleOperation viewModuleOperation6 = new ModuleOperation(subModule6, view, null);
             moduleOperations.add(viewModuleOperation6);
@@ -879,6 +887,8 @@ public class DBConfiguration {
             moduleOperations.add(exportModuleOperation25);
             ModuleOperation exportModuleOperation26 = new ModuleOperation(notification, export, null);
             moduleOperations.add(exportModuleOperation26);
+            ModuleOperation exportModuleOperation27 = new ModuleOperation(demonstration, export, null);
+            moduleOperations.add(exportModuleOperation27);
 
             ModuleOperation approveModuleOperation3 = new ModuleOperation(transaction, approve, null);
             moduleOperations.add(approveModuleOperation3);
@@ -951,6 +961,8 @@ public class DBConfiguration {
             moduleOperations.add(detailModuleOperation3);
             ModuleOperation detailModuleOperation4 = new ModuleOperation(sales, detail, null);
             moduleOperations.add(detailModuleOperation4);
+            ModuleOperation detailModuleOperation5 = new ModuleOperation(demonstration, detail, null);
+            moduleOperations.add(detailModuleOperation5);
 
             moduleOperationRepository.saveAll(moduleOperations);
 
@@ -1034,6 +1046,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, createModuleOperation28));
             userModuleOperations.add(new UserModuleOperation(user, createModuleOperation29));
             userModuleOperations.add(new UserModuleOperation(user, createModuleOperation30));
+            userModuleOperations.add(new UserModuleOperation(user, createModuleOperation31));
 
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation2));
@@ -1092,6 +1105,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation31));
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation32));
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation33));
+            userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation34));
 
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation2));
@@ -1117,6 +1131,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation24));
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation25));
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation26));
+            userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation27));
 
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation6));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation9));
@@ -1175,6 +1190,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, detailModuleOperation2));
             userModuleOperations.add(new UserModuleOperation(user, detailModuleOperation3));
             userModuleOperations.add(new UserModuleOperation(user, detailModuleOperation4));
+            userModuleOperations.add(new UserModuleOperation(user, detailModuleOperation5));
 
             userModuleOperationRepository.saveAll(userModuleOperations);
 
