@@ -124,5 +124,7 @@ public class Constants {
         public static final String CUSTOMER = "customer";
         public static final String CONFIGURATION = "configuration";
         public static final String NOTIFICATION = "notification";
+        public static final String DEMONSTRATION = "demonstration";
+        public static final String DEMONSTRATION_DETAIL = "demonstration-detail";
     }
 }

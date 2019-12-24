@@ -8,4 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface DemonstrationRepository extends JpaRepository<Demonstration, Integer> {
+    List<Demonstration> getDemonstrationsByActiveTrueOrderByDemonstrateDateDesc();
+    List<Demonstration> getDemonstrationsByActiveTrueAndOrganizationOrderByDemonstrateDateDesc(Organization organization);
+    Demonstration getDemonstrationById(int id);
 }

@@ -31,12 +31,12 @@ public class Demonstration {
 
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd.MM.yyyy")
-    @Column(name = "demonstration_date", nullable = false)
+    @Column(name = "demonstrate_date", nullable = false)
     private Date demonstrateDate = new Date();
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_employee_canavasser_id")
-    private Employee canavasser;
+    @JoinColumn(name = "hr_employee_id")
+    private Employee employee;
 
     @Min(value = 1, message = "Minimum 1 olmalıdır!")
     @Column(name = "amount", nullable = false)

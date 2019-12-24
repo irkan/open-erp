@@ -181,6 +181,9 @@ public class SkeletonController {
     NotificationRepository notificationRepository;
 
     @Autowired
+    DemonstrationRepository demonstrationRepository;
+
+    @Autowired
     LogRepository logRepository;
 
     @Autowired
