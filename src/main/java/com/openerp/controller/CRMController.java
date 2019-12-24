@@ -47,6 +47,7 @@ public class CRMController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             customerRepository.save(customer);
+            log("crm_customer", "create/edit", customer.getId(), customer.toString());
         }
         return mapPost(customer, binding, redirectAttributes);
     }

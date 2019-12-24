@@ -60,6 +60,7 @@ public class CollectController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             paymentRegulatorNoteRepository.save(paymentRegulatorNote);
+            log("collect_payment_regulator_note", "create/edit", paymentRegulatorNote.getId(), paymentRegulatorNote.toString());
         }
         return mapPost(paymentRegulatorNote, binding, redirectAttributes);
     }
@@ -80,14 +81,17 @@ public class CollectController extends SkeletonController {
         invoice.setDescription("Satışdan əldə edilən ödəniş " + invoice.getPrice() + " AZN");
         invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
         invoiceRepository.save(invoice);
+        log("sale_invoice", "transfer", invoice.getId(), invoice.toString());
         invoice.setChannelReferenceCode(String.valueOf(invoice.getId()));
         invoiceRepository.save(invoice);
+        log("sale_invoice", "create/edit", invoice.getId(), invoice.toString());
         String desc = "Hesab faktura yaradıldı: " + invoice.getId();
         if(sales!=null){
             PaymentRegulatorNote paymentRegulatorNote = new PaymentRegulatorNote();
             paymentRegulatorNote.setDescription(desc);
             paymentRegulatorNote.setPayment(sales.getPayment());
             paymentRegulatorNoteRepository.save(paymentRegulatorNote);
+            log("collect_payment_regulator_note", "create/edit", paymentRegulatorNote.getId(), paymentRegulatorNote.toString());
         }
         return mapPost(redirectAttributes, "/collect/payment-regulator");
     }
@@ -108,11 +112,13 @@ public class CollectController extends SkeletonController {
         invoice.setDescription("Satışdan əldə edilən ödəniş " + invoice.getPrice() + " AZN");
         invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
         invoiceRepository.save(invoice);
+        log("sale_invoice", "transfer", invoice.getId(), invoice.toString());
         String desc = "Hesab faktura yaradıldı: " + invoice.getId();
         if(sales!=null){
             PaymentRegulatorNote paymentRegulatorNote = new PaymentRegulatorNote();
             paymentRegulatorNote.setDescription(desc);
             paymentRegulatorNoteRepository.save(paymentRegulatorNote);
+            log("collect_payment_regulator_note", "create/edit", paymentRegulatorNote.getId(), paymentRegulatorNote.toString());
         }
         return mapPost(redirectAttributes, "/collect/troubled-customer");
     }

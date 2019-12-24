@@ -38,39 +38,53 @@ public class DeleteController extends SkeletonController {
             DictionaryType dictionaryType = dictionaryTypeRepository.getDictionaryTypeById(Integer.parseInt(id));
             dictionaryType.setActive(false);
             dictionaryTypeRepository.save(dictionaryType);
+            log("admin_dictionary_type", "delete", dictionaryType.getId(), dictionaryType.toString());
             if(dictionaryType!=null){
                 for(Dictionary dictionary: dictionaryRepository.getDictionariesByDictionaryType_Id(dictionaryType.getId())){
                     dictionary.setActive(false);
                     dictionaryRepository.save(dictionary);
+                    log("admin_dictionary_type", "delete", dictionary.getId(), dictionary.toString());
                 }
             }
         } else if(path.equalsIgnoreCase(Constants.ROUTE.DICTIONARY)){
             Dictionary dictionary = dictionaryRepository.getDictionaryById(Integer.parseInt(id));
             dictionary.setActive(false);
             dictionaryRepository.save(dictionary);
+            log("admin_dictionary", "delete", dictionary.getId(), dictionary.toString());
         } else if(path.equalsIgnoreCase(Constants.ROUTE.MODULE)){
             Module module = moduleRepository.getModuleById(Integer.parseInt(id));
             module.setActive(false);
             moduleRepository.save(module);
+            log("admin_module", "delete", module.getId(), module.toString());
             for(ModuleOperation moduleOperation: moduleOperationRepository.getModuleOperationsByModule_Active(false)){
                 userModuleOperationRepository.deleteInBatch(userModuleOperationRepository.getUserModuleOperationsByModuleOperation_Id(moduleOperation.getId()));
+                log("admin_user_module_operation", "delete-in-batch", moduleOperation.getId(), moduleOperation.toString());
                 moduleOperationRepository.deleteById(moduleOperation.getId());
+                log("admin_module_operation", "delete", moduleOperation.getId(), moduleOperation.toString());
             }
         } else if(path.equalsIgnoreCase(Constants.ROUTE.OPERATION)){
             Operation operation = operationRepository.getOperationById(Integer.parseInt(id));
             operation.setActive(false);
             operationRepository.save(operation);
+            log("admin_operation", "delete", operation.getId(), operation.toString());
             for(ModuleOperation moduleOperation: moduleOperationRepository.getModuleOperationsByOperation_Active(false)){
                 userModuleOperationRepository.deleteInBatch(userModuleOperationRepository.getUserModuleOperationsByModuleOperation_Id(moduleOperation.getId()));
+                log("admin_operation", "delete", operation.getId(), operation.toString());
                 moduleOperationRepository.deleteById(moduleOperation.getId());
+                log("admin_module_operation", "delete", moduleOperation.getId(), moduleOperation.toString());
             }
         } else if(path.equalsIgnoreCase(Constants.ROUTE.MODULE_OPERATION)){
             moduleOperationRepository.deleteById(Integer.parseInt(id));
+            //sora buna baxariq
+            // log("admin_module_operation", "delete", moduleOperation.getId(), moduleOperation.toString())
         } else if(path.equalsIgnoreCase(Constants.ROUTE.USER_MODULE_OPERATION)){
             User userObject = userRepository.getUserByActiveTrueAndId(Integer.parseInt(id));
             userRepository.save(userObject);
+            log("admin_user", "delete", userObject.getId(), userObject.toString());
             List<UserModuleOperation> userModuleOperations = userModuleOperationRepository.getUserModuleOperationsByUser_IdAndUser_Active(user.getId(), true);
             userModuleOperationRepository.deleteInBatch(userModuleOperations);
+            //Listin icinde nie metod hell etmek olmur
+            //log("admin_user_module_operation", "delete-in-batch", userModuleOperations.getId(), userModuleOperations.toString());
         } else if(path.equalsIgnoreCase(Constants.ROUTE.EMPLOYEE)){
             employeeRepository.deleteById(Integer.parseInt(id));
         } else if(path.equalsIgnoreCase(Constants.ROUTE.ORGANIZATION)){
