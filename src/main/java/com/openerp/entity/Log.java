@@ -21,11 +21,14 @@ public class Log {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
+    @Column(name = "type")
+    private String type="info";
+
     @Pattern(regexp=".{0,250}",message="Maksimum 250 simvol ola bilər")
     @Column(name = "table_name")
     private String tableName;
 
-    @Column(name = "row_id", nullable = false)
+    @Column(name = "row_id")
     private int rowId=0;
 
     @Pattern(regexp=".{0,250}",message="Maksimum 250 simvol ola bilər")
@@ -44,6 +47,9 @@ public class Log {
     @Column(name = "operation_date", nullable = false)
     private Date operationDate = new Date();
 
+    @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
+    private Boolean active = true;
+
     @Column(name = "operate_by", nullable = false)
     private String username;
 
@@ -52,6 +58,21 @@ public class Log {
         this.operation = operation;
         this.rowId = rowId;
         this.encapsulate = encapsulate;
+        this.username = username;
+    }
+
+    public Log(String type, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String tableName, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String operation, int rowId, String encapsulate, String username) {
+        this.type = type;
+        this.tableName = tableName;
+        this.operation = operation;
+        this.rowId = rowId;
+        this.encapsulate = encapsulate;
+        this.username = username;
+    }
+
+    public Log(@Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String operation, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String description, String username) {
+        this.operation = operation;
+        this.description = description;
         this.username = username;
     }
 }

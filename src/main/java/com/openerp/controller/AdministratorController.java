@@ -114,6 +114,11 @@ public class AdministratorController extends SkeletonController {
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Notification());
             }
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.LOG)){
+            model.addAttribute(Constants.LIST, logRepository.getLogsByActiveTrueOrderByOperationDateDesc());
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new Log());
+            }
         }
         return "layout";
     }

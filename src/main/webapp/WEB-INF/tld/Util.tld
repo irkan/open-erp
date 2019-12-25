@@ -69,4 +69,11 @@
             com.openerp.entity.Module findParentModule(com.openerp.entity.Module)
         </function-signature>
     </function>
+    <function>
+        <name>calculateTime</name>
+        <function-class>com.openerp.util.DateUtility</function-class>
+        <function-signature>
+            java.lang.String calculateTime(java.util.Date)
+        </function-signature>
+    </function>
 </taglib>

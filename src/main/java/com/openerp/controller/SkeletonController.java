@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -377,6 +378,20 @@ public class SkeletonController {
     }
 
     void log(String tableName, String operation, int rowId, String encapsulate){
-        logRepository.save(new Log(tableName, operation, rowId, encapsulate, getSessionUser().getUsername()));
+        Log log = new Log(tableName, operation, rowId, encapsulate, getSessionUser().getUsername());
+        logRepository.save(log);
+        sessionLog(log);
+    }
+
+    void log(String operation, String description){
+        Log log = new Log(operation, description, getSessionUser().getUsername());
+        logRepository.save(log);
+        sessionLog(log);
+    }
+
+    private void sessionLog(Log log){
+        List<Log> logs = (ArrayList<Log>)session.getAttribute(Constants.LOGS);
+        logs.add(log);
+        session.setAttribute(Constants.LOGS, logs);
     }
 }

@@ -1,9 +1,6 @@
 package com.openerp.controller;
 
-import com.openerp.entity.Module;
-import com.openerp.entity.Organization;
-import com.openerp.entity.User;
-import com.openerp.entity.UserModuleOperation;
+import com.openerp.entity.*;
 import com.openerp.util.Constants;
 import com.openerp.util.Util;
 import org.springframework.stereotype.Controller;
@@ -32,6 +29,7 @@ public class LoginController extends SkeletonController {
     public String logout() throws Exception {
         if(getSessionUser()!=null){
             session.removeAttribute(Constants.USER);
+            session.removeAttribute(Constants.LOGS);
             session.invalidate();
         }
         return "login";
@@ -58,6 +56,8 @@ public class LoginController extends SkeletonController {
         }
         if(parentModules.size()>0){
             session.setAttribute(Constants.USER, user);
+            session.setAttribute(Constants.LOGS, new ArrayList<Log>());
+            log("enter", "Sistemə giriş edildi: " + user.getUsername());
             redirectAttributes.addFlashAttribute(Constants.PAGE, "module");
             session.setAttribute(Constants.ORGANIZATION, getUserOrganization());
             session.setAttribute(Constants.ORGANIZATION_SELECTED, getUserOrganization());

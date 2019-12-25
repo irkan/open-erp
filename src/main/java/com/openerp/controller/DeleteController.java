@@ -182,7 +182,11 @@ public class DeleteController extends SkeletonController {
             financing.setActive(false);
             financingRepository.save(financing);
             log("accounting_financing", "create/edit", financing.getId(), financing.toString());
-
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.FINANCING)){
+            Log log = logRepository.getLogById(Integer.parseInt(id));
+            log.setActive(false);
+            logRepository.save(log);
+            log("admin_log", "create/edit", log.getId(), log.toString());
         }
         return "redirect:/"+parent+"/"+path;
     }

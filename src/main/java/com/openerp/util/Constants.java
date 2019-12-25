@@ -60,6 +60,7 @@ public class Constants {
     public static final String NOTIFICATIONS = "notifications";
     public static final String ORGANIZATION = "organization";
     public static final String ORGANIZATION_SELECTED = "organization_selected";
+    public static final String LOGS = "logs";
 
     public static final class STATUS{
         public static final String RESPONSE = "response";
@@ -126,5 +127,6 @@ public class Constants {
         public static final String NOTIFICATION = "notification";
         public static final String DEMONSTRATION = "demonstration";
         public static final String DEMONSTRATION_DETAIL = "demonstration-detail";
+        public static final String LOG = "log";
     }
 }

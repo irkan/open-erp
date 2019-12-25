@@ -97,4 +97,30 @@ public class DateUtility {
         return "«"+contractDate.getDate()+"» " + monthName + " " + (contractDate.getYear()+1900);
 
     }
+
+    public static String calculateTime(Date date){
+        String returned = "";
+        long value = (new Date()).getTime()-date.getTime();
+        int a = 0;
+        if(value>86400000){
+            returned+=Math.round(value/86400000) + " gün ";
+            value = value - Math.round(value/86400000)*86400000;
+            a++;
+        }
+        if(value>3600000 && a<3){
+            returned+=Math.round(value/3600000) + " saat ";
+            value = value - Math.round(value/3600000)*3600000;
+            a++;
+        }
+        if(value>60000 && a<2){
+            returned+=Math.round(value/60000) + " dəqiqə ";
+            value = value - Math.round(value/60000)*60000;
+            a++;
+        }
+        if(value>1000 && a<1){
+            returned+=Math.round(value/1000) + " saniyə ";
+        }
+        returned = returned.trim().length()>0?returned+"əvvəl":"indi";
+        return returned;
+    }
 }
