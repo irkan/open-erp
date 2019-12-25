@@ -87,6 +87,7 @@ public class SaleController extends SkeletonController {
             }
             sales.setGuaranteeExpire(Util.guarantee(sales.getSaleDate()==null?new Date():sales.getSaleDate(), sales.getGuarantee()));
             salesRepository.save(sales);
+            log("sale_sales", "create/edit", sales.getId(), sales.toString());
 
             List<Action> oldActions = actionRepository.getActionsByActiveTrueAndInventory_ActiveAndInventoryAndEmployeeAndAction_Attr1AndAmountGreaterThanOrderById(true, sales.getSalesInventories().get(0).getInventory(), getSessionUser().getEmployee(), "consolidate", 0);
             if(oldActions.size()>0){
@@ -98,10 +99,12 @@ public class SaleController extends SkeletonController {
                 action.setEmployee(getSessionUser().getEmployee());
                 action.setSupplier(oldActions.get(0).getSupplier());
                 actionRepository.save(action);
+                log("warehouse_action", "create/edit", action.getId(), action.toString());
 
                 Action oldAction = oldActions.get(0);
                 oldAction.setAmount(oldAction.getAmount()-1);
                 actionRepository.save(oldAction);
+                log("warehouse_action", "create/edit", oldAction.getId(), oldAction.toString());
             }
 
             if(sales.getPayment()!=null && sales.getPayment().getSchedules()!=null && sales.getPayment().getSchedules().size()>0){
@@ -110,6 +113,8 @@ public class SaleController extends SkeletonController {
                     schedule.setPayment(sales.getPayment());
                 }
                 scheduleRepository.saveAll(schedules);
+                //Id de error olur
+                //log("warehouse_action", "create/edit", schedules.getId(), schedules.toString());
             }
 
             double invoicePrice = 0d;
@@ -128,8 +133,10 @@ public class SaleController extends SkeletonController {
                 invoice.setDescription("Satışdan əldə edilən ödəniş " + invoicePrice + " AZN");
                 invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
                 invoiceRepository.save(invoice);
+                log("sale_invoice", "create/edit", invoice.getId(), invoice.toString());
                 invoice.setChannelReferenceCode(String.valueOf(invoice.getId()));
                 invoiceRepository.save(invoice);
+                log("sale_invoice", "create/edit", invoice.getId(), invoice.toString());
             }
         }
         return mapPost(sales, binding, redirectAttributes);
@@ -177,8 +184,10 @@ public class SaleController extends SkeletonController {
                 invc.setDescription(invoice.getDescription());
             }
             invoiceRepository.save(invc);
+            log("sale_invoice", "create/edit", invc.getId(), invc.toString());
             invc.setChannelReferenceCode(String.valueOf(invc.getId()));
             invoiceRepository.save(invc);
+            log("sale_invoice", "create/edit", invc.getId(), invc.toString());
         }
         return mapPost(invoice, binding, redirectAttributes);
     }
@@ -190,6 +199,7 @@ public class SaleController extends SkeletonController {
         if(!binding.hasErrors()) {
             invc.setCollector(invoice.getCollector());
             invoiceRepository.save(invc);
+            log("sale_invoice", "create/edit", invc.getId(), invc.toString());
         }
         return mapPost(invc, binding, redirectAttributes, "/sale/invoice/");
     }
@@ -215,6 +225,7 @@ public class SaleController extends SkeletonController {
             invc.setDescription(invoice.getDescription());
             invc.setAdvance(invoice.getAdvance());
             invoiceRepository.save(invc);
+            log("sale_invoice", "create/edit", invc.getId(), invc.toString());
 
             Transaction transaction = new Transaction();
             transaction.setApprove(false);
@@ -234,6 +245,7 @@ public class SaleController extends SkeletonController {
                     + " " + invc.getSales().getSalesInventories().get(0).getInventory().getBarcode()
             );
             transactionRepository.save(transaction);
+            log("accounting_transaction", "create/edit", transaction.getId(), transaction.toString());
 
             if(invc.getSales()!=null && invc.getApprove() && invc.getAdvance()){
                 List<Advance> advances = new ArrayList<>();
@@ -302,6 +314,8 @@ public class SaleController extends SkeletonController {
                     ));
                 }
                 advanceRepository.saveAll(advances);
+               //Id de error verir
+                // log("accounting_transaction", "create/edit", advances.getId(), advances.toString());
             }
         }
         return mapPost(invc, binding, redirectAttributes, "/sale/invoice/");

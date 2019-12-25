@@ -53,6 +53,7 @@ public class ProfileController extends SkeletonController {
             if(user.getPassword().equalsIgnoreCase(DigestUtils.md5DigestAsHex(changePassword.getOldPassword().getBytes()))){
                 user.setPassword(DigestUtils.md5DigestAsHex(changePassword.getNewPassword().getBytes()));
                 userRepository.save(user);
+                log("admin_user", "create/edit", user.getId(), user.toString());
                 model.addAttribute(Constants.FORM, new ChangePassword());
                 return "layout";
             }
@@ -66,6 +67,7 @@ public class ProfileController extends SkeletonController {
                                      BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         if(!binding.hasErrors()){
             contactRepository.save(contact);
+            log("common_contact", "create/edit", contact.getId(), contact.toString());
             User user = getSessionUser();
             Person person = user.getEmployee().getPerson();
             person.setContact(contact);
@@ -79,6 +81,7 @@ public class ProfileController extends SkeletonController {
                                           BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         if(!binding.hasErrors()){
             userDetailRepository.save(userDetail);
+            log("admin_user_detail", "create/edit", userDetail.getId(), userDetail.toString());
             User user = getSessionUser();
             user.setUserDetail(userDetail);
             session.setAttribute(Constants.USER, user);

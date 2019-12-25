@@ -40,6 +40,7 @@ public class IDGroupController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             itemRepository.save(item);
+            log("idgroup_item", "create/edit", item.getId(), item.toString());
         }
         return mapPost(item, binding, redirectAttributes);
     }
@@ -51,6 +52,7 @@ public class IDGroupController extends SkeletonController {
             List<Item> itms = itemRepository.getItemsByActiveTrueAndBarcode(item.getBarcode());
             if(itms!=null && itms.size()==0){
                 itemRepository.save(item);
+                log("idgroup_item", "create/edit", item.getId(), item.toString());
             }
         }
         return mapPost(redirectAttributes, "/idgroup/item");
