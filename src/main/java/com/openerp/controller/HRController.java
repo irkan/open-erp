@@ -158,12 +158,13 @@ public class HRController extends SkeletonController {
     }
 
     @PostMapping(value = "/employee/payroll")
-    public String postEmployeePayroll(@ModelAttribute(Constants.FORM) @Validated Employee employee, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+    public String postEmployeePayroll(@ModelAttribute(Constants.FORM) @Validated Employee object, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        Employee employee = employeeRepository.getEmployeeById(object.getId());
         employeePayrollDetailRepository.deleteInBatch(employeePayrollDetailRepository.getEmployeePayrollDetailsByEmployee_Id(employee.getId()));
         List<PayrollConfiguration> payrollConfigurations = payrollConfigurationRepository.getPayrollConfigurationsByActiveTrueOrderById();
         List<EmployeePayrollDetail> employeePayrollDetails = new ArrayList<>();
-        for(int i=0; i<employee.getEmployeePayrollDetails().size(); i++){
-            EmployeePayrollDetail employeePayrollDetail = employee.getEmployeePayrollDetails().get(i);
+        for(int i=0; i<object.getEmployeePayrollDetails().size(); i++){
+            EmployeePayrollDetail employeePayrollDetail = object.getEmployeePayrollDetails().get(i);
             employeePayrollDetail.setEmployee(employee);
             if(employeePayrollDetail.getKey().equalsIgnoreCase("{main_vacation_days}")){
                 employeePayrollDetail.setValue(Util.calculateMainVacationDays(payrollConfigurations, employee));
