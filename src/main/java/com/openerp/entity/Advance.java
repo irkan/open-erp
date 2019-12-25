@@ -3,6 +3,7 @@ package com.openerp.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
@@ -47,6 +48,7 @@ public class Advance {
     private String description;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
     @Column(name = "advance_date")
     private Date advanceDate=new Date();
 
@@ -54,8 +56,9 @@ public class Advance {
     private Boolean approve = false;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
     @Column(name = "approve_date")
-    private Date approveDate;
+    private Date approveDate = new Date();
 
     @Column(name = "is_debt", nullable = false, columnDefinition="boolean default true")
     private Boolean debt = false;

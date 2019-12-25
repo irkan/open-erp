@@ -60,6 +60,23 @@ public class SaleController extends SkeletonController {
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Invoice());
             }
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.DEMONSTRATION)){
+            List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization());
+            List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
+            Util.convertedEmployeesByPosition(employees, positions);
+            model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployeesByPosition(employees, positions));
+            List<Demonstration> demonstrations;
+            if(canViewAll()){
+                demonstrations = demonstrationRepository.getDemonstrationsByActiveTrueOrderByDemonstrateDateDesc();
+            } else {
+                demonstrations = demonstrationRepository.getDemonstrationsByActiveTrueAndOrganizationOrderByDemonstrateDateDesc(getSessionOrganization());
+            }
+            model.addAttribute(Constants.LIST, demonstrations);
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new Demonstration());
+            }
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.DEMONSTRATION_DETAIL)){
+
         } else if(page.equalsIgnoreCase(Constants.ROUTE.CALCULATOR)){
             model.addAttribute(Constants.SALE_PRICES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("sale-price"));
             model.addAttribute(Constants.PAYMENT_SCHEDULES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-schedule"));
@@ -190,6 +207,20 @@ public class SaleController extends SkeletonController {
             log("sale_invoice", "create/edit", invc.getId(), invc.toString());
         }
         return mapPost(invoice, binding, redirectAttributes);
+    }
+
+    @PostMapping(value = "/demonstration")
+    public String postDemonstration(@ModelAttribute(Constants.FORM) @Validated Demonstration demonstration, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()){
+            demonstrationRepository.save(demonstration);
+            List<EmployeePayrollDetail> employeeDetails = demonstration.getEmployee().getEmployeePayrollDetails();
+            String value = Util.findEmployeeDetail(employeeDetails, "{demonstration}");
+            double price = demonstration.getAmount()*Double.parseDouble(value);
+            Advance advance = new Advance(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("bonus-demonstration-advance", "advance"), demonstration.getEmployee(), demonstration.getEmployee().getOrganization(), "", "", demonstration.getCreatedDate(), price);
+            advanceRepository.save(advance);
+        }
+        return mapPost(demonstration, binding, redirectAttributes);
     }
 
     @PostMapping(value = "/invoice/consolidate")

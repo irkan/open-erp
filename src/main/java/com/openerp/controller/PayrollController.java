@@ -224,6 +224,7 @@ public class PayrollController extends SkeletonController {
     public String postAdvance(@ModelAttribute(Constants.FORM) @Validated Advance advance, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
+            advance.setOrganization(getSessionOrganization());
             advanceRepository.save(advance);
             log("payroll_advance", "create/edit", advance.getId(), advance.toString());
         }

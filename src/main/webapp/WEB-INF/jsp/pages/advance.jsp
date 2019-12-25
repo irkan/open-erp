@@ -30,6 +30,7 @@
         <th>Tarix</th>
         <th>Açıqlama</th>
         <th>Formul</th>
+        <th>Təsdiq edilib</th>
         <th>Status</th>
         <th>Əməliyyat</th>
     </tr>
@@ -50,6 +51,11 @@
             <th><fmt:formatDate value = "${t.advanceDate}" pattern = "dd.MM.yyyy" /></th>
             <td><c:out value="${t.description}" /></td>
             <td><c:out value="${t.formula}" /></td>
+            <td>
+                <c:if test="${t.approve}">
+                    <fmt:formatDate value = "${t.approveDate}" pattern = "dd.MM.yyyy HH:mm:ss" />
+                </c:if>
+            </td>
             <th class="text-center">
                 <c:choose>
                     <c:when test="${t.debt}">
@@ -130,32 +136,56 @@
                 <form:form modelAttribute="form" id="form" method="post" action="/payroll/advance" cssClass="form-group">
                     <form:hidden path="id"/>
                     <form:hidden path="approve"/>
-                    <form:hidden path="advanceDate"/>
-                    <div class="form-group">
-                        <form:label path="employee">Əməkdaş</form:label>
-                        <form:select  path="employee" cssClass="custom-select form-control">
-                            <form:options items="${employees}" itemLabel="person.fullName" itemValue="id" />
-                        </form:select>
-                        <form:errors path="employee" cssClass="control-label alert alert-danger" />
+                    <form:hidden path="approveDate"/>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <form:label path="employee">Əməkdaş</form:label>
+                                <form:select  path="employee" cssClass="custom-select form-control">
+                                    <form:options items="${employees}" itemLabel="person.fullName" itemValue="id" />
+                                </form:select>
+                                <form:errors path="employee" cssClass="control-label alert alert-danger" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <form:label path="advance">Avans</form:label>
+                                <form:select  path="advance" cssClass="custom-select form-control">
+                                    <form:options items="${advances}" itemLabel="name" itemValue="id" />
+                                </form:select>
+                                <form:errors path="advance" cssClass="control-label alert alert-danger" />
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <form:label path="advance">Avans</form:label>
-                        <form:select  path="advance" cssClass="custom-select form-control">
-                            <form:options items="${advances}" itemLabel="name" itemValue="id" />
-                        </form:select>
-                        <form:errors path="advance" cssClass="control-label alert alert-danger" />
-                    </div>
-                    <div class="form-group">
-                        <form:label path="payed">Məbləğ</form:label>
-                        <div class="input-group" >
-                            <form:input path="payed" cssClass="form-control" placeholder="Məbləği daxil edin"/>
-                            <div class="input-group-append">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <form:label path="payed">Məbləğ</form:label>
+                                <div class="input-group" >
+                                    <form:input path="payed" cssClass="form-control" placeholder="Məbləği daxil edin"/>
+                                    <div class="input-group-append">
                                                     <span class="input-group-text">
                                                         <i class="la la-usd"></i>
                                                     </span>
+                                    </div>
+                                </div>
+                                <form:errors path="payed" cssClass="alert-danger control-label"/>
                             </div>
                         </div>
-                        <form:errors path="payed" cssClass="alert-danger control-label"/>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <form:label path="advanceDate">Avans tarixi</form:label>
+                                <div class="input-group date" >
+                                    <form:input path="advanceDate" cssClass="form-control datepicker-element" date="date" placeholder="dd.MM.yyyy"/>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-calendar"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <form:errors path="advanceDate" cssClass="control-label alert-danger" />
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>
