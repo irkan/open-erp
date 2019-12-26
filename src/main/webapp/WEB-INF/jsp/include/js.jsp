@@ -73,7 +73,6 @@
 <script src="<c:url value="/assets/vendors/general/dompurify/dist/purify.js" />" type="text/javascript"></script>
 <script src="<c:url value="/assets/js/demo4/scripts.bundle.js" />" type="text/javascript"></script>
 <script src="<c:url value="/assets/vendors/custom/fullcalendar/fullcalendar.bundle.js" />" type="text/javascript"></script>
-<script src="//maps.google.com/maps/api/js?key=AIzaSyBTGnKT7dt597vo9QgeQ7BFhvSRP4eiMSM" type="text/javascript"></script>
 <script src="<c:url value="/assets/vendors/custom/gmaps/gmaps.js" />" type="text/javascript"></script>
 <script src="<c:url value="/assets/vendors/custom/datatables/datatables.bundle.js" />" type="text/javascript"></script>
 <script src="<c:url value="/assets/js/demo4/pages/crud/forms/widgets/bootstrap-datepicker.js" />" type="text/javascript"></script>

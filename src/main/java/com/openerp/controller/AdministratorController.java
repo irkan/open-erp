@@ -180,6 +180,16 @@ public class AdministratorController extends SkeletonController {
         return mapPost(dictionaryType, binding, redirectAttributes);
     }
 
+    @PostMapping(value = "/log1")
+    public String postLog(@ModelAttribute(Constants.FORM) @Validated Log log, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()){
+            logRepository.save(log);
+            log("admin_log", "create/edit", log.getId(), log.toString());
+        }
+        return mapPost(log, binding, redirectAttributes);
+    }
+
     @PostMapping(value = "/dictionary")
     public String postDictionary(@ModelAttribute(Constants.FORM) @Validated Dictionary dictionary, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));

@@ -19,35 +19,36 @@
 
 <c:choose>
     <c:when test="${not empty list}">
-<table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+    <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
+    <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
+    <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
     <thead>
     <tr>
-        <th>№</th>
         <th>ID</th>
-        <th>Ad</th>
-        <th>Atribut#1</th>
-        <th>Atribut#2</th>
+        <th>Tip</th>
+        <th>Cədvəl</th>
+        <th>Əməliyyat</th>
+        <th>Yazı №</th>
+        <th>Açıqlama</th>
+        <th>Enkapsulasiya</th>
+        <th>Tarix</th>
+        <th>İstifadəçi</th>
         <th>Əməliyyat</th>
     </tr>
     </thead>
     <tbody>
     <c:forEach var="t" items="${list}" varStatus="loop">
         <tr data="<c:out value="${utl:toJson(t)}" />">
-            <td>${loop.index + 1}</td>
-            <td><c:out value="${t.id}" /> <%--${utl:toJson(t)}--%></td>
-            <th><c:out value="${t.name}" /></th>
-            <th><c:out value="${t.attr1}" /></th>
-            <td><c:out value="${t.attr2}" /></td>
+            <td><c:out value="${t.id}" /></td>
+            <td><c:out value="${t.type}" /></td>
+            <th><c:out value="${t.tableName}" /></th>
+            <th><c:out value="${t.operation}" /></th>
+            <td><c:out value="${t.rowId}" /></td>
+            <td><c:out value="${t.description}" /></td>
+            <td><c:out value="${t.encapsulate}" /></td>
+            <td><fmt:formatDate value = "${t.operationDate}" pattern = "dd.MM.yyyy HH:mm:ss" /></td>
+            <td><c:out value="${t.username}" /></td>
             <td nowrap class="text-center">
-                <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
-                <c:choose>
-                    <c:when test="${view.status}">
-                        <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
-                            <i class="la <c:out value="${view.object.icon}"/>"></i>
-                        </a>
-                    </c:when>
-                </c:choose>
-                <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
                 <c:choose>
                     <c:when test="${edit.status}">
                         <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
@@ -55,10 +56,9 @@
                         </a>
                     </c:when>
                 </c:choose>
-                <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
                 <c:choose>
                     <c:when test="${delete.status}">
-                        <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
+                        <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.operation}" /><br/><c:out value="${t.description}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
                             <i class="<c:out value="${delete.object.icon}"/>"></i>
                         </a>
                     </c:when>
@@ -95,24 +95,47 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form:form modelAttribute="form" id="form" method="post" action="/admin/dictionary-type" cssClass="form-group">
+                <form:form modelAttribute="form" id="form" method="post" action="/admin/log" cssClass="form-group">
                     <form:input type="hidden" name="id" path="id"/>
                     <form:input type="hidden" name="active" path="active" value="1"/>
-                    <div class="form-group">
-                        <form:label path="name">Ad</form:label>
-                        <form:input path="name" cssClass="form-control" placeholder="Adı daxil edin"/>
-                        <form:errors path="name" cssClass="alert-danger control-label"/>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <form:label path="type">Tip</form:label>
+                                <form:input path="type" cssClass="form-control" placeholder="Tipi daxil edin"/>
+                                <form:errors path="type" cssClass="alert-danger control-label"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <form:label path="tableName">Cədvəl</form:label>
+                                <form:input path="tableName" cssClass="form-control" placeholder="Cədvəli daxil edin" />
+                                <form:errors path="tableName" cssClass="alert-danger"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <form:label path="operation">Əməliyyat</form:label>
+                                <form:input path="operation" cssClass="form-control" placeholder="Əməliyyatı daxil edin" />
+                                <form:errors path="operation" cssClass="alert alert-danger"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <form:label path="rowId">Sətr №</form:label>
+                                <form:input path="rowId" cssClass="form-control" placeholder="Sətr №-sini daxil edin" />
+                                <form:errors path="rowId" cssClass="alert alert-danger"/>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <form:label path="attr1">Atribut#1</form:label>
-                        <form:input path="attr1" cssClass="form-control" placeholder="Atributu daxil edin" />
-                        <form:errors path="attr1" cssClass="alert-danger"/>
+                        <form:label path="description">Açıqlama</form:label>
+                        <form:textarea path="description" cssClass="form-control" placeholder="Açıqlamanı daxil edin" />
+                        <form:errors path="description" cssClass="alert alert-danger"/>
                     </div>
-                    <div class="form-group">
-                        <form:label path="attr2">Atribut#2</form:label>
-                        <form:input path="attr2" cssClass="form-control" placeholder="Atributu daxil edin" />
-                        <form:errors path="attr2" cssClass="alert alert-danger"/>
-                    </div>
+
                 </form:form>
             </div>
             <div class="modal-footer">
