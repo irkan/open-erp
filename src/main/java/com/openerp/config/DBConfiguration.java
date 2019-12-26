@@ -595,6 +595,16 @@ public class DBConfiguration {
             modules.add(crm);
             Module customer = new Module("Müştəri", "Müştəri", "customer", "flaticon2-group", crm);
             modules.add(customer);
+            Module profile = new Module("Mənim profilim", "Hesab məlumatları və sazlamaları", "profile", "flaticon-rotate", null);
+            modules.add(profile);
+            Module overview = new Module("Profil", "Profil", "overview", "flaticon-rotate", profile);
+            modules.add(overview);
+            Module personalInformation = new Module("Şəxsi məlumat", "Şəxsi məlumat", "personal-information", "flaticon-rotate", profile);
+            modules.add(personalInformation);
+            Module accountInformation = new Module("Hesab məlumatı", "Hesab məlumatı", "account-information", "flaticon-rotate", profile);
+            modules.add(accountInformation);
+            Module changePassword = new Module("Şifrənin dəyişdirilməsi", "Şifrənin dəyişdirilməsi", "change-password", "flaticon-rotate", profile);
+            modules.add(changePassword);
 
             moduleRepository.saveAll(modules);
 

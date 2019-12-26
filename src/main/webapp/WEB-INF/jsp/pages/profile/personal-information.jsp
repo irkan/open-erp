@@ -91,7 +91,7 @@
                                     <h3 class="kt-section__title kt-section__title-sm">Əlaqə vasitələri:</h3>
                                 </div>
                             </div>
-                            <form:form modelAttribute="form" id="form" method="post" action="/profile/personal-information" cssClass="kt-form kt-form--label-right">
+                            <form:form modelAttribute="form" id="form" method="post" action="/route/sub/profile/personal-information" cssClass="kt-form kt-form--label-right">
                                 <form:hidden path="id"/>
                                 <div class="form-group row">
                                     <form:label path="mobilePhone" cssClass="col-xl-2 col-lg-2 col-form-label">Mobil nömrə</form:label>

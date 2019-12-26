@@ -54,7 +54,7 @@
                             </div>
                             <div class="kt-separator kt-separator--border-dashed"></div>
                             <div class="kt-widget__items">
-                                <a href="/profile/overview" class="kt-widget__item <c:out default="None" escapeXml="true" value="${sessionScope.profile_sub_page eq 'profile/overview' ? ' kt-widget__item--active' : ''}" />">
+                                <a href="/route/sub/profile/overview" class="kt-widget__item <c:out default="None" escapeXml="true" value="${sessionScope.profile_sub_page eq 'profile/overview' ? ' kt-widget__item--active' : ''}" />">
                         <span class="kt-widget__section">
                             <span class="kt-widget__icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
@@ -69,7 +69,7 @@
                             </span>
                         </span>
                                 </a>
-                                <a  href="/profile/personal-information" class="kt-widget__item  <c:out default="None" escapeXml="true" value="${sessionScope.profile_sub_page eq 'profile/personal-information' ? ' kt-widget__item--active' : ''}" />">
+                                <a  href="/route/sub/profile/personal-information" class="kt-widget__item  <c:out default="None" escapeXml="true" value="${sessionScope.profile_sub_page eq 'profile/personal-information' ? ' kt-widget__item--active' : ''}" />">
                         <span class="kt-widget__section">
                             <span class="kt-widget__icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
@@ -84,7 +84,7 @@
                             </span>
                         </span>
                                 </a>
-                                <a href="/profile/account-information" class="kt-widget__item  <c:out default="None" escapeXml="true" value="${sessionScope.profile_sub_page eq 'profile/account-information' ? ' kt-widget__item--active' : ''}" />">
+                                <a href="/route/sub/profile/account-information" class="kt-widget__item  <c:out default="None" escapeXml="true" value="${sessionScope.profile_sub_page eq 'profile/account-information' ? ' kt-widget__item--active' : ''}" />">
                         <span class="kt-widget__section">
                             <span class="kt-widget__icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
@@ -99,7 +99,7 @@
                             </span>
                             </spandiv>
                                 </a>
-                                <a href="/profile/change-password" class="kt-widget__item  <c:out default="None" escapeXml="true" value="${sessionScope.profile_sub_page eq 'profile/change-password' ? ' kt-widget__item--active' : ''}" />">
+                                <a href="/route/sub/profile/change-password" class="kt-widget__item  <c:out default="None" escapeXml="true" value="${sessionScope.profile_sub_page eq 'profile/change-password' ? ' kt-widget__item--active' : ''}" />">
                         <span class="kt-widget__section">
                             <span class="kt-widget__icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">

@@ -33,7 +33,6 @@ public class ProfileController extends SkeletonController {
     @GetMapping(value = {"/{page}", "/{page}/{data}"})
     public String route(Model model, @PathVariable("page") String page, @PathVariable("data") Optional<String> data, RedirectAttributes redirectAttributes) throws Exception {
         session.setAttribute(Constants.PROFILE_SUB_PAGE, "profile/"+page);
-
         if (page.equalsIgnoreCase(Constants.ROUTE.CHANGE_PASSWORD)) {
             model.addAttribute(Constants.FORM, new ChangePassword());
         } else if (page.equalsIgnoreCase(Constants.ROUTE.PERSONAL_INFORMATION)) {

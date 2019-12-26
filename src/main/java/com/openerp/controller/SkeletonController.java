@@ -18,6 +18,7 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -392,6 +393,7 @@ public class SkeletonController {
     private void sessionLog(Log log){
         List<Log> logs = (ArrayList<Log>)session.getAttribute(Constants.LOGS);
         logs.add(log);
+        Collections.reverse(logs);
         session.setAttribute(Constants.LOGS, logs);
     }
 }

@@ -163,7 +163,7 @@ public class DeleteController extends SkeletonController {
             PaymentRegulatorNote paymentRegulatorNote = paymentRegulatorNoteRepository.getPaymentRegulatorNoteById(Integer.parseInt(id));
             paymentRegulatorNote.setActive(false);
             paymentRegulatorNoteRepository.save(paymentRegulatorNote);
-            log("collect_payment_regulator_note", "create/edit", paymentRegulatorNote.getId(), paymentRegulatorNote.toString());
+            log("collect_payment_regulator_note", "delete", paymentRegulatorNote.getId(), paymentRegulatorNote.toString());
         } else if(path.equalsIgnoreCase(Constants.ROUTE.CUSTOMER)){
             Customer customer = customerRepository.getCustomerByIdAndActiveTrue(Integer.parseInt(id));
             customer.setActive(false);
@@ -175,18 +175,19 @@ public class DeleteController extends SkeletonController {
             configurationRepository.save(configuration);
             log("admin_configuration", "create/edit", configuration.getId(), configuration.toString());
         } else if(path.equalsIgnoreCase(Constants.ROUTE.NOTIFICATION)){
-            notificationRepository.delete(notificationRepository.getNotificationById(Integer.parseInt(id)));
-          //  log("admin_configuration", "delete", configuration.getId(), configuration.toString());
+            Notification notification = notificationRepository.getNotificationById(Integer.parseInt(id));
+            log("admin_configuration", "delete", notification.getId(), notification.toString());
+            notificationRepository.delete(notification);
         } else if(path.equalsIgnoreCase(Constants.ROUTE.FINANCING)){
             Financing financing = financingRepository.getFinancingById(Integer.parseInt(id));
             financing.setActive(false);
             financingRepository.save(financing);
             log("accounting_financing", "create/edit", financing.getId(), financing.toString());
-        } else if(path.equalsIgnoreCase(Constants.ROUTE.FINANCING)){
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.LOG)){
             Log log = logRepository.getLogById(Integer.parseInt(id));
             log.setActive(false);
             logRepository.save(log);
-            log("admin_log", "create/edit", log.getId(), log.toString());
+            log("admin_log", "delete", log.getId(), log.toString());
         }
         return "redirect:/"+parent+"/"+path;
     }

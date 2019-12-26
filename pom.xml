@@ -129,12 +129,6 @@
 			<artifactId>layout</artifactId>
 			<version>7.1.8</version>
 		</dependency>
-        <!-- https://mvnrepository.com/artifact/com.itextpdf/io -->
-        <dependency>
-            <groupId>com.itextpdf</groupId>
-            <artifactId>io</artifactId>
-            <version>7.1.8</version>
-        </dependency>
     </dependencies>
 
 	<build>
