@@ -49,7 +49,9 @@ public class LoginController extends SkeletonController {
         for(UserModuleOperation umo: user.getUserModuleOperations()){
             if (umo.getModuleOperation().getModule().getModule().getModule()==null) {
                 if(!parentModules.contains(umo.getModuleOperation().getModule().getModule())){
-                    parentModules.add(umo.getModuleOperation().getModule().getModule());
+                    if(!umo.getModuleOperation().getModule().getModule().getPath().equalsIgnoreCase("profile")){
+                        parentModules.add(umo.getModuleOperation().getModule().getModule());
+                    }
                 }
 
             }

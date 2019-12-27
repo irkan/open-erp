@@ -211,6 +211,11 @@ public class AdministratorController extends SkeletonController {
             user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
             userRepository.save(user);
             log("admin_user", "create/edit", user.getId(), user.toString());
+            List<ModuleOperation> moduleOperations = moduleOperationRepository.getModuleOperationsByModule_Path("profile");
+            for(ModuleOperation mo: moduleOperations){
+                userModuleOperationRepository.save(new UserModuleOperation(user, mo));
+            }
+            log("admin_user_module_operation", "create/edit", 0, null, "Profil yaradıldı");
             String message = "Hörmətli " + user.getEmployee().getPerson().getFirstName() + ",<br/><br/>" +
                     "Sizin məlumatlarınıza əsasən yeni istifadəçi yaradılmışdır.<br/><br/>" +
                     "İstifadəçi adınız: "+user.getUsername()+"<br/>" +
@@ -244,7 +249,7 @@ public class AdministratorController extends SkeletonController {
                 userModuleOperationRepository.save(new UserModuleOperation(userModuleOperation.getUser(), mo));
             }
             userDetailRepository.save(userModuleOperation.getUser().getUserDetail());
-            log("admin_user_module_operation", "create/edit", userModuleOperation.getId(), userModuleOperation.toString());
+            log("admin_user_module_operation", "create/edit", 0, userModuleOperation.toString(), userModuleOperation.getUser().getUsername() + " icazələri yeniləndi");
         }
         return mapPost(userModuleOperation, binding, redirectAttributes);
     }

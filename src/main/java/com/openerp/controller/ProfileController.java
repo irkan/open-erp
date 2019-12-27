@@ -34,12 +34,18 @@ public class ProfileController extends SkeletonController {
     public String route(Model model, @PathVariable("page") String page, @PathVariable("data") Optional<String> data, RedirectAttributes redirectAttributes) throws Exception {
         session.setAttribute(Constants.PROFILE_SUB_PAGE, "profile/"+page);
         if (page.equalsIgnoreCase(Constants.ROUTE.CHANGE_PASSWORD)) {
-            model.addAttribute(Constants.FORM, new ChangePassword());
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new ChangePassword());
+            }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.PERSONAL_INFORMATION)) {
-            model.addAttribute(Constants.FORM, getSessionUser().getEmployee().getPerson().getContact());
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, getSessionUser().getEmployee().getPerson().getContact());
+            }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.ACCOUNT_INFORMATION)) {
             model.addAttribute(Constants.LANGUAGES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("language"));
-            model.addAttribute(Constants.FORM, getSessionUser().getUserDetail());
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, getSessionUser().getUserDetail());
+            }
         }
         return "layout";
     }
