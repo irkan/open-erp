@@ -603,8 +603,8 @@ public class DBConfiguration {
             modules.add(personalInformation);
             Module accountInformation = new Module("Hesab məlumatı", "Hesab məlumatı", "account-information", "flaticon2-ui", profile);
             modules.add(accountInformation);
-            Module changePassword = new Module("Şifrənin dəyişdirilməsi", "Şifrənin dəyişdirilməsi", "change-password", "flaticon2-shield", profile);
-            modules.add(changePassword);
+            Module changePasswordModule = new Module("Şifrənin dəyişdirilməsi", "Şifrənin dəyişdirilməsi", "change-password", "flaticon2-shield", profile);
+            modules.add(changePasswordModule);
 
             moduleRepository.saveAll(modules);
 
@@ -647,6 +647,8 @@ public class DBConfiguration {
             operations.add(returnOperation);
             Operation detail = new Operation("Detal", "detail", "la la-external-link");
             operations.add(detail);
+            Operation changePassword = new Operation("Şifrəni dəyişdir", "change-password", "flaticon-lock");
+            operations.add(changePassword);
 
             operationRepository.saveAll(operations);
 
@@ -766,8 +768,8 @@ public class DBConfiguration {
             moduleOperations.add(editModuleOperation32);
             ModuleOperation editModuleOperation33 = new ModuleOperation(accountInformation, edit, null);
             moduleOperations.add(editModuleOperation33);
-            ModuleOperation editModuleOperation34 = new ModuleOperation(changePassword, edit, null);
-            moduleOperations.add(editModuleOperation34);
+            ModuleOperation editModuleOperation35 = new ModuleOperation(subModule5, edit, null);
+            moduleOperations.add(editModuleOperation35);
 
             ModuleOperation deleteModuleOperation1 = new ModuleOperation(subModule1, delete, null);
             moduleOperations.add(deleteModuleOperation1);
@@ -868,7 +870,7 @@ public class DBConfiguration {
             moduleOperations.add(viewModuleOperation25);
             ModuleOperation viewModuleOperation26 = new ModuleOperation(accountInformation, view, null);
             moduleOperations.add(viewModuleOperation26);
-            ModuleOperation viewModuleOperation27 = new ModuleOperation(changePassword, view, null);
+            ModuleOperation viewModuleOperation27 = new ModuleOperation(changePasswordModule, view, null);
             moduleOperations.add(viewModuleOperation27);
 
             ModuleOperation exportModuleOperation1 = new ModuleOperation(subModule1, export, null);
@@ -998,6 +1000,11 @@ public class DBConfiguration {
             ModuleOperation detailModuleOperation5 = new ModuleOperation(demonstration, detail, null);
             moduleOperations.add(detailModuleOperation5);
 
+            ModuleOperation changePasswordModuleOperation1 = new ModuleOperation(subModule5, changePassword, null);
+            moduleOperations.add(changePasswordModuleOperation1);
+            ModuleOperation changePasswordModuleOperation2 = new ModuleOperation(changePasswordModule, changePassword, null);
+            moduleOperations.add(changePasswordModuleOperation2);
+
             moduleOperationRepository.saveAll(moduleOperations);
 
             List<Organization> organizations = new ArrayList<>();
@@ -1111,7 +1118,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation31));
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation32));
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation33));
-            userModuleOperations.add(new UserModuleOperation(user, editModuleOperation34));
+            userModuleOperations.add(new UserModuleOperation(user, editModuleOperation35));
 
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation2));
@@ -1235,6 +1242,9 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, detailModuleOperation3));
             userModuleOperations.add(new UserModuleOperation(user, detailModuleOperation4));
             userModuleOperations.add(new UserModuleOperation(user, detailModuleOperation5));
+
+            userModuleOperations.add(new UserModuleOperation(user, changePasswordModuleOperation1));
+            userModuleOperations.add(new UserModuleOperation(user, changePasswordModuleOperation2));
 
             userModuleOperationRepository.saveAll(userModuleOperations);
 

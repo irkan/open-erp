@@ -1,31 +1,22 @@
 package com.openerp.controller;
 
-import com.openerp.domain.Response;
 import com.openerp.entity.*;
 import com.openerp.util.Constants;
-import com.openerp.util.DateUtility;
 import com.openerp.util.Util;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.DigestUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("/admin")
@@ -34,7 +25,7 @@ public class AdministratorController extends SkeletonController {
     @GetMapping(value = {"/{page}", "/{page}/{data}"})
     public String route(Model model, @PathVariable("page") String page, @PathVariable("data") Optional<String> data, RedirectAttributes redirectAttributes) throws Exception {
         if (page.equalsIgnoreCase(Constants.ROUTE.MODULE)) {
-            model.addAttribute(Constants.PARENTS, moduleRepository.findAllByModuleIsNullAndActiveTrue());
+            model.addAttribute(Constants.PARENTS, moduleRepository.getModulesByActiveTrueAndModuleIsNull());
             model.addAttribute(Constants.LIST, moduleRepository.getModulesByActiveTrue());
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Module());
@@ -144,7 +135,9 @@ public class AdministratorController extends SkeletonController {
             log("admin_module", "create/edit", module.getId(), module.toString());
             File source = new File(request.getRealPath("/WEB-INF/jsp/pages/empty.jsp"));
             File dest = new File(request.getRealPath("/WEB-INF/jsp/pages/"+module.getPath()+".jsp"));
-            Files.copy(source.toPath(), dest.toPath());
+            if(Files.notExists(dest.toPath())){
+                Files.copy(source.toPath(), dest.toPath());
+            }
         }
         return mapPost(module, binding, redirectAttributes);
     }
@@ -209,24 +202,49 @@ public class AdministratorController extends SkeletonController {
         if(!binding.hasErrors()){
             String password = user.getPassword();
             user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
+            if(user.getId()!=null){
+                user.setPassword(userRepository.getUserByActiveTrueAndId(user.getId()).getPassword());
+            }
             userRepository.save(user);
             log("admin_user", "create/edit", user.getId(), user.toString());
-            List<ModuleOperation> moduleOperations = moduleOperationRepository.getModuleOperationsByModule_Path("profile");
-            for(ModuleOperation mo: moduleOperations){
-                userModuleOperationRepository.save(new UserModuleOperation(user, mo));
+            if(user.getId()==null || user.getId()==0){
+                String message = "Hörmətli " + user.getEmployee().getPerson().getFirstName() + ",<br/><br/>" +
+                        "Sizin məlumatlarınıza əsasən yeni istifadəçi yaradılmışdır.<br/><br/>" +
+                        "İstifadəçi adınız: "+user.getUsername()+"<br/>" +
+                        "Şifrəniz: "+password+"<br/><br/>";
+                sendEmail(user.getEmployee().getOrganization(), user.getEmployee().getPerson().getContact().getEmail(),
+                        "Yeni istifadəçi!",
+                        message,
+                        null
+                );
+                List<ModuleOperation> moduleOperations = moduleOperationRepository.getModuleOperationsByModuleIn(moduleRepository.getModulesByActiveTrueAndPath("profile").get(0).getChildren());
+                for(ModuleOperation mo: moduleOperations){
+                    userModuleOperationRepository.save(new UserModuleOperation(user, mo));
+                }
+                log("admin_user_module_operation", "create/edit", 0, null, "Profil yaradıldı");
             }
-            log("admin_user_module_operation", "create/edit", 0, null, "Profil yaradıldı");
-            String message = "Hörmətli " + user.getEmployee().getPerson().getFirstName() + ",<br/><br/>" +
+        }
+        return mapPost(user, binding, redirectAttributes);
+    }
+
+    @PostMapping(value = "/user/change-password")
+    public String postUserChangePassword(@ModelAttribute(Constants.FORM) @Validated User user, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()){
+            User usr = userRepository.getUserByActiveTrueAndId(user.getId());
+            usr.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
+            log("admin_user", "create/edit", usr.getId(), usr.toString());
+            String message = "Hörmətli " + usr.getEmployee().getPerson().getFirstName() + ",<br/><br/>" +
                     "Sizin məlumatlarınıza əsasən yeni istifadəçi yaradılmışdır.<br/><br/>" +
-                    "İstifadəçi adınız: "+user.getUsername()+"<br/>" +
-                    "Şifrəniz: "+password+"<br/><br/>";
-            sendEmail(user.getEmployee().getOrganization(), user.getEmployee().getPerson().getContact().getEmail(),
+                    "İstifadəçi adınız: "+usr.getUsername()+"<br/>" +
+                    "Şifrəniz: "+user.getPassword()+"<br/><br/>";
+            sendEmail(usr.getEmployee().getOrganization(), usr.getEmployee().getPerson().getContact().getEmail(),
                     "Yeni istifadəçi!",
                     message,
                     null
             );
         }
-        return mapPost(user, binding, redirectAttributes);
+        return mapPost(user, binding, redirectAttributes, "/admin/user");
     }
 
     @PostMapping(value = "/module-operation")

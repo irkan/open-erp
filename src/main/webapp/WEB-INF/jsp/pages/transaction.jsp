@@ -282,7 +282,6 @@
         $(modal).find(".modal-title").html('Təsdiq et!');
         $(modal).modal('toggle');
     }
-
 </script>
 
 <script>

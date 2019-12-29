@@ -16,6 +16,9 @@
         <div class="kt-portlet__body">
             <c:choose>
                 <c:when test="${not empty list}">
+                    <c:set var="changePassword" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'change-password')}"/>
+                    <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
+                    <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
                     <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
                         <thead>
                         <tr>
@@ -75,30 +78,21 @@
                                     </c:otherwise>
                                 </c:choose>
                                 <td nowrap class="text-center">
-                                    <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
-                                    <c:choose>
-                                        <c:when test="${view.status}">
-                                            <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
-                                                <i class="la <c:out value="${view.object.icon.name}"/>"></i>
-                                            </a>
-                                        </c:when>
-                                    </c:choose>
-                                    <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
-                                    <c:choose>
-                                        <c:when test="${edit.status}">
-                                            <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
-                                                <i class="<c:out value="${edit.object.icon}"/>"></i>
-                                            </a>
-                                        </c:when>
-                                    </c:choose>
-                                    <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
-                                    <c:choose>
-                                        <c:when test="${delete.status}">
-                                            <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.username}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
-                                                <i class="<c:out value="${delete.object.icon}"/>"></i>
-                                            </a>
-                                        </c:when>
-                                    </c:choose>
+                                    <c:if test="${changePassword.status}">
+                                        <a href="javascript:changePassword($('#change-password-form'), $('#change-password-modal'), '<c:out value="${t.id}" />', '<c:out value="${t.username}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${changePassword.object.name}"/>">
+                                            <i class="la <c:out value="${changePassword.object.icon}"/>"></i>
+                                        </a>
+                                    </c:if>
+                                    <c:if test="${edit.status}">
+                                        <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                                            <i class="<c:out value="${edit.object.icon}"/>"></i>
+                                        </a>
+                                    </c:if>
+                                    <c:if test="${delete.status}">
+                                        <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.username}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
+                                            <i class="<c:out value="${delete.object.icon}"/>"></i>
+                                        </a>
+                                    </c:if>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -194,6 +188,37 @@
     </div>
 </div>
 
+<div class="modal fade" id="change-password-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Şifrənin yenilənməsi</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form:form modelAttribute="form" id="change-password-form" method="post" action="/admin/user/change-password" cssClass="form-group">
+                    <form:hidden path="id"/>
+                    <div class="form-group text-center">
+                        <label id="username_label"></label>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="password">Şifrə</form:label>
+                        <form:password path="password" cssClass="form-control" placeholder="Şifrəni daxil edin"/>
+                        <form:errors path="password" cssClass="alert-danger control-label"/>
+                    </div>
+                </form:form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="submit($('#change-password-form'));">İcra et</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script>
     $('.select2-single').select2({
         placeholder: "Əməkdaşı seçin",
@@ -230,5 +255,16 @@
         $('.selectpicker').selectpicker();
     });
 
-</script>
+    function changePassword(form, modal, id, username){
+        $(form).find("#id").val(id);
+        $(form).find("#username_label").text(username);
+        $(modal).modal('toggle');
+    }
 
+    <c:if test="${edit.status}">
+    $('#group_table tbody').on('dblclick', 'tr', function () {
+        edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
+    });
+    </c:if>
+
+</script>

@@ -79,8 +79,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
-                            <c:if test="${edit.status}">
+                            <c:set var="changePassword" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'change-password')}"/>
+                            <c:if test="${changePassword.status}">
                                 <div class="kt-portlet__foot">
                                     <div class="kt-form__actions">
                                         <div class="row">

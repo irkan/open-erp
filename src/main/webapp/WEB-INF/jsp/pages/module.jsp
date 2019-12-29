@@ -47,10 +47,11 @@
             </div>
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form" method="post" action="/admin/module" cssClass="form-group">
+                    <form:hidden path="id"/>
                     <div class="form-group">
                         <form:label path="module">Üst modul</form:label>
                         <form:select  path="module" cssClass="custom-select form-control">
-                            <form:options items="${list}" itemLabel="name" itemValue="id" />
+                            <form:options items="${parents}" itemLabel="name" itemValue="id" />
                         </form:select>
                     </div>
                     <div class="form-group">

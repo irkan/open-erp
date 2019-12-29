@@ -40,7 +40,7 @@ public class Module {
     @OneToMany(mappedBy = "module")
     private List<ModuleOperation> moduleOperations;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "module_id", referencedColumnName = "id")
     private Module module;
 
