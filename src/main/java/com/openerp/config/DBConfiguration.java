@@ -573,6 +573,8 @@ public class DBConfiguration {
             modules.add(sale);
             Module sales = new Module("Satış", "Satış", "sales", "flaticon-price-tag", sale);
             modules.add(sales);
+            Module service = new Module("Servis", "Servis", "service", "flaticon2-shopping-cart", sale);
+            modules.add(service);
             Module calculator = new Module("Kalkulyator", "Kalkulyator", "calculator", "la la-calculator", sale);
             modules.add(calculator);
             Module invoice = new Module("Hesab-faktura", "Hesab-faktura", "invoice", "flaticon2-group", sale);
@@ -708,6 +710,8 @@ public class DBConfiguration {
             moduleOperations.add(createModuleOperation30);
             ModuleOperation createModuleOperation31 = new ModuleOperation(demonstration, create, null);
             moduleOperations.add(createModuleOperation31);
+            ModuleOperation createModuleOperation32 = new ModuleOperation(service, create, null);
+            moduleOperations.add(createModuleOperation32);
 
 
             ModuleOperation editModuleOperation1 = new ModuleOperation(subModule1, edit, null);
@@ -770,6 +774,8 @@ public class DBConfiguration {
             moduleOperations.add(editModuleOperation33);
             ModuleOperation editModuleOperation35 = new ModuleOperation(subModule5, edit, null);
             moduleOperations.add(editModuleOperation35);
+            ModuleOperation editModuleOperation36 = new ModuleOperation(service, edit, null);
+            moduleOperations.add(editModuleOperation36);
 
             ModuleOperation deleteModuleOperation1 = new ModuleOperation(subModule1, delete, null);
             moduleOperations.add(deleteModuleOperation1);
@@ -835,6 +841,8 @@ public class DBConfiguration {
             moduleOperations.add(deleteModuleOperation34);
             ModuleOperation deleteModuleOperation35 = new ModuleOperation(log, delete, null);
             moduleOperations.add(deleteModuleOperation35);
+            ModuleOperation deleteModuleOperation36 = new ModuleOperation(service, delete, null);
+            moduleOperations.add(deleteModuleOperation36);
 
             ModuleOperation viewModuleOperation6 = new ModuleOperation(subModule6, view, null);
             moduleOperations.add(viewModuleOperation6);
@@ -925,6 +933,8 @@ public class DBConfiguration {
             moduleOperations.add(exportModuleOperation27);
             ModuleOperation exportModuleOperation28 = new ModuleOperation(log, export, null);
             moduleOperations.add(exportModuleOperation28);
+            ModuleOperation exportModuleOperation29 = new ModuleOperation(service, export, null);
+            moduleOperations.add(exportModuleOperation29);
 
             ModuleOperation approveModuleOperation3 = new ModuleOperation(transaction, approve, null);
             moduleOperations.add(approveModuleOperation3);
@@ -1088,6 +1098,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, createModuleOperation29));
             userModuleOperations.add(new UserModuleOperation(user, createModuleOperation30));
             userModuleOperations.add(new UserModuleOperation(user, createModuleOperation31));
+            userModuleOperations.add(new UserModuleOperation(user, createModuleOperation32));
 
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation2));
@@ -1119,6 +1130,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation32));
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation33));
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation35));
+            userModuleOperations.add(new UserModuleOperation(user, editModuleOperation36));
 
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation2));
@@ -1152,6 +1164,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation33));
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation34));
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation35));
+            userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation36));
 
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation2));
@@ -1179,6 +1192,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation26));
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation27));
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation28));
+            userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation29));
 
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation6));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation9));
