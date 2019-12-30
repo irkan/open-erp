@@ -128,5 +128,6 @@ public class Constants {
         public static final String DEMONSTRATION = "demonstration";
         public static final String DEMONSTRATION_DETAIL = "demonstration-detail";
         public static final String LOG = "log";
+        public static final String SERVICE = "service";
     }
 }

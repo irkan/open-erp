@@ -37,9 +37,28 @@ public class SaleController extends SkeletonController {
             model.addAttribute(Constants.GUARANTEES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("guarantee"));
             List<Sales> sales;
             if(canViewAll()){
-                sales = salesRepository.getSalesByActiveTrueOrderByIdDesc();
+                sales = salesRepository.getSalesByActiveTrueAndServiceFalseOrderByIdDesc();
             } else {
-                sales = salesRepository.getSalesByActiveTrueAndOrganizationOrderByIdDesc(getSessionOrganization());
+                sales = salesRepository.getSalesByActiveTrueAndServiceFalseAndOrganizationOrderByIdDesc(getSessionOrganization());
+            }
+            model.addAttribute(Constants.LIST, sales);
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new Sales());
+            }
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.SERVICE)){
+            List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization());
+            List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
+            model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployeesByPosition(employees, positions));
+            model.addAttribute(Constants.CITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("city"));
+            model.addAttribute(Constants.SALE_PRICES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("sale-price"));
+            model.addAttribute(Constants.PAYMENT_SCHEDULES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-schedule"));
+            model.addAttribute(Constants.PAYMENT_PERIODS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-period"));
+            model.addAttribute(Constants.GUARANTEES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("guarantee"));
+            List<Sales> sales;
+            if(canViewAll()){
+                sales = salesRepository.getSalesByActiveTrueAndServiceTrueOrderByIdDesc();
+            } else {
+                sales = salesRepository.getSalesByActiveTrueAndServiceTrueAndOrganizationOrderByIdDesc(getSessionOrganization());
             }
             model.addAttribute(Constants.LIST, sales);
             if(!model.containsAttribute(Constants.FORM)){

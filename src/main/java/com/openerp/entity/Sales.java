@@ -23,6 +23,9 @@ public class Sales {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
+    @Column(name = "is_service", nullable = false, columnDefinition="boolean default false")
+    private Boolean service = false;
+
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "crm_customer_id", nullable = false)
     private Customer customer;
