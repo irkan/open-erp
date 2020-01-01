@@ -115,7 +115,7 @@ public class HRController extends SkeletonController {
         if (!binding.hasErrors()) {
             if(employee!=null && employee.getId()!=null){
                 employeeRestDayRepository.deleteInBatch(employeeRestDayRepository.getEmployeeRestDaysByEmployee(employee));
-               // log("hr_employee_rest_day", "delete-in-batch", employee.getId(), employee.toString());
+                 log("hr_employee_rest_day", "delete-in-batch", employee.getId(), employee.toString());
             }
             List<EmployeeRestDay> erds = new ArrayList<>();
             if(ids[0]!=0){
@@ -134,7 +134,7 @@ public class HRController extends SkeletonController {
             }
             List<PayrollConfiguration> payrollConfigurations = payrollConfigurationRepository.getPayrollConfigurationsByActiveTrueOrderById();
             employeePayrollDetailRepository.deleteInBatch(employeePayrollDetailRepository.getEmployeePayrollDetailsByEmployee_Id(employeeId));
-           // log("hr_organization", "delete-in-batch", organization.getId(), organization.toString());
+            // log("hr_organization", "delete-in-batch", organization.getId(), organization.toString());
             List<EmployeePayrollDetail> employeePayrollDetails = new ArrayList<>();
             for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-payroll-field")){
                 EmployeePayrollDetail employeeDetailField1 = new EmployeePayrollDetail(employee, dictionary, dictionary.getAttr1(), dictionary.getAttr2());

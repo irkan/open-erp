@@ -266,6 +266,37 @@
             }
         }
     };
+
+    var KTSessionTimeoutDemo = function () {
+        <fmt:parseNumber var = "sessionIddle" integerOnly = "true" type = "number" value = "${pageContext.session.maxInactiveInterval*1000}" />
+        var initDemo = function () {
+            $.sessionTimeout({
+                title: 'Sessiya Zamanı Xəbərdarlığı',
+                message: 'Sessiyanız başa çatmaq üzrədir.',
+                logoutButton: 'Çıxış',
+                keepAliveButton: 'Davam et',
+                logoutUrl: '/logout',
+                redirUrl: '/logout',
+                warnAfter: ${sessionIddle}, //warn after 5 seconds
+                redirAfter: ${sessionIddle+30000}, //redirect after 10 secons,
+                ignoreUserActivity: true,
+                countdownMessage: 'Bitmə vaxtına {timer} saniyə qalıb.',
+                countdownBar: true
+            });
+        }
+
+        return {
+            //main function to initiate the module
+            init: function () {
+                initDemo();
+            }
+        };
+
+    }();
+
+    jQuery(document).ready(function() {
+        KTSessionTimeoutDemo.init();
+    });
 </script>
 
 

@@ -1,8 +1,10 @@
 package com.openerp.controller;
 
 import com.openerp.entity.*;
+import com.openerp.repository.ModuleRepository;
 import com.openerp.util.Constants;
 import com.openerp.util.*;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -74,9 +76,10 @@ public class DeleteController extends SkeletonController {
                 log("admin_module_operation", "delete", moduleOperation.getId(), moduleOperation.toString());
             }
         } else if(path.equalsIgnoreCase(Constants.ROUTE.MODULE_OPERATION)){
-            moduleOperationRepository.deleteById(Integer.parseInt(id));
-            //sora buna baxariq
-            // log("admin_module_operation", "delete", moduleOperation.getId(), moduleOperation.toString())
+            Module module = moduleRepository.getModuleById(Integer.parseInt(id));
+            log("admin_module_operation", "delete", module.getId(), module.toString());
+            moduleRepository.delete(module);
+
         } else if(path.equalsIgnoreCase(Constants.ROUTE.USER_MODULE_OPERATION)){
             User userObject = userRepository.getUserByActiveTrueAndId(Integer.parseInt(id));
             userRepository.save(userObject);
@@ -86,11 +89,13 @@ public class DeleteController extends SkeletonController {
             //Listin icinde nie metod hell etmek olmur
             //log("admin_user_module_operation", "delete-in-batch", userModuleOperations.getId(), userModuleOperations.toString());
         } else if(path.equalsIgnoreCase(Constants.ROUTE.EMPLOYEE)){
-            employeeRepository.deleteById(Integer.parseInt(id));
-           // log("admin_module_operation", "delete", moduleOperation.getId(), moduleOperation.toString());
+            Employee employee = employeeRepository.getEmployeeById(Integer.parseInt(id));
+            log("admin_module_operation", "delete", employee.getId(), employee.toString());
+            employeeRepository.delete(employee);
         } else if(path.equalsIgnoreCase(Constants.ROUTE.ORGANIZATION)){
-            organizationRepository.deleteById(Integer.parseInt(id));
-           // log("admin_module_operation", "delete", moduleOperation.getId(), moduleOperation.toString());
+            Organization organization = organizationRepository.getOrganizationByIdAndActiveTrue(Integer.parseInt(id));
+            log("admin_module_operation", "delete", organization.getId(), organization.toString());
+            organizationRepository.delete(organization);
         } else if(path.equalsIgnoreCase(Constants.ROUTE.SUPPLIER)){
             Supplier supplier = supplierRepository.getSuppliersById(Integer.parseInt(id));
             supplier.setActive(false);
