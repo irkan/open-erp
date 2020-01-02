@@ -176,24 +176,22 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form:form modelAttribute="form" id="form" method="post" action="/sale/sales" cssClass="form-group">
+                <form:form modelAttribute="form" id="form" method="post" action="/sale/service" cssClass="form-group">
                     <form:hidden path="id"/>
+                    <form:hidden path="active" value="1"/>
                     <input type="hidden" name="organization" value="<c:out value="${sessionScope.organization.id}"/>"/>
                     <div class="row">
                         <div class="col-md-4">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <form:label path="customer">Müştəri kodu</form:label>
-                                        <div class="input-group">
-                                            <form:input path="customer" autocomplete="false" class="form-control" placeholder="Müştəri kodu..."/>
-                                            <div class="input-group-append">
-                                                <button class="btn btn-primary" type="button" onclick="findCustomer($('input[name=\'customer\']'))">Müştəri axtar</button>
-                                            </div>
-                                        </div>
+                            <div class="form-group">
+                                <form:label path="customer">Müştəri kodu</form:label>
+                                <div class="input-group">
+                                    <form:input path="customer" autocomplete="false" class="form-control" placeholder="Müştəri kodu..."/>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="button" onclick="findCustomer($('input[name=\'customer\']'))">Müştəri axtar</button>
                                     </div>
                                 </div>
                             </div>
+                            <table id="customer-content" class="table table-striped- table-bordered table-hover table-checkable"></table>
                         </div>
                         <div class="col-md-5">
                             <div id="kt_repeater_1">
@@ -206,7 +204,7 @@
                                                         <label>İnventar:</label>
                                                     </div>
                                                     <div class="kt-form__control">
-                                                        <input type="email" class="form-control" placeholder="Barkodu daxil edin...">
+                                                        <input type="text" name="barcode" class="form-control" placeholder="Barkodu daxil edin...">
                                                     </div>
                                                 </div>
                                                 <div class="d-md-none kt-margin-b-10"></div>
@@ -238,613 +236,30 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <form:label path="payment.price">Qiymət</form:label>
+                                <form:input path="payment.price" cssClass="form-control" placeholder="Qiyməti daxil edin"/>
+                                <form:errors path="payment.price" cssClass="alert-danger control-label"/>
+                            </div>
+                            <div class="form-group">
+                                <form:label path="payment.discount">Endirim</form:label>
+                                <form:input path="payment.discount" cssClass="form-control" placeholder="Endirimi daxil edin"/>
+                                <form:errors path="payment.discount" cssClass="alert-danger control-label"/>
+                            </div>
+                            <div class="form-group">
+                                <form:label path="payment.lastPrice">Son qiymət</form:label>
+                                <form:input path="payment.lastPrice" cssClass="form-control" placeholder="Son qiyməti daxil edin" readonly="true"/>
+                                <form:errors path="payment.lastPrice" cssClass="alert-danger control-label"/>
+                            </div>
+                        </div>
                     </div>
                 </form:form>
             </div>
-            <%--<div class="modal-footer">
+            <div class="modal-footer">
                 <button type="button" class="btn btn-primary" onclick="submit($('#form'));">Yadda saxla</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
-            </div>--%>
-
-
-            <div class="kt-grid  kt-wizard-v1 kt-wizard-v1--white" id="kt_wizard_v1" data-ktwizard-state="step-first">
-                <div class="kt-grid__item">
-
-                    <!--begin: Form Wizard Nav -->
-                    <div class="kt-wizard-v1__nav">
-                        <div class="kt-wizard-v1__nav-items">
-                            <div class="kt-wizard-v1__nav-item" data-ktwizard-type="step" data-ktwizard-state="current">
-                                <div class="kt-wizard-v1__nav-body">
-                                    <div class="kt-wizard-v1__nav-icon">
-                                        <i class="flaticon-list"></i>
-                                    </div>
-                                    <div class="kt-wizard-v1__nav-label">
-                                        1. Müştəri
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="kt-wizard-v1__nav-item" data-ktwizard-type="step">
-                                <div class="kt-wizard-v1__nav-body">
-                                    <div class="kt-wizard-v1__nav-icon">
-                                        <i class="flaticon-bus-stop"></i>
-                                    </div>
-                                    <div class="kt-wizard-v1__nav-label">
-                                        2. Əlaqə
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="kt-wizard-v1__nav-item" data-ktwizard-type="step">
-                                <div class="kt-wizard-v1__nav-body">
-                                    <div class="kt-wizard-v1__nav-icon">
-                                        <i class="flaticon-responsive"></i>
-                                    </div>
-                                    <div class="kt-wizard-v1__nav-label">
-                                        3. İnventar
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="kt-wizard-v1__nav-item" data-ktwizard-type="step">
-                                <div class="kt-wizard-v1__nav-body">
-                                    <div class="kt-wizard-v1__nav-icon">
-                                        <i class="flaticon-price-tag"></i>
-                                    </div>
-                                    <div class="kt-wizard-v1__nav-label">
-                                        4. Ödəmə
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="kt-wizard-v1__nav-item" data-ktwizard-type="step">
-                                <div class="kt-wizard-v1__nav-body">
-                                    <div class="kt-wizard-v1__nav-icon">
-                                        <i class="flaticon-truck"></i>
-                                    </div>
-                                    <div class="kt-wizard-v1__nav-label">
-                                        5. Satıcı
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!--end: Form Wizard Nav -->
-                </div>
-                <div class="kt-grid__item kt-grid__item--fluid kt-wizard-v1__wrapper">
-                    <form:form modelAttribute="form" id="kt_form" method="post" action="/sale/sales" cssClass="form-group kt-form">
-                        <form:hidden path="id"/>
-                        <input type="hidden" name="organization" value="<c:out value="${sessionScope.organization.id}"/>"/>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                        <input type="hidden" name="customer.organization" value="<c:out value="${sessionScope.organization.id}"/>"/>
-
-                        <div class="kt-wizard-v1__content" data-ktwizard-type="step-content" data-ktwizard-state="current">
-                            <div class="kt-form__section kt-form__section--first">
-                                <div class="kt-wizard-v1__form">
-                                    <div class="row">
-                                        <div class="col-md-6">
-
-                                        </div>
-                                        <div class="col-md-4 offset-md-2">
-                                            <div class="form-group">
-                                                <form:label path="saleDate">Satış tarixi</form:label>
-                                                <div class="input-group date" >
-                                                    <form:input path="saleDate" cssClass="form-control datepicker-element" date="date" placeholder="dd.MM.yyyy"/>
-                                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-calendar"></i>
-                                        </span>
-                                                    </div>
-                                                </div>
-                                                <form:errors path="saleDate" cssClass="control-label alert-danger" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <form:label path="customer.person.firstName">Ad</form:label>
-                                                <form:input path="customer.person.firstName" cssClass="form-control" placeholder="Adı daxil edin Məs: Səbuhi"/>
-                                                <form:errors path="customer.person.firstName" cssClass="control-label alert-danger" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <form:label path="customer.person.lastName">Soyad</form:label>
-                                                <form:input path="customer.person.lastName" cssClass="form-control" placeholder="Soyadı daxil edin Məs: Vəliyev"/>
-                                                <form:errors path="customer.person.lastName" cssClass="control-label alert-danger" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <form:label path="customer.person.fatherName">Ata adı</form:label>
-                                                <form:input path="customer.person.fatherName" cssClass="form-control" placeholder="Ata adını daxil edin"/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <form:label path="customer.person.birthday">Doğum tarixi</form:label>
-                                                <div class="input-group date" >
-                                                    <form:input path="customer.person.birthday" cssClass="form-control datepicker-element" date="date" placeholder="dd.MM.yyyy"/>
-                                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-calendar"></i>
-                                        </span>
-                                                    </div>
-                                                </div>
-                                                <form:errors path="customer.person.birthday" cssClass="control-label alert-danger" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <form:label path="customer.person.idCardSerialNumber">Ş.v - nin seriya nömrəsi</form:label>
-                                                <form:input path="customer.person.idCardSerialNumber" cssClass="form-control" placeholder="AA0822304"/>
-                                                <form:errors path="customer.person.idCardSerialNumber" cssClass="control-label alert-danger" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <form:label path="customer.person.idCardPinCode">Ş.v - nin pin kodu</form:label>
-                                                <form:input path="customer.person.idCardPinCode" cssClass="form-control" placeholder="Məs: 4HWL0AM"/>
-                                                <form:errors path="customer.person.idCardPinCode" cssClass="control-label alert-danger" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <form:label path="customer.person.voen">VÖEN</form:label>
-                                                <form:input path="customer.person.voen" cssClass="form-control" placeholder="Məs: 0000000000"/>
-                                                <form:errors path="customer.person.voen" cssClass="control-label alert-danger" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Ş.v-nin ön hissəsi</label>
-                                                <div></div>
-                                                <div class="custom-file">
-                                                    <input type="file" name="file" class="custom-file-input" id="file1" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-                                                    <label class="custom-file-label" for="file1">Ş.v-nin ön hissəsi</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Ş.v-nin arxa hissəsi</label>
-                                                <div></div>
-                                                <div class="custom-file">
-                                                    <input type="file" name="file" class="custom-file-input" id="file2" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-                                                    <label class="custom-file-label" for="file2">Ş.v-nin arxa hissəsi</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="kt-wizard-v1__content" data-ktwizard-type="step-content">
-                            <div class="kt-form__section kt-form__section--first">
-                                <div class="kt-wizard-v1__form">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <form:label path="customer.person.contact.mobilePhone">Mobil nömrə</form:label>
-                                                <div class="input-group" >
-                                                    <form:input path="customer.person.contact.mobilePhone" cssClass="form-control" placeholder="0505505550"/>
-                                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-phone"></i>
-                                        </span>
-                                                    </div>
-                                                </div>
-                                                <form:errors path="customer.person.contact.mobilePhone" cssClass="control-label alert-danger" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <form:label path="customer.person.contact.homePhone">Şəhər nömrəsi</form:label>
-                                                <div class="input-group" >
-                                                    <form:input path="customer.person.contact.homePhone" cssClass="form-control" placeholder="0124555050"/>
-                                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-phone"></i>
-                                        </span>
-                                                    </div>
-                                                </div>
-                                                <form:errors path="customer.person.contact.homePhone" cssClass="control-label alert-danger" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <form:label path="customer.person.contact.email">Email</form:label>
-                                                <div class="input-group" >
-                                                    <form:input path="customer.person.contact.email" cssClass="form-control" placeholder="example@example.com"/>
-                                                    <div class="input-group-append">
-                                                            <span class="input-group-text">
-                                                                <i class="la la-at"></i>
-                                                            </span>
-                                                    </div>
-                                                </div>
-                                                <form:errors path="customer.person.contact.email" cssClass="control-label alert-danger" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <form:label path="customer.person.contact.relationalPhoneNumber1">Əlaqəli şəxs nömrəsi #1</form:label>
-                                                <div class="input-group" >
-                                                    <form:input path="customer.person.contact.relationalPhoneNumber1" cssClass="form-control" placeholder="0505505550"/>
-                                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-phone"></i>
-                                        </span>
-                                                    </div>
-                                                </div>
-                                                <form:errors path="customer.person.contact.relationalPhoneNumber1" cssClass="control-label alert-danger" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <form:label path="customer.person.contact.relationalPhoneNumber2">Əlaqəli şəxs nömrəsi #2</form:label>
-                                                <div class="input-group" >
-                                                    <form:input path="customer.person.contact.relationalPhoneNumber2" cssClass="form-control" placeholder="0505505550"/>
-                                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-phone"></i>
-                                        </span>
-                                                    </div>
-                                                </div>
-                                                <form:errors path="customer.person.contact.relationalPhoneNumber2" cssClass="control-label alert-danger" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <form:label path="customer.person.contact.relationalPhoneNumber3">Əlaqəli şəxs nömrəsi #3</form:label>
-                                                <div class="input-group" >
-                                                    <form:input path="customer.person.contact.relationalPhoneNumber3" cssClass="form-control" placeholder="0505505550"/>
-                                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-phone"></i>
-                                        </span>
-                                                    </div>
-                                                </div>
-                                                <form:errors path="customer.person.contact.relationalPhoneNumber3" cssClass="control-label alert-danger" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <form:label path="customer.person.contact.city">Şəhər</form:label>
-                                                <form:select  path="customer.person.contact.city" cssClass="custom-select form-control">
-                                                    <form:options items="${cities}" itemLabel="name" itemValue="id" />
-                                                </form:select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <div class="form-group">
-                                                <form:label path="customer.person.contact.address">Ünvan</form:label>
-                                                <div class="input-group" >
-                                                    <div class="input-group-append">
-                                                        <span class="input-group-text">
-                                                            <i class="la la-street-view"></i>
-                                                        </span>
-                                                    </div>
-                                                    <form:input path="customer.person.contact.address" cssClass="form-control" placeholder="Küçə adı, ev nömrəsi və s."/>
-                                                </div>
-                                                <form:errors path="customer.person.contact.address" cssClass="control-label alert-danger" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <form:label path="customer.person.contact.livingCity">Yaşadığı şəhər</form:label>
-                                                <form:select  path="customer.person.contact.livingCity" cssClass="custom-select form-control">
-                                                    <form:options items="${cities}" itemLabel="name" itemValue="id" />
-                                                </form:select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <div class="form-group">
-                                                <form:label path="customer.person.contact.livingAddress">Yaşayış ünvanı</form:label>
-                                                <div class="input-group" >
-                                                    <div class="input-group-append">
-                                                        <span class="input-group-text">
-                                                            <i class="la la-street-view"></i>
-                                                        </span>
-                                                    </div>
-                                                    <form:input path="customer.person.contact.livingAddress" cssClass="form-control" placeholder="Küçə adı, ev nömrəsi və s."/>
-                                                </div>
-                                                <form:errors path="customer.person.contact.livingAddress" cssClass="control-label alert-danger" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="kt-wizard-v1__content" data-ktwizard-type="step-content">
-                            <div class="kt-form__section kt-form__section--first">
-                                <div class="kt-wizard-v1__form">
-                                    <div class="row">
-                                        <div class="col-sm-8 offset-sm-2">
-                                            <input type="hidden" name="salesInventories[0].inventory" class="form-control"/>
-                                            <div class="form-group">
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text" style="background-color: white; border-right: none;"><i class="la la-search"></i></span>
-                                                    </div>
-                                                    <input type="text" name="salesInventories[0].inventory.barcode" class="form-control" placeholder="Barkodu daxil edin..." style="border-left: none;" />
-                                                    <div class="input-group-append">
-                                                        <button class="btn btn-primary" type="button" onclick="findInventory($('input[name=\'salesInventories[0].inventory.barcode\']'))">İnventar axtar</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-8 offset-md-2">
-                                            <div class="form-group">
-                                                <label>İnventar</label>
-                                                <input name="salesInventories[0].inventory.name" class="form-control" readonly="true"/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-8 offset-md-2">
-                                            <div class="form-group">
-                                                <label>Açıqlama</label>
-                                                <textarea name="salesInventories[0].inventory.description" class="form-control" readonly="true"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="kt-wizard-v1__content" data-ktwizard-type="step-content">
-                            <div class="kt-form__section kt-form__section--first">
-                                <div class="kt-wizard-v1__form">
-                                    <div class="row">
-                                        <div class="col-sm-4 offset-sm-1">
-                                            <form:label path="payment.price">Qiymət</form:label>
-                                            <form:select  path="payment.price" onchange="calculate($(this))" cssClass="custom-select form-control">
-                                                <form:options items="${sale_prices}" itemLabel="name" itemValue="attr1" />
-                                            </form:select>
-                                            <form:errors path="payment.price" cssClass="control-label alert-danger"/>
-                                        </div>
-                                        <div class="col-sm-3 text-center">
-                                            <div class="form-group mt-3 pt-4">
-                                                <label class="kt-checkbox kt-checkbox--brand">
-                                                    <form:checkbox path="payment.cash" onclick="doCash($(this), '10%')"/> Ödəniş nağd dırmı?
-                                                    <span></span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <form:label path="guarantee">Zəmanət müddəti</form:label>
-                                            <form:select  path="guarantee" cssClass="custom-select form-control">
-                                                <form:options items="${guarantees}" itemLabel="name" itemValue="attr1" />
-                                            </form:select>
-                                            <form:errors path="guarantee" cssClass="control-label alert-danger"/>
-                                        </div>
-                                    </div>
-                                    <div class="row kt-hidden animated zoomIn" id="cash-div">
-                                        <div class="col-md-5 offset-md-1">
-                                            <div class="form-group">
-                                                <form:label path="payment.discount">Endirim dəyəri</form:label>
-                                                <form:input path="payment.discount" cssClass="form-control" readonly="true" cssStyle="text-align: -webkit-center; text-align: center; font-weight: bold; letter-spacing: 3px;"/>
-                                                <form:errors path="payment.discount" cssClass="control-label alert-danger"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-5">
-                                            <div class="form-group">
-                                                <form:label path="payment.description">Açıqlama</form:label>
-                                                <form:input path="payment.description" cssClass="form-control" readonly="true"/>
-                                                <form:errors path="payment.description" cssClass="control-label alert-danger"/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-10 offset-md-1">
-                                            <div class="alert alert-info alert-elevate" role="alert" style="padding: 0; padding-left: 1rem; padding-right: 1rem; padding-top: 5px;">
-                                                <div class="alert-icon"><i class="flaticon-warning kt-font-brand kt-font-light"></i></div>
-                                                <div class="alert-text text-center">
-                                                    <div style="font-size: 18px; font-weight: bold; letter-spacing: 2px;">
-                                                        Yekun ödəniləcək məbləğ:
-                                                        <span id="lastPriceLabel">0</span>
-                                                        <span> AZN</span>
-                                                        <form:hidden path="payment.lastPrice"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row animated zoomIn" id="credit-div">
-                                        <div class="col-sm-7 offset-sm-1">
-                                            <div class="row">
-                                                <div class="col-sm-4">
-                                                    <div class="form-group">
-                                                        <form:label path="payment.down">İlkin ödəniş</form:label>
-                                                        <div class="input-group" >
-                                                            <form:input path="payment.down" cssClass="form-control" placeholder="İlkin ödənişi daxil edin"/>
-                                                            <div class="input-group-append">
-                                                    <span class="input-group-text">
-                                                        <i class="la la-usd"></i>
-                                                    </span>
-                                                            </div>
-                                                        </div>
-                                                        <form:errors path="payment.down" cssClass="alert-danger control-label"/>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <div class="form-group">
-                                                        <form:label path="payment.schedule">Ödəniş qrafiki</form:label>
-                                                        <form:select  path="payment.schedule" cssClass="custom-select form-control">
-                                                            <form:options items="${payment_schedules}" itemLabel="name" itemValue="id" />
-                                                        </form:select>
-                                                        <form:errors path="payment.schedule" cssClass="control-label alert-danger"/>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <div class="form-group">
-                                                        <form:label path="payment.period">Ödəniş edilsin</form:label>
-                                                        <form:select  path="payment.period" cssClass="custom-select form-control">
-                                                            <form:options items="${payment_periods}" itemLabel="name" itemValue="id" />
-                                                        </form:select>
-                                                        <form:errors path="payment.period" cssClass="control-label alert-danger"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-3 text-center">
-                                            <button type="button" class="btn btn-outline-info btn-tallest" style="font-size: 16px;padding-left: 7px; padding-right: 8px;" onclick="schedule($('input[name=\'payment.lastPrice\']'), $('input[name=\'payment.down\']'), $('select[name=\'payment.schedule\']'), $('select[name=\'payment.period\']'), $('input[name=\'saleDate\']'))"><i class="fa fa-play"></i> Ödəniş qrafiki yarat</button>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-10 offset-sm-1" id="schedule-div">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="kt-wizard-v1__content" data-ktwizard-type="step-content">
-                            <div class="kt-form__section kt-form__section--first">
-                                <div class="kt-wizard-v1__review">
-                                    <div class="kt-wizard-v1__review-item">
-                                        <div class="row">
-                                            <div class="col-md-3 offset-md-1 text-right">
-                                                <div class="kt-wizard-v1__review-title p-2">
-                                                    Konsul
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <form:select  path="console" cssClass="custom-select form-control select2-single" multiple="single">
-                                                        <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
-                                                            <optgroup label="${itemGroup.key}">
-                                                                <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
-                                                            </optgroup>
-                                                        </c:forEach>
-                                                    </form:select>
-                                                    <form:errors path="console" cssClass="control-label alert-danger"/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="kt-separator kt-separator--border-dashed kt-separator--space-sm kt-separator--portlet-fit" style="margin: 1rem 0"></div>
-                            <div class="kt-form__section kt-form__section--first">
-                                <div class="kt-wizard-v1__review">
-                                    <div class="kt-wizard-v1__review-item">
-                                        <div class="row">
-                                            <div class="col-md-3 offset-md-1 text-right">
-                                                <div class="kt-wizard-v1__review-title p-2">
-                                                    Ven lider
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <form:select  path="vanLeader" cssClass="custom-select form-control select2-single" multiple="single">
-                                                        <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
-                                                            <optgroup label="${itemGroup.key}">
-                                                                <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
-                                                            </optgroup>
-                                                        </c:forEach>
-                                                    </form:select>
-                                                    <form:errors path="vanLeader" cssClass="control-label alert-danger"/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="kt-separator kt-separator--border-dashed kt-separator--space-sm kt-separator--portlet-fit" style="margin: 1rem 0"></div>
-                            <div class="kt-form__section kt-form__section--first">
-                                <div class="kt-wizard-v1__review">
-                                    <div class="kt-wizard-v1__review-item">
-                                        <div class="row">
-                                            <div class="col-md-3 offset-md-1 text-right">
-                                                <div class="kt-wizard-v1__review-title p-2">
-                                                    Diller
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <form:select  path="dealer" cssClass="custom-select form-control select2-single" multiple="single">
-                                                        <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
-                                                            <optgroup label="${itemGroup.key}">
-                                                                <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
-                                                            </optgroup>
-                                                        </c:forEach>
-                                                    </form:select>
-                                                    <form:errors path="dealer" cssClass="control-label alert-danger"/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="kt-separator kt-separator--border-dashed kt-separator--space-sm kt-separator--portlet-fit" style="margin: 1rem 0"></div>
-                            <div class="kt-form__section kt-form__section--first">
-                                <div class="kt-wizard-v1__review">
-                                    <div class="kt-wizard-v1__review-item">
-                                        <div class="row">
-                                            <div class="col-md-3 offset-md-1 text-right">
-                                                <div class="kt-wizard-v1__review-title p-2">
-                                                    Canvasser
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <form:select  path="canavasser" cssClass="custom-select form-control select2-single" multiple="single">
-                                                        <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
-                                                            <optgroup label="${itemGroup.key}">
-                                                                <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
-                                                            </optgroup>
-                                                        </c:forEach>
-                                                    </form:select>
-                                                    <form:errors path="canavasser" cssClass="control-label alert-danger"/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="kt-form__actions">
-                            <button class="btn btn-secondary btn-md btn-tall btn-wide kt-font-bold kt-font-transform-u" data-ktwizard-type="action-prev">
-                                Geri
-                            </button>
-                            <button class="btn btn-success btn-md btn-tall btn-wide kt-font-bold kt-font-transform-u" data-ktwizard-type="action-submit">
-                                Yadda saxla
-                            </button>
-                            <button class="btn btn-brand btn-md btn-tall btn-wide kt-font-bold kt-font-transform-u" data-ktwizard-type="action-next">
-                                İrəli
-                            </button>
-                        </div>
-                    </form:form>
-                </div>
             </div>
-
         </div>
     </div>
 </div>
@@ -861,59 +276,6 @@
         allowClear: true
     });
 
-    function schedule(lastPrice, down, schedule, period, saleDate){
-        var table='';
-        swal.fire({
-            text: 'Proses davam edir...',
-            allowOutsideClick: false,
-            onOpen: function() {
-                swal.showLoading();
-                $.ajax({
-                    url: '/sale/payment/schedule/' + $(lastPrice).val() + '/' + $(down).val() + '/' + $(schedule).val() + '/' + $(period).val() + '/' + $(saleDate).val(),
-                    type: 'GET',
-                    dataType: 'json',
-                    beforeSend: function() {
-                        table+="<table class='table table-striped- table-bordered table-hover table-checkable  animated zoomIn' id='schedule-table'><thead><th style='width: 20px;' class='text-center'>№</th><th>Ödəniş tarixi</th><th>Ödəniş məbləği</th></thead>"
-                    },
-                    success: function(data) {
-                        table+="<tbody>";
-                        $.each(data, function(k, v) {
-                            table+="<tr>" +
-                                "<th>"+(parseInt(k)+1)+"</th>" +
-                                "<th>" +
-                                "<input type='hidden' name='payment.schedules["+parseInt(k)+"].scheduleDate'  value='"+v.scheduleDate.split(' ')[0]+"'/> "+
-                                v.scheduleDate.split(' ')[0]+
-                                "</th>" +
-                                "<th>" +
-                                "<input type='hidden' name='payment.schedules["+parseInt(k)+"].amount' value='"+v.amount+"' />"+
-                                v.amount+
-                                " <i style='font-style: italic; font-size: 10px;'>AZN<i></th></tr>";
-                            console.log(k + ' - ' + v)
-                        });
-                        table+="</tbody>";
-                        swal.close();
-                    },
-                    error: function() {
-                        swal.fire({
-                            title: "Xəta baş verdi!",
-                            html: "Cədvəl yarana bilmədi!",
-                            type: "error",
-                            cancelButtonText: 'Bağla',
-                            cancelButtonColor: '#c40000',
-                            cancelButtonClass: 'btn btn-danger',
-                            footer: '<a href>Məlumatlar yenilənsinmi?</a>'
-                        });
-                    },
-                    complete: function(){
-                        table+="</table>";
-                        $("#schedule-div").html(table);
-                        $("#schedule-table").DataTable({pageLength: 50});
-                    }
-                })
-            }
-        });
-
-    }
     function calculate(element){
         var price = $(element).val();
         var discount = $("input[name='payment.discount']").val();
@@ -1012,154 +374,8 @@
         $(this).next('.custom-file-label').addClass("selected").html(fileName);
     });
 
-    var KTWizard1 = function () {
-        var wizardEl;
-        var formEl;
-        var validator;
-        var wizard;
-
-        var initWizard = function () {
-            wizard = new KTWizard('kt_wizard_v1', {
-                startStep: 1
-            });
-
-            wizard.on('beforeNext', function(wizardObj) {
-                if (validator.form() !== true) {
-                    wizardObj.stop();
-                }
-            });
-
-            wizard.on('beforePrev', function(wizardObj) {
-                if (validator.form() !== true) {
-                    wizardObj.stop();
-                }
-            });
-
-            wizard.on('change', function(wizard) {
-                setTimeout(function() {
-                    KTUtil.scrollTop();
-                }, 500);
-            });
-        }
-
-        var initValidation = function() {
-            validator = formEl.validate({
-                ignore: ":hidden",
-                rules: {
-                    /*'customer.person.firstName': {
-                        required: true
-                    },
-                    'customer.person.lastName': {
-                        required: true
-                    },
-                    'customer.person.contact.mobilePhone': {
-                        required: true
-                    },
-                    'saleDate': {
-                        required: true
-                    },
-                    'birthday': {
-                        required: true
-                    },
-                    'customer.person.contact.address': {
-                        required: true
-                    },*/
-                    /*
-                    'action.inventory.barcode': {
-                        required: true
-                    },
-                    'action.inventory.name': {
-                        required: true
-                    },
-                    'action.warehouse.name': {
-                        required: true
-                    },
-                    'payment.price': {
-                        required: true
-                    },
-                    height: {
-                        required: true
-                    },
-                    length: {
-                        required: true
-                    },
-
-                    delivery: {
-                        required: true
-                    },
-                    packaging: {
-                        required: true
-                    },
-                    preferreddelivery: {
-                        required: true
-                    },
-
-                    locaddress1: {
-                        required: true
-                    },
-                    locpostcode: {
-                        required: true
-                    },
-                    loccity: {
-                        required: true
-                    },
-                    locstate: {
-                        required: true
-                    },
-                    loccountry: {
-                        required: true
-                    }*/
-                },
-                invalidHandler: function(event, validator) {
-                    KTUtil.scrollTop();
-
-                    swal.fire({
-                        "title": "",
-                        "text": "Məlumatı daxil edin!",
-                        "type": "error",
-                        "confirmButtonClass": "btn btn-secondary"
-                    });
-                },
-                submitHandler: function (form) {
-
-                }
-            });
-        }
-
-        var initSubmit = function() {
-            var btn = formEl.find('[data-ktwizard-type="action-submit"]');
-
-            btn.on('click', function(e) {
-                e.preventDefault();
-
-                if (validator.form()) {
-                    KTApp.progress(btn);
-                    formEl.ajaxSubmit({
-                        success: function() {
-                            KTApp.unprogress(btn);
-                            toastr.success("Əməliyyat uğurla yerinə yetirildi!");
-                            location.reload();
-                        }
-                    });
-                }
-            });
-        };
-        return {
-            init: function() {
-                wizardEl = KTUtil.get('kt_wizard_v1');
-                formEl = $('#kt_form');
-                initWizard();
-                initValidation();
-                initSubmit();
-            }
-        };
-    }();
-
-    jQuery(document).ready(function() {
-        KTWizard1.init();
-    });
-
     function findCustomer(element){
+        var tr = '';
         if($(element).val().trim().length>0){
             swal.fire({
                 text: 'Proses davam edir...',
@@ -1171,21 +387,15 @@
                         type: 'GET',
                         dataType: 'json',
                         beforeSend: function() {
-                            $("input[name='customer.person.firstName']").val('');
-                            $("input[name='customer.person.lastName']").val('');
-                            $("input[name='customer.person.fatherName']").val('');
-                            $("input[name='customer.person.birthday']").val('');
-                            $("input[name='customer.person.idCardSerialNumber']").val('');
-                            $("input[name='customer.person.idCardPinCode']").val('');
+
                         },
                         success: function(customer) {
                             console.log(customer);
-                            $("input[name='customer.person.firstName']").val(customer.person.firstName);
-                            $("input[name='customer.person.lastName']").val(customer.person.lastName);
-                            $("input[name='customer.person.fatherName']").val(customer.person.fatherName);
-                            $("input[name='customer.person.birthday']").val(customer.person.birthday);
-                            $("input[name='customer.person.idCardSerialNumber']").val(customer.person.idCardSerialNumber);
-                            $("input[name='customer.person.idCardPinCode']").val(customer.person.idCardPinCode);
+                            tr += '<tr class="text-center"><td class="text-center" colspan="2">'+customer.person.fullName+'</td></tr>';
+                            tr += '<tr><td>Doğum tarixi</td><td>'+customer.person.birthday+'</td></tr>';
+                            tr += '<tr><td>Seriya nömrəsi</td><td>'+customer.person.idCardSerialNumber+'</td></tr>';
+                            tr += '<tr><td>Pin kodu</td><td>'+customer.person.idCardPinCode+'</td></tr>';
+                            $('#customer-content').html(tr);
                             swal.close();
                         },
                         error: function() {
@@ -1322,6 +532,10 @@
                 },
 
                 show: function () {
+                    var elements = $($(this).parent()).find(".align-items-center");
+                    //alert(elements.length);
+                    console.log(elements);
+                    console.log(elements[0]);
                     $(this).slideDown();
                 },
 
