@@ -78,9 +78,12 @@
                                         <td><c:out value="${t.id}" /></td>
                                         <td><fmt:formatDate value = "${t.saleDate}" pattern = "dd.MM.yyyy" /></td>
                                         <th>
-                                            <c:out value="${t.salesInventories.get(0).inventory.name}" /><br/>
-                                            <c:out value="${t.salesInventories.get(0).inventory.barcode}" /><br/>
-                                            <c:out value="${t.salesInventories.get(0).inventory.description}" />
+                                            <c:forEach var="p" items="${t.salesInventories}" varStatus="lp">
+                                                <c:out value="${lp.index+1}" />.
+                                                <c:out value="${p.inventory.name}" /><br/>
+                                                <c:out value="${p.inventory.barcode}" /><br/>
+                                                <c:out value="${p.inventory.description}" /><br/>
+                                            </c:forEach>
                                         </th>
                                         <th>
                                             <c:out value="${t.customer.person.fullName}" /><br/>

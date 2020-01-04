@@ -33,7 +33,6 @@
                                     <th>İnventar</th>
                                     <th>Müştəri</th>
                                     <th>Qiymət</th>
-                                    <th>Qrafik</th>
                                     <th>Ödəniş</th>
                                     <th>Satış komandası</th>
                                 </tr>
@@ -78,9 +77,12 @@
                                         <td><c:out value="${t.id}" /></td>
                                         <td><fmt:formatDate value = "${t.saleDate}" pattern = "dd.MM.yyyy" /></td>
                                         <th>
-                                            <c:out value="${t.salesInventories.get(0).inventory.name}" /><br/>
-                                            <c:out value="${t.salesInventories.get(0).inventory.barcode}" /><br/>
-                                            <c:out value="${t.salesInventories.get(0).inventory.description}" />
+                                            <c:forEach var="p" items="${t.salesInventories}" varStatus="lp">
+                                                <c:out value="${lp.index+1}" />.
+                                                <c:out value="${p.inventory.name}" /><br/>
+                                                <c:out value="${p.inventory.barcode}" /><br/>
+                                                <c:out value="${p.inventory.description}" />
+                                            </c:forEach>
                                         </th>
                                         <th>
                                             <c:out value="${t.customer.person.fullName}" /><br/>
@@ -126,12 +128,6 @@
                                             Son qiymət: <c:out value="${t.payment.lastPrice}" />
                                         </th>
                                         <td>
-                                            Qrafik: <c:out value="${t.payment.schedule.name}" /><br/>
-                                            Period: <c:out value="${t.payment.period.name}" /><br/>
-                                            Zəmanət müddəti: <c:out value="${t.guarantee}" /> ay<br/>
-                                            Zəmanət bitir: <fmt:formatDate value = "${t.guaranteeExpire}" pattern = "dd.MM.yyyy" />
-                                        </td>
-                                        <td>
                                             <c:choose>
                                                 <c:when test="${t.payment.cash}">
                                                     <span class="kt-font-bold kt-font-success">Nəğd</span>
@@ -176,9 +172,11 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form:form modelAttribute="form" id="form" method="post" action="/sale/service" cssClass="form-group">
+                <form:form modelAttribute="form" id="form" method="post" action="/sale/sales" cssClass="form-group">
                     <form:hidden path="id"/>
                     <form:hidden path="active" value="1"/>
+                    <form:hidden path="service" value="1"/>
+                    <form:hidden path="payment.cash" value="1"/>
                     <input type="hidden" name="organization" value="<c:out value="${sessionScope.organization.id}"/>"/>
                     <div class="row">
                         <div class="col-md-4">
@@ -204,7 +202,9 @@
                                                         <label>İnventar:</label>
                                                     </div>
                                                     <div class="kt-form__control">
-                                                        <input type="text" name="barcode" class="form-control" placeholder="Barkodu daxil edin...">
+                                                        <input type="text" attr="barcode" name="inventory.barcode" class="form-control" placeholder="Barkodu daxil edin..." onchange="findInventory($(this))">
+                                                        <label attr="name" name="inventory.name"></label>
+                                                        <input type="hidden" attr="id" name="inventory" class="form-control" placeholder="Barkodu daxil edin..." >
                                                     </div>
                                                 </div>
                                                 <div class="d-md-none kt-margin-b-10"></div>
@@ -239,18 +239,23 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <form:label path="payment.price">Qiymət</form:label>
-                                <form:input path="payment.price" cssClass="form-control" placeholder="Qiyməti daxil edin"/>
+                                <form:input path="payment.price" cssClass="form-control" placeholder="Qiyməti daxil edin" onchange="calculate($('input[name=\"payment.price\"]').val(), $('input[name=\"payment.discount\"]').val())" onkeyup="calculate($('input[name=\"payment.price\"]').val(), $('input[name=\"payment.discount\"]').val())"/>
                                 <form:errors path="payment.price" cssClass="alert-danger control-label"/>
                             </div>
                             <div class="form-group">
                                 <form:label path="payment.discount">Endirim</form:label>
-                                <form:input path="payment.discount" cssClass="form-control" placeholder="Endirimi daxil edin"/>
+                                <form:input path="payment.discount" cssClass="form-control" placeholder="Endirim varsa daxil edin" onchange="calculate($('input[name=\"payment.price\"]').val(), $('input[name=\"payment.discount\"]').val())" onkeyup="calculate($('input[name=\"payment.price\"]').val(), $('input[name=\"payment.discount\"]').val())"/>
                                 <form:errors path="payment.discount" cssClass="alert-danger control-label"/>
                             </div>
                             <div class="form-group">
                                 <form:label path="payment.lastPrice">Son qiymət</form:label>
                                 <form:input path="payment.lastPrice" cssClass="form-control" placeholder="Son qiyməti daxil edin" readonly="true"/>
                                 <form:errors path="payment.lastPrice" cssClass="alert-danger control-label"/>
+                            </div>
+                            <div class="form-group">
+                                <form:label path="payment.description">Açıqlama</form:label>
+                                <form:textarea path="payment.description" cssClass="form-control" placeholder="Açıqlama daxil edin"/>
+                                <form:errors path="payment.description" cssClass="alert-danger control-label"/>
                             </div>
                         </div>
                     </div>
@@ -276,103 +281,25 @@
         allowClear: true
     });
 
-    function calculate(element){
-        var price = $(element).val();
-        var discount = $("input[name='payment.discount']").val();
-        if(discount.trim().length>0){
-            var discounts = discount.trim().split("%");
-            if(discounts.length>1){
-                price = price-price*parseFloat(discounts[0])*0.01;
-            } else {
-                price = price-parseFloat(discounts[0]);
-            }
-            price = Math.ceil(price);
+    function calculate(price, discount){
+        console.log(price);
+        if(price.trim().length===0){
+            price = 0;
         }
-        $("#lastPriceLabel").text(price);
-        $("input[name='payment.lastPrice']").val(price);
-    }
-
-    $(function(){
-        $("select[name='payment.price']").change();
-    });
-
-    function doCash(element, defaultCash){
-        if($(element).is(":checked")){
-            $("#cash-div").removeClass("kt-hidden");
-            $("#credit-div").addClass("kt-hidden");
-            $("#schedule-div").html('');
-            swal.fire({
-                title: 'Endirimi təsdiq edirsinizmi?',
-                html: 'Endirim faiz və ya məbləğini daxil edin',
-                type: 'question',
-                allowEnterKey: true,
-                showCancelButton: true,
-                buttonsStyling: false,
-                cancelButtonText: 'Xeyr, edilməsin!',
-                cancelButtonClass: 'btn btn-danger',
-                confirmButtonText: 'Bəli, edilsin!',
-                confirmButtonClass: 'btn btn-success',
-                reverseButtons: true,
-                allowOutsideClick: false,
-                input: 'text',
-                inputPlaceholder: 'Buraya daxil edin...',
-                inputValue: defaultCash,
-                inputAttributes: {
-                    maxlength: 10,
-                    autocapitalize: 'off',
-                    autocorrect: 'off',
-                    id: 'sale-value',
-                    style: 'text-align: -webkit-center; text-align: center; font-weight: bold; letter-spacing: 3px;'
-                },
-                footer: '<a href>Məlumatlar yenilənsinmi?</a>'
-            }).then(function(result) {
-                $("input[name='payment.discount']").val('');
-                $("input[name='payment.description']").val('');
-                if (result.value) {
-                    $("input[name='payment.discount']").val($('#sale-value').val());
-                    $("select[name='payment.price']").change();
-                    if($('#sale-value').val()!==defaultCash){
-                        swal.fire({
-                            title: $('#sale-value').val()+' - Səbəbini daxil edin',
-                            type: 'info',
-                            allowEnterKey: true,
-                            buttonsStyling: false,
-                            confirmButtonText: 'Təsdiq edirəm',
-                            confirmButtonClass: 'btn btn-default',
-                            allowOutsideClick: false,
-                            input: 'textarea',
-                            inputPlaceholder: 'Buraya daxil edin...',
-                            inputAttributes: {
-                                autocapitalize: 'off',
-                                autocorrect: 'off',
-                                style: 'letter-spacing: 1px;',
-                                'aria-label': 'Type your message here'
-                            },
-                            footer: '<a href>Məlumatlar yenilənsinmi?</a>'
-                        }).then(function(result2){
-                            if(result2.value.length>0){
-                                $("input[name='payment.description']").val(result2.value);
-                            }
-                        })
-
-                    }
-                }
-            })
-
-        } else {
-            var price = $("select[name='payment.price']").val();
-            $("#lastPriceLabel").text(price);
-            $("input[name='payment.lastPrice']").val(price);
-            $("#cash-div").addClass("kt-hidden");
-            $("#credit-div").removeClass("kt-hidden");
+        if(discount.trim().length===0){
+            discount = 0;
         }
+        console.log(discount);
+        if(discount!==0 && discount.indexOf('%')!==-1){
+            console.log(parseFloat(price)*parseFloat(discount.replace('%', '*0.01')));
+            discount = parseFloat(price)*parseFloat(discount.replace('%', ''))/100;
+        }
+        var result = parseFloat(price)-parseFloat(discount)
+        if(result<0){
+            result=0;
+        }
+        $("input[name='payment.lastPrice']").val(result);
     }
-
-
-    $('.custom-file-input').on('change', function() {
-        var fileName = $(this).val();
-        $(this).next('.custom-file-label').addClass("selected").html(fileName);
-    });
 
     function findCustomer(element){
         var tr = '';
@@ -387,7 +314,7 @@
                         type: 'GET',
                         dataType: 'json',
                         beforeSend: function() {
-
+                            $('#customer-content').html('');
                         },
                         success: function(customer) {
                             console.log(customer);
@@ -427,15 +354,11 @@
                         type: 'GET',
                         dataType: 'json',
                         beforeSend: function() {
-                            $("input[name='salesInventories[0].inventory']").val('');
-                            $("input[name='salesInventories[0].inventory.name']").val('');
-                            $("textarea[name='salesInventories[0].inventory.description']").val('');
                         },
                         success: function(inventory) {
+                            $(element).parent().find("input[attr='id']").val(inventory.id);
+                            $(element).parent().find("label[attr='name']").text(inventory.name);
                             console.log(inventory);
-                            $("input[name='salesInventories[0].inventory']").val(inventory.id);
-                            $("input[name='salesInventories[0].inventory.name']").val(inventory.name);
-                            $("textarea[name='salesInventories[0].inventory.description']").val(inventory.description);
                             swal.close();
                         },
                         error: function() {
@@ -532,11 +455,13 @@
                 },
 
                 show: function () {
-                    var elements = $($(this).parent()).find(".align-items-center");
-                    //alert(elements.length);
-                    console.log(elements);
-                    console.log(elements[0]);
                     $(this).slideDown();
+                    var elements = $($(this).parent()).find(".align-items-center");
+                    var lastBefore = $(elements).eq(-2);
+                    var barcode = $(lastBefore).find("input[attr='barcode']");
+                    if(barcode.val().trim().length>0){
+                        findInventory(barcode);
+                    }
                 },
 
                 hide: function (deleteElement) {
@@ -554,7 +479,6 @@
                         allowOutsideClick: false,
                         footer: '<a href>Məlumatlar yenilənsinmi?</a>'
                     }).then(function(result){
-                        console.log(result);
                         if(result.value){
                             $(this).slideUp(deleteElement);
                         }

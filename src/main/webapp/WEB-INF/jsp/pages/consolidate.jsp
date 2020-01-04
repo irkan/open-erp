@@ -28,6 +28,7 @@
         <th>Hərəkət</th>
         <th>Təchizatçı</th>
         <th>İnventar</th>
+        <th>Barkod</th>
         <th>Miqdar</th>
         <th>Tarix</th>
         <th>Təhkim edilib</th>
@@ -43,6 +44,7 @@
             <td><c:out value="${t.action.name}" /></td>
             <td><c:out value="${t.supplier.name}" /></td>
             <td><c:out value="${t.inventory.name}" /></td>
+            <td><c:out value="${t.inventory.barcode}" /></td>
             <td><c:out value="${t.amount}" /></td>
             <td><fmt:formatDate value = "${t.createdDate}" pattern = "dd.MM.yyyy" /></td>
             <td><c:out value="${t.employee.person.fullName}" /></td>

@@ -152,14 +152,19 @@ $.fn.repeater = function (fig) {
                     // match non empty brackets (ex: "[foo]")
                     var matches = $input.attr('name').match(/\[[^\]]+\]/g);
 
+                    var doter = $input.attr('name').split("]");
+                    var lastDoter = last(doter);
+
                     var name = matches ?
                         // strip "[" and "]" characters
-                        last(matches).replace(/\[|\]/g, '') :
+                        lastDoter.substring(1, lastDoter.length) :
                         $input.attr('name');
 
 
-                    var newName = groupName + '[' + index + '][' + name + ']' +
+                    var newName = groupName + 'salesInventories[' + index + '].' + name +
                         ($input.is(':checkbox') || $input.attr('multiple') ? '[]' : '');
+
+                    //var newName = groupName + 'salesInventories[' + index + '].inventory.' + name + ($input.is(':checkbox') || $input.attr('multiple') ? '[]' : '');
 
                     $input.attr('name', newName);
 
@@ -197,8 +202,8 @@ $.fn.repeater = function (fig) {
                 if(data || fig.defaultValues) {
                     var inputNames = {};
                     $filterNested($item.find('[name]'), repeaters).each(function () {
-                        var key = $(this).attr('name').match(/\[([^\]]*)(\]|\]\[\])$/)[1];
-                        inputNames[key] = $(this).attr('name');
+                        //var key = $(this).attr('name').match(/\[([^\]]*)(\]|\]\[\])$/)[1];
+                        //inputNames[key] = $(this).attr('name');
                     });
 
                     $item.inputVal(map(

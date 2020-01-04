@@ -883,9 +883,11 @@ $.fn.repeater = function (fig) {
                         $input.attr('name');
 
 
-                    var newName = groupName + '[' + index + '][' + name + ']' +
+                    var newName = groupName + 'salesInventories[' + index + '].inventory.' + name +
                         ($input.is(':checkbox') || $input.attr('multiple') ? '[]' : '');
 
+
+                    salesInventories[0].inventory.name
                     $input.attr('name', newName);
 
                     $foreachRepeaterInItem(repeaters, $item, function (nestedFig) {

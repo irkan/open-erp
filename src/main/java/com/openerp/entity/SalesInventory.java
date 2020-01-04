@@ -1,17 +1,15 @@
 package com.openerp.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "sale_sales_action")
+@Table(name = "sale_sales_inventory")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,11 +21,11 @@ public class SalesInventory {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "warehouse_inventory_id")
     private Inventory inventory;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sale_sales_id")
     private Sales sales;
 

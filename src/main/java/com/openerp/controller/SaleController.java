@@ -41,6 +41,9 @@ public class SaleController extends SkeletonController {
             } else {
                 sales = salesRepository.getSalesByActiveTrueAndServiceFalseAndOrganizationOrderByIdDesc(getSessionOrganization());
             }
+            for(Sales sales1: sales){
+                sales1.setSalesInventories(salesInventoryRepository.getSalesInventoriesByActiveTrueAndSales(sales1));
+            }
             model.addAttribute(Constants.LIST, sales);
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Sales());
@@ -49,16 +52,14 @@ public class SaleController extends SkeletonController {
             List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization());
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
             model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployeesByPosition(employees, positions));
-            model.addAttribute(Constants.CITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("city"));
-            model.addAttribute(Constants.SALE_PRICES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("sale-price"));
-            model.addAttribute(Constants.PAYMENT_SCHEDULES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-schedule"));
-            model.addAttribute(Constants.PAYMENT_PERIODS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-period"));
-            model.addAttribute(Constants.GUARANTEES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("guarantee"));
             List<Sales> sales;
             if(canViewAll()){
                 sales = salesRepository.getSalesByActiveTrueAndServiceTrueOrderByIdDesc();
             } else {
                 sales = salesRepository.getSalesByActiveTrueAndServiceTrueAndOrganizationOrderByIdDesc(getSessionOrganization());
+            }
+            for(Sales sales1: sales){
+                sales1.setSalesInventories(salesInventoryRepository.getSalesInventoriesByActiveTrueAndSales(sales1));
             }
             model.addAttribute(Constants.LIST, sales);
             if(!model.containsAttribute(Constants.FORM)){
@@ -107,14 +108,17 @@ public class SaleController extends SkeletonController {
         return "layout";
     }
 
+
+
     @PostMapping(value = "/sales")
     public String postSales(@ModelAttribute(Constants.FORM) @Validated Sales sales, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             if(sales.getId()==null){
                 List<SalesInventory> salesInventories = new ArrayList<>();
-                SalesInventory salesInventory = new SalesInventory(sales.getSalesInventories().get(0).getInventory(), sales);
-                salesInventories.add(salesInventory);
+                for(SalesInventory salesInventory: sales.getSalesInventories()){
+                    salesInventories.add(new SalesInventory(salesInventory.getInventory(), sales));
+                }
                 sales.setSalesInventories(salesInventories);
             }
             if(sales.getPayment().getCash()){
@@ -125,22 +129,24 @@ public class SaleController extends SkeletonController {
             salesRepository.save(sales);
             log("sale_sales", "create/edit", sales.getId(), sales.toString());
 
-            List<Action> oldActions = actionRepository.getActionsByActiveTrueAndInventory_ActiveAndInventoryAndEmployeeAndAction_Attr1AndAmountGreaterThanOrderById(true, sales.getSalesInventories().get(0).getInventory(), getSessionUser().getEmployee(), "consolidate", 0);
-            if(oldActions.size()>0){
-                Action action = new Action();
-                action.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sell", "action"));
-                action.setAmount(1);
-                action.setInventory(sales.getSalesInventories().get(0).getInventory());
-                action.setOrganization(sales.getOrganization());
-                action.setEmployee(getSessionUser().getEmployee());
-                action.setSupplier(oldActions.get(0).getSupplier());
-                actionRepository.save(action);
-                log("warehouse_action", "create/edit", action.getId(), action.toString());
+            for(SalesInventory salesInventory: sales.getSalesInventories()){
+                List<Action> oldActions = actionRepository.getActionsByActiveTrueAndInventory_ActiveAndInventoryAndEmployeeAndAction_Attr1AndAmountGreaterThanOrderById(true, salesInventory.getInventory(), getSessionUser().getEmployee(), "consolidate", 0);
+                if(oldActions.size()>0){
+                    Action action = new Action();
+                    action.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sell", "action"));
+                    action.setAmount(1);
+                    action.setInventory(salesInventory.getInventory());
+                    action.setOrganization(sales.getOrganization());
+                    action.setEmployee(getSessionUser().getEmployee());
+                    action.setSupplier(oldActions.get(0).getSupplier());
+                    actionRepository.save(action);
+                    log("warehouse_action", "create/edit", action.getId(), action.toString());
 
-                Action oldAction = oldActions.get(0);
-                oldAction.setAmount(oldAction.getAmount()-1);
-                actionRepository.save(oldAction);
-                log("warehouse_action", "create/edit", oldAction.getId(), oldAction.toString());
+                    Action oldAction = oldActions.get(0);
+                    oldAction.setAmount(oldAction.getAmount()-1);
+                    actionRepository.save(oldAction);
+                    log("warehouse_action", "create/edit", oldAction.getId(), oldAction.toString());
+                }
             }
 
             if(sales.getPayment()!=null && sales.getPayment().getSchedules()!=null && sales.getPayment().getSchedules().size()>0){
@@ -174,6 +180,9 @@ public class SaleController extends SkeletonController {
                 invoiceRepository.save(invoice);
                 log("sale_invoice", "create/edit", invoice.getId(), invoice.toString());
             }
+        }
+        if(sales.getService()){
+            return mapPost(sales, binding, redirectAttributes, "/sale/service");
         }
         return mapPost(sales, binding, redirectAttributes);
     }
