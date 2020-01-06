@@ -20,8 +20,8 @@ import java.util.List;
 public class Employee {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "hr_sequence")
-    @SequenceGenerator(sequenceName = "aa_hr_sequence", allocationSize = 1, name = "hr_sequence")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "hr_employee_sequence")
+    @SequenceGenerator(sequenceName = "aa_hr_employee_sequence", allocationSize = 1, initialValue = 100001, name = "hr_employee_sequence")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 

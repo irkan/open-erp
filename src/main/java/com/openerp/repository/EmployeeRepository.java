@@ -3,11 +3,10 @@ package com.openerp.repository;
 import com.openerp.entity.Employee;
 import com.openerp.entity.Organization;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.Date;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import java.util.List;
 
-public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
+public interface EmployeeRepository extends JpaRepository<Employee, Integer>, JpaSpecificationExecutor<Employee> {
     List<Employee> getEmployeesByContractEndDateIsNullAndOrganization(Organization organization);
     List<Employee> getEmployeesByContractEndDateIsNull();
     Employee getEmployeeById(int id);

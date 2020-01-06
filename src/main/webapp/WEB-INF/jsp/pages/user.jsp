@@ -14,6 +14,7 @@
 <div class="kt-container  kt-grid__item kt-grid__item--fluid">
     <div class="kt-portlet kt-portlet--mobile">
         <div class="kt-portlet__body">
+            <table id="sample"></table>
             <c:choose>
                 <c:when test="${not empty list}">
                     <c:set var="changePassword" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'change-password')}"/>
@@ -223,6 +224,14 @@
     $('.select2-single').select2({
         placeholder: "Əməkdaşı seçin",
         allowClear: true
+    });
+
+    $(document).ready(function() {
+        var table = $('table#sample').DataTable({
+            'ajax' : '/data/users',
+            'serverSide' : true,
+            columns : [  ]
+        });
     });
     function getSelect(element, url, filledComponentId){
         $.ajax({

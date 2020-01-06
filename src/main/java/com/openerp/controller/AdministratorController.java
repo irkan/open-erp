@@ -1,8 +1,13 @@
 package com.openerp.controller;
 
 import com.openerp.entity.*;
+import com.openerp.specification.internal.Comparison;
+import com.openerp.specification.internal.Condition;
+import com.openerp.specification.internal.Filter;
+import com.openerp.specification.internal.Type;
 import com.openerp.util.Constants;
 import com.openerp.util.Util;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +29,7 @@ public class AdministratorController extends SkeletonController {
 
     @GetMapping(value = {"/{page}", "/{page}/{data}"})
     public String route(Model model, @PathVariable("page") String page, @PathVariable("data") Optional<String> data, RedirectAttributes redirectAttributes) throws Exception {
+        Filter filter = new Filter();
         if (page.equalsIgnoreCase(Constants.ROUTE.MODULE)) {
             model.addAttribute(Constants.PARENTS, moduleRepository.getModulesByActiveTrueAndModuleIsNull());
             model.addAttribute(Constants.LIST, moduleRepository.getModulesByActiveTrue());
@@ -95,18 +101,18 @@ public class AdministratorController extends SkeletonController {
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.NOTIFICATION)){
             model.addAttribute(Constants.NOTIFICATIONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("notification"));
-            List<Notification> notifications;
-            if(canViewAll()){
-                notifications = notificationRepository.getNotificationsByActiveTrue();
-            } else {
-                notifications = notificationRepository.getNotificationsByActiveTrueAndOrganization(getSessionOrganization());
+
+            filter.addCondition(new Condition.Builder().setComparison(Comparison.eq).setField("active").setValue(1).setType(Type.numeric).build());
+            if(!canViewAll()){
+                filter.addCondition(new Condition.Builder().setComparison(Comparison.eq).setField("organization").setValue(getSessionOrganization().getId()).setType(Type.numeric).build());
             }
-            model.addAttribute(Constants.LIST, notifications);
+            model.addAttribute(Constants.LIST, notificationRepository.findAll(filter, Sort.by("id").descending()));
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Notification());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.LOG)){
-            model.addAttribute(Constants.LIST, logRepository.getLogsByActiveTrueOrderByOperationDateDesc());
+            filter.addCondition(new Condition.Builder().setComparison(Comparison.eq).setField("active").setValue(1).setType(Type.numeric).build());
+            model.addAttribute(Constants.LIST, logRepository.findAll(filter, Sort.by("operationDate").descending()));
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Log());
             }

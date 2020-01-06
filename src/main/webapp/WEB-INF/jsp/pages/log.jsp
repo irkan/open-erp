@@ -16,6 +16,15 @@
         <div class="col-lg-12">
             <div class="kt-portlet kt-portlet--mobile">
                 <div class="kt-portlet__body">
+                    teest
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="kt-portlet kt-portlet--mobile">
+                <div class="kt-portlet__body">
 
 <c:choose>
     <c:when test="${not empty list}">

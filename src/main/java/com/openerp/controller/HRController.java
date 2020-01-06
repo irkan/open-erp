@@ -2,6 +2,10 @@ package com.openerp.controller;
 
 import com.openerp.entity.*;
 import com.openerp.entity.Dictionary;
+import com.openerp.specification.internal.Comparison;
+import com.openerp.specification.internal.Condition;
+import com.openerp.specification.internal.Filter;
+import com.openerp.specification.internal.Type;
 import com.openerp.util.Constants;
 import com.openerp.util.DateUtility;
 import com.openerp.util.ReadWriteExcelFile;
@@ -22,7 +26,7 @@ public class HRController extends SkeletonController {
 
     @GetMapping(value = {"/{page}", "/{page}/{data}"})
     public String route(Model model, @PathVariable("page") String page, @PathVariable("data") Optional<String> data, RedirectAttributes redirectAttributes) throws Exception {
-
+        Filter filter = new Filter();
         if (page.equalsIgnoreCase(Constants.ROUTE.ORGANIZATION)){
             model.addAttribute(Constants.CITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("city"));
             model.addAttribute(Constants.ORGANIZATION_TYPES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("organization-type"));
@@ -41,13 +45,12 @@ public class HRController extends SkeletonController {
             model.addAttribute(Constants.MARITAL_STATUSES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("marital-status"));
             model.addAttribute(Constants.WEEK_DAYS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("week-day"));
             model.addAttribute(Constants.ORGANIZATIONS, organizationRepository.getOrganizationsByActiveTrue());
-            List<Employee> employees;
-            if(canViewAll()){
-                employees = employeeRepository.getEmployeesByContractEndDateIsNull();
-            } else {
-                employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization());
+
+            filter.addCondition(new Condition.Builder().setComparison(Comparison.isnull).setField("contractEndDate").build());
+            if(!canViewAll()){
+                filter.addCondition(new Condition.Builder().setComparison(Comparison.eq).setField("organization").setValue(getSessionOrganization().getId()).setType(Type.numeric).build());
             }
-            model.addAttribute(Constants.LIST, employees);
+            model.addAttribute(Constants.LIST, employeeRepository.findAll(filter));
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Employee());
             }
