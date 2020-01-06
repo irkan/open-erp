@@ -12,15 +12,37 @@
 <%@ taglib prefix="utl" uri="/WEB-INF/tld/Util.tld"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <div class="kt-container  kt-grid__item kt-grid__item--fluid">
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="kt-portlet kt-portlet--mobile">
-                <div class="kt-portlet__body">
-                    teest
+    <c:set var="filter" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'filter')}"/>
+    <c:if test="${filter.status}">
+        <div class="accordion  accordion-toggle-arrow mb-2" id="accordionFilter">
+            <div class="card" style="border-radius: 4px;">
+                <div class="card-header">
+                    <div class="card-title w-100" data-toggle="collapse" data-target="#filterContent" aria-expanded="true" aria-controls="collapseOne4">
+                        <div class="row w-100">
+                            <div class="col-6 p-1" style="font-size: 1.5rem">
+                                <i class="<c:out value="${filter.object.icon}"/>"> <c:out value="${filter.object.name}"/></i>
+                            </div>
+                            <div class="col-6 text-right pr-md-2">
+                                <button href="#" onclick="saveWHR($('#form'))" class="btn btn-danger btn-elevate btn-icon-sm">
+                                    <i class="la la-trash"></i> Təmizlə
+                                </button>
+                                <a href="#" onclick="saveWHR($('#form'))" class="btn btn-warning btn-elevate btn-icon-sm">
+                                    <i class="la la-search"></i> Axtar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="filterContent" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionFilter">
+                    <div class="card-body">
+                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. heard of them accusamus labore sustainable VHS.
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </c:if>
+
+
     <div class="row">
         <div class="col-lg-12">
             <div class="kt-portlet kt-portlet--mobile">

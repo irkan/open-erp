@@ -1,14 +1,13 @@
 package com.openerp.controller;
 
-import com.openerp.entity.Organization;
-import com.openerp.entity.User;
-import com.openerp.entity.UserModuleOperation;
+import com.openerp.entity.*;
+import com.openerp.specification.internal.Filter;
 import com.openerp.util.Constants;
-import com.openerp.entity.Module;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -79,5 +78,11 @@ public class RouterController extends SkeletonController {
         }
         redirectAttributes.addFlashAttribute(Constants.MODULE_DESCRIPTION, description);
         return "redirect:/"+path1+"/"+path2+(!data.equals(Optional.empty())?("/"+data.toString().trim()):"");
+    }
+
+    @PostMapping(value = {"/filter/{path1}/{path2}", "/sub/{path1}/{path2}/{data}"})
+    public String getFilter(@ModelAttribute(Constants.FORM) @Validated Filter filter, @PathVariable("path1") String path1, @PathVariable("path2") String path2, @PathVariable("data") Optional<String> data, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+
+        return path1;
     }
 }

@@ -1,6 +1,9 @@
 package com.openerp.specification.internal;
 
-import com.openerp.specification.internal.Condition;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -23,6 +26,10 @@ import java.util.List;
  * "comparison": "gt"
  * }]
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Filter implements Specification {
 
     List<Condition> conditions;
@@ -30,10 +37,6 @@ public class Filter implements Specification {
     public Filter(String json) {
 //        ObjectMapper mapper = new ObjectMapper();
 //        this.conditions = mapper.readValue(json, mapper.getTypeFactory().constructCollectionType(List.class, Condition.class));
-    }
-
-    public Filter() {
-        conditions = new ArrayList<>();
     }
 
     public void addCondition(Condition condition) {

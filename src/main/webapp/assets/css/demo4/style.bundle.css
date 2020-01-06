@@ -8095,7 +8095,7 @@ a.text-dark:hover, a.text-dark:focus {
       margin: 0;
       font-size: 1.1rem;
       font-weight: 500;
-      padding: 1rem 1rem;
+      padding: 0.5rem 1rem;
       color: #366cf3;
       display: -webkit-box;
       display: -ms-flexbox;
@@ -8117,7 +8117,7 @@ a.text-dark:hover, a.text-dark:focus {
       .accordion .card .card-header .card-title:after {
         right: 1rem; }
   .accordion .card .card-body {
-    padding: 1.25rem;
+    padding: 10px;
     font-size: 1rem; }
 
 .accordion--no-bg .card {
@@ -18820,7 +18820,7 @@ strong {
     -webkit-box-direction: normal;
     -ms-flex-direction: column;
     flex-direction: column;
-    padding: 25px;
+    padding: 10px;
     border-radius: 4px; }
     .kt-portlet .kt-portlet__body .kt-portlet__content {
       padding: 0;

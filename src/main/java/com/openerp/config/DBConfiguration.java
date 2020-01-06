@@ -651,6 +651,8 @@ public class DBConfiguration {
             operations.add(detail);
             Operation changePassword = new Operation("Şifrəni dəyişdir", "change-password", "flaticon-lock");
             operations.add(changePassword);
+            Operation filter = new Operation("Filter", "filter", "la la-filter");
+            operations.add(filter);
 
             operationRepository.saveAll(operations);
 
@@ -1015,6 +1017,51 @@ public class DBConfiguration {
             ModuleOperation changePasswordModuleOperation2 = new ModuleOperation(changePasswordModule, changePassword, null);
             moduleOperations.add(changePasswordModuleOperation2);
 
+            ModuleOperation filterModuleOperation1 = new ModuleOperation(notification, filter, null);
+            moduleOperations.add(filterModuleOperation1);
+            ModuleOperation filterModuleOperation2 = new ModuleOperation(log, filter, null);
+            moduleOperations.add(filterModuleOperation2);
+            ModuleOperation filterModuleOperation3 = new ModuleOperation(nonWorkingDay, filter, null);
+            moduleOperations.add(filterModuleOperation3);
+            ModuleOperation filterModuleOperation4 = new ModuleOperation(shortenedWorkingDay, filter, null);
+            moduleOperations.add(filterModuleOperation4);
+            ModuleOperation filterModuleOperation5 = new ModuleOperation(workAttendance, filter, null);
+            moduleOperations.add(filterModuleOperation5);
+            ModuleOperation filterModuleOperation6 = new ModuleOperation(vacation, filter, null);
+            moduleOperations.add(filterModuleOperation6);
+            ModuleOperation filterModuleOperation7 = new ModuleOperation(businessTrip, filter, null);
+            moduleOperations.add(filterModuleOperation7);
+            ModuleOperation filterModuleOperation8 = new ModuleOperation(illness, filter, null);
+            moduleOperations.add(filterModuleOperation8);
+            ModuleOperation filterModuleOperation9 = new ModuleOperation(inventory, filter, null);
+            moduleOperations.add(filterModuleOperation9);
+            ModuleOperation filterModuleOperation10 = new ModuleOperation(action, filter, null);
+            moduleOperations.add(filterModuleOperation10);
+            ModuleOperation filterModuleOperation11 = new ModuleOperation(consolidate, filter, null);
+            moduleOperations.add(filterModuleOperation11);
+            ModuleOperation filterModuleOperation12 = new ModuleOperation(transaction, filter, null);
+            moduleOperations.add(filterModuleOperation12);
+            ModuleOperation filterModuleOperation13 = new ModuleOperation(financing, filter, null);
+            moduleOperations.add(filterModuleOperation13);
+            ModuleOperation filterModuleOperation14 = new ModuleOperation(advance, filter, null);
+            moduleOperations.add(filterModuleOperation14);
+            ModuleOperation filterModuleOperation15 = new ModuleOperation(invoice, filter, null);
+            moduleOperations.add(filterModuleOperation15);
+            ModuleOperation filterModuleOperation16 = new ModuleOperation(sales, filter, null);
+            moduleOperations.add(filterModuleOperation16);
+            ModuleOperation filterModuleOperation17 = new ModuleOperation(demonstration, filter, null);
+            moduleOperations.add(filterModuleOperation17);
+            ModuleOperation filterModuleOperation18 = new ModuleOperation(service, filter, null);
+            moduleOperations.add(filterModuleOperation18);
+            ModuleOperation filterModuleOperation19 = new ModuleOperation(customer, filter, null);
+            moduleOperations.add(filterModuleOperation19);
+            ModuleOperation filterModuleOperation20 = new ModuleOperation(paymentRegulator, filter, null);
+            moduleOperations.add(filterModuleOperation20);
+            ModuleOperation filterModuleOperation21 = new ModuleOperation(paymentRegulatorNote, filter, null);
+            moduleOperations.add(filterModuleOperation21);
+            ModuleOperation filterModuleOperation22 = new ModuleOperation(troubledCustomer, filter, null);
+            moduleOperations.add(filterModuleOperation22);
+
             moduleOperationRepository.saveAll(moduleOperations);
 
             List<Organization> organizations = new ArrayList<>();
@@ -1259,6 +1306,29 @@ public class DBConfiguration {
 
             userModuleOperations.add(new UserModuleOperation(user, changePasswordModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, changePasswordModuleOperation2));
+
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation1));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation2));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation3));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation4));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation5));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation6));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation7));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation8));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation9));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation10));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation11));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation12));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation13));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation14));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation15));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation16));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation17));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation18));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation19));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation20));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation21));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation22));
 
             userModuleOperationRepository.saveAll(userModuleOperations);
 
