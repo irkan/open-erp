@@ -22,16 +22,16 @@ public class CustomerService {
             @Override
             public Predicate toPredicate(Root<Customer> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 List<Predicate> predicates = new ArrayList<>();
-                if(customer.getPerson().getFirstName()!=null) {
+                if(customer.getPerson()!=null && customer.getPerson().getFirstName()!=null) {
                     predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.join("person", JoinType.LEFT).get("firstName"), "%"+customer.getPerson().getFirstName()+"%")));
                 }
-                if(customer.getPerson().getLastName()!=null){
+                if(customer.getPerson()!=null && customer.getPerson().getLastName()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.join("person", JoinType.LEFT).get("lastName"), "%"+customer.getPerson().getLastName()+"%")));
                 }
-                if(customer.getPerson().getBirthday()!=null){
+                if(customer.getPerson()!=null && customer.getPerson().getBirthday()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.join("person", JoinType.LEFT).get("birthday"), customer.getPerson().getBirthday())));
                 }
-                if(customer.getOrganization().getId()!=null){
+                if(customer.getOrganization()!=null && customer.getOrganization().getId()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("organization"), customer.getOrganization().getId())));
                 }
                 return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));

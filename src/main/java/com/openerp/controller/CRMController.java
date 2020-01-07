@@ -28,15 +28,12 @@ public class CRMController extends SkeletonController {
             model.addAttribute(Constants.NATIONALITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("nationality"));
             model.addAttribute(Constants.GENDERS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("gender"));
             model.addAttribute(Constants.MARITAL_STATUSES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("marital-status"));
+            Customer customer = new Customer();
 
-            if(!model.containsAttribute(Constants.FILTER_FORM)){
-                model.addAttribute(Constants.FILTER_FORM, new Customer());
-            }
             if(!canViewAll()){
-                Customer customer = new Customer();
                 customer.setOrganization(getSessionOrganization());
             }
-            customerService.findAll((Customer) model.asMap().get(Constants.FILTER_FORM));
+
 
 
             List<Customer> customers;
@@ -45,10 +42,17 @@ public class CRMController extends SkeletonController {
             } else {
                 customers = customerRepository.getCustomersByActiveTrueAndOrganization(getSessionOrganization());
             }
-            model.addAttribute(Constants.LIST, customers);
+
+
+
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Customer());
             }
+            if(model.containsAttribute(Constants.FILTER_FORM)){
+                customer = (Customer) model.asMap().get(Constants.FILTER_FORM);
+            }
+            model.addAttribute(Constants.FILTER_FORM, customer);
+            model.addAttribute(Constants.LIST, customerService.findAll(customer));
         }
         return "layout";
     }

@@ -78,11 +78,11 @@ public class RouterController extends SkeletonController {
         }
         redirectAttributes.addFlashAttribute(Constants.MODULE_DESCRIPTION, description);
 
-        if(model.containsAttribute(Constants.FILTER_FORM)){
+        /*if(model.containsAttribute(Constants.FILTER_FORM)){
             redirectAttributes.addFlashAttribute(Constants.FILTER_FORM, model.asMap().get(Constants.FILTER_FORM));
         } else {
             redirectAttributes.addFlashAttribute(Constants.FILTER_FORM, new Filter());
-        }
+        }*/
         return "redirect:/"+path1+"/"+path2+(!data.equals(Optional.empty())?("/"+data.toString().trim()):"");
     }
 

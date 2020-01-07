@@ -13,8 +13,71 @@
 <%@ taglib prefix="utl" uri="/WEB-INF/tld/Util.tld" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <div class="kt-container  kt-grid__item kt-grid__item--fluid">
+    <c:set var="filter" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'filter')}"/>
+    <c:if test="${filter.status}">
+        <div class="accordion  accordion-toggle-arrow mb-2" id="accordionFilter">
+            <div class="card" style="border-radius: 4px;">
+                <div class="card-header">
+                    <div class="card-title w-100" data-toggle="collapse" data-target="#filterContent" aria-expanded="true" aria-controls="collapseOne4">
+                        <div class="row w-100">
+                            <div class="col-6" style="font-size: 1.2rem; font-family: Arial, Helvetica, sans-serif">
+                                <i class="<c:out value="${filter.object.icon}"/>"> <c:out value="${filter.object.name}"/></i>
+                            </div>
+                            <div class="col-6 text-right pr-md-4">
+                                <a href="#" onclick="submit($('#filter'))" class="btn btn-danger btn-elevate btn-icon-sm" style="padding: 0.35rem 0.6rem">
+                                    <i class="la la-trash"></i> Təmizlə
+                                </a>
+                                <a href="#" onclick="submit($('#filter'))" class="btn btn-warning btn-elevate btn-icon-sm" style="padding: 0.35rem 0.6rem">
+                                    <i class="la la-search"></i> Axtar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="filterContent" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionFilter">
+                    <div class="card-body">
+                        <form:form modelAttribute="filter-form" id="filter" method="post" action="/route/filter/crm/customer">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <form:label path="person.firstName">Ad</form:label>
+                                        <form:input path="person.firstName" cssClass="form-control"
+                                                    placeholder="Adı daxil edin Məs: Səbuhi"/>
+                                        <form:errors path="person.firstName" cssClass="control-label alert-danger"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <form:label path="person.lastName">Soyad</form:label>
+                                        <form:input path="person.lastName" cssClass="form-control"
+                                                    placeholder="Soyadı daxil edin Məs: Vəliyev"/>
+                                        <form:errors path="person.lastName" cssClass="control-label alert-danger"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <form:label path="person.birthday">Doğum tarixi</form:label>
+                                        <div class="input-group date">
+                                            <form:input path="person.birthday" autocomplete="off"
+                                                        cssClass="form-control datepicker-element" date="date"
+                                                        placeholder="dd.MM.yyyy"/>
+                                            <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-calendar"></i>
+                                        </span>
+                                            </div>
+                                        </div>
+                                        <form:errors path="person.birthday" cssClass="control-label alert-danger"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </form:form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </c:if>
     <div class="row">
-
         <div class="col-lg-12">
             <div class="kt-portlet kt-portlet--mobile">
                 <span class="kt-portlet__body">
