@@ -2,6 +2,8 @@ package com.openerp.controller;
 
 import com.openerp.entity.*;
 import com.openerp.service.StaticUtils;
+import com.openerp.specification.internal.Condition;
+import com.openerp.specification.internal.Filter;
 import com.openerp.util.Constants;
 import com.openerp.repository.*;
 import com.openerp.util.Util;
@@ -265,6 +267,15 @@ public class SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.FORM, object);
         if(!binding.hasErrors()){
             redirectAttributes.getFlashAttributes().remove(Constants.FORM);
+        }
+        return "redirect:"+redirect;
+    }
+
+    String mapFilter(Object object, BindingResult binding, RedirectAttributes redirectAttributes, String redirect){
+        redirectAttributes.addFlashAttribute(Constants.FILTER_FORM_RESULT_BINDING, binding);
+        redirectAttributes.addFlashAttribute(Constants.FILTER_FORM, object);
+        if(!binding.hasErrors()){
+            redirectAttributes.getFlashAttributes().remove(Constants.FILTER_FORM);
         }
         return "redirect:"+redirect;
     }

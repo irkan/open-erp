@@ -1,21 +1,31 @@
 package com.openerp.specification.internal;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class Condition {
 
     public Type type;
     public Comparison comparison;
+
     public Object value;
+
     public String field;
 
+    public Condition() {
+    }
+
+    public Condition(Type type, Comparison comparison, Object value, String field) {
+        this.type = type;
+        this.comparison = comparison;
+        this.value = value;
+        this.field = field;
+    }
+
+    @Getter
+    @Setter
     public static class Builder {
         private Type type;
         private Comparison comparison;

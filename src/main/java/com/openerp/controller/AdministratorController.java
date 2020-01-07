@@ -111,8 +111,11 @@ public class AdministratorController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new Notification());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.LOG)){
-            filter.addCondition(new Condition.Builder().setComparison(Comparison.eq).setField("active").setValue(1).setType(Type.numeric).build());
-            model.addAttribute(Constants.LIST, logRepository.findAll(filter, Sort.by("operationDate").descending()));
+            //filter.addCondition(new Condition.Builder().setComparison(Comparison.eq).setField("active").setValue(1).setType(Type.numeric).build());
+            Filter filter1 = (Filter) redirectAttributes.getFlashAttributes().get(Constants.FILTER_FORM);
+            Filter filter2 = (Filter) model.asMap().get(Constants.FILTER_FORM);
+            filter2.addCondition(new Condition.Builder().setComparison(Comparison.eq).setField("active").setValue(1).setType(Type.numeric).build());
+            model.addAttribute(Constants.LIST, logRepository.findAll(filter2, Sort.by("operationDate").descending()));
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Log());
             }

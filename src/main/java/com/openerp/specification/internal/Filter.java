@@ -1,17 +1,17 @@
 package com.openerp.specification.internal;
 
-import lombok.AllArgsConstructor;
+import com.openerp.util.Constants;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
+
+
+
 
 
 /**
@@ -28,8 +28,6 @@ import java.util.List;
  */
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class Filter implements Specification {
 
     List<Condition> conditions;
@@ -37,6 +35,10 @@ public class Filter implements Specification {
     public Filter(String json) {
 //        ObjectMapper mapper = new ObjectMapper();
 //        this.conditions = mapper.readValue(json, mapper.getTypeFactory().constructCollectionType(List.class, Condition.class));
+    }
+
+    public Filter() {
+        conditions = new ArrayList<>();
     }
 
     public void addCondition(Condition condition) {
@@ -62,10 +64,12 @@ public class Filter implements Specification {
         switch (condition.comparison) {
             case eq:
                 return buildEqualsPredicateToCriteria(condition, root, criteriaQuery, criteriaBuilder);
+            case like:
+                return buildLikePredicateToCriteria(condition, root, criteriaQuery, criteriaBuilder);
             case gt:
-                break;
+                return buildGtPredicateToCriteria(condition, root, criteriaQuery, criteriaBuilder);
             case lt:
-                break;
+                return buildLtPredicateToCriteria(condition, root, criteriaQuery, criteriaBuilder);
             case ne:
                 return buildNotEqualsPredicateToCriteria(condition, root, criteriaQuery, criteriaBuilder);
             case isnull:
@@ -82,11 +86,37 @@ public class Filter implements Specification {
         return criteriaBuilder.equal(root.get(condition.field), condition.value);
     }
 
+    private Predicate buildGtPredicateToCriteria(Condition condition, Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
+        return criteriaBuilder.gt(root.get(condition.field), Float.parseFloat(String.valueOf(condition.value)));
+    }
+
+    private Predicate buildLtPredicateToCriteria(Condition condition, Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
+        return criteriaBuilder.lt(root.get(condition.field), Float.parseFloat(String.valueOf(condition.value)));
+    }
+
+    private Predicate buildLikePredicateToCriteria(Condition condition, Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
+        return criteriaBuilder.like(root.get(condition.field),  "%" + condition.value + "%");
+    }
+
     private Predicate buildNotEqualsPredicateToCriteria(Condition condition, Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
         return criteriaBuilder.notEqual(root.get(condition.field), condition.value);
     }
 
     private Predicate buildIsNullPredicateToCriteria(Condition condition, Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
         return criteriaBuilder.isNull(root.get(condition.field));
+    }
+
+    public static Filter convertFilter(Filter filter){
+        //Filter filter = (Filter) redirectAttributes.getFlashAttributes().get(Constants.FILTER_FORM);
+        Filter newFilter = new Filter();
+        for(Condition condition: filter.getConditions()){
+            if(condition.getField().equalsIgnoreCase("active")){
+                if(condition.getValue()==null){
+                    condition.setValue(1);
+                }
+            }
+            newFilter.addCondition(new Condition.Builder().setComparison(condition.getComparison()).setField(condition.getField()).setValue(condition.getValue()).setType(condition.getType()).build());
+        }
+        return newFilter;
     }
 }

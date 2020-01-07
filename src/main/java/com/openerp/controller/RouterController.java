@@ -77,12 +77,13 @@ public class RouterController extends SkeletonController {
             session.setAttribute(Constants.ORGANIZATION_SELECTED, organization);
         }
         redirectAttributes.addFlashAttribute(Constants.MODULE_DESCRIPTION, description);
+        redirectAttributes.addFlashAttribute(Constants.FILTER_FORM, new Filter());
         return "redirect:/"+path1+"/"+path2+(!data.equals(Optional.empty())?("/"+data.toString().trim()):"");
     }
 
     @PostMapping(value = {"/filter/{path1}/{path2}", "/sub/{path1}/{path2}/{data}"})
-    public String getFilter(@ModelAttribute(Constants.FORM) @Validated Filter filter, @PathVariable("path1") String path1, @PathVariable("path2") String path2, @PathVariable("data") Optional<String> data, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
-
-        return path1;
+    public String postFilter(@ModelAttribute(Constants.FILTER_FORM) @Validated Filter filter, @PathVariable("path1") String path1, @PathVariable("path2") String path2, @PathVariable("data") Optional<String> data, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        String url = "/route/sub/"+path1 + "/" + path2 + (!data.equals(Optional.empty())?("/"+data.get()):"");
+        return mapFilter(Filter.convertFilter(filter), binding, redirectAttributes, url);
     }
 }

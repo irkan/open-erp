@@ -19,14 +19,14 @@
                 <div class="card-header">
                     <div class="card-title w-100" data-toggle="collapse" data-target="#filterContent" aria-expanded="true" aria-controls="collapseOne4">
                         <div class="row w-100">
-                            <div class="col-6 p-1" style="font-size: 1.5rem">
+                            <div class="col-6" style="font-size: 1.2rem; font-family: Arial, Helvetica, sans-serif">
                                 <i class="<c:out value="${filter.object.icon}"/>"> <c:out value="${filter.object.name}"/></i>
                             </div>
-                            <div class="col-6 text-right pr-md-2">
-                                <button href="#" onclick="saveWHR($('#form'))" class="btn btn-danger btn-elevate btn-icon-sm">
+                            <div class="col-6 text-right pr-md-4">
+                                <a href="#" onclick="submit($('#filter'))" class="btn btn-danger btn-elevate btn-icon-sm" style="padding: 0.35rem 0.6rem">
                                     <i class="la la-trash"></i> Təmizlə
-                                </button>
-                                <a href="#" onclick="saveWHR($('#form'))" class="btn btn-warning btn-elevate btn-icon-sm">
+                                </a>
+                                <a href="#" onclick="submit($('#filter'))" class="btn btn-warning btn-elevate btn-icon-sm" style="padding: 0.35rem 0.6rem">
                                     <i class="la la-search"></i> Axtar
                                 </a>
                             </div>
@@ -35,7 +35,98 @@
                 </div>
                 <div id="filterContent" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionFilter">
                     <div class="card-body">
-                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. heard of them accusamus labore sustainable VHS.
+                        <form:form modelAttribute="filter-form" id="filter" method="post" action="/route/filter/admin/log">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Əməliyyat</label>
+                                        <input type="text" name="conditions[0].value" placeholder="Daxil edin" class="form-control"/>
+                                        <input type="hidden" name="conditions[0].type" value="string" />
+                                        <input type="hidden" name="conditions[0].field" value="operation" />
+                                        <input type="hidden" name="conditions[0].comparison" value="like" />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Cədvəl</label>
+                                        <input type="text" name="conditions[2].value" placeholder="Daxil edin" class="form-control"/>
+                                        <input type="hidden" name="conditions[2].type" value="string" />
+                                        <input type="hidden" name="conditions[2].field" value="tableName" />
+                                        <input type="hidden" name="conditions[2].comparison" value="like" />
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <div class="form-group">
+                                        <label>Tip</label>
+                                        <select name="conditions[3].value" class="form-control">
+                                            <option></option>
+                                            <option value="info">İnfo</option>
+                                            <option value="error">Xəta</option>
+                                        </select>
+                                        <input type="hidden" name="conditions[3].type" value="string" />
+                                        <input type="hidden" name="conditions[3].field" value="tableName" />
+                                        <input type="hidden" name="conditions[3].comparison" value="like" />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>İstifadəçi</label>
+                                        <input type="text" name="conditions[4].value" placeholder="Daxil edin" class="form-control"/>
+                                        <input type="hidden" name="conditions[4].type" value="string" />
+                                        <input type="hidden" name="conditions[4].field" value="username" />
+                                        <input type="hidden" name="conditions[4].comparison" value="like" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Tarix</label>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <div class="input-group date" >
+                                                    <input type="text" name="conditions[5].value" class="form-control datetimepicker-element" date="date" placeholder="Tarixdən: dd.MM.yyyy hh:mm"/>
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">
+                                                            <i class="la la-calendar"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <input type="hidden" name="conditions[5].type" value="date" />
+                                                <input type="hidden" name="conditions[5].field" value="operationDate" />
+                                                <input type="hidden" name="conditions[5].comparison" value="gt" />
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <div class="input-group date" >
+                                                    <input type="text" name="conditions[6].value" class="form-control datetimepicker-element" date="date" placeholder="Tarixədək: dd.MM.yyyy hh:mm"/>
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">
+                                                            <i class="la la-calendar"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <input type="hidden" name="conditions[6].type" value="date" />
+                                                <input type="hidden" name="conditions[6].field" value="operationDate" />
+                                                <input type="hidden" name="conditions[6].comparison" value="lt" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-2" style="padding-top: 30px;">
+                                    <div class="form-group">
+                                        <label class="kt-checkbox kt-checkbox--brand">
+                                            <input type="checkbox" name="conditions[1].value" value="0"/> Silinmiş məlumat
+                                            <span></span>
+                                        </label>
+                                        <input type="hidden" name="conditions[1].value" value="1" />
+                                        <input type="hidden" name="conditions[1].type" value="numeric" />
+                                        <input type="hidden" name="conditions[1].field" value="active" />
+                                        <input type="hidden" name="conditions[1].comparison" value="eq" />
+                                    </div>
+                                </div>
+                            </div>
+                        </form:form>
                     </div>
                 </div>
             </div>
@@ -69,7 +160,11 @@
     </thead>
     <tbody>
     <c:forEach var="t" items="${list}" varStatus="loop">
-        <tr data="<c:out value="${utl:toJson(t)}" />">
+        <tr data="<c:out value="${utl:toJson(t)}" />"
+                <c:if test="${t.type eq 'error'}">
+                    style="background-color: #ffeaf1 !important"
+                </c:if>
+        >
             <td><c:out value="${t.id}" /></td>
             <td><c:out value="${t.type}" /></td>
             <th><c:out value="${t.tableName}" /></th>

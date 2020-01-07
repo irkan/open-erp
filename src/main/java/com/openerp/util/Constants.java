@@ -61,6 +61,9 @@ public class Constants {
     public static final String ORGANIZATION = "organization";
     public static final String ORGANIZATION_SELECTED = "organization_selected";
     public static final String LOGS = "logs";
+    public static final String FILTER = "filter";
+    public static final String FILTER_FORM = "filter-form";
+    public static final String FILTER_FORM_RESULT_BINDING = "filter-form-result-binding";
 
     public static final class STATUS{
         public static final String RESPONSE = "response";
