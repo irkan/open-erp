@@ -1,6 +1,7 @@
 package com.openerp.controller;
 
 import com.openerp.entity.*;
+import com.openerp.service.CustomerService;
 import com.openerp.service.StaticUtils;
 import com.openerp.specification.internal.Condition;
 import com.openerp.specification.internal.Filter;
@@ -191,6 +192,9 @@ public class SkeletonController {
     LogRepository logRepository;
 
     @Autowired
+    CustomerService customerService;
+
+    @Autowired
     HttpServletRequest request;
 
     @Autowired
@@ -274,9 +278,6 @@ public class SkeletonController {
     String mapFilter(Object object, BindingResult binding, RedirectAttributes redirectAttributes, String redirect){
         redirectAttributes.addFlashAttribute(Constants.FILTER_FORM_RESULT_BINDING, binding);
         redirectAttributes.addFlashAttribute(Constants.FILTER_FORM, object);
-        if(!binding.hasErrors()){
-            redirectAttributes.getFlashAttributes().remove(Constants.FILTER_FORM);
-        }
         return "redirect:"+redirect;
     }
 

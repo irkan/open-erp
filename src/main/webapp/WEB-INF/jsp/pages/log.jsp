@@ -37,24 +37,6 @@
                     <div class="card-body">
                         <form:form modelAttribute="filter-form" id="filter" method="post" action="/route/filter/admin/log">
                             <div class="row">
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label>Əməliyyat</label>
-                                        <input type="text" name="conditions[0].value" placeholder="Daxil edin" class="form-control"/>
-                                        <input type="hidden" name="conditions[0].type" value="string" />
-                                        <input type="hidden" name="conditions[0].field" value="operation" />
-                                        <input type="hidden" name="conditions[0].comparison" value="like" />
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label>Cədvəl</label>
-                                        <input type="text" name="conditions[2].value" placeholder="Daxil edin" class="form-control"/>
-                                        <input type="hidden" name="conditions[2].type" value="string" />
-                                        <input type="hidden" name="conditions[2].field" value="tableName" />
-                                        <input type="hidden" name="conditions[2].comparison" value="like" />
-                                    </div>
-                                </div>
                                 <div class="col-md-1">
                                     <div class="form-group">
                                         <label>Tip</label>
@@ -66,6 +48,24 @@
                                         <input type="hidden" name="conditions[3].type" value="string" />
                                         <input type="hidden" name="conditions[3].field" value="tableName" />
                                         <input type="hidden" name="conditions[3].comparison" value="like" />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Cədvəl</label>
+                                        <input type="text" name="conditions[2].value" placeholder="Daxil edin" class="form-control"/>
+                                        <input type="hidden" name="conditions[2].type" value="string" />
+                                        <input type="hidden" name="conditions[2].field" value="tableName" />
+                                        <input type="hidden" name="conditions[2].comparison" value="like" />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Əməliyyat</label>
+                                        <input type="text" name="conditions[0].value" placeholder="Daxil edin" class="form-control"/>
+                                        <input type="hidden" name="conditions[0].type" value="string" />
+                                        <input type="hidden" name="conditions[0].field" value="operation" />
+                                        <input type="hidden" name="conditions[0].comparison" value="like" />
                                     </div>
                                 </div>
                                 <div class="col-md-2">
@@ -82,14 +82,7 @@
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="form-group">
-                                                <div class="input-group date" >
-                                                    <input type="text" name="conditions[5].value" class="form-control datetimepicker-element" date="date" placeholder="Tarixdən: dd.MM.yyyy hh:mm"/>
-                                                    <div class="input-group-append">
-                                                        <span class="input-group-text">
-                                                            <i class="la la-calendar"></i>
-                                                        </span>
-                                                    </div>
-                                                </div>
+                                                <input type="text" name="conditions[5].value" class="form-control datetimepicker-element" date="date" placeholder="Tarixdən: dd.MM.yyyy hh:mm"/>
                                                 <input type="hidden" name="conditions[5].type" value="date" />
                                                 <input type="hidden" name="conditions[5].field" value="operationDate" />
                                                 <input type="hidden" name="conditions[5].comparison" value="gt" />
@@ -97,14 +90,7 @@
                                         </div>
                                         <div class="col-6">
                                             <div class="form-group">
-                                                <div class="input-group date" >
-                                                    <input type="text" name="conditions[6].value" class="form-control datetimepicker-element" date="date" placeholder="Tarixədək: dd.MM.yyyy hh:mm"/>
-                                                    <div class="input-group-append">
-                                                        <span class="input-group-text">
-                                                            <i class="la la-calendar"></i>
-                                                        </span>
-                                                    </div>
-                                                </div>
+                                                <input type="text" name="conditions[6].value" class="form-control datetimepicker-element" date="date" placeholder="Tarixədək: dd.MM.yyyy hh:mm"/>
                                                 <input type="hidden" name="conditions[6].type" value="date" />
                                                 <input type="hidden" name="conditions[6].field" value="operationDate" />
                                                 <input type="hidden" name="conditions[6].comparison" value="lt" />
@@ -119,7 +105,6 @@
                                             <input type="checkbox" name="conditions[1].value" value="0"/> Silinmiş məlumat
                                             <span></span>
                                         </label>
-                                        <input type="hidden" name="conditions[1].value" value="1" />
                                         <input type="hidden" name="conditions[1].type" value="numeric" />
                                         <input type="hidden" name="conditions[1].field" value="active" />
                                         <input type="hidden" name="conditions[1].comparison" value="eq" />

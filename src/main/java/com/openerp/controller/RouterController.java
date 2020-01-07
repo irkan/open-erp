@@ -45,7 +45,7 @@ public class RouterController extends SkeletonController {
     }
 
     @GetMapping(value = {"/sub/{path1}/{path2}", "/sub/{path1}/{path2}/{data}", "/sub/{path1}/{path2}/org/{id}", "/sub/{path1}/{path2}/{data}/org/{id}"})
-    public String getSubModules(@PathVariable("path1") String path1, @PathVariable("path2") String path2, @PathVariable("data") Optional<String> data, @PathVariable("id") Optional<String> id, RedirectAttributes redirectAttributes) throws Exception {
+    public String getSubModules(Model model, @PathVariable("path1") String path1, @PathVariable("path2") String path2, @PathVariable("data") Optional<String> data, @PathVariable("id") Optional<String> id, RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.PAGE, path2);
         String description = "";
         List<Module> moduleList = (List<Module>) session.getAttribute(Constants.MODULES);
@@ -77,13 +77,18 @@ public class RouterController extends SkeletonController {
             session.setAttribute(Constants.ORGANIZATION_SELECTED, organization);
         }
         redirectAttributes.addFlashAttribute(Constants.MODULE_DESCRIPTION, description);
-        redirectAttributes.addFlashAttribute(Constants.FILTER_FORM, new Filter());
+
+        if(model.containsAttribute(Constants.FILTER_FORM)){
+            redirectAttributes.addFlashAttribute(Constants.FILTER_FORM, model.asMap().get(Constants.FILTER_FORM));
+        } else {
+            redirectAttributes.addFlashAttribute(Constants.FILTER_FORM, new Filter());
+        }
         return "redirect:/"+path1+"/"+path2+(!data.equals(Optional.empty())?("/"+data.toString().trim()):"");
     }
 
     @PostMapping(value = {"/filter/{path1}/{path2}", "/sub/{path1}/{path2}/{data}"})
     public String postFilter(@ModelAttribute(Constants.FILTER_FORM) @Validated Filter filter, @PathVariable("path1") String path1, @PathVariable("path2") String path2, @PathVariable("data") Optional<String> data, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         String url = "/route/sub/"+path1 + "/" + path2 + (!data.equals(Optional.empty())?("/"+data.get()):"");
-        return mapFilter(Filter.convertFilter(filter), binding, redirectAttributes, url);
+        return mapFilter(filter, binding, redirectAttributes, url);
     }
 }

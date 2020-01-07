@@ -29,7 +29,7 @@ public class AdministratorController extends SkeletonController {
 
     @GetMapping(value = {"/{page}", "/{page}/{data}"})
     public String route(Model model, @PathVariable("page") String page, @PathVariable("data") Optional<String> data, RedirectAttributes redirectAttributes) throws Exception {
-        Filter filter = new Filter();
+        Filter filter = (Filter) model.asMap().get(Constants.FILTER_FORM);
         if (page.equalsIgnoreCase(Constants.ROUTE.MODULE)) {
             model.addAttribute(Constants.PARENTS, moduleRepository.getModulesByActiveTrueAndModuleIsNull());
             model.addAttribute(Constants.LIST, moduleRepository.getModulesByActiveTrue());
@@ -101,8 +101,7 @@ public class AdministratorController extends SkeletonController {
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.NOTIFICATION)){
             model.addAttribute(Constants.NOTIFICATIONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("notification"));
-
-            filter.addCondition(new Condition.Builder().setComparison(Comparison.eq).setField("active").setValue(1).setType(Type.numeric).build());
+            //filter.addCondition(new Condition.Builder().setComparison(Comparison.eq).setField("active").setValue(1).setType(Type.numeric).build());
             if(!canViewAll()){
                 filter.addCondition(new Condition.Builder().setComparison(Comparison.eq).setField("organization").setValue(getSessionOrganization().getId()).setType(Type.numeric).build());
             }
@@ -111,11 +110,7 @@ public class AdministratorController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new Notification());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.LOG)){
-            //filter.addCondition(new Condition.Builder().setComparison(Comparison.eq).setField("active").setValue(1).setType(Type.numeric).build());
-            Filter filter1 = (Filter) redirectAttributes.getFlashAttributes().get(Constants.FILTER_FORM);
-            Filter filter2 = (Filter) model.asMap().get(Constants.FILTER_FORM);
-            filter2.addCondition(new Condition.Builder().setComparison(Comparison.eq).setField("active").setValue(1).setType(Type.numeric).build());
-            model.addAttribute(Constants.LIST, logRepository.findAll(filter2, Sort.by("operationDate").descending()));
+            model.addAttribute(Constants.LIST, logRepository.findAll(Filter.convertFilter(filter), Sort.by("operationDate").descending()));
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Log());
             }

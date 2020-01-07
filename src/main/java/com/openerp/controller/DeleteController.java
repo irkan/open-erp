@@ -2,6 +2,7 @@ package com.openerp.controller;
 
 import com.openerp.entity.*;
 import com.openerp.repository.ModuleRepository;
+import com.openerp.specification.internal.Filter;
 import com.openerp.util.Constants;
 import com.openerp.util.*;
 import org.aspectj.weaver.ast.Or;
@@ -194,6 +195,7 @@ public class DeleteController extends SkeletonController {
             logRepository.save(log);
             log("admin_log", "delete", log.getId(), log.toString());
         }
+        redirectAttributes.addFlashAttribute(Constants.FILTER_FORM, new Filter());
         return "redirect:/"+parent+"/"+path;
     }
 }

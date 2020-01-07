@@ -107,15 +107,19 @@ public class Filter implements Specification {
     }
 
     public static Filter convertFilter(Filter filter){
-        //Filter filter = (Filter) redirectAttributes.getFlashAttributes().get(Constants.FILTER_FORM);
         Filter newFilter = new Filter();
         for(Condition condition: filter.getConditions()){
-            if(condition.getField().equalsIgnoreCase("active")){
+            if(condition.getField()!=null && condition.getField().equalsIgnoreCase("active")){
                 if(condition.getValue()==null){
                     condition.setValue(1);
                 }
             }
-            newFilter.addCondition(new Condition.Builder().setComparison(condition.getComparison()).setField(condition.getField()).setValue(condition.getValue()).setType(condition.getType()).build());
+            if(condition.getValue()!=null && String.valueOf(condition.getValue()).trim().length()>0){
+                newFilter.addCondition(new Condition.Builder().setComparison(condition.getComparison()).setField(condition.getField()).setValue(condition.getValue()).setType(condition.getType()).build());
+            }
+        }
+        if(newFilter.getConditions().size()==0){
+            newFilter.addCondition(new Condition.Builder().setComparison(Comparison.eq).setField("active").setValue(1).setType(Type.numeric).build());
         }
         return newFilter;
     }
