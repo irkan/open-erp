@@ -140,7 +140,7 @@
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <form:label path="person.contact.city">Şəhər</form:label>
-                                                <form:select path="person.contact.city" cssClass="custom-select form-control">
+                                                <form:select path="person.contact.city.id" cssClass="custom-select form-control">
                                                     <form:option value=""></form:option>
                                                     <form:options items="${cities}" itemLabel="name" itemValue="id"/>
                                                 </form:select>
@@ -165,7 +165,7 @@
                                             <div class="col-md-2" style="padding-top: 30px;">
                                                 <div class="form-group">
                                                     <label class="kt-checkbox kt-checkbox--brand">
-                                                        <input type="checkbox" name="active" value="false" <c:out value="${active?'checked':''}"/>/> Silinmiş məlumat <c:out value="${form.active}"/>
+                                                        <form:checkbox path="active"/> Aktual məlumat
                                                         <span></span>
                                                     </label>
                                                 </div>
@@ -175,8 +175,8 @@
                                 </div>
                                 <div class="col-md-1 text-right">
                                     <div class="form-group">
-                                        <a href="#" onclick="clear($('#filter'))" class="btn btn-danger btn-elevate btn-icon-sm btn-block mb-2" style="padding: 0.35rem 0.6rem;">
-                                            <i class="la la-trash"></i> Təmizlə
+                                        <a href="#" onclick="location.reload();" class="btn btn-danger btn-elevate btn-icon-sm btn-block mb-2" style="padding: 0.35rem 0.6rem;">
+                                            <i class="la la-trash"></i> Sil
                                         </a>
                                         <a href="#" onclick="submit($('#filter'))" class="btn btn-warning btn-elevate btn-icon-sm btn-block mt-2" style="padding: 0.35rem 0.6rem">
                                             <i class="la la-search"></i> Axtar

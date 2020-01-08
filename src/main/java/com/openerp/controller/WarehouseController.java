@@ -2,10 +2,6 @@ package com.openerp.controller;
 
 import com.openerp.domain.Response;
 import com.openerp.entity.*;
-import com.openerp.specification.internal.Comparison;
-import com.openerp.specification.internal.Condition;
-import com.openerp.specification.internal.Filter;
-import com.openerp.specification.internal.Type;
 import com.openerp.util.Constants;
 import com.openerp.util.*;
 import org.springframework.http.MediaType;
@@ -31,7 +27,6 @@ public class WarehouseController extends SkeletonController {
 
     @GetMapping(value = {"/{page}", "/{page}/{data}"})
     public String route(Model model, @PathVariable("page") String page, @PathVariable("data") Optional<String> data, RedirectAttributes redirectAttributes) throws Exception {
-        Filter filter = new Filter();
         if (page.equalsIgnoreCase(Constants.ROUTE.INVENTORY)) {
             List<Inventory> inventories;
             if(canViewAll()){

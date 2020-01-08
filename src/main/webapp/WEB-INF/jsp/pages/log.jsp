@@ -12,6 +12,7 @@
 <%@ taglib prefix="utl" uri="/WEB-INF/tld/Util.tld"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <div class="kt-container  kt-grid__item kt-grid__item--fluid">
+    <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
     <c:set var="filter" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'filter')}"/>
     <c:if test="${filter.status}">
         <div class="accordion  accordion-toggle-arrow mb-2" id="accordionFilter">
@@ -19,95 +20,124 @@
                 <div class="card-header">
                     <div class="card-title w-100" data-toggle="collapse" data-target="#filterContent" aria-expanded="true" aria-controls="collapseOne4">
                         <div class="row w-100">
-                            <div class="col-6" style="font-size: 1.2rem; font-family: Arial, Helvetica, sans-serif">
-                                <i class="<c:out value="${filter.object.icon}"/>"> <c:out value="${filter.object.name}"/></i>
+                            <div class="col-2">
+                                <i class="<c:out value="${filter.object.icon}"/>"></i>
                             </div>
-                            <div class="col-6 text-right pr-md-4">
-                                <a href="#" onclick="submit($('#filter'))" class="btn btn-danger btn-elevate btn-icon-sm" style="padding: 0.35rem 0.6rem">
-                                    <i class="la la-trash"></i> Təmizlə
-                                </a>
-                                <a href="#" onclick="submit($('#filter'))" class="btn btn-warning btn-elevate btn-icon-sm" style="padding: 0.35rem 0.6rem">
-                                    <i class="la la-search"></i> Axtar
-                                </a>
+                            <div class="col-8 text-center" style="letter-spacing: 10px;">
+                                <c:out value="${filter.object.name}"/>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div id="filterContent" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionFilter">
                     <div class="card-body">
-                        <form:form modelAttribute="filter-form" id="filter" method="post" action="/route/filter/admin/log">
+                        <form:form modelAttribute="filter" id="filter" method="post" action="/admin/log/filter">
                             <div class="row">
-                                <div class="col-md-1">
-                                    <div class="form-group">
-                                        <label>Tip</label>
-                                        <select name="conditions[3].value" class="form-control">
-                                            <option></option>
-                                            <option value="info">İnfo</option>
-                                            <option value="error">Xəta</option>
-                                        </select>
-                                        <input type="hidden" name="conditions[3].type" value="string" />
-                                        <input type="hidden" name="conditions[3].field" value="tableName" />
-                                        <input type="hidden" name="conditions[3].comparison" value="like" />
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label>Cədvəl</label>
-                                        <input type="text" name="conditions[2].value" placeholder="Daxil edin" class="form-control"/>
-                                        <input type="hidden" name="conditions[2].type" value="string" />
-                                        <input type="hidden" name="conditions[2].field" value="tableName" />
-                                        <input type="hidden" name="conditions[2].comparison" value="like" />
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label>Əməliyyat</label>
-                                        <input type="text" name="conditions[0].value" placeholder="Daxil edin" class="form-control"/>
-                                        <input type="hidden" name="conditions[0].type" value="string" />
-                                        <input type="hidden" name="conditions[0].field" value="operation" />
-                                        <input type="hidden" name="conditions[0].comparison" value="like" />
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label>İstifadəçi</label>
-                                        <input type="text" name="conditions[4].value" placeholder="Daxil edin" class="form-control"/>
-                                        <input type="hidden" name="conditions[4].type" value="string" />
-                                        <input type="hidden" name="conditions[4].field" value="username" />
-                                        <input type="hidden" name="conditions[4].comparison" value="like" />
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <label>Tarix</label>
+                                <div class="col-md-11">
                                     <div class="row">
-                                        <div class="col-6">
+                                        <div class="col-md-2">
                                             <div class="form-group">
-                                                <input type="text" name="conditions[5].value" class="form-control datetimepicker-element" date="date" placeholder="Tarixdən: dd.MM.yyyy hh:mm"/>
-                                                <input type="hidden" name="conditions[5].type" value="date" />
-                                                <input type="hidden" name="conditions[5].field" value="operationDate" />
-                                                <input type="hidden" name="conditions[5].comparison" value="gt" />
+                                                <form:label path="id">KOD</form:label>
+                                                <form:input path="id" cssClass="form-control" placeholder="######"/>
+                                                <form:errors path="id" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-md-2">
                                             <div class="form-group">
-                                                <input type="text" name="conditions[6].value" class="form-control datetimepicker-element" date="date" placeholder="Tarixədək: dd.MM.yyyy hh:mm"/>
-                                                <input type="hidden" name="conditions[6].type" value="date" />
-                                                <input type="hidden" name="conditions[6].field" value="operationDate" />
-                                                <input type="hidden" name="conditions[6].comparison" value="lt" />
+                                                <form:label path="type">Tip</form:label>
+                                                <form:input path="type" cssClass="form-control" placeholder="Tip \'info' və ya 'error' ola bilər"/>
+                                                <form:errors path="type" cssClass="alert-danger control-label"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="tableName">Cədvəl</form:label>
+                                                <form:input path="tableName" cssClass="form-control" placeholder="Cədvəli daxil edin" />
+                                                <form:errors path="tableName" cssClass="alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="operation">Əməliyyat</form:label>
+                                                <form:input path="operation" cssClass="form-control" placeholder="Əməliyyatı daxil edin" />
+                                                <form:errors path="operation" cssClass="alert alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="rowId">Sətr №</form:label>
+                                                <form:input path="rowId" cssClass="form-control" placeholder="Sətr №-sini daxil edin" />
+                                                <form:errors path="rowId" cssClass="alert alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="description">Açıqlama</form:label>
+                                                <form:input path="description" cssClass="form-control" placeholder="Açıqlamanı daxil edin" />
+                                                <form:errors path="description" cssClass="alert alert-danger"/>
                                             </div>
                                         </div>
                                     </div>
-
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="username">İstifadəçi adı</form:label>
+                                                <form:input path="username" cssClass="form-control" placeholder="Əməliyyatı daxil edin" />
+                                                <form:errors path="username" cssClass="alert alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="operationDate">Tarixdən</form:label>
+                                                <div class="input-group date">
+                                                    <form:input path="operationDate" autocomplete="off"
+                                                                cssClass="form-control datetimepicker-element" date="date"
+                                                                placeholder="Tarixdən: dd.MM.yyyy HH:mm"/>
+                                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-calendar"></i>
+                                        </span>
+                                                    </div>
+                                                </div>
+                                                <form:errors path="operationDate" cssClass="control-label alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="operationDate2">Tarixədək</form:label>
+                                                <div class="input-group date">
+                                                    <form:input path="operationDate2" autocomplete="off"
+                                                                cssClass="form-control datetimepicker-element" date="date"
+                                                                placeholder="Tarixədək': dd.MM.yyyy HH:mm"/>
+                                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-calendar"></i>
+                                        </span>
+                                                    </div>
+                                                </div>
+                                                <form:errors path="operationDate2" cssClass="control-label alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <c:if test="${delete.status}">
+                                            <div class="col-md-2" style="padding-top: 30px;">
+                                                <div class="form-group">
+                                                    <label class="kt-checkbox kt-checkbox--brand">
+                                                        <form:checkbox path="active"/> Aktual məlumat
+                                                        <span></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </c:if>
+                                    </div>
                                 </div>
-                                <div class="col-md-2" style="padding-top: 30px;">
+                                <div class="col-md-1 text-right">
                                     <div class="form-group">
-                                        <label class="kt-checkbox kt-checkbox--brand">
-                                            <input type="checkbox" name="conditions[1].value" value="0"/> Silinmiş məlumat
-                                            <span></span>
-                                        </label>
-                                        <input type="hidden" name="conditions[1].type" value="numeric" />
-                                        <input type="hidden" name="conditions[1].field" value="active" />
-                                        <input type="hidden" name="conditions[1].comparison" value="eq" />
+                                        <a href="#" onclick="location.reload();" class="btn btn-danger btn-elevate btn-icon-sm btn-block mb-2" style="padding: 0.35rem 0.6rem;">
+                                            <i class="la la-trash"></i> Sil
+                                        </a>
+                                        <a href="#" onclick="submit($('#filter'))" class="btn btn-warning btn-elevate btn-icon-sm btn-block mt-2" style="padding: 0.35rem 0.6rem">
+                                            <i class="la la-search"></i> Axtar
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -117,8 +147,6 @@
             </div>
         </div>
     </c:if>
-
-
     <div class="row">
         <div class="col-lg-12">
             <div class="kt-portlet kt-portlet--mobile">
@@ -127,7 +155,6 @@
 <c:choose>
     <c:when test="${not empty list}">
     <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
-    <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
     <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
     <thead>
     <tr>
@@ -213,7 +240,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <form:label path="type">Tip</form:label>
-                                <form:input path="type" cssClass="form-control" placeholder="Tipi daxil edin"/>
+                                <form:input path="type" cssClass="form-control" placeholder="Tip \'info' və ya 'error' ola bilər"/>
                                 <form:errors path="type" cssClass="alert-danger control-label"/>
                             </div>
                         </div>

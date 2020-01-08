@@ -4,7 +4,6 @@ import com.openerp.entity.Employee;
 import com.openerp.entity.Inventory;
 import com.openerp.entity.Organization;
 import com.openerp.entity.Person;
-import com.openerp.specification.internal.Filter;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

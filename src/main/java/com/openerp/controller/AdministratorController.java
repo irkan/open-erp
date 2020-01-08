@@ -1,10 +1,6 @@
 package com.openerp.controller;
 
 import com.openerp.entity.*;
-import com.openerp.specification.internal.Comparison;
-import com.openerp.specification.internal.Condition;
-import com.openerp.specification.internal.Filter;
-import com.openerp.specification.internal.Type;
 import com.openerp.util.Constants;
 import com.openerp.util.Util;
 import org.springframework.data.domain.Sort;
@@ -29,7 +25,6 @@ public class AdministratorController extends SkeletonController {
 
     @GetMapping(value = {"/{page}", "/{page}/{data}"})
     public String route(Model model, @PathVariable("page") String page, @PathVariable("data") Optional<String> data, RedirectAttributes redirectAttributes) throws Exception {
-        Filter filter = (Filter) model.asMap().get(Constants.FILTER);
         if (page.equalsIgnoreCase(Constants.ROUTE.MODULE)) {
             model.addAttribute(Constants.PARENTS, moduleRepository.getModulesByActiveTrueAndModuleIsNull());
             model.addAttribute(Constants.LIST, moduleRepository.getModulesByActiveTrue());
@@ -103,14 +98,17 @@ public class AdministratorController extends SkeletonController {
             model.addAttribute(Constants.NOTIFICATIONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("notification"));
             //filter.addCondition(new Condition.Builder().setComparison(Comparison.eq).setField("active").setValue(1).setType(Type.numeric).build());
             if(!canViewAll()){
-                filter.addCondition(new Condition.Builder().setComparison(Comparison.eq).setField("organization").setValue(getSessionOrganization().getId()).setType(Type.numeric).build());
+                //filter.addCondition(new Condition.Builder().setComparison(Comparison.eq).setField("organization").setValue(getSessionOrganization().getId()).setType(Type.numeric).build());
             }
-            model.addAttribute(Constants.LIST, notificationRepository.findAll(filter, Sort.by("id").descending()));
+            //model.addAttribute(Constants.LIST, notificationRepository.findAll(filter, Sort.by("id").descending()));
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Notification());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.LOG)){
-            model.addAttribute(Constants.LIST, logRepository.findAll(Filter.convertFilter(filter), Sort.by("operationDate").descending()));
+            if(!model.containsAttribute(Constants.FILTER)){
+                model.addAttribute(Constants.FILTER, new Log());
+            }
+            model.addAttribute(Constants.LIST, logService.findAll((Log) model.asMap().get(Constants.FILTER), Sort.by("id").descending()));
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Log());
             }
@@ -188,6 +186,11 @@ public class AdministratorController extends SkeletonController {
             logRepository.save(log);
         }
         return mapPost(log, binding, redirectAttributes);
+    }
+
+    @PostMapping(value = "/log/filter")
+    public String postCustomerFilter(@ModelAttribute(Constants.FILTER) @Validated Log log, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        return mapFilter(log, binding, redirectAttributes, "/admin/log");
     }
 
     @PostMapping(value = "/dictionary")

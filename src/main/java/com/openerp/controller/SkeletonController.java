@@ -2,18 +2,15 @@ package com.openerp.controller;
 
 import com.openerp.entity.*;
 import com.openerp.service.CustomerService;
+import com.openerp.service.LogService;
 import com.openerp.service.StaticUtils;
-import com.openerp.specification.internal.Condition;
-import com.openerp.specification.internal.Filter;
 import com.openerp.util.Constants;
 import com.openerp.repository.*;
 import com.openerp.util.Util;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -193,6 +190,9 @@ public class SkeletonController {
 
     @Autowired
     CustomerService customerService;
+
+    @Autowired
+    LogService logService;
 
     @Autowired
     HttpServletRequest request;

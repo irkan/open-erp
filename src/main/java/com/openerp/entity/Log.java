@@ -53,6 +53,8 @@ public class Log {
     @Column(name = "operate_by", nullable = false)
     private String username;
 
+    private Date operationDate2;
+
     public Log(@Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String tableName, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String operation, int rowId, String encapsulate, String username) {
         this.tableName = tableName;
         this.operation = operation;

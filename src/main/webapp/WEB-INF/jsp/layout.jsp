@@ -59,8 +59,10 @@
             }
         });
     }
-    function clear(form){
-        $.each( $(form).find("input,select,textarea"), function( key, element ) {
+/*
+    function clearFilter(form){
+
+        /!*$.each( $(form).find("input,select,textarea"), function( key, element ) {
             var tagName = $(element).prop("tagName");
             if(tagName.toLowerCase()==="input"){
                 if($(element).attr("type")==="checkbox"){
@@ -77,9 +79,10 @@
             } else if(tagName.toLowerCase()==="select"){
                 $("#"+$(element).attr("id")+" option:selected").removeAttr("selected");
             }
-        }
-        submit($(form));
+        })
+        submit($(form));*!/
     }
+*/
 
     function create(form, modal, modal_title){
         $('#' + modal).find(".modal-title").html(modal_title);
