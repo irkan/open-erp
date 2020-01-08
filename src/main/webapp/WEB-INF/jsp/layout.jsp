@@ -59,6 +59,28 @@
             }
         });
     }
+    function clear(form){
+        $.each( $(form).find("input,select,textarea"), function( key, element ) {
+            var tagName = $(element).prop("tagName");
+            if(tagName.toLowerCase()==="input"){
+                if($(element).attr("type")==="checkbox"){
+                    $("input[name='"+$(element).attr("name")+"']").prop('checked', false);
+                } else if($(element).attr("type")==="radio"){
+                    $("input[name='"+$(element).attr("name")+"']").prop('checked', false);
+                } else if($(element).attr("date")==='date') {
+                    $(element).val('');
+                } else {
+                    $(element).val('');
+                }
+            } else if(tagName.toLowerCase()==="textarea"){
+                $(element).val('');
+            } else if(tagName.toLowerCase()==="select"){
+                $("#"+$(element).attr("id")+" option:selected").removeAttr("selected");
+            }
+        }
+        submit($(form));
+    }
+
     function create(form, modal, modal_title){
         $('#' + modal).find(".modal-title").html(modal_title);
         $('#' + modal).modal('toggle');

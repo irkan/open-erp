@@ -277,7 +277,7 @@ public class SkeletonController {
 
     String mapFilter(Object object, BindingResult binding, RedirectAttributes redirectAttributes, String redirect){
         redirectAttributes.addFlashAttribute(Constants.FILTER_FORM_RESULT_BINDING, binding);
-        redirectAttributes.addFlashAttribute(Constants.FILTER_FORM, object);
+        redirectAttributes.addFlashAttribute(Constants.FILTER, object);
         return "redirect:"+redirect;
     }
 

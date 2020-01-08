@@ -29,7 +29,7 @@ public class AdministratorController extends SkeletonController {
 
     @GetMapping(value = {"/{page}", "/{page}/{data}"})
     public String route(Model model, @PathVariable("page") String page, @PathVariable("data") Optional<String> data, RedirectAttributes redirectAttributes) throws Exception {
-        Filter filter = (Filter) model.asMap().get(Constants.FILTER_FORM);
+        Filter filter = (Filter) model.asMap().get(Constants.FILTER);
         if (page.equalsIgnoreCase(Constants.ROUTE.MODULE)) {
             model.addAttribute(Constants.PARENTS, moduleRepository.getModulesByActiveTrueAndModuleIsNull());
             model.addAttribute(Constants.LIST, moduleRepository.getModulesByActiveTrue());

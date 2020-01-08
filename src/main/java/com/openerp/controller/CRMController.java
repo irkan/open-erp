@@ -4,6 +4,7 @@ import com.openerp.entity.*;
 import com.openerp.util.Constants;
 import com.openerp.util.DateUtility;
 import com.openerp.util.Util;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,43 +29,30 @@ public class CRMController extends SkeletonController {
             model.addAttribute(Constants.NATIONALITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("nationality"));
             model.addAttribute(Constants.GENDERS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("gender"));
             model.addAttribute(Constants.MARITAL_STATUSES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("marital-status"));
-            Customer customer = new Customer();
-
-            if(!canViewAll()){
-                customer.setOrganization(getSessionOrganization());
-            }
-
-
-
-            List<Customer> customers;
-            if(canViewAll()){
-                customers = customerRepository.getCustomersByActiveTrue();
-            } else {
-                customers = customerRepository.getCustomersByActiveTrueAndOrganization(getSessionOrganization());
-            }
-
-
-
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Customer());
             }
-            if(model.containsAttribute(Constants.FILTER_FORM)){
-                customer = (Customer) model.asMap().get(Constants.FILTER_FORM);
+            if(!model.containsAttribute(Constants.FILTER)){
+                model.addAttribute(Constants.FILTER, new Customer(!canViewAll()?getSessionOrganization():null));
             }
-            model.addAttribute(Constants.FILTER_FORM, customer);
-            model.addAttribute(Constants.LIST, customerService.findAll(customer));
+            model.addAttribute(Constants.LIST, customerService.findAll((Customer) model.asMap().get(Constants.FILTER), Sort.by("id").descending()));
         }
         return "layout";
     }
 
     @PostMapping(value = "/customer")
-    public String postAdvanceApprove(@ModelAttribute(Constants.FORM) @Validated Customer customer, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+    public String postCustomer(@ModelAttribute(Constants.FORM) @Validated Customer customer, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             customerRepository.save(customer);
             log("crm_customer", "create/edit", customer.getId(), customer.toString());
         }
         return mapPost(customer, binding, redirectAttributes);
+    }
+
+    @PostMapping(value = "/customer/filter")
+    public String postCustomerFilter(@ModelAttribute(Constants.FILTER) @Validated Customer customer, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        return mapFilter(customer, binding, redirectAttributes, "/crm/customer");
     }
 
     @ResponseBody

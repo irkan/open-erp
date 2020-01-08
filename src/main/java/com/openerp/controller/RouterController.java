@@ -87,7 +87,7 @@ public class RouterController extends SkeletonController {
     }
 
     @PostMapping(value = {"/filter/{path1}/{path2}", "/sub/{path1}/{path2}/{data}"})
-    public String postFilter(@ModelAttribute(Constants.FILTER_FORM) @Validated Filter filter, @PathVariable("path1") String path1, @PathVariable("path2") String path2, @PathVariable("data") Optional<String> data, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+    public String postFilter(@ModelAttribute(Constants.FILTER) @Validated Filter filter, @PathVariable("path1") String path1, @PathVariable("path2") String path2, @PathVariable("data") Optional<String> data, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         String url = "/route/sub/"+path1 + "/" + path2 + (!data.equals(Optional.empty())?("/"+data.get()):"");
         return mapFilter(filter, binding, redirectAttributes, url);
     }

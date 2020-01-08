@@ -49,4 +49,8 @@ public class Customer {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "created_by_admin_user_id")
     private User createdUser;
+
+    public Customer(Organization organization) {
+        this.organization = organization;
+    }
 }
