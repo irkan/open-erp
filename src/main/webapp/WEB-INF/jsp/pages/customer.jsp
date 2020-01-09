@@ -21,10 +21,11 @@
                 <div class="card-header">
                     <div class="card-title w-100" data-toggle="collapse" data-target="#filterContent" aria-expanded="true" aria-controls="collapseOne4">
                         <div class="row w-100">
-                            <div class="col-2">
+                            <div class="col-3">
                                 <i class="<c:out value="${filter.object.icon}"/>"></i>
+                                <c:out value="${list.totalElements>0?list.totalElements:0} sətr"/>
                             </div>
-                            <div class="col-8 text-center" style="letter-spacing: 10px;">
+                            <div class="col-6 text-center" style="letter-spacing: 10px;">
                                 <c:out value="${filter.object.name}"/>
                             </div>
                         </div>
@@ -212,7 +213,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <c:forEach var="t" items="${list}" varStatus="loop">
+                                <c:forEach var="t" items="${list.content}" varStatus="loop">
                                     <tr data="<c:out value="${utl:toJson(t)}" />">
                                         <td><c:out value="${t.id}"/></td>
                                         <th>

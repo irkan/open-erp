@@ -3,6 +3,8 @@ package com.openerp.controller;
 import com.openerp.entity.*;
 import com.openerp.util.Constants;
 import com.openerp.util.Util;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -96,19 +98,19 @@ public class AdministratorController extends SkeletonController {
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.NOTIFICATION)){
             model.addAttribute(Constants.NOTIFICATIONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("notification"));
-            //filter.addCondition(new Condition.Builder().setComparison(Comparison.eq).setField("active").setValue(1).setType(Type.numeric).build());
-            if(!canViewAll()){
-                //filter.addCondition(new Condition.Builder().setComparison(Comparison.eq).setField("organization").setValue(getSessionOrganization().getId()).setType(Type.numeric).build());
-            }
-            //model.addAttribute(Constants.LIST, notificationRepository.findAll(filter, Sort.by("id").descending()));
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Notification());
             }
+            if(!model.containsAttribute(Constants.FILTER)){
+                model.addAttribute(Constants.FILTER, new Notification(!canViewAll()?getSessionOrganization():null));
+            }
+            model.addAttribute(Constants.LIST, notificationService.findAll((Notification) model.asMap().get(Constants.FILTER), PageRequest.of(0, 100, Sort.by("id").descending())));
         } else if (page.equalsIgnoreCase(Constants.ROUTE.LOG)){
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Log());
             }
-            model.addAttribute(Constants.LIST, logService.findAll((Log) model.asMap().get(Constants.FILTER), Sort.by("id").descending()));
+            Sort.by("id").descending();
+            model.addAttribute(Constants.LIST, logService.findAll((Log) model.asMap().get(Constants.FILTER), PageRequest.of(0, 100, Sort.by("id").descending())));
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Log());
             }
@@ -127,6 +129,11 @@ public class AdministratorController extends SkeletonController {
             log("admin_notification", "create/edit", notification.getId(), notification.toString());
         }
         return mapPost(notification, binding, redirectAttributes);
+    }
+
+    @PostMapping(value = "/notification/filter")
+    public String postNotificationFilter(@ModelAttribute(Constants.FILTER) @Validated Notification notification, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        return mapFilter(notification, binding, redirectAttributes, "/admin/notification");
     }
 
     @PostMapping(value = "/module")
@@ -189,7 +196,7 @@ public class AdministratorController extends SkeletonController {
     }
 
     @PostMapping(value = "/log/filter")
-    public String postCustomerFilter(@ModelAttribute(Constants.FILTER) @Validated Log log, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+    public String postLogFilter(@ModelAttribute(Constants.FILTER) @Validated Log log, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         return mapFilter(log, binding, redirectAttributes, "/admin/log");
     }
 

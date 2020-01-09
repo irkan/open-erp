@@ -3,6 +3,7 @@ package com.openerp.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
@@ -28,8 +29,11 @@ public class Financing {
     @JoinColumn(name = "warehouse_organization_id")
     private Organization organization;
 
-    @Column(name="financing")
-    private double price=0d;
+    @Transient
+    private Double priceFrom;
+
+    @Column(name="price")
+    private Double price=0d;
 
     @Pattern(regexp=".{0,50}",message="Maksimum 5 simvol ola bilər")
     @Column(name = "currency", columnDefinition="varchar(5) default 'AZN'")
@@ -39,6 +43,17 @@ public class Financing {
     private Boolean active = true;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+    @Column(name = "financing_date", nullable = false)
+    private Date financingDate = new Date();
+
+    @Transient
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+    private Date financingDateFrom;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
     @Column(name = "created_date", nullable = false)
     private Date createdDate = new Date();
 
@@ -49,6 +64,10 @@ public class Financing {
     public Financing(Inventory inventory, double price, Organization organization) {
         this.inventory = inventory;
         this.price = price;
+        this.organization = organization;
+    }
+
+    public Financing(Organization organization) {
         this.organization = organization;
     }
 }

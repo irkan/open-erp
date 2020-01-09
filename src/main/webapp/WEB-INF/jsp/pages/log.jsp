@@ -20,10 +20,11 @@
                 <div class="card-header">
                     <div class="card-title w-100" data-toggle="collapse" data-target="#filterContent" aria-expanded="true" aria-controls="collapseOne4">
                         <div class="row w-100">
-                            <div class="col-2">
+                            <div class="col-3">
                                 <i class="<c:out value="${filter.object.icon}"/>"></i>
+                                <c:out value="${list.totalElements>0?list.totalElements:0} sətr"/>
                             </div>
-                            <div class="col-8 text-center" style="letter-spacing: 10px;">
+                            <div class="col-6 text-center" style="letter-spacing: 10px;">
                                 <c:out value="${filter.object.name}"/>
                             </div>
                         </div>
@@ -88,11 +89,27 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="operationDate">Tarixdən</form:label>
+                                                <form:label path="operationDateFrom">Tarixdən</form:label>
+                                                <div class="input-group date">
+                                                    <form:input path="operationDateFrom" autocomplete="off"
+                                                                cssClass="form-control datetimepicker-element" date="date"
+                                                                placeholder="dd.MM.yyyy HH:mm"/>
+                                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-calendar"></i>
+                                        </span>
+                                                    </div>
+                                                </div>
+                                                <form:errors path="operationDateFrom" cssClass="control-label alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="operationDate">Tarixədək</form:label>
                                                 <div class="input-group date">
                                                     <form:input path="operationDate" autocomplete="off"
                                                                 cssClass="form-control datetimepicker-element" date="date"
-                                                                placeholder="Tarixdən: dd.MM.yyyy HH:mm"/>
+                                                                placeholder="dd.MM.yyyy HH:mm"/>
                                                     <div class="input-group-append">
                                         <span class="input-group-text">
                                             <i class="la la-calendar"></i>
@@ -100,22 +117,6 @@
                                                     </div>
                                                 </div>
                                                 <form:errors path="operationDate" cssClass="control-label alert-danger"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <form:label path="operationDate2">Tarixədək</form:label>
-                                                <div class="input-group date">
-                                                    <form:input path="operationDate2" autocomplete="off"
-                                                                cssClass="form-control datetimepicker-element" date="date"
-                                                                placeholder="Tarixədək': dd.MM.yyyy HH:mm"/>
-                                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-calendar"></i>
-                                        </span>
-                                                    </div>
-                                                </div>
-                                                <form:errors path="operationDate2" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
                                         <c:if test="${delete.status}">
@@ -171,7 +172,7 @@
     </tr>
     </thead>
     <tbody>
-    <c:forEach var="t" items="${list}" varStatus="loop">
+    <c:forEach var="t" items="${list.content}" varStatus="loop">
         <tr data="<c:out value="${utl:toJson(t)}" />"
                 <c:if test="${t.type eq 'error'}">
                     style="background-color: #ffeaf1 !important"

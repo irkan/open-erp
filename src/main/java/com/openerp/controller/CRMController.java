@@ -4,6 +4,7 @@ import com.openerp.entity.*;
 import com.openerp.util.Constants;
 import com.openerp.util.DateUtility;
 import com.openerp.util.Util;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -35,7 +36,7 @@ public class CRMController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Customer(!canViewAll()?getSessionOrganization():null));
             }
-            model.addAttribute(Constants.LIST, customerService.findAll((Customer) model.asMap().get(Constants.FILTER), Sort.by("id").descending()));
+            model.addAttribute(Constants.LIST, customerService.findAll((Customer) model.asMap().get(Constants.FILTER), PageRequest.of(0, 100, Sort.by("id").descending())));
         }
         return "layout";
     }

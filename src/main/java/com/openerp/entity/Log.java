@@ -53,7 +53,10 @@ public class Log {
     @Column(name = "operate_by", nullable = false)
     private String username;
 
-    private Date operationDate2;
+    @Transient
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+    private Date operationDateFrom;
 
     public Log(@Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String tableName, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String operation, int rowId, String encapsulate, String username) {
         this.tableName = tableName;

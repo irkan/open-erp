@@ -1017,9 +1017,9 @@ public class DBConfiguration {
             ModuleOperation changePasswordModuleOperation2 = new ModuleOperation(changePasswordModule, changePassword, null);
             moduleOperations.add(changePasswordModuleOperation2);
 
-            ModuleOperation filterModuleOperation1 = new ModuleOperation(notification, filter, null);
+            ModuleOperation filterModuleOperation1 = new ModuleOperation(notification, filter, null); //ok
             moduleOperations.add(filterModuleOperation1);
-            ModuleOperation filterModuleOperation2 = new ModuleOperation(log, filter, null);
+            ModuleOperation filterModuleOperation2 = new ModuleOperation(log, filter, null); //ok
             moduleOperations.add(filterModuleOperation2);
             ModuleOperation filterModuleOperation3 = new ModuleOperation(nonWorkingDay, filter, null);
             moduleOperations.add(filterModuleOperation3);
@@ -1041,7 +1041,7 @@ public class DBConfiguration {
             moduleOperations.add(filterModuleOperation11);
             ModuleOperation filterModuleOperation12 = new ModuleOperation(transaction, filter, null);
             moduleOperations.add(filterModuleOperation12);
-            ModuleOperation filterModuleOperation13 = new ModuleOperation(financing, filter, null);
+            ModuleOperation filterModuleOperation13 = new ModuleOperation(financing, filter, null); //ok
             moduleOperations.add(filterModuleOperation13);
             ModuleOperation filterModuleOperation14 = new ModuleOperation(advance, filter, null);
             moduleOperations.add(filterModuleOperation14);
@@ -1053,7 +1053,7 @@ public class DBConfiguration {
             moduleOperations.add(filterModuleOperation17);
             ModuleOperation filterModuleOperation18 = new ModuleOperation(service, filter, null);
             moduleOperations.add(filterModuleOperation18);
-            ModuleOperation filterModuleOperation19 = new ModuleOperation(customer, filter, null);
+            ModuleOperation filterModuleOperation19 = new ModuleOperation(customer, filter, null); //ok
             moduleOperations.add(filterModuleOperation19);
             ModuleOperation filterModuleOperation20 = new ModuleOperation(paymentRegulator, filter, null);
             moduleOperations.add(filterModuleOperation20);

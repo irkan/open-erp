@@ -12,6 +12,146 @@
 <%@ taglib prefix="utl" uri="/WEB-INF/tld/Util.tld"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <div class="kt-container  kt-grid__item kt-grid__item--fluid">
+    <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
+    <c:set var="filter" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'filter')}"/>
+    <c:if test="${filter.status}">
+        <div class="accordion  accordion-toggle-arrow mb-2" id="accordionFilter">
+            <div class="card" style="border-radius: 4px;">
+                <div class="card-header">
+                    <div class="card-title w-100" data-toggle="collapse" data-target="#filterContent" aria-expanded="true" aria-controls="collapseOne4">
+                        <div class="row w-100">
+                            <div class="col-3">
+                                <i class="<c:out value="${filter.object.icon}"/>"></i>
+                                <c:out value="${list.totalElements>0?list.totalElements:0} sətr"/>
+                            </div>
+                            <div class="col-6 text-center" style="letter-spacing: 10px;">
+                                <c:out value="${filter.object.name}"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="filterContent" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionFilter">
+                    <div class="card-body">
+                        <form:form modelAttribute="filter" id="filter" method="post" action="/admin/notification/filter">
+                            <form:hidden path="organization" />
+                            <div class="row">
+                                <div class="col-md-11">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="id">KOD</form:label>
+                                                <form:input path="id" cssClass="form-control" placeholder="######"/>
+                                                <form:errors path="id" cssClass="control-label alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="type">Tip</form:label>
+                                                <form:select path="type.id" cssClass="custom-select form-control">
+                                                    <form:option value=""></form:option>
+                                                    <form:options items="${notifications}" itemLabel="name" itemValue="id"/>
+                                                </form:select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="to">Kimə?</form:label>
+                                                <form:input path="to" cssClass="form-control" placeholder="Email və ya telefon nömrəsi" />
+                                                <form:errors path="to" cssClass="alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="subject">Başlıq</form:label>
+                                                <form:input path="subject" cssClass="form-control" placeholder="Başlığı daxil edin" />
+                                                <form:errors path="subject" cssClass="alert alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="message">Mesaj mətni</form:label>
+                                                <form:input path="message" cssClass="form-control" placeholder="Mesajı daxil edin"/>
+                                                <form:errors path="message" cssClass="alert alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="description">Açıqlama</form:label>
+                                                <form:input path="description" cssClass="form-control" placeholder="Açıqlama daxil edin"/>
+                                                <form:errors path="description" cssClass="alert alert-danger"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="sendingDateFrom">Tarixdən</form:label>
+                                                <div class="input-group date">
+                                                    <form:input path="sendingDateFrom" autocomplete="off"
+                                                                cssClass="form-control datetimepicker-element" date="date"
+                                                                placeholder="dd.MM.yyyy HH:mm"/>
+                                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-calendar"></i>
+                                        </span>
+                                                    </div>
+                                                </div>
+                                                <form:errors path="sendingDateFrom" cssClass="control-label alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="sendingDate">Tarixədək</form:label>
+                                                <div class="input-group date">
+                                                    <form:input path="sendingDate" autocomplete="off"
+                                                                cssClass="form-control datetimepicker-element" date="date"
+                                                                placeholder="dd.MM.yyyy HH:mm"/>
+                                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-calendar"></i>
+                                        </span>
+                                                    </div>
+                                                </div>
+                                                <form:errors path="sendingDate" cssClass="control-label alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2" style="padding-top: 30px;">
+                                            <div class="form-group">
+                                                <label class="kt-checkbox kt-checkbox--brand">
+                                                    <form:checkbox path="sent"/> Göndərilmişdir
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <c:if test="${delete.status}">
+                                            <div class="col-md-2" style="padding-top: 30px;">
+                                                <div class="form-group">
+                                                    <label class="kt-checkbox kt-checkbox--brand">
+                                                        <form:checkbox path="active"/> Aktual məlumat
+                                                        <span></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </c:if>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 text-right">
+                                    <div class="form-group">
+                                        <a href="#" onclick="location.reload();" class="btn btn-danger btn-elevate btn-icon-sm btn-block mb-2" style="padding: 0.35rem 0.6rem;">
+                                            <i class="la la-trash"></i> Sil
+                                        </a>
+                                        <a href="#" onclick="submit($('#filter'))" class="btn btn-warning btn-elevate btn-icon-sm btn-block mt-2" style="padding: 0.35rem 0.6rem">
+                                            <i class="la la-search"></i> Axtar
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form:form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </c:if>
     <div class="row">
         <div class="col-lg-12">
             <div class="kt-portlet kt-portlet--mobile">
@@ -36,7 +176,7 @@
     </tr>
     </thead>
     <tbody>
-    <c:forEach var="t" items="${list}" varStatus="loop">
+    <c:forEach var="t" items="${list.content}" varStatus="loop">
         <tr data="<c:out value="${utl:toJson(t)}" />">
             <th><c:out value="${t.id}" /></th>
             <td><c:out value="${t.type.name}" /></td>
@@ -58,14 +198,11 @@
                 </c:choose>
             </td>
             <td nowrap class="text-center">
-                <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
-                <c:choose>
-                    <c:when test="${delete.status}">
-                        <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.to}" /><br/><c:out value="${t.subject}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
-                            <i class="<c:out value="${delete.object.icon}"/>"></i>
-                        </a>
-                    </c:when>
-                </c:choose>
+                <c:if test="${delete.status}">
+                    <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.to}" /><br/><c:out value="${t.subject}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
+                        <i class="<c:out value="${delete.object.icon}"/>"></i>
+                    </a>
+                </c:if>
             </td>
         </tr>
     </c:forEach>

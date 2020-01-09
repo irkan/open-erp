@@ -5,6 +5,8 @@ import com.openerp.entity.Employee;
 import com.openerp.repository.CustomerRepository;
 import com.openerp.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -18,7 +20,7 @@ public class CustomerService {
     @Autowired
     CustomerRepository customerRepository;
 
-    public List<Customer> findAll(Customer customer, Sort sort){
+    public Page<Customer> findAll(Customer customer, Pageable pageable){
         return customerRepository.findAll(new Specification<Customer>() {
             @Override
             public Predicate toPredicate(Root<Customer> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
@@ -64,6 +66,6 @@ public class CustomerService {
                 }
                 return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
             }
-        }, sort);
+        }, pageable);
     }
 }

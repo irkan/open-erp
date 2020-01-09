@@ -6,6 +6,8 @@ import com.openerp.repository.ActionRepository;
 import com.openerp.repository.InventoryRepository;
 import com.openerp.util.Constants;
 import com.openerp.util.Util;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -57,16 +59,13 @@ public class AccountingController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new Account());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.FINANCING)) {
-            List<Financing> financings;
-            if(canViewAll()){
-                financings = financingRepository.getFinancingsByActiveTrueOrderByIdDesc();
-            } else {
-                financings = financingRepository.getFinancingsByActiveTrueAndOrganizationOrderByIdDesc(getSessionOrganization());
-            }
-            model.addAttribute(Constants.LIST, financings);
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Financing());
             }
+            if(!model.containsAttribute(Constants.FILTER)){
+                model.addAttribute(Constants.FILTER, new Financing(!canViewAll()?getSessionOrganization():null));
+            }
+            model.addAttribute(Constants.LIST, financingService.findAll((Financing) model.asMap().get(Constants.FILTER), PageRequest.of(0, 100, Sort.by("id").descending())));
         }
         return "layout";
     }
@@ -89,6 +88,11 @@ public class AccountingController extends SkeletonController {
             log("accounting_financing", "create/edit", financing.getId(), financing.toString());
         }
         return mapPost(financing, binding, redirectAttributes);
+    }
+
+    @PostMapping(value = "/financing/filter")
+    public String postFinancingFilter(@ModelAttribute(Constants.FILTER) @Validated Financing financing, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        return mapFilter(financing, binding, redirectAttributes, "/accounting/financing");
     }
 
     @PostMapping(value = "/transaction")
@@ -144,6 +148,7 @@ public class AccountingController extends SkeletonController {
                 Double financingPrice = calculateFinancing(trn, actionRepository, inventory);
                 if (financing != null) {
                     financing.setPrice(financingPrice);
+                    financing.setFinancingDate(new Date());
                 } else {
                     financing = new Financing(trn.getInventory(), financingPrice, trn.getOrganization());
                 }

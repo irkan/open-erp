@@ -3,6 +3,7 @@ package com.openerp.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
@@ -54,8 +55,14 @@ public class Notification {
     private Boolean sent = false;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
     @Column(name = "sending_date", nullable = false)
     private Date sendingDate = new Date();
+
+    @Transient
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+    private Date sendingDateFrom;
 
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;
@@ -77,5 +84,9 @@ public class Notification {
         this.message = message;
         this.description = description;
         this.attachment = attachment;
+    }
+
+    public Notification(Organization organization) {
+        this.organization = organization;
     }
 }

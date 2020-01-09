@@ -5,10 +5,13 @@ import com.openerp.entity.Log;
 import com.openerp.repository.CustomerRepository;
 import com.openerp.repository.LogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -21,7 +24,7 @@ public class LogService {
     @Autowired
     LogRepository logRepository;
 
-    public List<Log> findAll(Log log, Sort sort){
+    public Page<Log> findAll(Log log, Pageable pageable){
         return logRepository.findAll(new Specification<Log>() {
             @Override
             public Predicate toPredicate(Root<Log> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
@@ -50,11 +53,14 @@ public class LogService {
                 if(log.getUsername()!=null && log.getUsername().trim().length()>0) {
                     predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("username"), "%"+log.getUsername()+"%")));
                 }
+                if(log.getOperationDateFrom()!=null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.greaterThanOrEqualTo(root.get("operationDate"), log.getOperationDateFrom())));
+                }
                 if(log.getOperationDate()!=null){
-                    //predicates.add(criteriaBuilder.and(criteriaBuilder.gt(root.get("operationDate"), log.getOperationDate().getTime())));
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.lessThanOrEqualTo(root.get("operationDate"), log.getOperationDate())));
                 }
                 return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
             }
-        }, sort);
+        }, pageable);
     }
 }
