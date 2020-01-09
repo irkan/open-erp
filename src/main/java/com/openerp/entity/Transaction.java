@@ -44,7 +44,7 @@ public class Transaction {
     private Account account;
 
     @Column(name = "amount", nullable = false)
-    private int amount=1;
+    private Integer amount=1;
 
     @Column(name = "is_debt", nullable = false, columnDefinition="boolean default true")
     private Boolean debt = false;
@@ -54,17 +54,20 @@ public class Transaction {
     private String currency;
 
     @Column(name = "rate", columnDefinition="double default 1")
-    private double rate;
+    private Double rate;
 
     @DecimalMin(value = "0", message = "Minimum 0 olmalıdır")
     @Column(name = "price", nullable = false, columnDefinition="Decimal(10,2) default 0")
-    private double price=0d;
+    private Double price=0d;
+
+    @Transient
+    private Double priceFrom;
 
     @Column(name = "sum_price", nullable = false, columnDefinition="Decimal(10,2) default 0")
-    private double sumPrice=0d;
+    private Double sumPrice=0d;
 
     @Column(name = "balance", nullable = false, columnDefinition="Decimal(10,2) default 0")
-    private double balance;
+    private Double balance;
 
     @Column(name = "is_approve", nullable = false, columnDefinition="boolean default true")
     private Boolean approve = true;
@@ -73,6 +76,11 @@ public class Transaction {
     @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
     @Column(name = "transaction_date", nullable = false)
     private Date transactionDate = new Date();
+
+    @Transient
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+    private Date transactionDateFrom;
 
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
@@ -105,4 +113,10 @@ public class Transaction {
         this.approve = approve;
         this.transaction = transaction;
     }
+
+    public Transaction(Organization organization) {
+        this.organization = organization;
+    }
+
+
 }

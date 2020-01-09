@@ -6,6 +6,8 @@ import com.openerp.util.Constants;
 import com.openerp.util.DateUtility;
 import com.openerp.util.*;
 import org.apache.commons.lang3.time.DateUtils;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -85,16 +87,13 @@ public class SaleController extends SkeletonController {
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
             Util.convertedEmployeesByPosition(employees, positions);
             model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployeesByPosition(employees, positions));
-            List<Demonstration> demonstrations;
-            if(canViewAll()){
-                demonstrations = demonstrationRepository.getDemonstrationsByActiveTrueOrderByDemonstrateDateDesc();
-            } else {
-                demonstrations = demonstrationRepository.getDemonstrationsByActiveTrueAndOrganizationOrderByDemonstrateDateDesc(getSessionOrganization());
-            }
-            model.addAttribute(Constants.LIST, demonstrations);
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Demonstration());
             }
+            if(!model.containsAttribute(Constants.FILTER)){
+                model.addAttribute(Constants.FILTER, new Demonstration(!canViewAll()?getSessionOrganization():null));
+            }
+            model.addAttribute(Constants.LIST, demonstrationService.findAll((Demonstration) model.asMap().get(Constants.FILTER), PageRequest.of(0, 100, Sort.by("id").descending())));
         } else if (page.equalsIgnoreCase(Constants.ROUTE.DEMONSTRATION_DETAIL)){
 
         } else if(page.equalsIgnoreCase(Constants.ROUTE.CALCULATOR)){
@@ -249,6 +248,11 @@ public class SaleController extends SkeletonController {
             advanceRepository.save(advance);
         }
         return mapPost(demonstration, binding, redirectAttributes);
+    }
+
+    @PostMapping(value = "/demonstration/filter")
+    public String postDemonstrationFilter(@ModelAttribute(Constants.FILTER) @Validated Demonstration demonstration, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        return mapFilter(demonstration, binding, redirectAttributes, "/sale/demonstration");
     }
 
     @PostMapping(value = "/invoice/consolidate")

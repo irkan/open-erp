@@ -68,7 +68,7 @@
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <form:label path="currency">Valyuta</form:label>
-                                                <form:input path="currency" cssClass="form-control" placeholder="Başlığı daxil edin" />
+                                                <form:input path="currency" cssClass="form-control" placeholder="AZN, EUR, USD, GBP" />
                                                 <form:errors path="currency" cssClass="alert alert-danger"/>
                                             </div>
                                         </div>

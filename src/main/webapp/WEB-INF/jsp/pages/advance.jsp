@@ -12,6 +12,147 @@
 <%@ taglib prefix="utl" uri="/WEB-INF/tld/Util.tld"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <div class="kt-container  kt-grid__item kt-grid__item--fluid">
+    <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
+    <c:set var="filter" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'filter')}"/>
+    <c:if test="${filter.status}">
+        <div class="accordion  accordion-toggle-arrow mb-2" id="accordionFilter">
+            <div class="card" style="border-radius: 4px;">
+                <div class="card-header">
+                    <div class="card-title w-100" data-toggle="collapse" data-target="#filterContent" aria-expanded="true" aria-controls="collapseOne4">
+                        <div class="row w-100">
+                            <div class="col-3">
+                                <i class="<c:out value="${filter.object.icon}"/>"></i>
+                                <c:out value="${list.totalElements>0?list.totalElements:0} sətr"/>
+                            </div>
+                            <div class="col-6 text-center" style="letter-spacing: 10px;">
+                                <c:out value="${filter.object.name}"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="filterContent" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionFilter">
+                    <div class="card-body">
+                        <form:form modelAttribute="filter" id="filter" method="post" action="/payroll/advance/filter">
+                            <form:hidden path="organization" />
+                            <div class="row">
+                                <div class="col-md-11">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="id">KOD</form:label>
+                                                <form:input path="id" cssClass="form-control" placeholder="######"/>
+                                                <form:errors path="id" cssClass="control-label alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="advance">Avans</form:label>
+                                                <form:select path="advance.id" cssClass="custom-select form-control">
+                                                    <form:option value=""></form:option>
+                                                    <form:options items="${advances}" itemLabel="name" itemValue="id"/>
+                                                </form:select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="employee">Əməkdaş</form:label>
+                                                <form:input path="employee" cssClass="form-control" placeholder="Əməkdaşın kodu" />
+                                                <form:errors path="employee" cssClass="alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="payedFrom">Qiymətdən</form:label>
+                                                <form:input path="payedFrom" cssClass="form-control" placeholder="Məbləği daxil edin"/>
+                                                <form:errors path="payedFrom" cssClass="alert-danger control-label"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="payed">Qiymətədək</form:label>
+                                                <form:input path="payed" cssClass="form-control" placeholder="Məbləği daxil edin"/>
+                                                <form:errors path="payed" cssClass="alert-danger control-label"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2" style="padding-top: 30px;">
+                                            <div class="form-group">
+                                                <label class="kt-checkbox kt-checkbox--brand">
+                                                    <form:checkbox path="approve"/> Təsdiq edilmiş
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="advanceDateFrom">Tarixdən</form:label>
+                                                <div class="input-group date">
+                                                    <form:input path="advanceDateFrom" autocomplete="off"
+                                                                cssClass="form-control datepicker-element" date="date"
+                                                                placeholder="dd.MM.yyyy"/>
+                                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-calendar"></i>
+                                        </span>
+                                                    </div>
+                                                </div>
+                                                <form:errors path="advanceDateFrom" cssClass="control-label alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="advanceDate">Tarixədək</form:label>
+                                                <div class="input-group date">
+                                                    <form:input path="advanceDate" autocomplete="off"
+                                                                cssClass="form-control datepicker-element" date="date"
+                                                                placeholder="dd.MM.yyyy"/>
+                                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-calendar"></i>
+                                        </span>
+                                                    </div>
+                                                </div>
+                                                <form:errors path="advanceDate" cssClass="control-label alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <c:if test="${delete.status}">
+                                            <div class="col-md-2" style="padding-top: 30px;">
+                                                <div class="form-group">
+                                                    <label class="kt-checkbox kt-checkbox--brand">
+                                                        <form:checkbox path="active"/> Aktual məlumat
+                                                        <span></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </c:if>
+                                        <div class="col-md-2" style="padding-top: 30px;">
+                                            <div class="form-group">
+                                                <label class="kt-checkbox kt-checkbox--brand">
+                                                    <form:checkbox path="debt"/> Debt
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 text-right">
+                                    <div class="form-group">
+                                        <a href="#" onclick="location.reload();" class="btn btn-danger btn-elevate btn-icon-sm btn-block mb-2" style="padding: 0.35rem 0.6rem;">
+                                            <i class="la la-trash"></i> Sil
+                                        </a>
+                                        <a href="#" onclick="submit($('#filter'))" class="btn btn-warning btn-elevate btn-icon-sm btn-block mt-2" style="padding: 0.35rem 0.6rem">
+                                            <i class="la la-search"></i> Axtar
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form:form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </c:if>
     <div class="row">
         <div class="col-lg-12">
             <div class="kt-portlet kt-portlet--mobile">
@@ -36,7 +177,7 @@
     </tr>
     </thead>
     <tbody>
-    <c:forEach var="t" items="${list}" varStatus="loop">
+    <c:forEach var="t" items="${list.content}" varStatus="loop">
         <tr data="<c:out value="${utl:toJson(t)}" />">
             <td>${loop.index + 1}</td>
             <td><c:out value="${t.id}" /></td>

@@ -1039,17 +1039,17 @@ public class DBConfiguration {
             moduleOperations.add(filterModuleOperation10);
             ModuleOperation filterModuleOperation11 = new ModuleOperation(consolidate, filter, null);
             moduleOperations.add(filterModuleOperation11);
-            ModuleOperation filterModuleOperation12 = new ModuleOperation(transaction, filter, null);
+            ModuleOperation filterModuleOperation12 = new ModuleOperation(transaction, filter, null); //ok
             moduleOperations.add(filterModuleOperation12);
             ModuleOperation filterModuleOperation13 = new ModuleOperation(financing, filter, null); //ok
             moduleOperations.add(filterModuleOperation13);
-            ModuleOperation filterModuleOperation14 = new ModuleOperation(advance, filter, null);
+            ModuleOperation filterModuleOperation14 = new ModuleOperation(advance, filter, null); //ok
             moduleOperations.add(filterModuleOperation14);
             ModuleOperation filterModuleOperation15 = new ModuleOperation(invoice, filter, null);
             moduleOperations.add(filterModuleOperation15);
             ModuleOperation filterModuleOperation16 = new ModuleOperation(sales, filter, null);
             moduleOperations.add(filterModuleOperation16);
-            ModuleOperation filterModuleOperation17 = new ModuleOperation(demonstration, filter, null);
+            ModuleOperation filterModuleOperation17 = new ModuleOperation(demonstration, filter, null); //ok
             moduleOperations.add(filterModuleOperation17);
             ModuleOperation filterModuleOperation18 = new ModuleOperation(service, filter, null);
             moduleOperations.add(filterModuleOperation18);

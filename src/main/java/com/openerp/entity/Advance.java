@@ -37,7 +37,10 @@ public class Advance {
 
     @DecimalMin(value = "0", message = "Minimum 0 olmalıdır")
     @Column(name = "payed", columnDefinition="Decimal(10,2) default 0")
-    private double payed=0d;
+    private Double payed=0d;
+
+    @Transient
+    private Double payedFrom;
 
     @Pattern(regexp=".{0,250}",message="Maksimum 250 simvol ola bilər")
     @Column(name = "formula")
@@ -51,6 +54,11 @@ public class Advance {
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     @Column(name = "advance_date")
     private Date advanceDate=new Date();
+
+    @Transient
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    private Date advanceDateFrom;
 
     @Column(name = "is_approve", nullable = false, columnDefinition="boolean default false")
     private Boolean approve = false;
@@ -83,4 +91,10 @@ public class Advance {
         this.advanceDate = advanceDate;
         this.payed = payed;
     }
+
+    public Advance(Organization organization) {
+        this.organization = organization;;
+    }
+
+
 }

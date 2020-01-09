@@ -196,6 +196,15 @@ public class SkeletonController {
     FinancingService financingService;
 
     @Autowired
+    TransactionService transactionService;
+
+    @Autowired
+    AdvanceService advanceService;
+
+    @Autowired
+    DemonstrationService demonstrationService;
+
+    @Autowired
     LogService logService;
 
     @Autowired

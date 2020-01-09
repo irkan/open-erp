@@ -5,6 +5,8 @@ import com.openerp.entity.*;
 import com.openerp.util.Constants;
 import com.openerp.util.DateUtility;
 import com.openerp.util.*;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -44,16 +46,13 @@ public class PayrollController extends SkeletonController {
         } else if (page.equalsIgnoreCase(Constants.ROUTE.ADVANCE)){
             model.addAttribute(Constants.ADVANCES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("advance"));
             model.addAttribute(Constants.EMPLOYEES, employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization()));
-            List<Advance> advances;
-            if(canViewAll()){
-                advances = advanceRepository.getAdvancesByActiveTrueOrderByIdDesc();
-            } else {
-                advances = advanceRepository.getAdvancesByActiveTrueAndOrganizationOrderByIdDesc(getSessionOrganization());
-            }
-            model.addAttribute(Constants.LIST, advances);
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Advance());
             }
+            if(!model.containsAttribute(Constants.FILTER)){
+                model.addAttribute(Constants.FILTER, new Advance(!canViewAll()?getSessionOrganization():null));
+            }
+            model.addAttribute(Constants.LIST, advanceService.findAll((Advance) model.asMap().get(Constants.FILTER), PageRequest.of(0, 100, Sort.by("id").descending())));
         } else if (page.equalsIgnoreCase(Constants.ROUTE.SALARY)){
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Salary(new WorkingHourRecord(getSessionOrganization())));
@@ -229,6 +228,11 @@ public class PayrollController extends SkeletonController {
             log("payroll_advance", "create/edit", advance.getId(), advance.toString());
         }
         return mapPost(advance, binding, redirectAttributes);
+    }
+
+    @PostMapping(value = "/advance/filter")
+    public String postAdvanceFilter(@ModelAttribute(Constants.FILTER) @Validated Advance advance, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        return mapFilter(advance, binding, redirectAttributes, "/payroll/advance");
     }
 
     @PostMapping(value = "/advance/approve")

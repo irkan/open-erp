@@ -34,6 +34,11 @@ public class Demonstration {
     @Column(name = "demonstrate_date", nullable = false)
     private Date demonstrateDate = new Date();
 
+    @Transient
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    private Date demonstrateDateFrom;
+
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hr_employee_id")
     private Employee employee;
@@ -56,4 +61,8 @@ public class Demonstration {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "created_by_admin_user_id")
     private User createdUser;
+
+    public Demonstration(Organization organization) {
+        this.organization = organization;
+    }
 }

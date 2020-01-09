@@ -35,16 +35,14 @@ public class AccountingController extends SkeletonController {
             model.addAttribute(Constants.CURRENCIES,  dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("currency"));
             model.addAttribute(Constants.ACCOUNTS, accountRepository.getAccountsByActiveTrueAndOrganization(getSessionOrganization()));
             model.addAttribute(Constants.EXPENSES, dictionaryRepository.getDictionariesByActiveTrueAndAttr2AndDictionaryType_Attr1("expense", "action"));
-            List<Transaction> transactions;
-            if(canViewAll()){
-                transactions = transactionRepository.getTransactionsByOrderByApproveDescCreatedDateDesc();
-            } else {
-                transactions = transactionRepository.getTransactionsByOrganizationOrderByApproveDescCreatedDateDesc(getSessionOrganization());
-            }
-            model.addAttribute(Constants.LIST, transactions);
+
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Transaction());
             }
+            if(!model.containsAttribute(Constants.FILTER)){
+                model.addAttribute(Constants.FILTER, new Transaction(!canViewAll()?getSessionOrganization():null));
+            }
+            model.addAttribute(Constants.LIST, transactionService.findAll((Transaction) model.asMap().get(Constants.FILTER), PageRequest.of(0, 100, Sort.by("id").descending())));
         } else if (page.equalsIgnoreCase(Constants.ROUTE.ACCOUNT)) {
             model.addAttribute(Constants.ORGANIZATIONS, organizationRepository.getOrganizationsByActiveTrueAndOrganizationType_Attr1("branch"));
             model.addAttribute(Constants.CURRENCIES,  dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("currency"));
@@ -114,6 +112,11 @@ public class AccountingController extends SkeletonController {
             balance(transaction);
         }
         return mapPost(transaction, binding, redirectAttributes);
+    }
+
+    @PostMapping(value = "/transaction/filter")
+    public String postTransactionFilter(@ModelAttribute(Constants.FILTER) @Validated Transaction transaction, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        return mapFilter(transaction, binding, redirectAttributes, "/accounting/transaction");
     }
 
     @PostMapping(value = "/transaction/approve")
