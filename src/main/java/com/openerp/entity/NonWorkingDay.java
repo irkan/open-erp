@@ -30,6 +30,11 @@ public class NonWorkingDay {
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date nonWorkingDate;
 
+    @Transient
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    private Date nonWorkingDateFrom;
+
     @Pattern(regexp=".{1,3}",message="Minimum 1 maksimum 2 simvol ola bilər")
     @Column(name = "identifier")
     private String identifier;
@@ -44,6 +49,7 @@ public class NonWorkingDay {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_date", nullable = false)
     private Date createdDate = new Date();
+
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "created_by_admin_user_id")

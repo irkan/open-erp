@@ -6,6 +6,8 @@ import com.openerp.util.Constants;
 import com.openerp.util.DateUtility;
 import com.openerp.util.ReadWriteExcelFile;
 import com.openerp.util.Util;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.*;
@@ -52,17 +54,23 @@ public class HRController extends SkeletonController {
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.NON_WORKING_DAY)){
             model.addAttribute(Constants.IDENTIFIERS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("identifier"));
-            model.addAttribute(Constants.LIST, nonWorkingDayRepository.getNonWorkingDaysByActiveTrue());
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new NonWorkingDay());
             }
+            if(!model.containsAttribute(Constants.FILTER)){
+                model.addAttribute(Constants.FILTER, new NonWorkingDay());
+            }
+            model.addAttribute(Constants.LIST, nonWorkingDayService.findAll((NonWorkingDay) model.asMap().get(Constants.FILTER), PageRequest.of(0, 100, Sort.by("id").descending())));
         } else if (page.equalsIgnoreCase(Constants.ROUTE.SHORTENED_WORKING_DAY)){
             model.addAttribute(Constants.IDENTIFIERS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("identifier"));
             model.addAttribute(Constants.SHORTENED_TIMES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("shortened-time"));
-            model.addAttribute(Constants.LIST, shortenedWorkingDayRepository.getShortenedWorkingDaysByActiveTrue());
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new ShortenedWorkingDay());
             }
+            if(!model.containsAttribute(Constants.FILTER)){
+                model.addAttribute(Constants.FILTER, new ShortenedWorkingDay());
+            }
+            model.addAttribute(Constants.LIST, shortenedWorkingDayService.findAll((ShortenedWorkingDay) model.asMap().get(Constants.FILTER), PageRequest.of(0, 100, Sort.by("id").descending())));
         } else if (page.equalsIgnoreCase(Constants.ROUTE.WORK_ATTENDANCE)){
 
         } else if (page.equalsIgnoreCase(Constants.ROUTE.BUSINESS_TRIP)){
@@ -223,6 +231,11 @@ public class HRController extends SkeletonController {
         return mapPost(nonWorkingDay, binding, redirectAttributes);
     }
 
+    @PostMapping(value = "/non-working-day/filter")
+    public String postNonWorkingDayFilter(@ModelAttribute(Constants.FILTER) @Validated NonWorkingDay nonWorkingDay, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        return mapFilter(nonWorkingDay, binding, redirectAttributes, "/hr/non-working-day");
+    }
+
     @PostMapping(value = "/non-working-day/upload", consumes = {"multipart/form-data"})
     public String postNonWorkingDayUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) throws Exception {
         List<NonWorkingDay> nonWorkingDays = ReadWriteExcelFile.readXLSXFileNonWorkingDays(file.getInputStream());
@@ -244,6 +257,11 @@ public class HRController extends SkeletonController {
             log("hr_shortened_working_day", "create/edit", shortenedWorkingDay.getId(), shortenedWorkingDay.toString());
         }
         return mapPost(shortenedWorkingDay, binding, redirectAttributes);
+    }
+
+    @PostMapping(value = "/shortened-working-day/filter")
+    public String postShortenedWorkingDayFilter(@ModelAttribute(Constants.FILTER) @Validated ShortenedWorkingDay shortenedWorkingDay, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        return mapFilter(shortenedWorkingDay, binding, redirectAttributes, "/hr/shortened-working-day");
     }
 
     @PostMapping(value = "/shortened-working-day/upload", consumes = {"multipart/form-data"})

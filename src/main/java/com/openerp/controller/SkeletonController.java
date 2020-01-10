@@ -208,6 +208,12 @@ public class SkeletonController {
     LogService logService;
 
     @Autowired
+    NonWorkingDayService nonWorkingDayService;
+
+    @Autowired
+    ShortenedWorkingDayService shortenedWorkingDayService;
+
+    @Autowired
     HttpServletRequest request;
 
     @Autowired

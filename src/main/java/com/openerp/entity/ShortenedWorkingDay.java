@@ -29,6 +29,12 @@ public class ShortenedWorkingDay {
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date workingDate;
 
+    @Transient
+    @NotNull(message = "Boş olmamalıdır")
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    private Date workingDateFrom;
+
     @Pattern(regexp=".{1,2}",message="Minimum 1 maksimum 2 simvol ola bilər")
     @Column(name = "identifier")
     private String identifier;
@@ -38,7 +44,7 @@ public class ShortenedWorkingDay {
     private String description;
 
     @Column(name = "shortened_time", nullable = false)
-    private int shortenedTime=1;
+    private Integer shortenedTime=1;
 
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;

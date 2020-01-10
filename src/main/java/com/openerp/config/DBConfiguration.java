@@ -1021,12 +1021,10 @@ public class DBConfiguration {
             moduleOperations.add(filterModuleOperation1);
             ModuleOperation filterModuleOperation2 = new ModuleOperation(log, filter, null); //ok
             moduleOperations.add(filterModuleOperation2);
-            ModuleOperation filterModuleOperation3 = new ModuleOperation(nonWorkingDay, filter, null);
+            ModuleOperation filterModuleOperation3 = new ModuleOperation(nonWorkingDay, filter, null); //ok
             moduleOperations.add(filterModuleOperation3);
-            ModuleOperation filterModuleOperation4 = new ModuleOperation(shortenedWorkingDay, filter, null);
+            ModuleOperation filterModuleOperation4 = new ModuleOperation(shortenedWorkingDay, filter, null); //ok
             moduleOperations.add(filterModuleOperation4);
-            ModuleOperation filterModuleOperation5 = new ModuleOperation(workAttendance, filter, null);
-            moduleOperations.add(filterModuleOperation5);
             ModuleOperation filterModuleOperation6 = new ModuleOperation(vacation, filter, null);
             moduleOperations.add(filterModuleOperation6);
             ModuleOperation filterModuleOperation7 = new ModuleOperation(businessTrip, filter, null);
@@ -1057,10 +1055,8 @@ public class DBConfiguration {
             moduleOperations.add(filterModuleOperation19);
             ModuleOperation filterModuleOperation20 = new ModuleOperation(paymentRegulator, filter, null);
             moduleOperations.add(filterModuleOperation20);
-            ModuleOperation filterModuleOperation21 = new ModuleOperation(paymentRegulatorNote, filter, null);
+            ModuleOperation filterModuleOperation21 = new ModuleOperation(troubledCustomer, filter, null);
             moduleOperations.add(filterModuleOperation21);
-            ModuleOperation filterModuleOperation22 = new ModuleOperation(troubledCustomer, filter, null);
-            moduleOperations.add(filterModuleOperation22);
 
             moduleOperationRepository.saveAll(moduleOperations);
 
@@ -1311,7 +1307,6 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation2));
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation3));
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation4));
-            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation5));
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation6));
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation7));
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation8));
@@ -1328,7 +1323,6 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation19));
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation20));
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation21));
-            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation22));
 
             userModuleOperationRepository.saveAll(userModuleOperations);
 
