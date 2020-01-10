@@ -83,10 +83,13 @@ public class HRController extends SkeletonController {
         } else if (page.equalsIgnoreCase(Constants.ROUTE.VACATION)){
             model.addAttribute(Constants.EMPLOYEES, employeeRepository.getEmployeesByContractEndDateIsNull());
             model.addAttribute(Constants.IDENTIFIERS, dictionaryRepository.getDictionariesByActiveTrueAndAttr2AndDictionaryType_Attr1("vacation", "identifier"));
-            model.addAttribute(Constants.LIST, vacationRepository.getVacationsByActiveTrue());
             if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new Vacation());
+                model.addAttribute(Constants.FORM, new Vacation(canViewAll()?getUserOrganization():getSessionOrganization()));
             }
+            if(!model.containsAttribute(Constants.FILTER)){
+                model.addAttribute(Constants.FILTER, new Vacation(!canViewAll()?getSessionOrganization():null));
+            }
+            model.addAttribute(Constants.LIST, vacationService.findAll((Vacation) model.asMap().get(Constants.FILTER), PageRequest.of(0, 100, Sort.by("id").descending())));
         } else if (page.equalsIgnoreCase(Constants.ROUTE.ILLNESS)){
             model.addAttribute(Constants.EMPLOYEES, employeeRepository.getEmployeesByContractEndDateIsNull());
             model.addAttribute(Constants.IDENTIFIERS, dictionaryRepository.getDictionariesByActiveTrueAndAttr2AndDictionaryType_Attr1("illness", "identifier"));
@@ -317,6 +320,11 @@ public class HRController extends SkeletonController {
         }
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         return mapPost(vacation, binding, redirectAttributes);
+    }
+
+    @PostMapping(value = "/vacation/filter")
+    public String postVacationFilter(@ModelAttribute(Constants.FILTER) @Validated Vacation vacation, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        return mapFilter(vacation, binding, redirectAttributes, "/hr/vacation");
     }
 
     @PostMapping(value = "/business-trip")

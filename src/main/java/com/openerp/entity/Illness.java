@@ -27,6 +27,9 @@ public class Illness {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hr_employee_id", nullable = false)
     private Employee employee;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "hr_organization_id", nullable = false)
+    private Organization organization;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "admin_dictionary_identifier_id", nullable = false)
@@ -64,5 +67,10 @@ public class Illness {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "created_by_admin_user_id")
     private User createdUser;
+
+    public Illness(Organization organization) {
+        this.organization = organization;
+    }
+
 
 }

@@ -29,6 +29,10 @@ public class BusinessTrip {
     private Employee employee;
 
     @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "hr_organization_id", nullable = false)
+    private Organization organization;
+
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "admin_dictionary_identifier_id", nullable = false)
     private Dictionary identifier;
 
@@ -65,4 +69,7 @@ public class BusinessTrip {
     @JoinColumn(name = "created_by_admin_user_id")
     private User createdUser;
 
+    public BusinessTrip(Organization organization) {
+        this.organization = organization;
+    }
 }

@@ -126,7 +126,6 @@
                     <c:choose>
                         <c:when test="${not empty list}">
                             <c:set var="detail" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'detail')}"/>
-                            <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="group_table">
                                 <thead>
                                 <tr>

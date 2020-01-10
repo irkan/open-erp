@@ -214,6 +214,9 @@ public class SkeletonController {
     ShortenedWorkingDayService shortenedWorkingDayService;
 
     @Autowired
+    VacationService vacationService;
+
+    @Autowired
     HttpServletRequest request;
 
     @Autowired
