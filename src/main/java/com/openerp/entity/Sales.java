@@ -67,17 +67,27 @@ public class Sales {
     private List<Invoice> invoices;
 
     @Column(name = "guarantee", nullable = false)
-    private int guarantee;
+    private Integer guarantee;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "sale_date", nullable = false)
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date saleDate = new Date();
 
+    @Transient
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    private Date saleDateFrom;
+
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     @Column(name = "guarantee_expire", nullable = false)
-    private Date guaranteeExpire = new Date();
+    private Date guaranteeExpire;
+
+    @Transient
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    private Date guaranteeExpireFrom;
 
     @Column(name = "is_saled", nullable = false, columnDefinition="boolean default false")
     private Boolean saled = false;
@@ -92,4 +102,13 @@ public class Sales {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "created_by_admin_user_id")
     private User createdUser;
+
+    public Sales(Organization organization, Boolean service) {
+        this.organization = organization;
+        this.service = service;
+    }
+
+    public Sales(Organization organization) {
+        this.organization = organization;
+    }
 }

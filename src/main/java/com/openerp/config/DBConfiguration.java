@@ -1043,13 +1043,13 @@ public class DBConfiguration {
             moduleOperations.add(filterModuleOperation13);
             ModuleOperation filterModuleOperation14 = new ModuleOperation(advance, filter, null); //ok
             moduleOperations.add(filterModuleOperation14);
-            ModuleOperation filterModuleOperation15 = new ModuleOperation(invoice, filter, null);
+            ModuleOperation filterModuleOperation15 = new ModuleOperation(invoice, filter, null); //ok
             moduleOperations.add(filterModuleOperation15);
-            ModuleOperation filterModuleOperation16 = new ModuleOperation(sales, filter, null);
+            ModuleOperation filterModuleOperation16 = new ModuleOperation(sales, filter, null); //ok
             moduleOperations.add(filterModuleOperation16);
             ModuleOperation filterModuleOperation17 = new ModuleOperation(demonstration, filter, null); //ok
             moduleOperations.add(filterModuleOperation17);
-            ModuleOperation filterModuleOperation18 = new ModuleOperation(service, filter, null);
+            ModuleOperation filterModuleOperation18 = new ModuleOperation(service, filter, null); //ok
             moduleOperations.add(filterModuleOperation18);
             ModuleOperation filterModuleOperation19 = new ModuleOperation(customer, filter, null); //ok
             moduleOperations.add(filterModuleOperation19);

@@ -223,6 +223,12 @@ public class SkeletonController {
     IllnessService illnessService;
 
     @Autowired
+    SalesService salesService;
+
+    @Autowired
+    InvoiceService invoiceService;
+
+    @Autowired
     HttpServletRequest request;
 
     @Autowired

@@ -44,12 +44,20 @@ public class Invoice {
 
     @DecimalMin(value = "0", message = "Minimum 0 olmalıdır")
     @Column(name = "price", nullable = false, columnDefinition="Decimal(10,2) default 0")
-    private double price=0d;
+    private Double price=0d;
+
+    @Transient
+    private Double priceFrom;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "invoice_date", nullable = false)
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date invoiceDate = new Date();
+
+    @Transient
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    private Date invoiceDateFrom;
 
     @Pattern(regexp=".{0,250}", message="Maksimum 250 simvol ola bilər")
     @Column(name = "description")
@@ -79,4 +87,8 @@ public class Invoice {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "created_by_admin_user_id")
     private User createdUser;
+
+    public Invoice(Organization organization) {
+        this.organization = organization;
+    }
 }

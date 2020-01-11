@@ -6,6 +6,7 @@ import com.openerp.util.Constants;
 import com.openerp.util.DateUtility;
 import com.openerp.util.*;
 import org.apache.commons.lang3.time.DateUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
@@ -37,51 +38,42 @@ public class SaleController extends SkeletonController {
             model.addAttribute(Constants.PAYMENT_SCHEDULES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-schedule"));
             model.addAttribute(Constants.PAYMENT_PERIODS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-period"));
             model.addAttribute(Constants.GUARANTEES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("guarantee"));
-            List<Sales> sales;
-            if(canViewAll()){
-                sales = salesRepository.getSalesByActiveTrueAndServiceFalseOrderByIdDesc();
-            } else {
-                sales = salesRepository.getSalesByActiveTrueAndServiceFalseAndOrganizationOrderByIdDesc(getSessionOrganization());
+
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new Sales(!canViewAll()?getSessionOrganization():getUserOrganization()));
             }
+            if(!model.containsAttribute(Constants.FILTER)){
+                model.addAttribute(Constants.FILTER, new Sales(!canViewAll()?getSessionOrganization():null));
+            }
+            Page<Sales> sales = salesService.findAll((Sales) model.asMap().get(Constants.FILTER), PageRequest.of(0, 100, Sort.by("id").descending()));
             for(Sales sales1: sales){
                 sales1.setSalesInventories(salesInventoryRepository.getSalesInventoriesByActiveTrueAndSales(sales1));
             }
             model.addAttribute(Constants.LIST, sales);
-            if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new Sales());
-            }
         } else if(page.equalsIgnoreCase(Constants.ROUTE.SERVICE)){
             List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization());
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
             model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployeesByPosition(employees, positions));
-            List<Sales> sales;
-            if(canViewAll()){
-                sales = salesRepository.getSalesByActiveTrueAndServiceTrueOrderByIdDesc();
-            } else {
-                sales = salesRepository.getSalesByActiveTrueAndServiceTrueAndOrganizationOrderByIdDesc(getSessionOrganization());
-            }
-            for(Sales sales1: sales){
-                sales1.setSalesInventories(salesInventoryRepository.getSalesInventoriesByActiveTrueAndSales(sales1));
-            }
-            model.addAttribute(Constants.LIST, sales);
             if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new Sales());
+                model.addAttribute(Constants.FORM, new Sales(!canViewAll()?getSessionOrganization():getUserOrganization(), true));
             }
+            if(!model.containsAttribute(Constants.FILTER)){
+                model.addAttribute(Constants.FILTER, new Sales(!canViewAll()?getSessionOrganization():null, true));
+            }
+            model.addAttribute(Constants.LIST, salesService.findAll((Sales) model.asMap().get(Constants.FILTER), PageRequest.of(0, 100, Sort.by("id").descending())));
         } else if (page.equalsIgnoreCase(Constants.ROUTE.INVOICE)){
             List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization());
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
             Util.convertedEmployeesByPosition(employees, positions);
+            model.addAttribute(Constants.PAYMENT_CHANNEL, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-channel"));
             model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployeesByPosition(employees, positions));
-            List<Invoice> invoices;
-            if(canViewAll()){
-                invoices = invoiceRepository.getInvoicesByActiveTrueOrderByInvoiceDateDesc();
-            } else {
-                invoices = invoiceRepository.getInvoicesByActiveTrueAndOrganizationOrderByInvoiceDateDesc(getSessionOrganization());
-            }
-            model.addAttribute(Constants.LIST, invoices);
             if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new Invoice());
+                model.addAttribute(Constants.FORM, new Invoice(!canViewAll()?getSessionOrganization():getUserOrganization()));
             }
+            if(!model.containsAttribute(Constants.FILTER)){
+                model.addAttribute(Constants.FILTER, new Invoice(!canViewAll()?getSessionOrganization():null));
+            }
+            model.addAttribute(Constants.LIST, invoiceService.findAll((Invoice) model.asMap().get(Constants.FILTER), PageRequest.of(0, 100, Sort.by("id").descending())));
         } else if (page.equalsIgnoreCase(Constants.ROUTE.DEMONSTRATION)){
             List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization());
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
@@ -186,6 +178,11 @@ public class SaleController extends SkeletonController {
         return mapPost(sales, binding, redirectAttributes);
     }
 
+    @PostMapping(value = "/sales/filter")
+    public String postSalesFilter(@ModelAttribute(Constants.FILTER) @Validated Sales sales, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        return mapFilter(sales, binding, redirectAttributes, "/sale/sales");
+    }
+
     @ResponseBody
     @GetMapping(value = "/payment/schedule/{lastPrice}/{down}/{schedule}/{period}/{saleDate}", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Schedule> getPaymentSchedule(Model model, @PathVariable("lastPrice") double lastPrice, @PathVariable("down") double down, @PathVariable("schedule") int scheduleId, @PathVariable("period") int periodId, @PathVariable(name = "saleDate", value = "") String saleDate){
@@ -234,6 +231,11 @@ public class SaleController extends SkeletonController {
             log("sale_invoice", "create/edit", invc.getId(), invc.toString());
         }
         return mapPost(invoice, binding, redirectAttributes);
+    }
+
+    @PostMapping(value = "/invoice/filter")
+    public String postInvoiceFilter(@ModelAttribute(Constants.FILTER) @Validated Invoice invoice, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        return mapFilter(invoice, binding, redirectAttributes, "/sale/invoice");
     }
 
     @PostMapping(value = "/demonstration")

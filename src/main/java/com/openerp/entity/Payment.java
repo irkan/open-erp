@@ -29,15 +29,18 @@ public class Payment {
 
     @DecimalMin(value = "0", message = "Minimum 0 olmalıdır")
     @Column(name = "price", nullable = false, columnDefinition="Decimal(10,2) default 0")
-    private double price=0d;
+    private Double price=0d;
 
     @DecimalMin(value = "0", message = "Minimum 0 olmalıdır")
     @Column(name = "last_price", nullable = false, columnDefinition="Decimal(10,2) default 0")
-    private double lastPrice=0d;
+    private Double lastPrice=0d;
+
+    @Transient
+    private Double lastPriceFrom;
 
     @DecimalMin(value = "0", message = "Minimum 0 olmalıdır")
     @Column(name = "down", nullable = false, columnDefinition="Decimal(10,2) default 0")
-    private double down=0d;
+    private Double down=0d;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "admin_dictionary_payment_schedule_id")

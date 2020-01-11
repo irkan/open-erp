@@ -11,8 +11,154 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="utl" uri="/WEB-INF/tld/Util.tld"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<link href="<c:url value="/assets/css/demo4/pages/wizard/wizard-1.css" />" rel="stylesheet" type="text/css"/>
 <div class="kt-container  kt-grid__item kt-grid__item--fluid">
+    <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
+    <c:set var="filter" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'filter')}"/>
+    <c:if test="${filter.status}">
+        <div class="accordion  accordion-toggle-arrow mb-2" id="accordionFilter">
+            <div class="card" style="border-radius: 4px;">
+                <div class="card-header">
+                    <div class="card-title w-100" data-toggle="collapse" data-target="#filterContent" aria-expanded="true" aria-controls="collapseOne4">
+                        <div class="row w-100">
+                            <div class="col-3">
+                                <i class="<c:out value="${filter.object.icon}"/>"></i>
+                                <c:out value="${list.totalElements>0?list.totalElements:0} sətr"/>
+                            </div>
+                            <div class="col-6 text-center" style="letter-spacing: 10px;">
+                                <c:out value="${filter.object.name}"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="filterContent" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionFilter">
+                    <div class="card-body">
+                        <form:form modelAttribute="filter" id="filter" method="post" action="/sale/sales/filter">
+                            <form:hidden path="organization" />
+                            <form:hidden path="service" />
+                            <div class="row">
+                                <div class="col-md-11">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="id">KOD</form:label>
+                                                <form:input path="id" cssClass="form-control" placeholder="######"/>
+                                                <form:errors path="id" cssClass="control-label alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="customer">Müştəri</form:label>
+                                                <form:input path="customer" cssClass="form-control" placeholder="Müştəri kodu" />
+                                                <form:errors path="customer" cssClass="alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="saleDateFrom">Satış tarixdən</form:label>
+                                                <div class="input-group date">
+                                                    <form:input path="saleDateFrom" autocomplete="off"
+                                                                cssClass="form-control datepicker-element" date="date"
+                                                                placeholder="dd.MM.yyyy"/>
+                                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-calendar"></i>
+                                        </span>
+                                                    </div>
+                                                </div>
+                                                <form:errors path="saleDateFrom" cssClass="control-label alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="saleDate">Tarixədək</form:label>
+                                                <div class="input-group date">
+                                                    <form:input path="saleDate" autocomplete="off"
+                                                                cssClass="form-control datepicker-element" date="date"
+                                                                placeholder="dd.MM.yyyy"/>
+                                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-calendar"></i>
+                                        </span>
+                                                    </div>
+                                                </div>
+                                                <form:errors path="saleDate" cssClass="control-label alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="guaranteeExpireFrom">Qarantiya bitir - tarixdən</form:label>
+                                                <div class="input-group date">
+                                                    <form:input path="guaranteeExpireFrom" autocomplete="off"
+                                                                cssClass="form-control datepicker-element" date="date"
+                                                                placeholder="dd.MM.yyyy"/>
+                                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-calendar"></i>
+                                        </span>
+                                                    </div>
+                                                </div>
+                                                <form:errors path="guaranteeExpireFrom" cssClass="control-label alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="guaranteeExpire">Tarixədək</form:label>
+                                                <div class="input-group date">
+                                                    <form:input path="guaranteeExpire" autocomplete="off"
+                                                                cssClass="form-control datepicker-element" date="date"
+                                                                placeholder="dd.MM.yyyy"/>
+                                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-calendar"></i>
+                                        </span>
+                                                    </div>
+                                                </div>
+                                                <form:errors path="guaranteeExpire" cssClass="control-label alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="payment.lastPriceFrom">Qiymətdən</form:label>
+                                                <form:input path="payment.lastPriceFrom" cssClass="form-control" placeholder="Qiyməti daxil edin"/>
+                                                <form:errors path="payment.lastPriceFrom" cssClass="alert-danger control-label"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="payment.lastPrice">Qiymətədək</form:label>
+                                                <form:input path="payment.lastPrice" cssClass="form-control" placeholder="Qiyməti daxil edin"/>
+                                                <form:errors path="payment.lastPrice" cssClass="alert-danger control-label"/>
+                                            </div>
+                                        </div>
+                                        <c:if test="${delete.status}">
+                                            <div class="col-md-2" style="padding-top: 30px;">
+                                                <div class="form-group">
+                                                    <label class="kt-checkbox kt-checkbox--brand">
+                                                        <form:checkbox path="active"/> Aktual məlumat
+                                                        <span></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </c:if>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 text-right">
+                                    <div class="form-group">
+                                        <a href="#" onclick="location.reload();" class="btn btn-danger btn-elevate btn-icon-sm btn-block mb-2" style="padding: 0.35rem 0.6rem;">
+                                            <i class="la la-trash"></i> Sil
+                                        </a>
+                                        <a href="#" onclick="submit($('#filter'))" class="btn btn-warning btn-elevate btn-icon-sm btn-block mt-2" style="padding: 0.35rem 0.6rem">
+                                            <i class="la la-search"></i> Axtar
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form:form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </c:if>
     <div class="row">
         <div class="col-lg-12">
             <div class="kt-portlet kt-portlet--mobile">
@@ -38,7 +184,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <c:forEach var="t" items="${list}" varStatus="loop">
+                                <c:forEach var="t" items="${list.content}" varStatus="loop">
                                     <tr data="<c:out value="${utl:toJson(t)}" />">
                                         <td nowrap class="text-center">
                                             <span class="dropdown">
@@ -174,10 +320,10 @@
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form" method="post" action="/sale/sales" cssClass="form-group">
                     <form:hidden path="id"/>
-                    <form:hidden path="active" value="1"/>
-                    <form:hidden path="service" value="1"/>
+                    <form:hidden path="organization"/>
+                    <form:hidden path="active"/>
+                    <form:hidden path="service"/>
                     <form:hidden path="payment.cash" value="1"/>
-                    <input type="hidden" name="organization" value="<c:out value="${sessionScope.organization.id}"/>"/>
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
