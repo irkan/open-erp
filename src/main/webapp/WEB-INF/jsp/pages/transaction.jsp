@@ -148,6 +148,9 @@
                 <div class="kt-portlet__body">
                     <c:choose>
                         <c:when test="${not empty list}">
+                            <c:set var="approve" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
+                            <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
+                            <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
                                 <thead>
                                 <tr>
@@ -203,40 +206,28 @@
                                         </td>
                                         <td><c:out value="${t.balance}" /></td>
                                         <td nowrap class="text-center">
-                                            <c:set var="approve" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
-                                            <c:choose>
-                                                <c:when test="${approve.status}">
-                                                    <c:if test="${!t.approve}">
-                                                        <a href="javascript:approve($('#transaction-approve-form'), $('#transaction-approve-modal'), '<c:out value="${t.id}" />', '<c:out value="${t.description}" />', '<c:out value="${t.price}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${approve.object.name}"/>">
-                                                            <i class="<c:out value="${approve.object.icon}"/>"></i>
-                                                        </a>
-                                                    </c:if>
-                                                </c:when>
-                                            </c:choose>
-                                            <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
-                                            <c:choose>
-                                                <c:when test="${view.status}">
-                                                    <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
-                                                        <i class="la <c:out value="${view.object.icon}"/>"></i>
+                                            <c:if test="${approve.status}">
+                                                <c:if test="${!t.approve}">
+                                                    <a href="javascript:approve($('#transaction-approve-form'), $('#transaction-approve-modal'), '<c:out value="${t.id}" />', '<c:out value="${t.description}" />', '<c:out value="${t.price}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${approve.object.name}"/>">
+                                                        <i class="<c:out value="${approve.object.icon}"/>"></i>
                                                     </a>
-                                                </c:when>
-                                            </c:choose>
-                                            <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
-                                            <c:choose>
-                                                <c:when test="${edit.status}">
-                                                    <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
-                                                        <i class="<c:out value="${edit.object.icon}"/>"></i>
-                                                    </a>
-                                                </c:when>
-                                            </c:choose>
-                                            <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
-                                            <c:choose>
-                                                <c:when test="${delete.status}">
-                                                    <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.description}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
-                                                        <i class="<c:out value="${delete.object.icon}"/>"></i>
-                                                    </a>
-                                                </c:when>
-                                            </c:choose>
+                                                </c:if>
+                                            </c:if>
+                                            <c:if test="${view.status}">
+                                                <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
+                                                    <i class="la <c:out value="${view.object.icon}"/>"></i>
+                                                </a>
+                                            </c:if>
+                                            <c:if test="${edit.status}">
+                                                <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                                                    <i class="<c:out value="${edit.object.icon}"/>"></i>
+                                                </a>
+                                            </c:if>
+                                            <c:if test="${delete.status}">
+                                                <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.description}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
+                                                    <i class="<c:out value="${delete.object.icon}"/>"></i>
+                                                </a>
+                                            </c:if>
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -270,6 +261,7 @@
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form" method="post" action="/accounting/transaction" cssClass="form-group">
                     <form:hidden path="id"/>
+                    <form:hidden path="organization" />
                     <div class="form-group">
                         <form:label path="account">Hesab</form:label>
                         <form:select  path="account" cssClass="custom-select form-control">

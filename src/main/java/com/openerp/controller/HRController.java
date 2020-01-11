@@ -76,15 +76,18 @@ public class HRController extends SkeletonController {
         } else if (page.equalsIgnoreCase(Constants.ROUTE.BUSINESS_TRIP)){
             model.addAttribute(Constants.EMPLOYEES, employeeRepository.getEmployeesByContractEndDateIsNull());
             model.addAttribute(Constants.IDENTIFIERS, dictionaryRepository.getDictionariesByActiveTrueAndAttr2AndDictionaryType_Attr1("business-trip", "identifier"));
-            model.addAttribute(Constants.LIST, businessTripRepository.getBusinessTripsByActiveTrue());
             if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new BusinessTrip());
+                model.addAttribute(Constants.FORM, new BusinessTrip(!canViewAll()?getSessionOrganization():getUserOrganization()));
             }
+            if(!model.containsAttribute(Constants.FILTER)){
+                model.addAttribute(Constants.FILTER, new BusinessTrip(!canViewAll()?getSessionOrganization():null));
+            }
+            model.addAttribute(Constants.LIST, businessTripService.findAll((BusinessTrip) model.asMap().get(Constants.FILTER), PageRequest.of(0, 100, Sort.by("id").descending())));
         } else if (page.equalsIgnoreCase(Constants.ROUTE.VACATION)){
             model.addAttribute(Constants.EMPLOYEES, employeeRepository.getEmployeesByContractEndDateIsNull());
             model.addAttribute(Constants.IDENTIFIERS, dictionaryRepository.getDictionariesByActiveTrueAndAttr2AndDictionaryType_Attr1("vacation", "identifier"));
             if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new Vacation(canViewAll()?getUserOrganization():getSessionOrganization()));
+                model.addAttribute(Constants.FORM, new Vacation(!canViewAll()?getSessionOrganization():getUserOrganization()));
             }
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Vacation(!canViewAll()?getSessionOrganization():null));
@@ -93,10 +96,13 @@ public class HRController extends SkeletonController {
         } else if (page.equalsIgnoreCase(Constants.ROUTE.ILLNESS)){
             model.addAttribute(Constants.EMPLOYEES, employeeRepository.getEmployeesByContractEndDateIsNull());
             model.addAttribute(Constants.IDENTIFIERS, dictionaryRepository.getDictionariesByActiveTrueAndAttr2AndDictionaryType_Attr1("illness", "identifier"));
-            model.addAttribute(Constants.LIST, illnessRepository.getIllnessesByActiveTrue());
             if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new Illness());
+                model.addAttribute(Constants.FORM, new Illness(!canViewAll()?getSessionOrganization():getUserOrganization()));
             }
+            if(!model.containsAttribute(Constants.FILTER)){
+                model.addAttribute(Constants.FILTER, new Illness(!canViewAll()?getSessionOrganization():null));
+            }
+            model.addAttribute(Constants.LIST, illnessService.findAll((Illness) model.asMap().get(Constants.FILTER), PageRequest.of(0, 100, Sort.by("id").descending())));
         }
         return "layout";
     }
@@ -359,6 +365,11 @@ public class HRController extends SkeletonController {
         return mapPost(businessTrip, binding, redirectAttributes);
     }
 
+    @PostMapping(value = "/business-trip/filter")
+    public String postBusinessTripFilter(@ModelAttribute(Constants.FILTER) @Validated BusinessTrip businessTrip, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        return mapFilter(businessTrip, binding, redirectAttributes, "/hr/business-trip");
+    }
+
     @PostMapping(value = "/illness")
     public String postIllness(@ModelAttribute(Constants.FORM) @Validated Illness illness, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         binding = check(binding, illness.getDateRange(), illness.getEmployee());
@@ -389,6 +400,11 @@ public class HRController extends SkeletonController {
             }
         }
         return mapPost(illness, binding, redirectAttributes);
+    }
+
+    @PostMapping(value = "/illness/filter")
+    public String postIllnessFilter(@ModelAttribute(Constants.FILTER) @Validated Illness illness, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        return mapFilter(illness, binding, redirectAttributes, "/hr/illness");
     }
 
     private Advance calculateVacationPrice(Vacation vacation){

@@ -88,7 +88,7 @@ public class SaleController extends SkeletonController {
             Util.convertedEmployeesByPosition(employees, positions);
             model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployeesByPosition(employees, positions));
             if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new Demonstration());
+                model.addAttribute(Constants.FORM, new Demonstration(!canViewAll()?getSessionOrganization():getUserOrganization()));
             }
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Demonstration(!canViewAll()?getSessionOrganization():null));

@@ -186,7 +186,6 @@
                                             </c:choose>
                                         </td>
                                     </tr>
-                                    </tr>
                                 </c:forEach>
                                 </tbody>
                             </table>
@@ -217,8 +216,9 @@
             </div>
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form" method="post" action="/accounting/financing" cssClass="form-group">
-                    <form:input type="hidden" path="id"/>
-                    <form:input type="hidden" path="active" value="1"/>
+                    <form:hidden path="id"/>
+                    <form:hidden path="active"/>
+                    <form:hidden path="organization" />
                     <div class="form-group">
                         <form:label path="inventory.name">İnventar</form:label>
                         <form:input path="inventory.name" cssClass="form-control" readonly="true"/>

@@ -272,8 +272,9 @@
             </div>
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form" method="post" action="/crm/customer" cssClass="form-group">
-                    <form:input path="id" type="hidden"/>
-                    <form:input path="organization" type="hidden" value="${sessionScope.organization.id}"/>
+                    <form:hidden path="id"/>
+                    <form:hidden path="active"/>
+                    <form:hidden path="organization"/>
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">

@@ -1027,9 +1027,9 @@ public class DBConfiguration {
             moduleOperations.add(filterModuleOperation4);
             ModuleOperation filterModuleOperation6 = new ModuleOperation(vacation, filter, null); //ok
             moduleOperations.add(filterModuleOperation6);
-            ModuleOperation filterModuleOperation7 = new ModuleOperation(businessTrip, filter, null);
+            ModuleOperation filterModuleOperation7 = new ModuleOperation(businessTrip, filter, null); //ok
             moduleOperations.add(filterModuleOperation7);
-            ModuleOperation filterModuleOperation8 = new ModuleOperation(illness, filter, null);
+            ModuleOperation filterModuleOperation8 = new ModuleOperation(illness, filter, null); //ok
             moduleOperations.add(filterModuleOperation8);
             ModuleOperation filterModuleOperation9 = new ModuleOperation(inventory, filter, null);
             moduleOperations.add(filterModuleOperation9);

@@ -235,8 +235,8 @@
             </div>
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form" method="post" action="/admin/log" cssClass="form-group">
-                    <form:input type="hidden" name="id" path="id"/>
-                    <form:input type="hidden" name="active" path="active" value="1"/>
+                    <form:hidden path="id"/>
+                    <form:hidden path="active"/>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">

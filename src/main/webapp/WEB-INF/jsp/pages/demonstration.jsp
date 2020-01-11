@@ -193,7 +193,8 @@
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form" method="post" action="/sale/demonstration" cssClass="form-group">
                     <form:hidden path="id"/>
-                    <input type="hidden" name="organization" value="<c:out value="${sessionScope.organization.id}"/>"/>
+                    <form:hidden path="active"/>
+                    <form:hidden path="organization"/>
                     <div class="form-group">
                         <form:label path="employee">Əməkdaş</form:label>
                         <form:select  path="employee" cssClass="custom-select form-control select2-single" multiple="single">

@@ -217,6 +217,12 @@ public class SkeletonController {
     VacationService vacationService;
 
     @Autowired
+    BusinessTripService businessTripService;
+
+    @Autowired
+    IllnessService illnessService;
+
+    @Autowired
     HttpServletRequest request;
 
     @Autowired

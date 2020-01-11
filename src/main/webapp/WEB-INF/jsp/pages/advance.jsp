@@ -276,6 +276,7 @@
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form" method="post" action="/payroll/advance" cssClass="form-group">
                     <form:hidden path="id"/>
+                    <form:hidden path="organization" />
                     <form:hidden path="approve"/>
                     <form:hidden path="approveDate"/>
                     <div class="row">

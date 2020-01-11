@@ -53,7 +53,7 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="identifier">Məzuniyyətin forması</form:label>
+                                                <form:label path="identifier">Forma</form:label>
                                                 <form:select  path="identifier.id" cssClass="custom-select form-control">
                                                     <form:option value=""></form:option>
                                                     <form:options items="${identifiers}" itemLabel="name" itemValue="id" />
@@ -165,11 +165,6 @@
             <td><c:out value="${t.vacationDetails.size()}" /> gün</td>
             <td><c:out value="${t.description}" /></td>
             <td nowrap class="text-center">
-                <c:if test="${view.status}">
-                    <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
-                        <i class="la <c:out value="${view.object.icon}"/>"></i>
-                    </a>
-                </c:if>
                 <c:if test="${edit.status}">
                     <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
                         <i class="<c:out value="${edit.object.icon}"/>"></i>

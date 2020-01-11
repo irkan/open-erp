@@ -31,7 +31,7 @@ public class CRMController extends SkeletonController {
             model.addAttribute(Constants.GENDERS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("gender"));
             model.addAttribute(Constants.MARITAL_STATUSES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("marital-status"));
             if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new Customer());
+                model.addAttribute(Constants.FORM, new Customer(!canViewAll()?getSessionOrganization():getUserOrganization()));
             }
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Customer(!canViewAll()?getSessionOrganization():null));
