@@ -1050,10 +1050,6 @@ public class DBConfiguration {
             moduleOperations.add(filterModuleOperation18);
             ModuleOperation filterModuleOperation19 = new ModuleOperation(customer, filter, null); //ok
             moduleOperations.add(filterModuleOperation19);
-            ModuleOperation filterModuleOperation20 = new ModuleOperation(paymentRegulator, filter, null);
-            moduleOperations.add(filterModuleOperation20);
-            ModuleOperation filterModuleOperation21 = new ModuleOperation(troubledCustomer, filter, null);
-            moduleOperations.add(filterModuleOperation21);
 
             moduleOperationRepository.saveAll(moduleOperations);
 
@@ -1317,8 +1313,6 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation17));
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation18));
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation19));
-            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation20));
-            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation21));
 
             userModuleOperationRepository.saveAll(userModuleOperations);
 
