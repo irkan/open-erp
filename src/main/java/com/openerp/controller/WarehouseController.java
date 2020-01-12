@@ -4,6 +4,8 @@ import com.openerp.domain.Response;
 import com.openerp.entity.*;
 import com.openerp.util.Constants;
 import com.openerp.util.*;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,30 +30,21 @@ public class WarehouseController extends SkeletonController {
     @GetMapping(value = {"/{page}", "/{page}/{data}"})
     public String route(Model model, @PathVariable("page") String page, @PathVariable("data") Optional<String> data, RedirectAttributes redirectAttributes) throws Exception {
         if (page.equalsIgnoreCase(Constants.ROUTE.INVENTORY)) {
-            List<Inventory> inventories;
-            if(canViewAll()){
-                inventories = inventoryRepository.getInventoriesByActiveTrueOrderByIdDesc();
-            } else {
-                inventories = inventoryRepository.findDistinctByActiveTrueAndActions_Organization_IdOrActions_FromOrganization_IdOrderByIdDesc(
-                        getSessionOrganization().getId(),
-                        getSessionOrganization().getId()
-                );
-                /*inventories.addAll(
-                        inventoryRepository.findDistinctByActiveTrueAndActions_FromOrganization_IdOrderByIdDesc(
-                                getSessionOrganization().getId()
-                        )
-                );*/
-            }
-            model.addAttribute(Constants.LIST, inventories);
             model.addAttribute(Constants.SUPPLIERS, supplierRepository.getSuppliersByActiveTrue());
             model.addAttribute(Constants.INVENTORY_GROUPS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("inventory-group"));
+
             if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new Inventory(new Action(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("buy", "action"),
-                        getSessionOrganization())));
+                model.addAttribute(Constants.FORM, new Inventory(getSessionOrganization()));
             }
+            if(!model.containsAttribute(Constants.FILTER)){
+                model.addAttribute(Constants.FILTER, new Inventory(!canViewAll()?getSessionOrganization():null));
+            }
+            model.addAttribute(Constants.LIST, inventoryService.findAll((Inventory) model.asMap().get(Constants.FILTER), PageRequest.of(0, 100, Sort.by("id").descending())));
         } else if (page.equalsIgnoreCase(Constants.ROUTE.ACTION)) {
             model.addAttribute(Constants.ORGANIZATIONS, organizationRepository.getOrganizationsByActiveTrueAndOrganizationType_Attr1("branch"));
-            List<Action> actions = null;
+            model.addAttribute(Constants.EMPLOYEES, employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization()));
+
+            List<Action> actions;
             if(!data.equals(Optional.empty())){
                 if(canViewAll()){
                     actions = actionRepository.getActionsByActiveTrueAndInventory_IdAndInventory_Active(Integer.parseInt(data.get()), true);
@@ -67,15 +60,6 @@ public class WarehouseController extends SkeletonController {
                     actions.addAll(actionRepository.getActionsByActiveTrueAndInventory_ActiveAndFromOrganizationAndApproveFalse(true, getSessionOrganization()));
                 }
             }
-
-            List<Employee> employees;
-            if(canViewAll()){
-                employees = employeeRepository.getEmployeesByContractEndDateIsNull();
-            } else {
-                employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization());
-            }
-            model.addAttribute(Constants.EMPLOYEES, employees);
-
             model.addAttribute(Constants.LIST, actions);
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Action());
@@ -89,18 +73,18 @@ public class WarehouseController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new Supplier());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.CONSOLIDATE)) {
-            List<Action> actions;
-            if(canViewAll()){
-                actions = actionRepository.getActionsByActiveTrueAndInventory_ActiveAndAction_Attr1AndAction_DictionaryType_Attr1(true,  "consolidate", "action");
-            } else {
-                actions = actionRepository.getActionsByActiveTrueAndInventory_ActiveAndAction_Attr1AndAction_DictionaryType_Attr1AndEmployee(true,  "consolidate", "action", getSessionUser().getEmployee());
-            }
-            model.addAttribute(Constants.LIST, actions);
             if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new Action());
+                model.addAttribute(Constants.FORM, new Action(getSessionOrganization()));
             }
+            if(!model.containsAttribute(Constants.FILTER)){
+                model.addAttribute(Constants.FILTER, new Action(
+                        !canViewAll()?getSessionUser().getEmployee():null,
+                        dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("consolidate", "action")
+                        )
+                );
+            }
+            model.addAttribute(Constants.LIST, actionService.findAll((Action) model.asMap().get(Constants.FILTER), PageRequest.of(0, 100, Sort.by("id").descending())));
         }
-
         return "layout";
     }
 
@@ -113,18 +97,25 @@ public class WarehouseController extends SkeletonController {
             }
             inventoryRepository.save(inventory);
             log("warehouse_inventory", "create/edit", inventory.getId(), inventory.toString());
-            Action action = inventory.getAction();
+            Action action = inventory.getActions().get(0);
             action.setInventory(inventory);
+            action.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("buy", "action"));
+            action.setOrganization(inventory.getOrganization());
             actionRepository.save(action);
             log("warehouse_action", "create/edit", action.getId(), action.toString());
             String description = action.getAction().getName()+", "+action.getSupplier().getName()+" -> "+action.getOrganization().getName()+", "+inventory.getName()+", Say: " + action.getAmount() + " ədəd";
             Organization organization = organizationRepository.getOrganizationByIdAndActiveTrue(action.getOrganization().getId());
             Transaction transaction = new Transaction(Util.getUserBranch(organization), inventory, action.getAction(), description, false, null);
-            transaction.setAmount(inventory.getAction().getAmount());
+            transaction.setAmount(inventory.getActions().get(0).getAmount());
             transactionRepository.save(transaction);
             log("accounting_transaction", "create/edit", transaction.getId(), transaction.toString());
         }
         return mapPost(inventory, binding, redirectAttributes);
+    }
+
+    @PostMapping(value = "/inventory/filter")
+    public String postInventoryFilter(@ModelAttribute(Constants.FILTER) @Validated Inventory inventory, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        return mapFilter(inventory, binding, redirectAttributes, "/warehouse/inventory");
     }
 
     @PostMapping(value = "/supplier")
@@ -248,6 +239,11 @@ public class WarehouseController extends SkeletonController {
             log("warehouse_action", "create/edit", actn.getId(), actn.toString());
         }
         return mapPost(action, binding, redirectAttributes, "/warehouse/action/"+actn.getInventory().getId());
+    }
+
+    @PostMapping(value = "/consolidate/filter")
+    public String postConsolidateFilter(@ModelAttribute(Constants.FILTER) @Validated Action action, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        return mapFilter(action, binding, redirectAttributes, "/warehouse/consolidate");
     }
 
     @PostMapping(value = "/action/return")

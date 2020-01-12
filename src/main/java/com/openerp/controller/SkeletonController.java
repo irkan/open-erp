@@ -229,6 +229,12 @@ public class SkeletonController {
     InvoiceService invoiceService;
 
     @Autowired
+    ActionService actionService;
+
+    @Autowired
+    InventoryService inventoryService;
+
+    @Autowired
     HttpServletRequest request;
 
     @Autowired

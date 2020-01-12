@@ -77,7 +77,7 @@ public class HRController extends SkeletonController {
             model.addAttribute(Constants.EMPLOYEES, employeeRepository.getEmployeesByContractEndDateIsNull());
             model.addAttribute(Constants.IDENTIFIERS, dictionaryRepository.getDictionariesByActiveTrueAndAttr2AndDictionaryType_Attr1("business-trip", "identifier"));
             if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new BusinessTrip(!canViewAll()?getSessionOrganization():getUserOrganization()));
+                model.addAttribute(Constants.FORM, new BusinessTrip(getSessionOrganization()));
             }
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new BusinessTrip(!canViewAll()?getSessionOrganization():null));
@@ -87,7 +87,7 @@ public class HRController extends SkeletonController {
             model.addAttribute(Constants.EMPLOYEES, employeeRepository.getEmployeesByContractEndDateIsNull());
             model.addAttribute(Constants.IDENTIFIERS, dictionaryRepository.getDictionariesByActiveTrueAndAttr2AndDictionaryType_Attr1("vacation", "identifier"));
             if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new Vacation(!canViewAll()?getSessionOrganization():getUserOrganization()));
+                model.addAttribute(Constants.FORM, new Vacation(getSessionOrganization()));
             }
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Vacation(!canViewAll()?getSessionOrganization():null));
@@ -97,7 +97,7 @@ public class HRController extends SkeletonController {
             model.addAttribute(Constants.EMPLOYEES, employeeRepository.getEmployeesByContractEndDateIsNull());
             model.addAttribute(Constants.IDENTIFIERS, dictionaryRepository.getDictionariesByActiveTrueAndAttr2AndDictionaryType_Attr1("illness", "identifier"));
             if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new Illness(!canViewAll()?getSessionOrganization():getUserOrganization()));
+                model.addAttribute(Constants.FORM, new Illness(getSessionOrganization()));
             }
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Illness(!canViewAll()?getSessionOrganization():null));

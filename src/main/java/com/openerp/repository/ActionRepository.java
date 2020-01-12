@@ -2,10 +2,11 @@ package com.openerp.repository;
 
 import com.openerp.entity.*;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.List;
 
-public interface ActionRepository extends JpaRepository<Action, Integer> {
+public interface ActionRepository extends JpaRepository<Action, Integer>, JpaSpecificationExecutor<Action> {
     List<Action> getActionsByActiveTrueAndInventory_IdAndInventory_Active(int id, boolean inventoryActive);
     List<Action> getActionsByActiveTrueAndInventory_IdAndInventory_ActiveAndActionOrderByIdDesc(int id, boolean inventoryActive, Dictionary action);
     List<Action> getActionsByActiveTrueAndInventory_ActiveAndEmployee_Id(boolean inventoryActive, int employeeId);

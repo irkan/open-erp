@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
@@ -60,6 +61,16 @@ public class Action {
     private Boolean active = true;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+    @Column(name = "action_date", nullable = false)
+    private Date actionDate = new Date();
+
+    @Transient
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+    private Date actionDateFrom;
+
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_date", nullable = false)
     private Date createdDate = new Date();
 
@@ -83,5 +94,10 @@ public class Action {
         this.inventory = inventory;
         this.supplier = supplier;
         this.approve = approve;
+    }
+
+    public Action(Employee employee, Dictionary action) {
+        this.employee = employee;
+        this.action = action;
     }
 }

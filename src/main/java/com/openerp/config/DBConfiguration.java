@@ -629,8 +629,6 @@ public class DBConfiguration {
             operations.add(upload);
             Operation reload = new Operation("Yenilə", "reload", "flaticon2-reload");
             operations.add(reload);
-            Operation actions = new Operation("Hərəkətlər", "actions", "flaticon-logout");
-            operations.add(actions);
             Operation search = new Operation("Axtar", "search", "la la-search");
             operations.add(search);
             Operation payrollOperation = new Operation("Əmək haqqı detalları", "payroll", "flaticon-security");
@@ -961,9 +959,6 @@ public class DBConfiguration {
             ModuleOperation reloadModuleOperation2 = new ModuleOperation(workingHourRecord, reload, null);
             moduleOperations.add(reloadModuleOperation2);
 
-            ModuleOperation actionsModuleOperation1 = new ModuleOperation(inventory, actions, null);
-            moduleOperations.add(actionsModuleOperation1);
-
             ModuleOperation searchModuleOperation1 = new ModuleOperation(workingHourRecord, search, null);
             moduleOperations.add(searchModuleOperation1);
 
@@ -1011,6 +1006,8 @@ public class DBConfiguration {
             moduleOperations.add(detailModuleOperation4);
             ModuleOperation detailModuleOperation5 = new ModuleOperation(demonstration, detail, null);
             moduleOperations.add(detailModuleOperation5);
+            ModuleOperation detailModuleOperation6 = new ModuleOperation(inventory, detail, null);
+            moduleOperations.add(detailModuleOperation6);
 
             ModuleOperation changePasswordModuleOperation1 = new ModuleOperation(subModule5, changePassword, null);
             moduleOperations.add(changePasswordModuleOperation1);
@@ -1031,11 +1028,11 @@ public class DBConfiguration {
             moduleOperations.add(filterModuleOperation7);
             ModuleOperation filterModuleOperation8 = new ModuleOperation(illness, filter, null); //ok
             moduleOperations.add(filterModuleOperation8);
-            ModuleOperation filterModuleOperation9 = new ModuleOperation(inventory, filter, null);
+            ModuleOperation filterModuleOperation9 = new ModuleOperation(inventory, filter, null); //ok
             moduleOperations.add(filterModuleOperation9);
             ModuleOperation filterModuleOperation10 = new ModuleOperation(action, filter, null);
             moduleOperations.add(filterModuleOperation10);
-            ModuleOperation filterModuleOperation11 = new ModuleOperation(consolidate, filter, null);
+            ModuleOperation filterModuleOperation11 = new ModuleOperation(consolidate, filter, null);  //ok
             moduleOperations.add(filterModuleOperation11);
             ModuleOperation filterModuleOperation12 = new ModuleOperation(transaction, filter, null); //ok
             moduleOperations.add(filterModuleOperation12);
@@ -1269,8 +1266,6 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, reloadModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, reloadModuleOperation2));
 
-            userModuleOperations.add(new UserModuleOperation(user, actionsModuleOperation1));
-
             userModuleOperations.add(new UserModuleOperation(user, searchModuleOperation1));
 
             userModuleOperations.add(new UserModuleOperation(user, saveModuleOperation1));
@@ -1299,6 +1294,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, detailModuleOperation3));
             userModuleOperations.add(new UserModuleOperation(user, detailModuleOperation4));
             userModuleOperations.add(new UserModuleOperation(user, detailModuleOperation5));
+            userModuleOperations.add(new UserModuleOperation(user, detailModuleOperation6));
 
             userModuleOperations.add(new UserModuleOperation(user, changePasswordModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, changePasswordModuleOperation2));

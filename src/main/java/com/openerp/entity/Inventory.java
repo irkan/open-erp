@@ -23,6 +23,10 @@ public class Inventory {
     private Integer id;
 
     @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "hr_organization_id", nullable = false)
+    private Organization organization;
+
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "admin_dictionary_inventory_group_id")
     private Dictionary group;
 
@@ -39,7 +43,7 @@ public class Inventory {
     private String barcode;
 
     @Column(name = "is_old", nullable = false, columnDefinition="boolean default true")
-    private boolean old = false;
+    private Boolean old = false;
 
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;
@@ -56,11 +60,11 @@ public class Inventory {
     @OneToMany(mappedBy = "inventory")
     private List<Action> actions;
 
-    @JsonIgnore
-    @OneToOne(mappedBy = "inventory", cascade = CascadeType.ALL)
-    private Action action;
+    public Inventory(Boolean active) {
+        this.active = active;
+    }
 
-    public Inventory(Action action) {
-        this.action = action;
+    public Inventory(Organization organization) {
+        this.organization = organization;
     }
 }

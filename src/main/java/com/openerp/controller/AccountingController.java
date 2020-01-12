@@ -37,7 +37,7 @@ public class AccountingController extends SkeletonController {
             model.addAttribute(Constants.EXPENSES, dictionaryRepository.getDictionariesByActiveTrueAndAttr2AndDictionaryType_Attr1("expense", "action"));
 
             if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new Transaction(!canViewAll()?getSessionOrganization():getUserOrganization()));
+                model.addAttribute(Constants.FORM, new Transaction(getSessionOrganization()));
             }
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Transaction(!canViewAll()?getSessionOrganization():null));
@@ -58,7 +58,7 @@ public class AccountingController extends SkeletonController {
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.FINANCING)) {
             if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new Financing(!canViewAll()?getSessionOrganization():getUserOrganization()));
+                model.addAttribute(Constants.FORM, new Financing(getSessionOrganization()));
             }
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Financing(!canViewAll()?getSessionOrganization():null));

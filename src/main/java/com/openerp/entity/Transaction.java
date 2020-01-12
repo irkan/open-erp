@@ -66,7 +66,7 @@ public class Transaction {
     @Column(name = "sum_price", nullable = false, columnDefinition="Decimal(10,2) default 0")
     private Double sumPrice=0d;
 
-    @Column(name = "balance", nullable = false, columnDefinition="Decimal(10,2) default 0")
+    @Column(name = "balance", columnDefinition="Decimal(10,2) default 0")
     private Double balance;
 
     @Column(name = "is_approve", nullable = false, columnDefinition="boolean default true")

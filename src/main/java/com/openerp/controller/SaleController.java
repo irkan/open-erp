@@ -40,7 +40,7 @@ public class SaleController extends SkeletonController {
             model.addAttribute(Constants.GUARANTEES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("guarantee"));
 
             if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new Sales(!canViewAll()?getSessionOrganization():getUserOrganization()));
+                model.addAttribute(Constants.FORM, new Sales(getSessionOrganization()));
             }
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Sales(!canViewAll()?getSessionOrganization():null));
@@ -55,7 +55,7 @@ public class SaleController extends SkeletonController {
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
             model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployeesByPosition(employees, positions));
             if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new Sales(!canViewAll()?getSessionOrganization():getUserOrganization(), true));
+                model.addAttribute(Constants.FORM, new Sales(getSessionOrganization(), true));
             }
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Sales(!canViewAll()?getSessionOrganization():null, true));
@@ -68,7 +68,7 @@ public class SaleController extends SkeletonController {
             model.addAttribute(Constants.PAYMENT_CHANNEL, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-channel"));
             model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployeesByPosition(employees, positions));
             if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new Invoice(!canViewAll()?getSessionOrganization():getUserOrganization()));
+                model.addAttribute(Constants.FORM, new Invoice(getSessionOrganization()));
             }
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Invoice(!canViewAll()?getSessionOrganization():null));
@@ -80,7 +80,7 @@ public class SaleController extends SkeletonController {
             Util.convertedEmployeesByPosition(employees, positions);
             model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployeesByPosition(employees, positions));
             if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new Demonstration(!canViewAll()?getSessionOrganization():getUserOrganization()));
+                model.addAttribute(Constants.FORM, new Demonstration(getSessionOrganization()));
             }
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Demonstration(!canViewAll()?getSessionOrganization():null));

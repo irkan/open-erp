@@ -47,7 +47,7 @@ public class PayrollController extends SkeletonController {
             model.addAttribute(Constants.ADVANCES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("advance"));
             model.addAttribute(Constants.EMPLOYEES, employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization()));
             if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new Advance(!canViewAll()?getSessionOrganization():getUserOrganization()));
+                model.addAttribute(Constants.FORM, new Advance(getSessionOrganization()));
             }
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Advance(!canViewAll()?getSessionOrganization():null));
