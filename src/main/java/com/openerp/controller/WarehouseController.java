@@ -201,7 +201,7 @@ public class WarehouseController extends SkeletonController {
                         action.getAmount(),
                         action.getInventory(),
                         action.getSupplier(),
-                        false);
+                        true);
                 sendAction.setFromOrganization(action.getOrganization());
                 actionRepository.save(sendAction);
 
@@ -213,17 +213,16 @@ public class WarehouseController extends SkeletonController {
                 inventory.setName(actn.getInventory().getName());
                 inventory.setDescription(actn.getInventory().getDescription());
                 inventory.setOld(actn.getInventory().getOld());
+                inventoryRepository.save(inventory);
+
                 Action acceptAction = new Action(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("accept", "action"),
                         action.getOrganization(),
                         action.getAmount(),
-                        action.getInventory(),
+                        inventory,
                         action.getSupplier(),
                         false);
                 acceptAction.setFromOrganization(sendAction.getOrganization());
-                List<Action> actions = new ArrayList<>();
-                actions.add(acceptAction);
-                inventory.setActions(actions);
-                inventoryRepository.save(inventory);
+                actionRepository.save(acceptAction);
 
                 log("warehouse_action", "create/edit", sendAction.getId(), sendAction.toString());
             }
@@ -236,31 +235,26 @@ public class WarehouseController extends SkeletonController {
         if(!binding.hasErrors()){
             Response response = null;
             action = actionRepository.getActionById(action.getId());
-            if (action.getFromOrganization().getId() != getSessionOrganization().getId()){
+            if (action.getOrganization().getId() != getUserOrganization().getId()){
                 List<String> messages = new ArrayList<>();
                 messages.add("Təsdiqləmə əməliyyatı " + action.getFromOrganization().getName() + " tərəfindən edilməlidir!");
                 response = new Response(Constants.STATUS.ERROR, messages);
                 redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, response);
             }
             if(response==null){
-                if(action.getAction().getAttr1().equalsIgnoreCase("send")){
-                    Action acceptAction = new Action(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("accept", "action"),
-                            action.getFromOrganization(),
-                            action.getAmount(),
-                            action.getInventory(),
-                            action.getSupplier(),
-                            true);
-                    acceptAction.setFromOrganization(action.getOrganization());
+                if(action.getAction().getAttr1().equalsIgnoreCase("accept")){
+                    action.setApprove(true);
+                    action.setApproveDate(new Date());
 
-                    actionRepository.save(acceptAction);
-                    log("warehouse_action", "create/edit", acceptAction.getId(), acceptAction.toString());
+                    actionRepository.save(action);
+                    log("warehouse_action", "create/edit", action.getId(), action.toString());
 
-                    String description = acceptAction.getAction().getName()+", "+acceptAction.getSupplier().getName()+" -> "+acceptAction.getOrganization().getName()+", "+acceptAction.getInventory().getName()+", Say: " + acceptAction.getAmount() + " ədəd";
-                    Transaction transaction = new Transaction(acceptAction.getOrganization(), acceptAction.getInventory(), acceptAction.getAction(), description, false, null);
-                    Financing financing = financingRepository.getFinancingByActiveTrueAndInventoryAndOrganization(action.getInventory(), action.getOrganization());
-                    transaction.setAmount(acceptAction.getAmount());
-                    transaction.setPrice(financing.getPrice());
-                    transaction.setCurrency(financing.getCurrency());
+                    String description = action.getAction().getName()+", "+action.getSupplier().getName()+" -> "+action.getOrganization().getName()+", "+action.getInventory().getName()+", Say: " + action.getAmount() + " ədəd";
+                    Transaction transaction = new Transaction(action.getOrganization(), action.getInventory(), action.getAction(), description, false, null);
+                    List<Financing> financings = financingRepository.getFinancingByActiveTrueAndInventory_BarcodeAndOrganizationOrderByIdAsc(action.getInventory().getBarcode(), action.getFromOrganization());
+                    transaction.setAmount(action.getAmount());
+                    transaction.setPrice(financings.size()>0?financings.get(0).getPrice():0);
+                    transaction.setCurrency(financings.size()>0?financings.get(0).getCurrency():"AZN");
                     transaction.setRate(1d);
                     transactionRepository.save(transaction);
                     log("accounting_transaction", "create/edit", transaction.getId(), transaction.toString());

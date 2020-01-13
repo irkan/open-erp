@@ -426,12 +426,14 @@ public class SkeletonController {
     }
 
     void balance(Transaction transaction){
-        Account account = accountRepository.getAccountById(transaction.getAccount().getId());
-        double balance = account.getBalance() + (transaction.getDebt()?transaction.getSumPrice():-1*transaction.getSumPrice());
-        account.setBalance(balance);
-        accountRepository.save(account);
-        transaction.setBalance(account.getBalance());
-        transactionRepository.save(transaction);
+        if(transaction!=null && transaction.getAccount()!=null){
+            Account account = accountRepository.getAccountById(transaction.getAccount().getId());
+            double balance = account.getBalance() + (transaction.getDebt()?transaction.getSumPrice():-1*transaction.getSumPrice());
+            account.setBalance(balance);
+            accountRepository.save(account);
+            transaction.setBalance(account.getBalance());
+            transactionRepository.save(transaction);
+        }
     }
 
     void log(String tableName, String operation, int rowId, String encapsulate){

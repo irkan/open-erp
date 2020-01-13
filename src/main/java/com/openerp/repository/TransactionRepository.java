@@ -14,4 +14,5 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
     List<Transaction> getTransactionsByOrderByApproveDescCreatedDateDesc();
     List<Transaction> getTransactionsByOrganizationOrderByApproveDescCreatedDateDesc(Organization organization);
     List<Transaction> getTransactionsByInventoryAndApproveFalseAndOrganization(Inventory inventory, Organization organization);
+    List<Transaction> getTransactionsByInventoryAndApproveTrueAndOrganization(Inventory inventory, Organization organization);
 }

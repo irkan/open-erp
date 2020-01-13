@@ -16,5 +16,6 @@ public interface FinancingRepository extends JpaRepository<Financing, Integer>, 
     List<Financing> getFinancingsByActiveTrueOrderByIdDesc();
     List<Financing> getFinancingsByActiveTrueAndOrganizationOrderByIdDesc(Organization organization);
     Financing getFinancingById(int id);
+    List<Financing> getFinancingByActiveTrueAndInventory_BarcodeAndOrganizationOrderByIdAsc(String barcode, Organization organization);
     Financing getFinancingByActiveTrueAndInventoryAndOrganization(Inventory inventory, Organization organization);
 }

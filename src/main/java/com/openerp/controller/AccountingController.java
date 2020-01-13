@@ -4,6 +4,7 @@ import com.openerp.domain.Response;
 import com.openerp.entity.*;
 import com.openerp.repository.ActionRepository;
 import com.openerp.repository.InventoryRepository;
+import com.openerp.repository.TransactionRepository;
 import com.openerp.util.Constants;
 import com.openerp.util.Util;
 import org.springframework.data.domain.PageRequest;
@@ -60,7 +61,7 @@ public class AccountingController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new Financing(getSessionOrganization()));
             }
             if(!model.containsAttribute(Constants.FILTER)){
-                model.addAttribute(Constants.FILTER, new Financing(!canViewAll()?getSessionOrganization():null));
+                model.addAttribute(Constants.FILTER, new Financing(!canViewAll()?getSessionOrganization():null, null, null));
             }
             model.addAttribute(Constants.LIST, financingService.findAll((Financing) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
         }
@@ -147,7 +148,7 @@ public class AccountingController extends SkeletonController {
 
                 Financing financing = financingRepository.getFinancingByActiveTrueAndInventoryAndOrganization(trn.getInventory(), trn.getOrganization());
                 Inventory inventory = financing!=null?financing.getInventory():trn.getInventory();
-                Double financingPrice = calculateFinancing(trn, actionRepository, inventory);
+                Double financingPrice = calculateFinancing(trn, actionRepository, inventory, transactionRepository);
                 if (financing != null) {
                     financing.setPrice(financingPrice);
                     financing.setFinancingDate(new Date());
@@ -165,20 +166,33 @@ public class AccountingController extends SkeletonController {
         return mapPost(transaction, binding, redirectAttributes, "/accounting/transaction");
     }
 
-    private static Double calculateFinancing(Transaction transaction, ActionRepository actionRepository, Inventory inventory){
+    private static Double calculateFinancing(Transaction transaction, ActionRepository actionRepository, Inventory inventory, TransactionRepository transactionRepository){
         List<Action> actions = actionRepository.getActionsByActiveTrueAndInventory_ActiveAndOrganizationAndInventory(true, transaction.getOrganization(), inventory);
         int amount=0;
-        for(Action action: actions){
-            if(action.getAction().getAttr1().equalsIgnoreCase("buy")
-            || action.getAction().getAttr1().equalsIgnoreCase("accept"))
-            amount+=action.getAmount();
+        List<Transaction> transactions = transactionRepository.getTransactionsByInventoryAndApproveTrueAndOrganization(transaction.getInventory(), transaction.getOrganization());
+        for(Transaction trn: transactions){
+            if(trn.getApprove()){
+                amount+=trn.getAmount();
+            }
         }
+        amount+=transaction.getAmount();
+       /*
 
-        Transaction parent = transaction.getTransaction()==null?transaction:transaction.getTransaction();
-        double sumPrice = parent.getSumPrice();
-        for(Transaction trn: parent.getChildren()){
+
+
+        for(Action action: actions){
+            if((action.getAction().getAttr1().equalsIgnoreCase("buy")
+            || action.getAction().getAttr1().equalsIgnoreCase("accept"))
+            && action.getApprove())
+
+            amount+=action.getAmount();
+        }*/
+        double sumPrice = 0;
+        for(Transaction trn: transactions){
             sumPrice+=trn.getSumPrice();
         }
+        amount = amount>0?amount:1;
+        sumPrice+=transaction.getAmount()*transaction.getPrice()*transaction.getRate();
         return Double.parseDouble(Util.format(sumPrice/amount));
     }
 }

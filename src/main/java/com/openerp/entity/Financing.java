@@ -67,6 +67,12 @@ public class Financing {
         this.organization = organization;
     }
 
+    public Financing(Organization organization, Double price, @Pattern(regexp = ".{0,50}", message = "Maksimum 5 simvol ola bilər") String currency) {
+        this.organization = organization;
+        this.price = price;
+        this.currency = currency;
+    }
+
     public Financing(Organization organization) {
         this.organization = organization;
     }

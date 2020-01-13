@@ -147,6 +147,9 @@
             <c:if test="${t.action.attr1=='send' or t.action.attr1=='sell'}">
                 style="background-color: #ffeaf1 !important"
             </c:if>
+            <c:if test="${t.action.attr1=='accept' or t.action.attr1=='buy'}">
+                style="background-color: #e6ffe7 !important"
+            </c:if>
         >
             <td>${loop.index + 1}</td>
             <td><c:out value="${t.id}" /></td>
