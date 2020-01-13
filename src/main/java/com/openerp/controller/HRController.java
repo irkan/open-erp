@@ -60,7 +60,7 @@ public class HRController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new NonWorkingDay());
             }
-            model.addAttribute(Constants.LIST, nonWorkingDayService.findAll((NonWorkingDay) model.asMap().get(Constants.FILTER), PageRequest.of(0, 100, Sort.by("id").descending())));
+            model.addAttribute(Constants.LIST, nonWorkingDayService.findAll((NonWorkingDay) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
         } else if (page.equalsIgnoreCase(Constants.ROUTE.SHORTENED_WORKING_DAY)){
             model.addAttribute(Constants.IDENTIFIERS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("identifier"));
             model.addAttribute(Constants.SHORTENED_TIMES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("shortened-time"));
@@ -70,7 +70,7 @@ public class HRController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new ShortenedWorkingDay());
             }
-            model.addAttribute(Constants.LIST, shortenedWorkingDayService.findAll((ShortenedWorkingDay) model.asMap().get(Constants.FILTER), PageRequest.of(0, 100, Sort.by("id").descending())));
+            model.addAttribute(Constants.LIST, shortenedWorkingDayService.findAll((ShortenedWorkingDay) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
         } else if (page.equalsIgnoreCase(Constants.ROUTE.WORK_ATTENDANCE)){
 
         } else if (page.equalsIgnoreCase(Constants.ROUTE.BUSINESS_TRIP)){
@@ -82,7 +82,7 @@ public class HRController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new BusinessTrip(!canViewAll()?getSessionOrganization():null));
             }
-            model.addAttribute(Constants.LIST, businessTripService.findAll((BusinessTrip) model.asMap().get(Constants.FILTER), PageRequest.of(0, 100, Sort.by("id").descending())));
+            model.addAttribute(Constants.LIST, businessTripService.findAll((BusinessTrip) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
         } else if (page.equalsIgnoreCase(Constants.ROUTE.VACATION)){
             model.addAttribute(Constants.EMPLOYEES, employeeRepository.getEmployeesByContractEndDateIsNull());
             model.addAttribute(Constants.IDENTIFIERS, dictionaryRepository.getDictionariesByActiveTrueAndAttr2AndDictionaryType_Attr1("vacation", "identifier"));
@@ -92,7 +92,7 @@ public class HRController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Vacation(!canViewAll()?getSessionOrganization():null));
             }
-            model.addAttribute(Constants.LIST, vacationService.findAll((Vacation) model.asMap().get(Constants.FILTER), PageRequest.of(0, 100, Sort.by("id").descending())));
+            model.addAttribute(Constants.LIST, vacationService.findAll((Vacation) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
         } else if (page.equalsIgnoreCase(Constants.ROUTE.ILLNESS)){
             model.addAttribute(Constants.EMPLOYEES, employeeRepository.getEmployeesByContractEndDateIsNull());
             model.addAttribute(Constants.IDENTIFIERS, dictionaryRepository.getDictionariesByActiveTrueAndAttr2AndDictionaryType_Attr1("illness", "identifier"));
@@ -102,7 +102,7 @@ public class HRController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Illness(!canViewAll()?getSessionOrganization():null));
             }
-            model.addAttribute(Constants.LIST, illnessService.findAll((Illness) model.asMap().get(Constants.FILTER), PageRequest.of(0, 100, Sort.by("id").descending())));
+            model.addAttribute(Constants.LIST, illnessService.findAll((Illness) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
         }
         return "layout";
     }

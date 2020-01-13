@@ -12,6 +12,105 @@
 <%@ taglib prefix="utl" uri="/WEB-INF/tld/Util.tld"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <div class="kt-container  kt-grid__item kt-grid__item--fluid">
+    <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
+    <c:set var="filter" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'filter')}"/>
+    <c:if test="${filter.status}">
+        <div class="accordion  accordion-toggle-arrow mb-2" id="accordionFilter">
+            <div class="card" style="border-radius: 4px;">
+                <div class="card-header">
+                    <div class="card-title w-100" data-toggle="collapse" data-target="#filterContent" aria-expanded="true" aria-controls="collapseOne4">
+                        <div class="row w-100">
+                            <div class="col-3">
+                                <i class="<c:out value="${filter.object.icon}"/>"></i>
+                                <c:out value="${list.totalElements>0?list.totalElements:0} sətr"/>
+                            </div>
+                            <div class="col-6 text-center" style="letter-spacing: 10px;">
+                                <c:out value="${filter.object.name}"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="filterContent" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionFilter">
+                    <div class="card-body">
+                        <form:form modelAttribute="filter" id="filter" method="post" action="/warehouse/action/filter">
+                            <form:hidden path="organization" />
+                            <form:hidden path="inventory.id" />
+                            <form:hidden path="inventory.active" htmlEscape="true" value="1" />
+                            <div class="row">
+                                <div class="col-md-11">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="id">KOD</form:label>
+                                                <form:input path="id" cssClass="form-control" placeholder="######"/>
+                                                <form:errors path="id" cssClass="control-label alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="actionDateFrom">Tarixdən</form:label>
+                                                <div class="input-group date" >
+                                                    <form:input path="actionDateFrom" autocomplete="off" date="date" cssClass="form-control datetimepicker-element" placeholder="dd.MM.yyyy HH:mm"/>
+                                                    <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="la la-calendar"></i>
+                                    </span>
+                                                    </div>
+                                                </div>
+                                                <form:errors path="actionDateFrom" cssClass="control-label alert-danger" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="actionDate">Tarixədək</form:label>
+                                                <div class="input-group date" >
+                                                    <form:input path="actionDate" autocomplete="off" date="date" cssClass="form-control datetimepicker-element" placeholder="dd.MM.yyyy HH:mm"/>
+                                                    <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="la la-calendar"></i>
+                                    </span>
+                                                    </div>
+                                                </div>
+                                                <form:errors path="actionDate" cssClass="control-label alert-danger" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2" style="padding-top: 30px;">
+                                            <div class="form-group">
+                                                <label class="kt-checkbox kt-checkbox--brand">
+                                                    <form:checkbox path="approve"/> Təsdiq edilənlər
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <c:if test="${delete.status}">
+                                            <div class="col-md-2" style="padding-top: 30px;">
+                                                <div class="form-group">
+                                                    <label class="kt-checkbox kt-checkbox--brand">
+                                                        <form:checkbox path="active"/> Aktual məlumat
+                                                        <span></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </c:if>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 text-right">
+                                    <div class="form-group">
+                                        <a href="#" onclick="location.reload();" class="btn btn-danger btn-elevate btn-icon-sm btn-block mb-2" style="padding: 0.35rem 0.6rem;">
+                                            <i class="la la-trash"></i> Sil
+                                        </a>
+                                        <a href="#" onclick="submit($('#filter'))" class="btn btn-warning btn-elevate btn-icon-sm btn-block mt-2" style="padding: 0.35rem 0.6rem">
+                                            <i class="la la-search"></i> Axtar
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form:form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </c:if>
     <div class="row">
         <div class="col-lg-12">
             <div class="kt-portlet kt-portlet--mobile">
@@ -19,6 +118,12 @@
 
 <c:choose>
     <c:when test="${not empty list}">
+        <c:set var="return1" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'return')}"/>
+        <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
+        <c:set var="approve" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
+        <c:set var="transfer" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'transfer')}"/>
+        <c:set var="consolidate" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'consolidate')}"/>
+        <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
 <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
     <thead>
     <tr>
@@ -36,7 +141,7 @@
     </tr>
     </thead>
     <tbody>
-    <c:forEach var="t" items="${list}" varStatus="loop">
+    <c:forEach var="t" items="${list.content}" varStatus="loop">
 
         <tr data="<c:out value="${utl:toJson(t)}" />"
             <c:if test="${t.action.attr1=='send' or t.action.attr1=='sell'}">
@@ -55,62 +160,41 @@
             <td><c:out value="${t.employee.person.fullName}" /></td>
             <td nowrap class="text-center">
                 <c:if test="${!(t.action.attr1 eq 'sell') and !(t.action.attr1 eq 'send' and t.approve)}">
-                    <c:set var="return1" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'return')}"/>
-                    <c:choose>
-                        <c:when test="${return1.status and t.action.attr1 eq 'consolidate'}">
-                            <a href="javascript:returnOperation($('#form-return'), '<c:out value="${utl:toJson(t)}" />', 'return-modal');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${return1.object.name}"/>">
-                                <i class="<c:out value="${return1.object.icon}"/>"></i>
-                            </a>
-                        </c:when>
-                    </c:choose>
-                    <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
-                    <c:choose>
-                        <c:when test="${view.status}">
-                            <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
-                                <i class="la <c:out value="${view.object.icon}"/>"></i>
-                            </a>
-                        </c:when>
-                    </c:choose>
-                    <c:set var="approve" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
-                    <c:choose>
-                        <c:when test="${approve.status and !t.approve}">
-                            <a href="javascript:approve($('#transfer-approve-form'), $('#transfer-approve-modal'), '<c:out value="${t.id}" />', '<c:out value="${t.inventory.id}" />', '<c:out value="${t.inventory.name}" />', '<c:out value="${t.inventory.barcode}" />', '<c:out value="${t.organization.name}" />', '<c:out value="${t.action.name}" />', '<c:out value="${t.supplier.name}" />', '<c:out value="${t.amount}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${approve.object.name}"/>">
-                                <i class="<c:out value="${approve.object.icon}"/>"></i>
-                            </a>
-                        </c:when>
-                    </c:choose>
-                    <c:set var="transfer" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'transfer')}"/>
-                    <c:choose>
-                        <c:when test="${transfer.status and t.approve and !(t.action.attr1 eq 'consolidate') and t.amount gt 0}">
-                            <a href="javascript:transfer($('#form'), '<c:out value="${utl:toJson(t)}" />', 'transfer-modal-operation');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
-                                <i class="<c:out value="${transfer.object.icon}"/>"></i>
-                            </a>
-                        </c:when>
-                    </c:choose>
-                    <c:set var="consolidate" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'consolidate')}"/>
-                    <c:choose>
-                        <c:when test="${consolidate.status and t.approve and !(t.action.attr1 eq 'consolidate') and t.amount gt 0}">
-                            <a href="javascript:consolidate($('#form-consolidate'), '<c:out value="${utl:toJson(t)}" />', 'consolidate-modal');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${consolidate.object.name}"/>">
-                                <i class="<c:out value="${consolidate.object.icon}"/>"></i>
-                            </a>
-                        </c:when>
-                    </c:choose>
-                    <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
-                    <c:choose>
-                        <c:when test="${edit.status}">
-                            <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
-                                <i class="<c:out value="${edit.object.icon}"/>"></i>
-                            </a>
-                        </c:when>
-                    </c:choose>
-                    <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
-                    <c:choose>
-                        <c:when test="${delete.status}">
-                            <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.action.name}" /> / <c:out value="${t.organization.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
-                                <i class="<c:out value="${delete.object.icon}"/>"></i>
-                            </a>
-                        </c:when>
-                    </c:choose>
+                    <c:if test="${return1.status and t.action.attr1 eq 'consolidate'}">
+                        <a href="javascript:returnOperation($('#form-return'), '<c:out value="${utl:toJson(t)}" />', 'return-modal');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${return1.object.name}"/>">
+                            <i class="<c:out value="${return1.object.icon}"/>"></i>
+                        </a>
+                    </c:if>
+                    <c:if test="${view.status}">
+                        <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
+                            <i class="la <c:out value="${view.object.icon}"/>"></i>
+                        </a>
+                    </c:if>
+                    <c:if test="${approve.status and !t.approve}">
+                        <a href="javascript:approve($('#transfer-approve-form'), $('#transfer-approve-modal'), '<c:out value="${t.id}" />', '<c:out value="${t.inventory.id}" />', '<c:out value="${t.inventory.name}" />', '<c:out value="${t.inventory.barcode}" />', '<c:out value="${t.organization.name}" />', '<c:out value="${t.action.name}" />', '<c:out value="${t.supplier.name}" />', '<c:out value="${t.amount}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${approve.object.name}"/>">
+                            <i class="<c:out value="${approve.object.icon}"/>"></i>
+                        </a>
+                    </c:if>
+                    <c:if test="${transfer.status and t.approve and !(t.action.attr1 eq 'consolidate') and t.amount gt 0}">
+                        <a href="javascript:transfer($('#form'), '<c:out value="${utl:toJson(t)}" />', 'transfer-modal-operation');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
+                            <i class="<c:out value="${transfer.object.icon}"/>"></i>
+                        </a>
+                    </c:if>
+                    <c:if test="${consolidate.status and t.approve and !(t.action.attr1 eq 'consolidate') and t.amount gt 0}">
+                        <a href="javascript:consolidate($('#form-consolidate'), '<c:out value="${utl:toJson(t)}" />', 'consolidate-modal');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${consolidate.object.name}"/>">
+                            <i class="<c:out value="${consolidate.object.icon}"/>"></i>
+                        </a>
+                    </c:if>
+                    <c:if test="${edit.status}">
+                        <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                            <i class="<c:out value="${edit.object.icon}"/>"></i>
+                        </a>
+                    </c:if>
+                    <c:if test="${delete.status}">
+                        <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.action.name}" /> / <c:out value="${t.organization.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
+                            <i class="<c:out value="${delete.object.icon}"/>"></i>
+                        </a>
+                    </c:if>
                 </c:if>
             </td>
         </tr>

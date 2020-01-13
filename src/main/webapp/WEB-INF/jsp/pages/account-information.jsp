@@ -41,7 +41,7 @@
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-xl-3 col-lg-3 col-form-label">İstifadəçi adı</label>
-                                            <div class="col-lg-9 col-xl-6">
+                                            <div class="col-lg-3 col-xl-3">
                                                 <div class="kt-spinner kt-spinner--sm kt-spinner--success kt-spinner--right kt-spinner--input">
                                                     <input class="form-control" type="text" value="<c:out value="${sessionScope.user.username}"/>" readonly/>
                                                 </div>
@@ -59,6 +59,12 @@
                                                         </option>
                                                     </c:forEach>
                                                 </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-xl-3 col-lg-3 col-form-label">Sətr sayı</label>
+                                            <div class="col-lg-2 col-xl-2">
+                                                <input class="form-control" type="text" value="<c:out value="${sessionScope.user.userDetail.paginationSize}"/>"/>
                                             </div>
                                         </div>
                                         <div class="form-group form-group-last row">

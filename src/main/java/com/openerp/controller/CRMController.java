@@ -36,7 +36,7 @@ public class CRMController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Customer(!canViewAll()?getSessionOrganization():null));
             }
-            model.addAttribute(Constants.LIST, customerService.findAll((Customer) model.asMap().get(Constants.FILTER), PageRequest.of(0, 100, Sort.by("id").descending())));
+            model.addAttribute(Constants.LIST, customerService.findAll((Customer) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
         }
         return "layout";
     }

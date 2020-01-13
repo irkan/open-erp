@@ -46,9 +46,9 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="inventory.barcode">Barkod</form:label>
-                                                <form:input path="inventory.barcode" cssClass="form-control" placeholder="Barkodu daxil edin" />
-                                                <form:errors path="inventory.barcode" cssClass="alert-danger"/>
+                                                <form:label path="description">Açıqlama</form:label>
+                                                <form:input path="description" cssClass="form-control" placeholder="Açıqlamanı daxil edin" />
+                                                <form:errors path="description" cssClass="alert-danger"/>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -118,7 +118,7 @@
                                         <div class="col-md-2" style="padding-top: 30px;">
                                             <div class="form-group">
                                                 <label class="kt-checkbox kt-checkbox--brand">
-                                                    <form:checkbox path="approve"/> Təsdiq edilməyənlər
+                                                    <form:checkbox path="approve"/> Təsdiq edilənlər
                                                     <span></span>
                                                 </label>
                                             </div>

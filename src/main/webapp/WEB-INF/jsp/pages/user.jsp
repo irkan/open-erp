@@ -30,6 +30,7 @@
                             <th>Flial</th>
                             <th>Email xəbərdarlıq</th>
                             <th>Sms xəbərdarlıq</th>
+                            <th>Sətr sayı</th>
                             <th>Status</th>
                             <th>Əməliyyat</th>
                         </tr>
@@ -66,6 +67,7 @@
                                         </td>
                                     </c:otherwise>
                                 </c:choose>
+                                <td><c:out value="${t.userDetail.paginationSize}" /></td>
                                 <c:choose>
                                     <c:when test="${t.active}">
                                         <td>
@@ -135,18 +137,24 @@
                         </form:select>
                         <form:errors path="employee" cssClass="control-label alert-danger"/>
                     </div>
-                    <div class="form-group">
-                        <form:label path="username">İstifadəçi adı</form:label>
-                        <form:input path="username" cssClass="form-control" placeholder="İstifadəçi adını daxil edin" />
-                        <form:errors path="username" cssClass="control-label alert alert-danger" />
-                    </div>
-                    <div class="form-group">
-                        <form:label path="password">Şifrə</form:label>
-                        <form:password path="password" cssClass="form-control" placeholder="Şifrəni daxil edin" />
-                        <form:errors path="password" cssClass="control-label alert alert-danger" />
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <form:label path="username">İstifadəçi adı</form:label>
+                                <form:input path="username" cssClass="form-control" placeholder="İstifadəçi adını daxil edin" />
+                                <form:errors path="username" cssClass="control-label alert alert-danger" />
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <form:label path="password">Şifrə</form:label>
+                                <form:password path="password" cssClass="form-control" placeholder="Şifrəni daxil edin" />
+                                <form:errors path="password" cssClass="control-label alert alert-danger" />
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-6">
                             <div class="form-group">
                                 <label class="kt-checkbox kt-checkbox--brand">
                                     <form:checkbox path="userDetail.emailNotification"/> Email xəbərdarlıq
@@ -154,7 +162,7 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-6">
                             <div class="form-group">
                                 <label class="kt-checkbox kt-checkbox--brand">
                                     <form:checkbox path="userDetail.smsNotification"/> Sms xəbərdarlıq
@@ -163,21 +171,32 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <form:label path="userDetail.language">Sistemin dili</form:label>
-                        <div>
-                            <select name="userDetail.language" id="userDetail.language" class="selectpicker form-control" data-width="fit">
-                                <c:forEach var="t" items="${languages}" varStatus="loop">
-                                    <option value="<c:out value="${t.attr1}"/>"
-                                            data-content='<span class="flag-icon kt-header__topbar-icon">
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="form-group">
+                                <form:label path="userDetail.language">Sistemin dili</form:label>
+                                <div>
+                                    <select name="userDetail.language" id="userDetail.language" class="selectpicker form-control" data-width="fit">
+                                        <c:forEach var="t" items="${languages}" varStatus="loop">
+                                            <option value="<c:out value="${t.attr1}"/>"
+                                                    data-content='<span class="flag-icon kt-header__topbar-icon">
                                         <img style="height:20px;" src="<c:out value="/assets/media/flags/${t.attr2}" />"
                                         alt="<c:out value="${t.attr1}"/>"></span> <c:out value="${t.name}"/>'>
-                                        <c:out value="${t.name}"/>
-                                    </option>
-                                </c:forEach>
-                            </select>
+                                                <c:out value="${t.name}"/>
+                                            </option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                                <form:errors path="userDetail.language" cssClass="control-label alert alert-danger" />
+                            </div>
                         </div>
-                        <form:errors path="userDetail.language" cssClass="control-label alert alert-danger" />
+                        <div class="col-4">
+                            <div class="form-group">
+                                <form:label path="userDetail.paginationSize">Sətr sayı</form:label>
+                                <form:input path="userDetail.paginationSize" cssClass="form-control" placeholder="Məlumat" />
+                                <form:errors path="userDetail.paginationSize" cssClass="control-label alert alert-danger" />
+                            </div>
+                        </div>
                     </div>
                 </form:form>
             </div>

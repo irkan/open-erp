@@ -63,7 +63,7 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="barcode">Ad</form:label>
+                                                <form:label path="barcode">Barkod</form:label>
                                                 <form:input path="barcode" cssClass="form-control" placeholder="Barkodu daxil edin"/>
                                                 <form:errors path="barcode" cssClass="alert-danger control-label"/>
                                             </div>
@@ -75,48 +75,40 @@
                                                 <form:errors path="description" cssClass="alert-danger control-label"/>
                                             </div>
                                         </div>
-                                        <%--<div class="col-md-2">
-                                            <div class="form-group">
-                                                <form:label path="actionDateFrom">Tarixdən</form:label>
-                                                <div class="input-group date" >
-                                                    <form:input path="actionDateFrom" autocomplete="off" date="date" cssClass="form-control datetimepicker-element" placeholder="dd.MM.yyyy HH:mm"/>
-                                                    <div class="input-group-append">
-                                    <span class="input-group-text">
-                                        <i class="la la-calendar"></i>
-                                    </span>
-                                                    </div>
-                                                </div>
-                                                <form:errors path="actionDateFrom" cssClass="control-label alert-danger" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <form:label path="actionDate">Tarixədək</form:label>
-                                                <div class="input-group date" >
-                                                    <form:input path="actionDate" autocomplete="off" date="date" cssClass="form-control datetimepicker-element" placeholder="dd.MM.yyyy HH:mm"/>
-                                                    <div class="input-group-append">
-                                    <span class="input-group-text">
-                                        <i class="la la-calendar"></i>
-                                    </span>
-                                                    </div>
-                                                </div>
-                                                <form:errors path="actionDate" cssClass="control-label alert-danger" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2" style="padding-top: 30px;">
-                                            <div class="form-group">
-                                                <label class="kt-checkbox kt-checkbox--brand">
-                                                    <form:checkbox path="approve"/> Təsdiq edilənlər
-                                                    <span></span>
-                                                </label>
-                                            </div>
-                                        </div>--%>
                                         <div class="col-md-2" style="padding-top: 30px;">
                                             <div class="form-group">
                                                 <label class="kt-checkbox kt-checkbox--brand">
                                                     <form:checkbox path="old"/> İşlənmiş
                                                     <span></span>
                                                 </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="inventoryDateFrom">Tarixdən</form:label>
+                                                <div class="input-group date" >
+                                                    <form:input path="inventoryDateFrom" autocomplete="off" date="date" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
+                                                    <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="la la-calendar"></i>
+                                    </span>
+                                                    </div>
+                                                </div>
+                                                <form:errors path="inventoryDateFrom" cssClass="control-label alert-danger" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="inventoryDate">Tarixədək</form:label>
+                                                <div class="input-group date" >
+                                                    <form:input path="inventoryDate" autocomplete="off" date="date" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
+                                                    <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="la la-calendar"></i>
+                                    </span>
+                                                    </div>
+                                                </div>
+                                                <form:errors path="inventoryDate" cssClass="control-label alert-danger" />
                                             </div>
                                         </div>
                                         <c:if test="${delete.status}">

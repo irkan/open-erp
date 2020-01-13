@@ -257,11 +257,15 @@ public class SkeletonController {
         return (User) session.getAttribute(Constants.USER);
     }
 
-    boolean isHeadOffice() {
-        if(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getOrganization()==null){
-            return true;
+    int paginationSize() {
+        try{
+            if(getSessionUser().getUserDetail().getPaginationSize()>0){
+                return getSessionUser().getUserDetail().getPaginationSize();
+            }
+        } catch (Exception e){
+            e.printStackTrace();
         }
-        return false;
+        return 100;
     }
 
     Organization getUserOrganization() {

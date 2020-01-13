@@ -45,7 +45,7 @@ public class SaleController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Sales(!canViewAll()?getSessionOrganization():null));
             }
-            Page<Sales> sales = salesService.findAll((Sales) model.asMap().get(Constants.FILTER), PageRequest.of(0, 100, Sort.by("id").descending()));
+            Page<Sales> sales = salesService.findAll((Sales) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
             for(Sales sales1: sales){
                 sales1.setSalesInventories(salesInventoryRepository.getSalesInventoriesByActiveTrueAndSales(sales1));
             }
@@ -60,7 +60,7 @@ public class SaleController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Sales(!canViewAll()?getSessionOrganization():null, true));
             }
-            model.addAttribute(Constants.LIST, salesService.findAll((Sales) model.asMap().get(Constants.FILTER), PageRequest.of(0, 100, Sort.by("id").descending())));
+            model.addAttribute(Constants.LIST, salesService.findAll((Sales) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
         } else if (page.equalsIgnoreCase(Constants.ROUTE.INVOICE)){
             List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization());
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
@@ -73,7 +73,7 @@ public class SaleController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Invoice(!canViewAll()?getSessionOrganization():null));
             }
-            model.addAttribute(Constants.LIST, invoiceService.findAll((Invoice) model.asMap().get(Constants.FILTER), PageRequest.of(0, 100, Sort.by("id").descending())));
+            model.addAttribute(Constants.LIST, invoiceService.findAll((Invoice) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
         } else if (page.equalsIgnoreCase(Constants.ROUTE.DEMONSTRATION)){
             List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization());
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
@@ -85,7 +85,7 @@ public class SaleController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Demonstration(!canViewAll()?getSessionOrganization():null));
             }
-            model.addAttribute(Constants.LIST, demonstrationService.findAll((Demonstration) model.asMap().get(Constants.FILTER), PageRequest.of(0, 100, Sort.by("id").descending())));
+            model.addAttribute(Constants.LIST, demonstrationService.findAll((Demonstration) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
         } else if (page.equalsIgnoreCase(Constants.ROUTE.DEMONSTRATION_DETAIL)){
 
         } else if(page.equalsIgnoreCase(Constants.ROUTE.CALCULATOR)){

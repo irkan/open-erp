@@ -28,6 +28,9 @@ public class UserDetail {
     @Column(name = "language")
     private String language;
 
+    @Column(name = "pagination_size")
+    private Integer paginationSize = 100;
+
     @Column(name = "is_administrator", nullable = false, columnDefinition="boolean default false")
     private Boolean administrator = false;
 

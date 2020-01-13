@@ -100,4 +100,9 @@ public class Action {
         this.employee = employee;
         this.action = action;
     }
+
+    public Action(Inventory inventory, Organization organization) {
+        this.inventory = inventory;
+        this.organization = organization;
+    }
 }

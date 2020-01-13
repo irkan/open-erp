@@ -104,8 +104,16 @@
                                     <form:form modelAttribute="form" id="form" method="post" action="/route/sub/profile/personal-information" cssClass="kt-form kt-form--label-right">
                                         <form:hidden path="id"/>
                                         <div class="form-group row">
-                                            <form:label path="mobilePhone" cssClass="col-xl-2 col-lg-2 col-form-label">Mobil nömrə</form:label>
-                                            <div class="col-lg-4 col-xl-4">
+                                            <form:label path="email" cssClass="col-xl-2 col-lg-2 col-form-label">Email</form:label>
+                                            <div class="col-lg-3 col-xl-3">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-at"></i></span></div>
+                                                    <form:input path="email" cssClass="form-control" placeholder="example@example.com" aria-describedby="basic-addon1" />
+                                                </div>
+                                                <form:errors path="email" cssClass="control-label alert-danger"/>
+                                            </div>
+                                            <form:label path="mobilePhone" cssClass="col-xl-1 col-lg-1 col-form-label">Mobil nömrə</form:label>
+                                            <div class="col-lg-2 col-xl-2">
                                                 <div class="input-group">
                                                     <div class="input-group-prepend"><span class="input-group-text"><i class="la la-phone"></i></span></div>
                                                     <form:input path="mobilePhone" cssClass="form-control" placeholder="505505050" aria-describedby="basic-addon1" />
@@ -113,22 +121,12 @@
                                                 <form:errors path="mobilePhone" cssClass="control-label alert-danger"/>
                                             </div>
                                             <form:label path="homePhone" cssClass="col-xl-2 col-lg-2 col-form-label">Şəhər nömrəsi</form:label>
-                                            <div class="col-lg-4 col-xl-4">
+                                            <div class="col-lg-2 col-xl-2">
                                                 <div class="input-group">
                                                     <div class="input-group-prepend"><span class="input-group-text"><i class="la la-phone"></i></span></div>
                                                     <form:input path="homePhone" cssClass="form-control" placeholder="125505050" aria-describedby="basic-addon1" />
                                                 </div>
                                                 <form:errors path="homePhone" cssClass="control-label alert-danger"/>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <form:label path="email" cssClass="col-xl-2 col-lg-2 col-form-label">Email</form:label>
-                                            <div class="col-lg-10 col-xl-10">
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-at"></i></span></div>
-                                                    <form:input path="email" cssClass="form-control" placeholder="example@example.com" aria-describedby="basic-addon1" />
-                                                </div>
-                                                <form:errors path="email" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
                                         <div class="form-group row">

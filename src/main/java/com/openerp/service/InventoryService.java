@@ -51,6 +51,12 @@ public class InventoryService {
                 if(inventory.getDescription()!=null && !inventory.getDescription().isEmpty()) {
                     predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("description"), "%"+inventory.getDescription()+"%")));
                 }
+                if(inventory.getInventoryDateFrom()!=null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.greaterThanOrEqualTo(root.get("inventoryDate"), inventory.getInventoryDateFrom())));
+                }
+                if(inventory.getInventoryDate()!=null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.lessThanOrEqualTo(root.get("inventoryDate"), inventory.getInventoryDate())));
+                }
                 return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
             }
         }, pageable);

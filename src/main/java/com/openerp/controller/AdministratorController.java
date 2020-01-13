@@ -104,13 +104,13 @@ public class AdministratorController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Notification(!canViewAll()?getSessionOrganization():null));
             }
-            model.addAttribute(Constants.LIST, notificationService.findAll((Notification) model.asMap().get(Constants.FILTER), PageRequest.of(0, 100, Sort.by("id").descending())));
+            model.addAttribute(Constants.LIST, notificationService.findAll((Notification) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
         } else if (page.equalsIgnoreCase(Constants.ROUTE.LOG)){
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Log());
             }
             Sort.by("id").descending();
-            model.addAttribute(Constants.LIST, logService.findAll((Log) model.asMap().get(Constants.FILTER), PageRequest.of(0, 100, Sort.by("id").descending())));
+            model.addAttribute(Constants.LIST, logService.findAll((Log) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Log());
             }

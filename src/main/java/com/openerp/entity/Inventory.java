@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
@@ -39,11 +40,21 @@ public class Inventory {
     private String description;
 
     @Pattern(regexp=".{0,50}",message="Maksimum 50 simvol ola bilər")
-    @Column(name = "barcode", unique = true, nullable = false)
+    @Column(name = "barcode", nullable = false)
     private String barcode;
 
     @Column(name = "is_old", nullable = false, columnDefinition="boolean default true")
     private Boolean old = false;
+
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    @Column(name = "inventory_date", nullable = false)
+    private Date inventoryDate = new Date();
+
+    @Transient
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    private Date inventoryDateFrom;
 
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;
@@ -62,6 +73,15 @@ public class Inventory {
 
     public Inventory(Boolean active) {
         this.active = active;
+    }
+
+    public Inventory(Integer id, Boolean active) {
+        this.id = id;
+        this.active = active;
+    }
+
+    public Inventory(Integer id) {
+        this.id = id;
     }
 
     public Inventory(Organization organization) {

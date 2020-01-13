@@ -36,8 +36,8 @@ public class TransactionService {
                 if(transaction.getOrganization()!=null && transaction.getOrganization().getId()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("organization"), transaction.getOrganization().getId())));
                 }
-                if(transaction.getInventory()!=null && transaction.getInventory().getBarcode()!=null && !transaction.getInventory().getBarcode().isEmpty()){
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("inventory").get("barcode"), "%"+transaction.getInventory().getBarcode()+"%")));
+                if(transaction.getDescription()!=null && !transaction.getInventory().getDescription().isEmpty()){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("description"), "%"+transaction.getDescription()+"%")));
                 }
                 if(transaction.getCurrency()!=null && !transaction.getCurrency().isEmpty()) {
                     predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("currency"), "%"+transaction.getCurrency()+"%")));

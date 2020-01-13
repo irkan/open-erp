@@ -30,6 +30,9 @@ public class ActionService {
                 if(action.getId()!=null) {
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("id"), action.getId())));
                 }
+                if(action.getInventory()!=null && action.getInventory().getId()!=null) {
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("inventory"), action.getInventory().getId())));
+                }
                 if(action.getActive()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("active"), action.getActive())));
                 }

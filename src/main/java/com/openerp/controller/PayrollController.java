@@ -52,7 +52,7 @@ public class PayrollController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Advance(!canViewAll()?getSessionOrganization():null));
             }
-            model.addAttribute(Constants.LIST, advanceService.findAll((Advance) model.asMap().get(Constants.FILTER), PageRequest.of(0, 100, Sort.by("id").descending())));
+            model.addAttribute(Constants.LIST, advanceService.findAll((Advance) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
         } else if (page.equalsIgnoreCase(Constants.ROUTE.SALARY)){
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Salary(new WorkingHourRecord(getSessionOrganization())));
