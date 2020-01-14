@@ -1165,9 +1165,11 @@
                         required: true
                     },
                     'saleDate': {
-                        required: true
+                        required: true,
+                        date: true
                     },
-                    'birthday': {
+                    'customer.person.birthday': {
+                        dateISO: true,
                         required: true
                     },
                     'customer.person.contact.address': {

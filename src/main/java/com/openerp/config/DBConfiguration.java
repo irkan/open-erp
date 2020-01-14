@@ -621,6 +621,8 @@ public class DBConfiguration {
             operations.add(delete);
             Operation export = new Operation("İxrac", "export", "flaticon2-print");
             operations.add(export);
+            Operation filter = new Operation("Filter", "filter", "la la-filter");
+            operations.add(filter);
             Operation approve = new Operation("Təsdiq", "approve", "flaticon2-check-mark");
             operations.add(approve);
             Operation cancel = new Operation("Təsdiqi ləğv", "cancel", "flaticon2-cancel-music");
@@ -649,8 +651,6 @@ public class DBConfiguration {
             operations.add(detail);
             Operation changePassword = new Operation("Şifrəni dəyişdir", "change-password", "flaticon-lock");
             operations.add(changePassword);
-            Operation filter = new Operation("Filter", "filter", "la la-filter");
-            operations.add(filter);
 
             operationRepository.saveAll(operations);
 
@@ -712,7 +712,6 @@ public class DBConfiguration {
             moduleOperations.add(createModuleOperation31);
             ModuleOperation createModuleOperation32 = new ModuleOperation(service, create, null);
             moduleOperations.add(createModuleOperation32);
-
 
             ModuleOperation editModuleOperation1 = new ModuleOperation(subModule1, edit, null);
             moduleOperations.add(editModuleOperation1);
@@ -1249,6 +1248,25 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation26));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation27));
 
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation1));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation2));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation3));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation4));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation6));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation7));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation8));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation9));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation10));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation11));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation12));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation13));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation14));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation15));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation16));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation17));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation18));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation19));
+
             userModuleOperations.add(new UserModuleOperation(user, approveModuleOperation3));
             userModuleOperations.add(new UserModuleOperation(user, approveModuleOperation4));
             userModuleOperations.add(new UserModuleOperation(user, approveModuleOperation5));
@@ -1294,25 +1312,6 @@ public class DBConfiguration {
 
             userModuleOperations.add(new UserModuleOperation(user, changePasswordModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, changePasswordModuleOperation2));
-
-            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation1));
-            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation2));
-            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation3));
-            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation4));
-            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation6));
-            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation7));
-            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation8));
-            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation9));
-            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation10));
-            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation11));
-            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation12));
-            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation13));
-            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation14));
-            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation15));
-            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation16));
-            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation17));
-            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation18));
-            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation19));
 
             userModuleOperationRepository.saveAll(userModuleOperations);
 

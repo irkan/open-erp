@@ -1,3 +1,4 @@
+"use strict";
 /*!
  * jQuery Validation Plugin v1.19.0
  *

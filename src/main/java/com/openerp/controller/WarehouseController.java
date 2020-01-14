@@ -303,7 +303,7 @@ public class WarehouseController extends SkeletonController {
 
     @PostMapping(value = "/action/filter")
     public String postActionFilter(@ModelAttribute(Constants.FILTER) @Validated Action action, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
-        return mapFilter(action, binding, redirectAttributes, "/action/consolidate");
+        return mapFilter(action, binding, redirectAttributes, "/warehouse/action");
     }
 
     @PostMapping(value = "/action/return")

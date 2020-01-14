@@ -147,8 +147,7 @@ public class AccountingController extends SkeletonController {
                 }
 
                 Financing financing = financingRepository.getFinancingByActiveTrueAndInventoryAndOrganization(trn.getInventory(), trn.getOrganization());
-                Inventory inventory = financing!=null?financing.getInventory():trn.getInventory();
-                Double financingPrice = calculateFinancing(trn, actionRepository, inventory, transactionRepository);
+                Double financingPrice = calculateFinancing(trn, transactionRepository);
                 if (financing != null) {
                     financing.setPrice(financingPrice);
                     financing.setFinancingDate(new Date());
@@ -166,33 +165,21 @@ public class AccountingController extends SkeletonController {
         return mapPost(transaction, binding, redirectAttributes, "/accounting/transaction");
     }
 
-    private static Double calculateFinancing(Transaction transaction, ActionRepository actionRepository, Inventory inventory, TransactionRepository transactionRepository){
-        List<Action> actions = actionRepository.getActionsByActiveTrueAndInventory_ActiveAndOrganizationAndInventory(true, transaction.getOrganization(), inventory);
+    private static Double calculateFinancing(Transaction transaction, TransactionRepository transactionRepository){
         int amount=0;
         List<Transaction> transactions = transactionRepository.getTransactionsByInventoryAndApproveTrueAndOrganization(transaction.getInventory(), transaction.getOrganization());
         for(Transaction trn: transactions){
-            if(trn.getApprove()){
+            if(trn.getApprove() &&
+                    (trn.getAction().getAttr1().equalsIgnoreCase("accept") ||
+                            trn.getAction().getAttr1().equalsIgnoreCase("buy"))){
                 amount+=trn.getAmount();
             }
         }
-        amount+=transaction.getAmount();
-       /*
-
-
-
-        for(Action action: actions){
-            if((action.getAction().getAttr1().equalsIgnoreCase("buy")
-            || action.getAction().getAttr1().equalsIgnoreCase("accept"))
-            && action.getApprove())
-
-            amount+=action.getAmount();
-        }*/
         double sumPrice = 0;
         for(Transaction trn: transactions){
             sumPrice+=trn.getSumPrice();
         }
         amount = amount>0?amount:1;
-        sumPrice+=transaction.getAmount()*transaction.getPrice()*transaction.getRate();
         return Double.parseDouble(Util.format(sumPrice/amount));
     }
 }

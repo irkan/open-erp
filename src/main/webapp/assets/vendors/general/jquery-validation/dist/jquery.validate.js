@@ -368,6 +368,7 @@ $.extend( $.validator, {
 		url: "Please enter a valid URL.",
 		date: "Please enter a valid date.",
 		dateISO: "Please enter a valid date (ISO).",
+		dateCustom: "Please enter a valid date (ISO).",
 		number: "Please enter a valid number.",
 		digits: "Please enter only digits.",
 		equalTo: "Please enter the same value again.",
@@ -1444,13 +1445,17 @@ $.extend( $.validator, {
 					}
 				}
 
-				return this.optional( element ) || !/Invalid|NaN/.test( new Date( value ).toString() );
+				return this.optional( element ) || /^([0-2][0-9]|(3)[0-1])(\.)(((0)[0-9])|((1)[0-2]))(\.)\d{4}$/.test( value );
 			};
 		}() ),
 
 		// https://jqueryvalidation.org/dateISO-method/
 		dateISO: function( value, element ) {
-			return this.optional( element ) || /^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/.test( value );
+			return this.optional( element ) || /^([0-2][0-9]|(3)[0-1])(\.)(((0)[0-9])|((1)[0-2]))(\.)\d{4}$/.test( value );
+		},
+
+		dateCustom: function( value, element ) {
+			return this.optional( element ) || /^([0-2][0-9]|(3)[0-1])(\.)(((0)[0-9])|((1)[0-2]))(\.)\d{4}$/.test( value );
 		},
 
 		// https://jqueryvalidation.org/number-method/

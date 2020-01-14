@@ -50,13 +50,13 @@ public class Advance {
     @Column(name = "description")
     private String description;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     @Column(name = "advance_date")
     private Date advanceDate=new Date();
 
     @Transient
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date advanceDateFrom;
 
@@ -64,7 +64,7 @@ public class Advance {
     private Boolean approve = false;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
     @Column(name = "approve_date")
     private Date approveDate = new Date();
 
@@ -94,6 +94,11 @@ public class Advance {
 
     public Advance(Organization organization) {
         this.organization = organization;;
+    }
+
+    public Advance(Organization organization, Double payed) {
+        this.organization = organization;
+        this.payed = payed;
     }
 
 

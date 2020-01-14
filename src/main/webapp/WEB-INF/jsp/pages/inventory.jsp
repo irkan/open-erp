@@ -165,7 +165,7 @@
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${list.content}" varStatus="loop">
-                                    <tr data="<c:out value="${utl:toJson(t)}" />">
+                                    <tr data="<c:out value="${t.id}" />">
                                         <td>${loop.index + 1}</td>
                                         <td><c:out value="${t.id}" /></td>
                                         <td><c:out value="${t.group.name}" /></td>
@@ -348,6 +348,13 @@
         $("#barcodeTarget").html("").show().barcode(value, btype, settings);
     }
 
+    <c:if test="${detail.status}">
+    $('#group_table tbody').on('dblclick', 'tr', function () {
+        swal.showLoading();
+        location.href = '/warehouse/action/'+ $(this).attr('data');
+        window.reload();
+    });
+    </c:if>
 
 </script>
 
