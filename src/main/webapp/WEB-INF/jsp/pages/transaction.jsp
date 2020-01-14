@@ -190,13 +190,23 @@
                                         <td>
                                             <div style="width: 75px;">
                                             <c:choose>
-                                                <c:when test="${t.debt and t.sumPrice!=0}">
+                                                <c:when test="${t.debt and t.sumPrice!=0 and t.approve}">
                                                     <span class="kt-font-bold kt-font-success"><c:out value="${t.sumPrice}" /></span>
                                                     <span class="kt-font-bold kt-font-success font-italic font-size-10px">AZN</span>
+                                                    <i class="la la-arrow-down kt-font-bold kt-font-success"></i>
                                                 </c:when>
-                                                <c:when test="${!t.debt and t.sumPrice!=0}">
+                                                <c:when test="${!t.debt and t.sumPrice!=0 and t.approve}">
                                                     <span class="kt-font-bold kt-font-danger">-<c:out value="${t.sumPrice}" /></span>
                                                     <span class="kt-font-bold kt-font-danger font-italic font-size-10px">AZN</span>
+                                                    <i class="la la-arrow-up kt-font-bold kt-font-danger" style="font-weight: bold;"></i>
+                                                </c:when>
+                                                <c:when test="${t.debt and t.sumPrice!=0 and !t.approve}">
+                                                    <span class="kt-font-bold"><c:out value="${t.sumPrice}" /></span>
+                                                    <span class="kt-font-bold font-italic font-size-10px">AZN</span>
+                                                </c:when>
+                                                <c:when test="${!t.debt and t.sumPrice!=0 and !t.approve}">
+                                                    <span class="kt-font-bold">-<c:out value="${t.sumPrice}" /></span>
+                                                    <span class="kt-font-bold font-italic font-size-10px">AZN</span>
                                                 </c:when>
                                                 <c:otherwise>
                                                     <span class="kt-font-bold"><c:out value="${t.sumPrice}" /></span>

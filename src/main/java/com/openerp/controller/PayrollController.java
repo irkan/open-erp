@@ -31,9 +31,6 @@ public class PayrollController extends SkeletonController {
     public String route(Model model, @PathVariable("page") String page, @PathVariable("data") Optional<String> data, RedirectAttributes redirectAttributes) throws Exception {
         if (page.equalsIgnoreCase(Constants.ROUTE.WORKING_HOUR_RECORD)){
             model.addAttribute(Constants.IDENTIFIERS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("identifier"));
-            if(!model.containsAttribute(Constants.YEAR_MONTH)){
-                model.addAttribute(Constants.YEAR_MONTH, DateUtility.getYearMonth(new Date()));
-            }
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new WorkingHourRecord(getSessionOrganization()));
             }
@@ -224,8 +221,26 @@ public class PayrollController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             advance.setOrganization(getSessionOrganization());
+            advance.setApprove(false);
+            advance.setApproveDate(new Date());
             advanceRepository.save(advance);
             log("payroll_advance", "create/edit", advance.getId(), advance.toString());
+            Transaction transaction = new Transaction();
+            transaction.setApprove(false);
+            transaction.setAmount(null);
+            transaction.setDebt(!advance.getDebt());
+            transaction.setOrganization(advance.getOrganization());
+            transaction.setPrice(advance.getPayed());
+            transaction.setCurrency("AZN");
+            transaction.setRate(getRate(transaction.getCurrency()));
+            double sumPrice = (transaction.getAmount()==null?1:transaction.getAmount()) * transaction.getPrice() * transaction.getRate();
+            transaction.setSumPrice(sumPrice);
+            transaction.setAction(advance.getAdvance());
+            transaction.setDescription("Avans ödənişi, Kod: "+advance.getId() + " -> "
+                    + advance.getEmployee().getPerson().getFullName()
+            );
+            transactionRepository.save(transaction);
+            log("accounting_transaction", "create/edit", transaction.getId(), transaction.toString());
         }
         return mapPost(advance, binding, redirectAttributes);
     }
@@ -241,8 +256,7 @@ public class PayrollController extends SkeletonController {
             Advance adv = advanceRepository.getAdvanceById(advance.getId());
             adv.setDescription(advance.getDescription());
             adv.setPayed(advance.getPayed());
-            adv.setApprove(true);
-            adv.setApproveDate(new Date());
+            adv.setApprove(false);
             advanceRepository.save(adv);
             log("payroll_advance", "create/edit", adv.getId(), adv.toString());
         }

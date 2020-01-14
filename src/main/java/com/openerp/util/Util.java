@@ -549,4 +549,11 @@ public class Util {
         }
         return digitInWord;
     }
+
+    public static int amountChecker(Integer amount){
+        if(amount!=null && amount!=0){
+            return amount;
+        }
+        return 1;
+    }
 }

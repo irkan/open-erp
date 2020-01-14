@@ -36,12 +36,6 @@ public class AdvanceService {
                 if(advance.getOrganization()!=null && advance.getOrganization().getId()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("organization"), advance.getOrganization().getId())));
                 }
-                if(advance.getApprove()){
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("approve"), advance.getApprove())));
-                }
-                if(advance.getDebt()){
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("debt"), advance.getDebt())));
-                }
                 if(advance.getEmployee()!=null && advance.getEmployee().getId()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("employee"), advance.getEmployee().getId())));
                 }

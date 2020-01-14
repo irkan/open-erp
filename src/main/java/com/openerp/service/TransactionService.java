@@ -36,7 +36,7 @@ public class TransactionService {
                 if(transaction.getOrganization()!=null && transaction.getOrganization().getId()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("organization"), transaction.getOrganization().getId())));
                 }
-                if(transaction.getDescription()!=null && !transaction.getInventory().getDescription().isEmpty()){
+                if(transaction.getDescription()!=null && !transaction.getDescription().isEmpty()){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("description"), "%"+transaction.getDescription()+"%")));
                 }
                 if(transaction.getCurrency()!=null && !transaction.getCurrency().isEmpty()) {

@@ -1,5 +1,6 @@
 package com.openerp.entity;
 
+import com.github.javafaker.Bool;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -69,7 +70,7 @@ public class Advance {
     private Date approveDate = new Date();
 
     @Column(name = "is_debt", nullable = false, columnDefinition="boolean default true")
-    private Boolean debt = false;
+    private Boolean debt = true;
 
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;
@@ -90,6 +91,17 @@ public class Advance {
         this.formula = formula;
         this.advanceDate = advanceDate;
         this.payed = payed;
+    }
+
+    public Advance(Dictionary advance, Employee employee, Organization organization, @Pattern(regexp = ".{0,250}", message = "Maksimum 50 simvol ola bilər") String description, @Pattern(regexp = ".{0,250}", message = "Maksimum 50 simvol ola bilər") String formula, Date advanceDate, double payed, Boolean debt) {
+        this.advance = advance;
+        this.employee = employee;
+        this.organization = organization;
+        this.description = description;
+        this.formula = formula;
+        this.advanceDate = advanceDate;
+        this.payed = payed;
+        this.debt = debt;
     }
 
     public Advance(Organization organization) {

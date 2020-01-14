@@ -190,6 +190,17 @@ public class DeleteController extends SkeletonController {
             log.setActive(false);
             logRepository.save(log);
             log("admin_log", "delete", log.getId(), log.toString());
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.DEMONSTRATION)){
+            Demonstration demonstration = demonstrationRepository.getDemonstrationById(Integer.parseInt(id));
+            demonstration.setActive(false);
+            demonstrationRepository.save(demonstration);
+            log("sale_demonstration", "delete", demonstration.getId(), demonstration.toString());
+            List<EmployeePayrollDetail> employeeDetails = demonstration.getEmployee().getEmployeePayrollDetails();
+            String value = Util.findEmployeeDetail(employeeDetails, "{demonstration}");
+            double price = demonstration.getAmount()*Double.parseDouble(value);
+            Advance advance = new Advance(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("bonus-demonstration-advance", "advance"), demonstration.getEmployee(), demonstration.getOrganization(), "Nümayişin silinməsinə görə kredit: Nümayiş №" + demonstration.getId(), "", demonstration.getDemonstrateDate(), price, false);
+            advanceRepository.save(advance);
+            log("payroll_advance", "create/edit", advance.getId(), advance.toString(), "Nümayişin silinməsinə görə kredit avans verilmişdir");
         }
         return "redirect:/"+parent+"/"+path;
     }

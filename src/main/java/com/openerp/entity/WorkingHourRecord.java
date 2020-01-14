@@ -1,6 +1,7 @@
 package com.openerp.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.openerp.util.DateUtility;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,7 +24,7 @@ public class WorkingHourRecord {
     private Integer id;
 
     @Column(name = "monthYear")
-    private String monthYear=String.valueOf((new Date()).getYear()+1900)+"-"+String.valueOf((new Date()).getMonth()+1);
+    private String monthYear= DateUtility.getYearMonth(new Date()); //String.valueOf((new Date()).getYear()+1900)+"-"+String.valueOf((new Date()).getMonth()+1);
 
     @Column(name = "month")
     private int month=(new Date()).getMonth()+1;

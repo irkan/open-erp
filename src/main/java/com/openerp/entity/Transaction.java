@@ -43,8 +43,8 @@ public class Transaction {
     @JoinColumn(name = "accounting_account_id")
     private Account account;
 
-    @Column(name = "amount", nullable = false)
-    private Integer amount=1;
+    @Column(name = "amount")
+    private Integer amount;
 
     @Column(name = "is_debt", nullable = false, columnDefinition="boolean default true")
     private Boolean debt = false;

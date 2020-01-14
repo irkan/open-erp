@@ -129,7 +129,7 @@ public class AccountingController extends SkeletonController {
                 trn.setPrice(transaction.getPrice());
                 trn.setCurrency(transaction.getCurrency());
                 trn.setRate(getRate(transaction.getCurrency()));
-                double sumPrice = trn.getAmount() * transaction.getPrice() * trn.getRate();
+                double sumPrice = Util.amountChecker(trn.getAmount()) * transaction.getPrice() * trn.getRate();
                 trn.setSumPrice(sumPrice);
                 trn.setAccount(transaction.getAccount());
                 transactionRepository.save(trn);
@@ -146,16 +146,18 @@ public class AccountingController extends SkeletonController {
                     }
                 }
 
-                Financing financing = financingRepository.getFinancingByActiveTrueAndInventoryAndOrganization(trn.getInventory(), trn.getOrganization());
-                Double financingPrice = calculateFinancing(trn, transactionRepository);
-                if (financing != null) {
-                    financing.setPrice(financingPrice);
-                    financing.setFinancingDate(new Date());
-                } else {
-                    financing = new Financing(trn.getInventory(), financingPrice, trn.getOrganization());
+                if(trn.getInventory()!=null){
+                    Financing financing = financingRepository.getFinancingByActiveTrueAndInventoryAndOrganization(trn.getInventory(), trn.getOrganization());
+                    Double financingPrice = calculateFinancing(trn, transactionRepository);
+                    if (financing != null) {
+                        financing.setPrice(financingPrice);
+                        financing.setFinancingDate(new Date());
+                    } else {
+                        financing = new Financing(trn.getInventory(), financingPrice, trn.getOrganization());
+                    }
+                    financingRepository.save(financing);
+                    log("accounting_financing", "approve", financing.getId(), financing.toString());
                 }
-                financingRepository.save(financing);
-                log("accounting_financing", "approve", financing.getId(), financing.toString());
             } else {
                 List<String> messages = new ArrayList<>();
                 messages.add("Təsdiqləmə əməliyyatı " + Util.getUserBranch(trn.getOrganization()).getName() + " tərəfindən edilməlidir!");

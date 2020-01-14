@@ -74,16 +74,6 @@
                                                 <form:errors path="payed" cssClass="alert-danger control-label"/>
                                             </div>
                                         </div>
-                                        <div class="col-md-2" style="padding-top: 30px;">
-                                            <div class="form-group">
-                                                <label class="kt-checkbox kt-checkbox--brand">
-                                                    <form:checkbox path="approve"/> Təsdiq edilmiş
-                                                    <span></span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <form:label path="advanceDateFrom">Tarixdən</form:label>
@@ -126,14 +116,6 @@
                                                 </div>
                                             </div>
                                         </c:if>
-                                        <div class="col-md-2" style="padding-top: 30px;">
-                                            <div class="form-group">
-                                                <label class="kt-checkbox kt-checkbox--brand">
-                                                    <form:checkbox path="debt"/> Debt
-                                                    <span></span>
-                                                </label>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-1 text-right">
@@ -160,7 +142,9 @@
 
 <c:choose>
     <c:when test="${not empty list}">
-<table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+        <c:set var="approve" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
+        <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
+        <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
     <thead>
     <tr>
         <th>№</th>
@@ -208,40 +192,21 @@
                 </c:choose>
             </th>
             <td nowrap class="text-center">
-                <c:set var="approve" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
-                <c:choose>
-                    <c:when test="${approve.status}">
-                        <c:if test="${!t.approve}">
-                            <a href="javascript:approve($('#advance-approve-form'), $('#advance-approve-modal'), '<c:out value="${t.id}" />', '<c:out value="${t.description}" />', '<c:out value="${t.payed}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${approve.object.name}"/>">
-                                <i class="<c:out value="${approve.object.icon}"/>"></i>
-                            </a>
-                        </c:if>
-                    </c:when>
-                </c:choose>
-                <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
-                <c:choose>
-                    <c:when test="${view.status}">
-                        <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
-                            <i class="la <c:out value="${view.object.icon}"/>"></i>
-                        </a>
-                    </c:when>
-                </c:choose>
-                <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
-                <c:choose>
-                    <c:when test="${edit.status}">
-                        <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
-                            <i class="<c:out value="${edit.object.icon}"/>"></i>
-                        </a>
-                    </c:when>
-                </c:choose>
-                <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
-                <c:choose>
-                    <c:when test="${delete.status}">
-                        <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.description}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
-                            <i class="<c:out value="${delete.object.icon}"/>"></i>
-                        </a>
-                    </c:when>
-                </c:choose>
+                <c:if test="${approve.status && !t.approve}">
+                    <a href="javascript:approve($('#advance-approve-form'), $('#advance-approve-modal'), '<c:out value="${t.id}" />', '<c:out value="${t.description}" />', '<c:out value="${t.payed}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${approve.object.name}"/>">
+                        <i class="<c:out value="${approve.object.icon}"/>"></i>
+                    </a>
+                </c:if>
+                <c:if test="${edit.status && !t.approve}">
+                    <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                        <i class="<c:out value="${edit.object.icon}"/>"></i>
+                    </a>
+                </c:if>
+                <c:if test="${delete.status}">
+                    <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.description}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
+                        <i class="<c:out value="${delete.object.icon}"/>"></i>
+                    </a>
+                </c:if>
             </td>
         </tr>
     </c:forEach>
@@ -300,7 +265,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <form:label path="payed">Məbləğ</form:label>
                                 <div class="input-group" >
@@ -314,7 +279,7 @@
                                 <form:errors path="payed" cssClass="alert-danger control-label"/>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-5">
                             <div class="form-group">
                                 <form:label path="advanceDate">Avans tarixi</form:label>
                                 <div class="input-group date" >
@@ -326,6 +291,14 @@
                                     </div>
                                 </div>
                                 <form:errors path="advanceDate" cssClass="control-label alert-danger" />
+                            </div>
+                        </div>
+                        <div class="col-md-3" style="padding-top: 30px;">
+                            <div class="form-group">
+                                <label class="kt-checkbox kt-checkbox--brand">
+                                    <form:checkbox path="debt"/> Ödənişdirmi?
+                                    <span></span>
+                                </label>
                             </div>
                         </div>
                     </div>
