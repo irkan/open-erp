@@ -36,6 +36,9 @@ public class DemonstrationService {
                 if(demonstration.getOrganization()!=null && demonstration.getOrganization().getId()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("organization"), demonstration.getOrganization().getId())));
                 }
+                if(demonstration.getEmployee()!=null && demonstration.getEmployee().getId()!=null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("employee"), demonstration.getEmployee().getId())));
+                }
                 if(demonstration.getDemonstrateDateFrom()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.greaterThanOrEqualTo(root.get("demonstrateDate"), demonstration.getDemonstrateDateFrom())));
                 }

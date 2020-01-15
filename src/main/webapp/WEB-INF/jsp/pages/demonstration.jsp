@@ -47,8 +47,15 @@
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <form:label path="employee">Əməkdaş</form:label>
-                                                <form:input path="employee" cssClass="form-control" placeholder="Əməkdaşın kodu" />
-                                                <form:errors path="employee" cssClass="alert-danger"/>
+                                                <form:select  path="employee.id" cssClass="custom-select form-control select2-single" multiple="single">
+                                                    <form:option value=""></form:option>
+                                                    <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
+                                                        <optgroup label="${itemGroup.key}">
+                                                            <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
+                                                        </optgroup>
+                                                    </c:forEach>
+                                                </form:select>
+                                                <form:errors path="employee" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -125,7 +132,6 @@
                 <div class="kt-portlet__body">
                     <c:choose>
                         <c:when test="${not empty list}">
-                            <c:set var="detail" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'detail')}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="group_table">
                                 <thead>
                                 <tr>
@@ -150,11 +156,6 @@
                                          <td><c:out value="${t.description}" /></td>
                                          <td><fmt:formatDate value = "${t.createdDate}" pattern = "dd.MM.yyyy HH:mm" /></td>
                                          <td nowrap class="text-center">
-                                             <c:if test="${detail.status}">
-                                                 <a href="/sale/demonstration-detail/<c:out value="${t.employee.id}"/>" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${detail.object.name}"/>">
-                                                     <i class="la <c:out value="${detail.object.icon}"/>"></i>
-                                                 </a>
-                                             </c:if>
                                              <c:if test="${delete.status}">
                                                  <a href="javascript:deleteData('<c:out value="${t.id}" />', '<fmt:formatDate value = "${t.demonstrateDate}" pattern = "dd.MM.yyyy" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
                                                      <i class="<c:out value="${delete.object.icon}"/>"></i>

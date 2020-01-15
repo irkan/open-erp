@@ -91,4 +91,10 @@ public class Invoice {
     public Invoice(Organization organization) {
         this.organization = organization;
     }
+
+    public Invoice(Organization organization, Double price, Boolean approve) {
+        this.organization = organization;
+        this.price = price;
+        this.approve = approve;
+    }
 }

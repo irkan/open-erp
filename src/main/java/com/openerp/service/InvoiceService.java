@@ -36,9 +36,6 @@ public class InvoiceService {
                 if(invoice.getActive()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("active"), invoice.getActive())));
                 }
-                if(invoice.getAdvance()){
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("advance"), invoice.getAdvance())));
-                }
                 if(invoice.getApprove()){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("approve"), invoice.getApprove())));
                 }

@@ -65,4 +65,9 @@ public class Demonstration {
     public Demonstration(Organization organization) {
         this.organization = organization;
     }
+
+    public Demonstration(Organization organization, Employee employee) {
+        this.organization = organization;
+        this.employee = employee;
+    }
 }

@@ -8,7 +8,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 @Entity
@@ -31,7 +30,7 @@ public class Schedule {
 
     @DecimalMin(value = "0", message = "Minimum 0 olmalıdır")
     @Column(name = "amount", nullable = false, columnDefinition="Decimal(10,2) default 0")
-    private double amount=0d;
+    private Double amount=0d;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "schedule_date")
@@ -43,9 +42,9 @@ public class Schedule {
 
     @DecimalMin(value = "0", message = "Minimum 0 olmalıdır")
     @Column(name = "payable_amount", nullable = false, columnDefinition="Decimal(10,2) default 0")
-    private double payableAmount=0d;
+    private Double payableAmount=0d;
 
-    public Schedule(Payment payment, @DecimalMin(value = "0", message = "Minimum 0 olmalıdır") double amount, Date scheduleDate) {
+    public Schedule(Payment payment, @DecimalMin(value = "0", message = "Minimum 0 olmalıdır") Double amount, Date scheduleDate) {
         this.payment = payment;
         this.amount = amount;
         this.scheduleDate = scheduleDate;

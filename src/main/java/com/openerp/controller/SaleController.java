@@ -50,6 +50,8 @@ public class SaleController extends SkeletonController {
                 sales1.setSalesInventories(salesInventoryRepository.getSalesInventoriesByActiveTrueAndSales(sales1));
             }
             model.addAttribute(Constants.LIST, sales);
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.SALES_DETAIL)){
+            model.addAttribute(Constants.OBJECT, salesRepository.getSalesByIdAndActiveTrue(Integer.parseInt(data.get())));
         } else if(page.equalsIgnoreCase(Constants.ROUTE.SERVICE)){
             List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization());
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
@@ -65,13 +67,13 @@ public class SaleController extends SkeletonController {
             List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization());
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
             Util.convertedEmployeesByPosition(employees, positions);
-            model.addAttribute(Constants.PAYMENT_CHANNEL, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-channel"));
             model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployeesByPosition(employees, positions));
+            model.addAttribute(Constants.PAYMENT_CHANNEL, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-channel"));
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Invoice(getSessionOrganization()));
             }
             if(!model.containsAttribute(Constants.FILTER)){
-                model.addAttribute(Constants.FILTER, new Invoice(!canViewAll()?getSessionOrganization():null));
+                model.addAttribute(Constants.FILTER, new Invoice(!canViewAll()?getSessionOrganization():null, null, false));
             }
             model.addAttribute(Constants.LIST, invoiceService.findAll((Invoice) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
         } else if (page.equalsIgnoreCase(Constants.ROUTE.DEMONSTRATION)){
@@ -86,8 +88,6 @@ public class SaleController extends SkeletonController {
                 model.addAttribute(Constants.FILTER, new Demonstration(!canViewAll()?getSessionOrganization():null));
             }
             model.addAttribute(Constants.LIST, demonstrationService.findAll((Demonstration) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
-        } else if (page.equalsIgnoreCase(Constants.ROUTE.DEMONSTRATION_DETAIL)){
-
         } else if(page.equalsIgnoreCase(Constants.ROUTE.CALCULATOR)){
             model.addAttribute(Constants.SALE_PRICES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("sale-price"));
             model.addAttribute(Constants.PAYMENT_SCHEDULES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-schedule"));

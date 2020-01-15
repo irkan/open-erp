@@ -41,8 +41,11 @@ public class PayrollController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new PayrollConfiguration());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.ADVANCE)){
+            List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization());
+            List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
+            Util.convertedEmployeesByPosition(employees, positions);
+            model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployeesByPosition(employees, positions));
             model.addAttribute(Constants.ADVANCES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("advance"));
-            model.addAttribute(Constants.EMPLOYEES, employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization()));
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Advance(getSessionOrganization()));
             }
@@ -225,22 +228,6 @@ public class PayrollController extends SkeletonController {
             advance.setApproveDate(new Date());
             advanceRepository.save(advance);
             log("payroll_advance", "create/edit", advance.getId(), advance.toString());
-            Transaction transaction = new Transaction();
-            transaction.setApprove(false);
-            transaction.setAmount(null);
-            transaction.setDebt(!advance.getDebt());
-            transaction.setOrganization(advance.getOrganization());
-            transaction.setPrice(advance.getPayed());
-            transaction.setCurrency("AZN");
-            transaction.setRate(getRate(transaction.getCurrency()));
-            double sumPrice = (transaction.getAmount()==null?1:transaction.getAmount()) * transaction.getPrice() * transaction.getRate();
-            transaction.setSumPrice(sumPrice);
-            transaction.setAction(advance.getAdvance());
-            transaction.setDescription("Avans ödənişi, Kod: "+advance.getId() + " -> "
-                    + advance.getEmployee().getPerson().getFullName()
-            );
-            transactionRepository.save(transaction);
-            log("accounting_transaction", "create/edit", transaction.getId(), transaction.toString());
         }
         return mapPost(advance, binding, redirectAttributes);
     }
@@ -256,9 +243,26 @@ public class PayrollController extends SkeletonController {
             Advance adv = advanceRepository.getAdvanceById(advance.getId());
             adv.setDescription(advance.getDescription());
             adv.setPayed(advance.getPayed());
-            adv.setApprove(false);
+            adv.setApprove(true);
+            adv.setApproveDate(new Date());
             advanceRepository.save(adv);
             log("payroll_advance", "create/edit", adv.getId(), adv.toString());
+            Transaction transaction = new Transaction();
+            transaction.setApprove(false);
+            transaction.setAmount(null);
+            transaction.setDebt(!adv.getDebt());
+            transaction.setOrganization(adv.getOrganization());
+            transaction.setPrice(adv.getPayed());
+            transaction.setCurrency("AZN");
+            transaction.setRate(getRate(transaction.getCurrency()));
+            double sumPrice = Util.amountChecker(transaction.getAmount()) * transaction.getPrice() * transaction.getRate();
+            transaction.setSumPrice(sumPrice);
+            transaction.setAction(adv.getAdvance());
+            transaction.setDescription(transaction.getAction().getName() + ": avans ödənişi, Kod: "+adv.getId() + " -> "
+                    + adv.getEmployee().getPerson().getFullName()
+            );
+            transactionRepository.save(transaction);
+            log("accounting_transaction", "create/edit", transaction.getId(), transaction.toString());
         }
         return mapPost(advance, binding, redirectAttributes, "/payroll/advance");
     }

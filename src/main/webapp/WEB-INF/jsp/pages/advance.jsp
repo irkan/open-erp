@@ -56,8 +56,15 @@
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <form:label path="employee">Əməkdaş</form:label>
-                                                <form:input path="employee" cssClass="form-control" placeholder="Əməkdaşın kodu" />
-                                                <form:errors path="employee" cssClass="alert-danger"/>
+                                                <form:select  path="employee.id" cssClass="custom-select form-control select2-single" multiple="single">
+                                                    <form:option value=""></form:option>
+                                                    <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
+                                                        <optgroup label="${itemGroup.key}">
+                                                            <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
+                                                        </optgroup>
+                                                    </c:forEach>
+                                                </form:select>
+                                                <form:errors path="employee" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -249,7 +256,11 @@
                             <div class="form-group">
                                 <form:label path="employee">Əməkdaş</form:label>
                                 <form:select  path="employee" cssClass="custom-select form-control">
-                                    <form:options items="${employees}" itemLabel="person.fullName" itemValue="id" />
+                                    <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
+                                        <optgroup label="${itemGroup.key}">
+                                            <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
+                                        </optgroup>
+                                    </c:forEach>
                                 </form:select>
                                 <form:errors path="employee" cssClass="control-label alert alert-danger" />
                             </div>
@@ -318,7 +329,7 @@
 </div>
 
 <div class="modal fade" id="advance-approve-modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"></h5>

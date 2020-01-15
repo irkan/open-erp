@@ -55,7 +55,7 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="saleDateFrom">Satış tarixdən</form:label>
+                                                <form:label path="saleDateFrom">Satış tarixindən</form:label>
                                                 <div class="input-group date">
                                                     <form:input path="saleDateFrom" autocomplete="off"
                                                                 cssClass="form-control datepicker-element" date="date"
@@ -201,56 +201,20 @@
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="group_table">
                                 <thead>
                                 <tr>
-                                    <th>Əməliyyat</th>
                                     <th>Kod</th>
-                                    <th>Satış tarixi</th>
                                     <th>İnventar</th>
+                                    <th>Satış tarixi</th>
                                     <th>Müştəri</th>
                                     <th>Qiymət</th>
                                     <th>Qrafik</th>
-                                    <th>Ödəniş</th>
                                     <th>Satış komandası</th>
+                                    <th>Əməliyyat</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${list.content}" varStatus="loop">
                                     <tr data="<c:out value="${utl:toJson(t)}" />">
-                                        <td nowrap class="text-center">
-                                            <span class="dropdown">
-                                                <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
-                                                  <i class="la la-ellipsis-h"></i>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <c:if test="${view.status}">
-                                                    <a href="/collect/payment-regulator-note/<c:out value="${t.payment.id}"/>" class="dropdown-item" title="Qeydlər">
-                                                        <i class="la <c:out value="${view.object.icon}"/>"></i> Qeydlər
-                                                    </a>
-                                                    </c:if>
-                                                    <c:if test="${detail.status}">
-                                                    <a href="/collect/payment-regulator-detail/<c:out value="${t.payment.id}"/>" class="dropdown-item" title="<c:out value="${detail.object.name}"/>">
-                                                        <i class="la <c:out value="${detail.object.icon}"/>"></i> <c:out value="${detail.object.name}"/>
-                                                    </a>
-                                                    </c:if>
-                                                    <c:if test="${edit.status}">
-                                                    <a href="javascript:edit($('#kt_form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="dropdown-item" title="<c:out value="${edit.object.name}"/>">
-                                                        <i class="<c:out value="${edit.object.icon}"/>"></i> <c:out value="${edit.object.name}"/>
-                                                    </a>
-                                                    </c:if>
-                                                    <c:if test="${delete.status}">
-                                                    <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.salesInventories.get(0).inventory.name}" /> <br/> <c:out value="${t.customer.person.fullName}" />');" class="dropdown-item" title="<c:out value="${delete.object.name}"/>">
-                                                        <i class="<c:out value="${delete.object.icon}"/>"></i> <c:out value="${delete.object.name}"/>
-                                                    </a>
-                                                    </c:if>
-                                                </div>
-                                            </span>
-                                            <c:if test="${export.status}">
-                                                <a href="javascript:exportContract($('#form-export-contract'), '<c:out value="${t.id}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Hesab-fakturanın çapı">
-                                                    <i class="<c:out value="${export.object.icon}"/>"></i>
-                                                </a>
-                                            </c:if>
-                                        </td>
-                                        <td><c:out value="${t.id}" /></td>
-                                        <td><fmt:formatDate value = "${t.saleDate}" pattern = "dd.MM.yyyy" /></td>
+                                        <td style="<c:out value="${t.payment.cash?'background-color: #e6ffe7 !important':'background-color: #ffeaf1 !important'}"/>"><c:out value="${t.id}" /></td>
                                         <th>
                                             <c:forEach var="p" items="${t.salesInventories}" varStatus="lp">
                                                 <c:out value="${lp.index+1}" />.
@@ -259,6 +223,7 @@
                                                 <c:out value="${p.inventory.description}" /><br/>
                                             </c:forEach>
                                         </th>
+                                        <td><fmt:formatDate value = "${t.saleDate}" pattern = "dd.MM.yyyy" /></td>
                                         <th>
                                             <c:out value="${t.customer.person.fullName}" /><br/>
                                             Müştəri kodu: <c:out value="${t.customer.id}" />
@@ -309,20 +274,44 @@
                                             Zəmanət bitir: <fmt:formatDate value = "${t.guaranteeExpire}" pattern = "dd.MM.yyyy" />
                                         </td>
                                         <td>
-                                            <c:choose>
-                                                <c:when test="${t.payment.cash}">
-                                                    <span class="kt-font-bold kt-font-success">Nəğd</span>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <span class="kt-font-bold kt-font-danger">Kredit</span>
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </td>
-                                        <td>
                                             Konsul: <c:out value="${t.console.person.fullName}" /><br/>
                                             Ven lider: <c:out value="${t.vanLeader.person.fullName}" /><br/>
                                             Diller: <c:out value="${t.dealer.person.fullName}" /><br/>
                                             Canvasser: <c:out value="${t.canavasser.person.fullName}" />
+                                        </td>
+                                        <td nowrap class="text-center">
+                                            <span class="dropdown">
+                                                <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
+                                                  <i class="la la-ellipsis-h"></i>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <c:if test="${view.status}">
+                                                    <a href="/collect/payment-regulator-note/<c:out value="${t.payment.id}"/>" class="dropdown-item" title="Qeydlər">
+                                                        <i class="la <c:out value="${view.object.icon}"/>"></i> Qeydlər
+                                                    </a>
+                                                    </c:if>
+                                                    <c:if test="${detail.status}">
+                                                    <a href="/sale/sales-detail/<c:out value="${t.id}"/>" class="dropdown-item" title="<c:out value="${detail.object.name}"/>">
+                                                        <i class="la <c:out value="${detail.object.icon}"/>"></i> <c:out value="${detail.object.name}"/>
+                                                    </a>
+                                                    </c:if>
+                                                    <c:if test="${edit.status}">
+                                                    <a href="javascript:edit($('#kt_form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="dropdown-item" title="<c:out value="${edit.object.name}"/>">
+                                                        <i class="<c:out value="${edit.object.icon}"/>"></i> <c:out value="${edit.object.name}"/>
+                                                    </a>
+                                                    </c:if>
+                                                    <c:if test="${delete.status}">
+                                                    <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.salesInventories.get(0).inventory.name}" /> <br/> <c:out value="${t.customer.person.fullName}" />');" class="dropdown-item" title="<c:out value="${delete.object.name}"/>">
+                                                        <i class="<c:out value="${delete.object.icon}"/>"></i> <c:out value="${delete.object.name}"/>
+                                                    </a>
+                                                    </c:if>
+                                                </div>
+                                            </span>
+                                            <c:if test="${export.status}">
+                                                <a href="javascript:exportContract($('#form-export-contract'), '<c:out value="${t.id}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Hesab-fakturanın çapı">
+                                                    <i class="<c:out value="${export.object.icon}"/>"></i>
+                                                </a>
+                                            </c:if>
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -824,7 +813,7 @@
                                             </div>
                                         </div>
                                         <div class="col-sm-3 text-center">
-                                            <button type="button" class="btn btn-outline-info btn-tallest" style="font-size: 16px;padding-left: 7px; padding-right: 8px;" onclick="schedule($('input[name=\'payment.lastPrice\']'), $('input[name=\'payment.down\']'), $('select[name=\'payment.schedule\']'), $('select[name=\'payment.period\']'), $('input[name=\'saleDate\']'))"><i class="fa fa-play"></i> Ödəniş qrafiki yarat</button>
+                                            <button type="button" class="btn btn-outline-info btn-tallest" style="font-size: 16px;padding-left: 7px; padding-right: 8px;" onclick="schedule($('#kt_form'))"><i class="fa fa-play"></i> Ödəniş qrafiki yarat</button>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -970,7 +959,7 @@
         allowClear: true
     });
 
-    function schedule(lastPrice, down, schedule, period, saleDate){
+    function schedule(form){
         var table='';
         swal.fire({
             text: 'Proses davam edir...',
@@ -978,7 +967,7 @@
             onOpen: function() {
                 swal.showLoading();
                 $.ajax({
-                    url: '/sale/payment/schedule/' + $(lastPrice).val() + '/' + $(down).val() + '/' + $(schedule).val() + '/' + $(period).val() + '/' + $(saleDate).val(),
+                    url: '/sale/payment/schedule/' + $(form).find("input[name='payment.lastPrice']").val() + '/' + $(form).find("input[name='payment.down']").val() + '/' + $(form).find("select[name='payment.schedule']").val() + '/' + $(form).find("select[name='payment.period']").val() + '/' + $(form).find("input[name='saleDate']").val(),
                     type: 'GET',
                     dataType: 'json',
                     beforeSend: function() {

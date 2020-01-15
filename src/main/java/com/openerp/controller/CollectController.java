@@ -35,7 +35,7 @@ public class CollectController extends SkeletonController {
             }
             model.addAttribute(Constants.LIST, Util.convertPaymentSchedule(schedules));
         } else if(page.equalsIgnoreCase(Constants.ROUTE.PAYMENT_REGULATOR_DETAIL)){
-            model.addAttribute(Constants.LIST, scheduleRepository.getScheduleDetails(new Date(), Integer.parseInt(data.get())));
+            model.addAttribute(Constants.LIST, scheduleRepository.getSchedulesByPayment_IdAndPaymentActiveOrderById(Integer.parseInt(data.get()), true));
         } if(page.equalsIgnoreCase(Constants.ROUTE.PAYMENT_REGULATOR_NOTE)){
             List<PaymentRegulatorNote> paymentRegulatorNotes = new ArrayList<>();
             int paymentId = 0;

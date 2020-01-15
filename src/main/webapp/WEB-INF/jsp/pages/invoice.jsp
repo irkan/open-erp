@@ -120,14 +120,6 @@
                                         <div class="col-md-2" style="padding-top: 30px;">
                                             <div class="form-group">
                                                 <label class="kt-checkbox kt-checkbox--brand">
-                                                    <form:checkbox path="advance"/> Avans
-                                                    <span></span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2" style="padding-top: 30px;">
-                                            <div class="form-group">
-                                                <label class="kt-checkbox kt-checkbox--brand">
                                                     <form:checkbox path="approve"/> Təsdiq edilənlər
                                                     <span></span>
                                                 </label>
