@@ -14,4 +14,5 @@ public interface SalesRepository extends JpaRepository<Sales, Integer>, JpaSpeci
     List<Sales> getSalesByActiveTrueAndServiceTrueOrderByIdDesc();
     List<Sales> getSalesByActiveTrueAndServiceTrueAndOrganizationOrderByIdDesc(Organization organization);
     Sales getSalesByIdAndActiveTrue(int salesId);
+    Sales getSalesByIdOrderByPayment_Schedules_Id(int salesId);
 }

@@ -51,7 +51,11 @@ public class SaleController extends SkeletonController {
             }
             model.addAttribute(Constants.LIST, sales);
         } else if (page.equalsIgnoreCase(Constants.ROUTE.SALES_DETAIL)){
-            model.addAttribute(Constants.OBJECT, salesRepository.getSalesByIdAndActiveTrue(Integer.parseInt(data.get())));
+            Sales sales = salesRepository.getSalesByIdAndActiveTrue(Integer.parseInt(data.get()));
+            Payment payment = sales.getPayment();
+            payment.setSchedules(scheduleRepository.getSchedulesByPayment_IdAndPaymentActiveOrderByScheduleDateAsc(sales.getPayment().getId(), true));
+            sales.setPayment(payment);
+            model.addAttribute(Constants.OBJECT, sales);
         } else if(page.equalsIgnoreCase(Constants.ROUTE.SERVICE)){
             List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization());
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");

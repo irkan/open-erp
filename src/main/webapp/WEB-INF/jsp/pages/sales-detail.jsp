@@ -11,9 +11,6 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="utl" uri="/WEB-INF/tld/Util.tld"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
-<link href="<c:url value="/assets/rate/jquery.raty.css" />" rel="stylesheet" type="text/css"/>
-<script src="<c:url value="/assets/rate/jquery.raty.js" />" type="text/javascript"></script>
 <div class="kt-container  kt-grid__item kt-grid__item--fluid">
     <div class="row">
         <div class="col-lg-12">
@@ -21,7 +18,7 @@
                 <div class="kt-portlet__body">
                     <c:choose>
                         <c:when test="${not empty object}">
-                            <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+                            <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
                                 <thead>
                                 <tr class="bg-light">
                                     <th colspan="4" class="text-right">
@@ -127,6 +124,16 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(function(){
+        $('#datatable').DataTable({
+            responsive: true,
+            pageLength: 100,
+            ordering: false
+        });
+    })
+</script>
 
 
 
