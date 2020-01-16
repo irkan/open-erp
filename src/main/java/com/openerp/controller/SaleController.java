@@ -50,12 +50,22 @@ public class SaleController extends SkeletonController {
                 sales1.setSalesInventories(salesInventoryRepository.getSalesInventoriesByActiveTrueAndSales(sales1));
             }
             model.addAttribute(Constants.LIST, sales);
-        } else if (page.equalsIgnoreCase(Constants.ROUTE.SALES_DETAIL)){
-            Sales sales = salesRepository.getSalesByIdAndActiveTrue(Integer.parseInt(data.get()));
-            Payment payment = sales.getPayment();
-            payment.setSchedules(scheduleRepository.getSchedulesByPayment_IdAndPaymentActiveOrderByScheduleDateAsc(sales.getPayment().getId(), true));
-            sales.setPayment(payment);
-            model.addAttribute(Constants.OBJECT, sales);
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.SCHEDULE)){
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new Schedule(
+                        new Payment(!data.equals(Optional.empty())?Integer.parseInt(data.get()):null),
+                        getSessionOrganization()
+                ));
+            }
+            if(!model.containsAttribute(Constants.FILTER)){
+                model.addAttribute(Constants.FILTER, new Schedule(
+                                new Payment(!data.equals(Optional.empty())?Integer.parseInt(data.get()):null),
+                                !canViewAll()?getSessionOrganization():null,
+                        null
+                        )
+                );
+            }
+            model.addAttribute(Constants.LIST, scheduleService.findAll((Schedule) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").ascending())));
         } else if(page.equalsIgnoreCase(Constants.ROUTE.SERVICE)){
             List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization());
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
@@ -148,6 +158,7 @@ public class SaleController extends SkeletonController {
                 List<Schedule> schedules = sales.getPayment().getSchedules();
                 for(Schedule schedule: schedules){
                     schedule.setPayment(sales.getPayment());
+                    schedule.setOrganization(sales.getOrganization());
                 }
                 scheduleRepository.saveAll(schedules);
                 //Id de error olur
@@ -259,6 +270,26 @@ public class SaleController extends SkeletonController {
     @PostMapping(value = "/demonstration/filter")
     public String postDemonstrationFilter(@ModelAttribute(Constants.FILTER) @Validated Demonstration demonstration, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         return mapFilter(demonstration, binding, redirectAttributes, "/sale/demonstration");
+    }
+
+    @PostMapping(value = "/schedule")
+    public String postSchedule(@ModelAttribute(Constants.FORM) @Validated Schedule schedule, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()){
+            Schedule s = scheduleRepository.getScheduleById(schedule.getId());
+            calculateSchedule(s.getPayment().getSales().getId(), schedule.getPayableAmount());
+            /*Schedule s = scheduleRepository.getScheduleById(schedule.getId());
+            schedule.setAmount(s.getAmount());
+            schedule.setPayment(s.getPayment());
+            scheduleRepository.save(schedule);*/
+            log("sale_schedule", "create/edit", schedule.getId(), schedule.toString());
+        }
+        return mapPost(schedule, binding, redirectAttributes);
+    }
+
+    @PostMapping(value = "/sale/schedule")
+    public String postScheduleFilter(@ModelAttribute(Constants.FILTER) @Validated Schedule schedule, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        return mapFilter(schedule, binding, redirectAttributes, "/sale/schedule");
     }
 
     @PostMapping(value = "/invoice/consolidate")

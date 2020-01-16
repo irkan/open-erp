@@ -235,6 +235,9 @@ public class SkeletonController {
     InventoryService inventoryService;
 
     @Autowired
+    ScheduleService scheduleService;
+
+    @Autowired
     HttpServletRequest request;
 
     @Autowired
@@ -459,5 +462,20 @@ public class SkeletonController {
         logs.add(log);
         Collections.reverse(logs);
         session.setAttribute(Constants.LOGS, logs);
+    }
+
+    void calculateSchedule(Integer salesId, Double payableAmount){
+        Sales sales = salesRepository.getSalesByIdAndActiveTrue(salesId);
+        List<Schedule> schedules = scheduleRepository.getSchedulesByActiveTrueAndPayment_IdAndPaymentActiveOrderByScheduleDateAsc(sales.getPayment().getId(), true);
+        for(Schedule schedule: schedules){
+            if(payableAmount>0){
+                Double different = schedule.getAmount()-schedule.getPayableAmount();
+                if(different>0){
+                    schedule.setPayableAmount(payableAmount>schedule.getAmount()?schedule.getAmount():(different+payableAmount));
+                    payableAmount = payableAmount-different;
+                    scheduleRepository.save(schedule);
+                }
+            }
+        }
     }
 }

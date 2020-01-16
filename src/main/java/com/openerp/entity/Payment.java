@@ -84,4 +84,8 @@ public class Payment {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "created_by_admin_user_id")
     private User createdUser;
+
+    public Payment(Integer id) {
+        this.id = id;
+    }
 }

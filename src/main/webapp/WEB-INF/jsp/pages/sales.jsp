@@ -213,7 +213,7 @@
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${list.content}" varStatus="loop">
-                                    <tr data="<c:out value="${utl:toJson(t)}" />">
+                                    <tr data="<c:out value="${t.payment.id}" />">
                                         <td style="<c:out value="${t.payment.cash?'background-color: #e6ffe7 !important':'background-color: #ffeaf1 !important'}"/>"><c:out value="${t.id}" /></td>
                                         <th>
                                             <c:forEach var="p" items="${t.salesInventories}" varStatus="lp">
@@ -291,7 +291,7 @@
                                                     </a>
                                                     </c:if>
                                                     <c:if test="${detail.status}">
-                                                    <a href="/sale/sales-detail/<c:out value="${t.id}"/>" class="dropdown-item" title="<c:out value="${detail.object.name}"/>">
+                                                    <a href="/sale/schedule/<c:out value="${t.payment.id}"/>" class="dropdown-item" title="<c:out value="${detail.object.name}"/>">
                                                         <i class="la <c:out value="${detail.object.icon}"/>"></i> <c:out value="${detail.object.name}"/>
                                                     </a>
                                                     </c:if>
@@ -1406,9 +1406,11 @@
         };
     }();
 
-    <c:if test="${edit.status}">
+    <c:if test="${detail.status}">
     $('#group_table tbody').on('dblclick', 'tr', function () {
-        edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
+        swal.showLoading();
+        location.href = '/sale/schedule/'+ $(this).attr('data');
+        window.reload();
     });
     </c:if>
 

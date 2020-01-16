@@ -131,6 +131,6 @@ public class Constants {
         public static final String DEMONSTRATION = "demonstration";
         public static final String LOG = "log";
         public static final String SERVICE = "service";
-        public static final String SALES_DETAIL = "sales-detail";
+        public static final String SCHEDULE = "schedule";
     }
 }
