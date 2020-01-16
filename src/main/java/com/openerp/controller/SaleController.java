@@ -176,6 +176,7 @@ public class SaleController extends SkeletonController {
                 Invoice invoice = new Invoice();
                 invoice.setSales(sales);
                 invoice.setApprove(false);
+                invoice.setAdvance(true);
                 invoice.setPrice(invoicePrice);
                 invoice.setOrganization(sales.getOrganization());
                 invoice.setDescription("Satışdan əldə edilən ödəniş " + invoicePrice + " AZN");
@@ -277,11 +278,9 @@ public class SaleController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             Schedule s = scheduleRepository.getScheduleById(schedule.getId());
-            calculateSchedule(s.getPayment().getSales().getId(), schedule.getPayableAmount());
-            /*Schedule s = scheduleRepository.getScheduleById(schedule.getId());
             schedule.setAmount(s.getAmount());
             schedule.setPayment(s.getPayment());
-            scheduleRepository.save(schedule);*/
+            scheduleRepository.save(schedule);
             log("sale_schedule", "create/edit", schedule.getId(), schedule.toString());
         }
         return mapPost(schedule, binding, redirectAttributes);
@@ -290,6 +289,30 @@ public class SaleController extends SkeletonController {
     @PostMapping(value = "/sale/schedule")
     public String postScheduleFilter(@ModelAttribute(Constants.FILTER) @Validated Schedule schedule, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         return mapFilter(schedule, binding, redirectAttributes, "/sale/schedule");
+    }
+
+    @PostMapping(value = "/schedule/transfer")
+    public String postScheduleTransfer(@ModelAttribute(Constants.FORM) @Validated Schedule schedule, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()){
+            Schedule s = scheduleRepository.getScheduleById(schedule.getId());
+            calculateSchedule(s.getPayment().getSales().getId(), schedule.getPayableAmount());
+            log("sale_schedule", "create/edit", schedule.getId(), schedule.toString());
+
+            Invoice invoice = new Invoice();
+            invoice.setSales(s.getPayment().getSales());
+            invoice.setApprove(false);
+            invoice.setPrice(schedule.getPayableAmount());
+            invoice.setOrganization(s.getPayment().getSales().getOrganization());
+            invoice.setDescription("Satışdan əldə edilən ödəniş " + schedule.getPayableAmount() + " AZN");
+            invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
+            invoiceRepository.save(invoice);
+            log("sale_invoice", "create/edit", invoice.getId(), invoice.toString());
+            invoice.setChannelReferenceCode(String.valueOf(invoice.getId()));
+            invoiceRepository.save(invoice);
+            log("sale_invoice", "create/edit", invoice.getId(), invoice.toString());
+        }
+        return mapPost(schedule, binding, redirectAttributes, "/sale/schedule");
     }
 
     @PostMapping(value = "/invoice/consolidate")

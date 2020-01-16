@@ -136,32 +136,26 @@
                             <c:set var="transfer" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'transfer')}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
                                 <thead>
-                                <%--<tr class="bg-light">
-                                    <th colspan="4" class="text-right">
-                                        <span style="font-size: 16px; font-weight: bold"><c:out value="${object.customer.person.fullName}"/></span>
-                                        <c:if test="${not empty object.customer.person.contact.mobilePhone}">
-                                            <br/><c:out value="${object.customer.person.contact.mobilePhone}"/>&nbsp;
-                                        </c:if>
-                                        <c:if test="${not empty object.customer.person.contact.homePhone}">
-                                            <c:out value="${object.customer.person.contact.homePhone}"/>&nbsp;
-                                        </c:if>
-                                        <c:if test="${not empty object.customer.person.contact.address}">
-                                            <br/><c:out value="${object.customer.person.contact.city.name}"/>,&nbsp;&nbsp;
-                                            <c:out value="${t.customer.person.contact.address}"/>
-                                        </c:if>
-                                        <c:if test="${not empty object.customer.person.contact.livingAddress}">
-                                            <br/><c:out value="${object.customer.person.contact.livingCity.name}"/>,&nbsp;&nbsp;
-                                            <c:out value="${object.customer.person.contact.livingAddress}"/>
-                                        </c:if>
-                                    </th>
-                                    <th colspan="3">
-                                        <c:forEach var="t" items="${list.content.salesInventories}" varStatus="loop">
-                                            <c:out value="${t.inventory.name}" /><br/>
-                                            <c:out value="${t.inventory.barcode}" /><br/>
-                                            <div class="kt-separator kt-separator--dashed"></div>
+                                <tr class="bg-light">
+                                    <th colspan="8" class="text-center">
+                                        <c:forEach var="t" items="${list.content}" varStatus="loop">
+                                            <c:if test="${loop.index==0}">
+                                                <span style="font-size: 16px; font-weight: bold"><c:out value="${t.payment.sales.customer.person.fullName}"/></span><br/>
+                                                <span style="font-size: 16px; font-weight: bold">Satış kodu: <c:out value="${t.payment.sales.id}"/></span>
+                                                <c:if test="${not empty t.payment.sales.customer.person.contact.mobilePhone}">
+                                                    <br/><c:out value="${t.payment.sales.customer.person.contact.mobilePhone}"/>&nbsp;
+                                                </c:if>
+                                                <c:if test="${not empty t.payment.sales.customer.person.contact.homePhone}">
+                                                    <c:out value="${t.payment.sales.customer.person.contact.homePhone}"/>&nbsp;
+                                                </c:if>
+                                                <c:if test="${not empty t.payment.sales.customer.person.contact.address}">
+                                                    <br/><c:out value="${t.payment.sales.customer.person.contact.city.name}"/>,&nbsp;&nbsp;
+                                                    <c:out value="${t.payment.sales.customer.person.contact.address}"/>
+                                                </c:if>
+                                            </c:if>
                                         </c:forEach>
                                     </th>
-                                </tr>--%>
+                                </tr>
                                 <tr>
                                     <th>№</th>
                                     <th>Satış kodu</th>
@@ -203,7 +197,7 @@
                                         </th>
                                         <td nowrap class="text-center">
                                             <c:if test="${transfer.status}">
-                                                <a href="javascript:transfer($('#form'), 'transfer-modal-operation', '<c:out value="${t.payment.sales.id}" />', '<c:out value="${t.amount-t.payableAmount}" />')" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
+                                                <a href="javascript:transfer($('#form-transfer'), 'transfer-modal-operation', '<c:out value="${t.id}" />', '<c:out value="${t.amount}" />', '<c:out value="${t.payableAmount}" />')" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
                                                     <i class="<c:out value="${transfer.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
@@ -275,7 +269,7 @@
                     </div>
                     <div class="form-group">
                         <form:label path="amount">Məbləğ</form:label>
-                        <form:input path="amount" cssClass="form-control" placeholder="Daxil edin" readonly="true"/>
+                        <form:input path="amount" cssClass="form-control" placeholder="Daxil edin"/>
                         <form:errors path="amount" cssClass="alert-danger control-label"/>
                     </div>
                     <div class="form-group">
@@ -304,33 +298,22 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="form" method="post" action="/sale/sales-detail/transfer" class="form-group">
-                    <input type="hidden" name="sale" id="sale"/>
+                <form:form modelAttribute="form" id="form-transfer" method="post" action="/sale/schedule/transfer" cssClass="form-group">
+                    <form:hidden path="id"/>
                     <div class="form-group">
-                        <label for="transfer">Haraya?</label>
-                        <select class="custom-select form-control" name="transfer" id="transfer">
-                            <option value="1">Hesab-fakturaya</option>
-                        </select>
+                        <form:label path="amount">Məbləğ</form:label>
+                        <form:input path="amount" cssClass="form-control" placeholder="Daxil edin" readonly="true"/>
+                        <form:errors path="amount" cssClass="alert-danger control-label"/>
                     </div>
                     <div class="form-group">
-                        <label for="price">Qiyməti</label>
-                        <div class="input-group" >
-                            <input id="price" name="price" class="form-control" placeholder="Qiyməti daxil edin"/>
-                            <div class="input-group-append">
-                                <span class="input-group-text">
-                                    <i class="la la-usd"></i>
-                                </span>
-                            </div>
-                        </div>
+                        <form:label path="payableAmount">Ödənilmiş məbləğ</form:label>
+                        <form:input path="payableAmount" cssClass="form-control" placeholder="Daxil edin"/>
+                        <form:errors path="payableAmount" cssClass="alert-danger control-label"/>
                     </div>
-                    <div class="form-group">
-                        <label for="description">Açıqlama</label>
-                        <textarea id="description" name="description" class="form-control"></textarea>
-                    </div>
-                </form>
+                </form:form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="submit($('#form'));">Yadda saxla</button>
+                <button type="button" class="btn btn-primary" onclick="submit($('#form-transfer'));">Yadda saxla</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
             </div>
         </div>
@@ -346,10 +329,11 @@
         });
     })
 
-    function transfer(form, modal, saleId, price){
+    function transfer(form, modal, id, amount, payableAmount){
         try {
-            $(form).find("input[name='sale']").val(saleId);
-            $(form).find("input[name='price']").val(price);
+            $(form).find("input[name='id']").val(id);
+            $(form).find("input[name='amount']").val(amount);
+            $(form).find("input[name='payableAmount']").val(payableAmount);
             $('#' + modal).modal('toggle');
         } catch (e) {
             console.error(e);

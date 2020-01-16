@@ -678,9 +678,9 @@ public class DBConfiguration {
             moduleOperations.add(createModuleOperation9);
             ModuleOperation createModuleOperation10 = new ModuleOperation(supplier, create, null);
             moduleOperations.add(createModuleOperation10);
-            ModuleOperation createModuleOperation13 = new ModuleOperation(account, create, null);
+            ModuleOperation createModuleOperation13 = new ModuleOperation(transaction, create, null);
             moduleOperations.add(createModuleOperation13);
-            ModuleOperation createModuleOperation14 = new ModuleOperation(transaction, create, null);
+            ModuleOperation createModuleOperation14 = new ModuleOperation(account, create, null);
             moduleOperations.add(createModuleOperation14);
             ModuleOperation createModuleOperation15 = new ModuleOperation(nonWorkingDay, create, null);
             moduleOperations.add(createModuleOperation15);
@@ -735,9 +735,9 @@ public class DBConfiguration {
             moduleOperations.add(editModuleOperation9);
             ModuleOperation editModuleOperation10 = new ModuleOperation(supplier, edit, null);
             moduleOperations.add(editModuleOperation10);
-            ModuleOperation editModuleOperation13 = new ModuleOperation(account, edit, null);
+            ModuleOperation editModuleOperation13 = new ModuleOperation(transaction, edit, null);
             moduleOperations.add(editModuleOperation13);
-            ModuleOperation editModuleOperation14 = new ModuleOperation(transaction, edit, null);
+            ModuleOperation editModuleOperation14 = new ModuleOperation(account, edit, null);
             moduleOperations.add(editModuleOperation14);
             ModuleOperation editModuleOperation15 = new ModuleOperation(nonWorkingDay, edit, null);
             moduleOperations.add(editModuleOperation15);
@@ -802,9 +802,9 @@ public class DBConfiguration {
             moduleOperations.add(deleteModuleOperation9);
             ModuleOperation deleteModuleOperation10 = new ModuleOperation(supplier, delete, null);
             moduleOperations.add(deleteModuleOperation10);
-            ModuleOperation deleteModuleOperation13 = new ModuleOperation(account, delete, null);
+            ModuleOperation deleteModuleOperation13 = new ModuleOperation(transaction, delete, null);
             moduleOperations.add(deleteModuleOperation13);
-            ModuleOperation deleteModuleOperation14 = new ModuleOperation(transaction, delete, null);
+            ModuleOperation deleteModuleOperation14 = new ModuleOperation(account, delete, null);
             moduleOperations.add(deleteModuleOperation14);
             ModuleOperation deleteModuleOperation15 = new ModuleOperation(nonWorkingDay, delete, null);
             moduleOperations.add(deleteModuleOperation15);
@@ -908,9 +908,9 @@ public class DBConfiguration {
             moduleOperations.add(exportModuleOperation9);
             ModuleOperation exportModuleOperation10 = new ModuleOperation(supplier, export, null);
             moduleOperations.add(exportModuleOperation10);
-            ModuleOperation exportModuleOperation13 = new ModuleOperation(account, export, null);
+            ModuleOperation exportModuleOperation13 = new ModuleOperation(transaction, export, null);
             moduleOperations.add(exportModuleOperation13);
-            ModuleOperation exportModuleOperation14 = new ModuleOperation(transaction, export, null);
+            ModuleOperation exportModuleOperation14 = new ModuleOperation(account, export, null);
             moduleOperations.add(exportModuleOperation14);
             ModuleOperation exportModuleOperation15 = new ModuleOperation(nonWorkingDay, export, null);
             moduleOperations.add(exportModuleOperation15);
@@ -1093,7 +1093,7 @@ public class DBConfiguration {
             organizationRepository.saveAll(organizations);
 
             Contact contact1 = new Contact("502535110", null, "irkan.ehmedov@gmail.com", "Ü.Hacıbəyov 195A", baku);
-            Person person = new Person(contact1, "İrkan", "Əhmədov", "Əflatun", DateUtility.getUtilDate("25.09.1989"), male, azerbaijanNationality, married, "4HWL0AM", "AA0844002", false, null);
+            Person person = new Person(contact1, "Paşa", "Hacıyev", "İlham", DateUtility.getUtilDate("25.09.1989"), male, azerbaijanNationality, married, "4HWL0AM", "AA0844002", false, null);
             Employee employee0 = new Employee(person, position1, new Date(), null, headBranch);
             List<EmployeePayrollDetail> employeePayrollDetails = new ArrayList<>();
             for(Dictionary dictionary1: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-payroll-field")){

@@ -469,10 +469,10 @@ public class SkeletonController {
         List<Schedule> schedules = scheduleRepository.getSchedulesByActiveTrueAndPayment_IdAndPaymentActiveOrderByScheduleDateAsc(sales.getPayment().getId(), true);
         for(Schedule schedule: schedules){
             if(payableAmount>0){
-                Double different = schedule.getAmount()-schedule.getPayableAmount();
+                double different = schedule.getAmount()-schedule.getPayableAmount();
                 if(different>0){
-                    schedule.setPayableAmount(payableAmount>schedule.getAmount()?schedule.getAmount():(different+payableAmount));
-                    payableAmount = payableAmount-different;
+                    schedule.setPayableAmount(different<payableAmount?schedule.getAmount():(schedule.getPayableAmount()+payableAmount));
+                    payableAmount = different<payableAmount?payableAmount-different:0;
                     scheduleRepository.save(schedule);
                 }
             }
