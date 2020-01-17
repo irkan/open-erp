@@ -37,7 +37,10 @@ public class AccountingController extends SkeletonController {
             model.addAttribute(Constants.ACCOUNTS, accountRepository.getAccountsByActiveTrueAndOrganization(getSessionOrganization()));
             model.addAttribute(Constants.EXPENSES, dictionaryRepository.getDictionariesByActiveTrueAndAttr2AndDictionaryType_Attr1("expense", "action"));
             if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new Transaction(getSessionOrganization()));
+                model.addAttribute(Constants.FORM, new Transaction(getSessionOrganization(),
+                        dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("other", "action"),
+                        true
+                        ));
             }
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Transaction(!canViewAll()?getSessionOrganization():null, null));
@@ -101,9 +104,11 @@ public class AccountingController extends SkeletonController {
         }
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
-            transaction.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("other", "action"));
-            transaction.setAmount(1);
-            transaction.setOrganization(getSessionOrganization());
+            if(transaction!=null && transaction.getId()!=null){
+                transaction.setDebt(!transaction.getDebt());
+                balance(transaction);
+            }
+            transaction.setDebt(!transaction.getDebt());
             transaction.setCurrency(transaction.getAccount().getCurrency());
             transaction.setRate(transaction.getAccount().getCurrency().equalsIgnoreCase("AZN")?1:currencyRateRepository.getCurrencyRateByCode(transaction.getCurrency()).getValue());
             transaction.setSumPrice(transaction.getPrice()*transaction.getAmount()*transaction.getRate());

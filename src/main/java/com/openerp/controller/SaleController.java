@@ -228,6 +228,7 @@ public class SaleController extends SkeletonController {
     public String postInvoice(@ModelAttribute(Constants.FORM) @Validated Invoice invoice, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
+            calculateSchedule(invoice.getSales().getId(), invoice.getPrice());
             Invoice invc;
             if(invoice.getId()==null){
                 invoice.setDescription("Satışdan əldə edilən ödəniş " + invoice.getPrice() + " AZN");
@@ -297,7 +298,6 @@ public class SaleController extends SkeletonController {
         if(!binding.hasErrors()){
             Schedule s = scheduleRepository.getScheduleById(schedule.getId());
             calculateSchedule(s.getPayment().getSales().getId(), schedule.getPayableAmount());
-            log("sale_schedule", "create/edit", schedule.getId(), schedule.toString());
 
             Invoice invoice = new Invoice();
             invoice.setSales(s.getPayment().getSales());

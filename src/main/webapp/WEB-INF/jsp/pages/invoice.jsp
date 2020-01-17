@@ -204,7 +204,7 @@
                                         <td><c:out value="${t.paymentChannel.name}" /></td>
                                         <td><c:out value="${t.channelReferenceCode}" /></td>
                                         <td class="text-center">
-                                            <c:if test="${t.advance}">
+                                            <c:if test="${t.advance and t.approve}">
                                                 <i class="flaticon2-check-mark kt-font-success"></i>
                                             </c:if>
                                         </td>

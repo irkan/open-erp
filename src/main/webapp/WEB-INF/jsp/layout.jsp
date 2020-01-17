@@ -107,7 +107,9 @@
                         $("input[name='"+$(element).attr("name")+"'][value='"+value.id+"']").prop('checked', true);
                     } else if($(element).attr("date")==='date') {
                         $(element).val(getFormattedDate(new Date(value)));
-                    } else {
+                    } else if($(element).attr("date")==='datetime') {
+                        $(element).val(getFormattedDateTime(new Date(value)));
+                    }  else {
                         if(value.id !== undefined){
                             value = value.id;
                         }
@@ -236,6 +238,27 @@
         day = day.length > 1 ? day : '0' + day;
 
         return day + '.' + month + '.' + year;
+    }
+
+    function getFormattedDateTime(date) {
+        var year = date.getFullYear();
+
+        var month = (1 + date.getMonth()).toString();
+        month = month.length > 1 ? month : '0' + month;
+
+        var day = date.getDate().toString();
+        day = day.length > 1 ? day : '0' + day;
+
+        var hours = date.getHours().toString();
+        hours = hours.length > 1 ? hours : '0' + hours;
+
+        var minutes = date.getMinutes().toString();
+        minutes = minutes.length > 1 ? minutes : '0' + minutes;
+
+        var seconds = date.getSeconds().toString();
+        seconds = seconds.length > 1 ? seconds : '0' + seconds;
+
+        return day + '.' + month + '.' + year + ' ' + hours + ':' + minutes + ':' + seconds;
     }
 
 

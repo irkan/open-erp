@@ -88,7 +88,7 @@
                                                 <form:label path="transactionDateFrom">Tarixdən</form:label>
                                                 <div class="input-group date">
                                                     <form:input path="transactionDateFrom" autocomplete="off"
-                                                                cssClass="form-control datetimepicker-element" date="date"
+                                                                cssClass="form-control datetimepicker-element" date="datetime"
                                                                 placeholder="dd.MM.yyyy HH:mm"/>
                                                     <div class="input-group-append">
                                         <span class="input-group-text">
@@ -104,7 +104,7 @@
                                                 <form:label path="transactionDate">Tarixədək</form:label>
                                                 <div class="input-group date">
                                                     <form:input path="transactionDate" autocomplete="off"
-                                                                cssClass="form-control datetimepicker-element" date="date"
+                                                                cssClass="form-control datetimepicker-element" date="datetime"
                                                                 placeholder="dd.MM.yyyy HH:mm"/>
                                                     <div class="input-group-append">
                                         <span class="input-group-text">
@@ -260,7 +260,7 @@
 </div>
 
 <div class="modal fade" id="modal-operation" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"></h5>
@@ -272,6 +272,8 @@
                 <form:form modelAttribute="form" id="form" method="post" action="/accounting/transaction" cssClass="form-group">
                     <form:hidden path="id"/>
                     <form:hidden path="organization" />
+                    <form:hidden path="action" />
+                    <form:hidden path="inventory" />
                     <div class="form-group">
                         <form:label path="account">Hesab</form:label>
                         <form:select  path="account" cssClass="custom-select form-control">
@@ -279,17 +281,29 @@
                         </form:select>
                         <form:errors path="account" cssClass="alert-danger control-label"/>
                     </div>
-                    <div class="form-group">
-                        <form:label path="transactionDate">Tarix</form:label>
-                        <div class="input-group date" >
-                            <form:input path="transactionDate" cssClass="form-control datetimepicker-element" date="date" placeholder="dd.MM.yyyy HH:mm"/>
-                            <div class="input-group-append">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <form:label path="transactionDate">Tarix</form:label>
+                                <div class="input-group date" >
+                                    <form:input path="transactionDate" cssClass="form-control datetimepicker-element" date="datetime" placeholder="dd.MM.yyyy HH:mm"/>
+                                    <div class="input-group-append">
                                 <span class="input-group-text">
                                     <i class="la la-calendar"></i>
                                 </span>
+                                    </div>
+                                </div>
+                                <form:errors path="transactionDate" cssClass="control-label alert-danger" />
                             </div>
                         </div>
-                        <form:errors path="transactionDate" cssClass="control-label alert-danger" />
+                        <div class="col-md-4">
+                            <div class="form-group pt-4">
+                                <label class="kt-checkbox kt-checkbox--brand">
+                                    <form:checkbox path="debt"/> Debt
+                                    <span></span>
+                                </label>
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-8">
@@ -307,11 +321,10 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="form-group pt-4">
-                                <label class="kt-checkbox kt-checkbox--brand">
-                                    <form:checkbox path="debt"/> Debt
-                                    <span></span>
-                                </label>
+                            <div class="form-group">
+                                <form:label path="amount">Açıqlama</form:label>
+                                <form:input path="amount" cssClass="form-control"/>
+                                <form:errors path="amount" cssClass="alert-danger control-label"/>
                             </div>
                         </div>
                     </div>
