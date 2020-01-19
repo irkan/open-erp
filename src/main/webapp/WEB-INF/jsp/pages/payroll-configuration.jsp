@@ -102,6 +102,7 @@
                     <div class="form-group">
                         <form:label path="type">Tipi</form:label>
                         <form:select  path="type" cssClass="custom-select form-control">
+                            <form:option value=""></form:option>
                             <form:options items="${formula_types}" itemLabel="name" itemValue="id" />
                         </form:select>
                     </div>
@@ -136,6 +137,26 @@
         edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
     });
     </c:if>
+
+    $( "#form" ).validate({
+        rules: {
+            type: {
+                required: true
+            },
+            name: {
+                required: true
+            },
+            formula: {
+                required: true
+            },
+            description: {
+                required: true
+            }
+        },
+        invalidHandler: function(event, validator) {
+            swal.close();
+        },
+    })
 </script>
 
 

@@ -256,6 +256,7 @@
                             <div class="form-group">
                                 <form:label path="employee">Əməkdaş</form:label>
                                 <form:select  path="employee" cssClass="custom-select form-control">
+                                    <form:option value=""></form:option>
                                     <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
                                         <optgroup label="${itemGroup.key}">
                                             <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
@@ -269,6 +270,7 @@
                             <div class="form-group">
                                 <form:label path="advance">Avans</form:label>
                                 <form:select  path="advance" cssClass="custom-select form-control">
+                                    <form:option value=""></form:option>
                                     <form:options items="${advances}" itemLabel="name" itemValue="id" />
                                 </form:select>
                                 <form:errors path="advance" cssClass="control-label alert alert-danger" />
@@ -280,12 +282,8 @@
                             <div class="form-group">
                                 <form:label path="payed">Məbləğ</form:label>
                                 <div class="input-group" >
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
                                     <form:input path="payed" cssClass="form-control" placeholder="Məbləği daxil edin"/>
-                                    <div class="input-group-append">
-                                                    <span class="input-group-text">
-                                                        <i class="la la-usd"></i>
-                                                    </span>
-                                    </div>
                                 </div>
                                 <form:errors path="payed" cssClass="alert-danger control-label"/>
                             </div>
@@ -294,12 +292,8 @@
                             <div class="form-group">
                                 <form:label path="advanceDate">Avans tarixi</form:label>
                                 <div class="input-group date" >
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
                                     <form:input path="advanceDate" cssClass="form-control datepicker-element" date="date" placeholder="dd.MM.yyyy"/>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-calendar"></i>
-                                        </span>
-                                    </div>
                                 </div>
                                 <form:errors path="advanceDate" cssClass="control-label alert-danger" />
                             </div>
@@ -349,13 +343,9 @@
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <form:label path="payed">Məbləğ</form:label>
-                                <div class="input-group" >
+                                <div class="input-group">
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
                                     <form:input path="payed" cssClass="form-control" placeholder="Məbləği daxil edin"/>
-                                    <div class="input-group-append">
-                                                    <span class="input-group-text">
-                                                        <i class="la la-usd"></i>
-                                                    </span>
-                                    </div>
                                 </div>
                                 <form:errors path="payed" cssClass="alert-danger control-label"/>
                             </div>
@@ -388,6 +378,40 @@
         edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
     });
     </c:if>
+
+    $( "#form" ).validate({
+        rules: {
+            employee: {
+                required: true
+            },
+            advance: {
+                required: true
+            },
+            payed: {
+                required: true,
+                number: true
+            },
+            advanceDate: {
+                required: true
+            }
+        },
+        invalidHandler: function(event, validator) {
+            swal.close();
+        },
+    })
+
+    $( "#advance-approve-form" ).validate({
+        rules: {
+            payed: {
+                required: true,
+                number: true
+            }
+        },
+        invalidHandler: function(event, validator) {
+            swal.close();
+        },
+    })
+
 </script>
 
 

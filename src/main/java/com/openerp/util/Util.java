@@ -53,11 +53,11 @@ public class Util {
     }
 
     public static Organization getUserBranch(Organization organization){
-        if(organization.getOrganizationType().getAttr1().equalsIgnoreCase("branch")){
+        if(organization.getType().getAttr1().equalsIgnoreCase("branch")){
             return organization;
-        } else if(organization.getOrganization().getOrganizationType().getAttr1().equalsIgnoreCase("branch")){
+        } else if(organization.getOrganization().getType().getAttr1().equalsIgnoreCase("branch")){
             return organization.getOrganization();
-        } else if(organization.getOrganization().getOrganization().getOrganizationType().getAttr1().equalsIgnoreCase("branch")){
+        } else if(organization.getOrganization().getOrganization().getType().getAttr1().equalsIgnoreCase("branch")){
             return organization.getOrganization().getOrganization();
         }
         return null;

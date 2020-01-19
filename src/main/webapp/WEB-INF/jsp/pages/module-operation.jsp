@@ -105,12 +105,14 @@
                     <div class="form-group">
                         <form:label path="module">Modul</form:label>
                         <form:select  path="module" cssClass="custom-select form-control">
+                            <form:option value=""></form:option>
                             <form:options items="${modules}" itemLabel="name" itemValue="id" />
                         </form:select>
                     </div>
                     <div class="form-group">
                         <form:label path="operation">Əməliyyat</form:label>
                         <form:select  path="operation" cssClass="custom-select form-control">
+                            <form:option value=""></form:option>
                             <form:options items="${operations}" itemLabel="name" itemValue="id" />
                         </form:select>
                     </div>
@@ -130,6 +132,39 @@
         edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
     });
     </c:if>
+
+    $( "#form" ).validate({
+        rules: {
+            module: {
+                required: true
+            },
+            operation: {
+                required: true,
+                remote: {
+                    url: "/admin/module-operation/check",
+                    type: "get",
+                    data: $("#username").val(),
+                    //data: {"username":username},
+                    dataType : "json",
+                    success:function(data){
+                        /* response = ( data == true ) ? true : false; */
+                        if (data.name == true)
+                        {
+                            message: {
+                                username: 'The username is already in use!'
+                            }
+                        }
+                    },
+                    error: function(e){
+                        alert("Gosterilmis modulda secilmis emeliyyat movcuddur!");
+                    }
+                }
+            }
+        },
+        invalidHandler: function(event, validator) {
+            swal.close();
+        },
+    });
 </script>
 
 <script src="<c:url value="/assets/js/demo4/pages/crud/datatables/advanced/row-grouping.js" />" type="text/javascript"></script>

@@ -77,4 +77,8 @@ public class Account {
     public String getAccountNumberWithCurrency() {
         return currency + " | " + accountNumber;
     }
+
+    public Account(Organization organization) {
+        this.organization = organization;
+    }
 }

@@ -30,12 +30,11 @@ public class ShortenedWorkingDay {
     private Date workingDate;
 
     @Transient
-    @NotNull(message = "Boş olmamalıdır")
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date workingDateFrom;
 
-    @Pattern(regexp=".{1,2}",message="Minimum 1 maksimum 2 simvol ola bilər")
+    @Pattern(regexp=".{1,6}",message="Minimum 1 maksimum 6 simvol ola bilər")
     @Column(name = "identifier")
     private String identifier;
 

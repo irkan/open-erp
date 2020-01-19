@@ -201,7 +201,7 @@
 
 
 <div class="modal fade" id="modal-operation" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"></h5>
@@ -215,12 +215,8 @@
                     <div class="form-group">
                         <form:label path="workingDate">Qeyri iş günü</form:label>
                         <div class="input-group date" >
-                            <form:input path="workingDate" cssClass="form-control datepicker-element" date="date" placeholder="dd.MM.yyyy"/>
-                            <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-calendar"></i>
-                                        </span>
-                            </div>
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
+                            <form:input path="workingDate" autocomplete="off" cssClass="form-control datepicker-element" date="date" placeholder="dd.MM.yyyy"/>
                         </div>
                         <form:errors path="workingDate" cssClass="control-label alert-danger" />
                     </div>
@@ -234,6 +230,7 @@
                     <div class="form-group">
                         <form:label path="shortenedTime">Qısaldılmış iş saatı</form:label>
                         <form:select  path="shortenedTime" cssClass="custom-select form-control">
+                            <form:option value=""></form:option>
                             <form:options items="${shortened_times}" itemLabel="name" itemValue="attr1" />
                         </form:select>
                         <form:errors path="shortenedTime" cssClass="alert-danger"/>
@@ -304,4 +301,21 @@
         edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
     });
     </c:if>
+
+    $( "#form" ).validate({
+        rules: {
+            workingDate: {
+                required: true
+            },
+            identifier: {
+                required: true
+            },
+            shortenedTime: {
+                required: true
+            }
+        },
+        invalidHandler: function(event, validator) {
+            swal.close();
+        },
+    })
 </script>

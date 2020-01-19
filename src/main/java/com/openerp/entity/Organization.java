@@ -49,18 +49,18 @@ public class Organization implements Serializable {
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "admin_dictionary_org_type_id")
-    private Dictionary organizationType;
+    private Dictionary type;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "common_contact_id")
     private Contact contact;
 
-    public Organization(Contact contact, String name, String description, Organization organization, Dictionary organizationType) {
+    public Organization(Contact contact, String name, String description, Organization organization, Dictionary type) {
         this.contact = contact;
         this.name = name;
         this.description = description;
         this.organization = organization;
-        this.organizationType = organizationType;
+        this.type = type;
     }
 
     public Organization(@Pattern(regexp = ".{2,50}", message = "Minimum 2 maksimum 50 simvol ola bilər") String name, @Pattern(regexp = ".{0,255}", message = "Maksimum 255 simvol ola bilər") String description) {

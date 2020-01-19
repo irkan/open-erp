@@ -104,7 +104,7 @@
                         <form:input path="icon" cssClass="form-control" placeholder="İkon adını daxil edin" />
                         <form:errors path="icon" cssClass="alert-danger control-label"/>
                         <div class="text-right" style="width: 100%">
-                            <a href="/admin/flat-icon" target="_blank" class="kt-link kt-font-sm kt-font-bold kt-margin-t-5">Flat ikonlardan ikon seçin</a>
+                            <a href="/route/sub/admin/flat-icon" target="_blank" class="kt-link kt-font-sm kt-font-bold kt-margin-t-5">Flat ikonlardan ikon seçin</a>
                         </div>
                     </div>
                 </form:form>
@@ -123,6 +123,36 @@
         edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
     });
     </c:if>
+
+    $( "#form" ).validate({
+        rules: {
+            name: {
+                required: true
+            },
+            path: {
+                required: true,
+                remote: {
+                    url: "/admin/operation/path/check",
+                    type: "get",
+                    data: $("#username").val(),
+                    dataType : "json",
+                    success:function(data){
+                        if (data.name == true) {
+                            message: {
+                                username: 'The username is already in use!'
+                            }
+                        }
+                    },
+                    error: function(e){
+                        alert("Gosterilmis modulda secilmis emeliyyat movcuddur!");
+                    }
+                }
+            }
+        },
+        invalidHandler: function(event, validator) {
+            swal.close();
+        },
+    })
 </script>
 
 

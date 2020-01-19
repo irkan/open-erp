@@ -94,13 +94,9 @@
             </div>
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form" method="post" action="/accounting/account" cssClass="form-group">
-                    <div class="form-group">
-                        <form:label path="organization">Flial</form:label>
-                        <form:select  path="organization" cssClass="custom-select form-control">
-                            <form:options items="${organizations}" itemLabel="name" itemValue="id" />
-                        </form:select>
-                        <form:errors path="organization" cssClass="alert-danger control-label"/>
-                    </div>
+                    <form:hidden path="id"/>
+                    <form:hidden path="organization"/>
+                    <form:hidden path="active"/>
                     <div class="row">
                         <div class="col-md-9">
                             <div class="form-group">
@@ -127,12 +123,8 @@
                     <div class="form-group">
                         <form:label path="balance">Balans</form:label>
                         <div class="input-group" >
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
                             <form:input path="balance" cssClass="form-control" placeholder="Balansı daxil edin"/>
-                            <div class="input-group-append">
-                                                    <span class="input-group-text">
-                                                        <i class="la la-usd"></i>
-                                                    </span>
-                            </div>
                         </div>
                         <form:errors path="balance" cssClass="alert-danger control-label"/>
                     </div>
@@ -178,6 +170,24 @@
         edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
     });
     </c:if>
+
+    $( "#form" ).validate({
+        rules: {
+            accountNumber: {
+                required: true
+            },
+            currency: {
+                required: true
+            },
+            balance: {
+                required: true,
+                number: true
+            }
+        },
+        invalidHandler: function(event, validator) {
+            swal.close();
+        },
+    })
 </script>
 
 <script src="<c:url value="/assets/js/demo4/pages/crud/datatables/advanced/row-grouping.js" />" type="text/javascript"></script>

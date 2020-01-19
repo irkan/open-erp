@@ -104,4 +104,8 @@ public class Employee {
         this.specialistOrManager = specialistOrManager;
         this.description = description;
     }
+
+    public Employee(Organization organization) {
+        this.organization = organization;
+    }
 }

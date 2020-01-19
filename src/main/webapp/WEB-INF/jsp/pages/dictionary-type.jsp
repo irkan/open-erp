@@ -129,6 +129,20 @@
         edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
     });
     </c:if>
+
+    $( "#form" ).validate({
+        rules: {
+            name: {
+                required: true
+            },
+            attr1: {
+                required: true
+            }
+        },
+        invalidHandler: function(event, validator) {
+            swal.close();
+        }
+    });
 </script>
 
 

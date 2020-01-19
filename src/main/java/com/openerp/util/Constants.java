@@ -64,6 +64,7 @@ public class Constants {
     public static final String FILTER_FORM_RESULT_BINDING = "filter-form-result-binding";
     public static final String PAYMENT_CHANNEL = "payment_channels";
     public static final String OBJECT = "object";
+    public static final String ACTIONS = "actions";
 
     public static final class STATUS{
         public static final String RESPONSE = "response";

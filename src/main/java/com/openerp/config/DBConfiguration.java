@@ -1363,11 +1363,9 @@ public class DBConfiguration {
 
             List<Account> accounts = new ArrayList<>();
             for(Organization organization: organizations){
-                if(organization.getOrganizationType().getAttr1().equalsIgnoreCase("branch")){
-                    String descriptionAccount = organization.getName() + " AZN hesabı";
-                    Account acc = new Account(organization, "AZN", descriptionAccount);
-                    accounts.add(acc);
-                }
+                String descriptionAccount = organization.getName() + " AZN hesabı";
+                Account acc = new Account(organization, "AZN", descriptionAccount);
+                accounts.add(acc);
             }
 
             accountRepository.saveAll(accounts);

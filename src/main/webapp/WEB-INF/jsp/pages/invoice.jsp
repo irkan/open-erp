@@ -204,14 +204,14 @@
                                         <td><c:out value="${t.paymentChannel.name}" /></td>
                                         <td><c:out value="${t.channelReferenceCode}" /></td>
                                         <td class="text-center">
-                                            <c:if test="${t.advance and t.approve}">
+                                            <c:if test="${t.advance}">
                                                 <i class="flaticon2-check-mark kt-font-success"></i>
                                             </c:if>
                                         </td>
                                         <td nowrap class="text-center">
                                             <c:if test="${approve.status}">
                                                 <c:if test="${!t.approve}">
-                                                    <a href="javascript:approve($('#form-approve'), '<c:out value="${utl:toJson(t)}" />', 'approve-modal');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${approve.object.name}"/>">
+                                                    <a href="javascript:edit($('#form-approve'), '<c:out value="${utl:toJson(t)}" />', 'approve-modal', '<c:out value="${approve.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${approve.object.name}"/>">
                                                         <i class="<c:out value="${approve.object.icon}"/>"></i>
                                                     </a>
                                                 </c:if>
@@ -351,7 +351,7 @@
                         <div class="col-md-12 text-center">
                             <div class="form-group">
                                 <label class="kt-checkbox kt-checkbox--brand">
-                                    <input type="checkbox" name="advance" checked/> Avans hesablansınmı?
+                                    <input type="checkbox" name="advance"/> Avans hesablansınmı?
                                     <span></span>
                                 </label>
                             </div>

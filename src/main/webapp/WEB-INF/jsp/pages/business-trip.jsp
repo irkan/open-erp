@@ -197,7 +197,7 @@
 
 
 <div class="modal fade" id="modal-operation" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"></h5>
@@ -212,6 +212,7 @@
                     <div class="form-group">
                         <form:label path="employee">Əməkdaş</form:label>
                         <form:select  path="employee" cssClass="custom-select form-control">
+                            <form:option value=""></form:option>
                             <form:options items="${employees}" itemLabel="person.fullName" itemValue="id" />
                         </form:select>
                         <form:errors path="employee" cssClass="control-label alert alert-danger" />
@@ -226,8 +227,8 @@
                     <div class="form-group">
                         <form:label path="dateRange">Başlama - Bitmə tarixi</form:label>
                         <div class="kt-input-icon" id='date-range-picker'>
-                            <input name="dateRange" id="dateRange" autocomplete="off" class="form-control" placeholder="Tarix aralığı dd.MM.yyyy - dd.MM.yyyy"/>
-                            <span class="kt-input-icon__icon kt-input-icon__icon--right"><span><i class="la la-calendar-check-o"></i></span></span>
+                            <span class="kt-input-icon__icon kt-input-icon__icon--left"><span><i class="la la-calendar-check-o"></i></span></span>
+                            <form:input path="dateRange" autocomplete="off" cssClass="form-control" placeholder="Tarix aralığı dd.MM.yyyy - dd.MM.yyyy" cssStyle="padding-left: 35px;"/>
                         </div>
                         <form:errors path="dateRange" cssClass="alert-danger control-label"/>
                     </div>
@@ -262,4 +263,25 @@
         edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
     });
     </c:if>
+
+    $( "#form" ).validate({
+        rules: {
+            employee: {
+                required: true
+            },
+            identifier: {
+                required: true
+            },
+            dateRange: {
+                required: true
+            },
+            description: {
+                required: true
+            }
+        },
+        invalidHandler: function(event, validator) {
+            swal.close();
+        },
+    })
+
 </script>

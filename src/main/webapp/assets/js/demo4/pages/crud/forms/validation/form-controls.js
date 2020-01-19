@@ -10,10 +10,10 @@ var KTFormControls = function () {
                 email: {
                     required: true,
                     email: true,
-                    minlength: 10 
+                    minlength: 10
                 },
                 url: {
-                    required: true 
+                    required: true
                 },
                 digits: {
                     required: true,
@@ -21,11 +21,11 @@ var KTFormControls = function () {
                 },
                 creditcard: {
                     required: true,
-                    creditcard: true 
+                    creditcard: true
                 },
                 phone: {
                     required: true,
-                    phoneUS: true 
+                    phoneUS: true
                 },
                 option: {
                     required: true
@@ -53,9 +53,9 @@ var KTFormControls = function () {
                     required: true
                 }
             },
-            
-            //display error alert on form submit  
-            invalidHandler: function(event, validator) {     
+
+            //display error alert on form submit
+            invalidHandler: function(event, validator) {
                 var alert = $('#kt_form_1_msg');
                 alert.removeClass('kt--hide').show();
                 KTUtil.scrollTop();
@@ -63,8 +63,10 @@ var KTFormControls = function () {
 
             submitHandler: function (form) {
                 //form[0].submit(); // submit the form
+                swal.showLoading();
+                return false;
             }
-        });       
+        });
     }
 
     var demo2 = function () {

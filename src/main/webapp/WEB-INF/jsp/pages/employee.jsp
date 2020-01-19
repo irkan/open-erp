@@ -123,6 +123,7 @@
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form" method="post" action="/hr/employee" cssClass="form-group">
                     <form:input path="id" type="hidden"/>
+                    <form:input path="organization" type="hidden"/>
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
@@ -150,12 +151,8 @@
                             <div class="form-group">
                                 <form:label path="person.birthday">Doğum tarixi</form:label>
                                 <div class="input-group date" >
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
                                     <form:input path="person.birthday" autocomplete="off" cssClass="form-control datepicker-element" date="date" placeholder="dd.MM.yyyy"/>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-calendar"></i>
-                                        </span>
-                                    </div>
                                 </div>
                                 <form:errors path="person.birthday" cssClass="control-label alert-danger" />
                             </div>
@@ -176,6 +173,7 @@
                             <div class="form-group">
                                 <form:label path="person.maritalStatus">Ailə vəziyyəti</form:label>
                                 <form:select  path="person.maritalStatus" cssClass="custom-select form-control">
+                                    <form:option value=""></form:option>
                                     <form:options items="${marital_statuses}" itemLabel="name" itemValue="id" />
                                 </form:select>
                             </div>
@@ -184,6 +182,7 @@
                             <div class="form-group">
                                 <form:label path="person.nationality">Milliyət</form:label>
                                 <form:select  path="person.nationality" cssClass="custom-select form-control">
+                                    <form:option value=""></form:option>
                                     <form:options items="${nationalities}" itemLabel="name" itemValue="id" />
                                 </form:select>
                             </div>
@@ -218,17 +217,19 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <form:label path="organization">Struktur</form:label>
-                                        <form:select  path="organization" cssClass="custom-select form-control">
-                                            <form:options items="${organizations}" itemLabel="name" itemValue="id" />
-                                        </form:select>
-                                        <form:errors path="organization" cssClass="control-label alert-danger" />
+                                        <form:label path="contractStartDate">İşə başlama tarixi</form:label>
+                                        <div class="input-group date" >
+                                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
+                                            <form:input path="contractStartDate" autocomplete="off" date="date" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
+                                        </div>
+                                        <form:errors path="contractStartDate" cssClass="control-label alert-danger" />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <form:label path="position">Vəzifə</form:label>
                                         <form:select  path="position" cssClass="custom-select form-control">
+                                            <form:option value=""></form:option>
                                             <form:options items="${positions}" itemLabel="name" itemValue="id" />
                                         </form:select>
                                         <form:errors path="position" cssClass="control-label alert-danger" />
@@ -238,39 +239,25 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <form:label path="contractStartDate">İşə başlama tarixi</form:label>
-                                        <div class="input-group date" >
-                                            <form:input path="contractStartDate" autocomplete="off" date="date" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
-                                            <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-calendar"></i>
-                                        </span>
-                                            </div>
-                                        </div>
-                                        <form:errors path="contractStartDate" cssClass="control-label alert-danger" />
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <form:label path="socialCardNumber">Sosial kart nömrəsi</form:label>
-                                        <form:input path="socialCardNumber" cssClass="form-control" placeholder="Sosial kart nömrəsini daxil edin"/>
-                                        <form:errors path="socialCardNumber" cssClass="control-label alert-danger" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
                                         <form:label path="bankAccountNumber">Bank hesab nömrəsi</form:label>
-                                        <form:input path="bankAccountNumber" cssClass="form-control" placeholder="Bank hesab nömrəsini daxil edin"/>
+                                        <form:input path="bankAccountNumber" cssClass="form-control" placeholder="Daxil edin"/>
                                         <form:errors path="bankAccountNumber" cssClass="control-label alert-danger" />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <form:label path="bankCardNumber">Bank kart nömrəsi</form:label>
-                                        <form:input path="bankCardNumber" cssClass="form-control" placeholder="Bank kart nömrəsini daxil edin"/>
+                                        <form:input path="bankCardNumber" cssClass="form-control" placeholder="Daxil edin"/>
                                         <form:errors path="bankCardNumber" cssClass="control-label alert-danger" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <form:label path="socialCardNumber">Sosial kart nömrəsi</form:label>
+                                        <form:input path="socialCardNumber" cssClass="form-control" placeholder="Daxil edin"/>
+                                        <form:errors path="socialCardNumber" cssClass="control-label alert-danger" />
                                     </div>
                                 </div>
                             </div>
@@ -322,26 +309,18 @@
                             <div class="form-group">
                                 <form:label path="person.contact.email">Email</form:label>
                                 <div class="input-group" >
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-at"></i></span></div>
                                     <form:input path="person.contact.email" cssClass="form-control" placeholder="example@example.com"/>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-at"></i>
-                                        </span>
-                                    </div>
                                 </div>
                                 <form:errors path="person.contact.email" cssClass="control-label alert-danger" />
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <form:label path="person.contact.mobilePhone">Mobil nömrə</form:label>
+                                <form:label path="person.contact.mobilePhone">Nömrə</form:label>
                                 <div class="input-group" >
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-phone"></i></span></div>
                                     <form:input path="person.contact.mobilePhone" cssClass="form-control" placeholder="505505550"/>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-phone"></i>
-                                        </span>
-                                    </div>
                                 </div>
                                 <form:errors path="person.contact.mobilePhone" cssClass="control-label alert-danger" />
                             </div>
@@ -350,12 +329,8 @@
                             <div class="form-group">
                                 <form:label path="person.contact.homePhone">Şəhər nömrəsi</form:label>
                                 <div class="input-group" >
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-phone"></i></span></div>
                                     <form:input path="person.contact.homePhone" cssClass="form-control" placeholder="124555050"/>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-phone"></i>
-                                        </span>
-                                    </div>
                                 </div>
                                 <form:errors path="person.contact.homePhone" cssClass="control-label alert-danger" />
                             </div>
@@ -366,6 +341,7 @@
                             <div class="form-group">
                                 <form:label path="person.contact.city">Şəhər</form:label>
                                 <form:select  path="person.contact.city" cssClass="custom-select form-control">
+                                    <form:option value=""></form:option>
                                     <form:options items="${cities}" itemLabel="name" itemValue="id" />
                                 </form:select>
                             </div>
@@ -374,11 +350,7 @@
                             <div class="form-group">
                                 <form:label path="person.contact.address">Ünvan</form:label>
                                 <div class="input-group" >
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-street-view"></i>
-                                        </span>
-                                    </div>
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-street-view"></i></span></div>
                                     <form:input path="person.contact.address" cssClass="form-control" placeholder="Küçə adı, ev nömrəsi və s."/>
                                 </div>
                                 <form:errors path="person.contact.address" cssClass="control-label alert-danger" />
@@ -585,5 +557,49 @@
             edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
         });
     </c:if>
+
+    $( "#form" ).validate({
+        rules: {
+            position: {
+                required: true
+            },
+            contractStartDate: {
+                required: true
+            },
+            socialCardNumber: {
+                required: true
+            },
+            "person.firstName": {
+                required: true
+            },
+            "person.lastName": {
+                required: true
+            },
+            "person.birthday": {
+                required: true
+            },
+            "person.gender": {
+                required: true
+            },
+            "person.maritalStatus": {
+                required: true
+            },
+            "person.nationality": {
+                required: true
+            },
+            "person.contact.mobilePhone": {
+                required: true
+            },
+            "person.contact.city": {
+                required: true
+            },
+            "person.contact.address": {
+                required: true
+            }
+        },
+        invalidHandler: function(event, validator) {
+            swal.close();
+        },
+    })
 </script>
 

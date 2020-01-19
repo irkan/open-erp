@@ -51,6 +51,7 @@
                     <div class="form-group">
                         <form:label path="module">Üst modul</form:label>
                         <form:select  path="module" cssClass="custom-select form-control">
+                            <form:option value=""></form:option>
                             <form:options items="${parents}" itemLabel="name" itemValue="id" />
                         </form:select>
                     </div>
@@ -78,7 +79,7 @@
                                 <form:input path="icon" type="text" cssClass="form-control" placeholder="İkon adını daxil edin" />
                                 <form:errors path="icon" cssClass="alert-danger control-label"/>
                                 <div class="text-right" style="width: 100%">
-                                    <a href="/admin/flat-icon" target="_blank" class="kt-link kt-font-sm kt-font-bold kt-margin-t-5">Flat ikonlardan ikon seçin</a>
+                                    <a href="/route/sub/admin/flat-icon" target="_blank" class="kt-link kt-font-sm kt-font-bold kt-margin-t-5">Flat ikonlardan ikon seçin</a>
                                 </div>
                             </div>
                         </div>
@@ -261,4 +262,37 @@
 
         $("#module-view-content").html(content);
     }
+
+    $( "#form" ).validate({
+        rules: {
+            module: {
+                required: true
+            },
+            name: {
+                required: true
+            },
+            path: {
+                required: true,
+                remote: {
+                    url: "/admin/module/path/check",
+                    type: "get",
+                    data: $("#username").val(),
+                    dataType : "json",
+                    success:function(data){
+                        if (data.name == true) {
+                            message: {
+                                username: 'The username is already in use!'
+                            }
+                        }
+                    },
+                    error: function(e){
+                        alert("Gosterilmis modulda secilmis emeliyyat movcuddur!");
+                    }
+                }
+            }
+        },
+        invalidHandler: function(event, validator) {
+            swal.close();
+        },
+    })
 </script>

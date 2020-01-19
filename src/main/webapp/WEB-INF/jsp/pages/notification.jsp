@@ -273,4 +273,26 @@
     </div>
 </div>
 
+<script>
+    $( "#form" ).validate({
+        rules: {
+            type: {
+                required: true
+            },
+            to: {
+                required: true
+            },
+            subject: {
+                required: true
+            },
+            message: {
+                required: true
+            }
+        },
+        invalidHandler: function(event, validator) {
+            swal.close();
+        },
+    })
+</script>
+
 

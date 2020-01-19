@@ -15,7 +15,7 @@
     <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
     <c:set var="filter" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'filter')}"/>
     <c:if test="${filter.status}">
-        <div class="accordion  accordion-toggle-arrow mb-2" id="accordionFilter">
+        <div class="accordion accordion-toggle-arrow mb-2" id="accordionFilter">
             <div class="card" style="border-radius: 4px;">
                 <div class="card-header">
                     <div class="card-title w-100" data-toggle="collapse" data-target="#filterContent" aria-expanded="true" aria-controls="collapseOne4">
@@ -180,7 +180,7 @@
 
 
 <div class="modal fade" id="modal-operation" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"></h5>
@@ -194,12 +194,8 @@
                     <div class="form-group">
                         <form:label path="nonWorkingDate">Qeyri iş günü</form:label>
                         <div class="input-group date" >
-                            <form:input path="nonWorkingDate" cssClass="form-control datepicker-element" date="date" placeholder="dd.MM.yyyy"/>
-                            <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-calendar"></i>
-                                        </span>
-                            </div>
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
+                            <form:input path="nonWorkingDate" autocomplete="off" cssClass="form-control datepicker-element" date="date" placeholder="dd.MM.yyyy"/>
                         </div>
                         <form:errors path="nonWorkingDate" cssClass="control-label alert-danger" />
                     </div>
@@ -268,12 +264,24 @@
         var fileName = $(this).val();
         $(this).next('.custom-file-label').addClass("selected").html(fileName);
     });
-</script>
 
-<script>
     <c:if test="${edit.status}">
     $('#kt_table_1 tbody').on('dblclick', 'tr', function () {
         edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
     });
     </c:if>
+
+    $( "#form" ).validate({
+        rules: {
+            nonWorkingDate: {
+                required: true
+            },
+            identifier: {
+                required: true
+            }
+        },
+        invalidHandler: function(event, validator) {
+            swal.close();
+        },
+    })
 </script>

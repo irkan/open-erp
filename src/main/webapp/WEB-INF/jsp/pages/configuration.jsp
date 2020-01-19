@@ -99,7 +99,7 @@
                     </div>
                     <div class="form-group">
                         <form:label path="key">Açar</form:label>
-                        <form:input path="key" cssClass="form-control" placeholder="Atributu daxil edin" />
+                        <form:input path="key" cssClass="form-control" placeholder="Açarı daxil edin" />
                         <form:errors path="key" cssClass="alert-danger"/>
                     </div>
                     <div class="form-group">
@@ -128,6 +128,23 @@
         edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
     });
     </c:if>
+
+    $( "#form" ).validate({
+        rules: {
+            name: {
+                required: true
+            },
+            key: {
+                required: true
+            },
+            attribute: {
+                required: true
+            }
+        },
+        invalidHandler: function(event, validator) {
+            swal.close();
+        },
+    })
 </script>
 
 

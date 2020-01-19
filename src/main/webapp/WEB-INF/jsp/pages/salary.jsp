@@ -39,7 +39,7 @@
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label>&nbsp;</label>
-                                            <input name="workingHourRecord.monthYear" class="form-control" type="month" value="<c:out value="${form.workingHourRecord.monthYear}"/>" />
+                                            <form:input path="workingHourRecord.monthYear" cssClass="form-control" type="month"/>
                                         </div>
                                     </div>
                                     <div class="col-sm-3">

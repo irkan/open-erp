@@ -52,7 +52,7 @@ public class AdministratorController extends SkeletonController {
         } else if (page.equalsIgnoreCase(Constants.ROUTE.USER)){
             model.addAttribute(Constants.LANGUAGES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("language"));
             List<Employee> employees;
-            List<Organization> organizations = organizationRepository.getOrganizationsByActiveTrueAndOrganizationType_Attr1("branch");
+            List<Organization> organizations = organizationRepository.getOrganizationsByActiveTrueAndType_Attr1("branch");
             List<User> users;
             if(canViewAll()){
                 employees = employeeRepository.getEmployeesByContractEndDateIsNull();

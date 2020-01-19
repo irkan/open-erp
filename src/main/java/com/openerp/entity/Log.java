@@ -29,7 +29,7 @@ public class Log {
     private String tableName;
 
     @Column(name = "row_id")
-    private int rowId=0;
+    private int rowId;
 
     @Pattern(regexp=".{0,250}",message="Maksimum 250 simvol ola bilər")
     @Column(name = "operation")

@@ -295,4 +295,60 @@
     });
     </c:if>
 
+    $( "#form" ).validate({
+        rules: {
+            employee: {
+                required: true
+            },
+            username: {
+                required: true,
+                minlength: 4,
+                remote: {
+                    url: "/admin/check/user",
+                    type: "get",
+                    data: $("#username").val(),
+                    //data: {"username":username},
+                    dataType : "json",
+                    success:function(data){
+                        /* response = ( data == true ) ? true : false; */
+                        if (data.name == true)
+                        {
+                            message: {
+                                username: 'The username is already in use!'
+                            }
+                        }
+                    },
+                    error: function(e){
+                        alert("User Name Already Present");
+                    }
+                }
+            },
+            password: {
+                required: true,
+                minlength: 6
+            },
+            "userDetail.paginationSize": {
+                required: true,
+                digits: true,
+                min: 10,
+                max: 1000
+            }
+        },
+        invalidHandler: function(event, validator) {
+            swal.close();
+        },
+    });
+
+    $( "#change-password-form" ).validate({
+        rules: {
+            password: {
+                required: true,
+                minlength: 6
+            }
+        },
+        invalidHandler: function(event, validator) {
+            swal.close();
+        },
+    });
+
 </script>

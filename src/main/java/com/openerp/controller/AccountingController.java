@@ -36,6 +36,7 @@ public class AccountingController extends SkeletonController {
             model.addAttribute(Constants.CURRENCIES,  dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("currency"));
             model.addAttribute(Constants.ACCOUNTS, accountRepository.getAccountsByActiveTrueAndOrganization(getSessionOrganization()));
             model.addAttribute(Constants.EXPENSES, dictionaryRepository.getDictionariesByActiveTrueAndAttr2AndDictionaryType_Attr1("expense", "action"));
+            model.addAttribute(Constants.ACTIONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("action"));
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Transaction(getSessionOrganization(),
                         dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("other", "action"),
@@ -47,7 +48,6 @@ public class AccountingController extends SkeletonController {
             }
             model.addAttribute(Constants.LIST, transactionService.findAll((Transaction) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
         } else if (page.equalsIgnoreCase(Constants.ROUTE.ACCOUNT)) {
-            model.addAttribute(Constants.ORGANIZATIONS, organizationRepository.getOrganizationsByActiveTrueAndOrganizationType_Attr1("branch"));
             model.addAttribute(Constants.CURRENCIES,  dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("currency"));
             List<Account> accounts;
             if(canViewAll()){
@@ -57,7 +57,7 @@ public class AccountingController extends SkeletonController {
             }
             model.addAttribute(Constants.LIST, accounts);
             if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new Account());
+                model.addAttribute(Constants.FORM, new Account(getSessionOrganization()));
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.FINANCING)) {
             if(!model.containsAttribute(Constants.FORM)){

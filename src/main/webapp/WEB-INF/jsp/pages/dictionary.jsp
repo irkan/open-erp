@@ -107,6 +107,7 @@
                     <div class="form-group">
                         <form:label path="dictionaryType">Tip</form:label>
                         <form:select  path="dictionaryType" cssClass="custom-select form-control">
+                            <form:option value=""></form:option>
                             <form:options items="${dictionary_types}" itemLabel="name" itemValue="id" />
                         </form:select>
                         <form:errors path="dictionaryType" cssClass="alert-danger control-label"/>
@@ -129,6 +130,23 @@
         edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
     });
     </c:if>
+
+    $( "#form" ).validate({
+        rules: {
+            name: {
+                required: true
+            },
+            attr1: {
+                required: true
+            },
+            dictionaryType: {
+                required: true
+            },
+        },
+        invalidHandler: function(event, validator) {
+            swal.close();
+        },
+    });
 </script>
 
 
