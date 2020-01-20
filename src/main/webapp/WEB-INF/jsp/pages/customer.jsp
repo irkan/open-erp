@@ -303,14 +303,8 @@
                             <div class="form-group">
                                 <form:label path="person.birthday">Doğum tarixi</form:label>
                                 <div class="input-group date">
-                                    <form:input path="person.birthday" autocomplete="off"
-                                                cssClass="form-control datepicker-element" date="date"
-                                                placeholder="dd.MM.yyyy"/>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-calendar"></i>
-                                        </span>
-                                    </div>
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
+                                    <form:input path="person.birthday" autocomplete="off" cssClass="form-control datepicker-element" date="date" placeholder="dd.MM.yyyy"/>
                                 </div>
                                 <form:errors path="person.birthday" cssClass="control-label alert-danger"/>
                             </div>
@@ -346,13 +340,8 @@
                             <div class="form-group">
                                 <form:label path="person.contact.email">Email</form:label>
                                 <div class="input-group">
-                                    <form:input path="person.contact.email" cssClass="form-control"
-                                                placeholder="example@example.com"/>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-at"></i>
-                                        </span>
-                                    </div>
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-at"></i></span></div>
+                                    <form:input path="person.contact.email" cssClass="form-control" placeholder="example@example.com"/>
                                 </div>
                                 <form:errors path="person.contact.email" cssClass="control-label alert-danger"/>
                             </div>
@@ -361,13 +350,8 @@
                             <div class="form-group">
                                 <form:label path="person.contact.mobilePhone">Mobil nömrə</form:label>
                                 <div class="input-group">
-                                    <form:input path="person.contact.mobilePhone" cssClass="form-control"
-                                                placeholder="505505550"/>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-phone"></i>
-                                        </span>
-                                    </div>
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-phone"></i></span></div>
+                                    <form:input path="person.contact.mobilePhone" cssClass="form-control" placeholder="505505550"/>
                                 </div>
                                 <form:errors path="person.contact.mobilePhone" cssClass="control-label alert-danger"/>
                             </div>
@@ -376,13 +360,8 @@
                             <div class="form-group">
                                 <form:label path="person.contact.homePhone">Şəhər nömrəsi</form:label>
                                 <div class="input-group">
-                                    <form:input path="person.contact.homePhone" cssClass="form-control"
-                                                placeholder="124555050"/>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-phone"></i>
-                                        </span>
-                                    </div>
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-phone"></i></span></div>
+                                    <form:input path="person.contact.homePhone" cssClass="form-control" placeholder="124555050"/>
                                 </div>
                                 <form:errors path="person.contact.homePhone" cssClass="control-label alert-danger"/>
                             </div>
@@ -393,13 +372,8 @@
                             <div class="form-group">
                                 <form:label path="person.contact.relationalPhoneNumber1">Əlaqəli şəxs nömrəsi #1</form:label>
                                 <div class="input-group">
-                                    <form:input path="person.contact.relationalPhoneNumber1" cssClass="form-control"
-                                                placeholder="505505550"/>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-phone"></i>
-                                        </span>
-                                    </div>
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-phone"></i></span></div>
+                                    <form:input path="person.contact.relationalPhoneNumber1" cssClass="form-control" placeholder="505505550"/>
                                 </div>
                                 <form:errors path="person.contact.relationalPhoneNumber1" cssClass="control-label alert-danger"/>
                             </div>
@@ -408,13 +382,8 @@
                             <div class="form-group">
                                 <form:label path="person.contact.relationalPhoneNumber2">Əlaqəli şəxs nömrəsi #2</form:label>
                                 <div class="input-group">
-                                    <form:input path="person.contact.relationalPhoneNumber2" cssClass="form-control"
-                                                placeholder="505505550"/>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-phone"></i>
-                                        </span>
-                                    </div>
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-phone"></i></span></div>
+                                    <form:input path="person.contact.relationalPhoneNumber2" cssClass="form-control" placeholder="505505550"/>
                                 </div>
                                 <form:errors path="person.contact.relationalPhoneNumber2" cssClass="control-label alert-danger"/>
                             </div>
@@ -423,13 +392,8 @@
                             <div class="form-group">
                                 <form:label path="person.contact.relationalPhoneNumber3">Əlaqəli şəxs nömrəsi #3</form:label>
                                 <div class="input-group">
-                                    <form:input path="person.contact.relationalPhoneNumber3" cssClass="form-control"
-                                                placeholder="505505550"/>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-phone"></i>
-                                        </span>
-                                    </div>
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-phone"></i></span></div>
+                                    <form:input path="person.contact.relationalPhoneNumber3" cssClass="form-control" placeholder="505505550"/>
                                 </div>
                                 <form:errors path="person.contact.relationalPhoneNumber3" cssClass="control-label alert-danger"/>
                             </div>
@@ -448,13 +412,8 @@
                             <div class="form-group">
                                 <form:label path="person.contact.address">Ünvan</form:label>
                                 <div class="input-group">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-street-view"></i>
-                                        </span>
-                                    </div>
-                                    <form:input path="person.contact.address" cssClass="form-control"
-                                                placeholder="Küçə adı, ev nömrəsi və s."/>
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-street-view"></i></span></div>
+                                    <form:input path="person.contact.address" cssClass="form-control" placeholder="Küçə adı, ev nömrəsi və s."/>
                                 </div>
                                 <form:errors path="person.contact.address" cssClass="control-label alert-danger"/>
                             </div>
@@ -473,11 +432,7 @@
                             <div class="form-group">
                                 <form:label path="person.contact.livingAddress">Yaşadığı ünvan</form:label>
                                 <div class="input-group">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-street-view"></i>
-                                        </span>
-                                    </div>
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-street-view"></i></span></div>
                                     <form:input path="person.contact.livingAddress" cssClass="form-control"
                                                 placeholder="Küçə adı, ev nömrəsi və s."/>
                                 </div>
@@ -502,6 +457,32 @@
             edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
         });
     </c:if>
+
+    $( "#form" ).validate({
+        rules: {
+            "person.firstName": {
+                required: true
+            },
+            "person.lastName": {
+                required: true
+            },
+            "person.birthday": {
+                required: true
+            },
+            "person.idCardPinCode": {
+                required: true
+            },
+            "person.contact.city": {
+                required: true
+            },
+            "person.contact.address": {
+                required: true
+            }
+        },
+        invalidHandler: function(event, validator) {
+            swal.close();
+        },
+    });
 </script>
 
 

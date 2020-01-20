@@ -198,7 +198,8 @@
                     <form:hidden path="organization"/>
                     <div class="form-group">
                         <form:label path="employee">Əməkdaş</form:label>
-                        <form:select  path="employee" cssClass="custom-select form-control select2-single" multiple="single">
+                        <form:select  path="employee" cssClass="custom-select form-control select2-single">
+                            <form:option value=""></form:option>
                             <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
                                 <optgroup label="${itemGroup.key}">
                                     <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
@@ -207,29 +208,27 @@
                         </form:select>
                         <form:errors path="employee" cssClass="control-label alert-danger"/>
                     </div>
-                    <div class="form-group">
-                        <form:label path="demonstrateDate">Nümayiş tarixi</form:label>
-                        <div class="input-group date" >
-                            <form:input path="demonstrateDate" autocomplete="off" date="date" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
-                            <div class="input-group-append">
-                                <span class="input-group-text">
-                                    <i class="la la-calendar"></i>
-                                </span>
+                    <div class="row">
+                        <div class="col-7">
+                            <div class="form-group">
+                                <form:label path="demonstrateDate">Nümayiş tarixi</form:label>
+                                <div class="input-group date">
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
+                                    <form:input path="demonstrateDate" autocomplete="off" date="date" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
+                                </div>
+                                <form:errors path="demonstrateDate" cssClass="control-label alert-danger" />
                             </div>
                         </div>
-                        <form:errors path="demonstrateDate" cssClass="control-label alert-danger" />
-                    </div>
-                    <div class="form-group">
-                        <form:label path="amount">Say</form:label>
-                        <div class="input-group date" >
-                            <form:input path="amount" autocomplete="off" cssClass="form-control" placeholder="Sayı daxil edin"/>
-                            <div class="input-group-append">
-                                    <span class="input-group-text">
-                                        <i class="la la-calculator"></i>
-                                    </span>
+                        <div class="col-5">
+                            <div class="form-group">
+                                <form:label path="amount">Say</form:label>
+                                <div class="input-group date">
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calculator"></i></span></div>
+                                    <form:input path="amount" autocomplete="off" cssClass="form-control" placeholder="Sayı daxil edin"/>
+                                </div>
+                                <form:errors path="amount" cssClass="control-label alert-danger" />
                             </div>
                         </div>
-                        <form:errors path="amount" cssClass="control-label alert-danger" />
                     </div>
                     <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>
@@ -254,6 +253,25 @@
         edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
     });
     </c:if>
+
+    $( "#form" ).validate({
+        rules: {
+            employee: {
+                required: true
+            },
+            demonstrateDate: {
+                required: true
+            },
+            amount: {
+                required: true,
+                digits: true
+            }
+        },
+        invalidHandler: function(event, validator) {
+            swal.close();
+        },
+    })
+
 </script>
 
 

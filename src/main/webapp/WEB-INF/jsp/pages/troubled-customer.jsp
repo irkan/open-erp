@@ -21,7 +21,7 @@
                 <div class="kt-portlet__body">
                     <c:choose>
                         <c:when test="${not empty list}">
-                            <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+                            <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
                                 <thead>
                                 <tr>
                                     <th>№</th>
@@ -153,7 +153,7 @@
 </div>
 
 <div class="modal fade" id="transfer-modal-operation" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Hesab fakturaya göndər</h5>
@@ -165,14 +165,10 @@
                 <form id="form" method="post" action="/collect/troubled-customer/transfer" class="form-group">
                     <input type="hidden" name="sale" id="sale"/>
                     <div class="form-group">
-                        <label for="price">Qiyməti</label>
-                        <div class="input-group" >
+                        <label for="price">Məbləğ</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
                             <input id="price" name="price" class="form-control" placeholder="Qiyməti daxil edin"/>
-                            <div class="input-group-append">
-                                <span class="input-group-text">
-                                    <i class="la la-usd"></i>
-                                </span>
-                            </div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -199,6 +195,33 @@
             console.error(e);
         }
     }
+
+    $("#datatable").DataTable({
+        responsive: true,
+        lengthMenu: [10, 25, 50, 75, 100, 200, 1000],
+        pageLength: 100,
+        order: [[1, 'desc']],
+        columnDefs: [
+            {
+                targets: 0,
+                width: '25px',
+                className: 'dt-center',
+                orderable: false
+            },
+        ],
+    });
+
+    $( "#form" ).validate({
+        rules: {
+            price: {
+                required: true,
+                number: true
+            }
+        },
+        invalidHandler: function(event, validator) {
+            swal.close();
+        },
+    });
 </script>
 
 

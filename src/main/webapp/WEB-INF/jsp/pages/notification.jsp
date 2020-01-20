@@ -159,7 +159,7 @@
 
 <c:choose>
     <c:when test="${not empty list}">
-<table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+<table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
     <thead>
     <tr>
         <th>ID</th>
@@ -255,12 +255,12 @@
                     </div>
                     <div class="form-group">
                         <form:label path="message">Mesaj mətni</form:label>
-                        <form:textarea path="message" cssClass="form-control" placeholder="Mesajı daxil edin"></form:textarea>
+                        <form:textarea path="message" cssClass="form-control" placeholder="Mesajı daxil edin" />
                         <form:errors path="message" cssClass="alert alert-danger"/>
                     </div>
                     <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>
-                        <form:textarea path="description" cssClass="form-control" placeholder="Açıqlama daxil edin"></form:textarea>
+                        <form:textarea path="description" cssClass="form-control" placeholder="Açıqlama daxil edin" />
                         <form:errors path="description" cssClass="alert alert-danger"/>
                     </div>
                 </form:form>
@@ -293,6 +293,21 @@
             swal.close();
         },
     })
+
+    $("#datatable").DataTable({
+        responsive: true,
+        lengthMenu: [10, 25, 50, 75, 100, 200, 1000],
+        pageLength: 100,
+        order: [[1, 'desc']],
+        columnDefs: [
+            {
+                targets: 0,
+                width: '25px',
+                className: 'dt-center',
+                orderable: false
+            },
+        ],
+    });
 </script>
 
 

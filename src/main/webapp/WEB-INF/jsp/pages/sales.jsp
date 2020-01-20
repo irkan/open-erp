@@ -441,12 +441,8 @@
                                             <div class="form-group">
                                                 <form:label path="saleDate">Satış tarixi</form:label>
                                                 <div class="input-group date" >
+                                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
                                                     <form:input path="saleDate" cssClass="form-control datepicker-element" date="date" placeholder="dd.MM.yyyy"/>
-                                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-calendar"></i>
-                                        </span>
-                                                    </div>
                                                 </div>
                                                 <form:errors path="saleDate" cssClass="control-label alert-danger" />
                                             </div>
@@ -479,12 +475,8 @@
                                             <div class="form-group">
                                                 <form:label path="customer.person.birthday">Doğum tarixi</form:label>
                                                 <div class="input-group date" >
+                                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
                                                     <form:input path="customer.person.birthday" cssClass="form-control datepicker-element" date="date" placeholder="dd.MM.yyyy"/>
-                                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-calendar"></i>
-                                        </span>
-                                                    </div>
                                                 </div>
                                                 <form:errors path="customer.person.birthday" cssClass="control-label alert-danger" />
                                             </div>
@@ -544,13 +536,9 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <form:label path="customer.person.contact.mobilePhone">Mobil nömrə</form:label>
-                                                <div class="input-group" >
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-phone"></i></span></div>
                                                     <form:input path="customer.person.contact.mobilePhone" cssClass="form-control" placeholder="0505505550"/>
-                                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-phone"></i>
-                                        </span>
-                                                    </div>
                                                 </div>
                                                 <form:errors path="customer.person.contact.mobilePhone" cssClass="control-label alert-danger" />
                                             </div>
@@ -559,12 +547,8 @@
                                             <div class="form-group">
                                                 <form:label path="customer.person.contact.homePhone">Şəhər nömrəsi</form:label>
                                                 <div class="input-group" >
+                                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-phone"></i></span></div>
                                                     <form:input path="customer.person.contact.homePhone" cssClass="form-control" placeholder="0124555050"/>
-                                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-phone"></i>
-                                        </span>
-                                                    </div>
                                                 </div>
                                                 <form:errors path="customer.person.contact.homePhone" cssClass="control-label alert-danger" />
                                             </div>
@@ -573,12 +557,8 @@
                                             <div class="form-group">
                                                 <form:label path="customer.person.contact.email">Email</form:label>
                                                 <div class="input-group" >
+                                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-at"></i></span></div>
                                                     <form:input path="customer.person.contact.email" cssClass="form-control" placeholder="example@example.com"/>
-                                                    <div class="input-group-append">
-                                                            <span class="input-group-text">
-                                                                <i class="la la-at"></i>
-                                                            </span>
-                                                    </div>
                                                 </div>
                                                 <form:errors path="customer.person.contact.email" cssClass="control-label alert-danger" />
                                             </div>
@@ -588,13 +568,9 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <form:label path="customer.person.contact.relationalPhoneNumber1">Əlaqəli şəxs nömrəsi #1</form:label>
-                                                <div class="input-group" >
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-phone"></i></span></div>
                                                     <form:input path="customer.person.contact.relationalPhoneNumber1" cssClass="form-control" placeholder="0505505550"/>
-                                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-phone"></i>
-                                        </span>
-                                                    </div>
                                                 </div>
                                                 <form:errors path="customer.person.contact.relationalPhoneNumber1" cssClass="control-label alert-danger" />
                                             </div>
@@ -602,13 +578,9 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <form:label path="customer.person.contact.relationalPhoneNumber2">Əlaqəli şəxs nömrəsi #2</form:label>
-                                                <div class="input-group" >
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-phone"></i></span></div>
                                                     <form:input path="customer.person.contact.relationalPhoneNumber2" cssClass="form-control" placeholder="0505505550"/>
-                                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-phone"></i>
-                                        </span>
-                                                    </div>
                                                 </div>
                                                 <form:errors path="customer.person.contact.relationalPhoneNumber2" cssClass="control-label alert-danger" />
                                             </div>
@@ -617,12 +589,8 @@
                                             <div class="form-group">
                                                 <form:label path="customer.person.contact.relationalPhoneNumber3">Əlaqəli şəxs nömrəsi #3</form:label>
                                                 <div class="input-group" >
+                                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-phone"></i></span></div>
                                                     <form:input path="customer.person.contact.relationalPhoneNumber3" cssClass="form-control" placeholder="0505505550"/>
-                                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-phone"></i>
-                                        </span>
-                                                    </div>
                                                 </div>
                                                 <form:errors path="customer.person.contact.relationalPhoneNumber3" cssClass="control-label alert-danger" />
                                             </div>
@@ -641,11 +609,7 @@
                                             <div class="form-group">
                                                 <form:label path="customer.person.contact.address">Ünvan</form:label>
                                                 <div class="input-group" >
-                                                    <div class="input-group-append">
-                                                        <span class="input-group-text">
-                                                            <i class="la la-street-view"></i>
-                                                        </span>
-                                                    </div>
+                                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-street-view"></i></span></div>
                                                     <form:input path="customer.person.contact.address" cssClass="form-control" placeholder="Küçə adı, ev nömrəsi və s."/>
                                                 </div>
                                                 <form:errors path="customer.person.contact.address" cssClass="control-label alert-danger" />
@@ -665,11 +629,7 @@
                                             <div class="form-group">
                                                 <form:label path="customer.person.contact.livingAddress">Yaşayış ünvanı</form:label>
                                                 <div class="input-group" >
-                                                    <div class="input-group-append">
-                                                        <span class="input-group-text">
-                                                            <i class="la la-street-view"></i>
-                                                        </span>
-                                                    </div>
+                                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-street-view"></i></span></div>
                                                     <form:input path="customer.person.contact.livingAddress" cssClass="form-control" placeholder="Küçə adı, ev nömrəsi və s."/>
                                                 </div>
                                                 <form:errors path="customer.person.contact.livingAddress" cssClass="control-label alert-danger" />

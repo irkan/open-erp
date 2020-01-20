@@ -119,7 +119,7 @@
 
 <c:choose>
     <c:when test="${not empty list}">
-<table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+<table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
     <thead>
     <tr>
         <th>№</th>
@@ -257,6 +257,21 @@
             console.error(e);
         }
     }
+
+    $("#datatable").DataTable({
+        responsive: true,
+        lengthMenu: [10, 25, 50, 75, 100, 200, 1000],
+        pageLength: 100,
+        order: [[1, 'desc']],
+        columnDefs: [
+            {
+                targets: 0,
+                width: '25px',
+                className: 'dt-center',
+                orderable: false
+            },
+        ],
+    });
 </script>
 
 
