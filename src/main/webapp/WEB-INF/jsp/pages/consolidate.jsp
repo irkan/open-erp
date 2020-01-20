@@ -153,7 +153,7 @@
                 <c:choose>
                     <c:when test="${return1.status and t.action.attr1 eq 'consolidate'}">
                         <c:if test="${t.amount gt 0}">
-                            <a href="javascript:returnOperation($('#form-return'), '<c:out value="${utl:toJson(t)}" />', 'return-modal');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${return1.object.name}"/>">
+                            <a href="javascript:returnOperation($('#form'), '<c:out value="${utl:toJson(t)}" />', 'return-modal');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${return1.object.name}"/>">
                                 <i class="<c:out value="${return1.object.icon}"/>"></i>
                             </a>
                         </c:if>
@@ -203,7 +203,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form:form modelAttribute="form" id="form-return" method="post" action="/warehouse/consolidate/return" cssClass="form-group">
+                <form:form modelAttribute="form" id="form" method="post" action="/warehouse/consolidate/return" cssClass="form-group">
                     <form:hidden path="id"/>
                     <div class="row">
                         <div class="col-sm-12 text-center">
@@ -228,13 +228,16 @@
                     </div>
                     <div class="form-group">
                         <form:label path="amount">Say</form:label>
-                        <form:input path="amount" cssClass="form-control" placeholder="Sayı daxil edin"  />
+                        <div class="input-group" >
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calculator"></i></span></div>
+                            <form:input path="amount" cssClass="form-control" placeholder="Say daxil edin"/>
+                        </div>
                         <form:errors path="amount" cssClass="alert alert-danger"/>
                     </div>
                 </form:form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="submit($('#form-return'));">Yadda saxla</button>
+                <button type="button" class="btn btn-primary" onclick="submit($('#form'));">Yadda saxla</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
             </div>
         </div>
@@ -271,6 +274,23 @@
                 orderable: false
             },
         ],
+    });
+
+    $( "#form" ).validate({
+        rules: {
+            amount: {
+                required: true,
+                digits: true,
+                min: 1
+            }
+        },
+        invalidHandler: function(event, validator) {
+            swal.close();
+        },
+    });
+
+    $("input[name='amount']").inputmask('decimal', {
+        rightAlignNumerics: false
     });
 </script>
 

@@ -226,9 +226,9 @@
                     </div>
                     <div class="form-group">
                         <form:label path="dateRange">Başlama - Bitmə tarixi</form:label>
-                        <div class="kt-input-icon" id='date-range-picker'>
+                        <div class="kt-input-icon kt-input-icon--left" id='date-range-picker'>
+                            <form:input path="dateRange" autocomplete="off" cssClass="form-control" placeholder="Tarix aralığı dd.MM.yyyy - dd.MM.yyyy"/>
                             <span class="kt-input-icon__icon kt-input-icon__icon--left"><span><i class="la la-calendar-check-o"></i></span></span>
-                            <form:input path="dateRange" autocomplete="off" cssClass="form-control" placeholder="Tarix aralığı dd.MM.yyyy - dd.MM.yyyy" cssStyle="padding-left: 35px;"/>
                         </div>
                         <form:errors path="dateRange" cssClass="alert-danger control-label"/>
                     </div>

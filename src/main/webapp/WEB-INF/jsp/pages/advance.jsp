@@ -419,13 +419,18 @@
         rules: {
             payed: {
                 required: true,
-                number: true
+                number: true,
+                min: 1
             }
         },
         invalidHandler: function(event, validator) {
             swal.close();
         },
-    })
+    });
+
+    $("input[name='payed']").inputmask('decimal', {
+        rightAlignNumerics: false
+    });
 
 </script>
 

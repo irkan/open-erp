@@ -316,26 +316,7 @@
             },
             username: {
                 required: true,
-                minlength: 4,
-                remote: {
-                    url: "/admin/check/user",
-                    type: "get",
-                    data: $("#username").val(),
-                    //data: {"username":username},
-                    dataType : "json",
-                    success:function(data){
-                        /* response = ( data == true ) ? true : false; */
-                        if (data.name == true)
-                        {
-                            message: {
-                                username: 'The username is already in use!'
-                            }
-                        }
-                    },
-                    error: function(e){
-                        alert("User Name Already Present");
-                    }
-                }
+                minlength: 4
             },
             password: {
                 required: true,
@@ -363,6 +344,10 @@
         invalidHandler: function(event, validator) {
             swal.close();
         },
+    });
+
+    $("input[name='userDetail.paginationSize']").inputmask('decimal', {
+        rightAlignNumerics: false
     });
 
 </script>

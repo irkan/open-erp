@@ -319,7 +319,11 @@
         invalidHandler: function(event, validator) {
             swal.close();
         },
-    })
+    });
+
+    $("input[name='rowId']").inputmask('decimal', {
+        rightAlignNumerics: false
+    });
 
 </script>
 

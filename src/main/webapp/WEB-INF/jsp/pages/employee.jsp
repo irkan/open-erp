@@ -600,6 +600,67 @@
         invalidHandler: function(event, validator) {
             swal.close();
         },
-    })
-</script>
+    });
 
+    $("input[name='person.contact.email']").inputmask({
+        mask: "*{1,20}[.*{1,20}][.*{1,20}][.*{1,20}]@*{1,20}[.*{2,6}][.*{1,2}]",
+        greedy: false,
+        onBeforePaste: function (pastedValue, opts) {
+            pastedValue = pastedValue.toLowerCase();
+            return pastedValue.replace("mailto:", "");
+        },
+        definitions: {
+            '*': {
+                validator: "[0-9A-Za-z!#$%&'*+/=?^_`{|}~\-]",
+                cardinality: 1,
+                casing: "lower"
+            }
+        }
+    });
+
+    $("input[name='person.contact.mobilePhone']").inputmask("mask", {
+        "mask": "(999) 999-9999"
+    });
+
+    $("input[name='person.contact.homePhone']").inputmask("mask", {
+        "mask": "(999) 999-9999"
+    });
+
+    $("input[name='bankCardNumber']").inputmask("mask", {
+        "mask": "9999-9999-9999-9999"
+    });
+
+    <c:forEach var="t" items="${employee_payroll_fields}" varStatus="loop">
+        $("input[name='employeePayrollDetails[<c:out value="${loop.index}"/>].value']").inputmask('decimal', {
+            rightAlignNumerics: false
+        });
+    </c:forEach>
+
+    $( "#form-payroll" ).validate({
+        rules: {
+            <c:forEach var="t" items="${employee_payroll_fields}" varStatus="loop">
+            "employeePayrollDetails[<c:out value="${loop.index}"/>].value" : {
+                required: true,
+                number: true
+            },
+            </c:forEach>
+        },
+        invalidHandler: function(event, validator) {
+            swal.close();
+        },
+    });
+
+    $( "#form-sale" ).validate({
+        rules: {
+            <c:forEach var="t" items="${employee_sale_fields}" varStatus="loop">
+            "employeeSaleDetails[<c:out value="${loop.index}"/>].value" : {
+                required: true,
+                number: true
+            },
+            </c:forEach>
+        },
+        invalidHandler: function(event, validator) {
+            swal.close();
+        },
+    });
+</script>

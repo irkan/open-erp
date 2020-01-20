@@ -240,11 +240,13 @@
                 <form:form modelAttribute="form" id="form" method="post" action="/warehouse/inventory" cssClass="form-group">
                     <form:hidden path="id"/>
                     <form:hidden path="organization"/>
+                    <form:hidden path="active"/>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <form:label path="group">Qrup</form:label>
                                 <form:select  path="group" cssClass="custom-select form-control">
+                                    <form:option value=""></form:option>
                                     <form:options items="${inventory_groups}" itemLabel="name" itemValue="id" />
                                 </form:select>
                             </div>
@@ -253,6 +255,7 @@
                             <div class="form-group">
                                 <form:label path="actions[0].supplier">Tədarükçü</form:label>
                                 <form:select  path="actions[0].supplier" cssClass="custom-select form-control">
+                                    <form:option value=""></form:option>
                                     <form:options items="${suppliers}" itemLabel="name" itemValue="id" />
                                 </form:select>
                             </div>
@@ -285,12 +288,8 @@
                             <div class="form-group">
                                 <form:label path="actions[0].amount">Say</form:label>
                                 <div class="input-group" >
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calculator"></i></span></div>
                                     <form:input path="actions[0].amount" cssClass="form-control" placeholder="Say daxil edin"/>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-calculator"></i>
-                                        </span>
-                                    </div>
                                 </div>
                                 <form:errors path="actions[0].amount" cssClass="alert-danger control-label"/>
                             </div>
@@ -355,6 +354,32 @@
         window.reload();
     });
     </c:if>
+
+    $( "#form" ).validate({
+        rules: {
+            group: {
+                required: true
+            },
+            "actions[0].amount": {
+                required: true,
+                digits: true,
+                min: 1
+            },
+            name: {
+                required: true
+            },
+            "actions[0].supplier": {
+                required: true
+            }
+        },
+        invalidHandler: function(event, validator) {
+            swal.close();
+        },
+    });
+
+    $("input[name='actions[0].amount']").inputmask('decimal', {
+        rightAlignNumerics: false
+    });
 
 </script>
 

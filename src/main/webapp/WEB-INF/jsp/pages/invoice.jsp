@@ -295,12 +295,8 @@
                             <div class="form-group">
                                 <form:label path="price">Qiyməti</form:label>
                                 <div class="input-group" >
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
                                     <form:input path="price" cssClass="form-control" placeholder="Qiyməti daxil edin"/>
-                                    <div class="input-group-append">
-                                                    <span class="input-group-text">
-                                                        <i class="la la-usd"></i>
-                                                    </span>
-                                    </div>
                                 </div>
                                 <form:errors path="price" cssClass="alert-danger control-label"/>
                             </div>
@@ -309,12 +305,8 @@
                             <div class="form-group">
                                 <form:label path="invoiceDate">Hesab-faktura tarixi</form:label>
                                 <div class="input-group date" >
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
                                     <form:input path="invoiceDate" autocomplete="off" date="date" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
-                                    <div class="input-group-append">
-                                    <span class="input-group-text">
-                                        <i class="la la-calendar"></i>
-                                    </span>
-                                    </div>
                                 </div>
                                 <form:errors path="invoiceDate" cssClass="control-label alert-danger" />
                             </div>
@@ -521,6 +513,29 @@
         edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
     });
     </c:if>
+
+    $( "#form" ).validate({
+        rules: {
+            price: {
+                required: true,
+                number: true,
+                min: 1
+            },
+            sales: {
+                required: true
+            },
+            invoiceDate: {
+                required: true
+            }
+        },
+        invalidHandler: function(event, validator) {
+            swal.close();
+        },
+    });
+
+    $("input[name='price']").inputmask('decimal', {
+        rightAlignNumerics: false
+    });
 </script>
 
 

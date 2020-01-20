@@ -308,7 +308,10 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <form:label path="amount">Say</form:label>
-                                <form:input path="amount" cssClass="form-control"/>
+                                <div class="input-group" >
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calculator"></i></span></div>
+                                    <form:input path="amount" cssClass="form-control" placeholder="Say daxil edin"/>
+                                </div>
                                 <form:errors path="amount" cssClass="alert-danger control-label"/>
                             </div>
                         </div>
@@ -325,7 +328,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group pt-4">
+                            <div class="form-group" style="padding-top: 30px;">
                                 <label class="kt-checkbox kt-checkbox--brand">
                                     <form:checkbox path="debt"/> Debt
                                     <span></span>
@@ -349,7 +352,7 @@
 </div>
 
 <div class="modal fade" id="transaction-approve-modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"></h5>
@@ -454,6 +457,11 @@ $("#datatable").DataTable({
 
 $( "#form" ).validate({
     rules: {
+        amount: {
+            required: false,
+            digits: true,
+            min: 1
+        },
         price: {
             required: true,
             number: true
@@ -483,5 +491,13 @@ $( "#transaction-approve-form" ).validate({
         swal.close();
     },
 })
+
+$("input[name='amount']").inputmask('decimal', {
+    rightAlignNumerics: false
+});
+
+$("input[name='price']").inputmask('decimal', {
+    rightAlignNumerics: false
+});
 
 </script>

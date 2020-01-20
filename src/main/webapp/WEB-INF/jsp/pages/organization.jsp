@@ -272,6 +272,30 @@
         invalidHandler: function(event, validator) {
             swal.close();
         },
-    })
+    });
+
+    $("input[name='contact.email']").inputmask({
+        mask: "*{1,20}[.*{1,20}][.*{1,20}][.*{1,20}]@*{1,20}[.*{2,6}][.*{1,2}]",
+        greedy: false,
+        onBeforePaste: function (pastedValue, opts) {
+            pastedValue = pastedValue.toLowerCase();
+            return pastedValue.replace("mailto:", "");
+        },
+        definitions: {
+            '*': {
+                validator: "[0-9A-Za-z!#$%&'*+/=?^_`{|}~\-]",
+                cardinality: 1,
+                casing: "lower"
+            }
+        }
+    });
+
+    $("input[name='contact.mobilePhone']").inputmask("mask", {
+        "mask": "(999) 999-9999"
+    });
+
+    $("input[name='contact.homePhone']").inputmask("mask", {
+        "mask": "(999) 999-9999"
+    });
 </script>
 

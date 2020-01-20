@@ -18,6 +18,8 @@
                 <div class="kt-portlet__body">
                     <c:choose>
                         <c:when test="${not empty list}">
+                            <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
+                            <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
                                 <thead>
                                 <tr>
@@ -30,6 +32,7 @@
                                     <th>Mobil nömrə</th>
                                     <th>Ofis nömrəsi</th>
                                     <th>Ünvan</th>
+                                    <th>Müqavilə bağlanmışdır</th>
                                     <th>Əməliyyat</th>
                                 </tr>
                                 </thead>
@@ -45,31 +48,18 @@
                                         <td><c:out value="${t.person.contact.mobilePhone}" /></td>
                                         <td><c:out value="${t.person.contact.homePhone}" /></td>
                                         <td><c:out value="${t.person.contact.city.name}" />, <c:out value="${t.person.contact.address}" /></td>
+                                        <td><fmt:formatDate value = "${t.contractDate}" pattern = "dd.MM.yyyy" /></td>
                                         <td nowrap class="text-center">
-                                            <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
-                                            <c:choose>
-                                                <c:when test="${view.status}">
-                                                    <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
-                                                        <i class="la <c:out value="${view.object.icon}"/>"></i>
-                                                    </a>
-                                                </c:when>
-                                            </c:choose>
-                                            <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
-                                            <c:choose>
-                                                <c:when test="${edit.status}">
-                                                    <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
-                                                        <i class="<c:out value="${edit.object.icon}"/>"></i>
-                                                    </a>
-                                                </c:when>
-                                            </c:choose>
-                                            <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
-                                            <c:choose>
-                                                <c:when test="${delete.status}">
-                                                    <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
-                                                        <i class="<c:out value="${delete.object.icon}"/>"></i>
-                                                    </a>
-                                                </c:when>
-                                            </c:choose>
+                                            <c:if test="${edit.status}">
+                                                <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                                                    <i class="<c:out value="${edit.object.icon}"/>"></i>
+                                                </a>
+                                            </c:if>
+                                            <c:if test="${delete.status}">
+                                                <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
+                                                    <i class="<c:out value="${delete.object.icon}"/>"></i>
+                                                </a>
+                                            </c:if>
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -104,18 +94,28 @@
                 <form:form modelAttribute="form" id="form" method="post" action="/warehouse/supplier" cssClass="form-group">
                     <form:input path="id" type="hidden"/>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-5">
                             <div class="form-group">
                                 <form:label path="name">Tədarükçü adı</form:label>
                                 <form:input path="name" cssClass="form-control" placeholder="Adı daxil edin"/>
                                 <form:errors path="name" cssClass="control-label alert-danger" />
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <form:label path="description">Açıqlama</form:label>
                                 <form:input path="description" cssClass="form-control" placeholder="Açıqlama daxil edin"/>
                                 <form:errors path="description" cssClass="control-label alert-danger" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <form:label path="contractDate">Müqavilə bağlanmışdır</form:label>
+                                <div class="input-group date" >
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
+                                    <form:input path="contractDate" autocomplete="off" cssClass="form-control datepicker-element" date="date" placeholder="dd.MM.yyyy"/>
+                                </div>
+                                <form:errors path="contractDate" cssClass="control-label alert-danger" />
                             </div>
                         </div>
                     </div>
@@ -147,27 +147,29 @@
                             <div class="form-group">
                                 <form:label path="person.birthday">Doğum tarixi</form:label>
                                 <div class="input-group date" >
-                                    <form:input path="person.birthday" cssClass="form-control datepicker-element" date="date" placeholder="dd.MM.yyyy"/>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-calendar"></i>
-                                        </span>
-                                    </div>
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
+                                    <form:input path="person.birthday" autocomplete="off" cssClass="form-control datepicker-element" date="date" placeholder="dd.MM.yyyy"/>
                                 </div>
                                 <form:errors path="person.birthday" cssClass="control-label alert-danger" />
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <fmt:parseNumber var = "grid" integerOnly = "true" type = "number" value = "${12/genders.size()}" />
-                                <form:label path="person.gender">Cins</form:label><br/>
-                                <form:radiobuttons items="${genders}" path="person.gender" itemLabel="name" itemValue="id"/>
+                                <form:label path="person.gender" cssClass="mb-3">Cins</form:label><br/>
+                                <c:forEach var="t" items="${genders}" varStatus="loop">
+                                    <label class="kt-radio kt-radio--brand">
+                                        <form:radiobutton path="person.gender" value="${t.id}"/> <c:out value="${t.name}"/>
+                                        <span></span>
+                                    </label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                </c:forEach>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <form:label path="person.nationality">Milliyət</form:label>
                                 <form:select  path="person.nationality" cssClass="custom-select form-control">
+                                    <form:option value=""></form:option>
                                     <form:options items="${nationalities}" itemLabel="name" itemValue="id" />
                                 </form:select>
                             </div>
@@ -178,13 +180,9 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <form:label path="person.contact.email">Email</form:label>
-                                <div class="input-group" >
+                                <div class="input-group">
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-at"></i></span></div>
                                     <form:input path="person.contact.email" cssClass="form-control" placeholder="example@example.com"/>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-at"></i>
-                                        </span>
-                                    </div>
                                 </div>
                                 <form:errors path="person.contact.email" cssClass="control-label alert-danger" />
                             </div>
@@ -193,12 +191,8 @@
                             <div class="form-group">
                                 <form:label path="person.contact.mobilePhone">Mobil nömrə</form:label>
                                 <div class="input-group" >
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-phone"></i></span></div>
                                     <form:input path="person.contact.mobilePhone" cssClass="form-control" placeholder="505505550"/>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-phone"></i>
-                                        </span>
-                                    </div>
                                 </div>
                                 <form:errors path="person.contact.mobilePhone" cssClass="control-label alert-danger" />
                             </div>
@@ -206,13 +200,9 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <form:label path="person.contact.homePhone">Şəhər nömrəsi</form:label>
-                                <div class="input-group" >
+                                <div class="input-group">
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-phone"></i></span></div>
                                     <form:input path="person.contact.homePhone" cssClass="form-control" placeholder="124555050"/>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-phone"></i>
-                                        </span>
-                                    </div>
                                 </div>
                                 <form:errors path="person.contact.homePhone" cssClass="control-label alert-danger" />
                             </div>
@@ -223,6 +213,7 @@
                             <div class="form-group">
                                 <form:label path="person.contact.city">Şəhər</form:label>
                                 <form:select  path="person.contact.city" cssClass="custom-select form-control">
+                                    <form:option value=""></form:option>
                                     <form:options items="${cities}" itemLabel="name" itemValue="id" />
                                 </form:select>
                             </div>
@@ -231,11 +222,7 @@
                             <div class="form-group">
                                 <form:label path="person.contact.address">Ünvan</form:label>
                                 <div class="input-group" >
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-street-view"></i>
-                                        </span>
-                                    </div>
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-street-view"></i></span></div>
                                     <form:input path="person.contact.address" cssClass="form-control" placeholder="Küçə adı, ev nömrəsi və s."/>
                                 </div>
                                 <form:errors path="person.contact.address" cssClass="control-label alert-danger" />
@@ -272,6 +259,62 @@
                 orderable: false
             },
         ],
+    });
+
+    $( "#form" ).validate({
+        rules: {
+            name: {
+                required: true
+            },
+            contractDate: {
+                required: true
+            },
+            "person.firstName": {
+                required: true
+            },
+            "person.lastName": {
+                required: true
+            },
+            "person.gender": {
+                required: true
+            },
+            "person.nationality": {
+                required: true
+            },
+            "person.contact.mobilePhone": {
+                required: true
+            },
+            "person.contact.city": {
+                required: true
+            }
+        },
+        invalidHandler: function(event, validator) {
+            swal.close();
+        },
+    });
+
+    $("input[name='person.contact.email']").inputmask({
+        mask: "*{1,20}[.*{1,20}][.*{1,20}][.*{1,20}]@*{1,20}[.*{2,6}][.*{1,2}]",
+        greedy: false,
+        onBeforePaste: function (pastedValue, opts) {
+            pastedValue = pastedValue.toLowerCase();
+            return pastedValue.replace("mailto:", "");
+        },
+        definitions: {
+            '*': {
+                validator: "[0-9A-Za-z!#$%&'*+/=?^_`{|}~\-]",
+                cardinality: 1,
+                casing: "lower"
+            }
+        }
+    });
+
+    $("input[name='person.contact.mobilePhone']").inputmask("mask", {
+        "mask": "(999) 999-9999"
+    });
+
+    $("input[name='person.contact.homePhone']").inputmask("mask", {
+        "mask": "(999) 999-9999"
     });
 </script>
 

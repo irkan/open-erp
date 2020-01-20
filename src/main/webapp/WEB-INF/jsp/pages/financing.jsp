@@ -233,7 +233,10 @@
                     </div>
                     <div class="form-group">
                         <form:label path="price">Qiymət</form:label>
-                        <form:input path="price" cssClass="form-control" placeholder="Qiyməti daxil edin"/>
+                        <div class="input-group" >
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
+                            <form:input path="price" autocomplete="off" cssClass="form-control" placeholder="Qiyməti daxil edin"/>
+                        </div>
                         <form:errors path="price" cssClass="alert-danger control-label"/>
                     </div>
                 </form:form>
@@ -272,11 +275,16 @@
         rules: {
             price: {
                 required: true,
-                number: true
+                number: true,
+                min: 0
             }
         },
         invalidHandler: function(event, validator) {
             swal.close();
         },
-    })
+    });
+
+    $("input[name='price']").inputmask('decimal', {
+        rightAlignNumerics: false
+    });
 </script>
