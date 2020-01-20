@@ -222,7 +222,7 @@
 
 
 <div class="modal fade" id="transfer-modal-operation" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Göndər</h5>
@@ -244,13 +244,17 @@
                     <div class="form-group">
                         <form:label path="organization">Haraya?</form:label>
                         <form:select  path="organization" cssClass="custom-select form-control">
+                            <form:option value=""></form:option>
                             <form:options items="${organizations}" itemLabel="name" itemValue="id" />
                         </form:select>
                         <form:errors path="organization" cssClass="alert-danger"/>
                     </div>
                     <div class="form-group">
                         <form:label path="amount">Say</form:label>
-                        <form:input path="amount" cssClass="form-control" placeholder="Sayı daxil edin"  />
+                        <div class="input-group" >
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calculator"></i></span></div>
+                            <form:input path="amount" cssClass="form-control" placeholder="Say daxil edin"/>
+                        </div>
                         <form:errors path="amount" cssClass="alert alert-danger"/>
                     </div>
                 </form:form>
@@ -367,13 +371,17 @@
                     <div class="form-group">
                         <form:label path="employee">Əməkdaş</form:label>
                         <form:select  path="employee" cssClass="custom-select form-control">
+                            <form:option value=""></form:option>
                             <form:options items="${employees}" itemLabel="person.fullName" itemValue="id" />
                         </form:select>
                         <form:errors path="employee" cssClass="alert-danger"/>
                     </div>
                     <div class="form-group">
                         <form:label path="amount">Say</form:label>
-                        <form:input path="amount" cssClass="form-control" placeholder="Sayı daxil edin"  />
+                        <div class="input-group" >
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calculator"></i></span></div>
+                            <form:input path="amount" cssClass="form-control" placeholder="Say daxil edin"/>
+                        </div>
                         <form:errors path="amount" cssClass="alert alert-danger"/>
                     </div>
                 </form:form>
@@ -523,6 +531,44 @@
                 orderable: false
             },
         ],
+    });
+
+    $( "#form-consolidate" ).validate({
+        rules: {
+            employee: {
+                required: true
+            },
+            amount: {
+                required: true,
+                digits: true,
+                min: 1
+            }
+        },
+        invalidHandler: function(event, validator) {
+            KTUtil.scrollTop();
+            swal.close();
+        },
+    });
+
+    $( "#form" ).validate({
+        rules: {
+            organization: {
+                required: true
+            },
+            amount: {
+                required: true,
+                digits: true,
+                min: 1
+            }
+        },
+        invalidHandler: function(event, validator) {
+            KTUtil.scrollTop();
+            swal.close();
+        },
+    });
+
+    $("input[name='amount']").inputmask('decimal', {
+        rightAlignNumerics: false
     });
 </script>
 

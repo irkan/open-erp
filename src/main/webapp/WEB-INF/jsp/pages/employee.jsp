@@ -598,6 +598,7 @@
             }
         },
         invalidHandler: function(event, validator) {
+                    KTUtil.scrollTop();
             swal.close();
         },
     });
@@ -646,6 +647,7 @@
             </c:forEach>
         },
         invalidHandler: function(event, validator) {
+                    KTUtil.scrollTop();
             swal.close();
         },
     });
@@ -660,6 +662,7 @@
             </c:forEach>
         },
         invalidHandler: function(event, validator) {
+                    KTUtil.scrollTop();
             swal.close();
         },
     });

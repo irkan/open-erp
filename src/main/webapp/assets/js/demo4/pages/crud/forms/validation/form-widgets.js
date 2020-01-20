@@ -121,7 +121,8 @@ var KTFormWidgets = function () {
             },
             
             //display error alert on form submit  
-            invalidHandler: function(event, validator) {             
+            invalidHandler: function(event, validator) {
+                    KTUtil.scrollTop();
                 var alert = $('#kt_form_1_msg');
                 alert.removeClass('kt--hide').show();
                 KTUtil.scrollTo('m_form_1_msg', -200);

@@ -330,6 +330,7 @@
             }
         },
         invalidHandler: function(event, validator) {
+                    KTUtil.scrollTop();
             swal.close();
         },
     });
@@ -342,6 +343,7 @@
             }
         },
         invalidHandler: function(event, validator) {
+                    KTUtil.scrollTop();
             swal.close();
         },
     });

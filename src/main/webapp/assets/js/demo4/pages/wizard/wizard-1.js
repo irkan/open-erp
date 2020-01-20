@@ -107,7 +107,8 @@ var KTWizard1 = function () {
 			},
 			
 			// Display error  
-			invalidHandler: function(event, validator) {	 
+			invalidHandler: function(event, validator) {
+                    KTUtil.scrollTop();
 				KTUtil.scrollTop();
 
 				swal.fire({

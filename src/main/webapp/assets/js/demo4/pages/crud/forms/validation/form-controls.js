@@ -56,6 +56,7 @@ var KTFormControls = function () {
 
             //display error alert on form submit
             invalidHandler: function(event, validator) {
+                    KTUtil.scrollTop();
                 var alert = $('#kt_form_1_msg');
                 alert.removeClass('kt--hide').show();
                 KTUtil.scrollTop();
@@ -119,6 +120,7 @@ var KTFormControls = function () {
             
             //display error alert on form submit  
             invalidHandler: function(event, validator) {
+                    KTUtil.scrollTop();
                 swal.fire({
                     "title": "", 
                     "text": "There are some errors in your submission. Please correct them.", 

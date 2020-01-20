@@ -480,6 +480,7 @@
             }
         },
         invalidHandler: function(event, validator) {
+                    KTUtil.scrollTop();
             swal.close();
         },
     });

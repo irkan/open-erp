@@ -163,12 +163,10 @@
             },
             formula: {
                 required: true
-            },
-            description: {
-                required: true
             }
         },
         invalidHandler: function(event, validator) {
+                    KTUtil.scrollTop();
             swal.close();
         },
     })
