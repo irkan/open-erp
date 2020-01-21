@@ -53,4 +53,9 @@ public class Customer {
     public Customer(Organization organization) {
         this.organization = organization;
     }
+
+    public Customer(Integer id, Organization organization) {
+        this.id = id;
+        this.organization = organization;
+    }
 }

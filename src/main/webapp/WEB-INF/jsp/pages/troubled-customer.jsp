@@ -45,17 +45,7 @@
                                         <tr>
                                             <td>${loop.index + 1}</td>
                                             <td>
-                                                <span style="font-size: 16px; font-weight: bold"><c:out value="${t.payment.sales.customer.person.fullName}"/></span>
-                                                <c:if test="${not empty t.payment.sales.customer.person.contact.mobilePhone}">
-                                                    <br/><c:out value="${t.payment.sales.customer.person.contact.mobilePhone}"/>&nbsp;
-                                                </c:if>
-                                                <c:if test="${not empty t.payment.sales.customer.person.contact.homePhone}">
-                                                    <c:out value="${t.payment.sales.customer.person.contact.homePhone}"/>&nbsp;
-                                                </c:if>
-                                                <c:if test="${not empty t.payment.sales.customer.person.contact.address}">
-                                                    <br/><c:out value="${t.payment.sales.customer.person.contact.city.name}"/>,&nbsp;&nbsp;
-                                                    <c:out value="${t.payment.sales.customer.person.contact.address}"/>
-                                                </c:if>
+                                                <a href="javascript:window.open('/crm/customer/<c:out value="${t.payment.sales.customer.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.payment.sales.customer.person.fullName}"/></a>
                                             </td>
                                             <td>
                                                 <c:out value="${t.payment.sales.salesInventories.get(0).inventory.name}" /><br/>

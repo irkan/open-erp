@@ -363,7 +363,7 @@
                                         </a>
                                     </div>
                                     <div class="col-lg-6 text-right">
-                                        <a href="javascript:window.open('http://localhost:8080/warehouse/inventory', 'mywindow', 'width=1250, height=800')" data-repeater-delete="" class="btn-sm btn btn-label-success btn-bold">
+                                        <a href="javascript:window.open('/warehouse/inventory', 'mywindow', 'width=1250, height=800')" data-repeater-delete="" class="btn-sm btn btn-label-success btn-bold">
                                             <i class="la la-search"></i>
                                             Axtar
                                         </a>
@@ -445,7 +445,7 @@
                 onOpen: function() {
                     swal.showLoading();
                     $.ajax({
-                        url: '/crm/customer/'+$(element).val(),
+                        url: '/crm/api/customer/'+$(element).val(),
                         type: 'GET',
                         dataType: 'json',
                         beforeSend: function() {

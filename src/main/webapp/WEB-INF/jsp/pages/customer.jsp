@@ -404,6 +404,7 @@
                             <div class="form-group">
                                 <form:label path="person.contact.city">Şəhər</form:label>
                                 <form:select path="person.contact.city" cssClass="custom-select form-control">
+                                    <form:option value=""></form:option>
                                     <form:options items="${cities}" itemLabel="name" itemValue="id"/>
                                 </form:select>
                             </div>
@@ -424,6 +425,7 @@
                             <div class="form-group">
                                 <form:label path="person.contact.livingCity">Yaşadığı şəhər</form:label>
                                 <form:select path="person.contact.livingCity" cssClass="custom-select form-control">
+                                    <form:option value=""></form:option>
                                     <form:options items="${cities}" itemLabel="name" itemValue="id"/>
                                 </form:select>
                             </div>
@@ -483,6 +485,42 @@
                     KTUtil.scrollTop();
             swal.close();
         },
+    });
+
+    $("input[name='person.contact.email']").inputmask({
+        mask: "*{1,20}[.*{1,20}][.*{1,20}][.*{1,20}]@*{1,20}[.*{2,6}][.*{1,2}]",
+        greedy: false,
+        onBeforePaste: function (pastedValue, opts) {
+            pastedValue = pastedValue.toLowerCase();
+            return pastedValue.replace("mailto:", "");
+        },
+        definitions: {
+            '*': {
+                validator: "[0-9A-Za-z!#$%&'*+/=?^_`{|}~\-]",
+                cardinality: 1,
+                casing: "lower"
+            }
+        }
+    });
+
+    $("input[name='person.contact.mobilePhone']").inputmask("mask", {
+        "mask": "(999) 999-9999"
+    });
+
+    $("input[name='person.contact.homePhone']").inputmask("mask", {
+        "mask": "(999) 999-9999"
+    });
+
+    $("input[name='person.contact.relationalPhoneNumber1']").inputmask("mask", {
+        "mask": "(999) 999-9999"
+    });
+
+    $("input[name='person.contact.relationalPhoneNumber2']").inputmask("mask", {
+        "mask": "(999) 999-9999"
+    });
+
+    $("input[name='person.contact.relationalPhoneNumber3']").inputmask("mask", {
+        "mask": "(999) 999-9999"
     });
 </script>
 

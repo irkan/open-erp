@@ -385,7 +385,7 @@ public class SaleController extends SkeletonController {
                     advances.add(new Advance(advance,
                             sales.getCanavasser(),
                             Util.getUserBranch(sales.getCanavasser().getOrganization()),
-                            sales.getId() + " nömrəli satış və " + invoice.getId() + " nömrəli hesab fakturadan əldə edilən bonus. (Canvasser)",
+                            sales.getId() + " nömrəli satış və " + invoice.getId() + " nömrəli hesab fakturadan əldə edilən bonus. "+canvasserSaleDetail.getEmployee().getPerson().getFullName()+" (Canvasser)",
                             calculated_bonus,
                             sales.getSaleDate(),
                             Double.parseDouble(String.valueOf(engine.eval(calculated_bonus)))
@@ -400,7 +400,7 @@ public class SaleController extends SkeletonController {
                     advances.add(new Advance(advance,
                             sales.getDealer(),
                             Util.getUserBranch(sales.getDealer().getOrganization()),
-                            sales.getId() + " nömrəli satış və " + invoice.getId() + " nömrəli hesab fakturadan əldə edilən bonus. (Diller)",
+                            sales.getId() + " nömrəli satış və " + invoice.getId() + " nömrəli hesab fakturadan əldə edilən bonus."+dealerSaleDetail.getEmployee().getPerson().getFullName()+" (Diller)",
                             calculated_bonus,
                             sales.getSaleDate(),
                             Double.parseDouble(String.valueOf(engine.eval(calculated_bonus)))
@@ -415,7 +415,7 @@ public class SaleController extends SkeletonController {
                     advances.add(new Advance(advance,
                             sales.getVanLeader(),
                             Util.getUserBranch(sales.getVanLeader().getOrganization()),
-                            sales.getId() + " nömrəli satış və " + invoice.getId() + " nömrəli hesab fakturadan əldə edilən bonus. (Ven lider)",
+                            sales.getId() + " nömrəli satış və " + invoice.getId() + " nömrəli hesab fakturadan əldə edilən bonus."+vanLeaderSaleDetail.getEmployee().getPerson().getFullName()+" (Ven lider)",
                             calculated_bonus,
                             sales.getSaleDate(),
                             Double.parseDouble(String.valueOf(engine.eval(calculated_bonus)))
@@ -430,7 +430,7 @@ public class SaleController extends SkeletonController {
                     advances.add(new Advance(advance,
                             sales.getConsole(),
                             Util.getUserBranch(sales.getConsole().getOrganization()),
-                            sales.getId() + " nömrəli satış və " + invoice.getId() + " nömrəli hesab fakturadan əldə edilən bonus. (Konsul)",
+                            sales.getId() + " nömrəli satış və " + invoice.getId() + " nömrəli hesab fakturadan əldə edilən bonus."+consulSaleDetail.getEmployee().getPerson().getFullName()+" (Konsul)",
                             calculated_bonus,
                             sales.getSaleDate(),
                             Double.parseDouble(String.valueOf(engine.eval(calculated_bonus)))

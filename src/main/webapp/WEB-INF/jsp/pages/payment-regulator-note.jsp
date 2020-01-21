@@ -19,7 +19,7 @@
                 <div class="kt-portlet__body">
                     <c:choose>
                         <c:when test="${not empty list}">
-                            <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+                            <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
                                 <thead>
                                 <tr class="bg-light">
                                     <th colspan="4" class="text-right">
@@ -107,7 +107,7 @@
 </div>
 
 <div class="modal fade" id="modal-operation" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Başlıq</h5>
@@ -120,18 +120,21 @@
                     <form:hidden path="id"/>
                     <input type="hidden" name="payment" id="payment" value="<c:out value="${payment_id}"/>">
                     <div class="form-group">
-                        <form:radiobuttons items="${contact_channels}" path="contactChannel" itemLabel="name" itemValue="id"/>
+                        <form:label path="contactChannel">Əlaqə yaradılmışdır</form:label><br/>
+                        <c:forEach var="t" items="${contact_channels}" varStatus="loop">
+                            <label class="kt-radio kt-radio--brand">
+                                <form:radiobutton path="contactChannel" value="${t.id}"/> <c:out value="${t.name}"/>
+                                <span></span>
+                            </label>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                        </c:forEach>
                         <form:errors path="contactChannel" cssClass="control-label alert-danger" />
                     </div>
                     <div class="form-group">
                         <form:label path="nextContactDate">Növbəti əlaqə taixi</form:label>
                         <div class="input-group date" >
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
                             <form:input path="nextContactDate" autocomplete="off" date="date" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
-                            <div class="input-group-append">
-                                        <span class="input-group-text">
-                                            <i class="la la-calendar"></i>
-                                        </span>
-                            </div>
                         </div>
                         <form:errors path="nextContactDate" cssClass="control-label alert-danger" />
                     </div>
@@ -152,10 +155,37 @@
 
 <script>
     <c:if test="${edit.status}">
-    $('#kt_table_1 tbody').on('dblclick', 'tr', function () {
+    $('#datatable tbody').on('dblclick', 'tr', function () {
         edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
     });
     </c:if>
+
+    $("#datatable").DataTable({
+        responsive: true,
+        lengthMenu: [10, 25, 50, 75, 100, 200, 1000],
+        pageLength: 100,
+        order: [[1, 'desc']],
+        columnDefs: [
+            {
+                targets: 0,
+                width: '25px',
+                className: 'dt-center',
+                orderable: false
+            },
+        ],
+    });
+
+    $( "#form" ).validate({
+        rules: {
+            description: {
+                required: true
+            }
+        },
+        invalidHandler: function(event, validator) {
+            KTUtil.scrollTop();
+            swal.close();
+        },
+    })
 </script>
 
 

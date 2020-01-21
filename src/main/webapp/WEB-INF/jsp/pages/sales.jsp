@@ -219,40 +219,12 @@
                                             <c:forEach var="p" items="${t.salesInventories}" varStatus="lp">
                                                 <c:out value="${lp.index+1}" />.
                                                 <c:out value="${p.inventory.name}" /><br/>
-                                                <c:out value="${p.inventory.barcode}" /><br/>
-                                                <c:out value="${p.inventory.description}" /><br/>
+                                                <c:out value="${p.inventory.barcode}" />
                                             </c:forEach>
                                         </th>
                                         <td><fmt:formatDate value = "${t.saleDate}" pattern = "dd.MM.yyyy" /></td>
                                         <th>
-                                            <c:out value="${t.customer.person.fullName}" /><br/>
-                                            Müştəri kodu: <c:out value="${t.customer.id}" />
-                                            <c:if test="${not empty t.customer.person.contact.email}">
-                                                <c:out value="${t.customer.person.contact.email}" /><br/>
-                                            </c:if>
-                                            <c:if test="${not empty t.customer.person.contact.mobilePhone}">
-                                                <c:out value="${t.customer.person.contact.mobilePhone}" />&nbsp;
-                                            </c:if>
-                                            <c:if test="${not empty t.customer.person.contact.homePhone}">
-                                                <c:out value="${t.customer.person.contact.homePhone}" />
-                                            </c:if>
-                                            <c:if test="${not empty t.customer.person.contact.relationalPhoneNumber1}">
-                                                <c:out value="${t.customer.person.contact.relationalPhoneNumber1}" />
-                                            </c:if>
-                                            <c:if test="${not empty t.customer.person.contact.relationalPhoneNumber2}">
-                                                <c:out value="${t.customer.person.contact.relationalPhoneNumber2}" />
-                                            </c:if>
-                                            <c:if test="${not empty t.customer.person.contact.relationalPhoneNumber2}">
-                                                <c:out value="${t.customer.person.contact.relationalPhoneNumber2}" />
-                                            </c:if><br/>
-                                            <c:if test="${not empty t.customer.person.contact.address}">
-                                                <c:out value="${t.customer.person.contact.city.name}" />,&nbsp;
-                                                <c:out value="${t.customer.person.contact.address}" /><br/>
-                                            </c:if>
-                                            <c:if test="${not empty t.customer.person.contact.livingAddress}">
-                                                <c:out value="${t.customer.person.contact.livingCity.name}" />,&nbsp;
-                                                <c:out value="${t.customer.person.contact.livingAddress}" />
-                                            </c:if>
+                                            <a href="javascript:window.open('/crm/customer/<c:out value="${t.payment.sales.customer.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.payment.sales.customer.person.fullName}"/></a>
                                         </th>
                                         <th>
                                             Qiymət: <c:out value="${t.payment.price}" /><br/>
@@ -296,7 +268,7 @@
                                                     </a>
                                                     </c:if>
                                                     <c:if test="${edit.status}">
-                                                    <a href="javascript:edit($('#kt_form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="dropdown-item" title="<c:out value="${edit.object.name}"/>">
+                                                    <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="dropdown-item" title="<c:out value="${edit.object.name}"/>">
                                                         <i class="<c:out value="${edit.object.icon}"/>"></i> <c:out value="${edit.object.name}"/>
                                                     </a>
                                                     </c:if>
@@ -412,7 +384,7 @@
                     <!--end: Form Wizard Nav -->
                 </div>
                 <div class="kt-grid__item kt-grid__item--fluid kt-wizard-v1__wrapper">
-                <form:form modelAttribute="form" id="kt_form" method="post" action="/sale/sales" cssClass="form-group kt-form">
+                <form:form modelAttribute="form" id="form" method="post" action="/sale/sales" cssClass="form-group kt-form">
                     <form:hidden path="id"/>
                     <form:hidden path="active"/>
                     <form:hidden path="service"/>
@@ -432,7 +404,7 @@
                                                     </div>
                                                     <form:input path="customer" autocomplete="false" class="form-control" placeholder="Müştəri kodunu daxil edin..." style="border-left: none;" />
                                                     <div class="input-group-append">
-                                                        <button class="btn btn-primary" type="button" onclick="findCustomer($('input[name=\'customer\']'))">Müştərini axtar</button>
+                                                        <button class="btn btn-primary" type="button" onclick="findCustomer($('#form'), $('#form').find('input[name=\'customer\']'))">Müştərini axtar</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -645,16 +617,29 @@
                             <div class="kt-form__section kt-form__section--first">
                                 <div class="kt-wizard-v1__form">
                                     <div class="row">
-                                        <div class="col-sm-8 offset-sm-2">
+                                        <div class="col-md-8 offset-md-2">
                                             <input type="hidden" name="salesInventories[0].inventory" class="form-control"/>
-                                            <div class="form-group">
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text" style="background-color: white; border-right: none;"><i class="la la-search"></i></span>
+                                            <div class="row">
+                                                <div class="col-md-8">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-search"></i></span></div>
+                                                            <input type="text" name="salesInventories[0].inventory.barcode" class="form-control" placeholder="Barkodu daxil edin..." />
+                                                        </div>
                                                     </div>
-                                                    <input type="text" name="salesInventories[0].inventory.barcode" class="form-control" placeholder="Barkodu daxil edin..." style="border-left: none;" />
-                                                    <div class="input-group-append">
-                                                        <button class="btn btn-primary" type="button" onclick="findInventory($('input[name=\'salesInventories[0].inventory.barcode\']'))">İnventar axtar</button>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="row">
+                                                        <div class="col-6">
+                                                            <a href="javascript:findInventory($('#form'), $('#form').find('input[name=\'salesInventories[0].inventory.barcode\']'));" data-repeater-delete="" class="btn btn-label-brand btn-block">
+                                                                Axtar
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <a href="javascript:window.open('/warehouse/inventory', 'mywindow', 'width=1250, height=800')" data-repeater-delete="" class="btn btn-label-success btn-block">
+                                                                İnventar
+                                                            </a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -771,7 +756,7 @@
                                             </div>
                                         </div>
                                         <div class="col-sm-3 text-center">
-                                            <button type="button" class="btn btn-outline-info btn-tallest" style="font-size: 16px;padding-left: 7px; padding-right: 8px;" onclick="schedule($('#kt_form'))"><i class="fa fa-play"></i> Ödəniş qrafiki yarat</button>
+                                            <button type="button" class="btn btn-outline-info btn-tallest" style="font-size: 16px;padding-left: 7px; padding-right: 8px;" onclick="schedule($('#form'))"><i class="fa fa-play"></i> Ödəniş qrafiki yarat</button>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -1132,7 +1117,7 @@
         return {
             init: function() {
                 wizardEl = KTUtil.get('kt_wizard_v1');
-                formEl = $('#kt_form');
+                formEl = $('#form');
                 initWizard();
                 initValidation();
                 initSubmit();
@@ -1144,7 +1129,7 @@
         KTWizard1.init();
     });
 
-    function findCustomer(element){
+    function findCustomer(form, element){
         if($(element).val().trim().length>0){
             swal.fire({
                 text: 'Proses davam edir...',
@@ -1152,25 +1137,39 @@
                 onOpen: function() {
                     swal.showLoading();
                     $.ajax({
-                        url: '/crm/customer/'+$(element).val(),
+                        url: '/crm/api/customer/'+$(element).val(),
                         type: 'GET',
                         dataType: 'json',
                         beforeSend: function() {
-                            $("input[name='customer.person.firstName']").val('');
-                            $("input[name='customer.person.lastName']").val('');
-                            $("input[name='customer.person.fatherName']").val('');
-                            $("input[name='customer.person.birthday']").val('');
-                            $("input[name='customer.person.idCardSerialNumber']").val('');
-                            $("input[name='customer.person.idCardPinCode']").val('');
+                            $(form).find("input[name='customer.person.firstName']").val('');
+                            $(form).find("input[name='customer.person.lastName']").val('');
+                            $(form).find("input[name='customer.person.fatherName']").val('');
+                            $(form).find("input[name='customer.person.birthday']").val('');
+                            $(form).find("input[name='customer.person.idCardSerialNumber']").val('');
+                            $(form).find("input[name='customer.person.idCardPinCode']").val('');
                         },
                         success: function(customer) {
                             console.log(customer);
-                            $("input[name='customer.person.firstName']").val(customer.person.firstName);
-                            $("input[name='customer.person.lastName']").val(customer.person.lastName);
-                            $("input[name='customer.person.fatherName']").val(customer.person.fatherName);
-                            $("input[name='customer.person.birthday']").val(customer.person.birthday);
-                            $("input[name='customer.person.idCardSerialNumber']").val(customer.person.idCardSerialNumber);
-                            $("input[name='customer.person.idCardPinCode']").val(customer.person.idCardPinCode);
+                            $(form).find("input[name='customer.person.firstName']").val(customer.person.firstName);
+                            $(form).find("input[name='customer.person.lastName']").val(customer.person.lastName);
+                            $(form).find("input[name='customer.person.fatherName']").val(customer.person.fatherName);
+                            $(form).find("input[name='customer.person.birthday']").val(getFormattedDate(new Date(customer.person.birthday)));
+                            $(form).find("input[name='customer.person.idCardSerialNumber']").val(customer.person.idCardSerialNumber);
+                            $(form).find("input[name='customer.person.idCardPinCode']").val(customer.person.idCardPinCode);
+                            $(form).find("input[name='customer.person.contact.mobilePhone']").val(customer.person.contact.mobilePhone);
+                            $(form).find("input[name='customer.person.contact.homePhone']").val(customer.person.contact.homePhone);
+                            $(form).find("input[name='customer.person.contact.email']").val(customer.person.contact.email);
+                            $(form).find("input[name='customer.person.contact.relationalPhoneNumber1']").val(customer.person.contact.relationalPhoneNumber1);
+                            $(form).find("input[name='customer.person.contact.relationalPhoneNumber2']").val(customer.person.contact.relationalPhoneNumber2);
+                            $(form).find("input[name='customer.person.contact.relationalPhoneNumber3']").val(customer.person.contact.relationalPhoneNumber3);
+                            if(customer.person.contact.city!=null){
+                                $(form).find("select[name='customer.person.contact.city'] option[value="+customer.person.contact.city.id+"]").attr("selected", "selected");
+                            }
+                            $(form).find("input[name='customer.person.contact.address']").val(customer.person.contact.address);
+                            if(customer.person.contact.livingCity!=null){
+                                $(form).find("select[name='customer.person.contact.livingCity'] option[value="+customer.person.contact.livingCity.id+"]").attr("selected", "selected");
+                            }
+                            $(form).find("input[name='customer.person.contact.livingAddress']").val(customer.person.contact.livingAddress);
                             swal.close();
                         },
                         error: function() {
@@ -1190,7 +1189,7 @@
         }
     }
 
-    function findInventory(element){
+    function findInventory(form, element){
         if($(element).val().trim().length>0){
             swal.fire({
                 text: 'Proses davam edir...',
@@ -1202,15 +1201,15 @@
                         type: 'GET',
                         dataType: 'json',
                         beforeSend: function() {
-                            $("input[name='salesInventories[0].inventory']").val('');
-                            $("input[name='salesInventories[0].inventory.name']").val('');
-                            $("textarea[name='salesInventories[0].inventory.description']").val('');
+                            $(form).find("input[name='salesInventories[0].inventory']").val('');
+                            $(form).find("input[name='salesInventories[0].inventory.name']").val('');
+                            $(form).find("textarea[name='salesInventories[0].inventory.description']").val('');
                         },
                         success: function(inventory) {
                             console.log(inventory);
-                            $("input[name='salesInventories[0].inventory']").val(inventory.id);
-                            $("input[name='salesInventories[0].inventory.name']").val(inventory.name);
-                            $("textarea[name='salesInventories[0].inventory.description']").val(inventory.description);
+                            $(form).find("input[name='salesInventories[0].inventory']").val(inventory.id);
+                            $(form).find("input[name='salesInventories[0].inventory.name']").val(inventory.name);
+                            $(form).find("textarea[name='salesInventories[0].inventory.description']").val(inventory.description);
                             swal.close();
                         },
                         error: function() {

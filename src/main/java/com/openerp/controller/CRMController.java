@@ -34,7 +34,7 @@ public class CRMController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new Customer(getSessionOrganization()));
             }
             if(!model.containsAttribute(Constants.FILTER)){
-                model.addAttribute(Constants.FILTER, new Customer(!canViewAll()?getSessionOrganization():null));
+                model.addAttribute(Constants.FILTER, new Customer(!data.equals(Optional.empty())?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null));
             }
             model.addAttribute(Constants.LIST, customerService.findAll((Customer) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
         }
@@ -57,7 +57,7 @@ public class CRMController extends SkeletonController {
     }
 
     @ResponseBody
-    @GetMapping(value = "/customer/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/api/customer/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Customer findCustomer(@PathVariable("id") String id){
         try {
             return customerRepository.getCustomerByIdAndActiveTrue(Integer.parseInt(id));

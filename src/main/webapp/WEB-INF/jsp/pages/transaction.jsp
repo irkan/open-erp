@@ -300,7 +300,7 @@
                                 <form:label path="price">Məbləğ</form:label>
                                 <div class="input-group" >
                                     <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
-                                    <form:input path="price" cssClass="form-control" placeholder="Balansı daxil edin"/>
+                                    <form:input path="price" autocomplete="off" cssClass="form-control" placeholder="Balansı daxil edin"/>
                                 </div>
                                 <form:errors path="price" cssClass="alert-danger control-label"/>
                             </div>
@@ -310,7 +310,7 @@
                                 <form:label path="amount">Say</form:label>
                                 <div class="input-group" >
                                     <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calculator"></i></span></div>
-                                    <form:input path="amount" cssClass="form-control" placeholder="Say daxil edin"/>
+                                    <form:input path="amount" autocomplete="off" cssClass="form-control" placeholder="Say daxil edin"/>
                                 </div>
                                 <form:errors path="amount" cssClass="alert-danger control-label"/>
                             </div>

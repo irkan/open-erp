@@ -49,6 +49,7 @@
 </form>
 
 <script>
+
     function submit(form){
         swal.fire({
             text: 'Proses davam edir...',
@@ -58,6 +59,21 @@
                 $(form).submit();
             }
         });
+    }
+    function submitTimeoutModal(form, modal, timeout){
+        swal.fire({
+            text: 'Proses davam edir...',
+            allowOutsideClick: false,
+            onOpen: function() {
+                swal.showLoading();
+                $(form).submit();
+            }
+        });
+
+        setTimeout(function(){
+            swal.close();
+            $(modal).modal('hide');
+        }, timeout);
     }
 /*
     function clearFilter(form){

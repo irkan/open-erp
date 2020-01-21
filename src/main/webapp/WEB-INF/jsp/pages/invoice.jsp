@@ -416,7 +416,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="submit($('#form-export-invoice'));">İcra et</button>
+                <button type="button" class="btn btn-primary" onclick="submitTimeoutModal($('#form-export-invoice'), $('#modal-export-invoice'), 3000);">İcra et</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
             </div>
         </div>
