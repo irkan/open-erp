@@ -22,7 +22,7 @@
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
                                 <thead>
                                 <tr class="bg-light">
-                                    <th colspan="4" class="text-right">
+                                    <th colspan="7" class="text-center">
                                         <c:forEach var="t" items="${list}" varStatus="loop">
                                             <c:if test="${loop.index==0}">
                                                 <span style="font-size: 16px; font-weight: bold"><c:out value="${t.payment.sales.customer.person.fullName}"/></span>
@@ -36,15 +36,6 @@
                                                     <br/><c:out value="${t.payment.sales.customer.person.contact.city.name}"/>,&nbsp;&nbsp;
                                                     <c:out value="${t.payment.sales.customer.person.contact.address}"/>
                                                 </c:if>
-                                            </c:if>
-                                        </c:forEach>
-                                    </th>
-                                    <th colspan="3">
-                                        <c:forEach var="t" items="${list}" varStatus="loop">
-                                            <c:if test="${loop.index==0}">
-                                                <c:out value="${t.payment.sales.action.inventory.name}" /><br/>
-                                                <c:out value="${t.payment.sales.action.warehouse.name}" /><br/>
-                                                <c:out value="${t.payment.sales.action.inventory.barcode}" />
                                             </c:if>
                                         </c:forEach>
                                     </th>

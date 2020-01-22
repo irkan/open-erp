@@ -43,7 +43,7 @@ public class SaleController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new Sales(getSessionOrganization()));
             }
             if(!model.containsAttribute(Constants.FILTER)){
-                model.addAttribute(Constants.FILTER, new Sales(!canViewAll()?getSessionOrganization():null));
+                model.addAttribute(Constants.FILTER, new Sales(!data.equals(Optional.empty())?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null));
             }
             Page<Sales> sales = salesService.findAll((Sales) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
             for(Sales sales1: sales){
@@ -74,7 +74,7 @@ public class SaleController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new Sales(getSessionOrganization(), true));
             }
             if(!model.containsAttribute(Constants.FILTER)){
-                model.addAttribute(Constants.FILTER, new Sales(!canViewAll()?getSessionOrganization():null, true));
+                model.addAttribute(Constants.FILTER, new Sales(!data.equals(Optional.empty())?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null, true));
             }
             model.addAttribute(Constants.LIST, salesService.findAll((Sales) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
         } else if (page.equalsIgnoreCase(Constants.ROUTE.INVOICE)){

@@ -160,20 +160,45 @@ public class DBConfiguration {
             dictionaries.add(married);
             Dictionary baku = new Dictionary("Bakı", "Baku", null, cityType);
             dictionaries.add(baku);
-            Dictionary sumgait = new Dictionary("Sumqayıt", "Sumgait", null, cityType);
-            dictionaries.add(sumgait);
             Dictionary ganja = new Dictionary("Gəncə", "Ganja", null, cityType);
             dictionaries.add(ganja);
+            Dictionary khankendi = new Dictionary("Xankəndi", "Khankendi", null, cityType);
+            dictionaries.add(khankendi);
             Dictionary lankaran = new Dictionary("Lənkəran", "Lankaran", null, cityType);
             dictionaries.add(lankaran);
             Dictionary mingacheur = new Dictionary("Mingəçevir", "Mingacheur", null, cityType);
             dictionaries.add(mingacheur);
-            Dictionary khachmaz = new Dictionary("Xaçmaz", "Khachmaz", null, cityType);
-            dictionaries.add(khachmaz);
+            Dictionary naftalan = new Dictionary("Naftalan", "Naftalan", null, cityType);
+            dictionaries.add(naftalan);
+            Dictionary sumgait = new Dictionary("Sumqayıt", "Sumgait", null, cityType);
+            dictionaries.add(sumgait);
+            Dictionary shaki = new Dictionary("Şəki", "Shaki", null, cityType);
+            dictionaries.add(shaki);
+            Dictionary shirvan = new Dictionary("Şirvan", "Shirvan", null, cityType);
+            dictionaries.add(shirvan);
             Dictionary yevlakh = new Dictionary("Yevlax", "Yevlakh", null, cityType);
             dictionaries.add(yevlakh);
             Dictionary khirdalan = new Dictionary("Xırdalan", "Khirdalan", null, cityType);
             dictionaries.add(khirdalan);
+
+
+
+
+
+
+
+
+
+
+
+
+            Dictionary khachmaz = new Dictionary("Xaçmaz", "Khachmaz", null, cityType);
+            dictionaries.add(khachmaz);
+
+
+
+
+
             Dictionary position1 = new Dictionary("Sistem inzibatçısı", "Administrator", null, positionType);
             dictionaries.add(position1);
             Dictionary position2 = new Dictionary("Canvasser", "Canvasser", null, positionType);
@@ -873,10 +898,6 @@ public class DBConfiguration {
             moduleOperations.add(viewModuleOperation19);
             ModuleOperation viewModuleOperation20 = new ModuleOperation(salary, view, null);
             moduleOperations.add(viewModuleOperation20);
-            ModuleOperation viewModuleOperation21 = new ModuleOperation(paymentRegulator, view, null);
-            moduleOperations.add(viewModuleOperation21);
-            ModuleOperation viewModuleOperation22 = new ModuleOperation(troubledCustomer, view, null);
-            moduleOperations.add(viewModuleOperation22);
             ModuleOperation viewModuleOperation23 = new ModuleOperation(sales, view, null);
             moduleOperations.add(viewModuleOperation23);
             ModuleOperation viewModuleOperation24 = new ModuleOperation(overview, view, null);
@@ -1256,8 +1277,6 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation18));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation19));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation20));
-            userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation21));
-            userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation22));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation23));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation24));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation25));

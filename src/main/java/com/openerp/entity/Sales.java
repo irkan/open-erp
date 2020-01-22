@@ -108,7 +108,18 @@ public class Sales {
         this.service = service;
     }
 
+    public Sales(Integer id, Organization organization, Boolean service) {
+        this.id = id;
+        this.organization = organization;
+        this.service = service;
+    }
+
     public Sales(Organization organization) {
+        this.organization = organization;
+    }
+
+    public Sales(Integer id, Organization organization) {
+        this.id = id;
         this.organization = organization;
     }
 }

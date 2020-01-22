@@ -47,8 +47,15 @@
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <form:label path="sales">Satış kodu</form:label>
-                                                <form:input path="sales" cssClass="form-control" placeholder="Müştəri kodu" />
+                                                <form:input path="sales" cssClass="form-control" placeholder="#######" />
                                                 <form:errors path="sales" cssClass="alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="sales.customer">Müştəri kodu</form:label>
+                                                <form:input path="sales.customer" cssClass="form-control" placeholder="#######" />
+                                                <form:errors path="sales.customer" cssClass="alert-danger"/>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -168,8 +175,9 @@
                                 <thead>
                                 <tr>
                                     <th>HF nömrəsi</th>
-                                    <th>Satış</th>
+                                    <th>Satış|Servis</th>
                                     <th>Status</th>
+                                    <th>Müştəri</th>
                                     <th>Məbləğ</th>
                                     <th>Tarix</th>
                                     <th>Yığımçı</th>
@@ -184,9 +192,14 @@
                                     <tr data="<c:out value="${utl:toJson(t)}" />">
                                         <td><c:out value="${t.id}" /></td>
                                         <td>
-                                            Satış nömrəsi: <c:out value="${t.sales.id}" />, Müştəri kodu: <c:out value="${t.sales.customer.id}" /><br/>
-                                            <span style="font-weight: bold; font-size: 16px;"><c:out value="${t.sales.customer.person.fullName}" /></span><br/>
-                                            <c:out value="${t.sales.salesInventories.get(0).inventory.name}" />, <c:out value="${t.sales.salesInventories.get(0).inventory.barcode}" />
+                                            <c:choose>
+                                                <c:when test="${t.sales.service}">
+                                                    <a href="javascript:window.open('/sale/service/<c:out value="${t.sales.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder">Servis: <c:out value="${t.sales.id}" /></a>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <a href="javascript:window.open('/sale/sales/<c:out value="${t.sales.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder">Satış: <c:out value="${t.sales.id}" /></a>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </td>
                                         <td>
                                             <c:choose>
@@ -197,6 +210,9 @@
                                                     Təsdiqlənənlər
                                                 </c:otherwise>
                                             </c:choose>
+                                        </td>
+                                        <td>
+                                            <a href="javascript:window.open('/crm/customer/<c:out value="${t.sales.customer.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.sales.customer.id}" />: <c:out value="${t.sales.customer.person.fullName}"/></a>
                                         </td>
                                         <td><c:out value="${t.price}" /> AZN</td>
                                         <th><fmt:formatDate value = "${t.invoiceDate}" pattern = "dd.MM.yyyy" /></th>
@@ -379,6 +395,7 @@
                     <div class="form-group">
                         <form:label path="collector">Yığımçı</form:label>
                         <form:select  path="collector" cssClass="custom-select form-control select2-single" multiple="single">
+                            <form:option value=""></form:option>
                             <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
                                 <optgroup label="${itemGroup.key}">
                                     <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
@@ -530,6 +547,18 @@
         },
         invalidHandler: function(event, validator) {
                     KTUtil.scrollTop();
+            swal.close();
+        },
+    });
+
+    $( "#form-consolidate" ).validate({
+        rules: {
+            collector: {
+                required: true
+            }
+        },
+        invalidHandler: function(event, validator) {
+            KTUtil.scrollTop();
             swal.close();
         },
     });

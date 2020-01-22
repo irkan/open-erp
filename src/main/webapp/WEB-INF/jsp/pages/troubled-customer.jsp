@@ -21,12 +21,14 @@
                 <div class="kt-portlet__body">
                     <c:choose>
                         <c:when test="${not empty list}">
+                            <c:set var="transfer" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'transfer')}"/>
+                            <c:set var="detail" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'detail')}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
                                 <thead>
                                 <tr>
                                     <th>№</th>
                                     <th>Müştəri</th>
-                                    <th>İnventar</th>
+                                    <th>Satış</th>
                                     <th>Ödəniş tarixi</th>
                                     <th>Gecikir</th>
                                     <th>Qrafik</th>
@@ -42,23 +44,19 @@
                                     <c:set var="now" value="<%=new Date().getTime()%>"/>
                                     <fmt:parseNumber var = "days" integerOnly = "true" type = "number" value = "${(now-t.scheduleDate.time)/86400000}" />
                                     <c:if test="${days gt configuration_troubled_customer}">
-                                        <tr>
+                                        <tr data="<c:out value="${t.payment.id}" />">
                                             <td>${loop.index + 1}</td>
                                             <td>
                                                 <a href="javascript:window.open('/crm/customer/<c:out value="${t.payment.sales.customer.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.payment.sales.customer.person.fullName}"/></a>
                                             </td>
                                             <td>
-                                                <c:out value="${t.payment.sales.salesInventories.get(0).inventory.name}" /><br/>
-                                                <c:out value="${t.payment.sales.salesInventories.get(0).inventory.barcode}" /><br/>
-                                                <c:out value="${t.payment.sales.salesInventories.get(0).inventory.description}" />
+                                                <a href="javascript:window.open('/sale/sales/<c:out value="${t.payment.sales.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.payment.sales.id}" /></a>
                                             </td>
                                             <td><fmt:formatDate value = "${t.scheduleDate}" pattern = "dd.MM.yyyy" /></td>
                                             <th>
-                                            <span class="kt-font-bold kt-font-info">
                                                 <c:set var="now" value="<%=new Date().getTime()%>"/>
                                                 <fmt:parseNumber var = "days" integerOnly = "true" type = "number" value = "${(now-t.scheduleDate.time)/86400000}" />
-                                                <c:out value = "${days}" /> gün
-                                            </span>
+                                                <a href="javascript:window.open('/sale/schedule/<c:out value="${t.payment.sales.payment.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value = "${days}" /> gün</a>
                                             </th>
                                             <th>Qrafik üzrə: <c:out value="${t.amount}" /> AZN<br/>
                                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ödənilib: <c:out value="${t.payableAmount}" /> AZN
@@ -74,16 +72,21 @@
                                                 Qalıq: <c:out value="${t.payment.lastPrice-t.payment.down}" /> AZN
                                             </th>
                                             <td>
-                                                <c:forEach var="n" items="${t.payment.paymentRegulatorNotes}" varStatus="lop">
-                                                    <c:if test="${lop.index==(t.payment.paymentRegulatorNotes.size()-1)}">
-                                                    <span style="font-weight: bold"><c:out value="${n.contactChannel.name}"/>,
-                                                    <fmt:formatDate value = "${n.createdDate}" pattern = "dd.MM.yyyy" />,
-                                                    <fmt:formatDate value = "${n.nextContactDate}" pattern = "dd.MM.yyyy" /></span>
-                                                        <c:if test="${not empty n.description}">
-                                                            <br/><c:out value="${n.description}"/>
-                                                        </c:if>
+                                                <c:if test="${t.payment.paymentRegulatorNotes.size()>0}">
+                                                    <c:set var="prn" value="${t.payment.paymentRegulatorNotes.get(t.payment.paymentRegulatorNotes.size()-1)}"/>
+                                                    <c:if test="${!prn.active and t.payment.paymentRegulatorNotes.size()>1}">
+                                                        <c:set var="prn" value="${t.payment.paymentRegulatorNotes.get(t.payment.paymentRegulatorNotes.size()-2)}"/>
                                                     </c:if>
-                                                </c:forEach>
+                                                    <c:if test="${prn.active}">
+                                                        <span style="font-weight: bold"><c:out value="${prn.contactChannel.name}"/>,
+                                                        <fmt:formatDate value = "${prn.createdDate}" pattern = "dd.MM.yyyy" />
+                                                        <c:if test="${not empty prn.nextContactDate}">
+                                                            <i class="la la-arrow-right"></i> <fmt:formatDate value = "${prn.nextContactDate}" pattern = "dd.MM.yyyy" />
+                                                        </c:if>
+                                                        </span>
+                                                        <br/><c:out value="${prn.description}"/>
+                                                    </c:if>
+                                                </c:if>
                                             </td>
                                             <td>
                                                 <div id="score-rating-<c:out value="${loop.index}" />" style="width: 130px;"></div>
@@ -96,30 +99,16 @@
                                                 </script>
                                             </td>
                                             <td nowrap class="text-center">
-                                                <c:set var="transfer" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'transfer')}"/>
-                                                <c:choose>
-                                                    <c:when test="${transfer.status}">
-                                                        <a href="javascript:transfer($('#form'), 'transfer-modal-operation', '<c:out value="${t.payment.sales.id}" />', '<c:out value="${t.amount-t.payableAmount}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
-                                                            <i class="<c:out value="${transfer.object.icon}"/>"></i>
-                                                        </a>
-                                                    </c:when>
-                                                </c:choose>
-                                                <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
-                                                <c:choose>
-                                                    <c:when test="${view.status}">
-                                                        <a href="/collect/payment-regulator-note/<c:out value="${t.payment.id}"/>" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Qeydlər">
-                                                            <i class="la <c:out value="${view.object.icon}"/>"></i>
-                                                        </a>
-                                                    </c:when>
-                                                </c:choose>
-                                                <c:set var="detail" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'detail')}"/>
-                                                <c:choose>
-                                                    <c:when test="${detail.status}">
-                                                        <a href="/collect/payment-regulator-detail/<c:out value="${t.payment.id}"/>" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${detail.object.name}"/>">
-                                                            <i class="la <c:out value="${detail.object.icon}"/>"></i>
-                                                        </a>
-                                                    </c:when>
-                                                </c:choose>
+                                                <c:if test="${transfer.status}">
+                                                    <a href="javascript:transfer($('#form'), 'transfer-modal-operation', '<c:out value="${t.payment.sales.id}" />', '<c:out value="${t.amount-t.payableAmount}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
+                                                        <i class="<c:out value="${transfer.object.icon}"/>"></i>
+                                                    </a>
+                                                </c:if>
+                                                <c:if test="${detail.status}">
+                                                    <a href="/collect/payment-regulator-note/<c:out value="${t.payment.id}"/>" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Qeydlər">
+                                                        <i class="la <c:out value="${detail.object.icon}"/>"></i>
+                                                    </a>
+                                                </c:if>
                                             </td>
                                         </tr>
                                     </c:if>
@@ -176,6 +165,13 @@
 </div>
 
 <script>
+    <c:if test="${detail.status}">
+    $('#datatable tbody').on('dblclick', 'tr', function () {
+        swal.showLoading();
+        location.href = '/collect/payment-regulator-note/'+ $(this).attr('data');
+        window.reload();
+    });
+    </c:if>
     function transfer(form, modal, saleId, price){
         try {
             $(form).find("input[name='sale']").val(saleId);
