@@ -434,7 +434,9 @@ public class Util {
                     items.add(employee);
                 }
             }
-            convertedEmployees.put(position.getName(), items);
+            if(items.size()>0){
+                convertedEmployees.put(position.getName(), items);
+            }
         }
         return convertedEmployees;
     }

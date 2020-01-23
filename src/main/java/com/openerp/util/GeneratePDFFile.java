@@ -1,5 +1,7 @@
 package com.openerp.util;
 
+import com.itextpdf.io.image.ImageData;
+import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.colors.Color;
 import com.itextpdf.kernel.colors.DeviceCmyk;
 import com.itextpdf.kernel.colors.DeviceGray;
@@ -12,10 +14,7 @@ import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.canvas.draw.DottedLine;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.borders.Border;
-import com.itextpdf.layout.element.Cell;
-import com.itextpdf.layout.element.LineSeparator;
-import com.itextpdf.layout.element.Paragraph;
-import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.property.HorizontalAlignment;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.UnitValue;
@@ -52,6 +51,9 @@ public class GeneratePDFFile {
             timesbi.setSubset(true);
             PdfFont timesi = PdfFontFactory.createFont(resourceLoader.getResource("classpath:/fonts/timesi.ttf").getFile().getPath(), BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             timesi.setSubset(true);
+            String paidFile = resourceLoader.getResource("classpath:/stamp/paid.png").getFile().getPath();
+            ImageData stampData = ImageDataFactory.create(paidFile);
+            Image stamp = new Image(stampData);
             if(invoices.size()==0){
                 Paragraph paragraph = new Paragraph("Hesab-faktura tapılmadı!");
                 paragraph.setFont(timesbd);
@@ -142,13 +144,9 @@ public class GeneratePDFFile {
                                 .setVerticalAlignment(VerticalAlignment.MIDDLE)
                                 .setHorizontalAlignment(HorizontalAlignment.RIGHT);
                         table.addCell(cell);
-                        cell = new Cell(3, 1)
-                                .setFont(timesbd)
-                                .setFontSize(28)
-                                .setRotationAngle(-85)
-                                .setFontColor(DeviceRgb.BLUE)
+                        cell = new Cell(4, 1)
                                 .setBorder(Border.NO_BORDER)
-                                .add(new Paragraph("ÖDƏNİLİB"))
+                                .add(stamp.setRotationAngle(-85).setWidth(100))
                                 .setVerticalAlignment(VerticalAlignment.MIDDLE)
                                 .setHorizontalAlignment(HorizontalAlignment.RIGHT);
                         table.addCell(cell);

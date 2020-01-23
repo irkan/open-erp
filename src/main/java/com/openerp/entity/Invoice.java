@@ -42,7 +42,6 @@ public class Invoice {
     @JoinColumn(name = "hr_employee_id")
     private Employee collector;
 
-    @DecimalMin(value = "0", message = "Minimum 0 olmalıdır")
     @Column(name = "price", nullable = false, columnDefinition="Decimal(10,2) default 0")
     private Double price=0d;
 
@@ -76,6 +75,9 @@ public class Invoice {
 
     @Column(name = "is_advance", nullable = false, columnDefinition="boolean default false")
     private Boolean advance = false;
+
+    @Column(name = "is_creditable", nullable = false, columnDefinition="boolean default true")
+    private Boolean creditable = true;
 
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;

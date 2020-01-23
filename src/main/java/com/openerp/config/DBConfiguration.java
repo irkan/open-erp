@@ -148,7 +148,6 @@ public class DBConfiguration {
 
             dictionaryTypeRepository.saveAll(types);
 
-
             List<Dictionary> dictionaries = new ArrayList<>();
             Dictionary male = new Dictionary("Kişi", "Male", null, genderType);
             dictionaries.add(male);
@@ -164,41 +163,146 @@ public class DBConfiguration {
             dictionaries.add(ganja);
             Dictionary khankendi = new Dictionary("Xankəndi", "Khankendi", null, cityType);
             dictionaries.add(khankendi);
-            Dictionary lankaran = new Dictionary("Lənkəran", "Lankaran", null, cityType);
-            dictionaries.add(lankaran);
             Dictionary mingacheur = new Dictionary("Mingəçevir", "Mingacheur", null, cityType);
             dictionaries.add(mingacheur);
             Dictionary naftalan = new Dictionary("Naftalan", "Naftalan", null, cityType);
             dictionaries.add(naftalan);
             Dictionary sumgait = new Dictionary("Sumqayıt", "Sumgait", null, cityType);
             dictionaries.add(sumgait);
-            Dictionary shaki = new Dictionary("Şəki", "Shaki", null, cityType);
-            dictionaries.add(shaki);
             Dictionary shirvan = new Dictionary("Şirvan", "Shirvan", null, cityType);
             dictionaries.add(shirvan);
-            Dictionary yevlakh = new Dictionary("Yevlax", "Yevlakh", null, cityType);
-            dictionaries.add(yevlakh);
             Dictionary khirdalan = new Dictionary("Xırdalan", "Khirdalan", null, cityType);
             dictionaries.add(khirdalan);
-
-
-
-
-
-
-
-
-
-
-
-
+            Dictionary agjabadi = new Dictionary("Ağcabədi", "Agjabadi", null, cityType);
+            dictionaries.add(agjabadi);
+            Dictionary agdam = new Dictionary("Ağdam", "Agdam", null, cityType);
+            dictionaries.add(agdam);
+            Dictionary agdash = new Dictionary("Ağdaş", "Agdash", null, cityType);
+            dictionaries.add(agdash);
+            Dictionary aghstafa = new Dictionary("Ağstafa", "Aghstafa", null, cityType);
+            dictionaries.add(aghstafa);
+            Dictionary aghsu = new Dictionary("Ağsu", "Aghsu", null, cityType);
+            dictionaries.add(aghsu);
+            Dictionary astara = new Dictionary("Astara", "Astara", null, cityType);
+            dictionaries.add(astara);
+            Dictionary babek = new Dictionary("Babək", "Babek", null, cityType);
+            dictionaries.add(babek);
+            Dictionary balakan = new Dictionary("Balakən", "Balakan", null, cityType);
+            dictionaries.add(balakan);
+            Dictionary beylagan = new Dictionary("Beyləqan", "Beylagan", null, cityType);
+            dictionaries.add(beylagan);
+            Dictionary barda = new Dictionary("Bərdə", "Barda", null, cityType);
+            dictionaries.add(barda);
+            Dictionary bilasuvar = new Dictionary("Biləsuvar", "Bilasuvar", null, cityType);
+            dictionaries.add(bilasuvar);
+            Dictionary jabrayil = new Dictionary("Cəbrayıl", "jabrayil", null, cityType);
+            dictionaries.add(jabrayil);
+            Dictionary jalilabad = new Dictionary("Cəlilabad", "Jalilabad", null, cityType);
+            dictionaries.add(jalilabad);
+            Dictionary julfa = new Dictionary("Culfa", "Julfa", null, cityType);
+            dictionaries.add(julfa);
+            Dictionary dashkassan = new Dictionary("Daşkəsən", "Dashkassan", null, cityType);
+            dictionaries.add(dashkassan);
+            Dictionary fuzuli = new Dictionary("Füzuli", "Fuzuli", null, cityType);
+            dictionaries.add(fuzuli);
+            Dictionary gadabay = new Dictionary("Gədəbəy", "Gadabay", null, cityType);
+            dictionaries.add(gadabay);
+            Dictionary goranboy = new Dictionary("Goranboy", "Goranboy", null, cityType);
+            dictionaries.add(goranboy);
+            Dictionary goychay = new Dictionary("Göyçay", "Goychay", null, cityType);
+            dictionaries.add(goychay);
+            Dictionary goygol = new Dictionary("Göygöl", "Goygol", null, cityType);
+            dictionaries.add(goygol);
+            Dictionary hajigabul = new Dictionary("Hacıqabul", "Hajigabul", null, cityType);
+            dictionaries.add(hajigabul);
             Dictionary khachmaz = new Dictionary("Xaçmaz", "Khachmaz", null, cityType);
             dictionaries.add(khachmaz);
-
-
-
-
-
+            Dictionary khizi = new Dictionary("Xızı", "Khizi", null, cityType);
+            dictionaries.add(khizi);
+            Dictionary khojaly = new Dictionary("Xocalı ", "Khojaly", null, cityType);
+            dictionaries.add(khojaly);
+            Dictionary khojavend = new Dictionary("Xocavənd ", "Khojavend", null, cityType);
+            dictionaries.add(khojavend);
+            Dictionary imishli = new Dictionary("İmişli ", "Imishli", null, cityType);
+            dictionaries.add(imishli);
+            Dictionary ismailli = new Dictionary("İsmayıllı ", "Ismailli", null, cityType);
+            dictionaries.add(ismailli);
+            Dictionary kalbajar = new Dictionary("Kəlbəcər ", "Kalbajar", null, cityType);
+            dictionaries.add(kalbajar);
+            Dictionary kangarli = new Dictionary("Kəngərli ", "Kangarli", null, cityType);
+            dictionaries.add(kangarli);
+            Dictionary kurdamir = new Dictionary("Kürdəmir ", "Kurdamir", null, cityType);
+            dictionaries.add(kurdamir);
+            Dictionary qakh = new Dictionary("Qax ", "Qakh", null, cityType);
+            dictionaries.add(qakh);
+            Dictionary qazakh = new Dictionary("Qazax ", "Qazakh", null, cityType);
+            dictionaries.add(qazakh);
+            Dictionary qabala = new Dictionary("Qəbələ ", "Qabala", null, cityType);
+            dictionaries.add(qabala);
+            Dictionary gobustan = new Dictionary("Qobustan ", "Gobustan", null, cityType);
+            dictionaries.add(gobustan);
+            Dictionary guba = new Dictionary("Quba ", "Guba", null, cityType);
+            dictionaries.add(guba);
+            Dictionary gubadli = new Dictionary("Qubadlı  ", "Gubadli", null, cityType);
+            dictionaries.add(gubadli);
+            Dictionary kusar = new Dictionary("Qusar  ", "Kusar", null, cityType);
+            dictionaries.add(kusar);
+            Dictionary lachin = new Dictionary("Laçın  ", "Lachin", null, cityType);
+            dictionaries.add(lachin);
+            Dictionary lerik = new Dictionary("Lerik  ", "Lerik", null, cityType);
+            dictionaries.add(lerik);
+            Dictionary lankaran = new Dictionary("Lənkəran  ", "Lankaran", null, cityType);
+            dictionaries.add(lankaran);
+            Dictionary masally = new Dictionary("Masallı  ", "Masally", null, cityType);
+            dictionaries.add(masally);
+            Dictionary neftchala = new Dictionary("Neftçala  ", "Neftchala", null, cityType);
+            dictionaries.add(neftchala);
+            Dictionary oghuz = new Dictionary("Oğuz  ", "Oghuz", null, cityType);
+            dictionaries.add(oghuz);
+            Dictionary ordubad = new Dictionary("Ordubad  ", "Ordubad", null, cityType);
+            dictionaries.add(ordubad);
+            Dictionary saatly = new Dictionary("Saatlı  ", "Saatly", null, cityType);
+            dictionaries.add(saatly);
+            Dictionary sabirabad = new Dictionary("Sabirabad  ", "Sabirabad", null, cityType);
+            dictionaries.add(sabirabad);
+            Dictionary salyan = new Dictionary("Salyan  ", "Salyan", null, cityType);
+            dictionaries.add(salyan);
+            Dictionary samukh = new Dictionary("Samux  ", "Samukh", null, cityType);
+            dictionaries.add(samukh);
+            Dictionary sadarak = new Dictionary("Sədərək  ", "Sadarak", null, cityType);
+            dictionaries.add(sadarak);
+            Dictionary siazan = new Dictionary("Siyəzən  ", "Siazan", null, cityType);
+            dictionaries.add(siazan);
+            Dictionary shabran = new Dictionary("Şabran  ", "Shabran", null, cityType);
+            dictionaries.add(shabran);
+            Dictionary shahbuz = new Dictionary("Şahbuz  ", "Shahbuz", null, cityType);
+            dictionaries.add(shahbuz);
+            Dictionary shamakhi = new Dictionary("Şamaxı  ", "Shamakhi", null, cityType);
+            dictionaries.add(shamakhi);
+            Dictionary shaki = new Dictionary("Şəki  ", "Shaki", null, cityType);
+            dictionaries.add(shaki);
+            Dictionary shamkir = new Dictionary("Şəmkir  ", "Shamkir", null, cityType);
+            dictionaries.add(shamkir);
+            Dictionary sharur = new Dictionary("Şərur  ", "Sharur", null, cityType);
+            dictionaries.add(sharur);
+            Dictionary shusha = new Dictionary("Şuşa  ", "Shusha", null, cityType);
+            dictionaries.add(shusha);
+            Dictionary tartar = new Dictionary("Tərtər  ", "Tartar", null, cityType);
+            dictionaries.add(tartar);
+            Dictionary tovuz = new Dictionary("Tovuz  ", "Tovuz", null, cityType);
+            dictionaries.add(tovuz);
+            Dictionary ucar = new Dictionary("Ucar  ", "Ucar", null, cityType);
+            dictionaries.add(ucar);
+            Dictionary yardymli = new Dictionary("Yardımlı  ", "Yardymli", null, cityType);
+            dictionaries.add(yardymli);
+            Dictionary yevlakh = new Dictionary("Yevlax  ", "Yevlakh", null, cityType);
+            dictionaries.add(yevlakh);
+            Dictionary zagatala = new Dictionary("Zaqatala  ", "Zagatala", null, cityType);
+            dictionaries.add(zagatala);
+            Dictionary zangilan = new Dictionary("Zəngilan  ", "Zangilan", null, cityType);
+            dictionaries.add(zangilan);
+            Dictionary zardab = new Dictionary("Zərdab  ", "Zardab", null, cityType);
+            dictionaries.add(zardab);
             Dictionary position1 = new Dictionary("Sistem inzibatçısı", "Administrator", null, positionType);
             dictionaries.add(position1);
             Dictionary position2 = new Dictionary("Canvasser", "Canvasser", null, positionType);
@@ -678,6 +782,8 @@ public class DBConfiguration {
             operations.add(detail);
             Operation changePassword = new Operation("Şifrəni dəyişdir", "change-password", "flaticon-lock");
             operations.add(changePassword);
+            Operation credit = new Operation("Kredit", "credit", "flaticon-tool-1");
+            operations.add(credit);
 
             operationRepository.saveAll(operations);
 
@@ -1083,6 +1189,9 @@ public class DBConfiguration {
             ModuleOperation filterModuleOperation20 = new ModuleOperation(schedule, filter, null); //ok
             moduleOperations.add(filterModuleOperation20);
 
+            ModuleOperation creditModuleOperation1 = new ModuleOperation(invoice, credit, null); //ok
+            moduleOperations.add(creditModuleOperation1);
+
             moduleOperationRepository.saveAll(moduleOperations);
 
             List<Organization> organizations = new ArrayList<>();
@@ -1348,6 +1457,8 @@ public class DBConfiguration {
 
             userModuleOperations.add(new UserModuleOperation(user, changePasswordModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, changePasswordModuleOperation2));
+
+            userModuleOperations.add(new UserModuleOperation(user, creditModuleOperation1));
 
             userModuleOperationRepository.saveAll(userModuleOperations);
 

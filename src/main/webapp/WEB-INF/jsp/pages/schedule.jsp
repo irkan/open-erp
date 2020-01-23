@@ -269,12 +269,18 @@
                     </div>
                     <div class="form-group">
                         <form:label path="amount">Məbləğ</form:label>
-                        <form:input path="amount" cssClass="form-control" placeholder="Daxil edin"/>
+                        <div class="input-group" >
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
+                            <form:input path="amount" cssClass="form-control" placeholder="Daxil edin"/>
+                        </div>
                         <form:errors path="amount" cssClass="alert-danger control-label"/>
                     </div>
                     <div class="form-group">
-                        <form:label path="payableAmount">Ödənilmiş məbləğ</form:label>
-                        <form:input path="payableAmount" cssClass="form-control" placeholder="Daxil edin"/>
+                        <form:label path="payableAmount">Ödəniləcək məbləğ</form:label>
+                        <div class="input-group" >
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
+                            <form:input path="payableAmount" cssClass="form-control" placeholder="Daxil edin"/>
+                        </div>
                         <form:errors path="payableAmount" cssClass="alert-danger control-label"/>
                     </div>
 
@@ -302,12 +308,18 @@
                     <form:hidden path="id"/>
                     <div class="form-group">
                         <form:label path="amount">Məbləğ</form:label>
-                        <form:input path="amount" cssClass="form-control" placeholder="Daxil edin" readonly="true"/>
+                        <div class="input-group" >
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
+                            <form:input path="amount" cssClass="form-control" placeholder="Daxil edin" readonly="true"/>
+                        </div>
                         <form:errors path="amount" cssClass="alert-danger control-label"/>
                     </div>
                     <div class="form-group">
-                        <form:label path="payableAmount">Ödənilmiş məbləğ</form:label>
-                        <form:input path="payableAmount" cssClass="form-control" placeholder="Daxil edin"/>
+                        <form:label path="payableAmount">Ödəniləcək məbləğ</form:label>
+                        <div class="input-group" >
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
+                            <form:input path="payableAmount" cssClass="form-control" placeholder="Daxil edin"/>
+                        </div>
                         <form:errors path="payableAmount" cssClass="alert-danger control-label"/>
                     </div>
                 </form:form>
@@ -339,6 +351,33 @@
             console.error(e);
         }
     }
+
+    $( "#form-transfer" ).validate({
+        rules: {
+            payableAmount: {
+                required: true,
+                number: true,
+                min: 1
+            },
+            amount: {
+                required: true,
+                number: true,
+                min: 1
+            },
+        },
+        invalidHandler: function(event, validator) {
+            KTUtil.scrollTop();
+            swal.close();
+        },
+    });
+
+    $("input[name='amount']").inputmask('decimal', {
+        rightAlignNumerics: false
+    });
+
+    $("input[name='payableAmount']").inputmask('decimal', {
+        rightAlignNumerics: false
+    });
 </script>
 
 

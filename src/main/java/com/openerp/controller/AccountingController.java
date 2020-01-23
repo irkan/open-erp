@@ -179,7 +179,7 @@ public class AccountingController extends SkeletonController {
             if(trn.getApprove() &&
                     (trn.getAction().getAttr1().equalsIgnoreCase("accept") ||
                             trn.getAction().getAttr1().equalsIgnoreCase("buy"))){
-                amount+=trn.getAmount();
+                amount+=Util.amountChecker(trn.getAmount());
             }
         }
         double sumPrice = 0;

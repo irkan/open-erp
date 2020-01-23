@@ -372,7 +372,11 @@
                         <form:label path="employee">Əməkdaş</form:label>
                         <form:select  path="employee" cssClass="custom-select form-control">
                             <form:option value=""></form:option>
-                            <form:options items="${employees}" itemLabel="person.fullName" itemValue="id" />
+                            <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
+                                <optgroup label="${itemGroup.key}">
+                                    <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
+                                </optgroup>
+                            </c:forEach>
                         </form:select>
                         <form:errors path="employee" cssClass="alert-danger"/>
                     </div>

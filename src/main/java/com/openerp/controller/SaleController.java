@@ -176,6 +176,7 @@ public class SaleController extends SkeletonController {
                 Invoice invoice = new Invoice();
                 invoice.setSales(sales);
                 invoice.setApprove(false);
+                invoice.setCreditable(false);
                 invoice.setAdvance(true);
                 invoice.setPrice(invoicePrice);
                 invoice.setOrganization(sales.getOrganization());
@@ -352,14 +353,13 @@ public class SaleController extends SkeletonController {
 
             Transaction transaction = new Transaction();
             transaction.setApprove(false);
-            transaction.setAmount(1);
             transaction.setDebt(true);
             transaction.setInventory(invc.getSales().getSalesInventories().get(0).getInventory());
             transaction.setOrganization(invc.getOrganization());
             transaction.setPrice(invc.getPrice());
             transaction.setCurrency("AZN");
             transaction.setRate(getRate(transaction.getCurrency()));
-            double sumPrice = transaction.getAmount() * transaction.getPrice() * transaction.getRate();
+            double sumPrice = Util.amountChecker(transaction.getAmount()) * transaction.getPrice() * transaction.getRate();
             transaction.setSumPrice(sumPrice);
             transaction.setAction(invc.getSales().getSalesInventories().get(0).getInventory().getActions().get(0).getAction()); //burda duzelis edilmelidir
             transaction.setDescription("Satış, Kod: "+invc.getSales().getId() + " -> "
@@ -443,4 +443,41 @@ public class SaleController extends SkeletonController {
         }
         return mapPost(invc, binding, redirectAttributes, "/sale/invoice/");
     }
+
+    @PostMapping(value = "/invoice/credit")
+    public String postInvoiceCredit(@ModelAttribute(Constants.FORM) @Validated Invoice invoice, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        Invoice invc = invoiceRepository.getInvoiceById(invoice.getId());
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()) {
+            Invoice invoice1 = new Invoice();
+            invoice1.setOrganization(invc.getOrganization());
+            invoice1.setSales(invc.getSales());
+            invoice1.setDescription("Kredit: " + invoice.getDescription());
+            invoice1.setCreditable(false);
+            invoice1.setPrice(-1*invc.getPrice());
+            invoiceRepository.save(invoice1);
+            log("sale_invoice", "create/edit", invoice1.getId(), invoice1.toString());
+
+            Transaction transaction = new Transaction();
+            transaction.setApprove(false);
+            transaction.setInventory(invc.getSales().getSalesInventories().get(0).getInventory());
+            transaction.setOrganization(invc.getOrganization());
+            transaction.setPrice(invc.getPrice());
+            transaction.setCurrency("AZN");
+            transaction.setRate(getRate(transaction.getCurrency()));
+            double sumPrice = Util.amountChecker(transaction.getAmount()) * transaction.getPrice() * transaction.getRate();
+            transaction.setSumPrice(sumPrice);
+            transaction.setAction(invc.getSales().getSalesInventories().get(0).getInventory().getActions().get(0).getAction()); //burda duzelis edilmelidir
+            transaction.setDescription("Satış, Kod: "+invc.getSales().getId() + " -> "
+                    + invc.getSales().getCustomer().getPerson().getFullName() + " -> "
+                    + " barkod: " + invc.getSales().getSalesInventories().get(0).getInventory().getName()
+                    + " " + invc.getSales().getSalesInventories().get(0).getInventory().getBarcode()
+            );
+            transactionRepository.save(transaction);
+            log("accounting_transaction", "create/edit", transaction.getId(), transaction.toString());
+        }
+        return mapPost(invc, binding, redirectAttributes, "/sale/invoice/");
+    }
+
+
 }

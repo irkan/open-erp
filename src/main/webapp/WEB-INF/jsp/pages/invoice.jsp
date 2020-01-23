@@ -11,6 +11,25 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="utl" uri="/WEB-INF/tld/Util.tld"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<style>
+
+    td { position: relative; }
+
+    tr.strikeout td:before {
+        content: " ";
+        position: absolute;
+        top: 45%;
+        left: 0;
+        border-bottom: 1px solid #e50f00;
+        width: 100%;
+    }
+
+    tr.strikeout td:after {
+        content: "\00B7";
+        font-size: 1px;
+    }
+
+</style>
 <div class="kt-container  kt-grid__item kt-grid__item--fluid">
     <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
     <c:set var="filter" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'filter')}"/>
@@ -170,6 +189,7 @@
                             <c:set var="approve" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
                             <c:set var="consolidate" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'consolidate')}"/>
                             <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
+                            <c:set var="credit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'credit')}"/>
                             <c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="group_table">
                                 <thead>
@@ -189,7 +209,7 @@
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${list.content}" varStatus="loop">
-                                    <tr data="<c:out value="${utl:toJson(t)}" />">
+                                    <tr data="<c:out value="${utl:toJson(t)}" />" class="<c:out value="${t.price lt 0?'strikeout':''}"/> ">
                                         <td><c:out value="${t.id}" /></td>
                                         <td>
                                             <c:choose>
@@ -215,7 +235,7 @@
                                             <a href="javascript:window.open('/crm/customer/<c:out value="${t.sales.customer.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.sales.customer.id}" />: <c:out value="${t.sales.customer.person.fullName}"/></a>
                                         </td>
                                         <td><c:out value="${t.price}" /> AZN</td>
-                                        <th><fmt:formatDate value = "${t.invoiceDate}" pattern = "dd.MM.yyyy" /></th>
+                                        <td><fmt:formatDate value = "${t.invoiceDate}" pattern = "dd.MM.yyyy" /></td>
                                         <td><c:out value="${t.collector.person.fullName}" /></td>
                                         <td><c:out value="${t.paymentChannel.name}" /></td>
                                         <td><c:out value="${t.channelReferenceCode}" /></td>
@@ -224,42 +244,49 @@
                                                 <i class="flaticon2-check-mark kt-font-success"></i>
                                             </c:if>
                                         </td>
-                                        <td nowrap class="text-center">
-                                            <c:if test="${approve.status}">
-                                                <c:if test="${!t.approve}">
-                                                    <a href="javascript:edit($('#form-approve'), '<c:out value="${utl:toJson(t)}" />', 'approve-modal', '<c:out value="${approve.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${approve.object.name}"/>">
-                                                        <i class="<c:out value="${approve.object.icon}"/>"></i>
+                                        <th nowrap class="text-center">
+                                            <c:if test="${t.price gt 0}">
+                                                <c:if test="${approve.status}">
+                                                    <c:if test="${!t.approve}">
+                                                        <a href="javascript:edit($('#form-approve'), '<c:out value="${utl:toJson(t)}" />', 'approve-modal', '<c:out value="${approve.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${approve.object.name}"/>">
+                                                            <i class="<c:out value="${approve.object.icon}"/>"></i>
+                                                        </a>
+                                                    </c:if>
+                                                </c:if>
+                                                <span class="dropdown">
+                                                    <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
+                                                      <i class="la la-ellipsis-h"></i>
                                                     </a>
+                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                        <c:if test="${consolidate.status}">
+                                                        <a href="javascript:consolidate($('#form-consolidate'), '<c:out value="${utl:toJson(t)}" />', 'consolidate-modal');" class="dropdown-item" title="<c:out value="${consolidate.object.name}"/>">
+                                                            <i class="<c:out value="${consolidate.object.icon}"/>"></i> <c:out value="${consolidate.object.name}"/>
+                                                        </a>
+                                                        </c:if>
+                                                        <c:if test="${edit.status and !t.approve}">
+                                                        <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="dropdown-item" title="<c:out value="${edit.object.name}"/>">
+                                                            <i class="<c:out value="${edit.object.icon}"/>"></i> <c:out value="${edit.object.name}"/>
+                                                        </a>
+                                                        </c:if>
+                                                        <c:if test="${credit.status and t.creditable and t.approve}">
+                                                        <a href="javascript:edit($('#credit-form'), '<c:out value="${utl:toJson(t)}" />', 'credit-modal-operation', '<c:out value="${credit.object.name}" />');" class="dropdown-item" title="<c:out value="${credit.object.name}"/>">
+                                                            <i class="<c:out value="${credit.object.icon}"/>"></i> <c:out value="${credit.object.name}"/>
+                                                        </a>
+                                                        </c:if>
+                                                        <c:if test="${delete.status and !t.approve}">
+                                                        <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.description}" />');" class="dropdown-item" title="<c:out value="${delete.object.name}"/>">
+                                                            <i class="<c:out value="${delete.object.icon}"/>"></i> <c:out value="${delete.object.name}"/>
+                                                        </a>
+                                                        </c:if>
+                                                    </div>
+                                                </span>
+                                                <c:if test="${export.status}">
+                                                <a href="javascript:exportInvoice($('#form-export-invoice'), '<c:out value="${t.id}" />', 'modal-export-invoice');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Hesab-fakturanın çapı">
+                                                    <i class="<c:out value="${export.object.icon}"/>"></i>
+                                                </a>
                                                 </c:if>
                                             </c:if>
-                                            <span class="dropdown">
-                                                <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
-                                                  <i class="la la-ellipsis-h"></i>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <c:if test="${consolidate.status}">
-                                                    <a href="javascript:consolidate($('#form-consolidate'), '<c:out value="${utl:toJson(t)}" />', 'consolidate-modal');" class="dropdown-item" title="<c:out value="${consolidate.object.name}"/>">
-                                                        <i class="<c:out value="${consolidate.object.icon}"/>"></i> <c:out value="${consolidate.object.name}"/>
-                                                    </a>
-                                                    </c:if>
-                                                    <c:if test="${edit.status}">
-                                                    <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="dropdown-item" title="<c:out value="${edit.object.name}"/>">
-                                                        <i class="<c:out value="${edit.object.icon}"/>"></i> <c:out value="${edit.object.name}"/>
-                                                    </a>
-                                                    </c:if>
-                                                    <c:if test="${delete.status}">
-                                                    <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.description}" />');" class="dropdown-item" title="<c:out value="${delete.object.name}"/>">
-                                                        <i class="<c:out value="${delete.object.icon}"/>"></i> <c:out value="${delete.object.name}"/>
-                                                    </a>
-                                                    </c:if>
-                                                </div>
-                                            </span>
-                                            <c:if test="${export.status}">
-                                            <a href="javascript:exportInvoice($('#form-export-invoice'), '<c:out value="${t.id}" />', 'modal-export-invoice');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Hesab-fakturanın çapı">
-                                                <i class="<c:out value="${export.object.icon}"/>"></i>
-                                            </a>
-                                            </c:if>
-                                        </td>
+                                        </th>
                                     </tr>
                                 </c:forEach>
                                 </tbody>
@@ -374,6 +401,41 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" onclick="submit($('#form-approve'));">Bəli, təsdiq edirəm!</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="credit-modal-operation" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Kredit</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form:form modelAttribute="form" id="credit-form" method="post" action="/sale/invoice/credit" cssClass="form-group">
+                    <form:hidden path="id"/>
+                    <div class="form-group">
+                        <form:label path="price">Kredit məbləği</form:label>
+                        <div class="input-group" >
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
+                            <form:input path="price" cssClass="form-control" placeholder="Qiyməti daxil edin" readonly="true"/>
+                        </div>
+                        <form:errors path="price" cssClass="alert-danger control-label"/>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="description">Açıqlama</form:label>
+                        <form:textarea path="description" cssClass="form-control"/>
+                        <form:errors path="description" cssClass="alert-danger control-label"/>
+                    </div>
+                </form:form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="submit($('#credit-form'));">Yadda saxla</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
             </div>
         </div>
@@ -555,6 +617,20 @@
         rules: {
             collector: {
                 required: true
+            }
+        },
+        invalidHandler: function(event, validator) {
+            KTUtil.scrollTop();
+            swal.close();
+        },
+    });
+
+    $( "#credit-form" ).validate({
+        rules: {
+            price: {
+                required: true,
+                number: true,
+                min: 0
             }
         },
         invalidHandler: function(event, validator) {

@@ -43,7 +43,6 @@ public class PayrollController extends SkeletonController {
         } else if (page.equalsIgnoreCase(Constants.ROUTE.ADVANCE)){
             List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization());
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
-            Util.convertedEmployeesByPosition(employees, positions);
             model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployeesByPosition(employees, positions));
             model.addAttribute(Constants.ADVANCES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("advance"));
             if(!model.containsAttribute(Constants.FORM)){
