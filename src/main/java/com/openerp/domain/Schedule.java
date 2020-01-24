@@ -19,6 +19,7 @@ import java.util.Date;
 public class Schedule {
     private Double amount;
 
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date scheduleDate;
 
     private Double payableAmount;

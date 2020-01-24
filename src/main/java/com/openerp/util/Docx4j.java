@@ -69,8 +69,8 @@ public class Docx4j {
                 this.put("${down_payment_in_word}",  Util.getDigitInWord(String.valueOf(sales.getPayment().getDown())));
                 this.put("${remain_payment_price}",  String.valueOf(sales.getPayment().getDown()));
                 this.put("${remain_payment_price_in_word}",  Util.getDigitInWord(String.valueOf(sales.getPayment().getDown())));
-                this.put("${period_payment_price}",  String.valueOf(sales.getPayment().getSchedules().get(0).getAmount()));
-                this.put("${period_payment_price_in_word}",  Util.getDigitInWord(String.valueOf(sales.getPayment().getSchedules().get(0).getAmount())));
+                //this.put("${period_payment_price}",  String.valueOf(sales.getPayment().getSchedules().get(0).getAmount()));
+                //this.put("${period_payment_price_in_word}",  Util.getDigitInWord(String.valueOf(sales.getPayment().getSchedules().get(0).getAmount())));
                 this.put("${period_payment_count}",  String.valueOf(sales.getPayment().getPeriod().getName()));
                 this.put("${period_payment}",  String.valueOf(sales.getPayment().getSchedule().getName()));
             }

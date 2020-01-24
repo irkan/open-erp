@@ -52,7 +52,7 @@ public class SaleController extends SkeletonController {
             }
             model.addAttribute(Constants.LIST, sales);
         } else if (page.equalsIgnoreCase(Constants.ROUTE.SCHEDULE)){
-            if(!model.containsAttribute(Constants.FORM)){
+            /*if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Schedule(
                         new Payment(!data.equals(Optional.empty())?Integer.parseInt(data.get()):null),
                         getSessionOrganization()
@@ -65,8 +65,8 @@ public class SaleController extends SkeletonController {
                         null
                         )
                 );
-            }
-            model.addAttribute(Constants.LIST, scheduleService.findAll((Schedule) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").ascending())));
+            }*/
+            //model.addAttribute(Constants.LIST, scheduleService.findAll((Schedule) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").ascending())));
         } else if(page.equalsIgnoreCase(Constants.ROUTE.SERVICE)){
             List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization());
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
@@ -130,6 +130,9 @@ public class SaleController extends SkeletonController {
             if(sales.getPayment().getCash()){
                 sales.getPayment().setPeriod(null);
                 sales.getPayment().setSchedule(null);
+                sales.getPayment().setSchedulePrice(null);
+            } else {
+                sales.getPayment().setSchedulePrice(schedulePrice(sales.getPayment().getSchedule().getId(), sales.getPayment().getLastPrice(), sales.getPayment().getDown()));
             }
             sales.setGuaranteeExpire(Util.guarantee(sales.getSaleDate()==null?new Date():sales.getSaleDate(), sales.getGuarantee()));
             salesRepository.save(sales);
@@ -153,17 +156,6 @@ public class SaleController extends SkeletonController {
                     actionRepository.save(oldAction);
                     log("warehouse_action", "create/edit", oldAction.getId(), oldAction.toString());
                 }
-            }
-
-            if(sales.getPayment()!=null && sales.getPayment().getSchedules()!=null && sales.getPayment().getSchedules().size()>0){
-                List<Schedule> schedules = sales.getPayment().getSchedules();
-                for(Schedule schedule: schedules){
-                    schedule.setPayment(sales.getPayment());
-                    schedule.setOrganization(sales.getOrganization());
-                }
-                scheduleRepository.saveAll(schedules);
-                //Id de error olur
-                //log("warehouse_action", "create/edit", schedules.getId(), schedules.toString());
             }
 
             double invoicePrice = 0d;
@@ -205,31 +197,11 @@ public class SaleController extends SkeletonController {
     @GetMapping(value = "/payment/schedule/{lastPrice}/{down}/{schedule}/{period}/{saleDate}", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Schedule> getPaymentSchedulePrice(Model model, @PathVariable("lastPrice") double lastPrice, @PathVariable("down") double down, @PathVariable("schedule") int scheduleId, @PathVariable("period") int periodId, @PathVariable(name = "saleDate", value = "") String saleDate){
         try {
-            Dictionary schedule = dictionaryRepository.getDictionaryById(scheduleId);
-            lastPrice = lastPrice - down;
-            int scheduleCount = Integer.parseInt(schedule.getAttr1());
-            double schedulePrice = Math.ceil(lastPrice/scheduleCount);
-            Date saleDt = saleDate.trim().length()>0?DateUtility.getUtilDate(saleDate):new Date();
-            Date startDate = DateUtility.generate(Integer.parseInt(period.getAttr1()), saleDt.getMonth(), saleDt.getYear()+1900);
-            List<Schedule> schedules = new ArrayList<>();
-            Date scheduleDate = DateUtils.addMonths(startDate, 1);
-            for(int i=0; i<scheduleCount; i++){
-                scheduleDate = DateUtils.addMonths(scheduleDate, 1);
-                Schedule schedule1 = new Schedule(schedulePrice, scheduleDate);
-                schedules.add(schedule1);
-            }
-            return schedules;
+            return getSchedulePayment(saleDate, scheduleId, periodId, lastPrice, down);
         } catch (Exception e){
             log.error(e);
         }
         return null;
-    }
-
-    private double schedulePrice(Integer scheduleId, Integer periodId, Double lastPrice, Double down){
-        Dictionary schedule = dictionaryRepository.getDictionaryById(scheduleId);
-        lastPrice = lastPrice - down;
-        int scheduleCount = Integer.parseInt(schedule.getAttr1());
-        return Math.ceil(lastPrice/scheduleCount);
     }
 
     @PostMapping(value = "/invoice")
@@ -248,7 +220,6 @@ public class SaleController extends SkeletonController {
                 invc.setPrice(invoice.getPrice());
                 invc.setInvoiceDate(invoice.getInvoiceDate());
                 invc.setDescription(invoice.getDescription());
-                calculateSchedule(invoice.getSales().getId(), invoice.getPrice());
             }
             invoiceRepository.save(invc);
             log("sale_invoice", "create/edit", invc.getId(), invc.toString());
@@ -281,47 +252,6 @@ public class SaleController extends SkeletonController {
     @PostMapping(value = "/demonstration/filter")
     public String postDemonstrationFilter(@ModelAttribute(Constants.FILTER) @Validated Demonstration demonstration, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         return mapFilter(demonstration, binding, redirectAttributes, "/sale/demonstration");
-    }
-
-    @PostMapping(value = "/schedule")
-    public String postSchedule(@ModelAttribute(Constants.FORM) @Validated Schedule schedule, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
-        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
-        if(!binding.hasErrors()){
-            Schedule s = scheduleRepository.getScheduleById(schedule.getId());
-            schedule.setAmount(s.getAmount());
-            schedule.setPayment(s.getPayment());
-            scheduleRepository.save(schedule);
-            log("sale_schedule", "create/edit", schedule.getId(), schedule.toString());
-        }
-        return mapPost(schedule, binding, redirectAttributes);
-    }
-
-    @PostMapping(value = "/sale/schedule")
-    public String postScheduleFilter(@ModelAttribute(Constants.FILTER) @Validated Schedule schedule, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
-        return mapFilter(schedule, binding, redirectAttributes, "/sale/schedule");
-    }
-
-    @PostMapping(value = "/schedule/transfer")
-    public String postScheduleTransfer(@ModelAttribute(Constants.FORM) @Validated Schedule schedule, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
-        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
-        if(!binding.hasErrors()){
-            Schedule s = scheduleRepository.getScheduleById(schedule.getId());
-            calculateSchedule(s.getPayment().getSales().getId(), schedule.getPayableAmount());
-
-            Invoice invoice = new Invoice();
-            invoice.setSales(s.getPayment().getSales());
-            invoice.setApprove(false);
-            invoice.setPrice(schedule.getPayableAmount());
-            invoice.setOrganization(s.getPayment().getSales().getOrganization());
-            invoice.setDescription("Satışdan əldə edilən ödəniş " + schedule.getPayableAmount() + " AZN");
-            invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
-            invoiceRepository.save(invoice);
-            log("sale_invoice", "create/edit", invoice.getId(), invoice.toString());
-            invoice.setChannelReferenceCode(String.valueOf(invoice.getId()));
-            invoiceRepository.save(invoice);
-            log("sale_invoice", "create/edit", invoice.getId(), invoice.toString());
-        }
-        return mapPost(schedule, binding, redirectAttributes, "/sale/schedule");
     }
 
     @PostMapping(value = "/invoice/consolidate")

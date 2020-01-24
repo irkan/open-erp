@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.Date;
 import java.util.List;
 
+/*
 public interface ScheduleRepository extends JpaRepository<Schedule, Integer>, JpaSpecificationExecutor<Schedule> {
     @Query(value = "from Schedule t where t.amount>t.payableAmount and t.scheduleDate<:current order by t.id desc")
     List<Schedule> getSchedules(@Param("current") Date current);
@@ -25,4 +26,4 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Integer>, Jp
 
     Schedule getScheduleById(Integer id);
 
-}
+}*/

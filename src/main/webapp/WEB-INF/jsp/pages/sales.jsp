@@ -237,7 +237,11 @@
                                             <c:if test="${t.payment.down>0}">
                                                 İlkin ödəniş: <c:out value="${t.payment.down}" /><br/>
                                             </c:if>
+                                            <c:if test="${!t.payment.cash}">
+                                                Qrafik üzrə: <c:out value="${t.payment.schedulePrice}" /><br/>
+                                            </c:if>
                                             Son qiymət: <c:out value="${t.payment.lastPrice}" />
+
                                         </th>
                                         <td>
                                             Qrafik: <c:out value="${t.payment.schedule.name}" /><br/>
@@ -536,6 +540,11 @@
                                                 <button type="button" class="btn btn-outline-info btn-tallest" style="font-size: 15px;font-weight: bolder; padding-left: 7px; padding-right: 8px;" onclick="schedule($('#form'))"><i class="fa fa-play"></i> Qrafik məbləğini hesabla</button>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12" id="schedule-div">
+
                                     </div>
                                 </div>
                             </div>
@@ -853,7 +862,7 @@
         columnDefs: [
             {
                 targets: 0,
-                width: '25px',
+                width: '50px',
                 className: 'dt-center',
                 orderable: false
             },
@@ -875,19 +884,18 @@
                         table+="<table class='table table-striped- table-bordered table-hover table-checkable  animated zoomIn' id='schedule-table'><thead><th style='width: 20px;' class='text-center'>№</th><th>Ödəniş tarixi</th><th>Ödəniş məbləği</th></thead>"
                     },
                     success: function(data) {
+                        console.log(data);
                         table+="<tbody>";
                         $.each(data, function(k, v) {
                             table+="<tr>" +
                                 "<th>"+(parseInt(k)+1)+"</th>" +
                                 "<th>" +
-                                "<input type='hidden' name='payment.schedules["+parseInt(k)+"].scheduleDate'  value='"+v.scheduleDate.split(' ')[0]+"'/> "+
                                 v.scheduleDate.split(' ')[0]+
                                 "</th>" +
                                 "<th>" +
-                                "<input type='hidden' name='payment.schedules["+parseInt(k)+"].amount' value='"+v.amount+"' />"+
                                 v.amount+
                                 " <i style='font-style: italic; font-size: 10px;'>AZN<i></th></tr>";
-                            console.log(k + ' - ' + v)
+                            $(form).find("input[name='payment.schedulePrice']").val(v.amount);
                         });
                         table+="</tbody>";
                         swal.close();
@@ -906,7 +914,7 @@
                     complete: function(){
                         table+="</table>";
                         $("#schedule-div").html(table);
-                        $("#schedule-table").DataTable({pageLength: 50});
+                        $("#schedule-table").DataTable({pageLength: 10});
                     }
                 })
             }
@@ -1075,6 +1083,11 @@
                     },
                     'payment.down': {
                         required: true,
+                        number: true,
+                        min: 0
+                    },
+                    'payment.schedulePrice': {
+                        required: false,
                         number: true,
                         min: 0
                     },
@@ -1348,6 +1361,10 @@
     });
 
     $("input[name='payment.down']").inputmask('decimal', {
+        rightAlignNumerics: false
+    });
+
+    $("input[name='payment.schedulePrice']").inputmask('decimal', {
         rightAlignNumerics: false
     });
 </script>

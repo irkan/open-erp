@@ -5,6 +5,8 @@ import com.openerp.entity.*;
 import com.openerp.service.*;
 import com.openerp.util.Constants;
 import com.openerp.repository.*;
+import com.openerp.util.DateUtility;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -163,9 +165,6 @@ public class SkeletonController {
     PaymentRegulatorNoteRepository paymentRegulatorNoteRepository;
 
     @Autowired
-    ScheduleRepository scheduleRepository;
-
-    @Autowired
     CustomerRepository customerRepository;
 
     @Autowired
@@ -233,9 +232,6 @@ public class SkeletonController {
 
     @Autowired
     InventoryService inventoryService;
-
-    @Autowired
-    ScheduleService scheduleService;
 
     @Autowired
     HttpServletRequest request;
@@ -464,34 +460,27 @@ public class SkeletonController {
         session.setAttribute(Constants.LOGS, logs);
     }
 
-    void calculateSchedule(Integer salesId, Double payableAmount){
-        Sales sales = salesRepository.getSalesByIdAndActiveTrue(salesId);
-        List<Invoice> invoices = invoiceRepository.getInvoicesByActiveTrueAndApproveTrueAndSales(sales);
-        if(payableAmount>0){
-            List<Schedule> schedules = scheduleRepository.getSchedulesByActiveTrueAndPayment_IdAndPaymentActiveOrderByScheduleDateAsc(sales.getPayment().getId(), true);
-            for(Schedule schedule: schedules){
-                if(payableAmount>0) {
-                    double different = schedule.getAmount() - schedule.getPayableAmount();
-                    if (different > 0) {
-                        schedule.setPayableAmount(different < payableAmount ? schedule.getAmount() : (schedule.getPayableAmount() + payableAmount));
-                        payableAmount = different < payableAmount ? payableAmount - different : 0;
-                        scheduleRepository.save(schedule);
-                    }
-                }
-            }
-            return;
-        }
+    Double schedulePrice(Integer scheduleId, Double lastPrice, Double down){
+        Dictionary schedule = dictionaryRepository.getDictionaryById(scheduleId);
+        lastPrice = lastPrice - down;
+        int scheduleCount = Integer.parseInt(schedule.getAttr1());
+        return Math.ceil(lastPrice/scheduleCount);
+    }
 
-        if(payableAmount<0){
-            List<Schedule> schedules = scheduleRepository.getSchedulesByActiveTrueAndPayment_IdAndPaymentActiveAndPayableAmountNotNullAndPayableAmountGreaterThanOrderByScheduleDateDesc(sales.getPayment().getId(), true, 0d);
-            for(Schedule schedule: schedules){
-                if(payableAmount<0){
-                    double schedulePayableAmount = schedule.getPayableAmount();
-                    schedule.setPayableAmount(schedulePayableAmount>-1*payableAmount?schedulePayableAmount+payableAmount:0);
-                    payableAmount = schedulePayableAmount > -1*payableAmount ? 0 : payableAmount+schedulePayableAmount;
-                    scheduleRepository.save(schedule);
-                }
-            }
+    List<Schedule> getSchedulePayment(String saleDate, Integer scheduleId, Integer periodId, Double lastPrice, Double down){
+        Dictionary schedule = dictionaryRepository.getDictionaryById(scheduleId);
+        Dictionary period = dictionaryRepository.getDictionaryById(periodId);
+        int scheduleCount = Integer.parseInt(schedule.getAttr1());
+        Date saleDt = saleDate.trim().length()>0? DateUtility.getUtilDate(saleDate):new Date();
+        Date startDate = DateUtility.generate(Integer.parseInt(period.getAttr1()), saleDt.getMonth(), saleDt.getYear()+1900);
+        List<Schedule> schedules = new ArrayList<>();
+        Date scheduleDate = DateUtils.addMonths(startDate, 1);
+        Double schedulePrice = schedulePrice(scheduleId, lastPrice, down);
+        for(int i=0; i<scheduleCount; i++){
+            scheduleDate = DateUtils.addMonths(scheduleDate, 1);
+            Schedule schedule1 = new Schedule(schedulePrice, scheduleDate);
+            schedules.add(schedule1);
         }
+        return schedules;
     }
 }

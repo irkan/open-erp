@@ -3,7 +3,12 @@ package com.openerp.controller;
 import com.openerp.domain.Schedule;
 import com.openerp.entity.*;
 import com.openerp.util.Constants;
+import com.openerp.util.DateUtility;
 import com.openerp.util.Util;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,13 +28,28 @@ public class CollectController extends SkeletonController {
         if(page.equalsIgnoreCase(Constants.ROUTE.PAYMENT_REGULATOR) ||
                 page.equalsIgnoreCase(Constants.ROUTE.TROUBLED_CUSTOMER)){
             model.addAttribute(Constants.CONFIGURATION_TROUBLED_CUSTOMER, configurationRepository.getConfigurationByKey("troubled_customer").getAttribute());
-            List<Schedule> schedules;
-            if(canViewAll()){
-                schedules = scheduleRepository.getSchedules(new Date());
-            } else {
-                schedules = scheduleRepository.getSchedulesByOrganization(new Date(), getSessionOrganization());
+            if(!model.containsAttribute(Constants.FILTER)){
+                Sales sales = new Sales(!data.equals(Optional.empty())?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null);
+                sales.setSaleDateFrom(DateUtility.minusYear(Integer.parseInt(configurationRepository.getConfigurationByKey("by_year").getAttribute())));
+                model.addAttribute(Constants.FILTER, sales);
             }
-            model.addAttribute(Constants.LIST, Util.convertPaymentSchedule(schedules));
+            Page<Sales> sales = salesService.findAll((Sales) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize()*100, Sort.by("id").descending()));
+
+            List<Sales> salesList = new ArrayList<>();
+            for(Sales sale: sales){
+                double sumOfInvoices = Util.calculateInvoice(sale.getInvoices());
+                List<Schedule> schedules = getSchedulePayment(DateUtility.getFormattedDate(sale.getSaleDate()), sale.getPayment().getSchedule().getId(), sale.getPayment().getPeriod().getId(), sale.getPayment().getLastPrice(), sale.getPayment().getDown());
+                double plannedPayment = Util.calculatePlannedPayment(sale, schedules);
+                if(sale.getPayment().getLastPrice()>sumOfInvoices && sumOfInvoices<plannedPayment){
+                    salesList.add(sale);
+                }
+            }
+            Page<Sales> salesPage = new PageImpl<Sales>(salesList);
+            model.addAttribute(Constants.LIST, salesPage);
+
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new Invoice(getSessionOrganization()));
+            }
         } if(page.equalsIgnoreCase(Constants.ROUTE.PAYMENT_REGULATOR_NOTE)){
             List<PaymentRegulatorNote> paymentRegulatorNotes;
             int paymentId = 0;

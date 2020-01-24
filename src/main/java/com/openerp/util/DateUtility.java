@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -122,5 +123,12 @@ public class DateUtility {
         }
         returned = returned.trim().length()>0?returned+"əvvəl":"indi";
         return returned;
+    }
+
+    public static Date minusYear(int year){
+        Calendar cal = Calendar.getInstance();
+        cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, year);
+        return cal.getTime();
     }
 }

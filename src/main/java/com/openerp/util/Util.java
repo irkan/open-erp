@@ -463,30 +463,6 @@ public class Util {
         return cal.getTime();
     }
 
-    public static List<Schedule> convertPaymentSchedule(List<Schedule> schedules) {
-        List<Schedule> list = new ArrayList<>();
-        Map<Payment, List<Schedule>> scheduleMap = Groups.groupBy(schedules, new Pluck<Payment, Schedule>(Schedule.class, "payment"));
-        for(Payment payment: scheduleMap.keySet()){
-            double sumAmount=0, sumPayableAmount = 0;
-            Date scheduleDate = new Date();
-            Schedule sch = new Schedule();
-            for(Schedule schedule: scheduleMap.get(payment)){
-                sumAmount+=schedule.getAmount();
-                sumPayableAmount+=schedule.getPayableAmount();
-                if(scheduleDate.getTime()>schedule.getScheduleDate().getTime()){
-                    scheduleDate = schedule.getScheduleDate();
-                }
-                sch.setPayment(schedule.getPayment());
-                sch.setId(schedule.getId());
-            }
-            sch.setScheduleDate(scheduleDate);
-            sch.setAmount(sumAmount);
-            sch.setPayableAmount(sumPayableAmount);
-            list.add(sch);
-        }
-        return list;
-    }
-
     public static List<Integer> getInvoiceIds(String data){
         boolean status = true;
         List<Integer> ids = new ArrayList<>();
@@ -558,5 +534,26 @@ public class Util {
             return amount;
         }
         return 1;
+    }
+
+    public static Double calculateInvoice(List<Invoice> invoices){
+        double price = 0;
+        for(Invoice invoice: invoices){
+            if(invoice.getApprove()){
+                price+=invoice.getPrice();
+            }
+        }
+        return price;
+    }
+
+    public static Double calculatePlannedPayment(Sales sales, List<Schedule> schedules){
+        double price = sales.getPayment().getDown();
+        Date today = new Date();
+        for(Schedule schedule: schedules){
+            if(schedule.getScheduleDate().getTime() < today.getTime()){
+                price+=schedule.getAmount();
+            }
+        }
+        return price;
     }
 }

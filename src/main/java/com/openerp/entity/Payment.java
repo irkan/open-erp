@@ -67,9 +67,6 @@ public class Payment {
     private Boolean cash = false;
 
     @OneToMany(mappedBy = "payment", fetch = FetchType.LAZY)
-    private List<Schedule> schedules;
-
-    @OneToMany(mappedBy = "payment", fetch = FetchType.LAZY)
     private List<PaymentRegulatorNote> paymentRegulatorNotes;
 
     @JsonIgnore
