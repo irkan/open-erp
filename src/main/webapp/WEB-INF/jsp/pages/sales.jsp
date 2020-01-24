@@ -198,7 +198,7 @@
                             <c:set var="detail" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'detail')}"/>
                             <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
                             <c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
-                            <table class="table table-striped- table-bordered table-hover table-checkable" id="group_table">
+                            <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
                                 <thead>
                                 <tr>
                                     <th>Kod</th>
@@ -331,10 +331,20 @@
                             <div class="kt-wizard-v1__nav-item" data-ktwizard-type="step" data-ktwizard-state="current">
                                 <div class="kt-wizard-v1__nav-body">
                                     <div class="kt-wizard-v1__nav-icon">
+                                        <i class="flaticon-price-tag"></i>
+                                    </div>
+                                    <div class="kt-wizard-v1__nav-label">
+                                        1. Satış
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="kt-wizard-v1__nav-item" data-ktwizard-type="step">
+                                <div class="kt-wizard-v1__nav-body">
+                                    <div class="kt-wizard-v1__nav-icon">
                                         <i class="flaticon-list"></i>
                                     </div>
                                     <div class="kt-wizard-v1__nav-label">
-                                        1. Müştəri
+                                        2. Müştəri
                                     </div>
                                 </div>
                             </div>
@@ -344,27 +354,7 @@
                                         <i class="flaticon-bus-stop"></i>
                                     </div>
                                     <div class="kt-wizard-v1__nav-label">
-                                        2. Əlaqə
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="kt-wizard-v1__nav-item" data-ktwizard-type="step">
-                                <div class="kt-wizard-v1__nav-body">
-                                    <div class="kt-wizard-v1__nav-icon">
-                                        <i class="flaticon-responsive"></i>
-                                    </div>
-                                    <div class="kt-wizard-v1__nav-label">
-                                        3. İnventar
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="kt-wizard-v1__nav-item" data-ktwizard-type="step">
-                                <div class="kt-wizard-v1__nav-body">
-                                    <div class="kt-wizard-v1__nav-icon">
-                                        <i class="flaticon-price-tag"></i>
-                                    </div>
-                                    <div class="kt-wizard-v1__nav-label">
-                                        4. Ödəmə
+                                        3. Əlaqə
                                     </div>
                                 </div>
                             </div>
@@ -374,7 +364,7 @@
                                         <i class="flaticon-truck"></i>
                                     </div>
                                     <div class="kt-wizard-v1__nav-label">
-                                        5. Satıcı
+                                        4. Satıcı
                                     </div>
                                 </div>
                             </div>
@@ -390,8 +380,168 @@
                     <form:hidden path="service"/>
                     <form:hidden path="organization"/>
                     <input type="hidden" name="customer.organization" value="<c:out value="${sessionScope.organization.id}"/>"/>
-
-                        <div class="kt-wizard-v1__content" data-ktwizard-type="step-content" data-ktwizard-state="current">
+                    <div class="kt-wizard-v1__content" data-ktwizard-type="step-content" data-ktwizard-state="current">
+                        <div class="kt-form__section kt-form__section--first">
+                            <div class="kt-wizard-v1__form">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <input type="hidden" name="salesInventories[0].inventory" class="form-control"/>
+                                        <form:label path="saleDate">Satış tarixi</form:label>
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <div class="form-group">
+                                                    <div class="input-group date" >
+                                                        <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
+                                                        <form:input path="saleDate" cssClass="form-control datepicker-element" date="date" placeholder="dd.MM.yyyy"/>
+                                                    </div>
+                                                    <form:errors path="saleDate" cssClass="control-label alert-danger" />
+                                                </div>
+                                            </div>
+                                            <div class="col-4">
+                                                <a href="javascript:window.open('/warehouse/inventory', 'mywindow', 'width=1250, height=800')" data-repeater-delete="" class="btn btn-label-success btn-block">
+                                                    İnventar
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Barkod üzrə inventar axtarışı</label>
+                                            <div class="row">
+                                                <div class="col-8">
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-search"></i></span></div>
+                                                            <input type="text" name="salesInventories[0].inventory.barcode" class="form-control" placeholder="Barkodu daxil edin..." />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <a href="javascript:findInventory($('#form'), $('#form').find('input[name=\'salesInventories[0].inventory.barcode\']'));" data-repeater-delete="" class="btn btn-label-brand btn-block">
+                                                        Axtar
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>İnventar</label>
+                                            <input name="salesInventories[0].inventory.name" class="form-control" readonly="true"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Açıqlama</label>
+                                            <textarea name="salesInventories[0].inventory.description" class="form-control" readonly="true"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <form:label path="payment.price">Qiymət</form:label>
+                                                <form:select  path="payment.price" onchange="calculate($(this))" cssClass="custom-select form-control">
+                                                    <form:options items="${sale_prices}" itemLabel="name" itemValue="attr1" />
+                                                </form:select>
+                                                <form:errors path="payment.price" cssClass="control-label alert-danger"/>
+                                            </div>
+                                            <div class="col-sm-4 text-center">
+                                                <div class="form-group mt-3 pt-4">
+                                                    <label class="kt-checkbox kt-checkbox--brand">
+                                                        <form:checkbox path="payment.cash" onclick="doCash($(this), '10%')"/> Nağd ödəniş?
+                                                        <span></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <form:label path="guarantee">Zəmanət müddəti</form:label>
+                                                <form:select  path="guarantee" cssClass="custom-select form-control">
+                                                    <form:options items="${guarantees}" itemLabel="name" itemValue="attr1" />
+                                                </form:select>
+                                                <form:errors path="guarantee" cssClass="control-label alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="row kt-hidden animated zoomIn" id="cash-div">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <form:label path="payment.discount">Endirim dəyəri</form:label>
+                                                    <form:input path="payment.discount" cssClass="form-control" readonly="true" cssStyle="text-align: -webkit-center; text-align: center; font-weight: bold; letter-spacing: 3px;"/>
+                                                    <form:errors path="payment.discount" cssClass="control-label alert-danger"/>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <form:label path="payment.description">Açıqlama</form:label>
+                                                    <form:input path="payment.description" cssClass="form-control" readonly="true"/>
+                                                    <form:errors path="payment.description" cssClass="control-label alert-danger"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="alert alert-info alert-elevate" role="alert" style="padding: 0; padding-left: 1rem; padding-right: 1rem; padding-top: 5px;">
+                                                    <div class="alert-icon"><i class="flaticon-warning kt-font-brand kt-font-light"></i></div>
+                                                    <div class="alert-text text-center">
+                                                        <div style="font-size: 15px; font-weight: bold; letter-spacing: 1px;">
+                                                            Yekun ödəniləcək məbləğ:
+                                                            <span id="lastPriceLabel">0</span>
+                                                            <span> AZN</span>
+                                                            <form:hidden path="payment.lastPrice"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row animated zoomIn" id="credit-div">
+                                            <div class="col-sm-9">
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <form:label path="payment.schedule">Ödəniş qrafiki</form:label>
+                                                            <form:select  path="payment.schedule" cssClass="custom-select form-control">
+                                                                <form:options items="${payment_schedules}" itemLabel="name" itemValue="id" />
+                                                            </form:select>
+                                                            <form:errors path="payment.schedule" cssClass="control-label alert-danger"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <form:label path="payment.period">Ödəniş edilsin</form:label>
+                                                            <form:select  path="payment.period" cssClass="custom-select form-control">
+                                                                <form:options items="${payment_periods}" itemLabel="name" itemValue="id" />
+                                                            </form:select>
+                                                            <form:errors path="payment.period" cssClass="control-label alert-danger"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <form:label path="payment.down">İlkin ödəniş</form:label>
+                                                            <div class="input-group" >
+                                                                <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
+                                                                <form:input path="payment.down" cssClass="form-control" placeholder="İlkin ödənişi daxil edin"/>
+                                                            </div>
+                                                            <form:errors path="payment.down" cssClass="alert-danger control-label"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <form:label path="payment.schedulePrice">Qrafik məbləği</form:label>
+                                                            <div class="input-group" >
+                                                                <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
+                                                                <form:input path="payment.schedulePrice" cssClass="form-control" readonly="true"/>
+                                                            </div>
+                                                            <form:errors path="payment.schedulePrice" cssClass="control-label alert-danger"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3 text-center">
+                                                <label>&nbsp;</label>
+                                                <button type="button" class="btn btn-outline-info btn-tallest" style="font-size: 15px;font-weight: bolder; padding-left: 7px; padding-right: 8px;" onclick="schedule($('#form'))"><i class="fa fa-play"></i> Qrafik məbləğini hesabla</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        <div class="kt-wizard-v1__content" data-ktwizard-type="step-content">
                             <div class="kt-form__section kt-form__section--first">
                                 <div class="kt-wizard-v1__form">
                                     <div class="row">
@@ -407,16 +557,6 @@
                                                         <button class="btn btn-primary" type="button" onclick="findCustomer($('#form'), $('#form').find('input[name=\'customer\']'))">Müştərini axtar</button>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 offset-md-2">
-                                            <div class="form-group">
-                                                <form:label path="saleDate">Satış tarixi</form:label>
-                                                <div class="input-group date" >
-                                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
-                                                    <form:input path="saleDate" cssClass="form-control datepicker-element" date="date" placeholder="dd.MM.yyyy"/>
-                                                </div>
-                                                <form:errors path="saleDate" cssClass="control-label alert-danger" />
                                             </div>
                                         </div>
                                     </div>
@@ -615,159 +755,6 @@
                         </div>
                         <div class="kt-wizard-v1__content" data-ktwizard-type="step-content">
                             <div class="kt-form__section kt-form__section--first">
-                                <div class="kt-wizard-v1__form">
-                                    <div class="row">
-                                        <div class="col-md-8 offset-md-2">
-                                            <input type="hidden" name="salesInventories[0].inventory" class="form-control"/>
-                                            <div class="row">
-                                                <div class="col-md-8">
-                                                    <div class="form-group">
-                                                        <div class="input-group">
-                                                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-search"></i></span></div>
-                                                            <input type="text" name="salesInventories[0].inventory.barcode" class="form-control" placeholder="Barkodu daxil edin..." />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="row">
-                                                        <div class="col-6">
-                                                            <a href="javascript:findInventory($('#form'), $('#form').find('input[name=\'salesInventories[0].inventory.barcode\']'));" data-repeater-delete="" class="btn btn-label-brand btn-block">
-                                                                Axtar
-                                                            </a>
-                                                        </div>
-                                                        <div class="col-6">
-                                                            <a href="javascript:window.open('/warehouse/inventory', 'mywindow', 'width=1250, height=800')" data-repeater-delete="" class="btn btn-label-success btn-block">
-                                                                İnventar
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-8 offset-md-2">
-                                            <div class="form-group">
-                                                <label>İnventar</label>
-                                                <input name="salesInventories[0].inventory.name" class="form-control" readonly="true"/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-8 offset-md-2">
-                                            <div class="form-group">
-                                                <label>Açıqlama</label>
-                                                <textarea name="salesInventories[0].inventory.description" class="form-control" readonly="true"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="kt-wizard-v1__content" data-ktwizard-type="step-content">
-                            <div class="kt-form__section kt-form__section--first">
-                                <div class="kt-wizard-v1__form">
-                                    <div class="row">
-                                        <div class="col-sm-4 offset-sm-1">
-                                            <form:label path="payment.price">Qiymət</form:label>
-                                            <form:select  path="payment.price" onchange="calculate($(this))" cssClass="custom-select form-control">
-                                                <form:options items="${sale_prices}" itemLabel="name" itemValue="attr1" />
-                                            </form:select>
-                                            <form:errors path="payment.price" cssClass="control-label alert-danger"/>
-                                        </div>
-                                        <div class="col-sm-3 text-center">
-                                            <div class="form-group mt-3 pt-4">
-                                                <label class="kt-checkbox kt-checkbox--brand">
-                                                    <form:checkbox path="payment.cash" onclick="doCash($(this), '10%')"/> Ödəniş nağd dırmı?
-                                                    <span></span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <form:label path="guarantee">Zəmanət müddəti</form:label>
-                                            <form:select  path="guarantee" cssClass="custom-select form-control">
-                                                <form:options items="${guarantees}" itemLabel="name" itemValue="attr1" />
-                                            </form:select>
-                                            <form:errors path="guarantee" cssClass="control-label alert-danger"/>
-                                        </div>
-                                    </div>
-                                    <div class="row kt-hidden animated zoomIn" id="cash-div">
-                                        <div class="col-md-5 offset-md-1">
-                                            <div class="form-group">
-                                                <form:label path="payment.discount">Endirim dəyəri</form:label>
-                                                <form:input path="payment.discount" cssClass="form-control" readonly="true" cssStyle="text-align: -webkit-center; text-align: center; font-weight: bold; letter-spacing: 3px;"/>
-                                                <form:errors path="payment.discount" cssClass="control-label alert-danger"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-5">
-                                            <div class="form-group">
-                                                <form:label path="payment.description">Açıqlama</form:label>
-                                                <form:input path="payment.description" cssClass="form-control" readonly="true"/>
-                                                <form:errors path="payment.description" cssClass="control-label alert-danger"/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-10 offset-md-1">
-                                            <div class="alert alert-info alert-elevate" role="alert" style="padding: 0; padding-left: 1rem; padding-right: 1rem; padding-top: 5px;">
-                                                <div class="alert-icon"><i class="flaticon-warning kt-font-brand kt-font-light"></i></div>
-                                                <div class="alert-text text-center">
-                                                    <div style="font-size: 18px; font-weight: bold; letter-spacing: 2px;">
-                                                        Yekun ödəniləcək məbləğ:
-                                                        <span id="lastPriceLabel">0</span>
-                                                        <span> AZN</span>
-                                                        <form:hidden path="payment.lastPrice"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row animated zoomIn" id="credit-div">
-                                        <div class="col-sm-7 offset-sm-1">
-                                            <div class="row">
-                                                <div class="col-sm-4">
-                                                    <div class="form-group">
-                                                        <form:label path="payment.down">İlkin ödəniş</form:label>
-                                                        <div class="input-group" >
-                                                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
-                                                            <form:input path="payment.down" cssClass="form-control" placeholder="İlkin ödənişi daxil edin"/>
-                                                        </div>
-                                                        <form:errors path="payment.down" cssClass="alert-danger control-label"/>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <div class="form-group">
-                                                        <form:label path="payment.schedule">Ödəniş qrafiki</form:label>
-                                                        <form:select  path="payment.schedule" cssClass="custom-select form-control">
-                                                            <form:options items="${payment_schedules}" itemLabel="name" itemValue="id" />
-                                                        </form:select>
-                                                        <form:errors path="payment.schedule" cssClass="control-label alert-danger"/>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <div class="form-group">
-                                                        <form:label path="payment.period">Ödəniş edilsin</form:label>
-                                                        <form:select  path="payment.period" cssClass="custom-select form-control">
-                                                            <form:options items="${payment_periods}" itemLabel="name" itemValue="id" />
-                                                        </form:select>
-                                                        <form:errors path="payment.period" cssClass="control-label alert-danger"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-3 text-center">
-                                            <button type="button" class="btn btn-outline-info btn-tallest" style="font-size: 16px;padding-left: 7px; padding-right: 8px;" onclick="schedule($('#form'))"><i class="fa fa-play"></i> Ödəniş qrafiki yarat</button>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-10 offset-sm-1" id="schedule-div">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="kt-wizard-v1__content" data-ktwizard-type="step-content">
-                            <div class="kt-form__section kt-form__section--first">
                                 <div class="kt-wizard-v1__review">
                                     <div class="row">
                                         <div class="col-md-5 offset-md-1">
@@ -856,9 +843,22 @@
     <input type="hidden" name="data" />
 </form>
 
-<script src="<c:url value="/assets/js/demo4/pages/crud/datatables/advanced/row-grouping.js" />" type="text/javascript"></script>
-
 <script>
+
+    $("#datatable").DataTable({
+        responsive: true,
+        lengthMenu: [10, 25, 50, 75, 100, 200, 1000],
+        pageLength: 100,
+        order: [[1, 'desc']],
+        columnDefs: [
+            {
+                targets: 0,
+                width: '25px',
+                className: 'dt-center',
+                orderable: false
+            },
+        ],
+    });
 
     function schedule(form){
         var table='';
@@ -1295,7 +1295,7 @@
     }();
 
     <c:if test="${detail.status}">
-    $('#group_table tbody').on('dblclick', 'tr', function () {
+    $('#datatable tbody').on('dblclick', 'tr', function () {
         swal.showLoading();
         location.href = '/sale/schedule/'+ $(this).attr('data');
         window.reload();

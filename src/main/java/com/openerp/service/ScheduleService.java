@@ -1,8 +1,6 @@
 package com.openerp.service;
 
-import com.openerp.entity.Sales;
-import com.openerp.entity.Schedule;
-import com.openerp.repository.SalesRepository;
+import com.openerp.domain.Schedule;
 import com.openerp.repository.ScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

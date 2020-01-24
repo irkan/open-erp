@@ -1,10 +1,10 @@
 package com.openerp.controller;
 
+import com.openerp.domain.Schedule;
 import com.openerp.entity.*;
 import com.openerp.service.*;
 import com.openerp.util.Constants;
 import com.openerp.repository.*;
-import com.openerp.util.Util;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,12 +1,10 @@
 package com.openerp.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jdk.nashorn.internal.ir.annotations.Ignore;
+import com.openerp.domain.Schedule;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.LazyToOne;
-import org.hibernate.annotations.LazyToOneOption;
 
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
@@ -41,6 +39,10 @@ public class Payment {
     @DecimalMin(value = "0", message = "Minimum 0 olmalıdır")
     @Column(name = "down", nullable = false, columnDefinition="Decimal(10,2) default 0")
     private Double down=0d;
+
+    @DecimalMin(value = "0", message = "Minimum 0 olmalıdır")
+    @Column(name = "schedule_price", columnDefinition="Decimal(10,2) default 0")
+    private Double schedulePrice;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "admin_dictionary_payment_schedule_id")

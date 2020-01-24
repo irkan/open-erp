@@ -1,13 +1,9 @@
 package com.openerp.controller;
 
+import com.openerp.domain.Schedule;
 import com.openerp.entity.*;
 import com.openerp.util.Constants;
-import com.openerp.util.DateUtility;
 import com.openerp.util.Util;
-import net.emaze.dysfunctional.Groups;
-import net.emaze.dysfunctional.dispatching.delegates.Pluck;
-import org.apache.commons.lang3.time.DateUtils;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;

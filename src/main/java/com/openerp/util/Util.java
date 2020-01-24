@@ -1,6 +1,7 @@
 package com.openerp.util;
 
 import com.openerp.domain.Response;
+import com.openerp.domain.Schedule;
 import com.openerp.entity.*;
 import com.openerp.entity.Dictionary;
 import net.emaze.dysfunctional.Groups;

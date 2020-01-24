@@ -72,8 +72,7 @@
           text-align: center; }
           .kt-wizard-v1 .kt-wizard-v1__nav .kt-wizard-v1__nav-items .kt-wizard-v1__nav-item .kt-wizard-v1__nav-body .kt-wizard-v1__nav-icon {
             font-size: 3.7rem;
-            color: #a2a5b9;
-            margin-bottom: 0.5rem; }
+            color: #a2a5b9; }
             .kt-wizard-v1 .kt-wizard-v1__nav .kt-wizard-v1__nav-items .kt-wizard-v1__nav-item .kt-wizard-v1__nav-body .kt-wizard-v1__nav-icon g [fill] {
               -webkit-transition: fill 0.3s ease;
               transition: fill 0.3s ease;

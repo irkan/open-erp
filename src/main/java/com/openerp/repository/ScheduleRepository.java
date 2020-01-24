@@ -1,9 +1,7 @@
 package com.openerp.repository;
 
 import com.openerp.entity.Organization;
-import com.openerp.entity.Payment;
-import com.openerp.entity.Sales;
-import com.openerp.entity.Schedule;
+import com.openerp.domain.Schedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;

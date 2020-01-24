@@ -1,5 +1,6 @@
 package com.openerp.controller;
 
+import com.openerp.domain.Schedule;
 import com.openerp.entity.*;
 import com.openerp.entity.Dictionary;
 import com.openerp.util.Constants;
@@ -202,10 +203,9 @@ public class SaleController extends SkeletonController {
 
     @ResponseBody
     @GetMapping(value = "/payment/schedule/{lastPrice}/{down}/{schedule}/{period}/{saleDate}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Schedule> getPaymentSchedule(Model model, @PathVariable("lastPrice") double lastPrice, @PathVariable("down") double down, @PathVariable("schedule") int scheduleId, @PathVariable("period") int periodId, @PathVariable(name = "saleDate", value = "") String saleDate){
+    public List<Schedule> getPaymentSchedulePrice(Model model, @PathVariable("lastPrice") double lastPrice, @PathVariable("down") double down, @PathVariable("schedule") int scheduleId, @PathVariable("period") int periodId, @PathVariable(name = "saleDate", value = "") String saleDate){
         try {
             Dictionary schedule = dictionaryRepository.getDictionaryById(scheduleId);
-            Dictionary period = dictionaryRepository.getDictionaryById(periodId);
             lastPrice = lastPrice - down;
             int scheduleCount = Integer.parseInt(schedule.getAttr1());
             double schedulePrice = Math.ceil(lastPrice/scheduleCount);
@@ -215,7 +215,7 @@ public class SaleController extends SkeletonController {
             Date scheduleDate = DateUtils.addMonths(startDate, 1);
             for(int i=0; i<scheduleCount; i++){
                 scheduleDate = DateUtils.addMonths(scheduleDate, 1);
-                Schedule schedule1 = new Schedule(null, schedulePrice, scheduleDate);
+                Schedule schedule1 = new Schedule(schedulePrice, scheduleDate);
                 schedules.add(schedule1);
             }
             return schedules;
@@ -223,6 +223,13 @@ public class SaleController extends SkeletonController {
             log.error(e);
         }
         return null;
+    }
+
+    private double schedulePrice(Integer scheduleId, Integer periodId, Double lastPrice, Double down){
+        Dictionary schedule = dictionaryRepository.getDictionaryById(scheduleId);
+        lastPrice = lastPrice - down;
+        int scheduleCount = Integer.parseInt(schedule.getAttr1());
+        return Math.ceil(lastPrice/scheduleCount);
     }
 
     @PostMapping(value = "/invoice")
