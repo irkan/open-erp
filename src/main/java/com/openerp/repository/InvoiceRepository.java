@@ -13,4 +13,5 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer>, JpaS
     List<Invoice> getInvoicesByActiveTrueAndOrganizationOrderByInvoiceDateDesc(Organization organization);
     Invoice getInvoiceById(int id);
     List<Invoice> getInvoicesByActiveTrueAndIdIn(List<Integer> ids);
+    List<Invoice> getInvoicesByActiveTrueAndApproveTrueAndSales(Sales sales);
 }

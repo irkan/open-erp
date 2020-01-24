@@ -209,7 +209,7 @@
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${list.content}" varStatus="loop">
-                                    <tr data="<c:out value="${utl:toJson(t)}" />" class="<c:out value="${t.price lt 0?'strikeout':''}"/> ">
+                                    <tr data="<c:out value="${utl:toJson(t)}" />" class="<c:out value="${(t.price lt 0 and t.approve)?'strikeout':''}"/> ">
                                         <td><c:out value="${t.id}" /></td>
                                         <td>
                                             <c:choose>
@@ -245,7 +245,7 @@
                                             </c:if>
                                         </td>
                                         <th nowrap class="text-center">
-                                            <c:if test="${t.price gt 0}">
+                                            <%--<c:if test="${t.price gt 0 and t.approve}">--%>
                                                 <c:if test="${approve.status}">
                                                     <c:if test="${!t.approve}">
                                                         <a href="javascript:edit($('#form-approve'), '<c:out value="${utl:toJson(t)}" />', 'approve-modal', '<c:out value="${approve.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${approve.object.name}"/>">
@@ -285,7 +285,7 @@
                                                     <i class="<c:out value="${export.object.icon}"/>"></i>
                                                 </a>
                                                 </c:if>
-                                            </c:if>
+                                            <%--</c:if>--%>
                                         </th>
                                     </tr>
                                 </c:forEach>
@@ -308,7 +308,7 @@
 </div>
 
 <div class="modal fade" id="modal-operation" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"></h5>
@@ -323,37 +323,33 @@
                     <form:hidden path="organization"/>
                     <div class="form-group">
                         <form:label path="sales">Satış nömrəsi</form:label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" style="background-color: white; border-right: none;"><i class="la la-search"></i></span>
+                        <div class="row">
+                            <div class="col-9">
+                                <div class="input-group">
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-search"></i></span></div>
+                                    <form:input path="sales" class="form-control" placeholder="Daxil edin..."/>
+                                </div>
                             </div>
-                            <form:input path="sales" class="form-control" placeholder="Satış nömrəsini daxil edin..." style="border-left: none;" />
-                            <div class="input-group-append">
+                            <div class="col-3">
                                 <button class="btn btn-primary" type="button" onclick="checkSales($('form').find('input[name=\'sales\']'))">Yoxla</button>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <form:label path="price">Qiyməti</form:label>
-                                <div class="input-group" >
-                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
-                                    <form:input path="price" cssClass="form-control" placeholder="Qiyməti daxil edin"/>
-                                </div>
-                                <form:errors path="price" cssClass="alert-danger control-label"/>
-                            </div>
+                    <div class="form-group">
+                        <form:label path="price">Qiyməti</form:label>
+                        <div class="input-group" >
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
+                            <form:input path="price" cssClass="form-control" placeholder="Qiyməti daxil edin"/>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <form:label path="invoiceDate">Hesab-faktura tarixi</form:label>
-                                <div class="input-group date" >
-                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
-                                    <form:input path="invoiceDate" autocomplete="off" date="date" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
-                                </div>
-                                <form:errors path="invoiceDate" cssClass="control-label alert-danger" />
-                            </div>
+                        <form:errors path="price" cssClass="alert-danger control-label"/>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="invoiceDate">Hesab-faktura tarixi</form:label>
+                        <div class="input-group date" >
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
+                            <form:input path="invoiceDate" autocomplete="off" date="date" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
                         </div>
+                        <form:errors path="invoiceDate" cssClass="control-label alert-danger" />
                     </div>
                     <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>
@@ -640,6 +636,10 @@
     });
 
     $("input[name='price']").inputmask('decimal', {
+        rightAlignNumerics: false
+    });
+
+    $("input[name='sales']").inputmask('decimal', {
         rightAlignNumerics: false
     });
 </script>

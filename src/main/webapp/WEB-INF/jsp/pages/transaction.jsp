@@ -14,6 +14,7 @@
 <div class="kt-container  kt-grid__item kt-grid__item--fluid">
     <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
     <c:set var="filter" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'filter')}"/>
+    <c:set var="credit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'credit')}"/>
     <c:if test="${filter.status}">
         <div class="accordion  accordion-toggle-arrow mb-2" id="accordionFilter">
             <div class="card" style="border-radius: 4px;">
@@ -226,6 +227,11 @@
                                             <c:if test="${view.status}">
                                                 <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
                                                     <i class="la <c:out value="${view.object.icon}"/>"></i>
+                                                </a>
+                                            </c:if>
+                                            <c:if test="${credit.status and t.creditable and t.approve}">
+                                                <a href="javascript:edit($('#credit-form'), '<c:out value="${utl:toJson(t)}" />', 'credit-modal-operation', '<c:out value="${credit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${credit.object.name}"/>">
+                                                    <i class="<c:out value="${credit.object.icon}"/>"></i> <c:out value="${credit.object.name}"/>
                                                 </a>
                                             </c:if>
                                             <c:if test="${edit.status}">

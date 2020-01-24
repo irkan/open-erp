@@ -23,6 +23,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Integer>, Jp
     List<Schedule> getScheduleDetails(@Param("current") Date current, @Param("paymentId") Integer paymentId);
 
     List<Schedule> getSchedulesByActiveTrueAndPayment_IdAndPaymentActiveOrderByScheduleDateAsc(Integer paymentId, Boolean paymentActive);
+    List<Schedule> getSchedulesByActiveTrueAndPayment_IdAndPaymentActiveAndPayableAmountNotNullAndPayableAmountGreaterThanOrderByScheduleDateDesc(Integer paymentId, Boolean paymentActive, Double payableAmount);
 
     Schedule getScheduleById(Integer id);
 

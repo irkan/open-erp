@@ -466,13 +466,29 @@ public class SkeletonController {
 
     void calculateSchedule(Integer salesId, Double payableAmount){
         Sales sales = salesRepository.getSalesByIdAndActiveTrue(salesId);
-        List<Schedule> schedules = scheduleRepository.getSchedulesByActiveTrueAndPayment_IdAndPaymentActiveOrderByScheduleDateAsc(sales.getPayment().getId(), true);
-        for(Schedule schedule: schedules){
-            if(payableAmount>0){
-                double different = schedule.getAmount()-schedule.getPayableAmount();
-                if(different>0){
-                    schedule.setPayableAmount(different<payableAmount?schedule.getAmount():(schedule.getPayableAmount()+payableAmount));
-                    payableAmount = different<payableAmount?payableAmount-different:0;
+        List<Invoice> invoices = invoiceRepository.getInvoicesByActiveTrueAndApproveTrueAndSales(sales);
+        if(payableAmount>0){
+            List<Schedule> schedules = scheduleRepository.getSchedulesByActiveTrueAndPayment_IdAndPaymentActiveOrderByScheduleDateAsc(sales.getPayment().getId(), true);
+            for(Schedule schedule: schedules){
+                if(payableAmount>0) {
+                    double different = schedule.getAmount() - schedule.getPayableAmount();
+                    if (different > 0) {
+                        schedule.setPayableAmount(different < payableAmount ? schedule.getAmount() : (schedule.getPayableAmount() + payableAmount));
+                        payableAmount = different < payableAmount ? payableAmount - different : 0;
+                        scheduleRepository.save(schedule);
+                    }
+                }
+            }
+            return;
+        }
+
+        if(payableAmount<0){
+            List<Schedule> schedules = scheduleRepository.getSchedulesByActiveTrueAndPayment_IdAndPaymentActiveAndPayableAmountNotNullAndPayableAmountGreaterThanOrderByScheduleDateDesc(sales.getPayment().getId(), true, 0d);
+            for(Schedule schedule: schedules){
+                if(payableAmount<0){
+                    double schedulePayableAmount = schedule.getPayableAmount();
+                    schedule.setPayableAmount(schedulePayableAmount>-1*payableAmount?schedulePayableAmount+payableAmount:0);
+                    payableAmount = schedulePayableAmount > -1*payableAmount ? 0 : payableAmount+schedulePayableAmount;
                     scheduleRepository.save(schedule);
                 }
             }

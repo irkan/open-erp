@@ -135,14 +135,14 @@
                     $(element).val(value);
                 } else if(tagName.toLowerCase()==="select"){
                     if($(element).attr("multiple")){
-                        $("#"+$(element).attr("id")+" option:selected").removeAttr("selected");
+                        $("select[name='"+$(element).attr("name")+"'] option:selected").removeAttr("selected");
                         $(value).each(function(key, item){
-                            $("#"+$(element).attr("id")+" option[value="+item.type.id+"]").attr("selected", "selected");
+                            $("select[name='"+$(element).attr("name")+"'] option[value="+item.type.id+"]").attr("selected", "selected");
                         });
-                        $("#"+$(element).attr("id")).select2();
+                        $("select[name='"+$(element).attr("name") +"']").select2();
                     } else {
                         if(value!=null){
-                            $("#"+$(element).attr("id")+" option[value="+value.id+"]").attr("selected", "selected");
+                            $("select[name='"+$(element).attr("name")+"'] option[value="+value.id+"]").attr("selected", "selected");
                         }
                     }
                 }

@@ -356,8 +356,7 @@
         rules: {
             payableAmount: {
                 required: true,
-                number: true,
-                min: 1
+                number: true
             },
             amount: {
                 required: true,

@@ -770,7 +770,7 @@
                             <div class="kt-form__section kt-form__section--first">
                                 <div class="kt-wizard-v1__review">
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-5 offset-md-1">
                                             <div class="form-group">
                                                 <form:label path="console">Konsul</form:label>
                                                 <form:select  path="console" cssClass="custom-select form-control">
@@ -784,7 +784,7 @@
                                                 <form:errors path="console" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-5">
                                             <div class="form-group">
                                                 <form:label path="vanLeader">Van lider</form:label>
                                                 <form:select  path="vanLeader" cssClass="custom-select form-control" multiple="single">
@@ -801,7 +801,7 @@
                                     </div>
                                     <div class="kt-separator kt-separator--border-dashed kt-separator--space-sm kt-separator--portlet-fit" style="margin: 1rem 0"></div>
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-5 offset-md-1">
                                             <div class="form-group">
                                                 <form:label path="dealer">Diller</form:label>
                                                 <form:select  path="dealer" cssClass="custom-select form-control" multiple="single">
@@ -815,7 +815,7 @@
                                                 <form:errors path="dealer" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-5">
                                             <div class="form-group">
                                                 <form:label path="canavasser">Canavasser</form:label>
                                                 <form:select  path="canavasser" cssClass="custom-select form-control" multiple="single">
@@ -1045,6 +1045,10 @@
             validator = formEl.validate({
                 ignore: ":hidden",
                 rules: {
+                    customer: {
+                        required: false,
+                        digits: true
+                    },
                     'customer.person.firstName': {
                         required: true
                     },

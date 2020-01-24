@@ -229,11 +229,11 @@ public class SaleController extends SkeletonController {
     public String postInvoice(@ModelAttribute(Constants.FORM) @Validated Invoice invoice, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
-            calculateSchedule(invoice.getSales().getId(), invoice.getPrice());
             Invoice invc;
             if(invoice.getId()==null){
                 invoice.setDescription("Satışdan əldə edilən ödəniş " + invoice.getPrice() + " AZN");
                 invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
+                invoice.setApprove(false);
                 invc = invoice;
             } else {
                 invc = invoiceRepository.getInvoiceById(invoice.getId());
@@ -241,6 +241,7 @@ public class SaleController extends SkeletonController {
                 invc.setPrice(invoice.getPrice());
                 invc.setInvoiceDate(invoice.getInvoiceDate());
                 invc.setDescription(invoice.getDescription());
+                calculateSchedule(invoice.getSales().getId(), invoice.getPrice());
             }
             invoiceRepository.save(invc);
             log("sale_invoice", "create/edit", invc.getId(), invc.toString());
@@ -344,6 +345,7 @@ public class SaleController extends SkeletonController {
         Invoice invc = invoiceRepository.getInvoiceById(invoice.getId());
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()) {
+            //calculateSchedule(invoice.getSales().getId(), invoice.getPrice());
             invc.setApprove(true);
             invc.setApproveDate(new Date());
             invc.setDescription(invoice.getDescription());
@@ -353,10 +355,10 @@ public class SaleController extends SkeletonController {
 
             Transaction transaction = new Transaction();
             transaction.setApprove(false);
-            transaction.setDebt(true);
+            transaction.setDebt(invc.getPrice()>0?true:false);
             transaction.setInventory(invc.getSales().getSalesInventories().get(0).getInventory());
             transaction.setOrganization(invc.getOrganization());
-            transaction.setPrice(invc.getPrice());
+            transaction.setPrice(Math.abs(invc.getPrice()));
             transaction.setCurrency("AZN");
             transaction.setRate(getRate(transaction.getCurrency()));
             double sumPrice = Util.amountChecker(transaction.getAmount()) * transaction.getPrice() * transaction.getRate();

@@ -1191,6 +1191,8 @@ public class DBConfiguration {
 
             ModuleOperation creditModuleOperation1 = new ModuleOperation(invoice, credit, null); //ok
             moduleOperations.add(creditModuleOperation1);
+            ModuleOperation creditModuleOperation2 = new ModuleOperation(transaction, credit, null); //ok
+            moduleOperations.add(creditModuleOperation2);
 
             moduleOperationRepository.saveAll(moduleOperations);
 
@@ -1459,6 +1461,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, changePasswordModuleOperation2));
 
             userModuleOperations.add(new UserModuleOperation(user, creditModuleOperation1));
+            userModuleOperations.add(new UserModuleOperation(user, creditModuleOperation2));
 
             userModuleOperationRepository.saveAll(userModuleOperations);
 

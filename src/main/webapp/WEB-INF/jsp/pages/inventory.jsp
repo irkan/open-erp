@@ -262,29 +262,14 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-9">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <form:label path="name">Ad</form:label>
                                 <form:input path="name" cssClass="form-control" placeholder="Adı daxil edin"/>
                                 <form:errors path="name" cssClass="alert-danger control-label"/>
                             </div>
                         </div>
-                        <div class="col-md-3 pt-md-4" style="top: 10px;">
-                            <div class="form-group">
-                                <label class="kt-checkbox kt-checkbox--brand">
-                                    <form:checkbox path="old"/> İşlənmişdir
-                                    <span></span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <form:label path="description">Açıqlama</form:label>
-                        <form:textarea path="description" cssClass="form-control" placeholder="Açıqlamanı daxil edin" />
-                        <form:errors path="description" cssClass="alert-danger control-label"/>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-5">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <form:label path="actions[0].amount">Say</form:label>
                                 <div class="input-group" >
@@ -294,10 +279,27 @@
                                 <form:errors path="actions[0].amount" cssClass="alert-danger control-label"/>
                             </div>
                         </div>
-                        <div class="col-md-7 text-center">
+                        <div class="col-md-2 pt-md-4" style="top: 10px;">
                             <div class="form-group">
-                                <form:label path="barcode">&nbsp;</form:label>
-                                <img src="<c:url value="/assets/media/barcode.png" />" style="width: 220px; height: 70px;">
+                                <label class="kt-checkbox kt-checkbox--brand">
+                                    <form:checkbox path="old"/> İşlənmiş
+                                    <span></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <form:label path="description">Açıqlama</form:label>
+                                <form:textarea path="description" cssClass="form-control" placeholder="Açıqlamanı daxil edin" />
+                                <form:errors path="description" cssClass="alert-danger control-label"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6 text-center">
+                            <div class="form-group">
+                                <form:label path="barcode">Barkod forma</form:label>
+                                <img src="<c:url value="/assets/media/barcode.png" />" style="width: 210px; height: 60px;">
                                 <form:hidden path="barcode" cssClass="form-control" placeholder="Barkodu daxil edin" readonly="true"/>
                                 <form:errors path="barcode" cssClass="alert-danger control-label"/>
                             </div>
