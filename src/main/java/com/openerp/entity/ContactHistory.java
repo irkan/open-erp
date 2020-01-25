@@ -12,11 +12,11 @@ import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 @Entity
-@Table(name = "collect_payment_regulator_note")
+@Table(name = "collect_contact_history")
 @Getter
 @Setter
 @NoArgsConstructor
-public class PaymentRegulatorNote {
+public class ContactHistory {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO, generator = "collect_sequence")
@@ -26,8 +26,8 @@ public class PaymentRegulatorNote {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "sale_payment_id")
-    private Payment payment;
+    @JoinColumn(name = "sale_sales_id")
+    private Sales sales;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "admin_dictionary_contact_channel_id")

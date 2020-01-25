@@ -570,9 +570,12 @@ public class Util {
         return schedules;
     }
 
-    public static Integer calculateLatency(List<Schedule> schedules){
-        Integer latency = 0;
+    public static Integer calculateLatency(List<Schedule> schedules, Double sumOfInvoice, Sales sales){
         Date today = new Date();
+        Integer latency = 0;
+        if(sumOfInvoice==0){
+            return DateUtility.daysBetween(sales.getSaleDate(), today);
+        }
         for(Schedule schedule: schedules){
             if(schedule.getScheduleDate().getTime()<today.getTime()){
                 if(schedule.getPayableAmount()!=null && schedule.getAmount()>schedule.getPayableAmount()){

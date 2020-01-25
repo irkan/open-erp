@@ -23,41 +23,51 @@
                         <c:when test="${not empty list}">
                             <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
                             <c:set var="detail" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'detail')}"/>
-                            <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
-                            <c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
                                 <thead>
                                 <tr>
                                     <th>Satış</th>
-                                    <th>Gecikir</th>
-                                    <th>İnventar</th>
-                                    <th>Satış tarixi</th>
                                     <th>Müştəri</th>
-                                    <th>Qiymət</th>
+                                    <th>Ödənilmişdir</th>
+                                    <th>Ödənilməlidir</th>
+                                    <th>Gecikir</th>
+                                    <th>Satış tarixi</th>
                                     <th>Qrafik</th>
+                                    <th>Qiymət</th>
+                                    <th>Sonuncu qeyd</th>
                                     <th>Əməliyyat</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${list.content}" varStatus="loop">
-                                    <tr data="<c:out value="${t.payment.id}" />">
+                                    <tr data="<c:out value="${t.id}" />">
                                         <td style="<c:out value="${t.payment.cash?'background-color: #e6ffe7 !important':'background-color: #ffeaf1 !important'}"/>">
                                             <a href="javascript:window.open('/sale/sales/<c:out value="${t.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.id}" /></a>
                                         </td>
-                                        <td><c:out value="${t.payment.latency}" /> gün</td>
-                                        <th>
-                                            <c:forEach var="p" items="${t.salesInventories}" varStatus="lp">
-                                                <c:out value="${lp.index+1}" />.
-                                                <c:out value="${p.inventory.name}" /><br/>
-                                                <c:out value="${p.inventory.barcode}" />
-                                            </c:forEach>
-                                        </th>
-                                        <td><fmt:formatDate value = "${t.saleDate}" pattern = "dd.MM.yyyy" /></td>
                                         <th>
                                             <a href="javascript:window.open('/crm/customer/<c:out value="${t.payment.sales.customer.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.payment.sales.customer.id}"/>: <c:out value="${t.payment.sales.customer.person.fullName}"/></a>
                                         </th>
+                                        <td>
+                                            <span class="kt-font-bold kt-font-success"><c:out value="${t.payment.sumOfInvoice}" /></span>
+                                            <span class="kt-font-bold kt-font-success font-italic font-size-10px">AZN</span>
+                                        </td>
+                                        <td>
+                                            <a href="javascript:window.open('/sale/schedule/<c:out value="${t.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder">
+                                                <span class="kt-font-bold kt-font-danger"><c:out value="${t.payment.unpaid}" /></span>
+                                                <span class="kt-font-bold kt-font-danger font-italic font-size-10px">AZN</span>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a href="javascript:window.open('/sale/schedule/<c:out value="${t.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.payment.latency}" /> gün</a>
+                                        </td>
+                                        <td><fmt:formatDate value = "${t.saleDate}" pattern = "dd.MM.yyyy" /></td>
+                                        <td>
+                                            <c:if test="${!t.payment.cash}">
+                                                <span class="kt-font-bold"><c:out value="${t.payment.schedule.name}" /> / <c:out value="${t.payment.schedulePrice}" /></span>
+                                                <span class="kt-font-bold font-italic font-size-10px">AZN</span>
+                                            </c:if>
+                                        </td>
                                         <th>
-                                            Qiymət: <c:out value="${t.payment.price}" /><br/>
                                             <c:if test="${not empty t.payment.discount}">
                                                 Endirim: <c:out value="${t.payment.discount}" /><br/>
                                             </c:if>
@@ -67,46 +77,21 @@
                                             <c:if test="${t.payment.down>0}">
                                                 İlkin ödəniş: <c:out value="${t.payment.down}" /><br/>
                                             </c:if>
-                                            <c:if test="${!t.payment.cash}">
-                                                Qrafik üzrə: <c:out value="${t.payment.schedulePrice}" /><br/>
-                                            </c:if>
                                             Son qiymət: <c:out value="${t.payment.lastPrice}" />
 
                                         </th>
                                         <td>
-                                            Qrafik: <c:out value="${t.payment.schedule.name}" /><br/>
+
                                         </td>
                                         <td nowrap class="text-center">
-                                            <span class="dropdown">
-                                                <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
-                                                  <i class="la la-ellipsis-h"></i>
+                                            <c:if test="${view.status}">
+                                                <a href="/collect/payment-regulator-note/<c:out value="${t.id}"/>" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Qeydlər">
+                                                    <i class="la <c:out value="${view.object.icon}"/>"></i>
                                                 </a>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <c:if test="${view.status}">
-                                                    <a href="/collect/payment-regulator-note/<c:out value="${t.payment.id}"/>" class="dropdown-item" title="Qeydlər">
-                                                        <i class="la <c:out value="${view.object.icon}"/>"></i> Qeydlər
-                                                    </a>
-                                                    </c:if>
-                                                    <c:if test="${detail.status}">
-                                                    <a href="/sale/schedule/<c:out value="${t.payment.id}"/>" class="dropdown-item" title="<c:out value="${detail.object.name}"/>">
-                                                        <i class="la <c:out value="${detail.object.icon}"/>"></i> <c:out value="${detail.object.name}"/>
-                                                    </a>
-                                                    </c:if>
-                                                    <c:if test="${edit.status}">
-                                                    <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="dropdown-item" title="<c:out value="${edit.object.name}"/>">
-                                                        <i class="<c:out value="${edit.object.icon}"/>"></i> <c:out value="${edit.object.name}"/>
-                                                    </a>
-                                                    </c:if>
-                                                    <c:if test="${delete.status}">
-                                                    <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.salesInventories.get(0).inventory.name}" /> <br/> <c:out value="${t.customer.person.fullName}" />');" class="dropdown-item" title="<c:out value="${delete.object.name}"/>">
-                                                        <i class="<c:out value="${delete.object.icon}"/>"></i> <c:out value="${delete.object.name}"/>
-                                                    </a>
-                                                    </c:if>
-                                                </div>
-                                            </span>
-                                            <c:if test="${export.status}">
-                                                <a href="javascript:exportContract($('#form-export-contract'), '<c:out value="${t.id}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Hesab-fakturanın çapı">
-                                                    <i class="<c:out value="${export.object.icon}"/>"></i>
+                                            </c:if>
+                                            <c:if test="${detail.status}">
+                                                <a href="/sale/schedule/<c:out value="${t.id}"/>" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${detail.object.name}"/>">
+                                                    <i class="la <c:out value="${detail.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
                                         </td>

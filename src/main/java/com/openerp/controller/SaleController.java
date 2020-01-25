@@ -1,5 +1,6 @@
 package com.openerp.controller;
 
+import com.openerp.domain.SalesSchedules;
 import com.openerp.domain.Schedule;
 import com.openerp.entity.*;
 import com.openerp.entity.Dictionary;
@@ -52,21 +53,22 @@ public class SaleController extends SkeletonController {
             }
             model.addAttribute(Constants.LIST, sales);
         } else if (page.equalsIgnoreCase(Constants.ROUTE.SCHEDULE)){
-            /*if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new Schedule(
-                        new Payment(!data.equals(Optional.empty())?Integer.parseInt(data.get()):null),
-                        getSessionOrganization()
-                ));
+            List<Schedule> schedules = new ArrayList<>();
+            Sales sale = null;
+            if(!data.equals(Optional.empty())){
+                sale = salesRepository.getSalesById(Integer.parseInt(data.get()));
+                if(sale!=null && sale.getPayment()!=null && !sale.getPayment().getCash()){
+                    double sumOfInvoices = Util.calculateInvoice(sale.getInvoices());
+                    schedules = getSchedulePayment(DateUtility.getFormattedDate(sale.getSaleDate()), sale.getPayment().getSchedule().getId(), sale.getPayment().getPeriod().getId(), sale.getPayment().getLastPrice(), sale.getPayment().getDown());
+                    double plannedPayment = Util.calculatePlannedPayment(sale, schedules);
+                    schedules = Util.calculateSchedule(sale, schedules, sumOfInvoices);
+                    sale.getPayment().setLatency(Util.calculateLatency(schedules, sumOfInvoices, sale));
+                    sale.getPayment().setSumOfInvoice(sumOfInvoices);
+                    sale.getPayment().setUnpaid(plannedPayment-sumOfInvoices);
+                }
+
             }
-            if(!model.containsAttribute(Constants.FILTER)){
-                model.addAttribute(Constants.FILTER, new Schedule(
-                                new Payment(!data.equals(Optional.empty())?Integer.parseInt(data.get()):null),
-                                !canViewAll()?getSessionOrganization():null,
-                        null
-                        )
-                );
-            }*/
-            //model.addAttribute(Constants.LIST, scheduleService.findAll((Schedule) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").ascending())));
+            model.addAttribute(Constants.LIST, new SalesSchedules(schedules, sale));
         } else if(page.equalsIgnoreCase(Constants.ROUTE.SERVICE)){
             List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization());
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");

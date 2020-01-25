@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -162,10 +161,10 @@ public class DeleteController extends SkeletonController {
             itemRepository.save(item);
             log("idgroup_item", "create/edit", item.getId(), item.toString());
         } else if(path.equalsIgnoreCase(Constants.ROUTE.PAYMENT_REGULATOR_NOTE)){
-            PaymentRegulatorNote paymentRegulatorNote = paymentRegulatorNoteRepository.getPaymentRegulatorNoteById(Integer.parseInt(id));
-            paymentRegulatorNote.setActive(false);
-            paymentRegulatorNoteRepository.save(paymentRegulatorNote);
-            log("collect_payment_regulator_note", "delete", paymentRegulatorNote.getId(), paymentRegulatorNote.toString());
+            ContactHistory contactHistory = paymentRegulatorNoteRepository.getPaymentRegulatorNoteById(Integer.parseInt(id));
+            contactHistory.setActive(false);
+            paymentRegulatorNoteRepository.save(contactHistory);
+            log("collect_payment_regulator_note", "delete", contactHistory.getId(), contactHistory.toString());
         } else if(path.equalsIgnoreCase(Constants.ROUTE.CUSTOMER)){
             Customer customer = customerRepository.getCustomerByIdAndActiveTrue(Integer.parseInt(id));
             customer.setActive(false);
@@ -185,6 +184,11 @@ public class DeleteController extends SkeletonController {
             financing.setActive(false);
             financingRepository.save(financing);
             log("accounting_financing", "create/edit", financing.getId(), financing.toString());
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.SALES)){
+            Sales sales = salesRepository.getSalesByIdAndActiveTrue(Integer.parseInt(id));
+            sales.setActive(false);
+            salesRepository.save(sales);
+            log("sale_sales", "delete", sales.getId(), sales.toString());
         } else if(path.equalsIgnoreCase(Constants.ROUTE.LOG)){
             Log log = logRepository.getLogById(Integer.parseInt(id));
             log.setActive(false);

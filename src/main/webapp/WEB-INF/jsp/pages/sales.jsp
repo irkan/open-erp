@@ -213,7 +213,7 @@
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${list.content}" varStatus="loop">
-                                    <tr data="<c:out value="${t.payment.id}" />">
+                                    <tr data="<c:out value="${t.id}" />">
                                         <td style="<c:out value="${t.payment.cash?'background-color: #e6ffe7 !important':'background-color: #ffeaf1 !important'}"/>"><c:out value="${t.id}" /></td>
                                         <th>
                                             <c:forEach var="p" items="${t.salesInventories}" varStatus="lp">
@@ -284,7 +284,7 @@
                                                 </div>
                                             </span>
                                             <c:if test="${export.status}">
-                                                <a href="javascript:exportContract($('#form-export-contract'), '<c:out value="${t.id}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Hesab-fakturanın çapı">
+                                                <a href="javascript:exportContract($('#form-export-contract'), '<c:out value="${t.id}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Müqavilənin ixracı">
                                                     <i class="<c:out value="${export.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
@@ -1068,9 +1068,6 @@
                     },
                     'saleDate': {
                         required: true,
-                    },
-                    'customer.person.birthday': {
-                        required: true
                     },
                     'customer.person.contact.city': {
                         required: true

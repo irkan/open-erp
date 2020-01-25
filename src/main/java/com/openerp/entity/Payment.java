@@ -1,7 +1,6 @@
 package com.openerp.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.openerp.domain.Schedule;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -76,7 +75,7 @@ public class Payment {
     private Double unpaid;
 
     @OneToMany(mappedBy = "payment", fetch = FetchType.LAZY)
-    private List<PaymentRegulatorNote> paymentRegulatorNotes;
+    private List<ContactHistory> contactHistories;
 
     @JsonIgnore
     @OneToOne(mappedBy = "payment")

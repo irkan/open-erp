@@ -468,9 +468,6 @@
             "person.lastName": {
                 required: true
             },
-            "person.birthday": {
-                required: true
-            },
             "person.idCardPinCode": {
                 required: true
             },

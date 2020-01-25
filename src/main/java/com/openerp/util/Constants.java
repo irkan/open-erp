@@ -120,9 +120,9 @@ public class Constants {
         public static final String SALES = "sales";
         public static final String CONSOLIDATE = "consolidate";
         public static final String CALCULATOR = "calculator";
-        public static final String PAYMENT_REGULATOR = "payment-regulator";
+        public static final String PAYMENT_LATENCY = "payment-latency";
         public static final String ITEM = "item";
-        public static final String PAYMENT_REGULATOR_NOTE = "payment-regulator-note";
+        public static final String CONTACT_HISTORY = "contact-history";
         public static final String INVOICE = "invoice";
         public static final String TROUBLED_CUSTOMER = "troubled-customer";
         public static final String CUSTOMER = "customer";

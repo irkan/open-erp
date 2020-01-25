@@ -25,7 +25,7 @@ public class CollectController extends SkeletonController {
     @GetMapping(value = {"/{page}", "/{page}/{data}"})
     public String route(Model model, @PathVariable("page") String page, @PathVariable("data") Optional<String> data, RedirectAttributes redirectAttributes) throws Exception {
 
-        if(page.equalsIgnoreCase(Constants.ROUTE.PAYMENT_REGULATOR) ||
+        if(page.equalsIgnoreCase(Constants.ROUTE.PAYMENT_LATENCY) ||
                 page.equalsIgnoreCase(Constants.ROUTE.TROUBLED_CUSTOMER)){
             model.addAttribute(Constants.CONFIGURATION_TROUBLED_CUSTOMER, configurationRepository.getConfigurationByKey("troubled_customer").getAttribute());
             if(!model.containsAttribute(Constants.FILTER)){
@@ -43,10 +43,13 @@ public class CollectController extends SkeletonController {
                 double plannedPayment = Util.calculatePlannedPayment(sale, schedules);
                 if(sale.getPayment().getLastPrice()>sumOfInvoices && sumOfInvoices<plannedPayment){
                     schedules = Util.calculateSchedule(sale, schedules, sumOfInvoices);
-                    sale.getPayment().setLatency(Util.calculateLatency(schedules));
+                    int latency = Util.calculateLatency(schedules, sumOfInvoices, sale);
+                    sale.getPayment().setLatency(latency);
                     sale.getPayment().setSumOfInvoice(sumOfInvoices);
                     sale.getPayment().setUnpaid(plannedPayment-sumOfInvoices);
-                    salesList.add(sale);
+                    if(latency>0){
+                        salesList.add(sale);
+                    }
                 }
             }
             Page<Sales> salesPage = new PageImpl<Sales>(salesList);
@@ -55,36 +58,36 @@ public class CollectController extends SkeletonController {
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Invoice(getSessionOrganization()));
             }
-        } if(page.equalsIgnoreCase(Constants.ROUTE.PAYMENT_REGULATOR_NOTE)){
-            List<PaymentRegulatorNote> paymentRegulatorNotes;
+        } if(page.equalsIgnoreCase(Constants.ROUTE.CONTACT_HISTORY)){
+            List<ContactHistory> contactHistories;
             int paymentId = 0;
             if(data.equals(Optional.empty())){
-                paymentRegulatorNotes = paymentRegulatorNoteRepository.getPaymentRegulatorNotesByActiveTrue();
+                contactHistories = paymentRegulatorNoteRepository.getPaymentRegulatorNotesByActiveTrue();
             } else {
-                paymentRegulatorNotes = paymentRegulatorNoteRepository.getPaymentRegulatorNotesByActiveTrueAndPayment_Id(Integer.parseInt(data.get()));
+                contactHistories = paymentRegulatorNoteRepository.getPaymentRegulatorNotesByActiveTrueAndPayment_Id(Integer.parseInt(data.get()));
                 paymentId = Integer.parseInt(data.get());
             }
-            model.addAttribute(Constants.LIST, paymentRegulatorNotes);
+            model.addAttribute(Constants.LIST, contactHistories);
             model.addAttribute(Constants.PAYMENT_ID, paymentId);
             model.addAttribute(Constants.CONTACT_CHANNELS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("contact-channel"));
             if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new PaymentRegulatorNote());
+                model.addAttribute(Constants.FORM, new ContactHistory());
             }
         }
         return "layout";
     }
 
-    @PostMapping(value = "/payment-regulator-note")
-    public String postShortenedWorkingDay(@ModelAttribute(Constants.FORM) @Validated PaymentRegulatorNote paymentRegulatorNote, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+    @PostMapping(value = "/contact-history")
+    public String postShortenedWorkingDay(@ModelAttribute(Constants.FORM) @Validated ContactHistory contactHistory, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
-            paymentRegulatorNoteRepository.save(paymentRegulatorNote);
-            log("collect_payment_regulator_note", "create/edit", paymentRegulatorNote.getId(), paymentRegulatorNote.toString());
+            paymentRegulatorNoteRepository.save(contactHistory);
+            log("collect_contact_history", "create/edit", contactHistory.getId(), contactHistory.toString());
         }
-        return mapPost(paymentRegulatorNote, binding, redirectAttributes);
+        return mapPost(contactHistory, binding, redirectAttributes);
     }
 
-    @PostMapping(value = "/payment-regulator/transfer")
+    @PostMapping(value = {"/payment-latency", "/troubled-customer"})
     public String postPaymentRegulatorTransfer(@RequestParam(value = "sale", defaultValue = "0") String sale,
                                                @RequestParam(value = "price", defaultValue = "0") String price,
                                                @RequestParam(value = "description") String description,
@@ -106,11 +109,11 @@ public class CollectController extends SkeletonController {
         log("sale_invoice", "create/edit", invoice.getId(), invoice.toString());
         String desc = "Hesab faktura yaradıldı: " + invoice.getId();
         if(sales!=null){
-            PaymentRegulatorNote paymentRegulatorNote = new PaymentRegulatorNote();
-            paymentRegulatorNote.setDescription(desc);
-            paymentRegulatorNote.setPayment(sales.getPayment());
-            paymentRegulatorNoteRepository.save(paymentRegulatorNote);
-            log("collect_payment_regulator_note", "create/edit", paymentRegulatorNote.getId(), paymentRegulatorNote.toString());
+            ContactHistory contactHistory = new ContactHistory();
+            contactHistory.setDescription(desc);
+            contactHistory.setSales(sales);
+            paymentRegulatorNoteRepository.save(contactHistory);
+            log("collect_payment_regulator_note", "create/edit", contactHistory.getId(), contactHistory.toString());
         }
         return mapPost(redirectAttributes, "/collect/payment-regulator");
     }
@@ -134,10 +137,10 @@ public class CollectController extends SkeletonController {
         log("sale_invoice", "transfer", invoice.getId(), invoice.toString());
         String desc = "Hesab faktura yaradıldı: " + invoice.getId();
         if(sales!=null){
-            PaymentRegulatorNote paymentRegulatorNote = new PaymentRegulatorNote();
-            paymentRegulatorNote.setDescription(desc);
-            paymentRegulatorNoteRepository.save(paymentRegulatorNote);
-            log("collect_payment_regulator_note", "create/edit", paymentRegulatorNote.getId(), paymentRegulatorNote.toString());
+            ContactHistory contactHistory = new ContactHistory();
+            contactHistory.setDescription(desc);
+            paymentRegulatorNoteRepository.save(contactHistory);
+            log("collect_payment_regulator_note", "create/edit", contactHistory.getId(), contactHistory.toString());
         }
         return mapPost(redirectAttributes, "/collect/troubled-customer");
     }

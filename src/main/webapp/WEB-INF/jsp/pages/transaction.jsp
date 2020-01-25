@@ -231,7 +231,7 @@
                                             </c:if>
                                             <c:if test="${credit.status and t.approve}">
                                                 <a href="javascript:edit($('#credit-form'), '<c:out value="${utl:toJson(t)}" />', 'credit-modal-operation', '<c:out value="${credit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${credit.object.name}"/>">
-                                                    <i class="<c:out value="${credit.object.icon}"/>"></i> <c:out value="${credit.object.name}"/>
+                                                    <i class="<c:out value="${credit.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
                                             <c:if test="${edit.status}">

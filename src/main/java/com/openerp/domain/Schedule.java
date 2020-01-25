@@ -3,6 +3,7 @@ package com.openerp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.openerp.entity.Organization;
 import com.openerp.entity.Payment;
+import com.openerp.entity.Sales;
 import com.openerp.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +23,9 @@ public class Schedule {
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date scheduleDate;
 
-    private Double payableAmount;
+    private Double payableAmount=0d;
+
+    private Sales sales;
 
     public Schedule(Double amount, Date scheduleDate) {
         this.amount = amount;
