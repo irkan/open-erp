@@ -31,6 +31,7 @@ public class CollectController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 Sales sales = new Sales(!data.equals(Optional.empty())?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null);
                 sales.setSaleDateFrom(DateUtility.minusYear(Integer.parseInt(configurationRepository.getConfigurationByKey("by_year").getAttribute())));
+                sales.setService(null);
                 model.addAttribute(Constants.FILTER, sales);
             }
             Page<Sales> sales = salesService.findAll((Sales) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize()*100, Sort.by("id").descending()));
@@ -41,6 +42,10 @@ public class CollectController extends SkeletonController {
                 List<Schedule> schedules = getSchedulePayment(DateUtility.getFormattedDate(sale.getSaleDate()), sale.getPayment().getSchedule().getId(), sale.getPayment().getPeriod().getId(), sale.getPayment().getLastPrice(), sale.getPayment().getDown());
                 double plannedPayment = Util.calculatePlannedPayment(sale, schedules);
                 if(sale.getPayment().getLastPrice()>sumOfInvoices && sumOfInvoices<plannedPayment){
+                    schedules = Util.calculateSchedule(sale, schedules, sumOfInvoices);
+                    sale.getPayment().setLatency(Util.calculateLatency(schedules));
+                    sale.getPayment().setSumOfInvoice(sumOfInvoices);
+                    sale.getPayment().setUnpaid(plannedPayment-sumOfInvoices);
                     salesList.add(sale);
                 }
             }

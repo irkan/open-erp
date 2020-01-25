@@ -28,20 +28,23 @@
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
                                 <thead>
                                 <tr>
-                                    <th>Kod</th>
+                                    <th>Satış</th>
+                                    <th>Gecikir</th>
                                     <th>İnventar</th>
                                     <th>Satış tarixi</th>
                                     <th>Müştəri</th>
                                     <th>Qiymət</th>
                                     <th>Qrafik</th>
-                                    <th>Satış komandası</th>
                                     <th>Əməliyyat</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${list.content}" varStatus="loop">
                                     <tr data="<c:out value="${t.payment.id}" />">
-                                        <td style="<c:out value="${t.payment.cash?'background-color: #e6ffe7 !important':'background-color: #ffeaf1 !important'}"/>"><c:out value="${t.id}" /></td>
+                                        <td style="<c:out value="${t.payment.cash?'background-color: #e6ffe7 !important':'background-color: #ffeaf1 !important'}"/>">
+                                            <a href="javascript:window.open('/sale/sales/<c:out value="${t.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.id}" /></a>
+                                        </td>
+                                        <td><c:out value="${t.payment.latency}" /> gün</td>
                                         <th>
                                             <c:forEach var="p" items="${t.salesInventories}" varStatus="lp">
                                                 <c:out value="${lp.index+1}" />.
@@ -72,15 +75,6 @@
                                         </th>
                                         <td>
                                             Qrafik: <c:out value="${t.payment.schedule.name}" /><br/>
-                                            Period: <c:out value="${t.payment.period.name}" /><br/>
-                                            Zəmanət müddəti: <c:out value="${t.guarantee}" /> ay<br/>
-                                            Zəmanət bitir: <fmt:formatDate value = "${t.guaranteeExpire}" pattern = "dd.MM.yyyy" />
-                                        </td>
-                                        <td>
-                                            Konsul: <c:out value="${t.console.person.fullName}" /><br/>
-                                            Ven lider: <c:out value="${t.vanLeader.person.fullName}" /><br/>
-                                            Diller: <c:out value="${t.dealer.person.fullName}" /><br/>
-                                            Canvasser: <c:out value="${t.canavasser.person.fullName}" />
                                         </td>
                                         <td nowrap class="text-center">
                                             <span class="dropdown">

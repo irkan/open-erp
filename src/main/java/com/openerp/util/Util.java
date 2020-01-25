@@ -556,4 +556,33 @@ public class Util {
         }
         return price;
     }
+
+    public static List<Schedule> calculateSchedule(Sales sales, List<Schedule> schedules, Double sumOfInvoices){
+        double price = sumOfInvoices-sales.getPayment().getDown();
+        if(price>0){
+            for(Schedule schedule: schedules){
+                if(price>0){
+                    schedule.setPayableAmount(price>schedule.getAmount()?schedule.getAmount():price);
+                    price = price>schedule.getAmount()?price-schedule.getAmount():0;
+                }
+            }
+        }
+        return schedules;
+    }
+
+    public static Integer calculateLatency(List<Schedule> schedules){
+        Integer latency = 0;
+        Date today = new Date();
+        for(Schedule schedule: schedules){
+            if(schedule.getScheduleDate().getTime()<today.getTime()){
+                if(schedule.getPayableAmount()!=null && schedule.getAmount()>schedule.getPayableAmount()){
+                    int days = DateUtility.daysBetween(schedule.getScheduleDate(), today);
+                    if(days>latency){
+                        latency=days;
+                    }
+                }
+            }
+        }
+        return latency;
+    }
 }

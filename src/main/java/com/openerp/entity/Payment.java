@@ -66,6 +66,15 @@ public class Payment {
     @Column(name = "is_cash", nullable = false, columnDefinition="boolean default false")
     private Boolean cash = false;
 
+    @Transient
+    private Integer latency;
+
+    @Transient
+    private Double sumOfInvoice;
+
+    @Transient
+    private Double unpaid;
+
     @OneToMany(mappedBy = "payment", fetch = FetchType.LAZY)
     private List<PaymentRegulatorNote> paymentRegulatorNotes;
 

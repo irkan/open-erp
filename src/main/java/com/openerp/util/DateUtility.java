@@ -128,7 +128,11 @@ public class DateUtility {
     public static Date minusYear(int year){
         Calendar cal = Calendar.getInstance();
         cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, year);
+        cal.add(Calendar.YEAR, year);
         return cal.getTime();
+    }
+
+    public static int daysBetween(Date d1, Date d2){
+        return (int)( (d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
     }
 }

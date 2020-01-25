@@ -171,12 +171,15 @@
                                         <td><c:out value="${t.group.name}" /></td>
                                         <td><c:out value="${t.name}" /></td>
                                         <td><c:out value="${t.description}" /></td>
-                                        <td><c:out value="${t.barcode}" />
+                                        <td><span class="barcode"><c:out value="${t.barcode}" /></span>
                                         <c:if test="${export.status}">
                                             <a href="javascript:printBarcode('<c:out value="${t.name}" />', '<c:out value="${t.barcode}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${export.object.name}"/>">
                                                 <i class="la <c:out value="${export.object.icon}"/>"></i>
                                             </a>
                                         </c:if>
+                                            <button onclick="copyToClipboard('<c:out value="${t.barcode}" />')" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Kopyala">
+                                                <i class="la la-copy"></i>
+                                            </button>
                                         </td>
                                         <td>
                                             <c:choose>
