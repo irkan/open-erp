@@ -24,6 +24,10 @@ public class ContactHistory {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "hr_organization_id")
+    private Organization organization;
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sale_sales_id")
@@ -42,6 +46,11 @@ public class ContactHistory {
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date nextContactDate;
 
+    @Transient
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    private Date nextContactDateFrom;
+
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;
 
@@ -52,5 +61,11 @@ public class ContactHistory {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "created_by_admin_user_id")
     private User createdUser;
+
+    public ContactHistory(Sales sales, Organization organization) {
+        this.sales = sales;
+        this.organization = organization;
+    }
+
 
 }

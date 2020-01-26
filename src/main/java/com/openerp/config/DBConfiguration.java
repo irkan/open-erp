@@ -715,12 +715,12 @@ public class DBConfiguration {
             modules.add(demonstration);
             Module collect = new Module("Yığım & Servis", "Yığımların idarə edilməsi", "collect", "flaticon2-cardiogram", null);
             modules.add(collect);
-            Module paymentLatency = new Module("Ödəniş requlyatoru", "Ödəniş requlyatoru", "payment-regulator", "flaticon-book", collect);
+            Module paymentLatency = new Module("Gecikmiş ödəniş", "Gecikmiş ödəniş", "payment-latency", "flaticon-book", collect);
             modules.add(paymentLatency);
-            Module contactHistory = new Module("Əlaqə tarixçəsi", "Əlaqə tarixçəsi", "contact-history", "flaticon-whatsapp", collect);
-            modules.add(contactHistory);
             Module troubledCustomer = new Module("Problemli müştəri", "Problemli müştəri", "troubled-customer", "flaticon2-warning", collect);
             modules.add(troubledCustomer);
+            Module contactHistory = new Module("Əlaqə tarixçəsi", "Əlaqə tarixçəsi", "contact-history", "flaticon-whatsapp", collect);
+            modules.add(contactHistory);
             /*Module idgroup = new Module("İD Qrup", "Daxili sistem və inteqrasiyalar", "idgroup", "flaticon2-analytics-2", null);
             modules.add(idgroup);
             Module item = new Module("İnventar", "İnventar", "item", "flaticon2-open-box", idgroup);

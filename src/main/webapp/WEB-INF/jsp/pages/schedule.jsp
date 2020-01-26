@@ -45,7 +45,6 @@
                                     <th>Ödənilib</th>
                                     <th>Qalıq</th>
                                     <th>Gecikir</th>
-                                    <th>Əməliyyat</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -76,13 +75,6 @@
                                                 </c:if>
                                             </span>
                                         </th>
-                                        <td nowrap class="text-center">
-                                            <c:if test="${transfer.status}">
-                                                <a href="javascript:transfer($('#form-transfer'), 'transfer-modal-operation', '', '<c:out value="${t.amount}" />', '<c:out value="${t.payableAmount}" />')" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
-                                                    <i class="<c:out value="${transfer.object.icon}"/>"></i>
-                                                </a>
-                                            </c:if>
-                                        </td>
                                     </tr>
                                 </c:forEach>
                                 </tbody>

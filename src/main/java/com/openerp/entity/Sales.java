@@ -34,6 +34,9 @@ public class Sales {
     @OneToMany(mappedBy = "sales", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<SalesInventory> salesInventories;
 
+    @OneToMany(mappedBy = "sales", fetch = FetchType.LAZY)
+    private List<ContactHistory> contactHistories;
+
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hr_organization_id", nullable = false)
     private Organization organization;
@@ -102,6 +105,10 @@ public class Sales {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "created_by_admin_user_id")
     private User createdUser;
+
+    public Sales(Integer id) {
+        this.id = id;
+    }
 
     public Sales(Organization organization, Boolean service) {
         this.organization = organization;

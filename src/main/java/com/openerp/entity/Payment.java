@@ -74,9 +74,6 @@ public class Payment {
     @Transient
     private Double unpaid;
 
-    @OneToMany(mappedBy = "payment", fetch = FetchType.LAZY)
-    private List<ContactHistory> contactHistories;
-
     @JsonIgnore
     @OneToOne(mappedBy = "payment")
     private Sales sales;

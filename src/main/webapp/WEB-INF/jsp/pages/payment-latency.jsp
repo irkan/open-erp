@@ -40,7 +40,7 @@
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${list.content}" varStatus="loop">
-                                    <c:if test="${t.payment.latency gt configuration_troubled_customer}">
+                                    <c:if test="${t.payment.latency le configuration_troubled_customer}">
                                         <tr data="<c:out value="${t.id}" />">
                                             <td style="<c:out value="${t.payment.cash?'background-color: #e6ffe7 !important':'background-color: #ffeaf1 !important'}"/>">
                                                 <a href="javascript:window.open('/sale/sales/<c:out value="${t.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.id}" /></a>

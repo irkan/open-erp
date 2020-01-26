@@ -162,7 +162,7 @@ public class SkeletonController {
     PaymentRepository paymentRepository;
 
     @Autowired
-    PaymentRegulatorNoteRepository paymentRegulatorNoteRepository;
+    ContactHistoryRepository contactHistoryRepository;
 
     @Autowired
     CustomerRepository customerRepository;
@@ -232,6 +232,9 @@ public class SkeletonController {
 
     @Autowired
     InventoryService inventoryService;
+
+    @Autowired
+    ContactHistoryService contactHistoryService;
 
     @Autowired
     HttpServletRequest request;

@@ -59,20 +59,15 @@ public class CollectController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new Invoice(getSessionOrganization()));
             }
         } if(page.equalsIgnoreCase(Constants.ROUTE.CONTACT_HISTORY)){
-            List<ContactHistory> contactHistories;
-            int paymentId = 0;
-            if(data.equals(Optional.empty())){
-                contactHistories = paymentRegulatorNoteRepository.getPaymentRegulatorNotesByActiveTrue();
-            } else {
-                contactHistories = paymentRegulatorNoteRepository.getPaymentRegulatorNotesByActiveTrueAndPayment_Id(Integer.parseInt(data.get()));
-                paymentId = Integer.parseInt(data.get());
-            }
-            model.addAttribute(Constants.LIST, contactHistories);
-            model.addAttribute(Constants.PAYMENT_ID, paymentId);
             model.addAttribute(Constants.CONTACT_CHANNELS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("contact-channel"));
+
             if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new ContactHistory());
+                model.addAttribute(Constants.FORM, new ContactHistory(new Sales(!data.equals(Optional.empty())?Integer.parseInt(data.get()):null), getSessionOrganization()));
             }
+            if(!model.containsAttribute(Constants.FILTER)){
+                model.addAttribute(Constants.FILTER, new ContactHistory(new Sales(!data.equals(Optional.empty())?Integer.parseInt(data.get()):null), !canViewAll()?getSessionOrganization():null));
+            }
+            model.addAttribute(Constants.LIST, contactHistoryService.findAll((ContactHistory) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
         }
         return "layout";
     }
@@ -81,7 +76,7 @@ public class CollectController extends SkeletonController {
     public String postShortenedWorkingDay(@ModelAttribute(Constants.FORM) @Validated ContactHistory contactHistory, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
-            paymentRegulatorNoteRepository.save(contactHistory);
+            contactHistoryRepository.save(contactHistory);
             log("collect_contact_history", "create/edit", contactHistory.getId(), contactHistory.toString());
         }
         return mapPost(contactHistory, binding, redirectAttributes);
@@ -112,7 +107,7 @@ public class CollectController extends SkeletonController {
             ContactHistory contactHistory = new ContactHistory();
             contactHistory.setDescription(desc);
             contactHistory.setSales(sales);
-            paymentRegulatorNoteRepository.save(contactHistory);
+            contactHistoryRepository.save(contactHistory);
             log("collect_payment_regulator_note", "create/edit", contactHistory.getId(), contactHistory.toString());
         }
         return mapPost(redirectAttributes, "/collect/payment-regulator");
@@ -139,7 +134,7 @@ public class CollectController extends SkeletonController {
         if(sales!=null){
             ContactHistory contactHistory = new ContactHistory();
             contactHistory.setDescription(desc);
-            paymentRegulatorNoteRepository.save(contactHistory);
+            contactHistoryRepository.save(contactHistory);
             log("collect_payment_regulator_note", "create/edit", contactHistory.getId(), contactHistory.toString());
         }
         return mapPost(redirectAttributes, "/collect/troubled-customer");

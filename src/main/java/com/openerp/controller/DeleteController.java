@@ -160,10 +160,10 @@ public class DeleteController extends SkeletonController {
             item.setActive(false);
             itemRepository.save(item);
             log("idgroup_item", "create/edit", item.getId(), item.toString());
-        } else if(path.equalsIgnoreCase(Constants.ROUTE.PAYMENT_REGULATOR_NOTE)){
-            ContactHistory contactHistory = paymentRegulatorNoteRepository.getPaymentRegulatorNoteById(Integer.parseInt(id));
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.CONTACT_HISTORY)){
+            ContactHistory contactHistory = contactHistoryRepository.getContactHistoryById(Integer.parseInt(id));
             contactHistory.setActive(false);
-            paymentRegulatorNoteRepository.save(contactHistory);
+            contactHistoryRepository.save(contactHistory);
             log("collect_payment_regulator_note", "delete", contactHistory.getId(), contactHistory.toString());
         } else if(path.equalsIgnoreCase(Constants.ROUTE.CUSTOMER)){
             Customer customer = customerRepository.getCustomerByIdAndActiveTrue(Integer.parseInt(id));
