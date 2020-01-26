@@ -121,6 +121,65 @@
     </div>
 </div>
 
+<div class="modal fade" id="modal-operation" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form:form modelAttribute="form" id="form" method="post" action="/sale/invoice" cssClass="form-group">
+                    <form:hidden path="id"/>
+                    <form:hidden path="active"/>
+                    <form:hidden path="organization"/>
+                    <div class="form-group">
+                        <form:label path="sales">Satış nömrəsi</form:label>
+                        <div class="row">
+                            <div class="col-9">
+                                <div class="input-group">
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-search"></i></span></div>
+                                    <form:input path="sales" class="form-control" placeholder="Daxil edin..."/>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <button class="btn btn-primary" type="button" onclick="checkSales($('form').find('input[name=\'sales\']'))">Yoxla</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="price">Qiyməti</form:label>
+                        <div class="input-group" >
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
+                            <form:input path="price" cssClass="form-control" placeholder="Qiyməti daxil edin"/>
+                        </div>
+                        <form:errors path="price" cssClass="alert-danger control-label"/>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="invoiceDate">Hesab-faktura tarixi</form:label>
+                        <div class="input-group date" >
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
+                            <form:input path="invoiceDate" autocomplete="off" date="date" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
+                        </div>
+                        <form:errors path="invoiceDate" cssClass="control-label alert-danger" />
+                    </div>
+                    <div class="form-group">
+                        <form:label path="description">Açıqlama</form:label>
+                        <form:textarea path="description" cssClass="form-control"/>
+                        <form:errors path="description" cssClass="alert-danger control-label"/>
+                    </div>
+                </form:form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="submit($('#form'));">Yadda saxla</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 
     $("#datatable").DataTable({
@@ -138,6 +197,26 @@
         ],
     });
 
+    $( "#form" ).validate({
+        rules: {
+            price: {
+                required: true,
+                number: true,
+                min: 1
+            },
+            sales: {
+                required: true
+            },
+            invoiceDate: {
+                required: true
+            }
+        },
+        invalidHandler: function(event, validator) {
+            KTUtil.scrollTop();
+            swal.close();
+        },
+    });
+
     <c:if test="${view.status}">
     $('#datatable tbody').on('dblclick', 'tr', function () {
         swal.showLoading();
@@ -145,4 +224,12 @@
         window.reload();
     });
     </c:if>
+
+    $("input[name='price']").inputmask('decimal', {
+        rightAlignNumerics: false
+    });
+
+    $("input[name='sales']").inputmask('decimal', {
+        rightAlignNumerics: false
+    });
 </script>

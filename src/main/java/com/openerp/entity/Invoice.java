@@ -93,6 +93,10 @@ public class Invoice {
     public Invoice(Organization organization) {
         this.organization = organization;
     }
+    public Invoice(Sales sales, Organization organization) {
+        this.sales = sales;
+        this.organization = organization;
+    }
 
     public Invoice(Organization organization, Double price, Boolean approve) {
         this.organization = organization;

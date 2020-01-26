@@ -244,8 +244,12 @@
 
                                         </th>
                                         <td>
-                                            Qrafik: <c:out value="${t.payment.schedule.name}" /><br/>
-                                            Period: <c:out value="${t.payment.period.name}" /><br/>
+                                            <c:if test="${!t.payment.cash}">
+                                                Qrafik: <c:out value="${t.payment.schedule.name}" /><br/>
+                                            </c:if>
+                                            <c:if test="${!t.payment.cash}">
+                                                Period: <c:out value="${t.payment.period.name}" /><br/>
+                                            </c:if>
                                             Zəmanət müddəti: <c:out value="${t.guarantee}" /> ay<br/>
                                             Zəmanət bitir: <fmt:formatDate value = "${t.guaranteeExpire}" pattern = "dd.MM.yyyy" />
                                         </td>

@@ -133,6 +133,7 @@ public class SaleController extends SkeletonController {
                 sales.getPayment().setPeriod(null);
                 sales.getPayment().setSchedule(null);
                 sales.getPayment().setSchedulePrice(null);
+                sales.getPayment().setDown(sales.getPayment().getLastPrice());
             } else {
                 sales.getPayment().setSchedulePrice(schedulePrice(sales.getPayment().getSchedule().getId(), sales.getPayment().getLastPrice(), sales.getPayment().getDown()));
             }

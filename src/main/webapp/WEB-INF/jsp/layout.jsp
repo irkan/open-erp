@@ -383,6 +383,51 @@
             swal.close();
         }, 1100);
     }
+
+    function checkSales(element){
+        console.log($(element).val())
+        if($(element).val().trim().length>0){
+            swal.fire({
+                text: 'Proses davam edir...',
+                allowOutsideClick: false,
+                onOpen: function() {
+                    swal.showLoading();
+                    $.ajax({
+                        url: '/sale/sales/check/'+$(element).val(),
+                        type: 'GET',
+                        dataType: 'json',
+                        beforeSend: function() {
+
+                        },
+                        success: function(data) {
+                            console.log(data);
+                            swal.close();
+                            swal.fire({
+                                title: data.id + ". " + data.customer.person.firstName + " " + data.customer.person.lastName,
+                                html: data.action.inventory.name + "<br/>" + data.action.inventory.barcode,
+                                type: "info",
+                                cancelButtonText: 'Bağla',
+                                cancelButtonClass: 'btn btn-info',
+                                footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+                            });
+                        },
+                        error: function() {
+                            swal.fire({
+                                title: "Məlumat tapılmadı!",
+                                html: "Satış kodu səhvdir!",
+                                type: "error",
+                                cancelButtonText: 'Bağla',
+                                cancelButtonColor: '#c40000',
+                                cancelButtonClass: 'btn btn-danger',
+                                footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+                            });
+                        }
+                    })
+                }
+            });
+        }
+    }
+
 </script>
 
 

@@ -205,6 +205,13 @@ public class DeleteController extends SkeletonController {
             Advance advance = new Advance(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("bonus-demonstration-advance", "advance"), demonstration.getEmployee(), demonstration.getOrganization(), "Nümayişin silinməsinə görə kredit: Nümayiş №" + demonstration.getId(), "", demonstration.getDemonstrateDate(), price, false);
             advanceRepository.save(advance);
             log("payroll_advance", "create/edit", advance.getId(), advance.toString(), "Nümayişin silinməsinə görə kredit avans verilmişdir");
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.INVOICE)){
+            Invoice invoice = invoiceRepository.getInvoiceById(Integer.parseInt(id));
+            if(!invoice.getApprove()){
+                invoice.setActive(false);
+                invoiceRepository.save(invoice);
+            }
+            log("sale_invoice", "delete", invoice.getId(), invoice.toString());
         }
         return "redirect:/"+parent+"/"+path;
     }

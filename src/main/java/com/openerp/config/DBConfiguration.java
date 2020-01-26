@@ -721,6 +721,8 @@ public class DBConfiguration {
             modules.add(troubledCustomer);
             Module contactHistory = new Module("Əlaqə tarixçəsi", "Əlaqə tarixçəsi", "contact-history", "flaticon-whatsapp", collect);
             modules.add(contactHistory);
+            Module collector = new Module("Yığımçı", "Yığımçı", "collector", "flaticon-globe", collect);
+            modules.add(collector);
             /*Module idgroup = new Module("İD Qrup", "Daxili sistem və inteqrasiyalar", "idgroup", "flaticon2-analytics-2", null);
             modules.add(idgroup);
             Module item = new Module("İnventar", "İnventar", "item", "flaticon2-open-box", idgroup);
@@ -1143,6 +1145,8 @@ public class DBConfiguration {
             moduleOperations.add(detailModuleOperation4);
             ModuleOperation detailModuleOperation6 = new ModuleOperation(inventory, detail, null);
             moduleOperations.add(detailModuleOperation6);
+            ModuleOperation detailModuleOperation7 = new ModuleOperation(collector, detail, null);
+            moduleOperations.add(detailModuleOperation7);
 
             ModuleOperation changePasswordModuleOperation1 = new ModuleOperation(subModule5, changePassword, null);
             moduleOperations.add(changePasswordModuleOperation1);
@@ -1451,6 +1455,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, detailModuleOperation3));
             userModuleOperations.add(new UserModuleOperation(user, detailModuleOperation4));
             userModuleOperations.add(new UserModuleOperation(user, detailModuleOperation6));
+            userModuleOperations.add(new UserModuleOperation(user, detailModuleOperation7));
 
             userModuleOperations.add(new UserModuleOperation(user, changePasswordModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, changePasswordModuleOperation2));

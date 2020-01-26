@@ -576,12 +576,17 @@ public class Util {
         if(sumOfInvoice==0){
             return DateUtility.daysBetween(sales.getSaleDate(), today);
         }
-        for(Schedule schedule: schedules){
-            if(schedule.getScheduleDate().getTime()<today.getTime()){
-                if(schedule.getPayableAmount()!=null && schedule.getAmount()>schedule.getPayableAmount()){
-                    int days = DateUtility.daysBetween(schedule.getScheduleDate(), today);
-                    if(days>latency){
-                        latency=days;
+        if(sales.getPayment().getCash() && sales.getPayment().getDown()>sumOfInvoice){
+            return DateUtility.daysBetween(sales.getSaleDate(), today);
+        }
+        if(!sales.getPayment().getCash()){
+            for(Schedule schedule: schedules){
+                if(schedule.getScheduleDate().getTime()<today.getTime()){
+                    if(schedule.getPayableAmount()!=null && schedule.getAmount()>schedule.getPayableAmount()){
+                        int days = DateUtility.daysBetween(schedule.getScheduleDate(), today);
+                        if(days>latency){
+                            latency=days;
+                        }
                     }
                 }
             }

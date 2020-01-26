@@ -132,5 +132,6 @@ public class Constants {
         public static final String LOG = "log";
         public static final String SERVICE = "service";
         public static final String SCHEDULE = "schedule";
+        public static final String COLLECTOR = "collector";
     }
 }

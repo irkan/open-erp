@@ -28,18 +28,24 @@ public class CollectController extends SkeletonController {
         if(page.equalsIgnoreCase(Constants.ROUTE.PAYMENT_LATENCY) ||
                 page.equalsIgnoreCase(Constants.ROUTE.TROUBLED_CUSTOMER)){
             model.addAttribute(Constants.CONFIGURATION_TROUBLED_CUSTOMER, configurationRepository.getConfigurationByKey("troubled_customer").getAttribute());
+            Sales salesObject = new Sales(!data.equals(Optional.empty())?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null);
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new Invoice(salesObject, getSessionOrganization()));
+            }
             if(!model.containsAttribute(Constants.FILTER)){
-                Sales sales = new Sales(!data.equals(Optional.empty())?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null);
-                sales.setSaleDateFrom(DateUtility.minusYear(Integer.parseInt(configurationRepository.getConfigurationByKey("by_year").getAttribute())));
-                sales.setService(null);
-                model.addAttribute(Constants.FILTER, sales);
+                salesObject.setSaleDateFrom(DateUtility.minusYear(Integer.parseInt(configurationRepository.getConfigurationByKey("by_year").getAttribute())));
+                salesObject.setService(null);
+                model.addAttribute(Constants.FILTER, salesObject);
             }
             Page<Sales> sales = salesService.findAll((Sales) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize()*100, Sort.by("id").descending()));
 
             List<Sales> salesList = new ArrayList<>();
             for(Sales sale: sales){
                 double sumOfInvoices = Util.calculateInvoice(sale.getInvoices());
-                List<Schedule> schedules = getSchedulePayment(DateUtility.getFormattedDate(sale.getSaleDate()), sale.getPayment().getSchedule().getId(), sale.getPayment().getPeriod().getId(), sale.getPayment().getLastPrice(), sale.getPayment().getDown());
+                List<Schedule> schedules = new ArrayList<>();
+                if(sale.getPayment()!=null && !sale.getPayment().getCash()){
+                    schedules = getSchedulePayment(DateUtility.getFormattedDate(sale.getSaleDate()), sale.getPayment().getSchedule().getId(), sale.getPayment().getPeriod().getId(), sale.getPayment().getLastPrice(), sale.getPayment().getDown());
+                }
                 double plannedPayment = Util.calculatePlannedPayment(sale, schedules);
                 if(sale.getPayment().getLastPrice()>sumOfInvoices && sumOfInvoices<plannedPayment){
                     schedules = Util.calculateSchedule(sale, schedules, sumOfInvoices);
@@ -54,10 +60,6 @@ public class CollectController extends SkeletonController {
             }
             Page<Sales> salesPage = new PageImpl<Sales>(salesList);
             model.addAttribute(Constants.LIST, salesPage);
-
-            if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new Invoice(getSessionOrganization()));
-            }
         } if(page.equalsIgnoreCase(Constants.ROUTE.CONTACT_HISTORY)){
             model.addAttribute(Constants.CONTACT_CHANNELS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("contact-channel"));
 
@@ -68,6 +70,11 @@ public class CollectController extends SkeletonController {
                 model.addAttribute(Constants.FILTER, new ContactHistory(new Sales(!data.equals(Optional.empty())?Integer.parseInt(data.get()):null), !canViewAll()?getSessionOrganization():null));
             }
             model.addAttribute(Constants.LIST, contactHistoryService.findAll((ContactHistory) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.COLLECTOR)){
+            if(!model.containsAttribute(Constants.FILTER)){
+                model.addAttribute(Constants.FILTER, new Invoice(!canViewAll()?getSessionOrganization():null, null, false));
+            }
+            model.addAttribute(Constants.LIST, invoiceService.findAll((Invoice) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
         }
         return "layout";
     }
