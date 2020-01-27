@@ -103,4 +103,10 @@ public class Invoice {
         this.price = price;
         this.approve = approve;
     }
+
+    public Invoice(Employee collector, Double price, Boolean approve) {
+        this.collector = collector;
+        this.price = price;
+        this.approve = approve;
+    }
 }

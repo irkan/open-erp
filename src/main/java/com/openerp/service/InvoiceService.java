@@ -42,7 +42,7 @@ public class InvoiceService {
                 if(invoice.getActive()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("active"), invoice.getActive())));
                 }
-                if(invoice.getApprove()){
+                if(invoice.getApprove()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("approve"), invoice.getApprove())));
                 }
                 if(invoice.getPaymentChannel()!=null && invoice.getPaymentChannel().getId()!=null){

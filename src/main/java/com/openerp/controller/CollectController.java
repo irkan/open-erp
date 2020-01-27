@@ -72,7 +72,7 @@ public class CollectController extends SkeletonController {
             model.addAttribute(Constants.LIST, contactHistoryService.findAll((ContactHistory) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
         } else if(page.equalsIgnoreCase(Constants.ROUTE.COLLECTOR)){
             if(!model.containsAttribute(Constants.FILTER)){
-                model.addAttribute(Constants.FILTER, new Invoice(!canViewAll()?getSessionOrganization():null, null, false));
+                model.addAttribute(Constants.FILTER, new Invoice(getSessionUser().getEmployee(), null, false));
             }
             model.addAttribute(Constants.LIST, invoiceService.findAll((Invoice) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
         }

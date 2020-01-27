@@ -18,7 +18,7 @@
     tr.strikeout td:before {
         content: " ";
         position: absolute;
-        top: 45%;
+        top: 46%;
         left: 0;
         border-bottom: 1px solid #e50f00;
         width: 100%;
@@ -234,7 +234,10 @@
                                         <td>
                                             <a href="javascript:window.open('/crm/customer/<c:out value="${t.sales.customer.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.sales.customer.id}" />: <c:out value="${t.sales.customer.person.fullName}"/></a>
                                         </td>
-                                        <td><c:out value="${t.price}" /> AZN</td>
+                                        <td>
+                                            <span class="kt-font-bold"><c:out value="${t.price}" /></span>
+                                            <span class="kt-font-bold font-italic font-size-10px">AZN</span>
+                                        </td>
                                         <td><fmt:formatDate value = "${t.invoiceDate}" pattern = "dd.MM.yyyy" /></td>
                                         <td><c:out value="${t.collector.person.fullName}" /></td>
                                         <td><c:out value="${t.paymentChannel.name}" /></td>

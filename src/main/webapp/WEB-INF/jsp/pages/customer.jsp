@@ -203,8 +203,8 @@
                                 <thead>
                                 <tr>
                                     <th>KOD</th>
-                                    <th>Struktur</th>
                                     <th>Ad Soyad Ata adı</th>
+                                    <th>Struktur</th>
                                     <th>Şəhər</th>
                                     <th>Doğum tarixi</th>
                                     <th>Ş.v - nin seriya nömrəsi</th>
@@ -217,8 +217,7 @@
                                     <tr data="<c:out value="${utl:toJson(t)}" />">
                                         <td><c:out value="${t.id}"/></td>
                                         <th>
-                                            <c:out value="${t.person.firstName}"/> <c:out value="${t.person.lastName}"/> <c:out
-                                                value="${t.person.fatherName}"/>
+                                            <c:out value="${t.person.fullName}"/>
                                         </th>
                                         <td><c:out value="${t.organization.name}"/></td>
                                         <th>
