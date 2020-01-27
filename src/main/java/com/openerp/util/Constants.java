@@ -17,10 +17,7 @@ public class Constants {
     public static final String FORM = "form";
     public static final String OPERATIONS = "operations";
     public static final String USERS = "users";
-    public static final String USER_MODULE_OPERATIONS = "user_module_operations";
     public static final String TEMPLATES = "templates";
-    public static final String TEMPLATE_MODULE_OPERATIONS = "template_module_operations";
-    public static final String TEMPLATE_ID = "template_id";
     public static final String PARENT_MODULES = "parent_modules";
     public static final String MESSAGE = "message";
     public static final String PROFILE_SUB_PAGE = "profile_sub_page";
@@ -39,22 +36,16 @@ public class Constants {
     public static final String EMPLOYEE_SALE_FIELDS = "employee_sale_fields";
     public static final String IDENTIFIERS = "identifiers";
     public static final String DAYS_IN_MONTH = "days_in_month";
-    public static final String BRANCHES = "branches";
-    public static final String BRANCH_ID = "branch_id";
     public static final String VACATION_DETAIL_REPOSITORY = "vacation_detail_repository";
     public static final String EXPENSES = "expenses";
-    public static final String WAREHOUSES = "warehouses";
-    public static final String SALARY_EMPLOYEES = "salary_employees";
     public static final String WEEK_DAYS = "week_days";
     public static final String MARITAL_STATUSES = "marital_statuses";
-    public static final String SALARY = "salary";
     public static final String SALE_PRICES = "sale_prices";
     public static final String ADVANCES = "advances";
     public static final String PAYMENT_SCHEDULES = "payment_schedules";
     public static final String PAYMENT_PERIODS = "payment_periods";
     public static final String GUARANTEES = "guarantees";
     public static final String CONTACT_CHANNELS = "contact_channels";
-    public static final String PAYMENT_ID = "payment_id";
     public static final String CONFIGURATION_TROUBLED_CUSTOMER = "configuration_troubled_customer";
     public static final String NOTIFICATIONS = "notifications";
     public static final String ORGANIZATION = "organization";
@@ -78,7 +69,7 @@ public class Constants {
         public static final String REGEX1 = "[0-9\\,\\-\\s]+";
         public static final String REGEX2 = "[0-9\\-\\s]+";
         public static final String REGEX3 = "[0-9\\s]+";
-        public static final String REGEX4 = "^[A-Za-z0-9+_.-]+@(.+)$";;
+        public static final String REGEX4 = "^[A-Za-z0-9+_.-]+@(.+)$";
     }
 
     public static final class TEXT{
@@ -133,5 +124,6 @@ public class Constants {
         public static final String SERVICE = "service";
         public static final String SCHEDULE = "schedule";
         public static final String COLLECTOR = "collector";
+        public static final String WEB_SERVICE_AUTHENTICATOR = "web-service-authenticator";
     }
 }

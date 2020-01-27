@@ -186,6 +186,9 @@ public class SkeletonController {
     LogRepository logRepository;
 
     @Autowired
+    WebServiceAuthenticatorRepository webServiceAuthenticatorRepository;
+
+    @Autowired
     CustomerService customerService;
 
     @Autowired
@@ -439,28 +442,30 @@ public class SkeletonController {
     }
 
     void log(String tableName, String operation, int rowId, String encapsulate){
-        Log log = new Log(tableName, operation, rowId, encapsulate, getSessionUser().getUsername());
+        Log log = new Log(tableName, operation, rowId, encapsulate, getSessionUser()!=null?getSessionUser().getUsername():"");
         logRepository.save(log);
         sessionLog(log);
     }
 
     void log(String tableName, String operation, int rowId, String encapsulate, String description){
-        Log log = new Log(tableName, operation, rowId, encapsulate, getSessionUser().getUsername(), description);
+        Log log = new Log(tableName, operation, rowId, encapsulate, getSessionUser()!=null?getSessionUser().getUsername():"", description);
         logRepository.save(log);
         sessionLog(log);
     }
 
     void log(String operation, String description){
-        Log log = new Log(operation, description, getSessionUser().getUsername());
+        Log log = new Log(operation, description, getSessionUser()!=null?getSessionUser().getUsername():"");
         logRepository.save(log);
         sessionLog(log);
     }
 
     private void sessionLog(Log log){
         List<Log> logs = (ArrayList<Log>)session.getAttribute(Constants.LOGS);
-        logs.add(log);
-        Collections.reverse(logs);
-        session.setAttribute(Constants.LOGS, logs);
+        if(logs!=null){
+            logs.add(log);
+            Collections.reverse(logs);
+            session.setAttribute(Constants.LOGS, logs);
+        }
     }
 
     Double schedulePrice(Integer scheduleId, Double lastPrice, Double down){

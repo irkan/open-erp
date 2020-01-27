@@ -69,6 +69,9 @@ public class DBConfiguration {
     @Autowired
     ConfigurationRepository configurationRepository;
 
+    @Autowired
+    WebServiceAuthenticatorRepository webServiceAuthenticatorRepository;
+
     @Value("${default.admin.username}")
     private String defaultAdminUsername;
 
@@ -78,17 +81,6 @@ public class DBConfiguration {
     @PostConstruct
     public void run() {
         try{
-            List<Configuration> configurations = new ArrayList<>();
-            configurations.add(new Configuration("Problemli müştəri", "troubled_customer", "60", "Gecikmə 60 gündən çox olduqda müştəri problemli sayılır"));
-            configurations.add(new Configuration("Gecikdirmə", "by_year", "-5", "5 il əvvəldən satış qalıqlarının hesablanması: Ödəniş requlyatoru və problemli müştərilər üçün"));
-            configurations.add(new Configuration("Hesab-faktura sayı", "invoice_count", "2", "Eyni hesab-fakturanın çap formasındakı sayı"));
-            configurations.add(new Configuration("Şirkərin adı", "company_name", "Sual", "Şirkətin adı"));
-            configurations.add(new Configuration("Qaynar xətt", "company_hot_line", "+994 55 546 06 61", "Şirkətin qaynar xətt nömrəsi"));
-            configurations.add(new Configuration("Telefon", "company_telephone", "+994 12 480 10 76", "Şirkətin telefon nömrəsi"));
-            configurations.add(new Configuration("Mobil", "company_mobile", "+994 55 546 06 61", "Şirkətin mobil nömrəsi"));
-            configurations.add(new Configuration("Email", "company_email", "sual.office@gmail.com", "Şirkətin email ünvanı"));
-            configurationRepository.saveAll(configurations);
-
             List<DictionaryType> types = new ArrayList<>();
             DictionaryType genderType = new DictionaryType("Cins", "gender", null);
             types.add(genderType);
@@ -635,6 +627,8 @@ public class DBConfiguration {
             modules.add(configuration);
             Module currencyRate = new Module("Valyuta kursu", "Valyuta kursu", "currency-rate", "la la-euro", configuration);
             modules.add(currencyRate);
+            Module webServiceAuthenticator = new Module("Web servis identifikator", "Web servis identifikator", "web-service-authenticator", "flaticon2-user-1", configuration);
+            modules.add(webServiceAuthenticator);
             Module subModule5 = new Module("İstifadəçi", "İstifadəçi", "user", "flaticon-users", module);
             modules.add(subModule5);
             Module subModule9 = new Module("İstifadəçi icazəsi", "İstifadəçi icazəsi", "user-module-operation", "flaticon-clipboard", subModule5);
@@ -854,6 +848,8 @@ public class DBConfiguration {
             moduleOperations.add(createModuleOperation34);
             ModuleOperation createModuleOperation35 = new ModuleOperation(troubledCustomer, create, null);
             moduleOperations.add(createModuleOperation35);
+            ModuleOperation createModuleOperation36 = new ModuleOperation(webServiceAuthenticator, create, null);
+            moduleOperations.add(createModuleOperation36);
 
             ModuleOperation editModuleOperation1 = new ModuleOperation(subModule1, edit, null);
             moduleOperations.add(editModuleOperation1);
@@ -917,6 +913,8 @@ public class DBConfiguration {
             moduleOperations.add(editModuleOperation35);
             ModuleOperation editModuleOperation36 = new ModuleOperation(service, edit, null);
             moduleOperations.add(editModuleOperation36);
+            ModuleOperation editModuleOperation37 = new ModuleOperation(webServiceAuthenticator, edit, null);
+            moduleOperations.add(editModuleOperation37);
 
             ModuleOperation deleteModuleOperation1 = new ModuleOperation(subModule1, delete, null);
             moduleOperations.add(deleteModuleOperation1);
@@ -984,6 +982,8 @@ public class DBConfiguration {
             moduleOperations.add(deleteModuleOperation35);
             ModuleOperation deleteModuleOperation36 = new ModuleOperation(service, delete, null);
             moduleOperations.add(deleteModuleOperation36);
+            ModuleOperation deleteModuleOperation37 = new ModuleOperation(webServiceAuthenticator, delete, null);
+            moduleOperations.add(deleteModuleOperation37);
 
             ModuleOperation viewModuleOperation6 = new ModuleOperation(subModule6, view, null);
             moduleOperations.add(viewModuleOperation6);
@@ -1244,9 +1244,7 @@ public class DBConfiguration {
 
             employeeRepository.save(employee0);
 
-
             User user = new User(defaultAdminUsername, DigestUtils.md5DigestAsHex("admin".getBytes()), employee0, new UserDetail("az", true));
-
             userRepository.save(user);
 
             List<UserModuleOperation> userModuleOperations = new ArrayList<>();
@@ -1282,6 +1280,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, createModuleOperation33));
             userModuleOperations.add(new UserModuleOperation(user, createModuleOperation34));
             userModuleOperations.add(new UserModuleOperation(user, createModuleOperation35));
+            userModuleOperations.add(new UserModuleOperation(user, createModuleOperation36));
 
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation2));
@@ -1314,6 +1313,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation33));
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation35));
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation36));
+            userModuleOperations.add(new UserModuleOperation(user, editModuleOperation37));
 
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation2));
@@ -1348,6 +1348,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation34));
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation35));
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation36));
+            userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation37));
 
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation2));
@@ -1524,8 +1525,22 @@ public class DBConfiguration {
             payrollConfigurations.add(new PayrollConfiguration(formulaType3,"Orta aylıq əmək haqqı", "{average_salary}={sum_work_month_salary_max_12}/{work_month_salary_count_max_12}", "Orta aylıq əmək haqqı = məzuniyyətdən əvvəlki 12 təqvim ayının əmək haqqının cəmlənmiş məbləği / 12"));
             payrollConfigurations.add(new PayrollConfiguration(formulaType3,"Bir günlük əmək haqqı", "{one_day_salary}={average_salary}/30.4", "Bir günlük əmək haqqı = orta aylıq əmək haqqı / 30.4"));
             payrollConfigurations.add(new PayrollConfiguration(formulaType3,"Məzuniyyət haqqı", "{vacation_pay}={one_day_salary}*{taken_vacation_day}", "Məzuniyyət haqqı = Bir günlük əmək haqqı * Məzuniyyət günləri"));
-
             payrollConfigurationRepository.saveAll(payrollConfigurations);
+
+            List<Configuration> configurations = new ArrayList<>();
+            configurations.add(new Configuration("Problemli müştəri", "troubled_customer", "60", "Gecikmə 60 gündən çox olduqda müştəri problemli sayılır"));
+            configurations.add(new Configuration("Gecikdirmə", "by_year", "-5", "5 il əvvəldən satış qalıqlarının hesablanması: Ödəniş requlyatoru və problemli müştərilər üçün"));
+            configurations.add(new Configuration("Hesab-faktura sayı", "invoice_count", "2", "Eyni hesab-fakturanın çap formasındakı sayı"));
+            configurations.add(new Configuration("Şirkərin adı", "company_name", "Sual", "Şirkətin adı"));
+            configurations.add(new Configuration("Qaynar xətt", "company_hot_line", "+994 55 546 06 61", "Şirkətin qaynar xətt nömrəsi"));
+            configurations.add(new Configuration("Telefon", "company_telephone", "+994 12 480 10 76", "Şirkətin telefon nömrəsi"));
+            configurations.add(new Configuration("Mobil", "company_mobile", "+994 55 546 06 61", "Şirkətin mobil nömrəsi"));
+            configurations.add(new Configuration("Email", "company_email", "sual.office@gmail.com", "Şirkətin email ünvanı"));
+            configurationRepository.saveAll(configurations);
+
+            List<WebServiceAuthenticator> webServiceAuthenticators = new ArrayList<>();
+            webServiceAuthenticators.add(new WebServiceAuthenticator("webservice1", "webS3r1cE12019", "MilliÖN web service identifikator"));
+            webServiceAuthenticatorRepository.saveAll(webServiceAuthenticators);
 
         } catch (Exception e){
             e.printStackTrace();

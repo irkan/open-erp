@@ -345,7 +345,6 @@
                                                 <div class="d-md-none kt-margin-b-10"></div>
                                             </div>
                                             <div class="col-3">
-                                                <label>&nbsp;</label>
                                                 <div>
                                                     <a href="javascript:;" data-repeater-delete="" class="btn-sm btn btn-label-danger btn-bold">
                                                         <i class="la la-trash-o"></i>
@@ -374,17 +373,26 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <form:label path="payment.price">Qiymət</form:label>
-                                <form:input path="payment.price" cssClass="form-control" placeholder="Qiyməti daxil edin" onchange="calculate($('input[name=\"payment.price\"]').val(), $('input[name=\"payment.discount\"]').val())" onkeyup="calculate($('input[name=\"payment.price\"]').val(), $('input[name=\"payment.discount\"]').val())"/>
+                                <div class="input-group" >
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
+                                    <form:input path="payment.price" cssClass="form-control" placeholder="Qiyməti daxil edin" onchange="calculate($('input[name=\"payment.price\"]').val(), $('input[name=\"payment.discount\"]').val())" onkeyup="calculate($('input[name=\"payment.price\"]').val(), $('input[name=\"payment.discount\"]').val())"/>
+                                </div>
                                 <form:errors path="payment.price" cssClass="alert-danger control-label"/>
                             </div>
                             <div class="form-group">
                                 <form:label path="payment.discount">Endirim</form:label>
-                                <form:input path="payment.discount" cssClass="form-control" placeholder="Endirim varsa daxil edin" onchange="calculate($('input[name=\"payment.price\"]').val(), $('input[name=\"payment.discount\"]').val())" onkeyup="calculate($('input[name=\"payment.price\"]').val(), $('input[name=\"payment.discount\"]').val())"/>
+                                <div class="input-group" >
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
+                                    <form:input path="payment.discount" cssClass="form-control" placeholder="Endirim varsa daxil edin" onchange="calculate($('input[name=\"payment.price\"]').val(), $('input[name=\"payment.discount\"]').val())" onkeyup="calculate($('input[name=\"payment.price\"]').val(), $('input[name=\"payment.discount\"]').val())"/>
+                                </div>
                                 <form:errors path="payment.discount" cssClass="alert-danger control-label"/>
                             </div>
                             <div class="form-group">
                                 <form:label path="payment.lastPrice">Son qiymət</form:label>
-                                <form:input path="payment.lastPrice" cssClass="form-control" placeholder="Son qiyməti daxil edin" readonly="true"/>
+                                <div class="input-group" >
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
+                                    <form:input path="payment.lastPrice" cssClass="form-control" placeholder="Son qiyməti daxil edin" readonly="true"/>
+                                </div>
                                 <form:errors path="payment.lastPrice" cssClass="alert-danger control-label"/>
                             </div>
                             <div class="form-group">
@@ -630,5 +638,65 @@
 
     jQuery(document).ready(function() {
         KTFormRepeater.init();
+    });
+
+    $( "#form" ).validate({
+        rules: {
+            customer: {
+                required: true,
+                digits: true
+            },
+            'payment.price': {
+                required: true,
+                number: true,
+                min: 1
+            },
+            'payment.lastPrice': {
+                required: true,
+                number: true,
+                min: 0
+            },
+            'payment.discount': {
+                required: false,
+                number: true,
+                min: 1
+            },
+            'salesInventories[0].inventory.barcode': {
+                required: true
+            },
+            'salesInventories[1].inventory.barcode': {
+                required: true
+            },
+            'salesInventories[2].inventory.barcode': {
+                required: true
+            },
+            'salesInventories[3].inventory.barcode': {
+                required: true
+            },
+            'salesInventories[4].inventory.barcode': {
+                required: true
+            },
+            'salesInventories[5].inventory.barcode': {
+                required: true
+            },
+            'salesInventories[6].inventory.barcode': {
+                required: true
+            }
+        },
+        invalidHandler: function(event, validator) {
+            KTUtil.scrollTop();
+            swal.close();
+        },
+    });
+
+    $("input[name='payment.price']").inputmask('decimal', {
+        rightAlignNumerics: false
+    });
+
+    $("input[name='payment.discount']").inputmask('decimal', {
+        rightAlignNumerics: false
+    });
+    $("input[name='payment.lastPrice']").inputmask('decimal', {
+        rightAlignNumerics: false
     });
 </script>

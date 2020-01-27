@@ -19,17 +19,18 @@
 
 <c:choose>
     <c:when test="${not empty list}">
-        <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
-        <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
+    <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
+    <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
 <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
     <thead>
     <tr>
         <th>№</th>
         <th>ID</th>
-        <th>Ad</th>
-        <th>Açar</th>
-        <th>Atribut</th>
+        <th>İstifadəçi adı</th>
+        <th>Şifrə</th>
+        <th>Yaradılmışdır</th>
         <th>Açıqlama</th>
+        <th>Status</th>
         <th>Əməliyyat</th>
     </tr>
     </thead>
@@ -38,10 +39,20 @@
         <tr data="<c:out value="${utl:toJson(t)}" />">
             <td>${loop.index + 1}</td>
             <td><c:out value="${t.id}" /></td>
-            <td><c:out value="${t.name}" /></td>
-            <td><c:out value="${t.key}" /></td>
-            <td><c:out value="${t.attribute}" /></td>
+            <td><c:out value="${t.username}" /></td>
+            <td><c:out value="${t.password}" /></td>
+            <td><fmt:formatDate value = "${t.createdDate}" pattern = "dd.MM.yyyy" /></td>
             <td><c:out value="${t.description}" /></td>
+            <td>
+                <c:choose>
+                    <c:when test="${t.active}">
+                        <span class="kt-badge kt-badge--success kt-badge--inline kt-badge--pill">Aktivdir</span>
+                    </c:when>
+                    <c:otherwise>
+                        <span class="kt-badge kt-badge--danger kt-badge--inline kt-badge--pill">Aktiv deyil</span>
+                    </c:otherwise>
+                </c:choose>
+            </td>
             <td nowrap class="text-center">
                 <c:if test="${edit.status}">
                     <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
@@ -49,7 +60,7 @@
                     </a>
                 </c:if>
                 <c:if test="${delete.status}">
-                    <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
+                    <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.username}" /><br/><c:out value="${t.description}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
                         <i class="<c:out value="${delete.object.icon}"/>"></i>
                     </a>
                 </c:if>
@@ -85,27 +96,22 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form:form modelAttribute="form" id="form" method="post" action="/admin/configuration" cssClass="form-group">
-                    <form:input type="hidden" name="id" path="id"/>
-                    <form:input type="hidden" name="active" path="active" value="1"/>
+                <form:form modelAttribute="form" id="form" method="post" action="/admin/web-service-authenticator" cssClass="form-group">
+                    <form:hidden path="id"/>
+                    <form:hidden path="active"/>
                     <div class="form-group">
-                        <form:label path="name">Ad</form:label>
-                        <form:input path="name" cssClass="form-control" placeholder="Adı daxil edin"/>
-                        <form:errors path="name" cssClass="alert-danger control-label"/>
+                        <form:label path="username">İstifadəçi adı</form:label>
+                        <form:input path="username" cssClass="form-control" placeholder="Adı daxil edin"/>
+                        <form:errors path="username" cssClass="alert-danger control-label"/>
                     </div>
                     <div class="form-group">
-                        <form:label path="key">Açar</form:label>
-                        <form:input path="key" cssClass="form-control" placeholder="Açarı daxil edin" />
-                        <form:errors path="key" cssClass="alert-danger"/>
-                    </div>
-                    <div class="form-group">
-                        <form:label path="attribute">Atribut</form:label>
-                        <form:input path="attribute" cssClass="form-control" placeholder="Atributu daxil edin" />
-                        <form:errors path="attribute" cssClass="alert-danger"/>
+                        <form:label path="password">Şifrə</form:label>
+                        <form:input path="password" cssClass="form-control" placeholder="Açarı daxil edin" />
+                        <form:errors path="password" cssClass="alert-danger"/>
                     </div>
                     <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>
-                        <form:textarea path="description" cssClass="form-control" placeholder="Açıqlama daxil edin" ></form:textarea>
+                        <form:textarea path="description" cssClass="form-control" placeholder="Açıqlama daxil edin" />
                         <form:errors path="description" cssClass="alert alert-danger"/>
                     </div>
                 </form:form>
@@ -142,14 +148,13 @@
 
     $( "#form" ).validate({
         rules: {
-            name: {
-                required: true
+            username: {
+                required: true,
+                minlength: 5
             },
-            key: {
-                required: true
-            },
-            attribute: {
-                required: true
+            password: {
+                required: true,
+                minlength: 6
             }
         },
         invalidHandler: function(event, validator) {

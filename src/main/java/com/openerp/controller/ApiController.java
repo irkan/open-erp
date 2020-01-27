@@ -34,8 +34,8 @@ public class ApiController extends SkeletonController {
     public WSResponse getPayment(@PathVariable("username") String username, @PathVariable("password") String password, @PathVariable("sale_no") Integer saleId){
         WSResponse response = new WSResponse("404", "Xəta baş verdi!");
         try {
-            User user = userRepository.findByUsernameAndPasswordAndActiveTrue(username, DigestUtils.md5DigestAsHex(password.getBytes()));
-            if(user!=null){
+            WebServiceAuthenticator webServiceAuthenticator = webServiceAuthenticatorRepository.getWebServiceAuthenticatorByUsernameAndPasswordAndActiveTrue(username, password);
+            if(webServiceAuthenticator!=null){
                 Sales sale = salesRepository.getSalesByIdAndActiveTrue(saleId);
                 response = new WSResponse("400", "Ödəniş tapılmadı!");
                 if(sale!=null && sale.getPayment()!=null){
@@ -52,6 +52,7 @@ public class ApiController extends SkeletonController {
         } catch (Exception e){
             log.error(e);
         }
+        log("sale_sales", "find", saleId, response.toString(), username);
         return response;
     }
 
@@ -59,10 +60,11 @@ public class ApiController extends SkeletonController {
     @ResponseBody
     @GetMapping(value = "/pay/{username}/{password}/{sale_no}/{amount}/{channel_reference_code}")
     public WSResponse pay(@PathVariable("username") String username, @PathVariable("password") String password,  @PathVariable("sale_no") Integer saleId, @PathVariable("amount") Double amount, @PathVariable("channel_reference_code") String channelReferenceCode){
+        Integer invoiceId = 0;
         WSResponse response = new WSResponse("404", "Xəta baş verdi!");
         try {
-            User user = userRepository.findByUsernameAndPasswordAndActiveTrue(username, DigestUtils.md5DigestAsHex(password.getBytes()));
-            if(user!=null){
+            WebServiceAuthenticator webServiceAuthenticator = webServiceAuthenticatorRepository.getWebServiceAuthenticatorByUsernameAndPasswordAndActiveTrue(username, password);
+            if(webServiceAuthenticator!=null){
                 Sales sale = salesRepository.getSalesByIdAndActiveTrue(saleId);
                 response = new WSResponse("400", "Ödəniş tapılmadı!");
                 if(sale!=null && sale.getPayment()!=null){
@@ -75,12 +77,14 @@ public class ApiController extends SkeletonController {
                     invoice.setDescription("Satışdan əldə edilən ödəniş " + invoice.getPrice() + " AZN");
                     invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("million", "payment-channel"));
                     invoiceRepository.save(invoice);
+                    invoiceId = invoice.getId();
                     response = new WSResponse("200", "OK", invoice);
                 }
             }
         } catch (Exception e){
             log.error(e);
         }
+        log("sale_invoice", "create/edit", invoiceId, response.toString(), username);
         return response;
     }
 }

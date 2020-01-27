@@ -194,6 +194,11 @@ public class DeleteController extends SkeletonController {
             log.setActive(false);
             logRepository.save(log);
             log("admin_log", "delete", log.getId(), log.toString());
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.WEB_SERVICE_AUTHENTICATOR)){
+            WebServiceAuthenticator webServiceAuthenticator = webServiceAuthenticatorRepository.getWebServiceAuthenticatorById(Integer.parseInt(id));
+            webServiceAuthenticator.setActive(false);
+            webServiceAuthenticatorRepository.save(webServiceAuthenticator);
+            log("admin_web_service_authenticator", "delete", webServiceAuthenticator.getId(), webServiceAuthenticator.toString());
         } else if(path.equalsIgnoreCase(Constants.ROUTE.DEMONSTRATION)){
             Demonstration demonstration = demonstrationRepository.getDemonstrationById(Integer.parseInt(id));
             demonstration.setActive(false);

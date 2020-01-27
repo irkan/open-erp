@@ -96,6 +96,11 @@ public class AdministratorController extends SkeletonController {
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Configuration());
             }
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.WEB_SERVICE_AUTHENTICATOR)){
+            model.addAttribute(Constants.LIST, webServiceAuthenticatorRepository.findAll());
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new WebServiceAuthenticator(true));
+            }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.NOTIFICATION)){
             model.addAttribute(Constants.NOTIFICATIONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("notification"));
             if(!model.containsAttribute(Constants.FORM)){
@@ -349,5 +354,16 @@ public class AdministratorController extends SkeletonController {
             log("admin_configuration", "create/edit", configuration.getId(), configuration.toString());
         }
         return mapPost(configuration, binding, redirectAttributes);
+    }
+
+    @PostMapping(value = "/web-service-authenticator")
+    public String postWebServiceAuthenticator(@ModelAttribute(Constants.FORM) @Validated WebServiceAuthenticator webServiceAuthenticator, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()){
+            webServiceAuthenticator.setActive(true);
+            webServiceAuthenticatorRepository.save(webServiceAuthenticator);
+            log("admin_web_service_authenticator", "create/edit", webServiceAuthenticator.getId(), webServiceAuthenticator.toString());
+        }
+        return mapPost(webServiceAuthenticator, binding, redirectAttributes);
     }
 }
