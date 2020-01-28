@@ -1,14 +1,12 @@
 package com.openerp.util;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import com.openerp.entity.Dictionary;
 import com.openerp.entity.Item;
 import com.openerp.entity.NonWorkingDay;
 import com.openerp.entity.ShortenedWorkingDay;
@@ -184,6 +182,38 @@ public class ReadWriteExcelFile {
 		wb.write(fileOut);
 		fileOut.flush();
 		fileOut.close();
+	}
+
+	public static File dictionaryXLSXFile(List<Dictionary> dictionaries) throws IOException {
+
+		File file = new File("Sorğu.xlsx");
+
+		String sheetName = "Sorğu";
+
+		XSSFWorkbook wb = new XSSFWorkbook();
+		XSSFSheet sheet = wb.createSheet(sheetName) ;
+		int rownum=0;
+		for(Dictionary dictionary: dictionaries){
+			XSSFRow row = sheet.createRow(rownum++);
+			XSSFCell cell = row.createCell(0);
+			cell.setCellValue(dictionary.getId());
+			cell = row.createCell(1);
+			cell.setCellValue(dictionary.getDictionaryType().getName());
+			cell = row.createCell(2);
+			cell.setCellValue(dictionary.getName());
+			cell = row.createCell(3);
+			cell.setCellValue(dictionary.getAttr1());
+			cell = row.createCell(4);
+			cell.setCellValue(dictionary.getAttr2());
+			cell = row.createCell(5);
+			cell.setCellValue(dictionary.getActive());
+		}
+
+		FileOutputStream fileOut = new FileOutputStream(file);
+		wb.write(fileOut);
+		fileOut.flush();
+		fileOut.close();
+		return file;
 	}
 
 	public static void main(String[] args) throws IOException {

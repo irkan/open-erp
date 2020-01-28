@@ -43,7 +43,7 @@
                                                 </a>
                                             </li>
                                             <li class="kt-nav__item">
-                                                <a href="#" class="kt-nav__link">
+                                                <a href="/${parent.path}/${page}/export" class="kt-nav__link">
                                                     <i class="kt-nav__link-icon la la-file-excel-o"></i>
                                                     <span class="kt-nav__link-text">Excel</span>
                                                 </a>

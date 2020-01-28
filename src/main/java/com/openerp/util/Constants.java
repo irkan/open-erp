@@ -56,6 +56,7 @@ public class Constants {
     public static final String PAYMENT_CHANNEL = "payment_channels";
     public static final String OBJECT = "object";
     public static final String ACTIONS = "actions";
+    public static final String EXPORTS = "exports";
 
     public static final class STATUS{
         public static final String RESPONSE = "response";
@@ -125,5 +126,6 @@ public class Constants {
         public static final String SCHEDULE = "schedule";
         public static final String COLLECTOR = "collector";
         public static final String WEB_SERVICE_AUTHENTICATOR = "web-service-authenticator";
+        public static final String EXPORT = "export";
     }
 }

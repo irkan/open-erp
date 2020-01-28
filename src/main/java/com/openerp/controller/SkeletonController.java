@@ -293,6 +293,10 @@ public class SkeletonController {
         return false;
     }
 
+    String exportExcel(Object object, RedirectAttributes redirectAttributes){
+        redirectAttributes.addFlashAttribute(Constants.EXPORTS, object);
+        return "redirect:/export/dictionary";
+    }
 
     String mapPost(Object object, BindingResult binding, RedirectAttributes redirectAttributes){
         redirectAttributes.addFlashAttribute(Constants.FORM_RESULT_BINDING, binding);

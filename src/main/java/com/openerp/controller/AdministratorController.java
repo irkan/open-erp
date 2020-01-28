@@ -4,7 +4,6 @@ import com.openerp.entity.*;
 import com.openerp.util.Constants;
 import com.openerp.util.Util;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -16,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,9 @@ public class AdministratorController extends SkeletonController {
             model.addAttribute(Constants.DICTIONARY_TYPES, dictionaryTypeRepository.getDictionaryTypesByActiveTrue());
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Dictionary());
+            }
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+               return exportExcel(dictionaryRepository.findAll(), redirectAttributes);
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.DICTIONARY_TYPE)){
             model.addAttribute(Constants.LIST, dictionaryTypeRepository.getDictionaryTypesByActiveTrue());
