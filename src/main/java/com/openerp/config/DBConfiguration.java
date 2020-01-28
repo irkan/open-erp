@@ -1078,6 +1078,8 @@ public class DBConfiguration {
             moduleOperations.add(exportModuleOperation29);
             ModuleOperation exportModuleOperation30 = new ModuleOperation(schedule, export, null);
             moduleOperations.add(exportModuleOperation30);
+            ModuleOperation exportModuleOperation31 = new ModuleOperation(currencyRate, export, null);
+            moduleOperations.add(exportModuleOperation31);
 
             ModuleOperation approveModuleOperation3 = new ModuleOperation(transaction, approve, null);
             moduleOperations.add(approveModuleOperation3);
@@ -1378,6 +1380,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation28));
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation29));
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation30));
+            userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation31));
 
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation6));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation9));

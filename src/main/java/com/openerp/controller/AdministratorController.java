@@ -3,6 +3,7 @@ package com.openerp.controller;
 import com.openerp.entity.*;
 import com.openerp.util.Constants;
 import com.openerp.util.Util;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
@@ -34,10 +35,16 @@ public class AdministratorController extends SkeletonController {
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Module());
             }
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(moduleRepository.findAll(), redirectAttributes, page);
+            }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.OPERATION)){
             model.addAttribute(Constants.LIST, operationRepository.getOperationsByActiveTrue());
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Operation());
+            }
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(operationRepository.findAll(), redirectAttributes, page);
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.DICTIONARY)){
             model.addAttribute(Constants.LIST, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Active(true));
@@ -46,12 +53,15 @@ public class AdministratorController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new Dictionary());
             }
             if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
-               return exportExcel(dictionaryRepository.findAll(), redirectAttributes);
+               return exportExcel(dictionaryRepository.findAll(), redirectAttributes, page);
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.DICTIONARY_TYPE)){
             model.addAttribute(Constants.LIST, dictionaryTypeRepository.getDictionaryTypesByActiveTrue());
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new DictionaryType());
+            }
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(dictionaryTypeRepository.findAll(), redirectAttributes, page);
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.USER)){
             model.addAttribute(Constants.LANGUAGES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("language"));
@@ -70,11 +80,17 @@ public class AdministratorController extends SkeletonController {
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new User());
             }
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(userRepository.findAll(), redirectAttributes, page);
+            }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.MODULE_OPERATION)){
             model.addAttribute(Constants.MODULES, moduleRepository.getModulesByActiveTrue());
             model.addAttribute(Constants.OPERATIONS, operationRepository.getOperationsByActiveTrue());
             model.addAttribute(Constants.LIST, moduleOperationRepository.findAll());
             model.addAttribute(Constants.FORM, new ModuleOperation());
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(moduleOperationRepository.findAll(), redirectAttributes, page);
+            }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.USER_MODULE_OPERATION)){
             model.addAttribute(Constants.USERS, userRepository.getUsersByActiveTrue());
             List<ModuleOperation>  list = moduleOperationRepository.findAll();
@@ -95,6 +111,9 @@ public class AdministratorController extends SkeletonController {
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new CurrencyRate());
             }
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(currencyRateRepository.findAll(), redirectAttributes, page);
+            }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.CONFIGURATION)){
             model.addAttribute(Constants.LIST, configurationRepository.getConfigurationsByActiveTrue());
             if(!model.containsAttribute(Constants.FORM)){
@@ -113,15 +132,22 @@ public class AdministratorController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Notification(!canViewAll()?getSessionOrganization():null));
             }
-            model.addAttribute(Constants.LIST, notificationService.findAll((Notification) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
+            Page<Notification> notifications = notificationService.findAll((Notification) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
+            model.addAttribute(Constants.LIST, notifications);
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(notifications, redirectAttributes, page);
+            }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.LOG)){
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Log());
             }
-            Sort.by("id").descending();
-            model.addAttribute(Constants.LIST, logService.findAll((Log) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
+            Page<Log> logs = logService.findAll((Log) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
+            model.addAttribute(Constants.LIST, logs);
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Log());
+            }
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(logs, redirectAttributes, page);
             }
         }
         return "layout";

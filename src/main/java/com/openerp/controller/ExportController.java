@@ -1,15 +1,14 @@
 package com.openerp.controller;
 
 import com.itextpdf.text.DocumentException;
-import com.openerp.entity.Dictionary;
-import com.openerp.entity.Invoice;
-import com.openerp.entity.Sales;
+import com.openerp.entity.*;
 import com.openerp.util.*;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -34,14 +34,30 @@ public class ExportController extends SkeletonController {
 
     @GetMapping(value = {"/{page}", "/{page}/{data}"})
     public ResponseEntity<Resource> route(Model model, @PathVariable("page") String page, @PathVariable("data") Optional<String> data, RedirectAttributes redirectAttributes) throws Exception {
+        File file = new File("template");
         if(page.equalsIgnoreCase(Constants.ROUTE.DICTIONARY)){
-            System.out.println("Teeeeeeeeeeeeeeeeeeeeeeeest!!!!!!!!!!!!!!!!!!!");
+            file = ReadWriteExcelFile.dictionaryXLSXFile((List< Dictionary>) model.asMap().get(Constants.EXPORTS), page);
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.DICTIONARY_TYPE)){
+            file = ReadWriteExcelFile.dictionaryTypeXLSXFile((List<DictionaryType>) model.asMap().get(Constants.EXPORTS), page);
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.USER)){
+            file = ReadWriteExcelFile.userXLSXFile((List<User>) model.asMap().get(Constants.EXPORTS), page);
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.MODULE_OPERATION)){
+            file = ReadWriteExcelFile.moduleOperationXLSXFile((List<ModuleOperation>) model.asMap().get(Constants.EXPORTS), page);
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.MODULE)){
+            file = ReadWriteExcelFile.moduleXLSXFile((List<Module>) model.asMap().get(Constants.EXPORTS), page);
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.OPERATION)){
+            file = ReadWriteExcelFile.operationXLSXFile((List<Operation>) model.asMap().get(Constants.EXPORTS), page);
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.CURRENCY_RATE)){
+            file = ReadWriteExcelFile.currencyRateXLSXFile((List<CurrencyRate>) model.asMap().get(Constants.EXPORTS), page);
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.NOTIFICATION)){
+            file = ReadWriteExcelFile.notificationRateXLSXFile((Page<Notification>) model.asMap().get(Constants.EXPORTS), page);
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.LOG)){
+            file = ReadWriteExcelFile.logRateXLSXFile((Page<Log>) model.asMap().get(Constants.EXPORTS), page);
         }
-        File file = ReadWriteExcelFile.dictionaryXLSXFile((List< Dictionary>) model.asMap().get(Constants.EXPORTS));
 
         InputStreamResource resourceIS = new InputStreamResource(new FileInputStream(file));
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename="+page+"-" + file.getName())
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename="+(new Date()).getTime() + "-" + file.getName())
                 .contentLength(file.length())
                 .contentType(MediaType.parseMediaType(MediaType.APPLICATION_OCTET_STREAM_VALUE))
                 .body(resourceIS);

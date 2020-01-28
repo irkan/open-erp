@@ -240,7 +240,13 @@
                     <form:hidden path="active" value="1"/>
                     <form:hidden path="organization" value="${sessionScope.organization.id}"/>
                     <div class="form-group">
-                        <form:radiobuttons items="${notifications}" path="type" itemLabel="name" itemValue="id"/>
+                        <c:forEach var="t" items="${notifications}" varStatus="loop">
+                            <label class="kt-radio kt-radio--brand">
+                                <form:radiobutton path="type" value="${t.id}"/> <c:out value="${t.name}"/>
+                                <span></span>
+                            </label>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </c:forEach>
                         <form:errors path="type" cssClass="control-label alert alert-danger" />
                     </div>
                     <div class="form-group">

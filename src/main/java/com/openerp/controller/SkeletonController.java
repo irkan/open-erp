@@ -293,9 +293,9 @@ public class SkeletonController {
         return false;
     }
 
-    String exportExcel(Object object, RedirectAttributes redirectAttributes){
+    String exportExcel(Object object, RedirectAttributes redirectAttributes, String page){
         redirectAttributes.addFlashAttribute(Constants.EXPORTS, object);
-        return "redirect:/export/dictionary";
+        return "redirect:/export/"+page;
     }
 
     String mapPost(Object object, BindingResult binding, RedirectAttributes redirectAttributes){
