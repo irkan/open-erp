@@ -690,7 +690,7 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <form:label path="customer.person.contact.relationalPhoneNumber1">Əlaqəli şəxs nömrəsi #1</form:label>
                                                 <div class="input-group">
@@ -700,7 +700,7 @@
                                                 <form:errors path="customer.person.contact.relationalPhoneNumber1" cssClass="control-label alert-danger" />
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <form:label path="customer.person.contact.relationalPhoneNumber2">Əlaqəli şəxs nömrəsi #2</form:label>
                                                 <div class="input-group">
@@ -710,7 +710,7 @@
                                                 <form:errors path="customer.person.contact.relationalPhoneNumber2" cssClass="control-label alert-danger" />
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <form:label path="customer.person.contact.relationalPhoneNumber3">Əlaqəli şəxs nömrəsi #3</form:label>
                                                 <div class="input-group" >
@@ -718,6 +718,16 @@
                                                     <form:input path="customer.person.contact.relationalPhoneNumber3" cssClass="form-control" placeholder="0505505550"/>
                                                 </div>
                                                 <form:errors path="customer.person.contact.relationalPhoneNumber3" cssClass="control-label alert-danger" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <form:label path="customer.person.contact.geolocation">Geolocation</form:label>
+                                                <div class="input-group" >
+                                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-map-marker"></i></span></div>
+                                                    <form:input path="customer.person.contact.geolocation" cssClass="form-control" readonly="true"/>
+                                                </div>
+                                                <form:errors path="customer.person.contact.geolocation" cssClass="control-label alert-danger" />
                                             </div>
                                         </div>
                                     </div>
@@ -1367,5 +1377,18 @@
 
     $("input[name='payment.schedulePrice']").inputmask('decimal', {
         rightAlignNumerics: false
+    });
+
+    function showPosition(position) {
+        var geolocation =  $("#form").find("input[name='customer.person.contact.geolocation']");
+        if($(geolocation).val().trim().length==0){
+            $(geolocation).val(position.coords.latitude + ',' + position.coords.longitude);
+        }
+    }
+
+    $(function(){
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        }
     });
 </script>

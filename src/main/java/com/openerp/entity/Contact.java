@@ -54,6 +54,9 @@ public class Contact {
     @JoinColumn(name = "admin_dictionary_living_city_id")
     private Dictionary livingCity;
 
+    @Column(name = "geolocation")
+    private String geolocation;
+
     public Contact(String mobilePhone, String homePhone, String email, String address, Dictionary city) {
         this.mobilePhone = mobilePhone;
         this.homePhone = homePhone;

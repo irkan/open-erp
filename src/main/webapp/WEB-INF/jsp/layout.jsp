@@ -339,6 +339,7 @@
                 message: 'Sessiyanız başa çatmaq üzrədir.',
                 logoutButton: 'Çıxış',
                 keepAliveButton: 'Davam et',
+                keepAliveUrl: 'https://keenthemes.com/metronic/tools/preview/api/session-timeout/keepalive.php',
                 logoutUrl: '/logout',
                 redirUrl: '/logout',
                 warnAfter: ${sessionIddle}, //warn after 5 seconds
