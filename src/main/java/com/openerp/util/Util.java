@@ -32,9 +32,19 @@ public class Util {
             if(object!=null)
                 return object;
         } catch (Exception e){
-            e.printStackTrace();
+            log.error(e);
         }
         return null;
+    }
+
+    public static String checkNull(Object object){
+        try{
+            if(object!=null)
+                return (String) String.valueOf(object);
+        } catch (Exception e){
+            log.error(e);
+        }
+        return "";
     }
 
     public static Map<Integer, List<Module>> convertParentModulesMap(List<Module> modules){

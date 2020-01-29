@@ -443,14 +443,577 @@ public class ReadWriteExcelFile {
 		return file;
 	}
 
-	public static void main(String[] args) throws IOException {
-		
-		writeXLSFile();
-		readXLSFile();
-		
-		writeXLSXFile();
-		//readXLSXFile();
+	public static File organizationXLSXFile(List<Organization> organizations, String page) throws IOException {
+		File file = new File(page+".xlsx");
+		XSSFWorkbook wb = new XSSFWorkbook();
+		XSSFSheet sheet = wb.createSheet(page) ;
+		int rownum=0;
+		for(Organization organization: organizations){
+			XSSFRow row = sheet.createRow(rownum++);
+			XSSFCell cell = row.createCell(0);
+			cell.setCellValue(organization.getId());
+			cell = row.createCell(1);
+			cell.setCellValue(organization.getName());
+			cell = row.createCell(2);
+			cell.setCellValue(organization.getActive());
+			cell = row.createCell(3);
+			cell.setCellValue(organization.getCreatedDate());
+			cell = row.createCell(4);
+			cell.setCellValue(organization.getType()!=null?organization.getType().getName():"");
+			cell = row.createCell(5);
+			cell.setCellValue(organization.getDescription());
+			cell = row.createCell(6);
+			cell.setCellValue(organization.getOrganization()!=null?organization.getOrganization().getName():"");
+			cell = row.createCell(7);
+			cell.setCellValue(organization.getContact()!=null?organization.getContact().getEmail():"");
+			cell = row.createCell(8);
+			cell.setCellValue(organization.getContact()!=null?organization.getContact().getHomePhone():"");
+			cell = row.createCell(9);
+			cell.setCellValue(organization.getContact()!=null?organization.getContact().getMobilePhone():"");
+			cell = row.createCell(10);
+			cell.setCellValue((organization.getContact()!=null && organization.getContact().getCity()!=null)?organization.getContact().getCity().getName():"");
+			cell = row.createCell(11);
+			cell.setCellValue(organization.getContact()!=null?organization.getContact().getAddress():"");
+		}
+		FileOutputStream fileOut = new FileOutputStream(file);
+		wb.write(fileOut);
+		fileOut.flush();
+		fileOut.close();
+		return file;
+	}
 
+	public static File employeeXLSXFile(List<Employee> employees, String page) throws IOException {
+		File file = new File(page+".xlsx");
+		XSSFWorkbook wb = new XSSFWorkbook();
+		XSSFSheet sheet = wb.createSheet(page) ;
+		int rownum=0;
+		for(Employee employee: employees){
+			XSSFRow row = sheet.createRow(rownum++);
+			XSSFCell cell = row.createCell(0);
+			cell.setCellValue(employee.getId());
+			cell = row.createCell(1);
+			cell.setCellValue(employee.getContractStartDate());
+			cell = row.createCell(2);
+			cell.setCellValue(employee.getSpecialistOrManager());
+			cell = row.createCell(3);
+			cell.setCellValue(employee.getBankAccountNumber());
+			cell = row.createCell(4);
+			cell.setCellValue(employee.getBankCardNumber());
+			cell = row.createCell(5);
+			cell.setCellValue((String) Util.check(employee.getContractEndDate()));
+			cell = row.createCell(6);
+			cell.setCellValue(employee.getSocialCardNumber());
+			cell = row.createCell(7);
+			cell.setCellValue(employee.getDescription());
+			cell = row.createCell(8);
+			cell.setCellValue(employee.getCreatedDate());
+			cell = row.createCell(9);
+			cell.setCellValue(employee.getPerson()!=null?employee.getPerson().getFullName():"");
+			cell = row.createCell(10);
+			cell.setCellValue(employee.getPerson()!=null?employee.getPerson().getFirstName():"");
+			cell = row.createCell(11);
+			cell.setCellValue(employee.getPerson()!=null?employee.getPerson().getLastName():"");
+			cell = row.createCell(12);
+			cell.setCellValue(employee.getPerson()!=null?employee.getPerson().getFatherName():"");
+			cell = row.createCell(13);
+			cell.setCellValue(employee.getPosition()!=null?employee.getPosition().getName():"");
+			cell = row.createCell(14);
+			cell.setCellValue(employee.getPerson()!=null?employee.getPerson().getDisability():false);
+			cell = row.createCell(15);
+			cell.setCellValue(employee.getPerson()!=null?employee.getPerson().getBirthday():null);
+			cell = row.createCell(16);
+			cell.setCellValue(employee.getPerson()!=null?employee.getPerson().getIdCardSerialNumber():"");
+			cell = row.createCell(17);
+			cell.setCellValue(employee.getPerson()!=null?employee.getPerson().getIdCardPinCode():"");
+			cell = row.createCell(18);
+			cell.setCellValue(employee.getPerson()!=null?employee.getPerson().getVoen():"");
+			cell = row.createCell(19);
+			cell.setCellValue((employee.getPerson()!=null && employee.getPerson().getGender()!=null)?employee.getPerson().getGender().getName():"");
+			cell = row.createCell(20);
+			cell.setCellValue((employee.getPerson()!=null && employee.getPerson().getMaritalStatus()!=null)?employee.getPerson().getMaritalStatus().getName():"");
+			cell = row.createCell(21);
+			cell.setCellValue((employee.getPerson()!=null && employee.getPerson().getNationality()!=null)?employee.getPerson().getNationality().getName():"");
+			cell = row.createCell(22);
+			cell.setCellValue((employee.getPerson()!=null && employee.getPerson().getContact()!=null)?employee.getPerson().getContact().getEmail():"");
+			cell = row.createCell(23);
+			cell.setCellValue((employee.getPerson()!=null && employee.getPerson().getContact()!=null)?employee.getPerson().getContact().getHomePhone():"");
+			cell = row.createCell(24);
+			cell.setCellValue((employee.getPerson()!=null && employee.getPerson().getContact()!=null)?employee.getPerson().getContact().getMobilePhone():"");
+			cell = row.createCell(25);
+			cell.setCellValue((employee.getPerson()!=null && employee.getPerson().getContact()!=null && employee.getPerson().getContact().getCity()!=null)?employee.getPerson().getContact().getCity().getName():"");
+			cell = row.createCell(26);
+			cell.setCellValue((employee.getPerson()!=null && employee.getPerson().getContact()!=null)?employee.getPerson().getContact().getAddress():"");
+			cell = row.createCell(27);
+			cell.setCellValue(employee.getOrganization()!=null?employee.getOrganization().getName():"");
+		}
+		FileOutputStream fileOut = new FileOutputStream(file);
+		wb.write(fileOut);
+		fileOut.flush();
+		fileOut.close();
+		return file;
+	}
+
+	public static File nonWorkingDayXLSXFile(Page<NonWorkingDay> nonWorkingDays, String page) throws IOException {
+		File file = new File(page+".xlsx");
+		XSSFWorkbook wb = new XSSFWorkbook();
+		XSSFSheet sheet = wb.createSheet(page) ;
+		int rownum=0;
+		for(NonWorkingDay nonWorkingDay: nonWorkingDays){
+			XSSFRow row = sheet.createRow(rownum++);
+			XSSFCell cell = row.createCell(0);
+			cell.setCellValue(nonWorkingDay.getId());
+			cell = row.createCell(1);
+			cell.setCellValue(nonWorkingDay.getIdentifier());
+			cell = row.createCell(2);
+			cell.setCellValue(nonWorkingDay.getDescription());
+			cell = row.createCell(3);
+			cell.setCellValue(nonWorkingDay.getNonWorkingDate());
+			cell = row.createCell(4);
+			cell.setCellValue(nonWorkingDay.getActive());
+		}
+		FileOutputStream fileOut = new FileOutputStream(file);
+		wb.write(fileOut);
+		fileOut.flush();
+		fileOut.close();
+		return file;
+	}
+
+	public static File shortenedWorkingDayXLSXFile(Page<ShortenedWorkingDay> shortenedWorkingDays, String page) throws IOException {
+		File file = new File(page+".xlsx");
+		XSSFWorkbook wb = new XSSFWorkbook();
+		XSSFSheet sheet = wb.createSheet(page) ;
+		int rownum=0;
+		for(ShortenedWorkingDay shortenedWorkingDay: shortenedWorkingDays){
+			XSSFRow row = sheet.createRow(rownum++);
+			XSSFCell cell = row.createCell(0);
+			cell.setCellValue(shortenedWorkingDay.getId());
+			cell = row.createCell(1);
+			cell.setCellValue(shortenedWorkingDay.getIdentifier());
+			cell = row.createCell(2);
+			cell.setCellValue(shortenedWorkingDay.getDescription());
+			cell = row.createCell(3);
+			cell.setCellValue(shortenedWorkingDay.getWorkingDate());
+			cell = row.createCell(4);
+			cell.setCellValue(shortenedWorkingDay.getShortenedTime());
+			cell = row.createCell(5);
+			cell.setCellValue(shortenedWorkingDay.getActive());
+		}
+		FileOutputStream fileOut = new FileOutputStream(file);
+		wb.write(fileOut);
+		fileOut.flush();
+		fileOut.close();
+		return file;
+	}
+
+	public static File vacationXLSXFile(Page<Vacation> vacations, String page) throws IOException {
+		File file = new File(page+".xlsx");
+		XSSFWorkbook wb = new XSSFWorkbook();
+		XSSFSheet sheet = wb.createSheet(page) ;
+		int rownum=0;
+		for(Vacation vacation: vacations){
+			XSSFRow row = sheet.createRow(rownum++);
+			XSSFCell cell = row.createCell(0);
+			cell.setCellValue(vacation.getId());
+			cell = row.createCell(1);
+			cell.setCellValue(vacation.getIdentifier()!=null?vacation.getIdentifier().getName():"");
+			cell = row.createCell(2);
+			cell.setCellValue(vacation.getDescription());
+			cell = row.createCell(3);
+			cell.setCellValue(vacation.getStartDate());
+			cell = row.createCell(4);
+			cell.setCellValue(vacation.getEndDate());
+			cell = row.createCell(5);
+			cell.setCellValue(vacation.getActive());
+			cell = row.createCell(6);
+			cell.setCellValue((vacation.getEmployee()!=null && vacation.getEmployee().getPerson()!=null)?vacation.getEmployee().getPerson().getFullName():"");
+			cell = row.createCell(7);
+			cell.setCellValue(vacation.getOrganization()!=null?vacation.getOrganization().getName():"");
+			cell = row.createCell(8);
+			cell.setCellValue(vacation.getDateRange());
+		}
+		FileOutputStream fileOut = new FileOutputStream(file);
+		wb.write(fileOut);
+		fileOut.flush();
+		fileOut.close();
+		return file;
+	}
+
+	public static File businessTripXLSXFile(Page<BusinessTrip> businessTrips, String page) throws IOException {
+		File file = new File(page+".xlsx");
+		XSSFWorkbook wb = new XSSFWorkbook();
+		XSSFSheet sheet = wb.createSheet(page) ;
+		int rownum=0;
+		for(BusinessTrip businessTrip: businessTrips){
+			XSSFRow row = sheet.createRow(rownum++);
+			XSSFCell cell = row.createCell(0);
+			cell.setCellValue(businessTrip.getId());
+			cell = row.createCell(1);
+			cell.setCellValue(businessTrip.getIdentifier()!=null?businessTrip.getIdentifier().getName():"");
+			cell = row.createCell(2);
+			cell.setCellValue(businessTrip.getDescription());
+			cell = row.createCell(3);
+			cell.setCellValue(businessTrip.getStartDate());
+			cell = row.createCell(4);
+			cell.setCellValue(businessTrip.getEndDate());
+			cell = row.createCell(5);
+			cell.setCellValue(businessTrip.getActive());
+			cell = row.createCell(6);
+			cell.setCellValue((businessTrip.getEmployee()!=null && businessTrip.getEmployee().getPerson()!=null)?businessTrip.getEmployee().getPerson().getFullName():"");
+			cell = row.createCell(7);
+			cell.setCellValue(businessTrip.getOrganization()!=null?businessTrip.getOrganization().getName():"");
+			cell = row.createCell(8);
+			cell.setCellValue(businessTrip.getDateRange());
+		}
+		FileOutputStream fileOut = new FileOutputStream(file);
+		wb.write(fileOut);
+		fileOut.flush();
+		fileOut.close();
+		return file;
+	}
+
+	public static File illnessXLSXFile(Page<Illness> illnesses, String page) throws IOException {
+		File file = new File(page+".xlsx");
+		XSSFWorkbook wb = new XSSFWorkbook();
+		XSSFSheet sheet = wb.createSheet(page) ;
+		int rownum=0;
+		for(Illness illness: illnesses){
+			XSSFRow row = sheet.createRow(rownum++);
+			XSSFCell cell = row.createCell(0);
+			cell.setCellValue(illness.getId());
+			cell = row.createCell(1);
+			cell.setCellValue(illness.getIdentifier()!=null?illness.getIdentifier().getName():"");
+			cell = row.createCell(2);
+			cell.setCellValue(illness.getDescription());
+			cell = row.createCell(3);
+			cell.setCellValue(illness.getStartDate());
+			cell = row.createCell(4);
+			cell.setCellValue(illness.getEndDate());
+			cell = row.createCell(5);
+			cell.setCellValue(illness.getActive());
+			cell = row.createCell(6);
+			cell.setCellValue((illness.getEmployee()!=null && illness.getEmployee().getPerson()!=null)?illness.getEmployee().getPerson().getFullName():"");
+			cell = row.createCell(7);
+			cell.setCellValue(illness.getOrganization()!=null?illness.getOrganization().getName():"");
+			cell = row.createCell(8);
+			cell.setCellValue(illness.getDateRange());
+		}
+		FileOutputStream fileOut = new FileOutputStream(file);
+		wb.write(fileOut);
+		fileOut.flush();
+		fileOut.close();
+		return file;
+	}
+
+	public static File inventoryXLSXFile(Page<Inventory> inventories, String page) throws IOException {
+		File file = new File(page+".xlsx");
+		XSSFWorkbook wb = new XSSFWorkbook();
+		XSSFSheet sheet = wb.createSheet(page) ;
+		int rownum=0;
+		for(Inventory inventory: inventories){
+			XSSFRow row = sheet.createRow(rownum++);
+			XSSFCell cell = row.createCell(0);
+			cell.setCellValue(inventory.getId());
+			cell = row.createCell(1);
+			cell.setCellValue(inventory.getGroup()!=null?inventory.getGroup().getName():"");
+			cell = row.createCell(2);
+			cell.setCellValue(inventory.getName());
+			cell = row.createCell(3);
+			cell.setCellValue(inventory.getBarcode());
+			cell = row.createCell(4);
+			cell.setCellValue(inventory.getDescription());
+			cell = row.createCell(5);
+			cell.setCellValue(inventory.getInventoryDate());
+			cell = row.createCell(6);
+			cell.setCellValue(inventory.getOrganization()!=null?inventory.getOrganization().getName():"");
+			cell = row.createCell(7);
+			cell.setCellValue(inventory.getOld());
+			cell = row.createCell(8);
+			cell.setCellValue(inventory.getActive());
+		}
+		FileOutputStream fileOut = new FileOutputStream(file);
+		wb.write(fileOut);
+		fileOut.flush();
+		fileOut.close();
+		return file;
+	}
+
+	public static File supplierXLSXFile(List<Supplier> suppliers, String page) throws IOException {
+		File file = new File(page+".xlsx");
+		XSSFWorkbook wb = new XSSFWorkbook();
+		XSSFSheet sheet = wb.createSheet(page) ;
+		int rownum=0;
+		for(Supplier supplier: suppliers){
+			XSSFRow row = sheet.createRow(rownum++);
+			XSSFCell cell = row.createCell(0);
+			cell.setCellValue(supplier.getId());
+			cell = row.createCell(1);
+			cell.setCellValue(supplier.getName());
+			cell = row.createCell(2);
+			cell.setCellValue(supplier.getContractDate());
+			cell = row.createCell(3);
+			cell.setCellValue(supplier.getDescription());
+			cell = row.createCell(4);
+			cell.setCellValue(supplier.getPerson()!=null?supplier.getPerson().getFullName():"");
+			cell = row.createCell(5);
+			cell.setCellValue((supplier.getPerson()!=null && supplier.getPerson().getContact()!=null)?supplier.getPerson().getContact().getEmail():"");
+			cell = row.createCell(6);
+			cell.setCellValue((supplier.getPerson()!=null && supplier.getPerson().getContact()!=null)?supplier.getPerson().getContact().getMobilePhone():"");
+			cell = row.createCell(7);
+			cell.setCellValue((supplier.getPerson()!=null && supplier.getPerson().getContact()!=null)?supplier.getPerson().getContact().getHomePhone():"");
+			cell = row.createCell(8);
+			cell.setCellValue((supplier.getPerson()!=null && supplier.getPerson().getContact()!=null && supplier.getPerson().getContact().getCity()!=null)?supplier.getPerson().getContact().getCity().getName():"");
+			cell = row.createCell(9);
+			cell.setCellValue((supplier.getPerson()!=null && supplier.getPerson().getContact()!=null)?supplier.getPerson().getContact().getAddress():"");
+		}
+		FileOutputStream fileOut = new FileOutputStream(file);
+		wb.write(fileOut);
+		fileOut.flush();
+		fileOut.close();
+		return file;
+	}
+
+	public static File consolidateXLSXFile(Page<Action> actions, String page) throws IOException {
+		File file = new File(page+".xlsx");
+		XSSFWorkbook wb = new XSSFWorkbook();
+		XSSFSheet sheet = wb.createSheet(page) ;
+		int rownum=0;
+		for(Action action: actions){
+			XSSFRow row = sheet.createRow(rownum++);
+			XSSFCell cell = row.createCell(0);
+			cell.setCellValue(action.getId());
+			cell = row.createCell(1);
+			cell.setCellValue(action.getAction()!=null?action.getAction().getName():"");
+			cell = row.createCell(2);
+			cell.setCellValue(action.getAmount());
+			cell = row.createCell(3);
+			cell.setCellValue(action.getApprove());
+			cell = row.createCell(4);
+			cell.setCellValue((String) Util.check(action.getApproveDate()));
+			cell = row.createCell(5);
+			cell.setCellValue(action.getOrganization()!=null?action.getOrganization().getName():"");
+			cell = row.createCell(6);
+			cell.setCellValue(action.getActionDate());
+			cell = row.createCell(7);
+			cell.setCellValue(action.getActive());
+			cell = row.createCell(8);
+			cell.setCellValue((action.getEmployee()!=null && action.getEmployee().getPerson()!=null)?action.getEmployee().getPerson().getFullName():"");
+			cell = row.createCell(9);
+			cell.setCellValue(action.getSupplier()!=null?action.getSupplier().getName():"");
+		}
+		FileOutputStream fileOut = new FileOutputStream(file);
+		wb.write(fileOut);
+		fileOut.flush();
+		fileOut.close();
+		return file;
+	}
+
+	public static File transactionXLSXFile(Page<Transaction> transactions, String page) throws IOException {
+		File file = new File(page+".xlsx");
+		XSSFWorkbook wb = new XSSFWorkbook();
+		XSSFSheet sheet = wb.createSheet(page) ;
+		int rownum=0;
+		for(Transaction transaction: transactions){
+			XSSFRow row = sheet.createRow(rownum++);
+			XSSFCell cell = row.createCell(0);
+			cell.setCellValue(transaction.getId());
+			cell = row.createCell(1);
+			cell.setCellValue(transaction.getAction()!=null?transaction.getAction().getName():"");
+			cell = row.createCell(2);
+			cell.setCellValue(transaction.getAccount()!=null?transaction.getAccount().getAccountNumber():"");
+			cell = row.createCell(3);
+			cell.setCellValue(transaction.getApprove());
+			cell = row.createCell(4);
+			cell.setCellValue(Util.checkNull(transaction.getApproveDate()));
+			cell = row.createCell(5);
+			cell.setCellValue(transaction.getOrganization()!=null?transaction.getOrganization().getName():"");
+			cell = row.createCell(6);
+			cell.setCellValue(transaction.getTransactionDate());
+			cell = row.createCell(7);
+			cell.setCellValue(transaction.getTransaction()!=null?transaction.getTransaction().getId():0);
+			cell = row.createCell(8);
+			cell.setCellValue(transaction.getDebt());
+			cell = row.createCell(9);
+			cell.setCellValue(transaction.getAmount());
+			cell = row.createCell(10);
+			cell.setCellValue(transaction.getPrice());
+			cell = row.createCell(11);
+			cell.setCellValue(transaction.getCurrency());
+			cell = row.createCell(12);
+			cell.setCellValue(transaction.getRate());
+			cell = row.createCell(13);
+			cell.setCellValue(transaction.getSumPrice());
+			cell = row.createCell(14);
+			cell.setCellValue(transaction.getBalance());
+		}
+		FileOutputStream fileOut = new FileOutputStream(file);
+		wb.write(fileOut);
+		fileOut.flush();
+		fileOut.close();
+		return file;
+	}
+
+	public static File accountXLSXFile(List<Account> accounts, String page) throws IOException {
+		File file = new File(page+".xlsx");
+		XSSFWorkbook wb = new XSSFWorkbook();
+		XSSFSheet sheet = wb.createSheet(page) ;
+		int rownum=0;
+		for(Account account: accounts){
+			XSSFRow row = sheet.createRow(rownum++);
+			XSSFCell cell = row.createCell(0);
+			cell.setCellValue(account.getId());
+			cell = row.createCell(1);
+			cell.setCellValue(account.getAccountNumber());
+			cell = row.createCell(2);
+			cell.setCellValue(account.getCurrency());
+			cell = row.createCell(3);
+			cell.setCellValue(account.getBankAccountNumber());
+			cell = row.createCell(4);
+			cell.setCellValue(account.getBankCode());
+			cell = row.createCell(5);
+			cell.setCellValue(account.getBankName());
+			cell = row.createCell(6);
+			cell.setCellValue(account.getBankSwiftBic());
+			cell = row.createCell(7);
+			cell.setCellValue(account.getBalance());
+			cell = row.createCell(8);
+			cell.setCellValue(account.getDescription());
+			cell = row.createCell(9);
+			cell.setCellValue(account.getOrganization()!=null?account.getOrganization().getName():"");
+		}
+		FileOutputStream fileOut = new FileOutputStream(file);
+		wb.write(fileOut);
+		fileOut.flush();
+		fileOut.close();
+		return file;
+	}
+
+	public static File financingXLSXFile(Page<Financing> financings, String page) throws IOException {
+		File file = new File(page+".xlsx");
+		XSSFWorkbook wb = new XSSFWorkbook();
+		XSSFSheet sheet = wb.createSheet(page) ;
+		int rownum=0;
+		for(Financing financing: financings){
+			XSSFRow row = sheet.createRow(rownum++);
+			XSSFCell cell = row.createCell(0);
+			cell.setCellValue(financing.getId());
+			cell = row.createCell(1);
+			cell.setCellValue(financing.getPrice());
+			cell = row.createCell(2);
+			cell.setCellValue(financing.getCurrency());
+			cell = row.createCell(3);
+			cell.setCellValue(financing.getFinancingDate());
+			cell = row.createCell(4);
+			cell.setCellValue(financing.getActive());
+			cell = row.createCell(5);
+			cell.setCellValue(financing.getInventory()!=null?financing.getInventory().getName():"");
+			cell = row.createCell(6);
+			cell.setCellValue(financing.getInventory()!=null?financing.getInventory().getBarcode():"");
+			cell = row.createCell(7);
+			cell.setCellValue(financing.getOrganization()!=null?financing.getOrganization().getName():"");
+		}
+		FileOutputStream fileOut = new FileOutputStream(file);
+		wb.write(fileOut);
+		fileOut.flush();
+		fileOut.close();
+		return file;
+	}
+
+	public static File advanceXLSXFile(Page<Advance> advances, String page) throws IOException {
+		File file = new File(page+".xlsx");
+		XSSFWorkbook wb = new XSSFWorkbook();
+		XSSFSheet sheet = wb.createSheet(page) ;
+		int rownum=0;
+		for(Advance advance: advances){
+			XSSFRow row = sheet.createRow(rownum++);
+			XSSFCell cell = row.createCell(0);
+			cell.setCellValue(advance.getId());
+			cell = row.createCell(1);
+			cell.setCellValue(advance.getPayed());
+			cell = row.createCell(2);
+			cell.setCellValue(advance.getActive());
+			cell = row.createCell(3);
+			cell.setCellValue(advance.getAdvanceDate());
+			cell = row.createCell(4);
+			cell.setCellValue(advance.getDebt());
+			cell = row.createCell(5);
+			cell.setCellValue(advance.getDescription());
+			cell = row.createCell(6);
+			cell.setCellValue(advance.getApprove());
+			cell = row.createCell(7);
+			cell.setCellValue(Util.checkNull(advance.getApproveDate()));
+			cell = row.createCell(8);
+			cell.setCellValue(advance.getFormula());
+			cell = row.createCell(9);
+			cell.setCellValue((advance.getEmployee()!=null && advance.getEmployee().getPerson()!=null)?advance.getEmployee().getPerson().getFullName():"");
+			cell = row.createCell(10);
+			cell.setCellValue(advance.getOrganization()!=null?advance.getOrganization().getName():"");
+		}
+		FileOutputStream fileOut = new FileOutputStream(file);
+		wb.write(fileOut);
+		fileOut.flush();
+		fileOut.close();
+		return file;
+	}
+
+	public static File customerXLSXFile(Page<Customer> customers, String page) throws IOException {
+		File file = new File(page+".xlsx");
+		XSSFWorkbook wb = new XSSFWorkbook();
+		XSSFSheet sheet = wb.createSheet(page) ;
+		int rownum=0;
+		for(Customer customer: customers){
+			XSSFRow row = sheet.createRow(rownum++);
+			XSSFCell cell = row.createCell(0);
+			cell.setCellValue(customer.getId());
+			cell = row.createCell(1);
+			cell.setCellValue(customer.getContractDate());
+			cell = row.createCell(2);
+			cell.setCellValue(customer.getDescription());
+			cell = row.createCell(3);
+			cell.setCellValue(customer.getActive());
+			cell = row.createCell(4);
+			cell.setCellValue(customer.getOrganization()!=null?customer.getOrganization().getName():"");
+			cell = row.createCell(5);
+			cell.setCellValue(customer.getPerson()!=null?customer.getPerson().getFullName():"");
+			cell = row.createCell(6);
+			cell.setCellValue(customer.getPerson()!=null?customer.getPerson().getFirstName():"");
+			cell = row.createCell(7);
+			cell.setCellValue(customer.getPerson()!=null?customer.getPerson().getLastName():"");
+			cell = row.createCell(8);
+			cell.setCellValue(customer.getPerson()!=null?customer.getPerson().getFatherName():"");
+			cell = row.createCell(9);
+			cell.setCellValue(customer.getPerson()!=null?Util.checkNull(customer.getPerson().getBirthday()):"");
+			cell = row.createCell(10);
+			cell.setCellValue(customer.getPerson()!=null?customer.getPerson().getIdCardSerialNumber():"");
+			cell = row.createCell(11);
+			cell.setCellValue(customer.getPerson()!=null?customer.getPerson().getIdCardPinCode():"");
+			cell = row.createCell(12);
+			cell.setCellValue((customer.getPerson()!=null && customer.getPerson().getContact()!=null)?customer.getPerson().getContact().getEmail():"");
+			cell = row.createCell(13);
+			cell.setCellValue((customer.getPerson()!=null && customer.getPerson().getContact()!=null)?customer.getPerson().getContact().getHomePhone():"");
+			cell = row.createCell(14);
+			cell.setCellValue((customer.getPerson()!=null && customer.getPerson().getContact()!=null)?customer.getPerson().getContact().getMobilePhone():"");
+			cell = row.createCell(15);
+			cell.setCellValue((customer.getPerson()!=null && customer.getPerson().getContact()!=null)?customer.getPerson().getContact().getRelationalPhoneNumber1():"");
+			cell = row.createCell(16);
+			cell.setCellValue((customer.getPerson()!=null && customer.getPerson().getContact()!=null)?customer.getPerson().getContact().getRelationalPhoneNumber2():"");
+			cell = row.createCell(17);
+			cell.setCellValue((customer.getPerson()!=null && customer.getPerson().getContact()!=null)?customer.getPerson().getContact().getRelationalPhoneNumber3():"");
+			cell = row.createCell(18);
+			cell.setCellValue((customer.getPerson()!=null && customer.getPerson().getContact()!=null)?customer.getPerson().getContact().getGeolocation():"");
+			cell = row.createCell(19);
+			cell.setCellValue((customer.getPerson()!=null && customer.getPerson().getContact()!=null && customer.getPerson().getContact().getCity()!=null)?customer.getPerson().getContact().getCity().getName():"");
+			cell = row.createCell(20);
+			cell.setCellValue((customer.getPerson()!=null && customer.getPerson().getContact()!=null)?customer.getPerson().getContact().getAddress():"");
+			cell = row.createCell(21);
+			cell.setCellValue((customer.getPerson()!=null && customer.getPerson().getContact()!=null && customer.getPerson().getContact().getLivingCity()!=null)?customer.getPerson().getContact().getLivingCity().getName():"");
+			cell = row.createCell(22);
+			cell.setCellValue((customer.getPerson()!=null && customer.getPerson().getContact()!=null)?customer.getPerson().getContact().getLivingAddress():"");
+		}
+		FileOutputStream fileOut = new FileOutputStream(file);
+		wb.write(fileOut);
+		fileOut.flush();
+		fileOut.close();
+		return file;
 	}
 
 }

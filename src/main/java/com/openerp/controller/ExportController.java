@@ -35,24 +35,55 @@ public class ExportController extends SkeletonController {
     @GetMapping(value = {"/{page}", "/{page}/{data}"})
     public ResponseEntity<Resource> route(Model model, @PathVariable("page") String page, @PathVariable("data") Optional<String> data, RedirectAttributes redirectAttributes) throws Exception {
         File file = new File("template");
+        Object object = model.asMap().get(Constants.EXPORTS);
         if(page.equalsIgnoreCase(Constants.ROUTE.DICTIONARY)){
-            file = ReadWriteExcelFile.dictionaryXLSXFile((List< Dictionary>) model.asMap().get(Constants.EXPORTS), page);
+            file = ReadWriteExcelFile.dictionaryXLSXFile((List< Dictionary>) object, page);
         } else if(page.equalsIgnoreCase(Constants.ROUTE.DICTIONARY_TYPE)){
-            file = ReadWriteExcelFile.dictionaryTypeXLSXFile((List<DictionaryType>) model.asMap().get(Constants.EXPORTS), page);
+            file = ReadWriteExcelFile.dictionaryTypeXLSXFile((List<DictionaryType>) object, page);
         } else if(page.equalsIgnoreCase(Constants.ROUTE.USER)){
-            file = ReadWriteExcelFile.userXLSXFile((List<User>) model.asMap().get(Constants.EXPORTS), page);
+            file = ReadWriteExcelFile.userXLSXFile((List<User>) object, page);
         } else if(page.equalsIgnoreCase(Constants.ROUTE.MODULE_OPERATION)){
-            file = ReadWriteExcelFile.moduleOperationXLSXFile((List<ModuleOperation>) model.asMap().get(Constants.EXPORTS), page);
+            file = ReadWriteExcelFile.moduleOperationXLSXFile((List<ModuleOperation>) object, page);
         } else if(page.equalsIgnoreCase(Constants.ROUTE.MODULE)){
-            file = ReadWriteExcelFile.moduleXLSXFile((List<Module>) model.asMap().get(Constants.EXPORTS), page);
+            file = ReadWriteExcelFile.moduleXLSXFile((List<Module>) object, page);
         } else if(page.equalsIgnoreCase(Constants.ROUTE.OPERATION)){
-            file = ReadWriteExcelFile.operationXLSXFile((List<Operation>) model.asMap().get(Constants.EXPORTS), page);
+            file = ReadWriteExcelFile.operationXLSXFile((List<Operation>) object, page);
         } else if(page.equalsIgnoreCase(Constants.ROUTE.CURRENCY_RATE)){
-            file = ReadWriteExcelFile.currencyRateXLSXFile((List<CurrencyRate>) model.asMap().get(Constants.EXPORTS), page);
+            file = ReadWriteExcelFile.currencyRateXLSXFile((List<CurrencyRate>) object, page);
         } else if(page.equalsIgnoreCase(Constants.ROUTE.NOTIFICATION)){
-            file = ReadWriteExcelFile.notificationRateXLSXFile((Page<Notification>) model.asMap().get(Constants.EXPORTS), page);
+            file = ReadWriteExcelFile.notificationRateXLSXFile((Page<Notification>) object, page);
         } else if(page.equalsIgnoreCase(Constants.ROUTE.LOG)){
-            file = ReadWriteExcelFile.logRateXLSXFile((Page<Log>) model.asMap().get(Constants.EXPORTS), page);
+            file = ReadWriteExcelFile.logRateXLSXFile((Page<Log>) object, page);
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.ORGANIZATION)){
+            file = ReadWriteExcelFile.organizationXLSXFile((List<Organization>) object, page);
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.EMPLOYEE)){
+            file = ReadWriteExcelFile.employeeXLSXFile((List<Employee>) object, page);
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.NON_WORKING_DAY)){
+            file = ReadWriteExcelFile.nonWorkingDayXLSXFile((Page<NonWorkingDay>) object, page);
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.SHORTENED_WORKING_DAY)){
+            file = ReadWriteExcelFile.shortenedWorkingDayXLSXFile((Page<ShortenedWorkingDay>) object, page);
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.VACATION)){
+            file = ReadWriteExcelFile.vacationXLSXFile((Page<Vacation>) object, page);
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.BUSINESS_TRIP)){
+            file = ReadWriteExcelFile.businessTripXLSXFile((Page<BusinessTrip>) object, page);
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.ILLNESS)){
+            file = ReadWriteExcelFile.illnessXLSXFile((Page<Illness>) object, page);
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.INVENTORY)){
+            file = ReadWriteExcelFile.inventoryXLSXFile((Page<Inventory>) object, page);
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.SUPPLIER)){
+            file = ReadWriteExcelFile.supplierXLSXFile((List<Supplier>) object, page);
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.CONSOLIDATE)){
+            file = ReadWriteExcelFile.consolidateXLSXFile((Page<Action>) object, page);
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.TRANSACTION)){
+            file = ReadWriteExcelFile.transactionXLSXFile((Page<Transaction>) object, page);
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.ACCOUNT)){
+            file = ReadWriteExcelFile.accountXLSXFile((List<Account>) object, page);
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.CONSOLIDATE)){
+            file = ReadWriteExcelFile.financingXLSXFile((Page<Financing>) object, page);
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.ADVANCE)){
+            file = ReadWriteExcelFile.advanceXLSXFile((Page<Advance>) object, page);
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.CUSTOMER)){
+            file = ReadWriteExcelFile.customerXLSXFile((Page<Customer>) object, page);
         }
 
         InputStreamResource resourceIS = new InputStreamResource(new FileInputStream(file));

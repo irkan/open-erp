@@ -7,6 +7,7 @@ import com.openerp.repository.InventoryRepository;
 import com.openerp.repository.TransactionRepository;
 import com.openerp.util.Constants;
 import com.openerp.util.Util;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
@@ -46,7 +47,11 @@ public class AccountingController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Transaction(!canViewAll()?getSessionOrganization():null, null));
             }
-            model.addAttribute(Constants.LIST, transactionService.findAll((Transaction) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
+            Page<Transaction> transactions = transactionService.findAll((Transaction) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
+            model.addAttribute(Constants.LIST, transactions);
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(transactions, redirectAttributes, page);
+            }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.ACCOUNT)) {
             model.addAttribute(Constants.CURRENCIES,  dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("currency"));
             List<Account> accounts;
@@ -59,6 +64,9 @@ public class AccountingController extends SkeletonController {
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Account(getSessionOrganization()));
             }
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(accounts, redirectAttributes, page);
+            }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.FINANCING)) {
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Financing(getSessionOrganization()));
@@ -66,7 +74,11 @@ public class AccountingController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Financing(!canViewAll()?getSessionOrganization():null, null, null));
             }
-            model.addAttribute(Constants.LIST, financingService.findAll((Financing) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
+            Page<Financing> financings = financingService.findAll((Financing) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
+            model.addAttribute(Constants.LIST, financings);
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(financings, redirectAttributes, page);
+            }
         }
         return "layout";
     }

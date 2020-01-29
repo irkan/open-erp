@@ -139,26 +139,7 @@
                 required: true
             },
             operation: {
-                required: true,
-                remote: {
-                    url: "/admin/module-operation/check",
-                    type: "get",
-                    data: $("#username").val(),
-                    //data: {"username":username},
-                    dataType : "json",
-                    success:function(data){
-                        /* response = ( data == true ) ? true : false; */
-                        if (data.name == true)
-                        {
-                            message: {
-                                username: 'The username is already in use!'
-                            }
-                        }
-                    },
-                    error: function(e){
-                        alert("Gosterilmis modulda secilmis emeliyyat movcuddur!");
-                    }
-                }
+                required: true
             }
         },
         invalidHandler: function(event, validator) {

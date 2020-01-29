@@ -6,6 +6,7 @@ import com.openerp.util.Constants;
 import com.openerp.util.DateUtility;
 import com.openerp.util.ReadWriteExcelFile;
 import com.openerp.util.Util;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -32,6 +33,9 @@ public class HRController extends SkeletonController {
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Organization());
             }
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(organizationRepository.findAll(), redirectAttributes, page);
+            }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.EMPLOYEE)){
             model.addAttribute(Constants.EMPLOYEE_PAYROLL_FIELDS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-payroll-field"));
             model.addAttribute(Constants.EMPLOYEE_SALE_FIELDS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-sale-field"));
@@ -52,6 +56,9 @@ public class HRController extends SkeletonController {
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Employee(getSessionOrganization()));
             }
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(employees, redirectAttributes, page);
+            }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.NON_WORKING_DAY)){
             model.addAttribute(Constants.IDENTIFIERS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("identifier"));
             if(!model.containsAttribute(Constants.FORM)){
@@ -60,7 +67,11 @@ public class HRController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new NonWorkingDay());
             }
-            model.addAttribute(Constants.LIST, nonWorkingDayService.findAll((NonWorkingDay) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
+            Page<NonWorkingDay> nonWorkingDays = nonWorkingDayService.findAll((NonWorkingDay) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
+            model.addAttribute(Constants.LIST, nonWorkingDays);
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(nonWorkingDays, redirectAttributes, page);
+            }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.SHORTENED_WORKING_DAY)){
             model.addAttribute(Constants.IDENTIFIERS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("identifier"));
             model.addAttribute(Constants.SHORTENED_TIMES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("shortened-time"));
@@ -70,7 +81,11 @@ public class HRController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new ShortenedWorkingDay());
             }
-            model.addAttribute(Constants.LIST, shortenedWorkingDayService.findAll((ShortenedWorkingDay) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
+            Page<ShortenedWorkingDay> shortenedWorkingDays = shortenedWorkingDayService.findAll((ShortenedWorkingDay) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
+            model.addAttribute(Constants.LIST, shortenedWorkingDays);
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(shortenedWorkingDays, redirectAttributes, page);
+            }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.WORK_ATTENDANCE)){
 
         } else if (page.equalsIgnoreCase(Constants.ROUTE.BUSINESS_TRIP)){
@@ -82,7 +97,11 @@ public class HRController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new BusinessTrip(!canViewAll()?getSessionOrganization():null));
             }
-            model.addAttribute(Constants.LIST, businessTripService.findAll((BusinessTrip) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
+            Page<BusinessTrip> businessTrips = businessTripService.findAll((BusinessTrip) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
+            model.addAttribute(Constants.LIST, businessTrips);
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(businessTrips, redirectAttributes, page);
+            }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.VACATION)){
             model.addAttribute(Constants.EMPLOYEES, canViewAll()?employeeRepository.getEmployeesByContractEndDateIsNull():employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization()));
             model.addAttribute(Constants.IDENTIFIERS, dictionaryRepository.getDictionariesByActiveTrueAndAttr2AndDictionaryType_Attr1("vacation", "identifier"));
@@ -92,7 +111,11 @@ public class HRController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Vacation(!canViewAll()?getSessionOrganization():null));
             }
-            model.addAttribute(Constants.LIST, vacationService.findAll((Vacation) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
+            Page<Vacation> vacations = vacationService.findAll((Vacation) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
+            model.addAttribute(Constants.LIST, vacations);
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(vacations, redirectAttributes, page);
+            }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.ILLNESS)){
             model.addAttribute(Constants.EMPLOYEES, canViewAll()?employeeRepository.getEmployeesByContractEndDateIsNull():employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization()));
             model.addAttribute(Constants.IDENTIFIERS, dictionaryRepository.getDictionariesByActiveTrueAndAttr2AndDictionaryType_Attr1("illness", "identifier"));
@@ -102,7 +125,11 @@ public class HRController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Illness(!canViewAll()?getSessionOrganization():null));
             }
-            model.addAttribute(Constants.LIST, illnessService.findAll((Illness) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
+            Page<Illness> illnesses = illnessService.findAll((Illness) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
+            model.addAttribute(Constants.LIST, illnesses);
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(illnesses, redirectAttributes, page);
+            }
         }
         return "layout";
     }

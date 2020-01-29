@@ -41,7 +41,11 @@ public class WarehouseController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Inventory(!canViewAll()?getSessionOrganization():null));
             }
-            model.addAttribute(Constants.LIST, inventoryService.findAll((Inventory) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
+            Page<Inventory> inventories = inventoryService.findAll((Inventory) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
+            model.addAttribute(Constants.LIST, inventories);
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(inventories, redirectAttributes, page);
+            }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.ACTION)) {
             model.addAttribute(Constants.ORGANIZATIONS, organizationRepository.getOrganizationsByActiveTrueAndType_Attr1("branch"));
             List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization());
@@ -114,6 +118,9 @@ public class WarehouseController extends SkeletonController {
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Supplier());
             }
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(supplierRepository.findAll(), redirectAttributes, page);
+            }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.CONSOLIDATE)) {
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Action(getSessionOrganization()));
@@ -125,7 +132,11 @@ public class WarehouseController extends SkeletonController {
                         )
                 );
             }
-            model.addAttribute(Constants.LIST, actionService.findAll((Action) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
+            Page<Action> actions = actionService.findAll((Action) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
+            model.addAttribute(Constants.LIST, actions);
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(actions, redirectAttributes, page);
+            }
         }
         return "layout";
     }

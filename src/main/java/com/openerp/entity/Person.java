@@ -1,6 +1,7 @@
 package com.openerp.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.openerp.util.Util;
 import com.openerp.validation.EmployeeGroup;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -94,7 +95,7 @@ public class Person {
     private List<PersonDocument> personDocuments;
 
     public String getFullName() {
-        return firstName+" "+lastName+" "+fatherName;
+        return firstName+" "+lastName+" "+ Util.checkNull(fatherName);
     }
 
     public Person(Contact contact, String firstName, String lastName, String fatherName, Date birthday, Dictionary gender, Dictionary nationality, Dictionary maritalStatus, String idCardPinCode, String idCardSerialNumber, boolean disability, User createdUser) {
