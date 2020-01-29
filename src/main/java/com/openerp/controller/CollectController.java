@@ -62,14 +62,17 @@ public class CollectController extends SkeletonController {
             model.addAttribute(Constants.LIST, salesPage);
         } if(page.equalsIgnoreCase(Constants.ROUTE.CONTACT_HISTORY)){
             model.addAttribute(Constants.CONTACT_CHANNELS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("contact-channel"));
-
             if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new ContactHistory(new Sales(!data.equals(Optional.empty())?Integer.parseInt(data.get()):null), getSessionOrganization()));
+                model.addAttribute(Constants.FORM, new ContactHistory(new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null), getSessionOrganization()));
             }
             if(!model.containsAttribute(Constants.FILTER)){
-                model.addAttribute(Constants.FILTER, new ContactHistory(new Sales(!data.equals(Optional.empty())?Integer.parseInt(data.get()):null), !canViewAll()?getSessionOrganization():null));
+                model.addAttribute(Constants.FILTER, new ContactHistory(new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null), !canViewAll()?getSessionOrganization():null));
             }
-            model.addAttribute(Constants.LIST, contactHistoryService.findAll((ContactHistory) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
+            Page<ContactHistory> contactHistories = contactHistoryService.findAll((ContactHistory) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
+            model.addAttribute(Constants.LIST, contactHistories);
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(contactHistories, redirectAttributes, page);
+            }
         } else if(page.equalsIgnoreCase(Constants.ROUTE.COLLECTOR)){
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Invoice(getSessionUser().getEmployee(), null, false));

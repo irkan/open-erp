@@ -84,6 +84,20 @@ public class ExportController extends SkeletonController {
             file = ReadWriteExcelFile.advanceXLSXFile((Page<Advance>) object, page);
         } else if(page.equalsIgnoreCase(Constants.ROUTE.CUSTOMER)){
             file = ReadWriteExcelFile.customerXLSXFile((Page<Customer>) object, page);
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.SALES)){
+            file = ReadWriteExcelFile.salesXLSXFile((Page<Sales>) object, page);
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.SERVICE)){
+            file = ReadWriteExcelFile.salesXLSXFile((Page<Sales>) object, page);
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.PAYMENT_LATENCY)){
+            file = ReadWriteExcelFile.salesXLSXFile((Page<Sales>) object, page);
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.TROUBLED_CUSTOMER)){
+            file = ReadWriteExcelFile.salesXLSXFile((Page<Sales>) object, page);
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.DEMONSTRATION)){
+            file = ReadWriteExcelFile.demonstrationXLSXFile((Page<Demonstration>) object, page);
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.INVOICE)){
+            file = ReadWriteExcelFile.invoiceXLSXFile((Page<Invoice>) object, page);
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.CONTACT_HISTORY)){
+            file = ReadWriteExcelFile.contactHistoryXLSXFile((Page<ContactHistory>) object, page);
         }
 
         InputStreamResource resourceIS = new InputStreamResource(new FileInputStream(file));

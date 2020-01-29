@@ -45,13 +45,16 @@ public class SaleController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new Sales(getSessionOrganization()));
             }
             if(!model.containsAttribute(Constants.FILTER)){
-                model.addAttribute(Constants.FILTER, new Sales(!data.equals(Optional.empty())?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null));
+                model.addAttribute(Constants.FILTER, new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null));
             }
             Page<Sales> sales = salesService.findAll((Sales) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
             for(Sales sales1: sales){
                 sales1.setSalesInventories(salesInventoryRepository.getSalesInventoriesByActiveTrueAndSales(sales1));
             }
             model.addAttribute(Constants.LIST, sales);
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(sales, redirectAttributes, page);
+            }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.SCHEDULE)){
             List<Schedule> schedules = new ArrayList<>();
             Sales sale = null;
@@ -66,7 +69,6 @@ public class SaleController extends SkeletonController {
                     sale.getPayment().setSumOfInvoice(sumOfInvoices);
                     sale.getPayment().setUnpaid(plannedPayment-sumOfInvoices);
                 }
-
             }
             model.addAttribute(Constants.LIST, new SalesSchedules(schedules, sale));
         } else if(page.equalsIgnoreCase(Constants.ROUTE.SERVICE)){
@@ -77,9 +79,13 @@ public class SaleController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new Sales(getSessionOrganization(), true));
             }
             if(!model.containsAttribute(Constants.FILTER)){
-                model.addAttribute(Constants.FILTER, new Sales(!data.equals(Optional.empty())?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null, true));
+                model.addAttribute(Constants.FILTER, new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null, true));
             }
-            model.addAttribute(Constants.LIST, salesService.findAll((Sales) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
+            Page<Sales> sales = salesService.findAll((Sales) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
+            model.addAttribute(Constants.LIST, sales);
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(sales, redirectAttributes, page);
+            }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.INVOICE)){
             List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization());
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
@@ -92,7 +98,11 @@ public class SaleController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Invoice(!canViewAll()?getSessionOrganization():null, null, null));
             }
-            model.addAttribute(Constants.LIST, invoiceService.findAll((Invoice) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
+            Page<Invoice> invoices = invoiceService.findAll((Invoice) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
+            model.addAttribute(Constants.LIST, invoices);
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(invoices, redirectAttributes, page);
+            }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.DEMONSTRATION)){
             List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization());
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
@@ -104,7 +114,11 @@ public class SaleController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Demonstration(!canViewAll()?getSessionOrganization():null));
             }
-            model.addAttribute(Constants.LIST, demonstrationService.findAll((Demonstration) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
+            Page<Demonstration> demonstrations = demonstrationService.findAll((Demonstration) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
+            model.addAttribute(Constants.LIST, demonstrations);
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(demonstrations, redirectAttributes, page);
+            }
         } else if(page.equalsIgnoreCase(Constants.ROUTE.CALCULATOR)){
             model.addAttribute(Constants.SALE_PRICES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("sale-price"));
             model.addAttribute(Constants.PAYMENT_SCHEDULES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-schedule"));

@@ -1084,6 +1084,12 @@ public class DBConfiguration {
             moduleOperations.add(exportModuleOperation32);
             ModuleOperation exportModuleOperation33 = new ModuleOperation(financing, export, null);
             moduleOperations.add(exportModuleOperation33);
+            ModuleOperation exportModuleOperation34 = new ModuleOperation(contactHistory, export, null);
+            moduleOperations.add(exportModuleOperation34);
+            ModuleOperation exportModuleOperation35 = new ModuleOperation(paymentLatency, export, null);
+            moduleOperations.add(exportModuleOperation35);
+            ModuleOperation exportModuleOperation36 = new ModuleOperation(troubledCustomer, export, null);
+            moduleOperations.add(exportModuleOperation36);
 
             ModuleOperation approveModuleOperation3 = new ModuleOperation(transaction, approve, null);
             moduleOperations.add(approveModuleOperation3);
@@ -1387,6 +1393,9 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation31));
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation32));
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation33));
+            userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation34));
+            userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation35));
+            userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation36));
 
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation6));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation9));
