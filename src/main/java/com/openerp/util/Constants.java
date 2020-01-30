@@ -127,5 +127,6 @@ public class Constants {
         public static final String COLLECTOR = "collector";
         public static final String WEB_SERVICE_AUTHENTICATOR = "web-service-authenticator";
         public static final String EXPORT = "export";
+        public static final String PERIOD = "period";
     }
 }

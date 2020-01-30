@@ -2,7 +2,8 @@
   Created by IntelliJ IDEA.
   User: irkan.ahmadov
   Date: 01.09.2019
-  Time: 1:22
+  Time: 1:22Təhkim etmə
+
   To change this template use File | Settings | File Templates.
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
@@ -473,8 +474,6 @@
             if(obj["employee"]!=null){
                 $("#employee option[value="+obj["employee"]["id"]+"]").attr("selected", "selected");
             }
-
-            $(form).find("input[name='amount']").val(obj["amount"]);
             $(form).find("#id").val(obj["id"]);
             $(form).find("#inventory_name").text(obj["inventory"]["name"]);
             $(form).find("#barcode_label").text(obj["inventory"]["barcode"]);

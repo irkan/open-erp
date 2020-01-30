@@ -260,7 +260,7 @@ public class SaleController extends SkeletonController {
             List<EmployeePayrollDetail> employeeDetails = demonstration.getEmployee().getEmployeePayrollDetails();
             String value = Util.findEmployeeDetail(employeeDetails, "{demonstration}");
             double price = demonstration.getAmount()*Double.parseDouble(value);
-            Advance advance = new Advance(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("bonus-demonstration-advance", "advance"), demonstration.getEmployee(), demonstration.getOrganization(), "", "", demonstration.getDemonstrateDate(), price, true);
+            Advance advance = new Advance(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("bonus-demonstration-advance", "advance"), demonstration.getEmployee(), demonstration.getOrganization(), demonstration.getId() + " nömrəli nümayişdən əldə edilən bonus", "", demonstration.getDemonstrateDate(), price, true);
             advanceRepository.save(advance);
         }
         return mapPost(demonstration, binding, redirectAttributes);

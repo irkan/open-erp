@@ -125,7 +125,7 @@ public class DateUtility {
         return returned;
     }
 
-    public static Date minusYear(int year){
+    public static Date addYear(int year){
         Calendar cal = Calendar.getInstance();
         cal = Calendar.getInstance();
         cal.add(Calendar.YEAR, year);

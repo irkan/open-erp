@@ -136,9 +136,9 @@
                                 <thead>
                                 <tr>
                                     <th>ID</th>
+                                    <th>Əməkdaş</th>
                                     <th>Struktur</th>
                                     <th>Tarix</th>
-                                    <th>Əməkdaş</th>
                                     <th>Say</th>
                                     <th>Açıqlama</th>
                                     <th>Yaradılma tarixi</th>
@@ -149,9 +149,9 @@
                                 <c:forEach var="t" items="${list.content}" varStatus="loop">
                                      <tr data="<c:out value="${utl:toJson(t)}" />">
                                          <td><c:out value="${t.id}" /></td>
+                                         <th><c:out value="${t.employee.person.fullName}" /></th>
                                          <th><c:out value="${t.organization.name}" /></th>
                                          <th><fmt:formatDate value = "${t.demonstrateDate}" pattern = "dd.MM.yyyy" /></th>
-                                         <th><c:out value="${t.employee.person.fullName}" /></th>
                                          <td><c:out value="${t.amount}" /></td>
                                          <td><c:out value="${t.description}" /></td>
                                          <td><fmt:formatDate value = "${t.createdDate}" pattern = "dd.MM.yyyy HH:mm" /></td>

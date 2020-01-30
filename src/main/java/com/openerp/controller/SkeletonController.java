@@ -189,6 +189,9 @@ public class SkeletonController {
     WebServiceAuthenticatorRepository webServiceAuthenticatorRepository;
 
     @Autowired
+    PeriodRepository periodRepository;
+
+    @Autowired
     CustomerService customerService;
 
     @Autowired

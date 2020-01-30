@@ -470,7 +470,8 @@ $( "#form" ).validate({
         },
         price: {
             required: true,
-            number: true
+            number: true,
+            min: 0.1
         },
         account: {
             required: true
@@ -485,7 +486,8 @@ $( "#transaction-approve-form" ).validate({
     rules: {
         price: {
             required: true,
-            number: true
+            number: true,
+            min: 0.1
         },
         account: {
             required: true

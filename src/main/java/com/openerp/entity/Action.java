@@ -36,7 +36,7 @@ public class Action {
 
     //@Pattern(regexp="\\d+",message="Say daxil edin")
     @Column(name = "amount")
-    private int amount=1;
+    private int amount;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "warehouse_inventory_id")

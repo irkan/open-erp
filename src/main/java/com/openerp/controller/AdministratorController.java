@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.DigestUtils;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -123,6 +124,12 @@ public class AdministratorController extends SkeletonController {
             model.addAttribute(Constants.LIST, webServiceAuthenticatorRepository.findAll());
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new WebServiceAuthenticator(true));
+            }
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.PERIOD)){
+            model.addAttribute(Constants.LIST, periodRepository.findAll());
+            model.addAttribute(Constants.USERS, userRepository.getUsersByActiveTrue());
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new Period());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.NOTIFICATION)){
             model.addAttribute(Constants.NOTIFICATIONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("notification"));
@@ -395,5 +402,20 @@ public class AdministratorController extends SkeletonController {
             log("admin_web_service_authenticator", "create/edit", webServiceAuthenticator.getId(), webServiceAuthenticator.toString());
         }
         return mapPost(webServiceAuthenticator, binding, redirectAttributes);
+    }
+
+    @PostMapping(value = "/period")
+    public String postPeriod(@ModelAttribute(Constants.FORM) @Validated Period period, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        /*List<Period> periods = periodRepository.getPeriodsByUser(period.getUser());
+        if(periods!=null && periods.size()>0){
+            FieldError fieldError = new FieldError("user", "user", "İstifadəçi mövcuddur!");
+            binding.addError(fieldError);
+        }*/
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()){
+            periodRepository.save(period);
+            log("admin_period", "create/edit", period.getId(), period.toString());
+        }
+        return mapPost(period, binding, redirectAttributes);
     }
 }

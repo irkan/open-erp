@@ -33,7 +33,7 @@ public class CollectController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new Invoice(salesObject, getSessionOrganization()));
             }
             if(!model.containsAttribute(Constants.FILTER)){
-                salesObject.setSaleDateFrom(DateUtility.minusYear(Integer.parseInt(configurationRepository.getConfigurationByKey("by_year").getAttribute())));
+                salesObject.setSaleDateFrom(DateUtility.addYear(Integer.parseInt(configurationRepository.getConfigurationByKey("by_year").getAttribute())));
                 salesObject.setService(null);
                 model.addAttribute(Constants.FILTER, salesObject);
             }

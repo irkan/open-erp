@@ -570,10 +570,12 @@
                 required: true
             },
             "person.firstName": {
-                required: true
+                required: true,
+                minlength: 1
             },
             "person.lastName": {
-                required: true
+                required: true,
+                minlength: 1
             },
             "person.birthday": {
                 required: true

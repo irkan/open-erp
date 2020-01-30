@@ -209,7 +209,7 @@ public class DeleteController extends SkeletonController {
             double price = demonstration.getAmount()*Double.parseDouble(value);
             Advance advance = new Advance(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("bonus-demonstration-advance", "advance"), demonstration.getEmployee(), demonstration.getOrganization(), "Nümayişin silinməsinə görə kredit: Nümayiş №" + demonstration.getId(), "", demonstration.getDemonstrateDate(), price, false);
             advanceRepository.save(advance);
-            log("payroll_advance", "create/edit", advance.getId(), advance.toString(), "Nümayişin silinməsinə görə kredit avans verilmişdir");
+            log("payroll_advance", "create/edit", advance.getId(), advance.toString(), demonstration.getId() + "nğmrəli nümayişin silinməsinə görə kredit avans verilmişdir");
         } else if(path.equalsIgnoreCase(Constants.ROUTE.INVOICE)){
             Invoice invoice = invoiceRepository.getInvoiceById(Integer.parseInt(id));
             if(!invoice.getApprove()){
@@ -217,6 +217,9 @@ public class DeleteController extends SkeletonController {
                 invoiceRepository.save(invoice);
             }
             log("sale_invoice", "delete", invoice.getId(), invoice.toString());
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.PERIOD)){
+            periodRepository.deleteById(Integer.parseInt(id));
+            log("admin_period", "delete", Integer.parseInt(id), "");
         }
         return "redirect:/"+parent+"/"+path;
     }

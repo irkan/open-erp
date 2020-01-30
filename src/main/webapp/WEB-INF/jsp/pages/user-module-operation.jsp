@@ -28,7 +28,7 @@
                             </div>
                             <div class="col-md-3">
                                 <form:select  path="user" cssClass="custom-select form-control" onchange="getUserModuleOperation($(this).val())">
-                                    <form:option value="0" label="İstifadəçini seçin"/>
+                                    <form:option value="" label="İstifadəçini seçin"/>
                                     <form:options items="${users}" itemLabel="employee.person.fullName" itemValue="id"  />
                                 </form:select>
                             </div>
@@ -131,6 +131,18 @@
 </div>
 
 <script>
+    $( "#form" ).validate({
+        rules: {
+            user: {
+                required: true
+            }
+        },
+        invalidHandler: function(event, validator) {
+            KTUtil.scrollTop();
+            swal.close();
+        },
+    });
+
     function checkedRow(element){
         var row = $(element).closest("tr");
         if($(element).prop("checked") == true){

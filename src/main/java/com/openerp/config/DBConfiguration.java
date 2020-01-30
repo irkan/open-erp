@@ -629,6 +629,8 @@ public class DBConfiguration {
             modules.add(currencyRate);
             Module webServiceAuthenticator = new Module("Web servis identifikator", "Web servis identifikator", "web-service-authenticator", "flaticon2-user-1", configuration);
             modules.add(webServiceAuthenticator);
+            Module period = new Module("Ay bağlanışı", "Ay bağlanışı", "period", "flaticon2-calendar-8", configuration);
+            modules.add(period);
             Module subModule5 = new Module("İstifadəçi", "İstifadəçi", "user", "flaticon-users", module);
             modules.add(subModule5);
             Module subModule9 = new Module("İstifadəçi icazəsi", "İstifadəçi icazəsi", "user-module-operation", "flaticon-clipboard", subModule5);
@@ -850,6 +852,8 @@ public class DBConfiguration {
             moduleOperations.add(createModuleOperation35);
             ModuleOperation createModuleOperation36 = new ModuleOperation(webServiceAuthenticator, create, null);
             moduleOperations.add(createModuleOperation36);
+            ModuleOperation createModuleOperation37 = new ModuleOperation(period, create, null);
+            moduleOperations.add(createModuleOperation37);
 
             ModuleOperation editModuleOperation1 = new ModuleOperation(subModule1, edit, null);
             moduleOperations.add(editModuleOperation1);
@@ -984,6 +988,8 @@ public class DBConfiguration {
             moduleOperations.add(deleteModuleOperation36);
             ModuleOperation deleteModuleOperation37 = new ModuleOperation(webServiceAuthenticator, delete, null);
             moduleOperations.add(deleteModuleOperation37);
+            ModuleOperation deleteModuleOperation38 = new ModuleOperation(period, delete, null);
+            moduleOperations.add(deleteModuleOperation38);
 
             ModuleOperation viewModuleOperation6 = new ModuleOperation(subModule6, view, null);
             moduleOperations.add(viewModuleOperation6);
@@ -1293,6 +1299,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, createModuleOperation34));
             userModuleOperations.add(new UserModuleOperation(user, createModuleOperation35));
             userModuleOperations.add(new UserModuleOperation(user, createModuleOperation36));
+            userModuleOperations.add(new UserModuleOperation(user, createModuleOperation37));
 
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation2));
@@ -1361,6 +1368,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation35));
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation36));
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation37));
+            userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation38));
 
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation2));
