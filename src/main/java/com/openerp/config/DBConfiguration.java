@@ -1107,6 +1107,8 @@ public class DBConfiguration {
             moduleOperations.add(approveModuleOperation6);
             ModuleOperation approveModuleOperation7 = new ModuleOperation(invoice, approve, null);
             moduleOperations.add(approveModuleOperation7);
+            ModuleOperation approveModuleOperation8 = new ModuleOperation(salary, approve, null);
+            moduleOperations.add(approveModuleOperation8);
 
             ModuleOperation uploadModuleOperation1 = new ModuleOperation(nonWorkingDay, upload, null);
             moduleOperations.add(uploadModuleOperation1);
@@ -1136,6 +1138,8 @@ public class DBConfiguration {
 
             ModuleOperation transferModuleOperation1 = new ModuleOperation(action, transfer, null);
             moduleOperations.add(transferModuleOperation1);
+            ModuleOperation transferModuleOperation2 = new ModuleOperation(advance, transfer, null);
+            moduleOperations.add(transferModuleOperation2);
 
             ModuleOperation consolidateModuleOperation1 = new ModuleOperation(action, consolidateOperation, null);
             moduleOperations.add(consolidateModuleOperation1);
@@ -1448,6 +1452,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, approveModuleOperation5));
             userModuleOperations.add(new UserModuleOperation(user, approveModuleOperation6));
             userModuleOperations.add(new UserModuleOperation(user, approveModuleOperation7));
+            userModuleOperations.add(new UserModuleOperation(user, approveModuleOperation8));
 
             userModuleOperations.add(new UserModuleOperation(user, uploadModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, uploadModuleOperation2));
@@ -1466,6 +1471,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, calculateModuleOperation2));
 
             userModuleOperations.add(new UserModuleOperation(user, transferModuleOperation1));
+            userModuleOperations.add(new UserModuleOperation(user, transferModuleOperation2));
 
             userModuleOperations.add(new UserModuleOperation(user, consolidateModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, consolidateModuleOperation2));
@@ -1544,7 +1550,8 @@ public class DBConfiguration {
             payrollConfigurations.add(new PayrollConfiguration(formulaType1,"İcbari tibbi sığorta haqqı", "{compulsory_health_insurance}=10", "İcbari tibbi sığorta haqqı = 10"));
             payrollConfigurations.add(new PayrollConfiguration(formulaType1,"Yekun ödəniləcək məbləğ (Rəsmi hissə)", "{total_amount_payable_official}={calculated_gross_salary}-{tax_income}-{dsmf_deduction}-{unemployment_insurance}-{compulsory_health_insurance}-{membership_fee_for_trade_union}", "Yekun ödəniləcək məbləğ = Hesablanan əmək haqqı - Gəlir vergisi - DSMF ayırmaları - İşsizlikdən sığorta haqqı - İcbari tibbi sığprta haqqı - Həmkarlar təşkilatına üzvlük haqqı"));
             payrollConfigurations.add(new PayrollConfiguration(formulaType1,"İş stajına görə əmək haqqına əlavə", "{work_experience_salary}={work_experience}>10?{salary}*15%:{work_experience}>5?{salary}*10%:{work_experience}>3?{salary}*5%:0", "İş stajına görə əmək haqqına əlavə = İş stajı 10 ildən artıq olduqda əlavə 15%, 5 ildən artıq olduqda əlavə 10%, 3 ildən artıq olduqda əlavə 5%"));
-            payrollConfigurations.add(new PayrollConfiguration(formulaType1,"Ümumi əmək haqqı", "{total_salary}={salary}+{work_experience_salary}", "Ümumi əmək haqqı = İş stajına görə əmək haqqına əlavə + Əmək haqqı"));
+            payrollConfigurations.add(new PayrollConfiguration(formulaType1,"Hesablanmış avans", "{calculated_advance}={advance}", "Hesablanmış avans = Avans"));
+            payrollConfigurations.add(new PayrollConfiguration(formulaType1,"Ümumi əmək haqqı", "{total_salary}={salary}+{work_experience_salary}+{calculated_advance}", "Ümumi əmək haqqı = İş stajına görə əmək haqqına əlavə + Əmək haqqı + Hesablanmış avans"));
             payrollConfigurations.add(new PayrollConfiguration(formulaType1,"Yekun ödəniləcək məbləğ (Qeyri rəsmi hissə)", "{total_amount_payable_non_official}={total_salary}-{total_amount_payable_official}", "Yekun ödəniləcək məbləğ (Qeyri rəsmi hissə) = Ümumi əmək haqqı - Yekun ödəniləcək məbləğ (Rəsmi hissə)"));
             payrollConfigurations.add(new PayrollConfiguration(formulaType2,"Əsas məzuniyyət günlərinin sayı", "{main_vacation_days}={disability}?43:{specialist_or_manager}?30:21", "AR ƏM əsasən əsas məzuniyyət günlərinin sayı əlilliyi olan şəxslər üçün 43, mütəxəssis və ya rəhbər şəxslər üçün 30, digər hallar üçün 21 gün təyin edilmişdir"));
             payrollConfigurations.add(new PayrollConfiguration(formulaType2,"Əlavə məzuniyyət günlərinin sayı", "{additional_vacation_days}={work_experience}>15?6:{work_experience}>10?4:{work_experience}>5?2:0", "İş stajı 15 ildən çox olduqda 9 gün, iş stajı 10 ildən çox olduqda 6 gün, iş stajı 5 ildən çox olduqda 3 gün əlavə məzuniyyət tətbiq edilir"));

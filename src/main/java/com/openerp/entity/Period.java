@@ -1,8 +1,6 @@
 package com.openerp.entity;
 
-import com.openerp.config.Unique;
 import com.openerp.util.DateUtility;
-import com.openerp.validation.PeriodValidator;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,7 +22,6 @@ public class Period {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
-    @Unique(service = PeriodValidator.class, fieldName = "user", message = "İstifadəçi mövcuddur!")
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "admin_user_id", unique = true, nullable = false)
     private User user;

@@ -11,4 +11,5 @@ import java.util.List;
 
 public interface PeriodRepository extends JpaRepository<Period, Integer>{
     List<Period> getPeriodsByUser(User user);
+    List<Period> getPeriodsByUser_Username(String username);
 }

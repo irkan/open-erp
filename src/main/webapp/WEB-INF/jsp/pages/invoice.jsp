@@ -211,7 +211,7 @@
                                 <c:forEach var="t" items="${list.content}" varStatus="loop">
                                     <tr data="<c:out value="${utl:toJson(t)}" />" class="<c:out value="${(t.price lt 0 and t.approve)?'strikeout':''}"/> ">
                                         <td><c:out value="${t.id}" /></td>
-                                        <td>
+                                        <td style="<c:out value="${t.sales.payment.cash?'background-color: #e6ffe7 !important':'background-color: #ffeaf1 !important'}"/>">
                                             <c:choose>
                                                 <c:when test="${t.sales.service}">
                                                     <a href="javascript:window.open('/sale/service/<c:out value="${t.sales.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder">Servis: <c:out value="${t.sales.id}" /></a>
@@ -234,7 +234,7 @@
                                         <td>
                                             <a href="javascript:window.open('/crm/customer/<c:out value="${t.sales.customer.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.sales.customer.id}" />: <c:out value="${t.sales.customer.person.fullName}"/></a>
                                         </td>
-                                        <td>
+                                        <td class="<c:out value="${t.creditable?'kt-bg-light-info':''}"/>">
                                             <span class="kt-font-bold"><c:out value="${t.price}" /></span>
                                             <span class="kt-font-bold font-italic font-size-10px">AZN</span>
                                         </td>

@@ -477,7 +477,7 @@
             "person.lastName": {
                 required: true
             },
-            "person.idCardPinCode": {
+            "person.contact.mobilePhone": {
                 required: true
             },
             "person.contact.city": {

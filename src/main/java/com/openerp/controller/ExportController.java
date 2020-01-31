@@ -84,13 +84,10 @@ public class ExportController extends SkeletonController {
             file = ReadWriteExcelFile.advanceXLSXFile((Page<Advance>) object, page);
         } else if(page.equalsIgnoreCase(Constants.ROUTE.CUSTOMER)){
             file = ReadWriteExcelFile.customerXLSXFile((Page<Customer>) object, page);
-        } else if(page.equalsIgnoreCase(Constants.ROUTE.SALES)){
-            file = ReadWriteExcelFile.salesXLSXFile((Page<Sales>) object, page);
-        } else if(page.equalsIgnoreCase(Constants.ROUTE.SERVICE)){
-            file = ReadWriteExcelFile.salesXLSXFile((Page<Sales>) object, page);
-        } else if(page.equalsIgnoreCase(Constants.ROUTE.PAYMENT_LATENCY)){
-            file = ReadWriteExcelFile.salesXLSXFile((Page<Sales>) object, page);
-        } else if(page.equalsIgnoreCase(Constants.ROUTE.TROUBLED_CUSTOMER)){
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.SALES)
+                || page.equalsIgnoreCase(Constants.ROUTE.TROUBLED_CUSTOMER)
+                || page.equalsIgnoreCase(Constants.ROUTE.PAYMENT_LATENCY)
+                || page.equalsIgnoreCase(Constants.ROUTE.SERVICE)){
             file = ReadWriteExcelFile.salesXLSXFile((Page<Sales>) object, page);
         } else if(page.equalsIgnoreCase(Constants.ROUTE.DEMONSTRATION)){
             file = ReadWriteExcelFile.demonstrationXLSXFile((Page<Demonstration>) object, page);

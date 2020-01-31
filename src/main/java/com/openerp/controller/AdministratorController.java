@@ -406,11 +406,11 @@ public class AdministratorController extends SkeletonController {
 
     @PostMapping(value = "/period")
     public String postPeriod(@ModelAttribute(Constants.FORM) @Validated Period period, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
-        /*List<Period> periods = periodRepository.getPeriodsByUser(period.getUser());
+        List<Period> periods = periodRepository.getPeriodsByUser(period.getUser());
         if(periods!=null && periods.size()>0){
             FieldError fieldError = new FieldError("user", "user", "İstifadəçi mövcuddur!");
             binding.addError(fieldError);
-        }*/
+        }
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             periodRepository.save(period);

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.PostConstruct;
@@ -497,5 +498,29 @@ public class SkeletonController {
             schedules.add(schedule1);
         }
         return schedules;
+    }
+
+    BindingResult checkDate(BindingResult binding, Date date){
+        Date today = new Date();
+        if(!(today.getMonth()!=date.getMonth())){
+            List<Period> periods = periodRepository.getPeriodsByUser_Username(getSessionUser().getUsername());
+            if(periods.size()>0){
+                Period period = periods.get(0);
+                if(period.getStartDate()!=null && period.getStartDate().getTime()<=date.getTime()){
+                    FieldError fieldError = new FieldError("startDate", "startDate", DateUtility.getFormattedDate(date) + " başlama tarixindən ("+DateUtility.getFormattedDate(period.getStartDate())+") əvvəldir!");
+                    binding.addError(fieldError);
+                }
+
+                if(period.getEndDate().getTime()>=date.getTime()){
+                    FieldError fieldError = new FieldError("endDate", "endDate", DateUtility.getFormattedDate(date) + " bitmə tarixindən ("+DateUtility.getFormattedDate(period.getEndDate())+") sonradır!");
+                    binding.addError(fieldError);
+                }
+            }
+            if(!binding.hasErrors()){
+                FieldError fieldError = new FieldError("endDate", "endDate", "Ay bağlanmışdır!");
+                binding.addError(fieldError);
+            }
+        }
+        return binding;
     }
 }

@@ -28,7 +28,7 @@ public class CollectController extends SkeletonController {
         if(page.equalsIgnoreCase(Constants.ROUTE.PAYMENT_LATENCY) ||
                 page.equalsIgnoreCase(Constants.ROUTE.TROUBLED_CUSTOMER)){
             model.addAttribute(Constants.CONFIGURATION_TROUBLED_CUSTOMER, configurationRepository.getConfigurationByKey("troubled_customer").getAttribute());
-            Sales salesObject = new Sales(!data.equals(Optional.empty())?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null);
+            Sales salesObject = new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null);
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Invoice(salesObject, getSessionOrganization()));
             }
@@ -54,12 +54,16 @@ public class CollectController extends SkeletonController {
                     sale.getPayment().setSumOfInvoice(sumOfInvoices);
                     sale.getPayment().setUnpaid(plannedPayment-sumOfInvoices);
                     if(latency>0){
+                        sale.setSalesInventories(salesInventoryRepository.getSalesInventoriesByActiveTrueAndSales(sale));
                         salesList.add(sale);
                     }
                 }
             }
             Page<Sales> salesPage = new PageImpl<Sales>(salesList);
             model.addAttribute(Constants.LIST, salesPage);
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(salesPage, redirectAttributes, page);
+            }
         } if(page.equalsIgnoreCase(Constants.ROUTE.CONTACT_HISTORY)){
             model.addAttribute(Constants.CONTACT_CHANNELS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("contact-channel"));
             if(!model.containsAttribute(Constants.FORM)){

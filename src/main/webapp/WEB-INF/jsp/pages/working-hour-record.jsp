@@ -54,7 +54,7 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <div class="col-sm-5 text-right">
+                                    <div class="col-sm-6 text-right">
                                         <label>&nbsp;</label>
                                         <div class="form-group">
                                             <c:set var="save" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'save')}"/>

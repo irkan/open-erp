@@ -251,6 +251,14 @@ public class PayrollController extends SkeletonController {
             adv.setApproveDate(new Date());
             advanceRepository.save(adv);
             log("payroll_advance", "create/edit", adv.getId(), adv.toString());
+        }
+        return mapPost(advance, binding, redirectAttributes, "/payroll/advance");
+    }
+
+    @PostMapping(value = "/advance/transfer")
+    public String postAdvanceTransfer(@ModelAttribute(Constants.FORM) @Validated Advance advance, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        if(!binding.hasErrors()){
+            Advance adv = advanceRepository.getAdvanceById(advance.getId());
             Transaction transaction = new Transaction();
             transaction.setApprove(false);
             transaction.setAmount(null);
@@ -267,6 +275,10 @@ public class PayrollController extends SkeletonController {
             );
             transactionRepository.save(transaction);
             log("accounting_transaction", "create/edit", transaction.getId(), transaction.toString());
+            adv.setTransaction(true);
+            adv.setTransactionDate(transaction.getTransactionDate());
+            advanceRepository.save(adv);
+            log("payroll_advance", "create/edit", adv.getId(), adv.toString(), "Transaction-a yollandı!");
         }
         return mapPost(advance, binding, redirectAttributes, "/payroll/advance");
     }
@@ -550,9 +562,42 @@ public class PayrollController extends SkeletonController {
                                             Util.findPayrollConfiguration(payrollConfigurations,"{work_experience_salary}")
                                     )
                             );
+
+                            double sum_advance = 0;
+                            for(Advance advance: advanceRepository.getAdvancesByActiveTrueAndApproveTrueAndTransactionFalseAndAdvanceDateBetweenAndEmployee(
+                                    DateUtility.generate(1,
+                                            se.getWorkingHourRecordEmployee().getWorkingHourRecord().getMonth(),
+                                            se.getWorkingHourRecordEmployee().getWorkingHourRecord().getMonth()),
+                                    DateUtility.generate(31,
+                                            se.getWorkingHourRecordEmployee().getWorkingHourRecord().getMonth(),
+                                            se.getWorkingHourRecordEmployee().getWorkingHourRecord().getMonth()),
+                                    se.getEmployee())){
+                                sum_advance += advance.getDebt()?advance.getPayed():-1*advance.getPayed();
+                            }
+
+
+                            String calculated_advance = Util.findPayrollConfiguration(payrollConfigurations,"{calculated_advance}")
+                                    .replaceAll(Pattern.quote("{advance}"), Util.format(sum_advance));
+                            salaryEmployeeDetails.add(
+                                    new SalaryEmployeeDetail(
+                                            se,
+                                            Util.findPayrollConfigurationDescription(payrollConfigurations, "{calculated_advance}"),
+                                            "{calculated_advance}",
+                                            Util.format(Double.parseDouble(String.valueOf(engine.eval(calculated_advance)))),
+                                            calculated_advance,
+                                            Util.findPayrollConfiguration(payrollConfigurations,"{calculated_advance}")
+                                    )
+                            );
+
+
+
+
+
+
                             String total_salary = Util.findPayrollConfiguration(payrollConfigurations,"{total_salary}")
                                     .replaceAll(Pattern.quote("{work_experience_salary}"), String.valueOf(engine.eval(work_experience_salary)))
-                                    .replaceAll(Pattern.quote("{salary}"), salary1);
+                                    .replaceAll(Pattern.quote("{salary}"), salary1)
+                                    .replaceAll(Pattern.quote("{calculated_advance}"), calculated_advance);
                             salaryEmployeeDetails.add(
                                     new SalaryEmployeeDetail(
                                             se,
@@ -576,10 +621,20 @@ public class PayrollController extends SkeletonController {
                                             Util.findPayrollConfiguration(payrollConfigurations,"{total_amount_payable_non_official}")
                                     )
                             );
+
+
+
+
+
+
+
+
+
+
+
                             se.setSalaryEmployeeDetails(salaryEmployeeDetails);
                             salaryEmployeeDetailRepository.saveAll(salaryEmployeeDetails);
-                           // Id de sef olur
-                            // log("payroll_salary", "create/edit", salaryEmployeeDetails.getId(), salaryEmployeeDetails.toString());
+                            log("payroll_salary", "calculate", 0, salaryEmployeeDetails.toString());
                         }
                     }
                 }

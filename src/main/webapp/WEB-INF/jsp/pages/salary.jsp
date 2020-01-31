@@ -51,9 +51,20 @@
                                             </a>
                                         </div>
                                     </div>
-                                    <div class="col-sm-5 text-right">
+                                    <div class="col-sm-6 text-right">
                                         <label>&nbsp;</label>
                                         <div class="form-group">
+                                            <c:set var="approve" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
+                                            <c:choose>
+                                                <c:when test="${approve.status}">
+                                                    <c:if test="${not empty form.salaryEmployees and !form.approve}">
+                                                        <a href="#" onclick="approveData($('#form'), '<c:out value="${form.workingHourRecord.month}"/>.<c:out value="${form.workingHourRecord.year}"/> tarixli iş vaxtının uçotu')" class="btn btn-success btn-elevate btn-icon-sm" title="<c:out value="${approve.object.name}"/>">
+                                                            <i class="la <c:out value="${approve.object.icon}"/>"></i>
+                                                            <c:out value="${approve.object.name}"/>
+                                                        </a>
+                                                    </c:if>
+                                                </c:when>
+                                            </c:choose>
                                             <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
                                             <c:choose>
                                                 <c:when test="${delete.status}">
@@ -84,6 +95,7 @@
                                     <th>Hesablanmış əmək haqqı (Rəsmi hissə)</th>
                                     <th>Ümumi əmək haqqı</th>
                                     <th>Hesablanmış əmək haqqı (Qeyri rəsmi hissə)</th>
+                                    <th>Hesablanmış avans</th>
                                     <th>Yekun ödəniləcək məbləğ (Rəsmi hissə)</th>
                                     <th>Yekun ödəniləcək məbləğ (Qeyri rəsmi hissə)</th>
                                     <th>Əməliyyat</th>
@@ -122,6 +134,13 @@
                                                 </c:if>
                                             </c:forEach>
                                         </td>
+                                        <th>
+                                            <c:forEach var="p" items="${t.salaryEmployeeDetails}" varStatus="loop">
+                                                <c:if test="${p.key eq '{calculated_advance}'}">
+                                                    <c:out value="${p.value}" />
+                                                </c:if>
+                                            </c:forEach>
+                                        </th>
                                         <th>
                                             <c:forEach var="p" items="${t.salaryEmployeeDetails}" varStatus="loop">
                                                 <c:if test="${p.key eq '{total_amount_payable_official}'}">
