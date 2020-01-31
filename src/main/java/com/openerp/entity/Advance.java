@@ -75,7 +75,7 @@ public class Advance {
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
     @Column(name = "transaction_date")
-    private Date transactionDate = new Date();
+    private Date transactionDate;
 
     @Column(name = "is_debt", nullable = false, columnDefinition="boolean default true")
     private Boolean debt = true;

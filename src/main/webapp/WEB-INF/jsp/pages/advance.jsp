@@ -149,6 +149,7 @@
 
 <c:choose>
     <c:when test="${not empty list}">
+        <c:set var="credit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'credit')}"/>
         <c:set var="transfer" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'transfer')}"/>
         <c:set var="approve" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
         <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
@@ -164,6 +165,7 @@
         <th>Açıqlama</th>
         <th>Formul</th>
         <th>Təsdiq edilib</th>
+        <th>Tranzaksiya</th>
         <th>Status</th>
         <th>Əməliyyat</th>
     </tr>
@@ -189,6 +191,11 @@
                     <fmt:formatDate value = "${t.approveDate}" pattern = "dd.MM.yyyy HH:mm:ss" />
                 </c:if>
             </td>
+            <td>
+                <c:if test="${t.transaction}">
+                    <fmt:formatDate value = "${t.transactionDate}" pattern = "dd.MM.yyyy HH:mm:ss" />
+                </c:if>
+            </td>
             <th class="text-center">
                 <c:choose>
                     <c:when test="${t.debt}">
@@ -208,6 +215,11 @@
                 <c:if test="${transfer.status and t.approve and !t.transaction}">
                     <a href="javascript:transfer($('#advance-transfer-form'), $('#advance-transfer-modal'), '<c:out value="${t.id}" />', '<c:out value="${t.payed}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
                         <i class="<c:out value="${transfer.object.icon}"/>"></i>
+                    </a>
+                </c:if>
+                <c:if test="${credit.status and t.transaction}">
+                    <a href="javascript:transfer($('#advance-credit-form'), $('#advance-credit-modal'), '<c:out value="${t.id}" />', '<c:out value="${t.payed}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${credit.object.name}"/>">
+                        <i class="<c:out value="${credit.object.icon}"/>"></i>
                     </a>
                 </c:if>
                 <c:if test="${edit.status and !t.approve}">
@@ -347,17 +359,13 @@
                         <form:textarea path="description" cssClass="form-control"/>
                         <form:errors path="description" cssClass="alert-danger control-label"/>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <form:label path="payed">Məbləğ</form:label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
-                                    <form:input path="payed" cssClass="form-control" placeholder="Məbləği daxil edin"/>
-                                </div>
-                                <form:errors path="payed" cssClass="alert-danger control-label"/>
-                            </div>
+                    <div class="form-group">
+                        <form:label path="payed">Məbləğ</form:label>
+                        <div class="input-group">
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
+                            <form:input path="payed" cssClass="form-control" placeholder="Məbləği daxil edin"/>
                         </div>
+                        <form:errors path="payed" cssClass="alert-danger control-label"/>
                     </div>
                 </form:form>
             </div>
@@ -381,6 +389,41 @@
             <div class="modal-body">
                 <form:form modelAttribute="form" id="advance-transfer-form" method="post" action="/payroll/advance/transfer" cssClass="form-group">
                     <form:hidden path="id"/>
+                    <div class="form-group">
+                        <form:label path="description">Açıqlama</form:label>
+                        <form:textarea path="description" cssClass="form-control"/>
+                        <form:errors path="description" cssClass="alert-danger control-label"/>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="payed">Məbləğ</form:label>
+                        <div class="input-group">
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
+                            <form:input path="payed" cssClass="form-control" placeholder="Məbləği daxil edin" readonly="true"/>
+                        </div>
+                        <form:errors path="payed" cssClass="alert-danger control-label"/>
+                    </div>
+                </form:form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="submit($('#advance-transfer-form'));">Tranzaksiya edilsin!</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="advance-credit-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form:form modelAttribute="form" id="advance-credit-form" method="post" action="/payroll/advance/credit" cssClass="form-group">
+                    <form:hidden path="id"/>
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
@@ -396,7 +439,7 @@
                 </form:form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="submit($('#advance-transfer-form'));">Bəli, təsdiq edirəm!</button>
+                <button type="button" class="btn btn-primary" onclick="submit($('#advance-credit-form'));">Təsdiq edilsin!</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
             </div>
         </div>
@@ -416,6 +459,14 @@
     function transfer(form, modal, id, payed){
         $(form).find("#id").val(id);
         $(form).find("#payed").val(payed);
+        $(modal).find(".modal-title").html('Tranzaksiya et!');
+        $(modal).modal('toggle');
+    }
+
+    function credit(form, modal, id, payed){
+        $(form).find("#id").val(id);
+        $(form).find("#payed").val(payed);
+        $(form).find("#description").val(description);
         $(modal).find(".modal-title").html('Tranzaksiya et!');
         $(modal).modal('toggle');
     }
@@ -479,7 +530,20 @@
 
     $( "#advance-transfer-form" ).validate({
         rules: {
-            payed: {
+            id: {
+                required: true,
+                digits: true
+            }
+        },
+        invalidHandler: function(event, validator) {
+            KTUtil.scrollTop();
+            swal.close();
+        },
+    });
+
+    $( "#advance-credit-form" ).validate({
+        rules: {
+            id: {
                 required: true,
                 digits: true
             }
