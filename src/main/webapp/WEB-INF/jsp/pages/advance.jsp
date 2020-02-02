@@ -11,6 +11,25 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="utl" uri="/WEB-INF/tld/Util.tld"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<style>
+
+    td { position: relative; }
+
+    tr.strikeout td:before {
+        content: " ";
+        position: absolute;
+        top: 46%;
+        left: 0;
+        border-bottom: 1px solid #e50f00;
+        width: 100%;
+    }
+
+    tr.strikeout td:after {
+        content: "\00B7";
+        font-size: 1px;
+    }
+
+</style>
 <div class="kt-container  kt-grid__item kt-grid__item--fluid">
     <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
     <c:set var="filter" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'filter')}"/>
@@ -166,24 +185,23 @@
         <th>Formul</th>
         <th>Təsdiq edilib</th>
         <th>Tranzaksiya</th>
-        <th>Status</th>
         <th>Əməliyyat</th>
     </tr>
     </thead>
     <tbody>
     <c:forEach var="t" items="${list.content}" varStatus="loop">
-        <tr data="<c:out value="${utl:toJson(t)}" />">
+        <tr data="<c:out value="${utl:toJson(t)}" />" class="<c:out value="${(t.payed lt 0)?'strikeout':''}"/> ">
             <td>${loop.index + 1}</td>
             <td><c:out value="${t.id}" /></td>
-            <th><div style="width: 160px;"><c:out value="${t.employee.person.fullName}" /></div></th>
+            <td><span style="width: 160px;" class="kt-font-bolder"><c:out value="${t.employee.person.fullName}" /></span></td>
             <td><c:out value="${t.organization.name}" /></td>
-            <th>
-                <div style="width: 65px;">
+            <td>
+                <span style="width: 65px;" class="kt-font-bolder">
                     <span><c:out value="${t.payed}" /></span>
                     <span class="kt-font-bold font-italic font-size-10px">AZN</span>
-                </div>
-            </th>
-            <th><fmt:formatDate value = "${t.advanceDate}" pattern = "dd.MM.yyyy" /></th>
+                </span>
+            </td>
+            <td><span class="kt-font-bolder"><fmt:formatDate value = "${t.advanceDate}" pattern = "dd.MM.yyyy" /></span></td>
             <td><c:out value="${t.description}" /></td>
             <td><c:out value="${t.formula}" /></td>
             <td>
@@ -196,42 +214,32 @@
                     <fmt:formatDate value = "${t.transactionDate}" pattern = "dd.MM.yyyy HH:mm:ss" />
                 </c:if>
             </td>
-            <th class="text-center">
-                <c:choose>
-                    <c:when test="${t.debt}">
-                        <i class="la la-arrow-down kt-font-bold kt-font-success"></i>
-                    </c:when>
-                    <c:when test="${!t.debt}">
-                        <i class="la la-arrow-up kt-font-bold kt-font-danger" style="font-weight: bold;"></i>
-                    </c:when>
-                </c:choose>
-            </th>
             <td nowrap class="text-center">
-                <c:if test="${approve.status and !t.approve}">
-                    <a href="javascript:approve($('#advance-approve-form'), $('#advance-approve-modal'), '<c:out value="${t.id}" />', '<c:out value="${t.description}" />', '<c:out value="${t.payed}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${approve.object.name}"/>">
-                        <i class="<c:out value="${approve.object.icon}"/>"></i>
-                    </a>
-                </c:if>
-                <c:if test="${transfer.status and t.approve and !t.transaction}">
-                    <a href="javascript:transfer($('#advance-transfer-form'), $('#advance-transfer-modal'), '<c:out value="${t.id}" />', '<c:out value="${t.payed}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
-                        <i class="<c:out value="${transfer.object.icon}"/>"></i>
-                    </a>
-                </c:if>
-                <c:if test="${credit.status and t.transaction}">
-                    <a href="javascript:transfer($('#advance-credit-form'), $('#advance-credit-modal'), '<c:out value="${t.id}" />', '<c:out value="${t.payed}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${credit.object.name}"/>">
-                        <i class="<c:out value="${credit.object.icon}"/>"></i>
-                    </a>
-                </c:if>
-                <c:if test="${edit.status and !t.approve}">
-                    <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
-                        <i class="<c:out value="${edit.object.icon}"/>"></i>
-                    </a>
-                </c:if>
-                <c:if test="${delete.status and !t.approve}">
-                    <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.description}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
-                        <i class="<c:out value="${delete.object.icon}"/>"></i>
-                    </a>
-                </c:if>
+                    <c:if test="${approve.status and !t.approve}">
+                        <a href="javascript:approve($('#advance-approve-form'), $('#advance-approve-modal'), '<c:out value="${t.id}" />', '<c:out value="${t.description}" />', '<c:out value="${t.payed}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${approve.object.name}"/>">
+                            <i class="<c:out value="${approve.object.icon}"/>"></i>
+                        </a>
+                    </c:if>
+                    <c:if test="${transfer.status and t.approve and !t.transaction}">
+                        <a href="javascript:transfer($('#advance-transfer-form'), $('#advance-transfer-modal'), '<c:out value="${t.id}" />', '<c:out value="${t.payed}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
+                            <i class="<c:out value="${transfer.object.icon}"/>"></i>
+                        </a>
+                    </c:if>
+                    <c:if test="${credit.status and t.transaction and t.payed gt 0}">
+                        <a href="javascript:transfer($('#advance-credit-form'), $('#advance-credit-modal'), '<c:out value="${t.id}" />', '<c:out value="${t.payed}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${credit.object.name}"/>">
+                            <i class="<c:out value="${credit.object.icon}"/>"></i>
+                        </a>
+                    </c:if>
+                    <c:if test="${edit.status and !t.approve}">
+                        <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                            <i class="<c:out value="${edit.object.icon}"/>"></i>
+                        </a>
+                    </c:if>
+                    <c:if test="${delete.status and !t.approve}">
+                        <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.description}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
+                            <i class="<c:out value="${delete.object.icon}"/>"></i>
+                        </a>
+                    </c:if>
             </td>
         </tr>
     </c:forEach>
@@ -298,7 +306,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <form:label path="payed">Məbləğ</form:label>
                                 <div class="input-group" >
@@ -308,7 +316,7 @@
                                 <form:errors path="payed" cssClass="alert-danger control-label"/>
                             </div>
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <form:label path="advanceDate">Avans tarixi</form:label>
                                 <div class="input-group date" >
@@ -316,14 +324,6 @@
                                     <form:input path="advanceDate" cssClass="form-control datepicker-element" date="date" placeholder="dd.MM.yyyy"/>
                                 </div>
                                 <form:errors path="advanceDate" cssClass="control-label alert-danger" />
-                            </div>
-                        </div>
-                        <div class="col-md-3" style="padding-top: 30px;">
-                            <div class="form-group">
-                                <label class="kt-checkbox kt-checkbox--brand">
-                                    <form:checkbox path="debt"/> Ödənişdirmi?
-                                    <span></span>
-                                </label>
                             </div>
                         </div>
                     </div>
@@ -518,8 +518,7 @@
         rules: {
             payed: {
                 required: true,
-                number: true,
-                min: 1
+                number: true
             }
         },
         invalidHandler: function(event, validator) {

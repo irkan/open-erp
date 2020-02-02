@@ -66,8 +66,9 @@ public class Demonstration {
         this.organization = organization;
     }
 
-    public Demonstration(Organization organization, Employee employee) {
+    public Demonstration(Organization organization, Employee employee, Date demonstrateDate) {
         this.organization = organization;
         this.employee = employee;
+        this.demonstrateDate = demonstrateDate;
     }
 }

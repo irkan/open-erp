@@ -372,6 +372,8 @@ public class DBConfiguration {
             dictionaries.add(buyAction);
             Dictionary consolidateDic = new Dictionary("Təhkim edilmə", "consolidate", null, actionType);
             dictionaries.add(consolidateDic);
+            Dictionary creditDic = new Dictionary("Kredit", "credit", null, actionType);
+            dictionaries.add(creditDic);
             Dictionary returnAction = new Dictionary("Qaytarılma", "return", null, actionType);
             dictionaries.add(returnAction);
             Dictionary sellAction = new Dictionary("Satış", "sell", null, actionType);
@@ -1216,6 +1218,8 @@ public class DBConfiguration {
             moduleOperations.add(creditModuleOperation1);
             ModuleOperation creditModuleOperation2 = new ModuleOperation(transaction, credit, null); //ok
             moduleOperations.add(creditModuleOperation2);
+            ModuleOperation creditModuleOperation3 = new ModuleOperation(advance, credit, null); //ok
+            moduleOperations.add(creditModuleOperation3);
 
             moduleOperationRepository.saveAll(moduleOperations);
 
@@ -1495,6 +1499,7 @@ public class DBConfiguration {
 
             userModuleOperations.add(new UserModuleOperation(user, creditModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, creditModuleOperation2));
+            userModuleOperations.add(new UserModuleOperation(user, creditModuleOperation3));
 
             userModuleOperationRepository.saveAll(userModuleOperations);
 

@@ -112,7 +112,7 @@ public class SaleController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new Demonstration(getSessionOrganization()));
             }
             if(!model.containsAttribute(Constants.FILTER)){
-                model.addAttribute(Constants.FILTER, new Demonstration(!canViewAll()?getSessionOrganization():null));
+                model.addAttribute(Constants.FILTER, new Demonstration(!canViewAll()?getSessionOrganization():null, null, null));
             }
             Page<Demonstration> demonstrations = demonstrationService.findAll((Demonstration) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
             model.addAttribute(Constants.LIST, demonstrations);
@@ -260,7 +260,7 @@ public class SaleController extends SkeletonController {
             List<EmployeePayrollDetail> employeeDetails = demonstration.getEmployee().getEmployeePayrollDetails();
             String value = Util.findEmployeeDetail(employeeDetails, "{demonstration}");
             double price = demonstration.getAmount()*Double.parseDouble(value);
-            Advance advance = new Advance(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("bonus-demonstration-advance", "advance"), demonstration.getEmployee(), demonstration.getOrganization(), demonstration.getId() + " nömrəli nümayişdən əldə edilən bonus", "", demonstration.getDemonstrateDate(), price, true);
+            Advance advance = new Advance(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("bonus-demonstration-advance", "advance"), demonstration.getEmployee(), demonstration.getOrganization(), demonstration.getId() + " nömrəli nümayişdən əldə edilən bonus", "", demonstration.getDemonstrateDate(), price);
             advanceRepository.save(advance);
         }
         return mapPost(demonstration, binding, redirectAttributes);

@@ -1089,6 +1089,9 @@
                     'customer.person.contact.address': {
                         required: true
                     },
+                    'salesInventories[0].inventory.name': {
+                        required: true
+                    },
                     'salesInventories[0].inventory.barcode': {
                         required: true
                     },

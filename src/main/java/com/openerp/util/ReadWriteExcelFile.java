@@ -934,8 +934,6 @@ public class ReadWriteExcelFile {
 			cell = row.createCell(row.getLastCellNum());
 			cell.setCellValue(advance.getAdvanceDate());
 			cell = row.createCell(row.getLastCellNum());
-			cell.setCellValue(advance.getDebt());
-			cell = row.createCell(row.getLastCellNum());
 			cell.setCellValue(advance.getDescription());
 			cell = row.createCell(row.getLastCellNum());
 			cell.setCellValue(advance.getApprove());
