@@ -27,11 +27,15 @@ public class Salary {
     @JoinColumn(name = "payroll_working_hour_record_id")
     private WorkingHourRecord workingHourRecord;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "hr_organization_id")
+    private Organization organization;
+
     @JsonIgnore
     @OneToMany(mappedBy = "salary", cascade = CascadeType.ALL)
     private List<SalaryEmployee> salaryEmployees;
 
-    @Column(name = "is_approve", nullable = false, columnDefinition="boolean default true")
+    @Column(name = "is_approve", nullable = false, columnDefinition="boolean default false")
     private Boolean approve = false;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -55,5 +59,9 @@ public class Salary {
 
     public Salary(WorkingHourRecord workingHourRecord) {
         this.workingHourRecord = workingHourRecord;
+    }
+
+    public Salary(Organization organization) {
+        this.organization = organization;
     }
 }

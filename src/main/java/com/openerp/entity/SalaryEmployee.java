@@ -35,6 +35,13 @@ public class SalaryEmployee {
     @JoinColumn(name = "payroll_working_hour_record_employee_id")
     private WorkingHourRecordEmployee workingHourRecordEmployee;
 
+    @Column(name = "is_approve", nullable = false, columnDefinition="boolean default false")
+    private Boolean approve = false;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "approve_date")
+    private Date approveDate;
+
     @OneToMany(mappedBy = "salaryEmployee", cascade = CascadeType.ALL)
     private List<SalaryEmployeeDetail> salaryEmployeeDetails;
 

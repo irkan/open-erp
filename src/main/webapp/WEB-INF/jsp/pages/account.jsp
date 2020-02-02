@@ -18,6 +18,7 @@
                 <div class="kt-portlet__body">
                     <c:choose>
                         <c:when test="${not empty list}">
+                            <c:set var="transfer" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'transfer')}"/>
                             <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
                             <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="group_table">
@@ -52,6 +53,11 @@
                                         <th><c:out value="${t.balance}"/></th>
                                         <td><c:out value="${t.description}"/></td>
                                         <td nowrap class="text-center">
+                                            <c:if test="${transfer.status}">
+                                                <a href="javascript:edit($('#transfer-form'), '<c:out value="${utl:toJson(t)}" />', 'transfer-modal-operation', '<c:out value="${transfer.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
+                                                    <i class="<c:out value="${transfer.object.icon}"/>"></i>
+                                                </a>
+                                            </c:if>
                                             <c:if test="${edit.status}">
                                                 <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
                                                     <i class="<c:out value="${edit.object.icon}"/>"></i>
@@ -164,6 +170,57 @@
     </div>
 </div>
 
+<div class="modal fade" id="transfer-modal-operation" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Yeni sorğu yarat</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form:form modelAttribute="form" id="transfer-form" method="post" action="/accounting/account/transfer" cssClass="form-group">
+                    <form:hidden path="id"/>
+                    <div class="form-group">
+                        <form:label path="accountNumber">Hesabdan</form:label>
+                        <div class="input-group" >
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-bank"></i></span></div>
+                            <form:input path="accountNumber" cssClass="form-control account-number2" placeholder="Hesab nömrəsi"/>
+                        </div>
+                        <form:errors path="accountNumber" cssClass="alert-danger control-label"/>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="toAccountNumber">Hesaba</form:label>
+                        <div class="input-group" >
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-bank"></i></span></div>
+                            <form:input path="toAccountNumber" cssClass="form-control account-number2" placeholder="Göndərilən hesab"/>
+                        </div>
+                        <form:errors path="toAccountNumber" cssClass="alert-danger control-label"/>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="balance">Məbləğ</form:label>
+                        <div class="input-group" >
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
+                            <form:input path="balance" cssClass="form-control" placeholder="Balansı daxil edin"/>
+                        </div>
+                        <form:errors path="balance" cssClass="alert-danger control-label"/>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="description">Açıqlama</form:label>
+                        <form:textarea path="description" cssClass="form-control" placeholder="Açıqlama daxil edin"/>
+                        <form:errors path="description" cssClass="alert-danger control-label"/>
+                    </div>
+                </form:form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="submit($('#transfer-form'));">Yadda saxla</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     <c:if test="${edit.status}">
     $('#group_table tbody').on('dblclick', 'tr', function () {
@@ -185,7 +242,28 @@
             }
         },
         invalidHandler: function(event, validator) {
-                    KTUtil.scrollTop();
+            KTUtil.scrollTop();
+            swal.close();
+        },
+    });
+
+    $( "#transfer-form" ).validate({
+        rules: {
+            accountNumber: {
+                required: true
+            },
+            toAccountNumber: {
+                required: true,
+                notEqualTo: "#accountNumber"
+            },
+            balance: {
+                required: true,
+                number: true,
+                min: 0.1
+            }
+        },
+        invalidHandler: function(event, validator) {
+            KTUtil.scrollTop();
             swal.close();
         },
     });

@@ -58,9 +58,15 @@ public class PayrollController extends SkeletonController {
                 return exportExcel(advances, redirectAttributes, page);
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.SALARY)){
-            if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new Salary(new WorkingHourRecord(getSessionOrganization())));
+            Salary slry = (Salary) model.asMap().get(Constants.FORM);
+            Salary salary = salaryRepository.getSalaryById(slry.getId());
+            for(SalaryEmployee salaryEmployee: salary.getSalaryEmployees()){
+                salaryEmployee.setSalaryEmployeeDetails(salaryEmployeeDetailRepository.getSalaryEmployeeDetailsBySalaryEmployee(salaryEmployee));
             }
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new Salary(getSessionOrganization()));
+            }
+            model.addAttribute(Constants.LIST, salary);
         } else if (page.equalsIgnoreCase(Constants.ROUTE.SALARY_EMPLOYEE)){
             List<SalaryEmployee> salaryEmployees = salaryEmployeeRepository.getSalaryEmployeesBySalary_ActiveAndEmployee_IdOrderByEmployeeDesc(true, Integer.parseInt(data.get()));
             model.addAttribute(Constants.LIST, salaryEmployees);
@@ -651,6 +657,34 @@ public class PayrollController extends SkeletonController {
                 salaryEmployee.setSalaryEmployeeDetails(salaryEmployeeDetailRepository.getSalaryEmployeeDetailsBySalaryEmployee(salaryEmployee));
             }
         }
+        return mapPost2(slry, binding, redirectAttributes, "/payroll/salary");
+    }
+
+    @PostMapping(value = "/salary/approve")
+    public String postSalaryApprove(@ModelAttribute(Constants.FORM) @Validated Salary slry, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        Date now = new Date();
+        Salary salary = salaryRepository.getSalaryById(slry.getId());
+        for(SalaryEmployee se: salary.getSalaryEmployees()){
+            if(!se.getApprove()){
+                Transaction transaction = new Transaction(
+                        salary.getWorkingHourRecord().getOrganization(),
+                        null,
+                        dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("salary", "action"),
+                        "Əmək haqqı " + se.getEmployee().getPerson().getFullName(),
+                        false,
+                        null
+                        );
+                transaction.setPrice(Util.calculateSalary(se.getSalaryEmployeeDetails()));
+                transactionRepository.save(transaction);
+
+                se.setApprove(true);
+                se.setApproveDate(now);
+                salaryEmployeeRepository.save(se);
+            }
+        }
+        salary.setApprove(true);
+        salary.setApproveDate(now);
+        salaryRepository.save(salary);
         return mapPost2(slry, binding, redirectAttributes, "/payroll/salary");
     }
 }

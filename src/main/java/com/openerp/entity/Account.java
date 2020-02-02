@@ -26,6 +26,10 @@ public class Account {
     @Column(name = "account_number", unique = true, nullable = false)
     private String accountNumber = RandomString.getAlphaNumeric(16);
 
+    @Transient
+    @Pattern(regexp=".{4,17}",message="Minimum 4 maksimum 17 simvol ola bilər")
+    private String toAccountNumber;
+
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hr_organization_id")
     private Organization organization;

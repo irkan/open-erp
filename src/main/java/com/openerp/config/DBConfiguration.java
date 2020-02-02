@@ -370,6 +370,8 @@ public class DBConfiguration {
             dictionaries.add(acceptAction);
             Dictionary buyAction = new Dictionary("Alış", "buy", null, actionType);
             dictionaries.add(buyAction);
+            Dictionary salaryAction = new Dictionary("Maaş", "salary", null, actionType);
+            dictionaries.add(salaryAction);
             Dictionary consolidateDic = new Dictionary("Təhkim edilmə", "consolidate", null, actionType);
             dictionaries.add(consolidateDic);
             Dictionary creditDic = new Dictionary("Kredit", "credit", null, actionType);
@@ -1132,6 +1134,8 @@ public class DBConfiguration {
 
             ModuleOperation cancelModuleOperation1 = new ModuleOperation(workingHourRecord, cancel, null);
             moduleOperations.add(cancelModuleOperation1);
+            ModuleOperation cancelModuleOperation2 = new ModuleOperation(salary, cancel, null);
+            moduleOperations.add(cancelModuleOperation2);
 
             ModuleOperation calculateModuleOperation1 = new ModuleOperation(salary, calculate, null);
             moduleOperations.add(calculateModuleOperation1);
@@ -1142,6 +1146,8 @@ public class DBConfiguration {
             moduleOperations.add(transferModuleOperation1);
             ModuleOperation transferModuleOperation2 = new ModuleOperation(advance, transfer, null);
             moduleOperations.add(transferModuleOperation2);
+            ModuleOperation transferModuleOperation3 = new ModuleOperation(account, transfer, null);
+            moduleOperations.add(transferModuleOperation3);
 
             ModuleOperation consolidateModuleOperation1 = new ModuleOperation(action, consolidateOperation, null);
             moduleOperations.add(consolidateModuleOperation1);
@@ -1470,12 +1476,14 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, saveModuleOperation1));
 
             userModuleOperations.add(new UserModuleOperation(user, cancelModuleOperation1));
+            userModuleOperations.add(new UserModuleOperation(user, cancelModuleOperation2));
 
             userModuleOperations.add(new UserModuleOperation(user, calculateModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, calculateModuleOperation2));
 
             userModuleOperations.add(new UserModuleOperation(user, transferModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, transferModuleOperation2));
+            userModuleOperations.add(new UserModuleOperation(user, transferModuleOperation3));
 
             userModuleOperations.add(new UserModuleOperation(user, consolidateModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, consolidateModuleOperation2));

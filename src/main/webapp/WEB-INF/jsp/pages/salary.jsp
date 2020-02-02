@@ -65,6 +65,17 @@
                                                     </c:if>
                                                 </c:when>
                                             </c:choose>
+                                            <c:set var="cancel" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'cancel')}"/>
+                                            <c:choose>
+                                                <c:when test="${cancel.status}">
+                                                    <c:if test="${not empty form.salaryEmployees and form.approve}">
+                                                        <a href="#" onclick="approveData($('#form'), '<c:out value="${form.month}"/>.<c:out value="${form.year}"/> tarixli iş vaxtının uçotu')" class="btn btn-dark btn-elevate btn-icon-sm" title="<c:out value="${cancel.object.name}"/>">
+                                                            <i class="la <c:out value="${cancel.object.icon}"/>"></i>
+                                                            <c:out value="${cancel.object.name}"/>
+                                                        </a>
+                                                    </c:if>
+                                                </c:when>
+                                            </c:choose>
                                             <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
                                             <c:choose>
                                                 <c:when test="${delete.status}">
@@ -103,7 +114,7 @@
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${form.salaryEmployees}" varStatus="loop">
-                                    <tr data="<c:out value="${utl:toJson(t)}" />">
+                                    <tr valign="middle" class="text-justify" data="<c:out value="${utl:toJson(t)}" />">
                                         <td><c:out value="${t.id}" /></td>
                                         <th><div style="width: 190px"><c:out value="${t.workingHourRecordEmployee.fullName}" /></div></th>
                                         <td>
@@ -215,7 +226,6 @@
                     </tr>
                     </thead>
                     <tbody>
-
                     </tbody>
                 </table>
             </div>
@@ -225,6 +235,10 @@
         </div>
     </div>
 </div>
+
+<form id="approve-form" method="post" action="/payroll/salary/approve">
+    <input type="hidden" name="salary">
+</form>
 
 <script>
     <c:if test="${view.status}">
@@ -288,6 +302,36 @@
             }
         };
     }();
+
+    function approveData(form, info){
+        swal.fire({
+            title: 'Əminsinizmi?',
+            html: info,
+            type: 'success',
+            allowEnterKey: true,
+            showCancelButton: true,
+            buttonsStyling: false,
+            cancelButtonText: 'İmtina',
+            cancelButtonColor: '#d1d5cf',
+            cancelButtonClass: 'btn btn-default',
+            confirmButtonText: 'Bəli, icra edilsin!',
+            confirmButtonColor: '#c40000',
+            confirmButtonClass: 'btn btn-success',
+            footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+        }).then(function(result) {
+            if (result.value) {
+                swal.fire({
+                    text: 'Proses davam edir...',
+                    allowOutsideClick: false,
+                    onOpen: function() {
+                        $(form).attr("action", "/payroll/salary/approve");
+                        swal.showLoading();
+                        $(form).submit();
+                    }
+                })
+            }
+        })
+    }
 </script>
 
 

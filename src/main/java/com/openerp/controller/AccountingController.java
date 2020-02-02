@@ -93,6 +93,58 @@ public class AccountingController extends SkeletonController {
         return mapPost(account, binding, redirectAttributes);
     }
 
+    @PostMapping(value = "/account/transfer")
+    public String postAccountTransfer(@ModelAttribute(Constants.FORM) @Validated Account account, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        Account to = accountRepository.getAccountsByAccountNumberAndActiveTrue(account.getToAccountNumber().trim());
+        Account from = accountRepository.getAccountById(account.getId());
+        if(to==null){
+            FieldError fieldError = new FieldError("toAccountNumber", "toAccountNumber", account.getToAccountNumber() + " hesab tapılmadı!");
+            binding.addError(fieldError);
+        }
+        if(from!=null && account.getBalance()>from.getBalance()){
+            FieldError fieldError = new FieldError("balance", "balance", "Hesabda kifayyət qədər məbləğ yoxdur!");
+            binding.addError(fieldError);
+        }
+        if(from!=null && to!=null && from.getId().intValue()==to.getId().intValue()){
+            FieldError fieldError = new FieldError("accountNumber", "accountNumber", "Eyni hesab olmamalıdır!");
+            binding.addError(fieldError);
+        }
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()){
+            Transaction fromTransaction = new Transaction();
+            fromTransaction.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("send", "action"));
+            fromTransaction.setOrganization(from.getOrganization());
+            fromTransaction.setApproveDate(new Date());
+            fromTransaction.setPrice(account.getBalance());
+            fromTransaction.setCurrency(from.getCurrency());
+            fromTransaction.setRate(getRate(fromTransaction.getCurrency()));
+            double sumPrice1 = Util.amountChecker(fromTransaction.getAmount()) * fromTransaction.getPrice() * fromTransaction.getRate();
+            fromTransaction.setSumPrice(sumPrice1);
+            fromTransaction.setAccount(from);
+            fromTransaction.setDescription(to.getOrganization().getName() + " : " + to.getAccountNumber() + " hesabına göndərildi. " + account.getDescription());
+            transactionRepository.save(fromTransaction);
+            log("accounting_transaction", "create/edit", fromTransaction.getId(), fromTransaction.toString());
+            balance(fromTransaction);
+
+            Transaction toTransaction = new Transaction();
+            toTransaction.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("accept", "action"));
+            toTransaction.setOrganization(to.getOrganization());
+            toTransaction.setApproveDate(new Date());
+            toTransaction.setPrice(fromTransaction.getSumPrice());
+            toTransaction.setCurrency(to.getCurrency());
+            toTransaction.setRate(Util.exchangeRate(fromTransaction.getRate(), toTransaction.getRate()));
+            double sumPrice2 = Util.amountChecker(toTransaction.getAmount()) * toTransaction.getPrice() * toTransaction.getRate();
+            toTransaction.setSumPrice(sumPrice2);
+            toTransaction.setAccount(to);
+            toTransaction.setDebt(true);
+            toTransaction.setDescription(from.getOrganization().getName() + " : " + from.getAccountNumber() + " hesabından köçürmə ilə qəbul edilib. " + account.getDescription());
+            transactionRepository.save(toTransaction);
+            log("accounting_transaction", "create/edit", toTransaction.getId(), toTransaction.toString());
+            balance(toTransaction);
+        }
+        return mapPost(account, binding, redirectAttributes, "/accounting/account");
+    }
+
     @PostMapping(value = "/financing")
     public String postFinancing(@ModelAttribute(Constants.FORM) @Validated Financing financing, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));

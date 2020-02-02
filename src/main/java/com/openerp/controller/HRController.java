@@ -204,19 +204,18 @@ public class HRController extends SkeletonController {
        // log("hr_employee", "create/edit", employee.getId(), employee.toString());
         List<PayrollConfiguration> payrollConfigurations = payrollConfigurationRepository.getPayrollConfigurationsByActiveTrueOrderById();
         List<EmployeePayrollDetail> employeePayrollDetails = new ArrayList<>();
-        for(int i=0; i<object.getEmployeePayrollDetails().size(); i++){
-            EmployeePayrollDetail employeePayrollDetail = object.getEmployeePayrollDetails().get(i);
-            employeePayrollDetail.setEmployee(employee);
-            if(employeePayrollDetail.getKey().equalsIgnoreCase("{main_vacation_days}")){
-                employeePayrollDetail.setValue(Util.calculateMainVacationDays(payrollConfigurations, employee));
-            } else if(employeePayrollDetail.getKey().equalsIgnoreCase("{additional_vacation_days}")){
-                employeePayrollDetail.setValue(Util.calculateAdditionalVacationDays(payrollConfigurations, employee, Util.findPreviousWorkExperience(employeePayrollDetails)));
+        for(EmployeePayrollDetail epd: object.getEmployeePayrollDetails()){
+            epd.setEmployee(employee);
+            if(epd.getKey().equalsIgnoreCase("{main_vacation_days}")){
+                epd.setValue(Util.calculateMainVacationDays(payrollConfigurations, employee));
+            } else if(epd.getKey().equalsIgnoreCase("{additional_vacation_days}")){
+                epd.setValue(Util.calculateAdditionalVacationDays(payrollConfigurations, employee, Util.findPreviousWorkExperience(employeePayrollDetails)));
             }
-            if(employeePayrollDetail.getValue().trim().length()<1){
-                FieldError fieldError = new FieldError("", "", employeePayrollDetail.getEmployeePayrollField().getName() + ": Boş olmalıdır!");
+            if(epd.getValue().trim().length()<1){
+                FieldError fieldError = new FieldError("", "", epd.getEmployeePayrollField().getName() + ": Boş olmalıdır!");
                 binding.addError(fieldError);
             }
-            employeePayrollDetails.add(employeePayrollDetail);
+            employeePayrollDetails.add(epd);
         }
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){

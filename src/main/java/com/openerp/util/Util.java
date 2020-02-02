@@ -186,6 +186,12 @@ public class Util {
         return df.format(amount).replace(",", ".");
     }
 
+    public static String formatRate(double amount){
+        DecimalFormat df = new DecimalFormat("#.####");
+        df.setRoundingMode(RoundingMode.CEILING);
+        return df.format(amount).replace(",", ".");
+    }
+
     public static String findWorkingHourRecordEmployeeDayCalculations(List<WorkingHourRecordEmployeeDayCalculation> workingHourRecordEmployeeDayCalculations, String key){
         for(WorkingHourRecordEmployeeDayCalculation whredc: workingHourRecordEmployeeDayCalculations){
             if(whredc.getKey().equalsIgnoreCase(key)){
@@ -602,5 +608,24 @@ public class Util {
             }
         }
         return latency;
+    }
+
+    public static Double calculateSalary(List<SalaryEmployeeDetail> salaryEmployeeDetails){
+        Double price = 0d;
+        for(SalaryEmployeeDetail sed: salaryEmployeeDetails){
+            if(sed.getKey().equalsIgnoreCase("")){
+
+            }
+        }
+        return price;
+    }
+
+    public static Double exchangeRate(Double rate1, Double rate2){
+        try {
+            return Double.parseDouble(Util.formatRate(rate1/rate2));
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return 1d;
     }
 }

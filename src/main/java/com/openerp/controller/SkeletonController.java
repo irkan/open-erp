@@ -444,8 +444,10 @@ public class SkeletonController {
             double balance = account.getBalance() + (transaction.getDebt()?transaction.getSumPrice():-1*transaction.getSumPrice());
             account.setBalance(balance);
             accountRepository.save(account);
+            log("accounting_account", "create/edit", account.getId(), account.toString());
             transaction.setBalance(account.getBalance());
             transactionRepository.save(transaction);
+            log("accounting_transaction", "create/edit", transaction.getId(), transaction.toString());
         }
     }
 

@@ -368,7 +368,7 @@
 </div>
 
 <div class="modal fade" id="modal-payroll" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Əmək haqqı məlumatları</h5>
@@ -390,18 +390,18 @@
                     <c:forEach var="t" items="${employee_payroll_fields}" varStatus="loop">
                         <div class="form-group-0_5">
                             <div class="row">
-                                <div class="col-md-8 text-right" style="padding-top: 8px;">
-                                    <label><c:out value="${t.name}"/></label>
+                                <div class="col-md-8 text-right" style="padding-top: 2px;">
+                                    <input type="text" class="form-control" name="employeePayrollDetails[${loop.index}].employeePayrollField.name" style="border: none; background: none;  width: 100%" readonly/>
                                 </div>
                                 <div class="col-md-4">
                                     <input type="hidden" name="employeePayrollDetails[${loop.index}].employeePayrollField" value="${t.id}"/>
                                     <input type="hidden" name="employeePayrollDetails[${loop.index}].key" value="${t.attr1}"/>
                                     <c:choose>
                                         <c:when test="${t.attr1 eq '{previous_work_experience}'}">
-                                            <input type="text" name="employeePayrollDetails[${loop.index}].value" value="${t.attr2}" key="${t.attr1}" onkeyup="calculateVacationDay($('input[name=\'person.disability\']'), $('input[name=specialistOrManager]'), $('input[name=contractStartDate]'), $('input[key=\'{previous_work_experience}\']'))" class="form-control" />
+                                            <input type="text" name="employeePayrollDetails[${loop.index}].value" onkeyup="calculateVacationDay($('input[name=\'person.disability\']'), $('input[name=specialistOrManager]'), $('input[name=contractStartDate]'), $('input[key=\'{previous_work_experience}\']'))" class="form-control" />
                                         </c:when>
                                         <c:otherwise>
-                                            <input type="text" name="employeePayrollDetails[${loop.index}].value" value="${t.attr2}" key="${t.attr1}" class="form-control" />
+                                            <input type="text" name="employeePayrollDetails[${loop.index}].value" class="form-control" />
                                         </c:otherwise>
                                     </c:choose>
                                 </div>
