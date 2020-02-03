@@ -45,11 +45,11 @@ public class SaleController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new Sales(getSessionOrganization()));
             }
             if(!model.containsAttribute(Constants.FILTER)){
-                model.addAttribute(Constants.FILTER, new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null));
+                model.addAttribute(Constants.FILTER, new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null, new Payment((Double) null)));
             }
             Page<Sales> sales = salesService.findAll((Sales) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
             for(Sales sales1: sales){
-                sales1.setSalesInventories(salesInventoryRepository.getSalesInventoriesByActiveTrueAndSales(sales1));
+                sales1.setSalesInventories(salesInventoryRepository.getSalesInventoriesByActiveTrueAndSales_Id(sales1.getId()));
             }
             model.addAttribute(Constants.LIST, sales);
             if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
@@ -79,7 +79,7 @@ public class SaleController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new Sales(getSessionOrganization(), true));
             }
             if(!model.containsAttribute(Constants.FILTER)){
-                model.addAttribute(Constants.FILTER, new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null, true));
+                model.addAttribute(Constants.FILTER, new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null, true, null));
             }
             Page<Sales> sales = salesService.findAll((Sales) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
             model.addAttribute(Constants.LIST, sales);
@@ -151,6 +151,7 @@ public class SaleController extends SkeletonController {
             } else {
                 sales.getPayment().setSchedulePrice(schedulePrice(sales.getPayment().getSchedule().getId(), sales.getPayment().getLastPrice(), sales.getPayment().getDown()));
             }
+            sales.setGuarantee(sales.getGuarantee()!=null?sales.getGuarantee():6);
             sales.setGuaranteeExpire(Util.guarantee(sales.getSaleDate()==null?new Date():sales.getSaleDate(), sales.getGuarantee()));
             salesRepository.save(sales);
             log("sale_sales", "create/edit", sales.getId(), sales.toString());
@@ -433,6 +434,12 @@ public class SaleController extends SkeletonController {
             log("accounting_transaction", "create/edit", transaction.getId(), transaction.toString());
         }
         return mapPost(invc, binding, redirectAttributes, "/sale/invoice/");
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/api/service/inventory/{salesId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<SalesInventory> getSalesInventories(@PathVariable("salesId") Integer salesId){
+        return salesInventoryRepository.getSalesInventoriesByActiveTrueAndSales_Id(salesId);
     }
 
 

@@ -39,7 +39,7 @@ public class WarehouseController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new Inventory(getSessionOrganization()));
             }
             if(!model.containsAttribute(Constants.FILTER)){
-                model.addAttribute(Constants.FILTER, new Inventory(!canViewAll()?getSessionOrganization():null));
+                model.addAttribute(Constants.FILTER, new Inventory(!canViewAll()?getSessionOrganization():null, null));
             }
             Page<Inventory> inventories = inventoryService.findAll((Inventory) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
             model.addAttribute(Constants.LIST, inventories);
@@ -128,7 +128,8 @@ public class WarehouseController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Action(
                         !canViewAll()?getSessionUser().getEmployee():null,
-                        dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("consolidate", "action")
+                        dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("consolidate", "action"),
+                        null
                         )
                 );
             }
@@ -370,7 +371,7 @@ public class WarehouseController extends SkeletonController {
     }
 
     @ResponseBody
-    @GetMapping(value = "/inventory/{barcode}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/api/inventory/{barcode}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Inventory findInventory(@PathVariable("barcode") String barcode){
         List<Action> actions = actionRepository.getActionsByActiveTrueAndInventory_BarcodeAndEmployeeAndInventory_ActiveAndAction_Attr1AndAmountGreaterThan(barcode, getSessionUser().getEmployee(), true, "consolidate", 0);
         if(actions.size()>0){

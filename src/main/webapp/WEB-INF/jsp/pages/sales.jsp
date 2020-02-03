@@ -1234,7 +1234,7 @@
                 onOpen: function() {
                     swal.showLoading();
                     $.ajax({
-                        url: '/warehouse/inventory/'+$(element).val(),
+                        url: '/warehouse/api/inventory/'+$(element).val(),
                         type: 'GET',
                         dataType: 'json',
                         beforeSend: function() {

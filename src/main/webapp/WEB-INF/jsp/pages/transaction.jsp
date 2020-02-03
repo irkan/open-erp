@@ -164,7 +164,7 @@
                                     <th>Miqdar</th>
                                     <th>Qiymət</th>
                                     <th>Kurs</th>
-                                    <th>Ümumi qiymət</th>
+                                    <th>Ümumi qiymət AZN</th>
                                     <th>Hesabda qalıq</th>
                                     <th>Flial</th>
                                     <th>Əməliyyat</th>
@@ -192,21 +192,17 @@
                                             <c:choose>
                                                 <c:when test="${t.debt and t.sumPrice!=0 and t.approve}">
                                                     <span class="kt-font-bold kt-font-success"><c:out value="${t.sumPrice}" /></span>
-                                                    <span class="kt-font-bold kt-font-success font-italic font-size-10px">AZN</span>
                                                     <i class="la la-arrow-down kt-font-bold kt-font-success"></i>
                                                 </c:when>
                                                 <c:when test="${!t.debt and t.sumPrice!=0 and t.approve}">
                                                     <span class="kt-font-bold kt-font-danger">-<c:out value="${t.sumPrice}" /></span>
-                                                    <span class="kt-font-bold kt-font-danger font-italic font-size-10px">AZN</span>
                                                     <i class="la la-arrow-up kt-font-bold kt-font-danger" style="font-weight: bold;"></i>
                                                 </c:when>
                                                 <c:when test="${t.debt and t.sumPrice!=0 and !t.approve}">
                                                     <span class="kt-font-bold"><c:out value="${t.sumPrice}" /></span>
-                                                    <span class="kt-font-bold font-italic font-size-10px">AZN</span>
                                                 </c:when>
                                                 <c:when test="${!t.debt and t.sumPrice!=0 and !t.approve}">
                                                     <span class="kt-font-bold">-<c:out value="${t.sumPrice}" /></span>
-                                                    <span class="kt-font-bold font-italic font-size-10px">AZN</span>
                                                 </c:when>
                                                 <c:otherwise>
                                                     <span class="kt-font-bold"><c:out value="${t.sumPrice}" /></span>
@@ -214,7 +210,12 @@
                                             </c:choose>
                                             </div>
                                         </td>
-                                        <td><c:out value="${t.balance}" /></td>
+                                        <td>
+                                            <div style="width: 90px;">
+                                                <span><c:out value="${t.balance}" /></span>
+                                                <span class="kt-font-bold font-italic font-size-10px"><c:out value="${t.account.currency}" /></span>
+                                            </div>
+                                        </td>
                                         <td><div style="width: 90px;"><c:out value="${t.organization.name}" /></div></td>
                                         <td nowrap class="text-center">
                                             <c:if test="${approve.status}">
@@ -373,7 +374,7 @@
                         <form:label path="account">Hesab</form:label>
                         <form:select  path="account" cssClass="custom-select form-control">
                             <form:option value=""></form:option>
-                            <form:options items="${accounts}" itemLabel="accountNumber" itemValue="id" />
+                            <form:options items="${accounts}" itemLabel="accountNumberWithCurrency" itemValue="id" />
                         </form:select>
                         <form:errors path="account" cssClass="alert-danger control-label"/>
                     </div>

@@ -101,6 +101,12 @@ public class Action {
         this.action = action;
     }
 
+    public Action(Employee employee, Dictionary action, Date actionDate) {
+        this.employee = employee;
+        this.action = action;
+        this.actionDate = actionDate;
+    }
+
     public Action(Inventory inventory, Organization organization) {
         this.inventory = inventory;
         this.organization = organization;

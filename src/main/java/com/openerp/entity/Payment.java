@@ -92,4 +92,8 @@ public class Payment {
     public Payment(Integer id) {
         this.id = id;
     }
+
+    public Payment(Double lastPrice) {
+        this.lastPrice = lastPrice;
+    }
 }

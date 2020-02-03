@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface SalesInventoryRepository extends JpaRepository<SalesInventory, Integer> {
-    List<SalesInventory> getSalesInventoriesByActiveTrueAndSales(Sales sales);
+    List<SalesInventory> getSalesInventoriesByActiveTrueAndSales_Id(Integer salesId);
 }

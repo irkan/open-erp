@@ -121,12 +121,20 @@ public class Sales {
         this.service = service;
     }
 
+    public Sales(Integer id, Organization organization, Boolean service, Date saleDate) {
+        this.id = id;
+        this.organization = organization;
+        this.service = service;
+        this.saleDate = saleDate;
+    }
+
     public Sales(Organization organization) {
         this.organization = organization;
     }
 
-    public Sales(Integer id, Organization organization) {
+    public Sales(Integer id, Organization organization, Payment payment) {
         this.id = id;
         this.organization = organization;
+        this.payment = payment;
     }
 }

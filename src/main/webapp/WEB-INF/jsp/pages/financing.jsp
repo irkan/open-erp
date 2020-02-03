@@ -72,8 +72,16 @@
                                                 <form:errors path="currency" cssClass="alert alert-danger"/>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
+                                        <c:if test="${delete.status}">
+                                            <div class="col-md-2" style="padding-top: 30px;">
+                                                <div class="form-group">
+                                                    <label class="kt-checkbox kt-checkbox--brand">
+                                                        <form:checkbox path="active"/> Aktual məlumat
+                                                        <span></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </c:if>
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <form:label path="financingDateFrom">Tarixdən</form:label>
@@ -106,16 +114,6 @@
                                                 <form:errors path="financingDate" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
-                                        <c:if test="${delete.status}">
-                                            <div class="col-md-2" style="padding-top: 30px;">
-                                                <div class="form-group">
-                                                    <label class="kt-checkbox kt-checkbox--brand">
-                                                        <form:checkbox path="active"/> Aktual məlumat
-                                                        <span></span>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </c:if>
                                     </div>
                                 </div>
                                 <div class="col-md-1 text-right">

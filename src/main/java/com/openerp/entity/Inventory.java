@@ -87,4 +87,9 @@ public class Inventory {
     public Inventory(Organization organization) {
         this.organization = organization;
     }
+
+    public Inventory(Organization organization, Date inventoryDate) {
+        this.organization = organization;
+        this.inventoryDate = inventoryDate;
+    }
 }

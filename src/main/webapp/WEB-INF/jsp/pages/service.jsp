@@ -165,12 +165,9 @@
                 <div class="kt-portlet__body">
                     <c:choose>
                         <c:when test="${not empty list}">
-                            <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
-                            <c:set var="detail" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'detail')}"/>
                             <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
                             <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
-                            <c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
-                            <table class="table table-striped- table-bordered table-hover table-checkable" id="group_table">
+                            <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
                                 <thead>
                                 <tr>
                                     <th>Kod</th>
@@ -178,7 +175,7 @@
                                     <th>Satış tarixi</th>
                                     <th>Müştəri</th>
                                     <th>Qiymət</th>
-                                    <th>Satış komandası</th>
+                                    <th>Qarantiya</th>
                                     <th>Əməliyyat</th>
                                 </tr>
                                 </thead>
@@ -196,34 +193,7 @@
                                         </th>
                                         <td><fmt:formatDate value = "${t.saleDate}" pattern = "dd.MM.yyyy" /></td>
                                         <th>
-                                            <c:out value="${t.customer.person.fullName}" /><br/>
-                                            Müştəri kodu: <c:out value="${t.customer.id}" />
-                                            <c:if test="${not empty t.customer.person.contact.email}">
-                                                <c:out value="${t.customer.person.contact.email}" /><br/>
-                                            </c:if>
-                                            <c:if test="${not empty t.customer.person.contact.mobilePhone}">
-                                                <c:out value="${t.customer.person.contact.mobilePhone}" />&nbsp;
-                                            </c:if>
-                                            <c:if test="${not empty t.customer.person.contact.homePhone}">
-                                                <c:out value="${t.customer.person.contact.homePhone}" />
-                                            </c:if>
-                                            <c:if test="${not empty t.customer.person.contact.relationalPhoneNumber1}">
-                                                <c:out value="${t.customer.person.contact.relationalPhoneNumber1}" />
-                                            </c:if>
-                                            <c:if test="${not empty t.customer.person.contact.relationalPhoneNumber2}">
-                                                <c:out value="${t.customer.person.contact.relationalPhoneNumber2}" />
-                                            </c:if>
-                                            <c:if test="${not empty t.customer.person.contact.relationalPhoneNumber2}">
-                                                <c:out value="${t.customer.person.contact.relationalPhoneNumber2}" />
-                                            </c:if><br/>
-                                            <c:if test="${not empty t.customer.person.contact.address}">
-                                                <c:out value="${t.customer.person.contact.city.name}" />,&nbsp;
-                                                <c:out value="${t.customer.person.contact.address}" /><br/>
-                                            </c:if>
-                                            <c:if test="${not empty t.customer.person.contact.livingAddress}">
-                                                <c:out value="${t.customer.person.contact.livingCity.name}" />,&nbsp;
-                                                <c:out value="${t.customer.person.contact.livingAddress}" />
-                                            </c:if>
+                                            <a href="javascript:window.open('/crm/customer/<c:out value="${t.customer.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.customer.id}" />: <c:out value="${t.customer.person.fullName}"/></a>
                                         </th>
                                         <th>
                                             Qiymət: <c:out value="${t.payment.price}" /><br/>
@@ -238,43 +208,18 @@
                                             </c:if>
                                             Son qiymət: <c:out value="${t.payment.lastPrice}" />
                                         </th>
-                                        <td>
-                                            Konsul: <c:out value="${t.console.person.fullName}" /><br/>
-                                            Ven lider: <c:out value="${t.vanLeader.person.fullName}" /><br/>
-                                            Diller: <c:out value="${t.dealer.person.fullName}" /><br/>
-                                            Canvasser: <c:out value="${t.canavasser.person.fullName}" />
-                                        </td>
+                                        <th>
+                                            <fmt:formatDate value = "${t.guaranteeExpire}" pattern = "dd.MM.yyyy" />, <c:out value="${t.guarantee}" /> ay
+                                        </th>
                                         <td nowrap class="text-center">
-                                            <span class="dropdown">
-                                                <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
-                                                  <i class="la la-ellipsis-h"></i>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <c:if test="${view.status}">
-                                                    <a href="/collect/payment-regulator-note/<c:out value="${t.payment.id}"/>" class="dropdown-item" title="Qeydlər">
-                                                        <i class="la <c:out value="${view.object.icon}"/>"></i> Qeydlər
-                                                    </a>
-                                                    </c:if>
-                                                    <c:if test="${detail.status}">
-                                                    <a href="/collect/payment-regulator-detail/<c:out value="${t.payment.id}"/>" class="dropdown-item" title="<c:out value="${detail.object.name}"/>">
-                                                        <i class="la <c:out value="${detail.object.icon}"/>"></i> <c:out value="${detail.object.name}"/>
-                                                    </a>
-                                                    </c:if>
-                                                    <c:if test="${edit.status}">
-                                                    <a href="javascript:edit($('#kt_form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="dropdown-item" title="<c:out value="${edit.object.name}"/>">
-                                                        <i class="<c:out value="${edit.object.icon}"/>"></i> <c:out value="${edit.object.name}"/>
-                                                    </a>
-                                                    </c:if>
-                                                    <c:if test="${delete.status}">
-                                                    <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.salesInventories.get(0).inventory.name}" /> <br/> <c:out value="${t.customer.person.fullName}" />');" class="dropdown-item" title="<c:out value="${delete.object.name}"/>">
-                                                        <i class="<c:out value="${delete.object.icon}"/>"></i> <c:out value="${delete.object.name}"/>
-                                                    </a>
-                                                    </c:if>
-                                                </div>
-                                            </span>
                                             <c:if test="${edit.status}">
-                                                <a href="javascript:edit($('#kt_form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                                                <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');getInventories('<c:out value="${t.id}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
                                                     <i class="<c:out value="${edit.object.icon}"/>"></i>
+                                                </a>
+                                            </c:if>
+                                            <c:if test="${delete.status}">
+                                                <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.id}" /> <br/> <c:out value="${t.customer.person.fullName}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
+                                                    <i class="<c:out value="${delete.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
                                         </td>
@@ -412,13 +357,22 @@
     </div>
 </div>
 
-<form id="form-export-contract" method="post" action="/export/sale/contract" style="display: none">
-    <input type="hidden" name="data" />
-</form>
-
-<script src="<c:url value="/assets/js/demo4/pages/crud/datatables/advanced/row-grouping.js" />" type="text/javascript"></script>
-
 <script>
+    $("#datatable").DataTable({
+        responsive: true,
+        lengthMenu: [10, 25, 50, 75, 100, 200, 1000],
+        pageLength: 100,
+        order: [[1, 'desc']],
+        columnDefs: [
+            {
+                targets: 0,
+                width: '50px',
+                className: 'dt-center',
+                orderable: false
+            },
+        ],
+    });
+
     $('.select2-single').select2({
         placeholder: "Əməkdaşı seçin",
         allowClear: true
@@ -493,7 +447,7 @@
                 onOpen: function() {
                     swal.showLoading();
                     $.ajax({
-                        url: '/warehouse/inventory/'+$(element).val(),
+                        url: '/warehouse/api/inventory/'+$(element).val(),
                         type: 'GET',
                         dataType: 'json',
                         beforeSend: function() {
@@ -507,7 +461,7 @@
                         error: function() {
                             swal.fire({
                                 title: "Xəta baş verdi!",
-                                html: "Əlaqə saxlamağınızı xahiş edirik.",
+                                html: "<c:out value="${sessionScope.user.employee.person.lastName}"/> <c:out value="${sessionScope.user.employee.person.firstName}"/> adına inventar təhkim edilməyib",
                                 type: "error",
                                 cancelButtonText: 'Bağla',
                                 cancelButtonColor: '#c40000',
@@ -521,69 +475,82 @@
         }
     }
 
+    function getInventories(salesId){
+        var content = '';
+        swal.fire({
+            text: 'Proses davam edir...',
+            allowOutsideClick: false,
+            onOpen: function() {
+                swal.showLoading();
+                $.ajax({
+                    url: '/sale/api/service/inventory/'+salesId,
+                    type: 'GET',
+                    dataType: 'json',
+                    beforeSend: function() {
+                    },
+                    success: function(data) {
+                        console.log(data);
+
+                        $.each(data, function( index, value ) {
+                            alert( index + ": " + value );
+
+                            content+='<div data-repeater-item="" class="form-group row align-items-center">\n' +
+                                '                                            <div class="col-9">\n' +
+                                '                                                <div class="kt-form__group--inline">\n' +
+                                '                                                    <div class="kt-form__label">\n' +
+                                '                                                        <label>İnventar:</label>\n' +
+                                '                                                    </div>\n' +
+                                '                                                    <div class="kt-form__control">\n' +
+                                '                                                        <input type="text" attr="barcode" name="salesInventories['+index+'].inventory.barcode" class="form-control" placeholder="Barkodu daxil edin..." onchange="findInventory($(this))">\n' +
+                                '                                                        <label attr="name" name="salesInventories['+index+'].inventory.name"></label>\n' +
+                                '                                                        <input type="hidden" attr="id" name="salesInventories['+index+'].inventory" class="form-control" placeholder="Barkodu daxil edin...">\n' +
+                                '                                                    </div>\n' +
+                                '                                                </div>\n' +
+                                '                                                <div class="d-md-none kt-margin-b-10"></div>\n' +
+                                '                                            </div>\n' +
+                                '                                            <div class="col-3">\n' +
+                                '                                                <div>\n' +
+                                '                                                    <a href="javascript:;" data-repeater-delete="" class="btn-sm btn btn-label-danger btn-bold">\n' +
+                                '                                                        <i class="la la-trash-o"></i>\n' +
+                                '                                                        Sil\n' +
+                                '                                                    </a>\n' +
+                                '                                                </div>\n' +
+                                '                                            </div>\n' +
+                                '                                        </div>';
+                        });
+
+
+
+
+
+
+
+
+
+                        swal.close();
+                    },
+                    error: function() {
+                        swal.fire({
+                            title: "Xəta baş verdi!",
+                            html: "<c:out value="${sessionScope.user.employee.person.lastName}"/> <c:out value="${sessionScope.user.employee.person.firstName}"/> adına inventar təhkim edilməyib",
+                            type: "error",
+                            cancelButtonText: 'Bağla',
+                            cancelButtonColor: '#c40000',
+                            cancelButtonClass: 'btn btn-danger',
+                            footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+                        });
+                    }
+                })
+            }
+        });
+    }
+
     $('#modal-operation').on('shown.bs.modal', function() {
         $(document).off('focusin.modal');
     });
 
-    var KTDatatablesBasicBasic = function() {
-
-        var initTable1 = function() {
-            var table = $('#schedule-table');
-
-            table.DataTable({
-                responsive: true,
-
-                // DOM Layout settings
-                dom: "<'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 dataTables_pager'lp>>",
-
-                lengthMenu: [5, 10, 25, 50, 75, 100, 200],
-
-                pageLength: 25,
-
-                language: {
-                    'lengthMenu': 'Display _MENU_',
-                },
-                order: [[1, 'desc']],
-                columnDefs: [
-                    {
-                        targets: 0,
-                        width: '25px',
-                        className: 'dt-center',
-                        orderable: false
-                    },
-                ],
-            });
-
-            table.on('change', '.kt-group-checkable', function() {
-                var set = $(this).closest('table').find('td:first-child .kt-checkable');
-                var checked = $(this).is(':checked');
-
-                $(set).each(function() {
-                    if (checked) {
-                        $(this).prop('checked', true);
-                        $(this).closest('tr').addClass('active');
-                    }
-                    else {
-                        $(this).prop('checked', false);
-                        $(this).closest('tr').removeClass('active');
-                    }
-                });
-            });
-
-            table.on('change', 'tbody tr .kt-checkbox', function() {
-                $(this).parents('tr').toggleClass('active');
-            });
-        };
-
-        return {
-            init: function() {
-                initTable1();
-            },
-        };
-    }();
-
     <c:if test="${edit.status}">
-    $('#group_table tbody').on('dblclick', 'tr', function () {
+    $('#datatable tbody').on('dblclick', 'tr', function () {
         edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
     });
     </c:if>

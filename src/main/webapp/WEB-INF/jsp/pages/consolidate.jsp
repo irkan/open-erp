@@ -232,7 +232,7 @@
                             <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calculator"></i></span></div>
                             <form:input path="amount" cssClass="form-control" placeholder="Say daxil edin"/>
                         </div>
-                        <form:errors path="amount" cssClass="alert alert-danger"/>
+                        <form:errors path="amount" cssClass="alert-danger"/>
                     </div>
                 </form:form>
             </div>

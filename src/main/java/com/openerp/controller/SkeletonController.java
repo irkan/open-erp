@@ -345,17 +345,19 @@ public class SkeletonController {
     }
 
     double getRate(String currency){
-        if(currency!=null && currency.trim().length()>0){
-            if(currency.trim().equalsIgnoreCase("AZN")){
-                return 1;
-            } else {
+        try {
+            if(currency!=null && currency.trim().length()>0){
                 CurrencyRate currencyRate = currencyRateRepository.getCurrencyRateByCode(currency.toUpperCase());
                 if(currencyRate!=null){
-                    return currencyRate.getValue();
+                    if(currencyRate.getValue()>0){
+                        return currencyRate.getValue();
+                    }
                 }
             }
+        } catch (Exception e){
+            log.error(e);
         }
-        return 0;
+        return 1;
     }
 
     double price(boolean debt, double price){
@@ -442,7 +444,7 @@ public class SkeletonController {
     void balance(Transaction transaction){
         if(transaction!=null && transaction.getAccount()!=null){
             Account account = accountRepository.getAccountById(transaction.getAccount().getId());
-            double balance = account.getBalance() + Util.amountChecker(transaction.getAmount())*(transaction.getDebt() ? transaction.getPrice() : -1 * transaction.getPrice());
+            double balance = account.getBalance() + Double.parseDouble(Util.format((transaction.getDebt() ? transaction.getSumPrice() : -1 * transaction.getSumPrice())/getRate(account.getCurrency())));
             account.setBalance(balance);
             accountRepository.save(account);
             log("accounting_account", "create/edit", account.getId(), account.toString());
