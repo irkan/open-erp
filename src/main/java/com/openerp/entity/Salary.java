@@ -49,6 +49,24 @@ public class Salary {
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;
 
+    @Column(name = "sum_of_membership_fee_for_trade_union")
+    private Double sumOfMembershipFeeForTradeUnion;
+
+    @Column(name = "sum_of_compulsory_health_insurance")
+    private Double sumOfCompulsoryHealthInsurance;
+
+    @Column(name = "sum_of_unemployment_insurance")
+    private Double sumOfUnemploymentInsurance;
+
+    @Column(name = "sum_of_tax")
+    private Double sumOfTax;
+
+    @Column(name = "sum_of_dsmf_deduction")
+    private Double sumOfDsmfDeduction;
+
+    @Column(name = "sum_of_salary")
+    private Double sumOfSalary;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_date", nullable = false)
     private Date createdDate = new Date();

@@ -95,7 +95,7 @@ public class AccountingController extends SkeletonController {
 
     @PostMapping(value = "/account/transfer")
     public String postAccountTransfer(@ModelAttribute(Constants.FORM) @Validated Account account, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
-        Account to = accountRepository.getAccountsByAccountNumberAndActiveTrue(account.getToAccountNumber().trim());
+        Account to = accountRepository.getAccountByAccountNumberAndActiveTrue(account.getToAccountNumber().trim());
         Account from = accountRepository.getAccountById(account.getId());
         if(to==null){
             FieldError fieldError = new FieldError("toAccountNumber", "toAccountNumber", account.getToAccountNumber() + " hesab tapılmadı!");
@@ -234,6 +234,17 @@ public class AccountingController extends SkeletonController {
             }
         }
         return mapPost(transaction, binding, redirectAttributes, "/accounting/transaction");
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/api/account/{accountNumber}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Account findAccount(@PathVariable("accountNumber") String accountNumber){
+        try {
+            return accountRepository.getAccountByAccountNumberAndActiveTrue(accountNumber.trim());
+        } catch (Exception e){
+            log.error(e);
+        }
+        return null;
     }
 
     private static Double calculateFinancing(Transaction transaction, TransactionRepository transactionRepository){

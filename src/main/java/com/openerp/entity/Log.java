@@ -89,4 +89,8 @@ public class Log {
         this.description = description;
         this.username = username;
     }
+
+    public Log(Date operationDate) {
+        this.operationDate = operationDate;
+    }
 }

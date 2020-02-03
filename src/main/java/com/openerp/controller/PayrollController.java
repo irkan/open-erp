@@ -58,15 +58,19 @@ public class PayrollController extends SkeletonController {
                 return exportExcel(advances, redirectAttributes, page);
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.SALARY)){
-            Salary slry = (Salary) model.asMap().get(Constants.FORM);
-            Salary salary = salaryRepository.getSalaryById(slry.getId());
-            for(SalaryEmployee salaryEmployee: salary.getSalaryEmployees()){
-                salaryEmployee.setSalaryEmployeeDetails(salaryEmployeeDetailRepository.getSalaryEmployeeDetailsBySalaryEmployee(salaryEmployee));
-            }
+            /*if(!model.containsAttribute(Constants.FORM)){
+                Salary slry = (Salary) model.asMap().get(Constants.FORM);
+                Salary salary = salaryRepository.getSalaryById(slry.getId());
+                for(SalaryEmployee salaryEmployee: salary.getSalaryEmployees()){
+                    salaryEmployee.setSalaryEmployeeDetails(salaryEmployeeDetailRepository.getSalaryEmployeeDetailsBySalaryEmployee(salaryEmployee));
+                }
+                model.addAttribute(Constants.LIST, salary);
+            }*/
+
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Salary(getSessionOrganization()));
             }
-            model.addAttribute(Constants.LIST, salary);
+
         } else if (page.equalsIgnoreCase(Constants.ROUTE.SALARY_EMPLOYEE)){
             List<SalaryEmployee> salaryEmployees = salaryEmployeeRepository.getSalaryEmployeesBySalary_ActiveAndEmployee_IdOrderByEmployeeDesc(true, Integer.parseInt(data.get()));
             model.addAttribute(Constants.LIST, salaryEmployees);
@@ -349,6 +353,13 @@ public class PayrollController extends SkeletonController {
                         salaryRepository.save(slry);
                         log("payroll_salary", "create/edit", slry.getId(), slry.toString());
 
+                        double sumOfMembershipFeeForTradeUnion=0;
+                        double sumOfCompulsoryHealthInsurance=0;
+                        double sumOfUnemploymentInsurance=0;
+                        double sumOfTax=0;
+                        double sumOfDsmfDeduction=0;
+                        double sumOfSalary=0;
+
                         List<PayrollConfiguration> payrollConfigurations = payrollConfigurationRepository.getPayrollConfigurationsByActiveTrueOrderById();
                         List<Dictionary> employeeAdditionalFields = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-payroll-field");
                         ScriptEngineManager mgr = new ScriptEngineManager();
@@ -454,6 +465,7 @@ public class PayrollController extends SkeletonController {
                                             membership_fee_for_trade_union_fee
                                     )
                             );
+
                             String minimal_salary = Util.findPayrollConfiguration(payrollConfigurations,"{minimal_salary}");
                             salaryEmployeeDetails.add(
                                     new SalaryEmployeeDetail(
@@ -520,6 +532,7 @@ public class PayrollController extends SkeletonController {
                                             Util.findPayrollConfiguration(payrollConfigurations,"{membership_fee_for_trade_union}")
                                     )
                             );
+                            sumOfMembershipFeeForTradeUnion+=Double.parseDouble(membership_fee_for_trade_union);
                             String compulsory_health_insurance = Util.findPayrollConfiguration(payrollConfigurations,"{compulsory_health_insurance}")
                                     .replaceAll(Pattern.quote("{gross_salary}"), gross_salary)
                                     .replaceAll(Pattern.quote("%"), percent);
@@ -533,6 +546,7 @@ public class PayrollController extends SkeletonController {
                                             Util.findPayrollConfiguration(payrollConfigurations,"{compulsory_health_insurance}")
                                     )
                             );
+                            sumOfCompulsoryHealthInsurance+=Double.parseDouble(compulsory_health_insurance);
                             String unemployment_insurance = Util.findPayrollConfiguration(payrollConfigurations,"{unemployment_insurance}")
                                     .replaceAll(Pattern.quote("{calculated_gross_salary}"), String.valueOf(engine.eval(calculated_gross_salary)))
                                     .replaceAll(Pattern.quote("%"), percent);
@@ -546,6 +560,7 @@ public class PayrollController extends SkeletonController {
                                             Util.findPayrollConfiguration(payrollConfigurations,"{unemployment_insurance}")
                                     )
                             );
+                            sumOfUnemploymentInsurance+=Double.parseDouble(unemployment_insurance);
                             String total_amount_payable_official = Util.findPayrollConfiguration(payrollConfigurations,"{total_amount_payable_official}")
                                     .replaceAll(Pattern.quote("{calculated_gross_salary}"), String.valueOf(engine.eval(calculated_gross_salary)))
                                     .replaceAll(Pattern.quote("{tax_income}"), String.valueOf(engine.eval(tax_income)))

@@ -137,7 +137,7 @@ public class AdministratorController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new Notification(getSessionOrganization()));
             }
             if(!model.containsAttribute(Constants.FILTER)){
-                model.addAttribute(Constants.FILTER, new Notification(!canViewAll()?getSessionOrganization():null));
+                model.addAttribute(Constants.FILTER, new Notification(!canViewAll()?getSessionOrganization():null, null));
             }
             Page<Notification> notifications = notificationService.findAll((Notification) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
             model.addAttribute(Constants.LIST, notifications);
@@ -146,7 +146,7 @@ public class AdministratorController extends SkeletonController {
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.LOG)){
             if(!model.containsAttribute(Constants.FILTER)){
-                model.addAttribute(Constants.FILTER, new Log());
+                model.addAttribute(Constants.FILTER, new Log(null));
             }
             Page<Log> logs = logService.findAll((Log) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
             model.addAttribute(Constants.LIST, logs);

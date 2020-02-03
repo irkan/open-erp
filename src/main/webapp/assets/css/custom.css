@@ -104,3 +104,7 @@ input[type="checkbox"]{
 .a-link-active {
     background-color: #e8eaee;
 }
+
+.modal-header {
+    cursor: move;
+}

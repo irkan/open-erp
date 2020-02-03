@@ -195,7 +195,7 @@
                         <form:label path="toAccountNumber">Hesaba</form:label>
                         <div class="input-group" >
                             <div class="input-group-prepend"><span class="input-group-text"><i class="la la-bank"></i></span></div>
-                            <form:input path="toAccountNumber" cssClass="form-control account-number2" placeholder="Göndərilən hesab"/>
+                            <form:input path="toAccountNumber" cssClass="form-control account-number2" placeholder="Göndərilən hesab" onchange="getCurrency($('#transfer-form'), $(this))"/>
                         </div>
                         <form:errors path="toAccountNumber" cssClass="alert-danger control-label"/>
                     </div>
@@ -344,4 +344,18 @@
     }();
 
     KTTypeahead.init();
+
+    function getCurrency(form, account){
+        $.ajax({
+            url: '/accounting/api/account/'+$(account).val().trim(),
+            type: 'GET',
+            dataType: 'json',
+            beforeSend: function() {
+                $(form).find("input[name='toCurrency']").val('');
+            },
+            success: function(data) {
+                $(form).find("input[name='toCurrency']").val(data.currency);
+            }
+        })
+    }
 </script>

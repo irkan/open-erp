@@ -89,4 +89,9 @@ public class Notification {
     public Notification(Organization organization) {
         this.organization = organization;
     }
+
+    public Notification(Organization organization, Date sendingDate) {
+        this.organization = organization;
+        this.sendingDate = sendingDate;
+    }
 }

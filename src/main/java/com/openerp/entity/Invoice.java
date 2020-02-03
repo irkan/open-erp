@@ -98,10 +98,11 @@ public class Invoice {
         this.organization = organization;
     }
 
-    public Invoice(Organization organization, Double price, Boolean approve) {
+    public Invoice(Organization organization, Double price, Boolean approve, Date invoiceDate) {
         this.organization = organization;
         this.price = price;
         this.approve = approve;
+        this.invoiceDate = invoiceDate;
     }
 
     public Invoice(Employee collector, Double price, Boolean approve) {

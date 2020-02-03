@@ -158,7 +158,6 @@
                                     <th>№</th>
                                     <th>ID</th>
                                     <th>Nədir?</th>
-                                    <th>Flial</th>
                                     <th>Hesab nömrəsi</th>
                                     <th>Açıqlama</th>
                                     <th>Tarix/Vaxt</th>
@@ -167,6 +166,7 @@
                                     <th>Kurs</th>
                                     <th>Ümumi qiymət</th>
                                     <th>Hesabda qalıq</th>
+                                    <th>Flial</th>
                                     <th>Əməliyyat</th>
                                 </tr>
                                 </thead>
@@ -175,21 +175,20 @@
                                     <tr data="<c:out value="${utl:toJson(t)}" />">
                                         <td>${loop.index + 1}</td>
                                         <td><c:out value="${t.id}" /></td>
-                                        <td><c:out value="${t.action.name}" /></td>
-                                        <td><div style="width: 90px;"><c:out value="${t.organization.name}" /></div></td>
+                                        <td><div style="width: 100px;"><c:out value="${t.action.name}" /></div></td>
                                         <td><c:out value="${t.account.accountNumber}" /></td>
                                         <td><c:out value="${t.description}" /></td>
                                         <td><fmt:formatDate value = "${t.transactionDate}" pattern = "dd.MM.yyyy HH:mm:ss" /></td>
                                         <td><c:out value="${t.amount}" /> ədəd</td>
                                         <td>
-                                            <div style="width: 65px;">
+                                            <div style="width: 70px;">
                                                 <span><c:out value="${t.price}" /></span>
                                                 <span class="kt-font-bold font-italic font-size-10px"><c:out value="${t.currency}" /></span>
                                             </div>
                                         </td>
                                         <td><c:out value="${t.rate}" /></td>
                                         <td>
-                                            <div style="width: 75px;">
+                                            <div style="width: 90px;">
                                             <c:choose>
                                                 <c:when test="${t.debt and t.sumPrice!=0 and t.approve}">
                                                     <span class="kt-font-bold kt-font-success"><c:out value="${t.sumPrice}" /></span>
@@ -216,6 +215,7 @@
                                             </div>
                                         </td>
                                         <td><c:out value="${t.balance}" /></td>
+                                        <td><div style="width: 90px;"><c:out value="${t.organization.name}" /></div></td>
                                         <td nowrap class="text-center">
                                             <c:if test="${approve.status}">
                                                 <c:if test="${!t.approve}">

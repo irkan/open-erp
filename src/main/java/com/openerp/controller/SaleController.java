@@ -96,7 +96,7 @@ public class SaleController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new Invoice(getSessionOrganization()));
             }
             if(!model.containsAttribute(Constants.FILTER)){
-                model.addAttribute(Constants.FILTER, new Invoice(!canViewAll()?getSessionOrganization():null, null, null));
+                model.addAttribute(Constants.FILTER, new Invoice(!canViewAll()?getSessionOrganization():null, null, null, null));
             }
             Page<Invoice> invoices = invoiceService.findAll((Invoice) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
             model.addAttribute(Constants.LIST, invoices);

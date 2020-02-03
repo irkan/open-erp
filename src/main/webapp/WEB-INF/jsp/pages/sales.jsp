@@ -1178,6 +1178,12 @@
                             $(form).find("input[name='customer.person.birthday']").val('');
                             $(form).find("input[name='customer.person.idCardSerialNumber']").val('');
                             $(form).find("input[name='customer.person.idCardPinCode']").val('');
+                            $(form).find("input[name='customer.person.contact.mobilePhone']").val('');
+                            $(form).find("input[name='customer.person.contact.homePhone']").val('');
+                            $(form).find("input[name='customer.person.contact.email']").val('');
+                            $(form).find("input[name='customer.person.contact.relationalPhoneNumber1']").val('');
+                            $(form).find("input[name='customer.person.contact.relationalPhoneNumber2']").val('');
+                            $(form).find("input[name='customer.person.contact.relationalPhoneNumber3']").val('');
                         },
                         success: function(customer) {
                             console.log(customer);
