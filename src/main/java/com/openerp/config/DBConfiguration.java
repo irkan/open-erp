@@ -1550,7 +1550,7 @@ public class DBConfiguration {
             accountRepository.saveAll(accounts);
 
             List<PayrollConfiguration> payrollConfigurations = new ArrayList<>();
-            payrollConfigurations.add(new PayrollConfiguration(formulaType1, "Minimal əmək haqqı", "{minimal_salary}=200", "Azərbaycan Respublikasında müəyyənləşdirilmiş minimal əmək haqqı"));
+            payrollConfigurations.add(new PayrollConfiguration(formulaType1, "Minimal əmək haqqı", "{minimal_salary}=250", "Azərbaycan Respublikasında müəyyənləşdirilmiş minimal əmək haqqı"));
             payrollConfigurations.add(new PayrollConfiguration(formulaType1,"Ümumi iş günlərinin sayı", "{total_working_days}={uig}", "Ümumi iş günlərinin sayı"));
             payrollConfigurations.add(new PayrollConfiguration(formulaType1,"Hesablanmış iş günlərinin sayı", "{calculated_working_days}={hig}", "Hesablanmış iş günlərinin sayı"));
             payrollConfigurations.add(new PayrollConfiguration(formulaType1,"Hesablanmış əmək haqqı (Rəsmi hissə)", "{calculated_gross_salary}={gross_salary}*{calculated_working_days}/{total_working_days}", "Hesablanmış ümumi əmək haqqı = ümumi əmək haqqı * hesablanmış iş günlərinin sayı / ümumi iş günlərinin sayı"));
