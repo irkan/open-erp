@@ -130,9 +130,9 @@ public class AccountingController extends SkeletonController {
             toTransaction.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("accept", "action"));
             toTransaction.setOrganization(to.getOrganization());
             toTransaction.setApproveDate(new Date());
-            toTransaction.setPrice(fromTransaction.getSumPrice());
             toTransaction.setCurrency(to.getCurrency());
-            toTransaction.setRate(Util.exchangeRate(fromTransaction.getRate(), toTransaction.getRate()));
+            toTransaction.setRate(getRate(toTransaction.getCurrency()));
+            toTransaction.setPrice(fromTransaction.getPrice()*Util.exchangeRate(fromTransaction.getRate(), toTransaction.getRate()));
             double sumPrice2 = Util.amountChecker(toTransaction.getAmount()) * toTransaction.getPrice() * toTransaction.getRate();
             toTransaction.setSumPrice(sumPrice2);
             toTransaction.setAccount(to);

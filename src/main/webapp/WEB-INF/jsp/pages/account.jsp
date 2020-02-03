@@ -104,19 +104,20 @@
                     <form:hidden path="organization"/>
                     <form:hidden path="active"/>
                     <div class="row">
-                        <div class="col-md-9">
+                        <div class="col-9">
                             <div class="form-group">
                                 <form:label path="accountNumber">Hesab nömrəsi</form:label>
-                                <form:input path="accountNumber" cssClass="form-control account-number" placeholder="Hesab nömrəsi" readonly="true"/>
+                                <div class="input-group" >
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-bank"></i></span></div>
+                                    <form:input path="accountNumber" cssClass="form-control account-number" placeholder="Hesab nömrəsi" readonly="true"/>
+                                </div>
                                 <form:errors path="accountNumber" cssClass="alert-danger control-label"/>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
+                        <div class="col-3">
+                            <div class="form-group typeahead">
                                 <form:label path="currency">Valyuta</form:label>
-                                <form:select  path="currency" cssClass="custom-select form-control">
-                                    <form:options items="${currencies}" itemLabel="name" itemValue="name" />
-                                </form:select>
+                                    <form:input path="currency" cssClass="form-control account-number2 type-ahead-currency" />
                                 <form:errors path="currency" cssClass="alert-danger control-label"/>
                             </div>
                         </div>
@@ -198,6 +199,31 @@
                         </div>
                         <form:errors path="toAccountNumber" cssClass="alert-danger control-label"/>
                     </div>
+                    <div class="row">
+                        <div class="col-5">
+                            <div class="form-group">
+                                <form:label path="currency">Valyuta</form:label>
+                                <div class="input-group" >
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-cube"></i></span></div>
+                                    <form:input path="currency" cssClass="form-control" readonly="true"/>
+                                </div>
+                                <form:errors path="currency" cssClass="alert-danger control-label"/>
+                            </div>
+                        </div>
+                        <div class="col-2 text-center pt-4">
+                            <i class="la la-exchange kt-font-brand" style="font-size: 20px; margin-top: 10px;"></i>
+                        </div>
+                        <div class="col-5">
+                            <div class="form-group">
+                                <form:label path="toCurrency">Valyuta</form:label>
+                                <div class="input-group" >
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-cube"></i></span></div>
+                                    <form:input path="toCurrency" cssClass="form-control" readonly="true"/>
+                                </div>
+                                <form:errors path="toCurrency" cssClass="alert-danger control-label"/>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <form:label path="balance">Məbləğ</form:label>
                         <div class="input-group" >
@@ -220,6 +246,11 @@
         </div>
     </div>
 </div>
+
+<script src="<c:url value="/assets/js/demo4/pages/crud/datatables/advanced/row-grouping.js" />" type="text/javascript"></script>
+<script src="<c:url value="/assets/vendors/general/typeahead.js/dist/typeahead.bundle.js" />" type="text/javascript"></script>
+<script src="<c:url value="/assets/vendors/general/typeahead.js/dist/typeahead.jquery.js" />" type="text/javascript"></script>
+
 
 <script>
     <c:if test="${edit.status}">
@@ -271,6 +302,46 @@
     $("input[name='balance']").inputmask('decimal', {
         rightAlignNumerics: false
     });
-</script>
 
-<script src="<c:url value="/assets/js/demo4/pages/crud/datatables/advanced/row-grouping.js" />" type="text/javascript"></script>
+    var KTTypeahead = function() {
+
+        var states = [
+            <c:forEach var="t" items="${currencies}" varStatus="loop">
+            '<c:out value="${t.name}"/>',
+            </c:forEach>
+        ];
+
+        var demo1 = function() {
+            var substringMatcher = function(strs) {
+                return function findMatches(q, cb) {
+                    var matches, substringRegex;
+                    matches = [];
+                    substrRegex = new RegExp(q, 'i');
+                    $.each(strs, function(i, str) {
+                        if (substrRegex.test(str)) {
+                            matches.push(str);
+                        }
+                    });
+                    cb(matches);
+                };
+            };
+
+            $(".type-ahead-currency").typeahead({
+                hint: true,
+                highlight: true,
+                minLength: 0,
+                items: 'all'
+            }, {
+                name: 'states',
+                source: substringMatcher(states)
+            });
+        };
+        return {
+            init: function() {
+                demo1();
+            }
+        };
+    }();
+
+    KTTypeahead.init();
+</script>

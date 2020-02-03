@@ -6,6 +6,7 @@ import com.openerp.service.*;
 import com.openerp.util.Constants;
 import com.openerp.repository.*;
 import com.openerp.util.DateUtility;
+import com.openerp.util.Util;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -441,7 +442,7 @@ public class SkeletonController {
     void balance(Transaction transaction){
         if(transaction!=null && transaction.getAccount()!=null){
             Account account = accountRepository.getAccountById(transaction.getAccount().getId());
-            double balance = account.getBalance() + (transaction.getDebt()?transaction.getSumPrice():-1*transaction.getSumPrice());
+            double balance = account.getBalance() + Util.amountChecker(transaction.getAmount())*(transaction.getDebt() ? transaction.getPrice() : -1 * transaction.getPrice());
             account.setBalance(balance);
             accountRepository.save(account);
             log("accounting_account", "create/edit", account.getId(), account.toString());

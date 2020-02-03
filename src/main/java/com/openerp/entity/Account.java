@@ -30,6 +30,9 @@ public class Account {
     @Pattern(regexp=".{4,17}",message="Minimum 4 maksimum 17 simvol ola bilər")
     private String toAccountNumber;
 
+    @Transient
+    private String toCurrency;
+
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hr_organization_id")
     private Organization organization;
