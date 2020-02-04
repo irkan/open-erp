@@ -149,8 +149,8 @@
                 <div class="kt-portlet__body">
                     <c:choose>
                         <c:when test="${not empty list}">
-                            <c:set var="approve" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
                             <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
+                            <c:set var="approve" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
                             <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
                                 <thead>
@@ -179,7 +179,7 @@
                                         <td><c:out value="${t.account.accountNumber}" /></td>
                                         <td><c:out value="${t.description}" /></td>
                                         <td><fmt:formatDate value = "${t.transactionDate}" pattern = "dd.MM.yyyy HH:mm:ss" /></td>
-                                        <td><c:out value="${t.amount}" /> ədəd</td>
+                                        <td><c:out value="${t.amount}" /> <c:out value="${t.amount>0?'ədəd':''}"/></td>
                                         <td>
                                             <div style="width: 70px;">
                                                 <span><c:out value="${t.price}" /></span>
@@ -226,21 +226,16 @@
                                                 </c:if>
                                             </c:if>
                                             <c:if test="${view.status}">
-                                                <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
-                                                    <i class="la <c:out value="${view.object.icon}"/>"></i>
+                                                <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
+                                                    <i class="<c:out value="${view.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
-                                            <c:if test="${credit.status and t.approve}">
-                                                <a href="javascript:edit($('#credit-form'), '<c:out value="${utl:toJson(t)}" />', 'credit-modal-operation', '<c:out value="${credit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${credit.object.name}"/>">
-                                                    <i class="<c:out value="${credit.object.icon}"/>"></i>
-                                                </a>
-                                            </c:if>
-                                            <c:if test="${edit.status}">
+                                            <c:if test="${edit.status and !t.approve}">
                                                 <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
                                                     <i class="<c:out value="${edit.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
-                                            <c:if test="${delete.status}">
+                                            <c:if test="${delete.status and !t.approve}">
                                                 <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.description}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
                                                     <i class="<c:out value="${delete.object.icon}"/>"></i>
                                                 </a>
@@ -441,11 +436,16 @@
 </script>
 
 <script>
-<c:if test="${edit.status}">
+
     $('#datatable tbody').on('dblclick', 'tr', function () {
-    edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
+        <c:if test="${edit.status}">
+            edit($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${edit.object.name}" />');
+        </c:if>
+        <c:if test="${!edit.status and view.status}">
+            view($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${view.object.name}" />');
+        </c:if>
     });
-</c:if>
+
 
 $("#datatable").DataTable({
     responsive: true,

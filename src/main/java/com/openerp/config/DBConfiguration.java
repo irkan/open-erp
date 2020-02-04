@@ -995,8 +995,22 @@ public class DBConfiguration {
             ModuleOperation deleteModuleOperation38 = new ModuleOperation(period, delete, null);
             moduleOperations.add(deleteModuleOperation38);
 
+            ModuleOperation viewModuleOperation1 = new ModuleOperation(subModule5, view, null);
+            moduleOperations.add(viewModuleOperation1);
+            ModuleOperation viewModuleOperation2 = new ModuleOperation(dictionary, view, null);
+            moduleOperations.add(viewModuleOperation2);
+            ModuleOperation viewModuleOperation3 = new ModuleOperation(dictionaryType, view, null);
+            moduleOperations.add(viewModuleOperation3);
+            ModuleOperation viewModuleOperation4 = new ModuleOperation(account, view, null);
+            moduleOperations.add(viewModuleOperation4);
+            ModuleOperation viewModuleOperation5 = new ModuleOperation(transaction, view, null);
+            moduleOperations.add(viewModuleOperation5);
             ModuleOperation viewModuleOperation6 = new ModuleOperation(subModule6, view, null);
             moduleOperations.add(viewModuleOperation6);
+            ModuleOperation viewModuleOperation7 = new ModuleOperation(subModule8, view, null);
+            moduleOperations.add(viewModuleOperation7);
+            ModuleOperation viewModuleOperation8 = new ModuleOperation(subModule4, view, null);
+            moduleOperations.add(viewModuleOperation8);
             ModuleOperation viewModuleOperation9 = new ModuleOperation(subModule9, view, null);
             moduleOperations.add(viewModuleOperation9);
             ModuleOperation viewModuleOperation10 = new ModuleOperation(subModule10, view, null);
@@ -1007,8 +1021,12 @@ public class DBConfiguration {
             moduleOperations.add(viewModuleOperation12);
             ModuleOperation viewModuleOperation13 = new ModuleOperation(subModule13, view, null);
             moduleOperations.add(viewModuleOperation13);
+            ModuleOperation viewModuleOperation14 = new ModuleOperation(configuration, view, null);
+            moduleOperations.add(viewModuleOperation14);
             ModuleOperation viewModuleOperation15 = new ModuleOperation(currencyRate, view, null);
             moduleOperations.add(viewModuleOperation15);
+            ModuleOperation viewModuleOperation16 = new ModuleOperation(webServiceAuthenticator, view, null);
+            moduleOperations.add(viewModuleOperation16);
             ModuleOperation viewModuleOperation17 = new ModuleOperation(workAttendance, view, null);
             moduleOperations.add(viewModuleOperation17);
             ModuleOperation viewModuleOperation18 = new ModuleOperation(workingHourRecord, view, null);
@@ -1017,6 +1035,10 @@ public class DBConfiguration {
             moduleOperations.add(viewModuleOperation19);
             ModuleOperation viewModuleOperation20 = new ModuleOperation(salary, view, null);
             moduleOperations.add(viewModuleOperation20);
+            ModuleOperation viewModuleOperation21 = new ModuleOperation(log, view, null);
+            moduleOperations.add(viewModuleOperation21);
+            ModuleOperation viewModuleOperation22 = new ModuleOperation(employee, view, null);
+            moduleOperations.add(viewModuleOperation22);
             ModuleOperation viewModuleOperation23 = new ModuleOperation(sales, view, null);
             moduleOperations.add(viewModuleOperation23);
             ModuleOperation viewModuleOperation24 = new ModuleOperation(overview, view, null);
@@ -1031,6 +1053,20 @@ public class DBConfiguration {
             moduleOperations.add(viewModuleOperation28);
             ModuleOperation viewModuleOperation29 = new ModuleOperation(troubledCustomer, view, null);
             moduleOperations.add(viewModuleOperation29);
+            ModuleOperation viewModuleOperation30 = new ModuleOperation(nonWorkingDay, view, null);
+            moduleOperations.add(viewModuleOperation30);
+            ModuleOperation viewModuleOperation31 = new ModuleOperation(shortenedWorkingDay, view, null);
+            moduleOperations.add(viewModuleOperation31);
+            ModuleOperation viewModuleOperation32 = new ModuleOperation(vacation, view, null);
+            moduleOperations.add(viewModuleOperation32);
+            ModuleOperation viewModuleOperation33 = new ModuleOperation(businessTrip, view, null);
+            moduleOperations.add(viewModuleOperation33);
+            ModuleOperation viewModuleOperation34 = new ModuleOperation(illness, view, null);
+            moduleOperations.add(viewModuleOperation34);
+            ModuleOperation viewModuleOperation35 = new ModuleOperation(advance, view, null);
+            moduleOperations.add(viewModuleOperation35);
+            ModuleOperation viewModuleOperation36 = new ModuleOperation(payrollConfiguration, view, null);
+            moduleOperations.add(viewModuleOperation36);
 
             ModuleOperation exportModuleOperation1 = new ModuleOperation(subModule1, export, null);
             moduleOperations.add(exportModuleOperation1);
@@ -1227,8 +1263,6 @@ public class DBConfiguration {
 
             ModuleOperation creditModuleOperation1 = new ModuleOperation(invoice, credit, null); //ok
             moduleOperations.add(creditModuleOperation1);
-            ModuleOperation creditModuleOperation2 = new ModuleOperation(transaction, credit, null); //ok
-            moduleOperations.add(creditModuleOperation2);
             ModuleOperation creditModuleOperation3 = new ModuleOperation(advance, credit, null); //ok
             moduleOperations.add(creditModuleOperation3);
 
@@ -1424,17 +1458,28 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation35));
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation36));
 
+            userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation1));
+            userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation2));
+            userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation3));
+            userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation4));
+            userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation5));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation6));
+            userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation7));
+            userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation8));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation9));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation10));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation11));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation12));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation13));
+            userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation14));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation15));
+            userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation16));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation17));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation18));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation19));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation20));
+            userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation21));
+            userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation22));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation23));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation24));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation25));
@@ -1442,6 +1487,13 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation27));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation28));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation29));
+            userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation30));
+            userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation31));
+            userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation32));
+            userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation33));
+            userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation34));
+            userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation35));
+            userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation36));
 
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation2));
@@ -1513,7 +1565,6 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, changePasswordModuleOperation2));
 
             userModuleOperations.add(new UserModuleOperation(user, creditModuleOperation1));
-            userModuleOperations.add(new UserModuleOperation(user, creditModuleOperation2));
             userModuleOperations.add(new UserModuleOperation(user, creditModuleOperation3));
 
             userModuleOperationRepository.saveAll(userModuleOperations);

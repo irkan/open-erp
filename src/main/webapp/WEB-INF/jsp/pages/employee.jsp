@@ -21,6 +21,7 @@
 
 <c:choose>
     <c:when test="${not empty list}">
+        <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
         <c:set var="payroll" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'payroll')}"/>
         <c:set var="sale" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'sale')}"/>
         <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
@@ -84,6 +85,11 @@
                         </c:if>
                     </div>
                 </span>
+                <c:if test="${view.status}">
+                    <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
+                        <i class="<c:out value="${view.object.icon}"/>"></i>
+                    </a>
+                </c:if>
                 <c:if test="${edit.status}">
                     <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
                         <i class="<c:out value="${edit.object.icon}"/>"></i>
@@ -552,11 +558,14 @@
         var array2 = today.split(".");
         return parseFloat(array2[2])-parseFloat(array1[2])
     }
-    <c:if test="${edit.status}">
-        $('#group_table tbody').on('dblclick', 'tr', function () {
-            edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
-        });
-    </c:if>
+    $('#group_table tbody').on('dblclick', 'tr', function () {
+        <c:if test="${edit.status}">
+        edit($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${edit.object.name}" />');
+        </c:if>
+        <c:if test="${!edit.status and view.status}">
+        view($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${view.object.name}" />');
+        </c:if>
+    });
 
     $( "#form" ).validate({
         rules: {

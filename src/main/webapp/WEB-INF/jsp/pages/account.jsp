@@ -18,6 +18,7 @@
                 <div class="kt-portlet__body">
                     <c:choose>
                         <c:when test="${not empty list}">
+                            <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
                             <c:set var="transfer" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'transfer')}"/>
                             <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
                             <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
@@ -53,6 +54,11 @@
                                         <th><c:out value="${t.balance}"/></th>
                                         <td><c:out value="${t.description}"/></td>
                                         <td nowrap class="text-center">
+                                            <c:if test="${view.status}">
+                                                <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
+                                                    <i class="<c:out value="${view.object.icon}"/>"></i>
+                                                </a>
+                                            </c:if>
                                             <c:if test="${transfer.status}">
                                                 <a href="javascript:edit($('#transfer-form'), '<c:out value="${utl:toJson(t)}" />', 'transfer-modal-operation', '<c:out value="${transfer.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
                                                     <i class="<c:out value="${transfer.object.icon}"/>"></i>
@@ -253,11 +259,14 @@
 
 
 <script>
-    <c:if test="${edit.status}">
     $('#group_table tbody').on('dblclick', 'tr', function () {
-        edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
+        <c:if test="${edit.status}">
+        edit($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${edit.object.name}" />');
+        </c:if>
+        <c:if test="${!edit.status and view.status}">
+        view($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${view.object.name}" />');
+        </c:if>
     });
-    </c:if>
 
     $( "#form" ).validate({
         rules: {

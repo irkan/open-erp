@@ -168,6 +168,7 @@
 
 <c:choose>
     <c:when test="${not empty list}">
+        <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
         <c:set var="credit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'credit')}"/>
         <c:set var="transfer" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'transfer')}"/>
         <c:set var="approve" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
@@ -233,6 +234,11 @@
                     <c:if test="${edit.status and !t.approve}">
                         <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
                             <i class="<c:out value="${edit.object.icon}"/>"></i>
+                        </a>
+                    </c:if>
+                    <c:if test="${view.status}">
+                        <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
+                            <i class="<c:out value="${view.object.icon}"/>"></i>
                         </a>
                     </c:if>
                     <c:if test="${delete.status and !t.approve}">
@@ -471,11 +477,11 @@
         $(modal).modal('toggle');
     }
 
-    <c:if test="${edit.status}">
     $('#datatable tbody').on('dblclick', 'tr', function () {
-        edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
+        <c:if test="${view.status}">
+        view($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${view.object.name}" />');
+        </c:if>
     });
-    </c:if>
 
     $("#datatable").DataTable({
         responsive: true,

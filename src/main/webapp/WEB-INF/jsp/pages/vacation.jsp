@@ -165,6 +165,11 @@
             <td><c:out value="${t.vacationDetails.size()}" /> gün</td>
             <td><c:out value="${t.description}" /></td>
             <td nowrap class="text-center">
+                <c:if test="${view.status}">
+                    <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
+                        <i class="<c:out value="${view.object.icon}"/>"></i>
+                    </a>
+                </c:if>
                 <c:if test="${edit.status}">
                     <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
                         <i class="<c:out value="${edit.object.icon}"/>"></i>
@@ -259,11 +264,14 @@
 </script>
 
 <script>
-    <c:if test="${edit.status}">
     $('#datatable tbody').on('dblclick', 'tr', function () {
-        edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
+        <c:if test="${edit.status}">
+        edit($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${edit.object.name}" />');
+        </c:if>
+        <c:if test="${!edit.status and view.status}">
+        view($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${view.object.name}" />');
+        </c:if>
     });
-    </c:if>
 
     $("#datatable").DataTable({
         responsive: true,

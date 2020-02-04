@@ -75,8 +75,7 @@
             $(modal).modal('hide');
         }, timeout);
     }
-/*
-    function clearFilter(form){
+    /*function clearFilter(form){
 
         /!*$.each( $(form).find("input,select,textarea"), function( key, element ) {
             var tagName = $(element).prop("tagName");
@@ -97,15 +96,23 @@
             }
         })
         submit($(form));*!/
-    }
-*/
+    }*/
 
     function create(form, modal, modal_title){
         $('#' + modal).find(".modal-title").html(modal_title);
         $('#' + modal).modal('toggle');
     }
-
     function edit(form, data, modal, modal_title){
+        $('#' + modal).find(".modal-footer").removeClass("kt-hide");
+        fillData(form, data, modal, modal_title);
+    }
+
+    function view(form, data, modal, modal_title){
+        $('#' + modal).find(".modal-footer").addClass("kt-hide");
+        fillData(form, data, modal, modal_title);
+    }
+
+    function fillData(form, data, modal, modal_title){
         data = data.replace(/\&#034;/g, '"');
         var obj = jQuery.parseJSON(data);
         console.log(obj);
