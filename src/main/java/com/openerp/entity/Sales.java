@@ -26,6 +26,13 @@ public class Sales {
     @Column(name = "is_service", nullable = false, columnDefinition="boolean default false")
     private Boolean service = false;
 
+    @Column(name = "is_approve", nullable = false, columnDefinition="boolean default false")
+    private Boolean approve = false;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "approve_date")
+    private Date approveDate;
+
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "crm_customer_id", nullable = false)
     private Customer customer;

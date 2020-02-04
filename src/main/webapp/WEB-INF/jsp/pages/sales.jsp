@@ -195,6 +195,7 @@
                     <c:choose>
                         <c:when test="${not empty list}">
                             <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
+                            <c:set var="approve" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
                             <c:set var="detail" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'detail')}"/>
                             <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
                             <c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
@@ -260,6 +261,11 @@
                                             Canvasser: <c:out value="${t.canavasser.person.fullName}" />
                                         </td>
                                         <td nowrap class="text-center">
+                                            <c:if test="${approve.status and !t.approve}">
+                                                <a href="javascript:approveData($('#approve-form'),'<c:out value="${t.id}" /> nömrəli müqavilənin təsdiqi', '<c:out value="${t.id}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${approve.object.name}"/>">
+                                                    <i class="<c:out value="${approve.object.icon}"/>"></i>
+                                                </a>
+                                            </c:if>
                                             <span class="dropdown">
                                                 <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
                                                   <i class="la la-ellipsis-h"></i>
@@ -866,6 +872,10 @@
     <input type="hidden" name="data" />
 </form>
 
+<form id="approve-form" method="post" action="/sale/sales/approve" style="display: none">
+    <input type="hidden" name="id" />
+</form>
+
 <script>
 
     $("#datatable").DataTable({
@@ -1400,4 +1410,34 @@
             navigator.geolocation.getCurrentPosition(showPosition);
         }
     });
+
+    function approveData(form, info, id){
+        swal.fire({
+            title: 'Əminsinizmi?',
+            html: info,
+            type: 'success',
+            allowEnterKey: true,
+            showCancelButton: true,
+            buttonsStyling: false,
+            cancelButtonText: 'İmtina',
+            cancelButtonColor: '#d1d5cf',
+            cancelButtonClass: 'btn btn-default',
+            confirmButtonText: 'Bəli, icra edilsin!',
+            confirmButtonColor: '#c40000',
+            confirmButtonClass: 'btn btn-success',
+            footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+        }).then(function(result) {
+            if (result.value) {
+                swal.fire({
+                    text: 'Proses davam edir...',
+                    allowOutsideClick: false,
+                    onOpen: function() {
+                        $(form).find("input[name='id']").val(id);
+                        swal.showLoading();
+                        $(form).submit();
+                    }
+                })
+            }
+        })
+    }
 </script>

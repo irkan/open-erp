@@ -166,6 +166,7 @@
                     <c:choose>
                         <c:when test="${not empty list}">
                             <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
+                            <c:set var="approve" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
                             <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
                                 <thead>
@@ -212,6 +213,11 @@
                                             <fmt:formatDate value = "${t.guaranteeExpire}" pattern = "dd.MM.yyyy" />, <c:out value="${t.guarantee}" /> ay
                                         </th>
                                         <td nowrap class="text-center">
+                                            <c:if test="${approve.status and !t.approve}">
+                                                <a href="javascript:approveData($('#approve-form'),'<c:out value="${t.id}" /> nömrəli müqavilənin təsdiqi', '<c:out value="${t.id}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${approve.object.name}"/>">
+                                                    <i class="<c:out value="${approve.object.icon}"/>"></i>
+                                                </a>
+                                            </c:if>
                                             <c:if test="${edit.status}">
                                                 <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');getInventories('<c:out value="${t.id}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
                                                     <i class="<c:out value="${edit.object.icon}"/>"></i>
@@ -261,11 +267,43 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <form:label path="customer">Müştəri kodu</form:label>
-                                <div class="input-group">
-                                    <form:input path="customer" autocomplete="false" class="form-control" placeholder="Müştəri kodu..."/>
-                                    <div class="input-group-append">
-                                        <button class="btn btn-primary" type="button" onclick="findCustomer($('#form').find('input[name=\'customer\']'))">Müştəri axtar</button>
+                                <form:label path="saleDate">Satış tarixi</form:label>
+                                <div class="input-group date" >
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
+                                    <form:input path="saleDate" cssClass="form-control datepicker-element" date="date" placeholder="dd.MM.yyyy"/>
+                                </div>
+                                <form:errors path="saleDate" cssClass="control-label alert-danger" />
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+
+                            <div class="form-group">
+                                <form:label path="payment.description">Açıqlama</form:label>
+                                <form:input path="payment.description" cssClass="form-control" placeholder="Açıqlama daxil edin"/>
+                                <form:errors path="payment.description" cssClass="alert-danger control-label"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <form:label path="customer">Müştəri</form:label>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-user"></i></span></div>
+                                            <form:input path="customer" autocomplete="false" class="form-control" placeholder="M.kodu..."/>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <a href="javascript:findCustomer($('#form').find('input[name=\'customer\']'));" data-repeater-delete="" class="btn-sm btn btn-label-success btn-bold">
+                                            Axtar
+                                        </a>
+                                    </div>
+                                    <div class="col-3">
+                                        <a href="javascript:window.open('/crm/customer', 'mywindow', 'width=1250, height=800')" data-repeater-delete="" class="btn btn-bold btn-sm btn-label-primary">
+                                            Müştəri
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -274,7 +312,7 @@
                         <div class="col-md-5">
                             <div id="kt_repeater_1">
                                 <div class="form-group form-group-last row" id="kt_repeater_2">
-                                    <div data-repeater-list="" class="col-lg-12">
+                                    <div data-repeater-list="" class="col-lg-12" id="data-repeater-list">
                                         <div data-repeater-item class="form-group row align-items-center">
                                             <div class="col-9">
                                                 <div class="kt-form__group--inline">
@@ -340,11 +378,6 @@
                                 </div>
                                 <form:errors path="payment.lastPrice" cssClass="alert-danger control-label"/>
                             </div>
-                            <div class="form-group">
-                                <form:label path="payment.description">Açıqlama</form:label>
-                                <form:textarea path="payment.description" cssClass="form-control" placeholder="Açıqlama daxil edin"/>
-                                <form:errors path="payment.description" cssClass="alert-danger control-label"/>
-                            </div>
                         </div>
                     </div>
                 </form:form>
@@ -356,6 +389,14 @@
         </div>
     </div>
 </div>
+
+<form id="approve" method="post" action="/sale/sales/approve" style="display: none">
+    <input type="hidden" name="id" />
+</form>
+
+<form id="approve-form" method="post" action="/sale/sales/approve" style="display: none">
+    <input type="hidden" name="id" />
+</form>
 
 <script>
     $("#datatable").DataTable({
@@ -487,13 +528,12 @@
                     type: 'GET',
                     dataType: 'json',
                     beforeSend: function() {
+                        $("#kt_repeater_1").find("#data-repeater-list").html(content);
                     },
                     success: function(data) {
                         console.log(data);
 
                         $.each(data, function( index, value ) {
-                            alert( index + ": " + value );
-
                             content+='<div data-repeater-item="" class="form-group row align-items-center">\n' +
                                 '                                            <div class="col-9">\n' +
                                 '                                                <div class="kt-form__group--inline">\n' +
@@ -501,9 +541,9 @@
                                 '                                                        <label>İnventar:</label>\n' +
                                 '                                                    </div>\n' +
                                 '                                                    <div class="kt-form__control">\n' +
-                                '                                                        <input type="text" attr="barcode" name="salesInventories['+index+'].inventory.barcode" class="form-control" placeholder="Barkodu daxil edin..." onchange="findInventory($(this))">\n' +
-                                '                                                        <label attr="name" name="salesInventories['+index+'].inventory.name"></label>\n' +
-                                '                                                        <input type="hidden" attr="id" name="salesInventories['+index+'].inventory" class="form-control" placeholder="Barkodu daxil edin...">\n' +
+                                '                                                        <input type="text" attr="barcode" name="salesInventories['+index+'].inventory.barcode" class="form-control" placeholder="Barkodu daxil edin..." onchange="findInventory($(this))" value="'+value.inventory.barcode+'">\n' +
+                                '                                                        <label attr="name" name="salesInventories['+index+'].inventory.name">'+value.inventory.name+'</label>\n' +
+                                '                                                        <input type="hidden" attr="id" name="salesInventories['+index+'].inventory" class="form-control" placeholder="Barkodu daxil edin..." value="'+value.inventory.id+'">\n' +
                                 '                                                    </div>\n' +
                                 '                                                </div>\n' +
                                 '                                                <div class="d-md-none kt-margin-b-10"></div>\n' +
@@ -519,14 +559,7 @@
                                 '                                        </div>';
                         });
 
-
-
-
-
-
-
-
-
+                        $("#kt_repeater_1").find("#data-repeater-list").html(content);
                         swal.close();
                     },
                     error: function() {
@@ -666,4 +699,34 @@
     $("input[name='payment.lastPrice']").inputmask('decimal', {
         rightAlignNumerics: false
     });
+
+    function approveData(form, info, id){
+        swal.fire({
+            title: 'Əminsinizmi?',
+            html: info,
+            type: 'success',
+            allowEnterKey: true,
+            showCancelButton: true,
+            buttonsStyling: false,
+            cancelButtonText: 'İmtina',
+            cancelButtonColor: '#d1d5cf',
+            cancelButtonClass: 'btn btn-default',
+            confirmButtonText: 'Bəli, icra edilsin!',
+            confirmButtonColor: '#c40000',
+            confirmButtonClass: 'btn btn-success',
+            footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+        }).then(function(result) {
+            if (result.value) {
+                swal.fire({
+                    text: 'Proses davam edir...',
+                    allowOutsideClick: false,
+                    onOpen: function() {
+                        $(form).find("input[name='id']").val(id);
+                        swal.showLoading();
+                        $(form).submit();
+                    }
+                })
+            }
+        })
+    }
 </script>

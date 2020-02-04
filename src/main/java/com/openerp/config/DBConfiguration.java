@@ -1113,6 +1113,11 @@ public class DBConfiguration {
             moduleOperations.add(approveModuleOperation7);
             ModuleOperation approveModuleOperation8 = new ModuleOperation(salary, approve, null);
             moduleOperations.add(approveModuleOperation8);
+            ModuleOperation approveModuleOperation9 = new ModuleOperation(sales, approve, null);
+            moduleOperations.add(approveModuleOperation9);
+            ModuleOperation approveModuleOperation10 = new ModuleOperation(service, approve, null);
+            moduleOperations.add(approveModuleOperation10);
+
 
             ModuleOperation uploadModuleOperation1 = new ModuleOperation(nonWorkingDay, upload, null);
             moduleOperations.add(uploadModuleOperation1);
@@ -1463,6 +1468,8 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, approveModuleOperation6));
             userModuleOperations.add(new UserModuleOperation(user, approveModuleOperation7));
             userModuleOperations.add(new UserModuleOperation(user, approveModuleOperation8));
+            userModuleOperations.add(new UserModuleOperation(user, approveModuleOperation9));
+            userModuleOperations.add(new UserModuleOperation(user, approveModuleOperation10));
 
             userModuleOperations.add(new UserModuleOperation(user, uploadModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, uploadModuleOperation2));

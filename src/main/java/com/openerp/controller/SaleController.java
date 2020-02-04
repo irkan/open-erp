@@ -136,13 +136,13 @@ public class SaleController extends SkeletonController {
     public String postSales(@ModelAttribute(Constants.FORM) @Validated Sales sales, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
-            if(sales.getId()==null){
-                List<SalesInventory> salesInventories = new ArrayList<>();
-                for(SalesInventory salesInventory: sales.getSalesInventories()){
-                    salesInventories.add(new SalesInventory(salesInventory.getInventory(), sales));
-                }
-                sales.setSalesInventories(salesInventories);
+            salesInventoryRepository.deleteInBatch(salesInventoryRepository.getSalesInventoriesByActiveTrueAndSales_Id(sales.getId()));
+            List<SalesInventory> salesInventories = new ArrayList<>();
+            for(SalesInventory salesInventory: sales.getSalesInventories()){
+                salesInventories.add(new SalesInventory(salesInventory.getInventory(), sales));
             }
+            sales.setSalesInventories(salesInventories);
+
             if(sales.getPayment().getCash()){
                 sales.getPayment().setPeriod(null);
                 sales.getPayment().setSchedule(null);
@@ -155,7 +155,18 @@ public class SaleController extends SkeletonController {
             sales.setGuaranteeExpire(Util.guarantee(sales.getSaleDate()==null?new Date():sales.getSaleDate(), sales.getGuarantee()));
             salesRepository.save(sales);
             log("sale_sales", "create/edit", sales.getId(), sales.toString());
+        }
+        if(sales.getService()){
+            return mapPost(sales, binding, redirectAttributes, "/sale/service");
+        }
+        return mapPost(sales, binding, redirectAttributes);
+    }
 
+    @PostMapping(value = "/sales/approve")
+    public String postSalesApprove(@ModelAttribute(Constants.FORM) @Validated Sales sales, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        sales = salesRepository.getSalesById(sales.getId());
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()){
             for(SalesInventory salesInventory: sales.getSalesInventories()){
                 List<Action> oldActions = actionRepository.getActionsByActiveTrueAndInventory_ActiveAndInventoryAndEmployeeAndAction_Attr1AndAmountGreaterThanOrderById(true, salesInventory.getInventory(), getSessionUser().getEmployee(), "consolidate", 0);
                 if(oldActions.size()>0){
@@ -199,11 +210,15 @@ public class SaleController extends SkeletonController {
                 invoiceRepository.save(invoice);
                 log("sale_invoice", "create/edit", invoice.getId(), invoice.toString());
             }
+            sales.setApprove(true);
+            sales.setApproveDate(new Date());
+            salesRepository.save(sales);
+            log("sale_sales", "approve", sales.getId(), sales.toString());
         }
         if(sales.getService()){
             return mapPost(sales, binding, redirectAttributes, "/sale/service");
         }
-        return mapPost(sales, binding, redirectAttributes);
+        return mapPost(sales, binding, redirectAttributes, "/sale/sales");
     }
 
     @PostMapping(value = "/sales/filter")
