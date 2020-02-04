@@ -182,7 +182,7 @@
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${list.content}" varStatus="loop">
-                                    <tr data="<c:out value="${utl:toJson(t)}" />">
+                                    <tr data="<c:out value="${utl:toJson(t)}" />" rowId="">
                                         <td style="<c:out value="${t.payment.cash?'background-color: #e6ffe7 !important':'background-color: #ffeaf1 !important'}"/>"><c:out value="${t.id}" /></td>
                                         <th>
                                             <c:forEach var="p" items="${t.salesInventories}" varStatus="lp">
@@ -219,7 +219,7 @@
                                                 </a>
                                             </c:if>
                                             <c:if test="${edit.status}">
-                                                <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');getInventories('<c:out value="${t.id}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                                                <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
                                                     <i class="<c:out value="${edit.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
@@ -585,6 +585,7 @@
     <c:if test="${edit.status}">
     $('#datatable tbody').on('dblclick', 'tr', function () {
         edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
+        getInventories($(this).attr('id'));
     });
     </c:if>
 

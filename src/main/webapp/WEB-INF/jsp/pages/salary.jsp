@@ -188,6 +188,69 @@
                                 </c:forEach>
                                 </tbody>
                             </table>
+                            <div class="row">
+                                <div class="col-10 text-right">
+                                    Ümumi DSMF ayırmaları:
+                                </div>
+                                <div class="col-2">
+                                    <fmt:formatNumber value="${form.sumOfDsmfDeduction}" type="number" maxFractionDigits="2"/><c:out value=" ₼"/>
+                                    <div class="kt-separator kt-separator--border-2x kt-separator--space-sm kt-separator--portlet-fit mb-3"></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-10 text-right">
+                                    Ümumi gəlir vergisi:
+                                </div>
+                                <div class="col-2">
+                                    <fmt:formatNumber value="${form.sumOfTaxIncome}" type="number" maxFractionDigits="2"/><c:out value=" ₼"/>
+                                    <div class="kt-separator kt-separator--border-2x kt-separator--space-sm kt-separator--portlet-fit mb-3"></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-10 text-right">
+                                    Ümumi həmkarlar təşkilatına üzvlük haqqı:
+                                </div>
+                                <div class="col-2">
+                                    <fmt:formatNumber value="${form.sumOfMembershipFeeForTradeUnion}" type="number" maxFractionDigits="2"/><c:out value=" ₼"/>
+                                    <div class="kt-separator kt-separator--border-2x kt-separator--space-sm kt-separator--portlet-fit mb-3"></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-10 text-right">
+                                    Ümumi icbari tibbi sığorta haqqı:
+                                </div>
+                                <div class="col-2">
+                                    <fmt:formatNumber value="${form.sumOfCompulsoryHealthInsurance}" type="number" maxFractionDigits="2"/><c:out value=" ₼"/>
+                                    <div class="kt-separator kt-separator--border-2x kt-separator--space-sm kt-separator--portlet-fit mb-3"></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-10 text-right">
+                                    Ümumi işsizlikdən sığorta haqqı:
+                                </div>
+                                <div class="col-2">
+                                    <fmt:formatNumber value="${form.sumOfUnemploymentInsurance}" type="number" maxFractionDigits="2"/><c:out value=" ₼"/>
+                                    <div class="kt-separator kt-separator--border-2x kt-separator--space-sm kt-separator--portlet-fit mb-3"></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-10 text-right">
+                                    Ümumi yekun ödəniləcək məbləğ (Rəsmi hissə):
+                                </div>
+                                <div class="col-2">
+                                    <fmt:formatNumber value="${form.sumOfTotalAmountPayableOfficial}" type="number" maxFractionDigits="2"/><c:out value=" ₼"/>
+                                    <div class="kt-separator kt-separator--border-2x kt-separator--space-sm kt-separator--portlet-fit mb-3"></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-10 text-right">
+                                    Ümumi yekun ödəniləcək məbləğ (Qeyri rəsmi hissə):
+                                </div>
+                                <div class="col-2">
+                                    <fmt:formatNumber value="${form.sumOfTotalAmountPayableNonOfficial}" type="number" maxFractionDigits="2"/><c:out value=" ₼"/>
+                                    <div class="kt-separator kt-separator--border-2x kt-separator--space-sm kt-separator--portlet-fit mb-3"></div>
+                                </div>
+                            </div>
                         </c:when>
                         <c:otherwise>
                             <div class="row">

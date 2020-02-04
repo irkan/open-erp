@@ -345,20 +345,20 @@ public class PayrollController extends SkeletonController {
                     slry = salaryRepository.getSalaryByActiveTrueAndWorkingHourRecord(whr);
                     if(slry==null){
                         slry = new Salary(whr);
+                        slry.setOrganization(whr.getOrganization());
                         List<SalaryEmployee> salaryEmployees = new ArrayList<>();
                         for(WorkingHourRecordEmployee whre: workingHourRecordEmployeeRepository.getWorkingHourRecordEmployeesByWorkingHourRecord_Id(whr.getId())){
                             salaryEmployees.add(new SalaryEmployee(slry, whre.getEmployee(), whre));
                         }
                         slry.setSalaryEmployees(salaryEmployees);
-                        salaryRepository.save(slry);
-                        log("payroll_salary", "create/edit", slry.getId(), slry.toString());
 
                         double sumOfMembershipFeeForTradeUnion=0;
                         double sumOfCompulsoryHealthInsurance=0;
                         double sumOfUnemploymentInsurance=0;
-                        double sumOfTax=0;
                         double sumOfDsmfDeduction=0;
-                        double sumOfSalary=0;
+                        double sumOfTaxIncome=0;
+                        double sumOfTotalAmountPayableOfficial=0;
+                        double sumOfTotalAmountPayableNonOfficial=0;
 
                         List<PayrollConfiguration> payrollConfigurations = payrollConfigurationRepository.getPayrollConfigurationsByActiveTrueOrderById();
                         List<Dictionary> employeeAdditionalFields = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-payroll-field");
@@ -504,6 +504,7 @@ public class PayrollController extends SkeletonController {
                                             Util.findPayrollConfiguration(payrollConfigurations,"{tax_income}")
                                     )
                             );
+                            sumOfTaxIncome += Double.parseDouble(Util.format(Double.parseDouble(String.valueOf(engine.eval(tax_income)))));
                             String dsmf_deduction = Util.findPayrollConfiguration(payrollConfigurations,"{dsmf_deduction}")
                                     .replaceAll(Pattern.quote("{calculated_gross_salary}"), String.valueOf(engine.eval(calculated_gross_salary)))
                                     .replaceAll(Pattern.quote("{minimal_salary}"), minimal_salary)
@@ -518,6 +519,7 @@ public class PayrollController extends SkeletonController {
                                             Util.findPayrollConfiguration(payrollConfigurations,"{dsmf_deduction}")
                                     )
                             );
+                            sumOfDsmfDeduction+=Double.parseDouble(Util.format(Double.parseDouble(String.valueOf(engine.eval(dsmf_deduction)))));
                             String membership_fee_for_trade_union = Util.findPayrollConfiguration(payrollConfigurations,"{membership_fee_for_trade_union}")
                                     .replaceAll(Pattern.quote("{calculated_gross_salary}"), String.valueOf(engine.eval(calculated_gross_salary)))
                                     .replaceAll(Pattern.quote("{membership_fee_for_trade_union_fee}"), membership_fee_for_trade_union_fee)
@@ -532,7 +534,7 @@ public class PayrollController extends SkeletonController {
                                             Util.findPayrollConfiguration(payrollConfigurations,"{membership_fee_for_trade_union}")
                                     )
                             );
-                            sumOfMembershipFeeForTradeUnion+=Double.parseDouble(membership_fee_for_trade_union);
+                            sumOfMembershipFeeForTradeUnion+=Double.parseDouble(Util.format(Double.parseDouble(String.valueOf(engine.eval(membership_fee_for_trade_union)))));
                             String compulsory_health_insurance = Util.findPayrollConfiguration(payrollConfigurations,"{compulsory_health_insurance}")
                                     .replaceAll(Pattern.quote("{gross_salary}"), gross_salary)
                                     .replaceAll(Pattern.quote("%"), percent);
@@ -546,7 +548,7 @@ public class PayrollController extends SkeletonController {
                                             Util.findPayrollConfiguration(payrollConfigurations,"{compulsory_health_insurance}")
                                     )
                             );
-                            sumOfCompulsoryHealthInsurance+=Double.parseDouble(compulsory_health_insurance);
+                            sumOfCompulsoryHealthInsurance+=Double.parseDouble(Util.format(Double.parseDouble(String.valueOf(engine.eval(compulsory_health_insurance)))));
                             String unemployment_insurance = Util.findPayrollConfiguration(payrollConfigurations,"{unemployment_insurance}")
                                     .replaceAll(Pattern.quote("{calculated_gross_salary}"), String.valueOf(engine.eval(calculated_gross_salary)))
                                     .replaceAll(Pattern.quote("%"), percent);
@@ -560,7 +562,7 @@ public class PayrollController extends SkeletonController {
                                             Util.findPayrollConfiguration(payrollConfigurations,"{unemployment_insurance}")
                                     )
                             );
-                            sumOfUnemploymentInsurance+=Double.parseDouble(unemployment_insurance);
+                            sumOfUnemploymentInsurance+=Double.parseDouble(Util.format(Double.parseDouble(String.valueOf(engine.eval(unemployment_insurance)))));
                             String total_amount_payable_official = Util.findPayrollConfiguration(payrollConfigurations,"{total_amount_payable_official}")
                                     .replaceAll(Pattern.quote("{calculated_gross_salary}"), String.valueOf(engine.eval(calculated_gross_salary)))
                                     .replaceAll(Pattern.quote("{tax_income}"), String.valueOf(engine.eval(tax_income)))
@@ -581,6 +583,7 @@ public class PayrollController extends SkeletonController {
                                             Util.findPayrollConfiguration(payrollConfigurations,"{total_amount_payable_official}")
                                     )
                             );
+                            sumOfTotalAmountPayableOfficial+=Double.parseDouble(Util.format(Double.parseDouble(String.valueOf(engine.eval(total_amount_payable_official)))));
                             String work_experience = Util.calculateWorkExperience(se.getWorkingHourRecordEmployee().getEmployee().getContractStartDate());
                             salaryEmployeeDetails.add(
                                     new SalaryEmployeeDetail(
@@ -660,9 +663,20 @@ public class PayrollController extends SkeletonController {
                                             Util.findPayrollConfiguration(payrollConfigurations,"{total_amount_payable_non_official}")
                                     )
                             );
+                            sumOfTotalAmountPayableNonOfficial+=Double.parseDouble(Util.format(Double.parseDouble(String.valueOf(engine.eval(total_amount_payable_non_official)))));
+
                             se.setSalaryEmployeeDetails(salaryEmployeeDetails);
-                            salaryEmployeeDetailRepository.saveAll(salaryEmployeeDetails);
                         }
+                        slry.setSumOfCompulsoryHealthInsurance(sumOfCompulsoryHealthInsurance);
+                        slry.setSumOfMembershipFeeForTradeUnion(sumOfMembershipFeeForTradeUnion);
+                        slry.setSumOfDsmfDeduction(sumOfDsmfDeduction);
+                        slry.setSumOfUnemploymentInsurance(sumOfUnemploymentInsurance);
+                        slry.setSumOfTaxIncome(sumOfTaxIncome);
+                        slry.setSumOfTotalAmountPayableOfficial(sumOfTotalAmountPayableOfficial);
+                        slry.setSumOfTotalAmountPayableNonOfficial(sumOfTotalAmountPayableNonOfficial);
+
+                        salaryRepository.save(slry);
+                        log("payroll_salary", "create/edit", slry.getId(), slry.toString());
                     }
                 }
             }
@@ -679,24 +693,17 @@ public class PayrollController extends SkeletonController {
     public String postSalaryApprove(@ModelAttribute(Constants.FORM) @Validated Salary slry, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         Date now = new Date();
         Salary salary = salaryRepository.getSalaryById(slry.getId());
-        for(SalaryEmployee se: salary.getSalaryEmployees()){
-            if(!se.getApprove()){
-                Transaction transaction = new Transaction(
-                        salary.getWorkingHourRecord().getOrganization(),
-                        null,
-                        dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("salary", "action"),
-                        "Əmək haqqı " + se.getEmployee().getPerson().getFullName(),
-                        false,
-                        null
-                        );
-                transaction.setPrice(Util.calculateSalary(se.getSalaryEmployeeDetails()));
-                transactionRepository.save(transaction);
+        Transaction transaction = new Transaction(
+                salary.getWorkingHourRecord().getOrganization(),
+                null,
+                dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("salary", "action"),
+                "Əmək haqqı ",
+                false,
+                null
+        );
+        transaction.setPrice(salary.getSumOfCompulsoryHealthInsurance());
+        transactionRepository.save(transaction);
 
-                se.setApprove(true);
-                se.setApproveDate(now);
-                salaryEmployeeRepository.save(se);
-            }
-        }
         salary.setApprove(true);
         salary.setApproveDate(now);
         salaryRepository.save(salary);

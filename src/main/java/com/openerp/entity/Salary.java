@@ -31,7 +31,6 @@ public class Salary {
     @JoinColumn(name = "hr_organization_id")
     private Organization organization;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "salary", cascade = CascadeType.ALL)
     private List<SalaryEmployee> salaryEmployees;
 
@@ -58,14 +57,17 @@ public class Salary {
     @Column(name = "sum_of_unemployment_insurance")
     private Double sumOfUnemploymentInsurance;
 
-    @Column(name = "sum_of_tax")
-    private Double sumOfTax;
+    @Column(name = "sum_of_tax_income")
+    private Double sumOfTaxIncome;
 
     @Column(name = "sum_of_dsmf_deduction")
     private Double sumOfDsmfDeduction;
 
-    @Column(name = "sum_of_salary")
-    private Double sumOfSalary;
+    @Column(name = "sum_of_total_amount_payable_official")
+    private Double sumOfTotalAmountPayableOfficial;
+
+    @Column(name = "sum_of_total_amount_payable_non_official")
+    private Double sumOfTotalAmountPayableNonOfficial;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_date", nullable = false)
