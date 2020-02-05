@@ -165,6 +165,7 @@
                 <div class="kt-portlet__body">
                     <c:choose>
                         <c:when test="${not empty list}">
+                            <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
                             <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
                             <c:set var="approve" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
                             <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
@@ -182,7 +183,7 @@
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${list.content}" varStatus="loop">
-                                    <tr data="<c:out value="${utl:toJson(t)}" />" rowId="">
+                                    <tr data="<c:out value="${utl:toJson(t)}" />" rowId="<c:out value="${t.id}" />" customerId="<c:out value="${t.customer.id}" />">
                                         <td style="<c:out value="${t.payment.cash?'background-color: #e6ffe7 !important':'background-color: #ffeaf1 !important'}"/>"><c:out value="${t.id}" /></td>
                                         <th>
                                             <c:forEach var="p" items="${t.salesInventories}" varStatus="lp">
@@ -213,17 +214,22 @@
                                             <fmt:formatDate value = "${t.guaranteeExpire}" pattern = "dd.MM.yyyy" />, <c:out value="${t.guarantee}" /> ay
                                         </th>
                                         <td nowrap class="text-center">
+                                            <c:if test="${view.status}">
+                                                <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');getInventories('<c:out value="${t.id}" />');findCustomer('<c:out value="${t.id}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
+                                                    <i class="<c:out value="${view.object.icon}"/>"></i>
+                                                </a>
+                                            </c:if>
                                             <c:if test="${approve.status and !t.approve}">
                                                 <a href="javascript:approveData($('#approve-form'),'<c:out value="${t.id}" /> nömrəli müqavilənin təsdiqi', '<c:out value="${t.id}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${approve.object.name}"/>">
                                                     <i class="<c:out value="${approve.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
-                                            <c:if test="${edit.status}">
-                                                <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                                            <c:if test="${edit.status and !t.approve}">
+                                                <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');getInventories('<c:out value="${t.id}" />');findCustomer('<c:out value="${t.id}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
                                                     <i class="<c:out value="${edit.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
-                                            <c:if test="${delete.status}">
+                                            <c:if test="${delete.status and !t.approve}">
                                                 <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.id}" /> <br/> <c:out value="${t.customer.person.fullName}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
                                                     <i class="<c:out value="${delete.object.icon}"/>"></i>
                                                 </a>
@@ -296,7 +302,7 @@
                                         </div>
                                     </div>
                                     <div class="col-3">
-                                        <a href="javascript:findCustomer($('#form').find('input[name=\'customer\']'));" data-repeater-delete="" class="btn-sm btn btn-label-success btn-bold">
+                                        <a href="javascript:findCustomer($('#form').find('input[name=\'customer\']').val());" data-repeater-delete="" class="btn-sm btn btn-label-success btn-bold">
                                             Axtar
                                         </a>
                                     </div>
@@ -439,16 +445,16 @@
         $("input[name='payment.lastPrice']").val(result);
     }
 
-    function findCustomer(element){
+    function findCustomer(customerId){
         var tr = '';
-        if($(element).val().trim().length>0){
+        if(customerId.trim().length>0){
             swal.fire({
                 text: 'Proses davam edir...',
                 allowOutsideClick: false,
                 onOpen: function() {
                     swal.showLoading();
                     $.ajax({
-                        url: '/crm/api/customer/'+$(element).val(),
+                        url: '/crm/api/customer/'+customerId,
                         type: 'GET',
                         dataType: 'json',
                         beforeSend: function() {
@@ -582,12 +588,13 @@
         $(document).off('focusin.modal');
     });
 
-    <c:if test="${edit.status}">
     $('#datatable tbody').on('dblclick', 'tr', function () {
-        edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
-        getInventories($(this).attr('id'));
+        <c:if test="${view.status}">
+        view($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${view.object.name}" />');
+        getInventories($(this).attr('rowId'));
+        findCustomer($(this).attr('customerId'));
+        </c:if>
     });
-    </c:if>
 
     var KTFormRepeater = function() {
         var demo1 = function() {

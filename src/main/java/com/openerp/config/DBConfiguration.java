@@ -1067,6 +1067,12 @@ public class DBConfiguration {
             moduleOperations.add(viewModuleOperation35);
             ModuleOperation viewModuleOperation36 = new ModuleOperation(payrollConfiguration, view, null);
             moduleOperations.add(viewModuleOperation36);
+            ModuleOperation viewModuleOperation37 = new ModuleOperation(service, view, null);
+            moduleOperations.add(viewModuleOperation37);
+            ModuleOperation viewModuleOperation38 = new ModuleOperation(demonstration, view, null);
+            moduleOperations.add(viewModuleOperation38);
+            ModuleOperation viewModuleOperation39 = new ModuleOperation(customer, view, null);
+            moduleOperations.add(viewModuleOperation39);
 
             ModuleOperation exportModuleOperation1 = new ModuleOperation(subModule1, export, null);
             moduleOperations.add(exportModuleOperation1);
@@ -1494,6 +1500,9 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation34));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation35));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation36));
+            userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation37));
+            userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation38));
+            userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation39));
 
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation2));

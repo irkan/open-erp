@@ -197,6 +197,7 @@
                 <span class="kt-portlet__body">
                     <c:choose>
                         <c:when test="${not empty list}">
+                            <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
                             <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable"
                                    id="group_table">
@@ -206,6 +207,7 @@
                                     <th>Ad Soyad Ata adı</th>
                                     <th>Struktur</th>
                                     <th>Şəhər</th>
+                                    <th>Telefon</th>
                                     <th>Doğum tarixi</th>
                                     <th>Ş.v - nin seriya nömrəsi</th>
                                     <th>Ş.v - nin pin kodu</th>
@@ -223,10 +225,16 @@
                                         <th>
                                             <c:out value="${t.person.contact.city.name}"/>
                                         </th>
+                                        <td><c:out value="${t.person.contact.mobilePhone}"/></td>
                                         <td><fmt:formatDate value="${t.person.birthday}" pattern="dd.MM.yyyy"/></td>
                                         <td><c:out value="${t.person.idCardSerialNumber}"/></td>
                                         <td><c:out value="${t.person.idCardPinCode}"/></td>
                                         <td nowrap class="text-center">
+                                            <c:if test="${view.status}">
+                                                 <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
+                                                     <i class="<c:out value="${view.object.icon}"/>"></i>
+                                                 </a>
+                                            </c:if>
                                             <c:if test="${edit.status}">
                                                 <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');"
                                                    class="btn btn-sm btn-clean btn-icon btn-icon-md"
@@ -463,11 +471,14 @@
 
 <script src="<c:url value="/assets/js/demo4/pages/crud/datatables/advanced/row-grouping.js" />"  type="text/javascript"></script>
 <script>
-    <c:if test="${edit.status}">
-        $('#group_table tbody').on('dblclick', 'tr', function () {
-            edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
-        });
-    </c:if>
+    $('#group_table tbody').on('dblclick', 'tr', function () {
+        <c:if test="${edit.status}">
+        edit($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${edit.object.name}" />');
+        </c:if>
+        <c:if test="${!edit.status and view.status}">
+        view($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${view.object.name}" />');
+        </c:if>
+    });
 
     $( "#form" ).validate({
         rules: {

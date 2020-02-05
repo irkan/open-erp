@@ -36,6 +36,9 @@ public class SalesService {
                 if(sales.getActive()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("active"), sales.getActive())));
                 }
+                if(sales.getApprove()!=null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("approve"), sales.getApprove())));
+                }
                 if(sales.getService()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("service"), sales.getService())));
                 }

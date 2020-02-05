@@ -35,6 +35,7 @@ public class CollectController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 salesObject.setSaleDateFrom(DateUtility.addYear(Integer.parseInt(configurationRepository.getConfigurationByKey("by_year").getAttribute())));
                 salesObject.setService(null);
+                salesObject.setApprove(true);
                 model.addAttribute(Constants.FILTER, salesObject);
             }
             Page<Sales> sales = salesService.findAll((Sales) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize()*100, Sort.by("id").descending()));

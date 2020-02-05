@@ -26,7 +26,8 @@
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
                                 <thead>
                                 <tr>
-                                    <th>Satış</th>
+                                    <th class="text-right">Tip</th>
+                                    <th>Kod</th>
                                     <th>Müştəri</th>
                                     <th>Ödənilmişdir</th>
                                     <th>Ödənilməlidir</th>
@@ -42,8 +43,16 @@
                                 <c:forEach var="t" items="${list.content}" varStatus="loop">
                                     <c:if test="${t.payment.latency le configuration_troubled_customer}">
                                         <tr data="<c:out value="${t.id}" />">
+                                            <td class="text-right <c:out value="${t.service?'kt-bg-light-primary':''}"/>">
+                                                <span class="kt-font-bold "><c:out value="${t.service?'Servis':'Satış'}"/></span>
+                                            </td>
                                             <td style="<c:out value="${t.payment.cash?'background-color: #e6ffe7 !important':'background-color: #ffeaf1 !important'}"/>">
-                                                <a href="javascript:window.open('/sale/sales/<c:out value="${t.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.id}" /></a>
+                                                <c:if test="${!t.service}">
+                                                    <a href="javascript:window.open('/sale/sales/<c:out value="${t.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.id}" /></a>
+                                                </c:if>
+                                                <c:if test="${t.service}">
+                                                    <a href="javascript:window.open('/sale/service/<c:out value="${t.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.id}" /></a>
+                                                </c:if>
                                             </td>
                                             <th>
                                                 <a href="javascript:window.open('/crm/customer/<c:out value="${t.payment.sales.customer.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.payment.sales.customer.id}"/>: <c:out value="${t.payment.sales.customer.person.fullName}"/></a>
