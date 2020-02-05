@@ -33,6 +33,9 @@ public class InvoiceService {
                 if(invoice.getOrganization()!=null && invoice.getOrganization().getId()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("organization"), invoice.getOrganization().getId())));
                 }
+                if(invoice.getCollector()!=null && invoice.getCollector().getId()!=null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("collector"), invoice.getCollector().getId())));
+                }
                 if(invoice.getSales()!=null && invoice.getSales().getId()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("sales"), invoice.getSales().getId())));
                 }

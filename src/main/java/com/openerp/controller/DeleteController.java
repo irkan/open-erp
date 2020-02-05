@@ -204,9 +204,8 @@ public class DeleteController extends SkeletonController {
             demonstration.setActive(false);
             demonstrationRepository.save(demonstration);
             log("sale_demonstration", "delete", demonstration.getId(), demonstration.toString());
-            List<EmployeePayrollDetail> employeeDetails = demonstration.getEmployee().getEmployeePayrollDetails();
-            String value = Util.findEmployeeDetail(employeeDetails, "{demonstration}");
-            double price = demonstration.getAmount()*Double.parseDouble(value);
+            EmployeeSaleDetail demonstrationSaleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(demonstration.getEmployee(), "{demonstration}");
+            double price = demonstration.getAmount()*Double.parseDouble(demonstrationSaleDetail.getValue());
             Advance advance = new Advance(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("bonus-demonstration-advance", "advance"), demonstration.getEmployee(), demonstration.getOrganization(), "Nümayişin silinməsinə görə kredit: Nümayiş №" + demonstration.getId(), "", demonstration.getDemonstrateDate(), price);
             advanceRepository.save(advance);
             log("payroll_advance", "create/edit", advance.getId(), advance.toString(), demonstration.getId() + "nğmrəli nümayişin silinməsinə görə kredit avans verilmişdir");

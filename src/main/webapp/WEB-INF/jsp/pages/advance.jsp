@@ -216,36 +216,36 @@
                 </c:if>
             </td>
             <td nowrap class="text-center">
-                    <c:if test="${approve.status and !t.approve}">
-                        <a href="javascript:approve($('#advance-approve-form'), $('#advance-approve-modal'), '<c:out value="${t.id}" />', '<c:out value="${t.description}" />', '<c:out value="${t.payed}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${approve.object.name}"/>">
-                            <i class="<c:out value="${approve.object.icon}"/>"></i>
-                        </a>
-                    </c:if>
-                    <c:if test="${transfer.status and t.approve and !t.transaction}">
-                        <a href="javascript:transfer($('#advance-transfer-form'), $('#advance-transfer-modal'), '<c:out value="${t.id}" />', '<c:out value="${t.payed}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
-                            <i class="<c:out value="${transfer.object.icon}"/>"></i>
-                        </a>
-                    </c:if>
-                    <c:if test="${credit.status and t.transaction and t.payed gt 0}">
-                        <a href="javascript:transfer($('#advance-credit-form'), $('#advance-credit-modal'), '<c:out value="${t.id}" />', '<c:out value="${t.payed}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${credit.object.name}"/>">
-                            <i class="<c:out value="${credit.object.icon}"/>"></i>
-                        </a>
-                    </c:if>
-                    <c:if test="${edit.status and !t.approve}">
-                        <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
-                            <i class="<c:out value="${edit.object.icon}"/>"></i>
-                        </a>
-                    </c:if>
-                    <c:if test="${view.status}">
-                        <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
-                            <i class="<c:out value="${view.object.icon}"/>"></i>
-                        </a>
-                    </c:if>
-                    <c:if test="${delete.status and !t.approve}">
-                        <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.description}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
-                            <i class="<c:out value="${delete.object.icon}"/>"></i>
-                        </a>
-                    </c:if>
+                <c:if test="${approve.status and !t.approve}">
+                    <a href="javascript:approve($('#advance-approve-form'), $('#advance-approve-modal'), '<c:out value="${t.id}" />', '<c:out value="${t.description}" />', '<c:out value="${t.payed}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${approve.object.name}"/>">
+                        <i class="<c:out value="${approve.object.icon}"/>"></i>
+                    </a>
+                </c:if>
+                <c:if test="${view.status}">
+                    <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
+                        <i class="<c:out value="${view.object.icon}"/>"></i>
+                    </a>
+                </c:if>
+                <c:if test="${transfer.status and t.approve and !t.transaction}">
+                    <a href="javascript:transfer($('#advance-transfer-form'), $('#advance-transfer-modal'), '<c:out value="${t.id}" />', '<c:out value="${t.payed}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
+                        <i class="<c:out value="${transfer.object.icon}"/>"></i>
+                    </a>
+                </c:if>
+                <c:if test="${credit.status and t.transaction and t.payed gt 0}">
+                    <a href="javascript:transfer($('#advance-credit-form'), $('#advance-credit-modal'), '<c:out value="${t.id}" />', '<c:out value="${t.payed}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${credit.object.name}"/>">
+                        <i class="<c:out value="${credit.object.icon}"/>"></i>
+                    </a>
+                </c:if>
+                <c:if test="${edit.status and !t.approve}">
+                    <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                        <i class="<c:out value="${edit.object.icon}"/>"></i>
+                    </a>
+                </c:if>
+                <c:if test="${delete.status and !t.approve}">
+                    <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.description}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
+                        <i class="<c:out value="${delete.object.icon}"/>"></i>
+                    </a>
+                </c:if>
             </td>
         </tr>
     </c:forEach>

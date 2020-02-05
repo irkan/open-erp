@@ -186,6 +186,7 @@
                 <div class="kt-portlet__body">
                     <c:choose>
                         <c:when test="${not empty list}">
+                            <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
                             <c:set var="approve" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
                             <c:set var="consolidate" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'consolidate')}"/>
                             <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
@@ -248,47 +249,48 @@
                                             </c:if>
                                         </td>
                                         <th nowrap class="text-center">
-                                            <%--<c:if test="${t.price gt 0 and t.approve}">--%>
-                                                <c:if test="${approve.status}">
-                                                    <c:if test="${!t.approve}">
-                                                        <a href="javascript:edit($('#form-approve'), '<c:out value="${utl:toJson(t)}" />', 'approve-modal', '<c:out value="${approve.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${approve.object.name}"/>">
-                                                            <i class="<c:out value="${approve.object.icon}"/>"></i>
-                                                        </a>
-                                                    </c:if>
-                                                </c:if>
-                                                <span class="dropdown">
-                                                    <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
-                                                      <i class="la la-ellipsis-h"></i>
-                                                    </a>
-                                                    <div class="dropdown-menu dropdown-menu-right">
-                                                        <c:if test="${consolidate.status}">
-                                                        <a href="javascript:consolidate($('#form-consolidate'), '<c:out value="${utl:toJson(t)}" />', 'consolidate-modal');" class="dropdown-item" title="<c:out value="${consolidate.object.name}"/>">
-                                                            <i class="<c:out value="${consolidate.object.icon}"/>"></i> <c:out value="${consolidate.object.name}"/>
-                                                        </a>
-                                                        </c:if>
-                                                        <c:if test="${edit.status and !t.approve}">
-                                                        <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="dropdown-item" title="<c:out value="${edit.object.name}"/>">
-                                                            <i class="<c:out value="${edit.object.icon}"/>"></i> <c:out value="${edit.object.name}"/>
-                                                        </a>
-                                                        </c:if>
-                                                        <c:if test="${credit.status and t.creditable and t.approve}">
-                                                        <a href="javascript:edit($('#credit-form'), '<c:out value="${utl:toJson(t)}" />', 'credit-modal-operation', '<c:out value="${credit.object.name}" />');" class="dropdown-item" title="<c:out value="${credit.object.name}"/>">
-                                                            <i class="<c:out value="${credit.object.icon}"/>"></i> <c:out value="${credit.object.name}"/>
-                                                        </a>
-                                                        </c:if>
-                                                        <c:if test="${delete.status and !t.approve}">
-                                                        <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.description}" />');" class="dropdown-item" title="<c:out value="${delete.object.name}"/>">
-                                                            <i class="<c:out value="${delete.object.icon}"/>"></i> <c:out value="${delete.object.name}"/>
-                                                        </a>
-                                                        </c:if>
-                                                    </div>
-                                                </span>
-                                                <c:if test="${export.status}">
-                                                <a href="javascript:exportInvoice($('#form-export-invoice'), '<c:out value="${t.id}" />', 'modal-export-invoice');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Hesab-fakturanın çapı">
-                                                    <i class="<c:out value="${export.object.icon}"/>"></i>
+                                            <c:if test="${approve.status and !t.approve}">
+                                                <a href="javascript:edit($('#form-approve'), '<c:out value="${utl:toJson(t)}" />', 'approve-modal', '<c:out value="${approve.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${approve.object.name}"/>">
+                                                    <i class="<c:out value="${approve.object.icon}"/>"></i>
                                                 </a>
-                                                </c:if>
-                                            <%--</c:if>--%>
+                                            </c:if>
+                                            <c:if test="${view.status}">
+                                                <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
+                                                    <i class="<c:out value="${view.object.icon}"/>"></i>
+                                                </a>
+                                            </c:if>
+                                            <span class="dropdown">
+                                                <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
+                                                  <i class="la la-ellipsis-h"></i>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <c:if test="${consolidate.status}">
+                                                    <a href="javascript:consolidate($('#form-consolidate'), '<c:out value="${utl:toJson(t)}" />', 'consolidate-modal');" class="dropdown-item" title="<c:out value="${consolidate.object.name}"/>">
+                                                        <i class="<c:out value="${consolidate.object.icon}"/>"></i> <c:out value="${consolidate.object.name}"/>
+                                                    </a>
+                                                    </c:if>
+                                                    <c:if test="${edit.status and !t.approve}">
+                                                    <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="dropdown-item" title="<c:out value="${edit.object.name}"/>">
+                                                        <i class="<c:out value="${edit.object.icon}"/>"></i> <c:out value="${edit.object.name}"/>
+                                                    </a>
+                                                    </c:if>
+                                                    <c:if test="${credit.status and t.creditable and t.approve}">
+                                                    <a href="javascript:edit($('#credit-form'), '<c:out value="${utl:toJson(t)}" />', 'credit-modal-operation', '<c:out value="${credit.object.name}" />');" class="dropdown-item" title="<c:out value="${credit.object.name}"/>">
+                                                        <i class="<c:out value="${credit.object.icon}"/>"></i> <c:out value="${credit.object.name}"/>
+                                                    </a>
+                                                    </c:if>
+                                                    <c:if test="${delete.status and !t.approve}">
+                                                    <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.description}" />');" class="dropdown-item" title="<c:out value="${delete.object.name}"/>">
+                                                        <i class="<c:out value="${delete.object.icon}"/>"></i> <c:out value="${delete.object.name}"/>
+                                                    </a>
+                                                    </c:if>
+                                                </div>
+                                            </span>
+                                            <c:if test="${export.status}">
+                                            <a href="javascript:exportInvoice($('#form-export-invoice'), '<c:out value="${t.id}" />', 'modal-export-invoice');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Hesab-fakturanın çapı">
+                                                <i class="<c:out value="${export.object.icon}"/>"></i>
+                                            </a>
+                                            </c:if>
                                         </th>
                                     </tr>
                                 </c:forEach>
@@ -543,11 +545,14 @@
         }
     }
 
-    <c:if test="${edit.status}">
     $('#group_table tbody').on('dblclick', 'tr', function () {
-        edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
+        <c:if test="${edit.status}">
+        edit($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${edit.object.name}" />');
+        </c:if>
+        <c:if test="${!edit.status and view.status}">
+        view($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${view.object.name}" />');
+        </c:if>
     });
-    </c:if>
 
     $( "#form" ).validate({
         rules: {
@@ -571,8 +576,9 @@
 
     $( "#form-consolidate" ).validate({
         rules: {
-            collector: {
-                required: true
+            id: {
+                required: true,
+                digits: true
             }
         },
         invalidHandler: function(event, validator) {

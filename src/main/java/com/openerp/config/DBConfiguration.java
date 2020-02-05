@@ -450,8 +450,6 @@ public class DBConfiguration {
             dictionaries.add(employeePayrollDetail6);
             Dictionary employeePayrollDetail7 = new Dictionary("Əlavə məzuniyyət günlərinin sayı", "{additional_vacation_days}", "0", employeePayrollDetailType);
             dictionaries.add(employeePayrollDetail7);
-            Dictionary employeePayrollDetail8 = new Dictionary("Nümayiş", "{demonstration}", "1", employeePayrollDetailType);
-            dictionaries.add(employeePayrollDetail8);
             Dictionary employeeSaleDetail1 = new Dictionary("Canvasser", "{canvasser}", "{sale_price}>1698?30:25", employeeSaleDetailType);
             dictionaries.add(employeeSaleDetail1);
             Dictionary employeeSaleDetail2 = new Dictionary("Diller", "{dealer}", "{sale_price}>1698?120:100", employeeSaleDetailType);
@@ -460,6 +458,12 @@ public class DBConfiguration {
             dictionaries.add(employeeSaleDetail3);
             Dictionary employeeSaleDetail4 = new Dictionary("Konsul", "{consul}", "30", employeeSaleDetailType);
             dictionaries.add(employeeSaleDetail4);
+            Dictionary employeeSaleDetail5 = new Dictionary("Nümayiş", "{demonstration}", "1", employeeSaleDetailType);
+            dictionaries.add(employeeSaleDetail5);
+            Dictionary employeeSaleDetail6 = new Dictionary("Yığım", "{collect}", "2", employeeSaleDetailType);
+            dictionaries.add(employeeSaleDetail6);
+            Dictionary employeeSaleDetail7 = new Dictionary("Servis", "{service}", "3", employeeSaleDetailType);
+            dictionaries.add(employeeSaleDetail7);
             Dictionary identifier6 = new Dictionary("İş Günü", "İG", null, identifierType);
             dictionaries.add(identifier6);
             Dictionary identifier8 = new Dictionary("Qısaldılmış İş Günü (Səhər)", "QİG(S)", null, identifierType);
@@ -1073,6 +1077,8 @@ public class DBConfiguration {
             moduleOperations.add(viewModuleOperation38);
             ModuleOperation viewModuleOperation39 = new ModuleOperation(customer, view, null);
             moduleOperations.add(viewModuleOperation39);
+            ModuleOperation viewModuleOperation40 = new ModuleOperation(invoice, view, null);
+            moduleOperations.add(viewModuleOperation40);
 
             ModuleOperation exportModuleOperation1 = new ModuleOperation(subModule1, export, null);
             moduleOperations.add(exportModuleOperation1);
@@ -1503,6 +1509,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation37));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation38));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation39));
+            userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation40));
 
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation2));

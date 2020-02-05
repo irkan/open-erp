@@ -277,9 +277,8 @@ public class SaleController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             demonstrationRepository.save(demonstration);
-            List<EmployeePayrollDetail> employeeDetails = demonstration.getEmployee().getEmployeePayrollDetails();
-            String value = Util.findEmployeeDetail(employeeDetails, "{demonstration}");
-            double price = demonstration.getAmount()*Double.parseDouble(value);
+            EmployeeSaleDetail demonstrationSaleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(demonstration.getEmployee(), "{demonstration}");
+            double price = demonstration.getAmount()*Double.parseDouble(demonstrationSaleDetail.getValue());
             Advance advance = new Advance(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("bonus-demonstration-advance", "advance"), demonstration.getEmployee(), demonstration.getOrganization(), demonstration.getId() + " nömrəli nümayişdən əldə edilən bonus", "", demonstration.getDemonstrateDate(), price);
             advanceRepository.save(advance);
         }

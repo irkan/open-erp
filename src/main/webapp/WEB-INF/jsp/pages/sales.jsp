@@ -266,6 +266,11 @@
                                                     <i class="<c:out value="${approve.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
+                                            <c:if test="${view.status}">
+                                                <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
+                                                    <i class="<c:out value="${view.object.icon}"/>"></i>
+                                                </a>
+                                            </c:if>
                                             <span class="dropdown">
                                                 <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">
                                                   <i class="la la-ellipsis-h"></i>
@@ -281,12 +286,12 @@
                                                         <i class="la <c:out value="${detail.object.icon}"/>"></i> <c:out value="${detail.object.name}"/>
                                                     </a>
                                                     </c:if>
-                                                    <c:if test="${edit.status}">
+                                                    <c:if test="${edit.status and !t.approve}">
                                                     <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="dropdown-item" title="<c:out value="${edit.object.name}"/>">
                                                         <i class="<c:out value="${edit.object.icon}"/>"></i> <c:out value="${edit.object.name}"/>
                                                     </a>
                                                     </c:if>
-                                                    <c:if test="${delete.status}">
+                                                    <c:if test="${delete.status and !t.approve}">
                                                     <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.salesInventories.get(0).inventory.name}" /> <br/> <c:out value="${t.customer.person.fullName}" />');" class="dropdown-item" title="<c:out value="${delete.object.name}"/>">
                                                         <i class="<c:out value="${delete.object.icon}"/>"></i> <c:out value="${delete.object.name}"/>
                                                     </a>
@@ -853,7 +858,7 @@
                             <button class="btn btn-secondary btn-md btn-tall btn-wide kt-font-bold kt-font-transform-u" data-ktwizard-type="action-prev">
                                 Geri
                             </button>
-                            <button class="btn btn-success btn-md btn-tall btn-wide kt-font-bold kt-font-transform-u" data-ktwizard-type="action-submit">
+                            <button class="btn btn-success btn-md btn-tall btn-wide kt-font-bold kt-font-transform-u modal-footer" data-ktwizard-type="action-submit">
                                 Yadda saxla
                             </button>
                             <button class="btn btn-brand btn-md btn-tall btn-wide kt-font-bold kt-font-transform-u" data-ktwizard-type="action-next">
