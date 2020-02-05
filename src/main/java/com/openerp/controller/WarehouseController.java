@@ -371,9 +371,9 @@ public class WarehouseController extends SkeletonController {
     }
 
     @ResponseBody
-    @GetMapping(value = "/api/inventory/{barcode}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Inventory findInventory(@PathVariable("barcode") String barcode){
-        List<Action> actions = actionRepository.getActionsByActiveTrueAndInventory_BarcodeAndEmployeeAndInventory_ActiveAndAction_Attr1AndAmountGreaterThan(barcode, getSessionUser().getEmployee(), true, "consolidate", 0);
+    @GetMapping(value = "/api/inventory/{barcode}/{employee}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Inventory findInventory(@PathVariable("barcode") String barcode, @PathVariable(name = "employee", required = false, value = "0") Integer employee){
+        List<Action> actions = actionRepository.getActionsByActiveTrueAndInventory_BarcodeAndEmployeeAndInventory_ActiveAndAction_Attr1AndAmountGreaterThan(barcode, (employee!=null && employee!=0)?employeeRepository.getEmployeeById(employee):getSessionUser().getEmployee(), true, "consolidate", 0);
         if(actions.size()>0){
             return actions.get(0).getInventory();
         }

@@ -52,25 +52,25 @@ public class Sales {
     @JoinColumn(name = "sale_payment_id", nullable = false)
     private Payment payment;
 
-    @JsonIgnore
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hr_employee_console_id")
     private Employee console;
 
-    @JsonIgnore
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hr_employee_van_leader_id")
     private Employee vanLeader;
 
-    @JsonIgnore
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hr_employee_dealer_id")
     private Employee dealer;
 
-    @JsonIgnore
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hr_employee_canavasser_id")
     private Employee canavasser;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "hr_employee_servicer_id")
+    private Employee servicer;
 
     @JsonIgnore
     @OneToMany(mappedBy = "sales")

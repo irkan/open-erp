@@ -203,7 +203,9 @@ public class SaleController extends SkeletonController {
                 invoice.setSales(sales);
                 invoice.setApprove(false);
                 invoice.setCreditable(false);
-                invoice.setAdvance(true);
+                if(!sales.getService()){
+                    invoice.setAdvance(true);
+                }
                 invoice.setPrice(invoicePrice);
                 invoice.setOrganization(sales.getOrganization());
                 invoice.setDescription("Satışdan əldə edilən ödəniş " + invoicePrice + " AZN");
@@ -345,13 +347,38 @@ public class SaleController extends SkeletonController {
             transactionRepository.save(transaction);
             log("accounting_transaction", "create/edit", transaction.getId(), transaction.toString());
 
-            if(invc.getSales()!=null && invc.getApprove() && invc.getAdvance()){
-                List<Advance> advances = new ArrayList<>();
-                ScriptEngineManager mgr = new ScriptEngineManager();
-                ScriptEngine engine = mgr.getEngineByName("JavaScript");
-                Dictionary advance = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("bonus-sale-advance", "advance");
-                Sales sales = invc.getSales();
-                String percent = "*0.01";
+            List<Advance> advances = new ArrayList<>();
+            ScriptEngineManager mgr = new ScriptEngineManager();
+            ScriptEngine engine = mgr.getEngineByName("JavaScript");
+            String percent = "*0.01";
+            Dictionary advance = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("bonus-sale-advance", "advance");
+            Sales sales = invc.getSales();
+
+            if(sales!=null && sales.getServicer()!=null){
+                EmployeeSaleDetail saleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getServicer(), "{service}");
+                String advancePrice = saleDetail.getValue().replaceAll(Pattern.quote("%"), percent);
+                advances.add(new Advance(advance,
+                        sales.getServicer(),
+                        Util.getUserBranch(sales.getServicer().getOrganization()),
+                        sales.getId() + " nömrəli satış və " + invoice.getId() + " nömrəli hesab fakturadan əldə edilən bonus. "+sales.getServicer().getPerson().getFullName()+" (Servis işçisi)",
+                        advancePrice,
+                        sales.getSaleDate(),
+                        Double.parseDouble(String.valueOf(engine.eval(advancePrice)))
+                ));
+            }
+            if(sales!=null && invc.getCollector()!=null){
+                EmployeeSaleDetail saleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(invc.getCollector(), "{collect}");
+                String advancePrice = saleDetail.getValue().replaceAll(Pattern.quote("%"), percent);
+                advances.add(new Advance(advance,
+                        invc.getCollector(),
+                        Util.getUserBranch(sales.getServicer().getOrganization()),
+                        sales.getId() + " nömrəli satış və " + invoice.getId() + " nömrəli hesab fakturadan əldə edilən bonus. "+invc.getCollector().getPerson().getFullName()+" (Yığımçı)",
+                        advancePrice,
+                        sales.getSaleDate(),
+                        Double.parseDouble(String.valueOf(engine.eval(advancePrice)))
+                ));
+            }
+            if(sales!=null && invc.getApprove() && invc.getAdvance()){
                 if(sales.getCanavasser()!=null){
                     EmployeeSaleDetail canvasserSaleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getCanavasser(), "{canvasser}");
                     String calculated_bonus = canvasserSaleDetail.getValue()

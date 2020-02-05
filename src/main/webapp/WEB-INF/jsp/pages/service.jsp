@@ -173,6 +173,7 @@
                                 <thead>
                                 <tr>
                                     <th>Kod</th>
+                                    <th>Servis əməkdaşı</th>
                                     <th>İnventar</th>
                                     <th>Satış tarixi</th>
                                     <th>Müştəri</th>
@@ -185,6 +186,7 @@
                                 <c:forEach var="t" items="${list.content}" varStatus="loop">
                                     <tr data="<c:out value="${utl:toJson(t)}" />" rowId="<c:out value="${t.id}" />" customerId="<c:out value="${t.customer.id}" />">
                                         <td style="<c:out value="${t.payment.cash?'background-color: #e6ffe7 !important':'background-color: #ffeaf1 !important'}"/>"><c:out value="${t.id}" /></td>
+                                        <td><c:out value="${t.servicer.person.fullName}"/></td>
                                         <th>
                                             <c:forEach var="p" items="${t.salesInventories}" varStatus="lp">
                                                 <c:out value="${lp.index+1}" />.
@@ -281,12 +283,25 @@
                                 <form:errors path="saleDate" cssClass="control-label alert-danger" />
                             </div>
                         </div>
-                        <div class="col-md-8">
-
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <form:label path="payment.description">Açıqlama</form:label>
                                 <form:input path="payment.description" cssClass="form-control" placeholder="Açıqlama daxil edin"/>
                                 <form:errors path="payment.description" cssClass="alert-danger control-label"/>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <form:label path="servicer">Servis əməkdaşı</form:label>
+                                <form:select  path="servicer" cssClass="custom-select form-control">
+                                    <form:option value=""></form:option>
+                                    <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
+                                        <optgroup label="${itemGroup.key}">
+                                            <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
+                                        </optgroup>
+                                    </c:forEach>
+                                </form:select>
+                                <form:errors path="servicer" cssClass="control-label alert-danger"/>
                             </div>
                         </div>
                     </div>
@@ -487,14 +502,29 @@
     }
 
     function findInventory(element){
-        if($(element).val().trim().length>0){
+        var servicer = $("#form").find("input[name='servicer']");
+        var flag = true;
+        if(jQuery.type($(servicer).val()) === "undefined"){
+            flag = false;
+            $("#form").find("input[name='servicer']").addClass("is-invalid");
+            swal.fire({
+                title: "Xəta baş verdi!",
+                html: "Servis əməkdaşı seçilməyib!",
+                type: "error",
+                cancelButtonText: 'Bağla',
+                cancelButtonColor: '#c40000',
+                cancelButtonClass: 'btn btn-danger',
+                footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+            });
+        }
+        if($(element).val().trim().length>0 && flag){
             swal.fire({
                 text: 'Proses davam edir...',
                 allowOutsideClick: false,
                 onOpen: function() {
                     swal.showLoading();
                     $.ajax({
-                        url: '/warehouse/api/inventory/'+$(element).val(),
+                        url: '/warehouse/api/inventory/'+$(element).val()+'/'+$(servicer).val(),
                         type: 'GET',
                         dataType: 'json',
                         beforeSend: function() {
@@ -508,7 +538,7 @@
                         error: function() {
                             swal.fire({
                                 title: "Xəta baş verdi!",
-                                html: "<c:out value="${sessionScope.user.employee.person.lastName}"/> <c:out value="${sessionScope.user.employee.person.firstName}"/> adına inventar təhkim edilməyib",
+                                html: $("#form").find("input[name='servicer'] option:selected").text() + " adına inventar təhkim edilməyib",
                                 type: "error",
                                 cancelButtonText: 'Bağla',
                                 cancelButtonColor: '#c40000',
@@ -650,6 +680,10 @@
 
     $( "#form" ).validate({
         rules: {
+            servicer: {
+                required: true,
+                digits: true
+            },
             customer: {
                 required: true,
                 digits: true

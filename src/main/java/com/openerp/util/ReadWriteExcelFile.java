@@ -1107,6 +1107,8 @@ public class ReadWriteExcelFile {
 			cell.setCellValue((sale.getDealer()!=null && sale.getDealer().getPerson()!=null)?sale.getDealer().getPerson().getFullName():"");
 			cell = row.createCell(row.getLastCellNum());
 			cell.setCellValue((sale.getCanavasser()!=null && sale.getCanavasser().getPerson()!=null)?sale.getCanavasser().getPerson().getFullName():"");
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue((sale.getServicer()!=null && sale.getServicer().getPerson()!=null)?sale.getServicer().getPerson().getFullName():"");
 			for(SalesInventory salesInventory: sale.getSalesInventories()){
 				cell = row.createCell(row.getLastCellNum());
 				cell.setCellValue(salesInventory.getInventory()!=null?salesInventory.getInventory().getName():"");

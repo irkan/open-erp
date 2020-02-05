@@ -201,7 +201,7 @@
                                     <th>Müştəri</th>
                                     <th>Məbləğ</th>
                                     <th>Tarix</th>
-                                    <th>Yığımçı</th>
+                                    <th>Yığımçı|Servis</th>
                                     <th>Kanal</th>
                                     <th>Referans</th>
                                     <th>Avans</th>
@@ -240,7 +240,8 @@
                                             <span class="kt-font-bold font-italic font-size-10px">AZN</span>
                                         </td>
                                         <td><fmt:formatDate value = "${t.invoiceDate}" pattern = "dd.MM.yyyy" /></td>
-                                        <td><c:out value="${t.collector.person.fullName}" /></td>
+                                        <td><c:out value="${t.collector.person.fullName}" /> <c:out value="${(not empty t.collector.person.fullName and not empty t.sales.servicer.person.fullName)?',':''}"/>
+                                            <c:out value="${t.sales.servicer.person.fullName}"/></td>
                                         <td><c:out value="${t.paymentChannel.name}" /></td>
                                         <td><c:out value="${t.channelReferenceCode}" /></td>
                                         <td class="text-center">
