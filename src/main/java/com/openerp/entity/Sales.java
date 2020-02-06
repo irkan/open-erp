@@ -76,6 +76,9 @@ public class Sales {
     @OneToMany(mappedBy = "sales")
     private List<Invoice> invoices;
 
+    @OneToOne(mappedBy = "sales")
+    private ServiceRegulaor serviceRegulaor;
+
     @Column(name = "guarantee", nullable = false)
     private Integer guarantee;
 

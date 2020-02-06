@@ -162,7 +162,7 @@ public class AccountingController extends SkeletonController {
 
     @PostMapping(value = "/transaction")
     public String postTransaction(@ModelAttribute(Constants.FORM) @Validated Transaction transaction, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
-        if(!transaction.getAccount().getCurrency().equalsIgnoreCase("AZN") && currencyRateRepository.getCurrencyRateByCode(transaction.getAccount().getCurrency())==null){
+        if(transaction.getAccount()!=null && !transaction.getAccount().getCurrency().equalsIgnoreCase("AZN") && currencyRateRepository.getCurrencyRateByCode(transaction.getAccount().getCurrency())==null){
             FieldError fieldError = new FieldError("account", "account", transaction.getAccount().getCurrency() + " valyutasına uyğun kurs tapılmadı!");
             binding.addError(fieldError);
         }
@@ -173,8 +173,8 @@ public class AccountingController extends SkeletonController {
                 balance(transaction);
             }
             transaction.setDebt(!transaction.getDebt());
-            transaction.setCurrency(transaction.getAccount().getCurrency());
-            transaction.setRate(transaction.getAccount().getCurrency().equalsIgnoreCase("AZN")?1:currencyRateRepository.getCurrencyRateByCode(transaction.getCurrency()).getValue());
+            transaction.setCurrency(transaction.getAccount()!=null?transaction.getAccount().getCurrency():"AZN");
+            transaction.setRate(transaction.getCurrency().equalsIgnoreCase("AZN")?1:currencyRateRepository.getCurrencyRateByCode(transaction.getCurrency()).getValue());
             transaction.setSumPrice(transaction.getPrice()*transaction.getAmount()*transaction.getRate());
             transactionRepository.save(transaction);
             log("accounting_transaction", "create/edit", transaction.getId(), transaction.toString());

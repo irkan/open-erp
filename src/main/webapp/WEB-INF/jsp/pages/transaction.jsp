@@ -87,7 +87,7 @@
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <form:label path="transactionDateFrom">Tarixdən</form:label>
-                                                <div class="input-group date">
+                                                <div class="input-group">
                                                     <form:input path="transactionDateFrom" autocomplete="off"
                                                                 cssClass="form-control datetimepicker-element" date="datetime"
                                                                 placeholder="dd.MM.yyyy HH:mm"/>
@@ -322,7 +322,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <form:label path="transactionDate">Tarix</form:label>
-                                <div class="input-group date" >
+                                <div class="input-group">
                                     <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
                                     <form:input path="transactionDate" cssClass="form-control datetimepicker-element" date="datetime" placeholder="dd.MM.yyyy HH:mm"/>
                                 </div>
@@ -438,10 +438,7 @@
 <script>
 
     $('#datatable tbody').on('dblclick', 'tr', function () {
-        <c:if test="${edit.status}">
-            edit($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${edit.object.name}" />');
-        </c:if>
-        <c:if test="${!edit.status and view.status}">
+        <c:if test="${view.status}">
             view($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${view.object.name}" />');
         </c:if>
     });
@@ -476,6 +473,10 @@ $( "#form" ).validate({
         },
         account: {
             required: true
+        },
+        transactionDate: {
+            required: false,
+            pattern: "."
         }
     },
     invalidHandler: function(event, validator) {

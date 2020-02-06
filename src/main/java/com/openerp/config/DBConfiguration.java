@@ -392,16 +392,30 @@ public class DBConfiguration {
             dictionaries.add(otherExpenseAction);
             Dictionary reason1 = new Dictionary("Xarabdır", "break", null, reasonType);
             dictionaries.add(reason1);
-            Dictionary inventoryGroup1 = new Dictionary("İnventar qrup #1", "group1", null, inventoryGroupType);
+            Dictionary inventoryGroup1 = new Dictionary("Pambıq filteri", "group1", null, inventoryGroupType);
             dictionaries.add(inventoryGroup1);
-            Dictionary inventoryGroup2 = new Dictionary("İnventar qrup #2", "group2", null, inventoryGroupType);
+            Dictionary inventoryGroup2 = new Dictionary("Kömür filteri", "group2", null, inventoryGroupType);
             dictionaries.add(inventoryGroup2);
-            Dictionary inventoryGroup3 = new Dictionary("İnventar qrup #3", "group3", null, inventoryGroupType);
+            Dictionary inventoryGroup3 = new Dictionary("Kristal filteri", "group3", null, inventoryGroupType);
             dictionaries.add(inventoryGroup3);
-            Dictionary inventoryGroup4 = new Dictionary("İnventar qrup #4", "group4", null, inventoryGroupType);
+            Dictionary inventoryGroup4 = new Dictionary("Ana membran", "group4", null, inventoryGroupType);
             dictionaries.add(inventoryGroup4);
-            Dictionary inventoryGroup5 = new Dictionary("İnventar qrup #5", "group5", null, inventoryGroupType);
+            Dictionary inventoryGroup5 = new Dictionary("Kakos", "group5", null, inventoryGroupType);
             dictionaries.add(inventoryGroup5);
+            Dictionary inventoryGroup6 = new Dictionary("Minerallaşdırıcı", "group6", null, inventoryGroupType);
+            dictionaries.add(inventoryGroup6);
+            Dictionary inventoryGroup7 = new Dictionary("Hidrofor", "group7", null, inventoryGroupType);
+            dictionaries.add(inventoryGroup7);
+            Dictionary inventoryGroup8 = new Dictionary("Aşağı təzyiq relesi ", "group8", null, inventoryGroupType);
+            dictionaries.add(inventoryGroup8);
+            Dictionary inventoryGroup9 = new Dictionary("Yuxarı təzyiq relesi", "group9", null, inventoryGroupType);
+            dictionaries.add(inventoryGroup9);
+            Dictionary inventoryGroup10 = new Dictionary("Su çəni", "group10", null, inventoryGroupType);
+            dictionaries.add(inventoryGroup10);
+            Dictionary inventoryGroup11 = new Dictionary("Ana plata və elektron hissələr", "group11", null, inventoryGroupType);
+            dictionaries.add(inventoryGroup11);
+            Dictionary inventoryGroup12 = new Dictionary("Şarj cihazı (adapter)", "group12", null, inventoryGroupType);
+            dictionaries.add(inventoryGroup12);
             Dictionary AZN = new Dictionary("AZN", "AZN", null, currencyType);
             dictionaries.add(AZN);
             Dictionary USD = new Dictionary("USD", "USD", null, currencyType);
@@ -729,6 +743,8 @@ public class DBConfiguration {
             modules.add(collector);
             Module serviceEmployee = new Module("Servis əməkdaşı", "Servis əməkdaşı", "service-employee", "flaticon-user-settings", collect);
             modules.add(serviceEmployee);
+            Module serviceRegulator = new Module("Servis requlyatoru", "Servis requlyatoru", "service-regulator", "flaticon2-gear", collect);
+            modules.add(serviceRegulator);
             /*Module idgroup = new Module("İD Qrup", "Daxili sistem və inteqrasiyalar", "idgroup", "flaticon2-analytics-2", null);
             modules.add(idgroup);
             Module item = new Module("İnventar", "İnventar", "item", "flaticon2-open-box", idgroup);
@@ -1083,6 +1099,8 @@ public class DBConfiguration {
             moduleOperations.add(viewModuleOperation40);
             ModuleOperation viewModuleOperation41 = new ModuleOperation(serviceEmployee, view, null);
             moduleOperations.add(viewModuleOperation41);
+            ModuleOperation viewModuleOperation42 = new ModuleOperation(serviceRegulator, view, null);
+            moduleOperations.add(viewModuleOperation42);
 
             ModuleOperation exportModuleOperation1 = new ModuleOperation(subModule1, export, null);
             moduleOperations.add(exportModuleOperation1);
@@ -1515,6 +1533,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation39));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation40));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation41));
+            userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation42));
 
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation2));

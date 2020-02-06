@@ -4,6 +4,9 @@ import com.openerp.entity.*;
 import com.openerp.util.Constants;
 import com.openerp.util.*;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -14,7 +17,7 @@ import java.util.List;
 public class DeleteController extends SkeletonController {
 
     @PostMapping(value = "/{path}")
-    public String getSubModules(RedirectAttributes redirectAttributes, @PathVariable("path") String path, @RequestParam(name="deletedId", defaultValue = "0") String id) throws Exception {
+    public String getSubModules(RedirectAttributes redirectAttributes, BindingResult binding, @PathVariable("path") String path, @RequestParam(name="deletedId", defaultValue = "0") String id) throws Exception {
         User user = getSessionUser();
         String parent = "admin";
         for(UserModuleOperation umo: user.getUserModuleOperations()){
@@ -139,9 +142,16 @@ public class DeleteController extends SkeletonController {
             log("payroll_advance", "create/edit", advance.getId(), advance.toString());
         } else if(path.equalsIgnoreCase(Constants.ROUTE.INVENTORY)){
             Inventory inventory = inventoryRepository.getInventoryById(Integer.parseInt(id));
-            inventory.setActive(false);
-            inventoryRepository.save(inventory);
-            log("warehouse_inventory", "create/edit", inventory.getId(), inventory.toString());
+            int amount = Util.calculateInventoryAmount(inventory.getActions(), getSessionOrganization().getId());
+            if(amount==0){
+                inventory.setActive(false);
+                inventoryRepository.save(inventory);
+                log("warehouse_inventory", "create/edit", inventory.getId(), inventory.toString());
+            } else {
+                FieldError fieldError = new FieldError("", "",  "İnventar qalığı " + amount + " olduğu üçün silinmədi!");
+                binding.addError(fieldError);
+                redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
+            }
         } else if(path.equalsIgnoreCase(Constants.ROUTE.ACTION)){
             Action action = actionRepository.getActionById(Integer.parseInt(id));
             action.setActive(false);
