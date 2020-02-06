@@ -10,6 +10,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -17,7 +18,7 @@ import java.util.List;
 public class DeleteController extends SkeletonController {
 
     @PostMapping(value = "/{path}")
-    public String getSubModules(RedirectAttributes redirectAttributes, BindingResult binding, @PathVariable("path") String path, @RequestParam(name="deletedId", defaultValue = "0") String id) throws Exception {
+    public String getSubModules(RedirectAttributes redirectAttributes, @PathVariable("path") String path, @RequestParam(name="deletedId", defaultValue = "0") String id, @RequestBody String parameter, BindingResult binding) throws Exception {
         User user = getSessionUser();
         String parent = "admin";
         for(UserModuleOperation umo: user.getUserModuleOperations()){
