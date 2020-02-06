@@ -69,6 +69,12 @@ public class InvoiceService {
                 if(invoice.getChannelReferenceCode()!=null && !invoice.getChannelReferenceCode().isEmpty()) {
                     predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("channelReferenceCode"), "%"+invoice.getChannelReferenceCode()+"%")));
                 }
+                if(invoice.getSales()!=null && invoice.getSales().getService()!=null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("sales").get("service"), invoice.getSales().getService())));
+                }
+                if(invoice.getSales()!=null && invoice.getSales().getServicer()!=null && invoice.getSales().getServicer().getId()!=null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("sales").get("servicer"), invoice.getSales().getServicer().getId())));
+                }
                 return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
             }
         }, pageable);

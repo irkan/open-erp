@@ -281,10 +281,7 @@
                 <form:form modelAttribute="form" id="form" method="post" action="/payroll/advance" cssClass="form-group">
                     <form:hidden path="id"/>
                     <form:hidden path="organization" />
-                    <form:hidden path="approve"/>
-                    <form:hidden path="approveDate"/>
-                    <form:hidden path="transaction"/>
-                    <form:hidden path="transactionDate"/>
+                    <form:hidden path="active"/>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -297,7 +294,7 @@
                                         </optgroup>
                                     </c:forEach>
                                 </form:select>
-                                <form:errors path="employee" cssClass="control-label alert alert-danger" />
+                                <form:errors path="employee" cssClass="control-label alert-danger" />
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -307,7 +304,7 @@
                                     <form:option value=""></form:option>
                                     <form:options items="${advances}" itemLabel="name" itemValue="id" />
                                 </form:select>
-                                <form:errors path="advance" cssClass="control-label alert alert-danger" />
+                                <form:errors path="advance" cssClass="control-label alert-danger" />
                             </div>
                         </div>
                     </div>

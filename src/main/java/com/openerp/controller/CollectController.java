@@ -83,6 +83,16 @@ public class CollectController extends SkeletonController {
                 model.addAttribute(Constants.FILTER, new Invoice(getSessionUser().getEmployee(), null, false));
             }
             model.addAttribute(Constants.LIST, invoiceService.findAll((Invoice) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.SERVICE_EMPLOYEE)){
+            if(!model.containsAttribute(Constants.FILTER)){
+                Sales sales = new Sales();
+                sales.setService(true);
+                if(!canViewAll()){
+                    sales.setServicer(getSessionUser().getEmployee());
+                }
+                model.addAttribute(Constants.FILTER, new Invoice(null, false, sales));
+            }
+            model.addAttribute(Constants.LIST, invoiceService.findAll((Invoice) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
         }
         return "layout";
     }

@@ -502,29 +502,14 @@
     }
 
     function findInventory(element){
-        var servicer = $("#form").find("input[name='servicer']");
-        var flag = true;
-        if(jQuery.type($(servicer).val()) === "undefined"){
-            flag = false;
-            $("#form").find("input[name='servicer']").addClass("is-invalid");
-            swal.fire({
-                title: "Xəta baş verdi!",
-                html: "Servis əməkdaşı seçilməyib!",
-                type: "error",
-                cancelButtonText: 'Bağla',
-                cancelButtonColor: '#c40000',
-                cancelButtonClass: 'btn btn-danger',
-                footer: '<a href>Məlumatlar yenilənsinmi?</a>'
-            });
-        }
-        if($(element).val().trim().length>0 && flag){
+        if($(element).val().trim().length>0){
             swal.fire({
                 text: 'Proses davam edir...',
                 allowOutsideClick: false,
                 onOpen: function() {
                     swal.showLoading();
                     $.ajax({
-                        url: '/warehouse/api/inventory/'+$(element).val()+'/'+$(servicer).val(),
+                        url: '/warehouse/api/inventory/'+$(element).val(),
                         type: 'GET',
                         dataType: 'json',
                         beforeSend: function() {

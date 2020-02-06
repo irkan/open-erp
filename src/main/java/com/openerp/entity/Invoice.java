@@ -110,4 +110,10 @@ public class Invoice {
         this.price = price;
         this.approve = approve;
     }
+
+    public Invoice(Double price, Boolean approve, Sales sales) {
+        this.price = price;
+        this.approve = approve;
+        this.sales = sales;
+    }
 }

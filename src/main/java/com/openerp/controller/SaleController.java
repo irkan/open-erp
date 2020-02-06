@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -169,10 +170,18 @@ public class SaleController extends SkeletonController {
     @PostMapping(value = "/sales/approve")
     public String postSalesApprove(@ModelAttribute(Constants.FORM) @Validated Sales sales, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         sales = salesRepository.getSalesById(sales.getId());
+        Employee employee = (sales.getService() && sales.getServicer()!=null)?sales.getServicer():getSessionUser().getEmployee();
+        for(SalesInventory salesInventory: sales.getSalesInventories()) {
+            List<Action> oldActions = actionRepository.getActionsByActiveTrueAndInventory_ActiveAndInventoryAndEmployeeAndAction_Attr1AndAmountGreaterThanOrderById(true, salesInventory.getInventory(), employee, "consolidate", 0);
+            if (oldActions.size() == 0) {
+                FieldError fieldError = new FieldError("", "", salesInventory.getInventory().getBarcode() + " barkodlu " + salesInventory.getInventory().getName() + " " + employee.getPerson().getFullName() + " adına təhkim edilməmişdir");
+                binding.addError(fieldError);
+            }
+        }
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             for(SalesInventory salesInventory: sales.getSalesInventories()){
-                List<Action> oldActions = actionRepository.getActionsByActiveTrueAndInventory_ActiveAndInventoryAndEmployeeAndAction_Attr1AndAmountGreaterThanOrderById(true, salesInventory.getInventory(), getSessionUser().getEmployee(), "consolidate", 0);
+                List<Action> oldActions = actionRepository.getActionsByActiveTrueAndInventory_ActiveAndInventoryAndEmployeeAndAction_Attr1AndAmountGreaterThanOrderById(true, salesInventory.getInventory(), employee, "consolidate", 0);
                 if(oldActions.size()>0){
                     Action action = new Action();
                     action.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sell", "action"));
@@ -438,10 +447,9 @@ public class SaleController extends SkeletonController {
                             Double.parseDouble(String.valueOf(engine.eval(calculated_bonus)))
                     ));
                 }
-                advanceRepository.saveAll(advances);
-               //Id de error verir
-                // log("accounting_transaction", "create/edit", advances.getId(), advances.toString());
             }
+            advanceRepository.saveAll(advances);
+            log("accounting_transaction", "create/edit", 0, advances.toString());
         }
         return mapPost(invc, binding, redirectAttributes, "/sale/invoice/");
     }

@@ -727,6 +727,8 @@ public class DBConfiguration {
             modules.add(contactHistory);
             Module collector = new Module("Yığımçı", "Yığımçı", "collector", "flaticon-globe", collect);
             modules.add(collector);
+            Module serviceEmployee = new Module("Servis əməkdaşı", "Servis əməkdaşı", "service-employee", "flaticon-user-settings", collect);
+            modules.add(serviceEmployee);
             /*Module idgroup = new Module("İD Qrup", "Daxili sistem və inteqrasiyalar", "idgroup", "flaticon2-analytics-2", null);
             modules.add(idgroup);
             Module item = new Module("İnventar", "İnventar", "item", "flaticon2-open-box", idgroup);
@@ -1079,6 +1081,8 @@ public class DBConfiguration {
             moduleOperations.add(viewModuleOperation39);
             ModuleOperation viewModuleOperation40 = new ModuleOperation(invoice, view, null);
             moduleOperations.add(viewModuleOperation40);
+            ModuleOperation viewModuleOperation41 = new ModuleOperation(serviceEmployee, view, null);
+            moduleOperations.add(viewModuleOperation41);
 
             ModuleOperation exportModuleOperation1 = new ModuleOperation(subModule1, export, null);
             moduleOperations.add(exportModuleOperation1);
@@ -1510,6 +1514,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation38));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation39));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation40));
+            userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation41));
 
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation2));

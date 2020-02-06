@@ -238,8 +238,6 @@ public class PayrollController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             advance.setOrganization(getSessionOrganization());
-            advance.setApprove(false);
-            advance.setApproveDate(new Date());
             advanceRepository.save(advance);
             log("payroll_advance", "create/edit", advance.getId(), advance.toString());
         }
