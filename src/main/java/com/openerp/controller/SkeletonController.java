@@ -245,6 +245,12 @@ public class SkeletonController {
     ContactHistoryService contactHistoryService;
 
     @Autowired
+    ServiceTaskService serviceTaskService;
+
+    @Autowired
+    ServiceRegulatorRepository serviceRegulatorRepository;
+
+    @Autowired
     HttpServletRequest request;
 
     @Autowired
@@ -454,7 +460,7 @@ public class SkeletonController {
         }
     }
 
-    void log(String tableName, String operation, int rowId, String encapsulate){
+    public void log(String tableName, String operation, int rowId, String encapsulate){
         Log log = new Log(tableName, operation, rowId, encapsulate, getSessionUser()!=null?getSessionUser().getUsername():"");
         logRepository.save(log);
         sessionLog(log);

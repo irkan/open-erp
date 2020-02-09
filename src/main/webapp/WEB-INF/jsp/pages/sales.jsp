@@ -277,7 +277,7 @@
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-right">
                                                     <c:if test="${view.status}">
-                                                    <a href="/collect/payment-regulator-note/<c:out value="${t.payment.id}"/>" class="dropdown-item" title="Qeydlər">
+                                                    <a href="/collect/contact-history/<c:out value="${t.id}"/>" class="dropdown-item" title="Qeydlər">
                                                         <i class="la <c:out value="${view.object.icon}"/>"></i> Qeydlər
                                                     </a>
                                                     </c:if>
@@ -440,13 +440,23 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label>İnventar</label>
-                                            <input name="salesInventories[0].inventory.name" class="form-control" readonly="true"/>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Açıqlama</label>
-                                            <textarea name="salesInventories[0].inventory.description" class="form-control" readonly="true"></textarea>
+                                        <div class="row">
+                                            <div class="col-md-7">
+                                                <div class="form-group">
+                                                    <label>İnventar</label>
+                                                    <input name="salesInventories[0].inventory.name" class="form-control" readonly="true"/>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Qrup</label>
+                                                    <input name="salesInventories[0].inventory.group.name" class="form-control" readonly="true"/>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <div class="form-group">
+                                                    <label>Açıqlama</label>
+                                                    <textarea rows="4" name="salesInventories[0].inventory.description" class="form-control" readonly="true"></textarea>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-7">
@@ -1255,12 +1265,14 @@
                         beforeSend: function() {
                             $(form).find("input[name='salesInventories[0].inventory']").val('');
                             $(form).find("input[name='salesInventories[0].inventory.name']").val('');
+                            $(form).find("input[name='salesInventories[0].inventory.group.name']").val('');
                             $(form).find("textarea[name='salesInventories[0].inventory.description']").val('');
                         },
                         success: function(inventory) {
                             console.log(inventory);
                             $(form).find("input[name='salesInventories[0].inventory']").val(inventory.id);
                             $(form).find("input[name='salesInventories[0].inventory.name']").val(inventory.name);
+                            $(form).find("input[name='salesInventories[0].inventory.group.name']").val(inventory.group.name);
                             $(form).find("textarea[name='salesInventories[0].inventory.description']").val(inventory.description);
                             swal.close();
                         },

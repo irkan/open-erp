@@ -7,7 +7,6 @@ import com.openerp.entity.Dictionary;
 import com.openerp.util.Constants;
 import com.openerp.util.DateUtility;
 import com.openerp.util.*;
-import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -158,6 +157,20 @@ public class SaleController extends SkeletonController {
             }
             sales.setGuarantee(sales.getGuarantee()!=null?sales.getGuarantee():6);
             sales.setGuaranteeExpire(Util.guarantee(sales.getSaleDate()==null?new Date():sales.getSaleDate(), sales.getGuarantee()));
+
+            if(!sales.getService()){
+                List<ServiceRegulator> serviceRegulators;
+                if(sales.getId()!=null){
+                    Sales sl = salesRepository.getSalesById(sales.getId());
+                    serviceRegulators = sl!=null?sl.getServiceRegulators():null;
+                } else {
+                    serviceRegulators = new ArrayList<>();
+                    for(Dictionary serviceNotification: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("service-notification")){
+                        serviceRegulators.add(new ServiceRegulator(sales, serviceNotification, sales.getSaleDate()));
+                    }
+                }
+                sales.setServiceRegulators(serviceRegulators);
+            }
             salesRepository.save(sales);
             log("sale_sales", "create/edit", sales.getId(), sales.toString());
         }
@@ -239,6 +252,11 @@ public class SaleController extends SkeletonController {
     @PostMapping(value = "/sales/filter")
     public String postSalesFilter(@ModelAttribute(Constants.FILTER) @Validated Sales sales, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         return mapFilter(sales, binding, redirectAttributes, "/sale/sales");
+    }
+
+    @PostMapping(value = "/service-regulator/filter")
+    public String postServiceRegulatorFilter(@ModelAttribute(Constants.FILTER) @Validated ServiceTask serviceTask, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        return mapFilter(serviceTask, binding, redirectAttributes, "/sale/service-regulator");
     }
 
     @ResponseBody

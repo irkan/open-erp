@@ -630,4 +630,20 @@ public class Util {
         }
         return 1d;
     }
+
+    public static int parseInt(String value, String defaultValue){
+        try {
+            return Integer.parseInt(value);
+        } catch (Exception e){
+            log.error(e);
+        }
+
+        try {
+            return Integer.parseInt(defaultValue);
+        } catch (Exception e){
+            log.error(e);
+        }
+
+        return 6;
+    }
 }

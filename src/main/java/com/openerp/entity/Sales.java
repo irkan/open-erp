@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -73,11 +75,13 @@ public class Sales {
     private Employee servicer;
 
     @JsonIgnore
+    @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "sales")
     private List<Invoice> invoices;
 
-    @OneToOne(mappedBy = "sales")
-    private ServiceRegulaor serviceRegulaor;
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(mappedBy = "sales", cascade = CascadeType.ALL)
+    private List<ServiceRegulator> serviceRegulators;
 
     @Column(name = "guarantee", nullable = false)
     private Integer guarantee;
@@ -104,6 +108,12 @@ public class Sales {
 
     @Column(name = "is_saled", nullable = false, columnDefinition="boolean default false")
     private Boolean saled = false;
+
+    @Column(name = "is_service_next", nullable = false, columnDefinition="boolean default true")
+    private Boolean serviceNext = true;
+
+    @Column(name = "service_next_reason")
+    private Boolean serviceNextReason;
 
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;

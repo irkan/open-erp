@@ -132,6 +132,15 @@ public class DateUtility {
         return cal.getTime();
     }
 
+    public static Date addMonth(int date, int month, int year, int value){
+        Date today = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal = Calendar.getInstance();
+        cal.setTime(getUtilDate(generateStringDate(date, month, year)));
+        cal.add(Calendar.MONTH, value);
+        return cal.getTime();
+    }
+
     public static int daysBetween(Date d1, Date d2){
         return (int)( (d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
     }

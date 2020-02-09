@@ -93,6 +93,15 @@ public class CollectController extends SkeletonController {
                 model.addAttribute(Constants.FILTER, new Invoice(null, false, sales));
             }
             model.addAttribute(Constants.LIST, invoiceService.findAll((Invoice) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.SERVICE_REGULATOR)){
+            model.addAttribute(Constants.SERVICE_NOTIFICATIONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("service-notification"));
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new ServiceTask(getSessionOrganization()));
+            }
+            if(!model.containsAttribute(Constants.FILTER)){
+                model.addAttribute(Constants.FILTER, new ServiceTask(!canViewAll()?getSessionOrganization():null));
+            }
+            model.addAttribute(Constants.LIST, serviceTaskService.findAll((ServiceTask) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
         }
         return "layout";
     }

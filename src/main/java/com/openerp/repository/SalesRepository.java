@@ -10,9 +10,9 @@ import java.util.List;
 
 public interface SalesRepository extends JpaRepository<Sales, Integer>, JpaSpecificationExecutor<Sales> {
     List<Sales> getSalesByActiveTrueAndServiceFalseOrderByIdDesc();
+    List<Sales> getSalesByActiveTrueAndServiceFalseAndApproveTrueOrderByIdAsc();
     List<Sales> getSalesByActiveTrueAndServiceFalseAndOrganizationOrderByIdDesc(Organization organization);
     List<Sales> getSalesByActiveTrueAndServiceTrueOrderByIdDesc();
-    List<Sales> getSalesByActiveTrueAndServiceTrueAndOrganizationOrderByIdDesc(Organization organization);
     List<Sales> getSalesByActiveTrueAndOrganizationOrderByIdDesc(Organization organization);
     Sales getSalesByIdAndActiveTrue(int salesId);
     Sales getSalesById(int salesId);

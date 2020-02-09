@@ -138,6 +138,8 @@ public class DBConfiguration {
             types.add(monthType);
             DictionaryType notificationType = new DictionaryType("Xəbərdarlıq", "notification", null);
             types.add(notificationType);
+            DictionaryType serviceNotificationType = new DictionaryType("Servis xəbərdarlığı", "service-notification", null);
+            types.add(serviceNotificationType);
 
             dictionaryTypeRepository.saveAll(types);
 
@@ -628,6 +630,18 @@ public class DBConfiguration {
             dictionaries.add(notification1);
             Dictionary notification2 = new Dictionary("Email", "email", null, notificationType);
             dictionaries.add(notification2);
+            Dictionary serviceNotification1 = new Dictionary("Pambıq", "sn1", "12", serviceNotificationType);
+            dictionaries.add(serviceNotification1);
+            Dictionary serviceNotification2 = new Dictionary("Kömür", "sn2", "12", serviceNotificationType);
+            dictionaries.add(serviceNotification2);
+            Dictionary serviceNotification3 = new Dictionary("Kristal", "sn3", "12", serviceNotificationType);
+            dictionaries.add(serviceNotification3);
+            Dictionary serviceNotification4 = new Dictionary("Membran", "sn4", "12", serviceNotificationType);
+            dictionaries.add(serviceNotification4);
+            Dictionary serviceNotification5 = new Dictionary("Kakos", "sn5", "12", serviceNotificationType);
+            dictionaries.add(serviceNotification5);
+            Dictionary serviceNotification6 = new Dictionary("Mineral", "sn6", "12", serviceNotificationType);
+            dictionaries.add(serviceNotification6);
 
             dictionaryRepository.saveAll(dictionaries);
 
@@ -1016,6 +1030,8 @@ public class DBConfiguration {
             moduleOperations.add(deleteModuleOperation37);
             ModuleOperation deleteModuleOperation38 = new ModuleOperation(period, delete, null);
             moduleOperations.add(deleteModuleOperation38);
+            ModuleOperation deleteModuleOperation39 = new ModuleOperation(serviceRegulator, delete, null);
+            moduleOperations.add(deleteModuleOperation39);
 
             ModuleOperation viewModuleOperation1 = new ModuleOperation(subModule5, view, null);
             moduleOperations.add(viewModuleOperation1);
@@ -1099,8 +1115,6 @@ public class DBConfiguration {
             moduleOperations.add(viewModuleOperation40);
             ModuleOperation viewModuleOperation41 = new ModuleOperation(serviceEmployee, view, null);
             moduleOperations.add(viewModuleOperation41);
-            ModuleOperation viewModuleOperation42 = new ModuleOperation(serviceRegulator, view, null);
-            moduleOperations.add(viewModuleOperation42);
 
             ModuleOperation exportModuleOperation1 = new ModuleOperation(subModule1, export, null);
             moduleOperations.add(exportModuleOperation1);
@@ -1170,6 +1184,8 @@ public class DBConfiguration {
             moduleOperations.add(exportModuleOperation35);
             ModuleOperation exportModuleOperation36 = new ModuleOperation(troubledCustomer, export, null);
             moduleOperations.add(exportModuleOperation36);
+            ModuleOperation exportModuleOperation37 = new ModuleOperation(serviceRegulator, export, null);
+            moduleOperations.add(exportModuleOperation37);
 
             ModuleOperation approveModuleOperation3 = new ModuleOperation(transaction, approve, null);
             moduleOperations.add(approveModuleOperation3);
@@ -1223,6 +1239,8 @@ public class DBConfiguration {
             moduleOperations.add(transferModuleOperation2);
             ModuleOperation transferModuleOperation3 = new ModuleOperation(account, transfer, null);
             moduleOperations.add(transferModuleOperation3);
+            ModuleOperation transferModuleOperation4 = new ModuleOperation(serviceRegulator, transfer, null);
+            moduleOperations.add(transferModuleOperation4);
 
             ModuleOperation consolidateModuleOperation1 = new ModuleOperation(action, consolidateOperation, null);
             moduleOperations.add(consolidateModuleOperation1);
@@ -1294,6 +1312,8 @@ public class DBConfiguration {
             moduleOperations.add(filterModuleOperation18);
             ModuleOperation filterModuleOperation19 = new ModuleOperation(customer, filter, null); //ok
             moduleOperations.add(filterModuleOperation19);
+            ModuleOperation filterModuleOperation20 = new ModuleOperation(serviceRegulator, filter, null); //ok
+            moduleOperations.add(filterModuleOperation20);
 
             ModuleOperation creditModuleOperation1 = new ModuleOperation(invoice, credit, null); //ok
             moduleOperations.add(creditModuleOperation1);
@@ -1456,6 +1476,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation36));
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation37));
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation38));
+            userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation39));
 
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation2));
@@ -1491,6 +1512,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation34));
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation35));
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation36));
+            userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation37));
 
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation2));
@@ -1533,7 +1555,6 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation39));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation40));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation41));
-            userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation42));
 
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation2));
@@ -1553,6 +1574,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation17));
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation18));
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation19));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation20));
 
             userModuleOperations.add(new UserModuleOperation(user, approveModuleOperation3));
             userModuleOperations.add(new UserModuleOperation(user, approveModuleOperation4));
@@ -1583,6 +1605,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, transferModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, transferModuleOperation2));
             userModuleOperations.add(new UserModuleOperation(user, transferModuleOperation3));
+            userModuleOperations.add(new UserModuleOperation(user, transferModuleOperation4));
 
             userModuleOperations.add(new UserModuleOperation(user, consolidateModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, consolidateModuleOperation2));
@@ -1680,6 +1703,7 @@ public class DBConfiguration {
             configurations.add(new Configuration("Telefon", "company_telephone", "+994 12 480 10 76", "Şirkətin telefon nömrəsi"));
             configurations.add(new Configuration("Mobil", "company_mobile", "+994 55 546 06 61", "Şirkətin mobil nömrəsi"));
             configurations.add(new Configuration("Email", "company_email", "sual.office@gmail.com", "Şirkətin email ünvanı"));
+            configurations.add(new Configuration("Servis", "service", "6", "Servis xidməti göstərilmədikdə növbəti xəbərdarlıq 6 ay sonra gələcəkdir"));
             configurationRepository.saveAll(configurations);
 
             List<WebServiceAuthenticator> webServiceAuthenticators = new ArrayList<>();

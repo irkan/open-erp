@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ServiceRegulaor {
+public class ServiceRegulator {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO, generator = "sale_sequence")
@@ -23,7 +23,23 @@ public class ServiceRegulaor {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sale_sales_id")
     private Sales sales;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "admin_dictionary_service_notification_id")
+    private Dictionary serviceNotification;
+
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    @Column(name = "serviced_date")
+    private Date servicedDate;
+
+    public ServiceRegulator(Sales sales, Dictionary serviceNotification, Date servicedDate) {
+        this.sales = sales;
+        this.serviceNotification = serviceNotification;
+        this.servicedDate = servicedDate;
+    }
 }

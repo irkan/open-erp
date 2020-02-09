@@ -57,6 +57,7 @@ public class Constants {
     public static final String OBJECT = "object";
     public static final String ACTIONS = "actions";
     public static final String EXPORTS = "exports";
+    public static final String SERVICE_NOTIFICATIONS = "service_notifications";
 
     public static final class STATUS{
         public static final String RESPONSE = "response";
@@ -129,5 +130,6 @@ public class Constants {
         public static final String EXPORT = "export";
         public static final String PERIOD = "period";
         public static final String SERVICE_EMPLOYEE = "service-employee";
+        public static final String SERVICE_REGULATOR = "service-regulator";
     }
 }
