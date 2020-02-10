@@ -931,8 +931,6 @@ public class DBConfiguration {
             moduleOperations.add(editModuleOperation22);
             ModuleOperation editModuleOperation20 = new ModuleOperation(payrollConfiguration, edit, null);
             moduleOperations.add(editModuleOperation20);
-            ModuleOperation editModuleOperation23 = new ModuleOperation(action, edit, null);
-            moduleOperations.add(editModuleOperation23);
             ModuleOperation editModuleOperation24 = new ModuleOperation(sales, edit, null);
             moduleOperations.add(editModuleOperation24);
             ModuleOperation editModuleOperation25 = new ModuleOperation(invoice, edit, null);
@@ -1426,7 +1424,6 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation21));
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation22));
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation20));
-            userModuleOperations.add(new UserModuleOperation(user, editModuleOperation23));
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation24));
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation25));
             //userModuleOperations.add(new UserModuleOperation(user, editModuleOperation26));

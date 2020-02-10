@@ -163,7 +163,7 @@
             <td><fmt:formatDate value = "${t.createdDate}" pattern = "dd.MM.yyyy" /></td>
             <td><c:out value="${t.employee.person.fullName}" /></td>
             <td nowrap class="text-center">
-                <c:if test="${!(t.action.attr1 eq 'sell') and !(t.action.attr1 eq 'send' and t.approve)}">
+                <c:if test="${!(t.action.attr1 eq 'sell') and !(t.action.attr1 eq 'cancellation') and !(t.action.attr1 eq 'send' and t.approve)}">
                     <c:if test="${return1.status and t.action.attr1 eq 'consolidate'}">
                         <a href="javascript:returnOperation($('#form-return'), '<c:out value="${utl:toJson(t)}" />', 'return-modal');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${return1.object.name}"/>">
                             <i class="<c:out value="${return1.object.icon}"/>"></i>
@@ -189,12 +189,14 @@
                             <i class="<c:out value="${consolidate.object.icon}"/>"></i>
                         </a>
                     </c:if>
-                    <c:if test="${edit.status}">
-                        <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
-                            <i class="<c:out value="${edit.object.icon}"/>"></i>
+                </c:if>
+                <c:if test="${delete.status}">
+                    <c:if test="${t.approve and t.action.attr1 eq 'buy' and t.amount gt 0}">
+                        <a href="javascript:returnOperation($('#form-cancellation'), '<c:out value="${utl:toJson(t)}" />', 'cancellation-modal');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Ləğv edilmə">
+                            <i class="<c:out value="${delete.object.icon}"/>"></i>
                         </a>
                     </c:if>
-                    <c:if test="${delete.status}">
+                    <c:if test="${t.approve and t.action.attr1 eq 'cancellation'}">
                         <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.action.name}" /> / <c:out value="${t.organization.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
                             <i class="<c:out value="${delete.object.icon}"/>"></i>
                         </a>
@@ -256,7 +258,7 @@
                             <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calculator"></i></span></div>
                             <form:input path="amount" cssClass="form-control" placeholder="Say daxil edin"/>
                         </div>
-                        <form:errors path="amount" cssClass="alert alert-danger"/>
+                        <form:errors path="amount" cssClass="alert-danger"/>
                     </div>
                 </form:form>
             </div>
@@ -387,7 +389,7 @@
                             <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calculator"></i></span></div>
                             <form:input path="amount" cssClass="form-control" placeholder="Say daxil edin"/>
                         </div>
-                        <form:errors path="amount" cssClass="alert alert-danger"/>
+                        <form:errors path="amount" cssClass="alert-danger"/>
                     </div>
                 </form:form>
             </div>
@@ -434,13 +436,67 @@
                     </div>
                     <div class="form-group">
                         <form:label path="amount">Say</form:label>
-                        <form:input path="amount" cssClass="form-control" placeholder="Sayı daxil edin"  />
-                        <form:errors path="amount" cssClass="alert alert-danger"/>
+                        <div class="input-group" >
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calculator"></i></span></div>
+                            <form:input path="amount" cssClass="form-control" placeholder="Sayı daxil edin"  />
+                        </div>
+                        <form:errors path="amount" cssClass="alert-danger"/>
                     </div>
                 </form:form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" onclick="submit($('#form-return'));">Yadda saxla</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="cancellation-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Silinmə</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form:form modelAttribute="form" id="form-cancellation" method="post" action="/warehouse/action/cancellation" cssClass="form-group">
+                    <form:hidden path="id"/>
+                    <div class="row">
+                        <div class="col-sm-12 text-center">
+                            <label id="inventory_name" style="font-size: 16px; font-weight: bold;"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 text-right">
+                            <label>Barkod</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <label id="barcode_label"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 text-right">
+                            <label>Anbar</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <label id="warehouse_label"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="amount">Say</form:label>
+                        <div class="input-group" >
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calculator"></i></span></div>
+                            <form:input path="amount" cssClass="form-control" placeholder="Sayı daxil edin"  />
+                        </div>
+                        <form:errors path="amount" cssClass="alert-danger"/>
+                    </div>
+                </form:form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="submit($('#form-cancellation'));">Yadda saxla</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
             </div>
         </div>

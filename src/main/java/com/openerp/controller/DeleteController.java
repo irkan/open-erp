@@ -156,13 +156,26 @@ public class DeleteController extends SkeletonController {
             Action action = actionRepository.getActionById(Integer.parseInt(id));
             action.setActive(false);
             actionRepository.save(action);
-            log("warehouse_action", "create/edit", action.getId(), action.toString());
+            log("warehouse_action", "delete", action.getId(), action.toString(), "Silinmə əməliyyatının ləğvi");
+
             List<Action> actions = actionRepository.getActionsByActiveTrueAndInventory_IdAndInventory_ActiveAndActionOrderByIdDesc(action.getInventory().getId(), true, dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("buy", "action"));
             if(actions.size()>0){
                 Action returnAction = actions.get(0);
                 returnAction.setAmount(returnAction.getAmount()+action.getAmount());
                 actionRepository.save(returnAction);
                 log("warehouse_action", "create/edit", returnAction.getId(), returnAction.toString());
+            } else {
+                Action buy = new Action(
+                        dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("buy", "action"),
+                        action.getOrganization(),
+                        action.getAmount(),
+                        action.getInventory(),
+                        action.getSupplier(),
+                        false
+                );
+                actionRepository.save(buy);
+
+                log("warehouse_action", "create/edit", buy.getId(), buy.toString(), "Yeni alış əməliyyatı");
             }
             return "redirect:/"+parent+"/"+path+"/"+action.getInventory().getId();
         } else if(path.equalsIgnoreCase(Constants.ROUTE.ITEM)){

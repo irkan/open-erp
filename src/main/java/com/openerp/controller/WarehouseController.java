@@ -345,6 +345,31 @@ public class WarehouseController extends SkeletonController {
         return mapPost(action, binding, redirectAttributes, "/warehouse/action/"+actn.getInventory().getId());
     }
 
+    @PostMapping(value = "/action/cancellation")
+    public String postActionCancellation(@ModelAttribute(Constants.FORM) @Validated Action action, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        Action actn = actionRepository.getActionById(action.getId());
+        if(actn.getAmount()-action.getAmount()<0){
+            FieldError fieldError = new FieldError("amount", "amount", "Maksimum "+ actn.getAmount() + " ədəd silə bilərsiniz!");
+            binding.addError(fieldError);
+        }
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors() && actn!=null) {
+            action.setId(null);
+            action.setInventory(actn.getInventory());
+            action.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cancellation", "action"));
+            action.setSupplier(actn.getSupplier());
+            action.setOrganization(actn.getOrganization());
+            action.setApprove(true);
+            action.setApproveDate(new Date());
+            actionRepository.save(action);
+            log("warehouse_action", "create/edit", action.getId(), action.toString());
+            actn.setAmount(actn.getAmount() - action.getAmount());
+            actionRepository.save(actn);
+            log("warehouse_action", "cancellation", actn.getId(), actn.toString());
+        }
+        return mapPost(action, binding, redirectAttributes, "/warehouse/action/"+actn.getInventory().getId());
+    }
+
     @PostMapping(value = "/consolidate/return")
     public String postConsolidateReturn(@ModelAttribute(Constants.FORM) @Validated Action action, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         Action actn = actionRepository.getActionById(action.getId());
