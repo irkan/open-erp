@@ -35,8 +35,7 @@
                         <form:form modelAttribute="filter" id="filter" method="post" action="/warehouse/consolidate/filter">
                             <form:hidden path="organization" />
                             <form:hidden path="inventory.active" htmlEscape="true" value="1" />
-                            <form:hidden path="action.attr1" htmlEscape="true" value="consolidate"  />
-                            <form:hidden path="action.dictionaryType.attr1" htmlEscape="true" value="action"  />
+                            <form:hidden path="action"/>
                             <div class="row">
                                 <div class="col-md-11">
                                     <div class="row">
@@ -73,6 +72,20 @@
                                                     </div>
                                                 </div>
                                                 <form:errors path="actionDate" cssClass="control-label alert-danger" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="amountFrom">Saydan</form:label>
+                                                <form:input path="amountFrom" cssClass="form-control" placeholder="Sayı daxil edin"/>
+                                                <form:errors path="amountFrom" cssClass="alert-danger control-label"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="amount">Sayadək</form:label>
+                                                <form:input path="amount" cssClass="form-control" placeholder="Qiyməti daxil edin"/>
+                                                <form:errors path="amount" cssClass="alert-danger control-label"/>
                                             </div>
                                         </div>
                                         <div class="col-md-2" style="padding-top: 30px;">

@@ -75,6 +75,20 @@
                                                 <form:errors path="actionDate" cssClass="control-label alert-danger" />
                                             </div>
                                         </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="amountFrom">Saydan</form:label>
+                                                <form:input path="amountFrom" cssClass="form-control" placeholder="Sayı daxil edin"/>
+                                                <form:errors path="amountFrom" cssClass="alert-danger control-label"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="amount">Sayadək</form:label>
+                                                <form:input path="amount" cssClass="form-control" placeholder="Qiyməti daxil edin"/>
+                                                <form:errors path="amount" cssClass="alert-danger control-label"/>
+                                            </div>
+                                        </div>
                                         <div class="col-md-2" style="padding-top: 30px;">
                                             <div class="form-group">
                                                 <label class="kt-checkbox kt-checkbox--brand">
@@ -413,6 +427,7 @@
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form-return" method="post" action="/warehouse/action/return" cssClass="form-group">
                     <form:hidden path="id"/>
+                    <form:hidden path="inventory.id"/>
                     <div class="row">
                         <div class="col-sm-12 text-center">
                             <label id="inventory_name" style="font-size: 16px; font-weight: bold;"></label>
@@ -628,6 +643,26 @@
 
     $("input[name='amount']").inputmask('decimal', {
         rightAlignNumerics: false
+    });
+
+    $( "#form-return" ).validate({
+        rules: {
+            id: {
+                required: true
+            },
+            inventory: {
+                required: true
+            },
+            amount: {
+                required: true,
+                digits: true,
+                min: 1
+            }
+        },
+        invalidHandler: function(event, validator) {
+            KTUtil.scrollTop();
+            swal.close();
+        },
     });
 </script>
 

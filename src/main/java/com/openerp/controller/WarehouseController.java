@@ -126,12 +126,14 @@ public class WarehouseController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new Action(getSessionOrganization()));
             }
             if(!model.containsAttribute(Constants.FILTER)){
-                model.addAttribute(Constants.FILTER, new Action(
+                Action action = new Action(
                         !canViewAll()?getSessionUser().getEmployee():null,
                         dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("consolidate", "action"),
-                        null
-                        )
+                        null,
+                        1
                 );
+                action.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("consolidate", "action"));
+                model.addAttribute(Constants.FILTER, action);
             }
             Page<Action> actions = actionService.findAll((Action) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
             model.addAttribute(Constants.LIST, actions);
@@ -329,18 +331,27 @@ public class WarehouseController extends SkeletonController {
         }
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()) {
-            action.setId(null);
-            action.setInventory(actn.getInventory());
-            action.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("return", "action"));
-            action.setSupplier(actn.getSupplier());
-            action.setOrganization(actn.getOrganization());
-            action.setEmployee(actn.getEmployee());
-            action.setApprove(false);
-            actionRepository.save(action);
-            log("warehouse_action", "create/edit", action.getId(), action.toString());
+            List<Action> actions = actionRepository.getActionsByActiveTrueAndInventory_IdAndInventory_ActiveAndActionOrderByIdDesc(actn.getInventory().getId(), true, dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("buy", "action"));
+            if(actions.size()>0){
+                Action buy = actions.get(0);
+                buy.setAmount(buy.getAmount()+action.getAmount());
+                actionRepository.save(buy);
+                log("warehouse_action", "create/edit", buy.getId(), buy.toString());
+            } else {
+                Action buy = new Action(
+                        dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("buy", "action"),
+                        action.getOrganization(),
+                        action.getAmount(),
+                        action.getInventory(),
+                        action.getSupplier(),
+                        false
+                );
+                actionRepository.save(buy);
+                log("warehouse_action", "create/edit", buy.getId(), buy.toString(), "Yeni alış əməliyyatı");
+            }
             actn.setAmount(actn.getAmount() - action.getAmount());
             actionRepository.save(actn);
-            log("warehouse_action", "create/edit", actn.getId(), actn.toString());
+            log("warehouse_action", "create/edit", actn.getId(), actn.toString(), "Qaytarılma əməliyyatı");
         }
         return mapPost(action, binding, redirectAttributes, "/warehouse/action/"+actn.getInventory().getId());
     }

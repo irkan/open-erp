@@ -429,7 +429,7 @@
                                                     <div class="form-group">
                                                         <div class="input-group">
                                                             <div class="input-group-prepend"><span class="input-group-text"><i class="la la-search"></i></span></div>
-                                                            <input type="text" name="salesInventories[0].inventory.barcode" class="form-control" placeholder="Barkodu daxil edin..." />
+                                                            <form:input path="salesInventories[0].inventory.barcode" class="form-control" placeholder="Barkodu daxil edin..." />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -444,17 +444,17 @@
                                             <div class="col-md-7">
                                                 <div class="form-group">
                                                     <label>İnventar</label>
-                                                    <input name="salesInventories[0].inventory.name" class="form-control" readonly="true"/>
+                                                    <form:input path="salesInventories[0].inventory.name" class="form-control" readonly="true"/>
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Qrup</label>
-                                                    <input name="salesInventories[0].inventory.group.name" class="form-control" readonly="true"/>
+                                                    <form:input path="salesInventories[0].inventory.group.name" class="form-control" readonly="true"/>
                                                 </div>
                                             </div>
                                             <div class="col-md-5">
                                                 <div class="form-group">
                                                     <label>Açıqlama</label>
-                                                    <textarea rows="4" name="salesInventories[0].inventory.description" class="form-control" readonly="true"></textarea>
+                                                    <form:textarea rows="4" path="salesInventories[0].inventory.description" class="form-control" readonly="true" />
                                                 </div>
                                             </div>
                                         </div>

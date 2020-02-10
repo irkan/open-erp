@@ -42,6 +42,12 @@ public class ActionService {
                 if(action.getAction()!=null && action.getAction().getId()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("action"), action.getAction().getId())));
                 }
+                if(action.getAmountFrom()!=null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.greaterThanOrEqualTo(root.get("amount"), action.getAmountFrom())));
+                }
+                if(action.getAmount()!=null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.lessThanOrEqualTo(root.get("amount"), action.getAmount())));
+                }
                 return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
             }
         }, pageable);

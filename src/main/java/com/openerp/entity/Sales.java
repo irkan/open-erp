@@ -39,7 +39,6 @@ public class Sales {
     @JoinColumn(name = "crm_customer_id", nullable = false)
     private Customer customer;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "sales", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<SalesInventory> salesInventories;
 

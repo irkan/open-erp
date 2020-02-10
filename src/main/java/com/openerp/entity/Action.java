@@ -36,7 +36,10 @@ public class Action {
 
     //@Pattern(regexp="\\d+",message="Say daxil edin")
     @Column(name = "amount")
-    private int amount;
+    private Integer amount;
+
+    @Transient
+    private Integer amountFrom;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "warehouse_inventory_id")
@@ -105,6 +108,13 @@ public class Action {
         this.employee = employee;
         this.action = action;
         this.actionDate = actionDate;
+    }
+
+    public Action(Employee employee, Dictionary action, Date actionDate, Integer amountFrom) {
+        this.employee = employee;
+        this.action = action;
+        this.actionDate = actionDate;
+        this.amountFrom = amountFrom;
     }
 
     public Action(Inventory inventory, Organization organization) {
