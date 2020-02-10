@@ -133,7 +133,7 @@
                     } else if($(element).attr("date")==='datetime') {
                         $(element).val(getFormattedDateTime(new Date(value)));
                     }  else {
-                        if(value.id !== undefined){
+                        if($.type(value) !== "undefined" && $.type(value.id) !== "undefined"){
                             value = value.id;
                         }
                         $(element).val(value);

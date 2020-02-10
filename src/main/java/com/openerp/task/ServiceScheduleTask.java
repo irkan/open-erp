@@ -53,7 +53,7 @@ public class ServiceScheduleTask {
                     for(ServiceRegulator serviceRegulator: sales.getServiceRegulators()){
                         Date servicedDate = serviceRegulator.getServicedDate();
                         Date serviceDate = DateUtility.addMonth(servicedDate.getDate(), servicedDate.getMonth(), servicedDate.getYear()+1900, Util.parseInt(serviceRegulator.getServiceNotification().getAttr2(), defaultValue));
-                        if(serviceDate.getTime()<=today.getTime() && sales.getServiceNext() && Util.calculateInvoice(sales.getInvoices())>0){
+                        if(serviceDate.getTime()<=today.getTime() && !sales.getNotServiceNext() && Util.calculateInvoice(sales.getInvoices())>0){
                             serviceRegulatorTasks.add(new ServiceRegulatorTask(serviceTask, serviceRegulator));
                             description += serviceRegulator.getServiceNotification().getName() + " ";
                         }
@@ -64,6 +64,7 @@ public class ServiceScheduleTask {
                         serviceTask.setOrganization(sales.getOrganization());
                         serviceTask.setSales(sales);
                         serviceTask.setServiceRegulatorTasks(serviceRegulatorTasks);
+                        serviceTask.setTaskDate(new Date());
                         serviceTaskRepository.save(serviceTask);
                     }
                 } catch (Exception e){

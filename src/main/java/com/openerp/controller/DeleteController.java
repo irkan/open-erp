@@ -33,7 +33,6 @@ public class DeleteController extends SkeletonController {
                 }
                 break;
             }
-
         }
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(null, Constants.TEXT.SUCCESS));
         if(path.equalsIgnoreCase(Constants.ROUTE.DICTIONARY_TYPE)){

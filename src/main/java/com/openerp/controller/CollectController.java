@@ -173,4 +173,15 @@ public class CollectController extends SkeletonController {
         }
         return mapPost(redirectAttributes, "/collect/troubled-customer");
     }
+
+    @PostMapping(value = "/service-regulator/transfer")
+    public String postServiceRegulatorTransfer(@ModelAttribute(Constants.FORM) @Validated ServiceTask serviceTask, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(null, Constants.TEXT.SUCCESS));
+        Sales sales = serviceTask.getSales();
+        if(!binding.hasErrors()){
+            //muqahise ucun evvel olan service regulyatorar sales obyektinden yeniden goturulecekdir;
+            //log("collect_contact_history", "create/edit", contactHistory.getId(), contactHistory.toString());
+        }
+        return mapPost(serviceTask, binding, redirectAttributes, "/collect/service-regulator");
+    }
 }

@@ -164,7 +164,7 @@
                                         <td><c:out value="${t.description}" /></td>
                                         <td nowrap class="text-center">
                                             <c:if test="${transfer.status}">
-                                                <a href="javascript:edit($('#transfer-form'), '<c:out value="${utl:toJson(t)}" />', 'transfer-modal-operation', '<c:out value="${transfer.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
+                                                <a href="javascript:edit($('#transfer-form'), '<c:out value="${utl:toJson(t)}" />', 'transfer-modal-operation', '<c:out value="${transfer.object.name}" />');check('<c:out value="${utl:toJson(t.serviceRegulatorTasks)}" />')" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
                                                     <i class="la <c:out value="${transfer.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
@@ -193,7 +193,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="transfer-modal-operation" tabindex="-1" role="dialog">
+<div class="modal fade" id="transfer-modal-operation" tabindex="100" role="dialog">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -205,10 +205,11 @@
             <div class="modal-body">
                 <form:form modelAttribute="form" id="transfer-form" method="post" action="/collect/service-regulator/transfer" cssClass="form-group">
                     <form:hidden path="id"/>
+                    <form:hidden path="sales"/>
                     <form:hidden path="organization"/>
                     <div class="form-group text-center">
                         <form:label path="description" cssStyle="letter-spacing: 4px; font-weight: bold; font-size: 1.3rem;">Filterlər</form:label>
-                        <div class="row text-left">
+                        <div class="row text-left filters">
                         <c:forEach var="t" items="${service_notifications}" varStatus="loop">
                             <div class="col-md-6">
                                 <label class="kt-checkbox kt-checkbox--brand">
@@ -221,17 +222,20 @@
                         <form:errors path="description" cssClass="control-label alert alert-danger" />
                     </div>
                     <div class="form-group">
-                        <form:label path="taskDate">Növbəti servis tarixi</form:label>
-                        <div class="input-group date" >
-                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
-                            <form:input path="taskDate" cssClass="form-control datepicker-element" date="date" placeholder="dd.MM.yyyy"/>
-                        </div>
-                        <form:errors path="taskDate" cssClass="control-label alert-danger" />
-                    </div>
-                    <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>
                         <form:textarea path="description" cssClass="form-control" placeholder="Açıqlama daxil edin" />
                         <form:errors path="description" cssClass="alert alert-danger"/>
+                    </div>
+                    <div class="form-group">
+                        <label class="kt-checkbox kt-checkbox--brand">
+                            <form:checkbox path="sales.notServiceNext" onclick="reason($(this))"/> Bir daha narahat edilməsin
+                            <span></span>
+                        </label>
+                    </div>
+                    <div class="form-group notServiceNextReason kt-hide">
+                        <form:label path="sales.notServiceNextReason">Səbəb</form:label>
+                        <form:textarea path="sales.notServiceNextReason" cssClass="form-control" placeholder="Səbəbi daxil edin"/>
+                        <form:errors path="sales.notServiceNextReason" cssClass="alert alert-danger"/>
                     </div>
                 </form:form>
             </div>
@@ -257,6 +261,29 @@
             swal.close();
         },
     })
+
+    function check(data){
+        data = data.replace(/\&#034;/g, '"');
+        var obj = jQuery.parseJSON(data);
+        console.log(obj);
+        $(".filters").find("input[type='checkbox']").prop('checked', false);
+        $(".filters").find("input[type='checkbox']").parent().find("span").removeClass(":after");
+        $.each( $(".filters").find("input[type='checkbox']"), function( key, element ) {
+            $.each(obj, function(i, v){
+                $(".filters").find($('input[type=checkbox][value="'+v.serviceRegulator.serviceNotification.id+'"]')).prop('checked', true);
+                $(".filters").find($('input[type=checkbox][value="'+v.serviceRegulator.serviceNotification.id+'"]')).parent().find("span").addClass(":after");
+            })
+        })
+    }
+
+    function reason(element){
+        if(!$(element).is(":checked")){
+            $(".notServiceNextReason").addClass("kt-hide");
+        } else {
+            $(".notServiceNextReason").removeClass("kt-hide");
+        }
+    }
+
 </script>
 
 

@@ -24,7 +24,6 @@ public class ServiceTask {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sale_sales_id")
     private Sales sales;
