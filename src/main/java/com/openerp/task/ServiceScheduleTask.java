@@ -36,7 +36,7 @@ public class ServiceScheduleTask {
     @Autowired
     SkeletonController skeletonController;
 
-    @Scheduled(/*cron = "0 0 0 * * *", */fixedDelay = 6000000)
+    @Scheduled(/*cron = "0 0 0 * * *", */fixedDelay = 60000)
     public void service() {
         try{
             log.info("Service Regulator Task Start");

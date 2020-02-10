@@ -159,15 +159,12 @@ public class SaleController extends SkeletonController {
             sales.setGuaranteeExpire(Util.guarantee(sales.getSaleDate()==null?new Date():sales.getSaleDate(), sales.getGuarantee()));
 
             if(!sales.getService()){
-                List<ServiceRegulator> serviceRegulators;
                 if(sales.getId()!=null){
-                    Sales sl = salesRepository.getSalesById(sales.getId());
-                    serviceRegulators = sl!=null?sl.getServiceRegulators():null;
-                } else {
-                    serviceRegulators = new ArrayList<>();
-                    for(Dictionary serviceNotification: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("service-notification")){
-                        serviceRegulators.add(new ServiceRegulator(sales, serviceNotification, sales.getSaleDate()));
-                    }
+                    serviceRegulatorRepository.deleteInBatch(serviceRegulatorRepository.getServiceRegulatorsBySales(sales));
+                }
+                List<ServiceRegulator> serviceRegulators = new ArrayList<>();
+                for(Dictionary serviceNotification: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("service-notification")){
+                    serviceRegulators.add(new ServiceRegulator(sales, serviceNotification, sales.getSaleDate()));
                 }
                 sales.setServiceRegulators(serviceRegulators);
             }
