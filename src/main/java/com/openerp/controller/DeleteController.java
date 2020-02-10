@@ -79,7 +79,6 @@ public class DeleteController extends SkeletonController {
             Module module = moduleRepository.getModuleById(Integer.parseInt(id));
             log("admin_module_operation", "delete", module.getId(), module.toString());
             moduleRepository.delete(module);
-
         } else if(path.equalsIgnoreCase(Constants.ROUTE.USER_MODULE_OPERATION)){
             User userObject = userRepository.getUserByActiveTrueAndId(Integer.parseInt(id));
             userRepository.save(userObject);
