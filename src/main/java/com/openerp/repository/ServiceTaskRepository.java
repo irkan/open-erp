@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface ServiceTaskRepository extends JpaRepository<ServiceTask, Integer>, JpaSpecificationExecutor<ServiceTask> {
-
+    ServiceTask getServiceTaskById(int id);
 }

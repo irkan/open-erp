@@ -211,6 +211,7 @@
                         <form:label path="description" cssStyle="letter-spacing: 4px; font-weight: bold; font-size: 1.3rem;">Filterlər</form:label>
                         <div class="row text-left filters">
                         <c:forEach var="t" items="${service_notifications}" varStatus="loop">
+                            <form:hidden path="serviceRegulatorTasks[${loop.index}].serviceRegulator.serviceNotification.attr2" value="${t.attr2}"/>
                             <div class="col-md-6">
                                 <label class="kt-checkbox kt-checkbox--brand">
                                     <form:checkbox path="serviceRegulatorTasks[${loop.index}].serviceRegulator.serviceNotification.id" value="${t.id}"/> <c:out value="${t.name}"/>
@@ -240,7 +241,7 @@
                 </form:form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="submit($('#form'));">Yadda saxla</button>
+                <button type="button" class="btn btn-primary" onclick="submitTransferForm($('#transfer-form'));">Yadda saxla</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
             </div>
         </div>
@@ -281,6 +282,33 @@
             $(".notServiceNextReason").addClass("kt-hide");
         } else {
             $(".notServiceNextReason").removeClass("kt-hide");
+        }
+    }
+
+    function submitTransferForm(form){
+        var checkboxes = $(".filters").find("input[type='checkbox']:checked");
+        if($("input[name='sales.notServiceNext']").is(":checked") && checkboxes.length>0){
+            swal.fire({
+                title: 'Əminsinizmi?',
+                html: "Seçilmiş filterlər var. Servis yaradılmağına əminsinizmi?",
+                type: 'success',
+                allowEnterKey: true,
+                showCancelButton: true,
+                buttonsStyling: false,
+                cancelButtonText: 'İmtina',
+                cancelButtonColor: '#d1d5cf',
+                cancelButtonClass: 'btn btn-default',
+                confirmButtonText: 'Bəli, razıyam!',
+                confirmButtonColor: '#c40000',
+                confirmButtonClass: 'btn btn-danger',
+                footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+            }).then(function(result) {
+                if (result.value) {
+                    submit(form);
+                }
+            })
+        } else {
+            submit(form);
         }
     }
 

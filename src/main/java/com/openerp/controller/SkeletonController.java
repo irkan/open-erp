@@ -194,6 +194,9 @@ public class SkeletonController {
     PeriodRepository periodRepository;
 
     @Autowired
+    ServiceTaskRepository serviceTaskRepository;
+
+    @Autowired
     CustomerService customerService;
 
     @Autowired
