@@ -181,55 +181,52 @@ public class CollectController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(null, Constants.TEXT.SUCCESS));
 
         if(!binding.hasErrors()){
+            Date today = new Date();
             Configuration configuration = configurationRepository.getConfigurationByKey("service");
             String defaultValue = configuration!=null?configuration.getAttribute():"6";
             ServiceTask serviceTaskOld = serviceTaskRepository.getServiceTaskById(serviceTask.getId());
 
-            for(ServiceDomain serviceDomain: calculateServiceDomain(serviceTaskOld.getServiceRegulatorTasks(), serviceTask.getServiceRegulatorTasks(), defaultValue)){
-                if(serviceDomain.getDictionary()!=null &&
-                        serviceDomain.getDictionary().getId()!=null &&
-                        serviceDomain.getNextServiceDate()!=null){
-                    List<ServiceRegulator> serviceRegulators = serviceRegulatorRepository.getServiceRegulatorsBySalesAndServiceNotification_Id(serviceTask.getSales(), serviceDomain.getDictionary().getId());
-                    for(ServiceRegulator serviceRegulator: serviceRegulators){
-                        serviceRegulator.setServicedDate(serviceDomain.getNextServiceDate());
-                        serviceRegulatorRepository.save(serviceRegulator);
+            if(!serviceTask.getSales().getNotServiceNext()){
+                for(ServiceRegulatorTask srt: serviceTask.getServiceRegulatorTasks()){
+                    if(serviceTask.getSales()!=null &&
+                            srt.getServiceRegulator()!=null &&
+                            srt.getServiceRegulator().getServiceNotification()!=null &&
+                            srt.getServiceRegulator().getServiceNotification().getId()!=null){
+                        List<ServiceRegulator> serviceRegulators = serviceRegulatorRepository.getServiceRegulatorsBySalesAndServiceNotification_Id(serviceTask.getSales(), srt.getServiceRegulator().getServiceNotification().getId());
+                        for(ServiceRegulator serviceRegulator: serviceRegulators){
+                            serviceRegulator.setServicedDate(DateUtility.addMonth(today, Util.parseInt(serviceRegulator.getServiceNotification().getAttr2(), defaultValue)));
+                            serviceRegulatorRepository.save(serviceRegulator);
+                        }
                     }
                 }
+
+                for(ServiceRegulatorTask srt: serviceTaskOld.getServiceRegulatorTasks()){
+                    if(serviceTaskOld.getSales()!=null &&
+                            srt.getServiceRegulator()!=null &&
+                            srt.getServiceRegulator().getServiceNotification()!=null &&
+                            srt.getServiceRegulator().getServiceNotification().getId()!=null){
+                        List<ServiceRegulator> serviceRegulators = serviceRegulatorRepository.getServiceRegulatorsBySalesAndServiceNotification_Id(serviceTaskOld.getSales(), srt.getServiceRegulator().getServiceNotification().getId());
+                        for(ServiceRegulator serviceRegulator: serviceRegulators){
+                            if(serviceRegulator.getServicedDate().getTime()<today.getTime()){
+                                serviceRegulator.setServicedDate(DateUtility.addMonth(today, Util.parseInt(defaultValue, defaultValue)));
+                                serviceRegulatorRepository.save(serviceRegulator);
+                            }
+                        }
+                    }
+                }
+            } else {
+                Sales sales = salesRepository.getSalesById(serviceTask.getSales().getId());
+                sales.setNotServiceNext(true);
+                sales.setNotServiceNextReason(serviceTask.getSales().getNotServiceNextReason());
+                salesRepository.save(sales);
             }
+            serviceTaskRepository.delete(serviceTaskOld);
+
+
 
             //muqahise ucun evvel olan service regulyatorar sales obyektinden yeniden goturulecekdir;
             //log("collect_contact_history", "create/edit", contactHistory.getId(), contactHistory.toString());
         }
         return mapPost(serviceTask, binding, redirectAttributes, "/collect/service-regulator");
-    }
-
-    private static List<ServiceDomain> calculateServiceDomain(List<ServiceRegulatorTask> serviceRegulatorOldTasks, List<ServiceRegulatorTask> serviceRegulatorTasks, String defaultValue){
-        Date today = new Date();
-        List<ServiceDomain> serviceDomains = new ArrayList<>();
-        for(ServiceRegulatorTask old: serviceRegulatorOldTasks) {
-            if (old.getServiceRegulator() != null &&
-                    old.getServiceRegulator().getServiceNotification() != null &&
-                    old.getServiceRegulator().getServiceNotification().getId() != null) {
-                serviceDomains.add(new ServiceDomain(old.getServiceRegulator().getServiceNotification(), DateUtility.addMonth(today, Util.parseInt(defaultValue, defaultValue))));
-            }
-        }
-        List<ServiceDomain> serviceDomainList = new ArrayList<>();
-        for(ServiceRegulatorTask current: serviceRegulatorTasks){
-            if(current.getServiceRegulator()!=null &&
-                    current.getServiceRegulator().getServiceNotification()!=null &&
-                    current.getServiceRegulator().getServiceNotification().getId()!=null){
-                for(ServiceDomain serviceDomain: serviceDomains){
-                    if(serviceDomain.getDictionary()!=null &&
-                            serviceDomain.getDictionary().getId()!=null){
-                        if(current.getServiceRegulator().getServiceNotification().getId().intValue()==serviceDomain.getDictionary().getId().intValue()){
-                            serviceDomain.setNextServiceDate(DateUtility.addMonth(today, Util.parseInt(current.getServiceRegulator().getServiceNotification().getAttr2(), defaultValue)));
-                        } else {
-                            serviceDomainList.add(new ServiceDomain(current.getServiceRegulator().getServiceNotification(), DateUtility.addMonth(today, Util.parseInt(current.getServiceRegulator().getServiceNotification().getAttr2(), defaultValue))));
-                        }
-                    }
-                }
-            }
-        }
-        return serviceDomains;
     }
 }
