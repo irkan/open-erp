@@ -185,13 +185,15 @@ public class CollectController extends SkeletonController {
             Configuration configuration = configurationRepository.getConfigurationByKey("service");
             String defaultValue = configuration!=null?configuration.getAttribute():"6";
             ServiceTask serviceTaskOld = serviceTaskRepository.getServiceTaskById(serviceTask.getId());
-
+            Sales sales = salesRepository.getSalesById(serviceTask.getSales().getId());
+            String description = "";
             if(!serviceTask.getSales().getNotServiceNext()){
                 for(ServiceRegulatorTask srt: serviceTask.getServiceRegulatorTasks()){
                     if(serviceTask.getSales()!=null &&
                             srt.getServiceRegulator()!=null &&
                             srt.getServiceRegulator().getServiceNotification()!=null &&
                             srt.getServiceRegulator().getServiceNotification().getId()!=null){
+                        description += dictionaryRepository.getDictionaryById(srt.getServiceRegulator().getServiceNotification().getId()).getName() + " ";
                         List<ServiceRegulator> serviceRegulators = serviceRegulatorRepository.getServiceRegulatorsBySalesAndServiceNotification_Id(serviceTask.getSales(), srt.getServiceRegulator().getServiceNotification().getId());
                         for(ServiceRegulator serviceRegulator: serviceRegulators){
                             serviceRegulator.setServicedDate(DateUtility.addMonth(today, Util.parseInt(serviceRegulator.getServiceNotification().getAttr2(), defaultValue)));
@@ -215,15 +217,29 @@ public class CollectController extends SkeletonController {
                     }
                 }
             } else {
-                Sales sales = salesRepository.getSalesById(serviceTask.getSales().getId());
                 sales.setNotServiceNext(true);
                 sales.setNotServiceNextReason(serviceTask.getSales().getNotServiceNextReason());
                 salesRepository.save(sales);
             }
+
             serviceTaskRepository.delete(serviceTaskOld);
 
+            if(description.trim().length()>0){
+                description += "filter dəyişimi";
+                Sales service = new Sales();
+                service.setOrganization(sales.getOrganization());
+                service.setService(true);
+                service.setCustomer(sales.getCustomer());
+                service.setGuarantee(6);
+                service.setGuaranteeExpire(Util.guarantee(new Date(), service.getGuarantee()));
+                Payment payment = new Payment();
+                payment.setCash(true);
+                payment.setDescription(description);
+                service.setPayment(payment);
+                salesRepository.save(service);
 
-
+                log("sale_sales", "create/edit", service.getId(), service.toString(), "Servis yaradıldı");
+            }
             //muqahise ucun evvel olan service regulyatorar sales obyektinden yeniden goturulecekdir;
             //log("collect_contact_history", "create/edit", contactHistory.getId(), contactHistory.toString());
         }

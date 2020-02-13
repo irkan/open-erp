@@ -31,31 +31,27 @@ public class ServiceScheduleTask {
     ServiceRegulatorTaskRepository serviceRegulatorTaskRepository;
 
     @Autowired
-    ConfigurationRepository configurationRepository;
-
-    @Autowired
     SkeletonController skeletonController;
 
-    @Scheduled(/*cron = "0 0 0 * * *", */fixedDelay = 60000)
+    @Scheduled(fixedDelay = 43200000)
     public void service() {
         try{
             log.info("Service Regulator Task Start");
             serviceTaskRepository.deleteAllInBatch();
             serviceRegulatorTaskRepository.deleteAllInBatch();
-            Configuration configuration = configurationRepository.getConfigurationByKey("service");
-            String defaultValue = configuration!=null?configuration.getAttribute():"6";
             Date today = new Date();
-            for(Sales sales: salesRepository.getSalesByActiveTrueAndServiceFalseAndApproveTrueOrderByIdAsc()){
+            for(Sales sales: salesRepository.getSalesByActiveTrueAndServiceFalseAndApproveTrueAndNotServiceNextFalseOrderByIdAsc()){
                 try {
                     ServiceTask serviceTask = new ServiceTask();
                     String description = "";
                     List<ServiceRegulatorTask> serviceRegulatorTasks = new ArrayList<>();
-                    for(ServiceRegulator serviceRegulator: sales.getServiceRegulators()){
-                        Date servicedDate = serviceRegulator.getServicedDate();
-                        Date serviceDate = DateUtility.addMonth(servicedDate.getDate(), servicedDate.getMonth(), servicedDate.getYear()+1900, Util.parseInt(serviceRegulator.getServiceNotification().getAttr2(), defaultValue));
-                        if(serviceDate.getTime()<=today.getTime() && !sales.getNotServiceNext() && Util.calculateInvoice(sales.getInvoices())>0){
-                            serviceRegulatorTasks.add(new ServiceRegulatorTask(serviceTask, serviceRegulator));
-                            description += serviceRegulator.getServiceNotification().getName() + " ";
+                    if(Util.calculateInvoice(sales.getInvoices())>0){
+                        for(ServiceRegulator serviceRegulator: sales.getServiceRegulators()){
+                            Date servicedDate = serviceRegulator.getServicedDate();
+                            if(servicedDate.getTime()<today.getTime()){
+                                serviceRegulatorTasks.add(new ServiceRegulatorTask(serviceTask, serviceRegulator));
+                                description += serviceRegulator.getServiceNotification().getName() + " ";
+                            }
                         }
                     }
                     if(serviceRegulatorTasks.size()>0){
