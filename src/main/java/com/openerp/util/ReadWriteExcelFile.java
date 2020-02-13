@@ -1109,6 +1109,10 @@ public class ReadWriteExcelFile {
 			cell.setCellValue((sale.getCanavasser()!=null && sale.getCanavasser().getPerson()!=null)?sale.getCanavasser().getPerson().getFullName():"");
 			cell = row.createCell(row.getLastCellNum());
 			cell.setCellValue((sale.getServicer()!=null && sale.getServicer().getPerson()!=null)?sale.getServicer().getPerson().getFullName():"");
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(sale.getNotServiceNext()!=null?sale.getNotServiceNext():false);
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(sale.getNotServiceNextReason()!=null?sale.getNotServiceNextReason():"");
 			for(SalesInventory salesInventory: sale.getSalesInventories()){
 				cell = row.createCell(row.getLastCellNum());
 				cell.setCellValue(salesInventory.getInventory()!=null?salesInventory.getInventory().getName():"");

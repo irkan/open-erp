@@ -153,4 +153,13 @@ public class DateUtility {
     public static int daysBetween(Date d1, Date d2){
         return (int)( (d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
     }
+
+    public static String getMonthTextAZE(List<Dictionary> months, int value){
+        for(Dictionary dictionary: months){
+            if(Util.parseInt(dictionary.getAttr2())==value){
+                return dictionary.getName();
+            }
+        }
+        return "";
+    }
 }
