@@ -32,7 +32,7 @@
                 </div>
                 <div id="filterContent" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionFilter">
                     <div class="card-body">
-                        <form:form modelAttribute="filter" id="filter" method="post" action="/sale/sales-service/filter">
+                        <form:form modelAttribute="filter" id="filter" method="post" action="/sale/service-regulator/filter">
                             <form:hidden path="organization" />
                             <div class="row">
                                 <div class="col-md-11">
@@ -203,22 +203,22 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form:form modelAttribute="form" id="transfer-form" method="post" action="/collect/service-regulator/transfer" cssClass="form-group">
+                <form:form modelAttribute="form" id="transfer-form" method="post" action="/collect/service-task/transfer" cssClass="form-group">
                     <form:hidden path="id"/>
                     <form:hidden path="sales"/>
                     <form:hidden path="organization"/>
                     <div class="form-group text-center">
                         <form:label path="description" cssStyle="letter-spacing: 4px; font-weight: bold; font-size: 1.3rem;">Filterlər</form:label>
                         <div class="row text-left filters">
-                            <c:forEach var="t" items="${service_notifications}" varStatus="loop">
-                                <form:hidden path="serviceRegulatorTasks[${loop.index}].serviceRegulator.serviceNotification.attr2" value="${t.attr2}"/>
-                                <div class="col-md-6">
-                                    <label class="kt-checkbox kt-checkbox--brand">
-                                        <form:checkbox path="serviceRegulatorTasks[${loop.index}].serviceRegulator.serviceNotification.id" value="${t.id}"/> <c:out value="${t.name}"/>
-                                        <span></span>
-                                    </label>
-                                </div>
-                            </c:forEach>
+                        <c:forEach var="t" items="${service_notifications}" varStatus="loop">
+                            <form:hidden path="serviceRegulatorTasks[${loop.index}].serviceRegulator.serviceNotification.attr2" value="${t.attr2}"/>
+                            <div class="col-md-6">
+                                <label class="kt-checkbox kt-checkbox--brand">
+                                    <form:checkbox path="serviceRegulatorTasks[${loop.index}].serviceRegulator.serviceNotification.id" value="${t.id}"/> <c:out value="${t.name}"/>
+                                    <span></span>
+                                </label>
+                            </div>
+                        </c:forEach>
                         </div>
                         <form:errors path="description" cssClass="control-label alert alert-danger" />
                     </div>
@@ -313,3 +313,7 @@
     }
 
 </script>
+
+
+
+

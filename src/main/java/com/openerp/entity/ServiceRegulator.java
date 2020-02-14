@@ -37,6 +37,11 @@ public class ServiceRegulator {
     @Column(name = "serviced_date")
     private Date servicedDate;
 
+    @Transient
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    private Date servicedDateFrom;
+
     public ServiceRegulator(Sales sales, Dictionary serviceNotification, Date servicedDate) {
         this.sales = sales;
         this.serviceNotification = serviceNotification;

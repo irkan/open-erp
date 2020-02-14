@@ -95,7 +95,7 @@ public class CollectController extends SkeletonController {
                 model.addAttribute(Constants.FILTER, new Invoice(null, false, sales));
             }
             model.addAttribute(Constants.LIST, invoiceService.findAll((Invoice) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
-        } else if(page.equalsIgnoreCase(Constants.ROUTE.SERVICE_REGULATOR)){
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.SERVICE_TASK)){
             model.addAttribute(Constants.SERVICE_NOTIFICATIONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("service-notification"));
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new ServiceTask(getSessionOrganization()));
@@ -176,7 +176,7 @@ public class CollectController extends SkeletonController {
         return mapPost(redirectAttributes, "/collect/troubled-customer");
     }
 
-    @PostMapping(value = "/service-regulator/transfer")
+    @PostMapping(value = "/service-task/transfer")
     public String postServiceRegulatorTransfer(@ModelAttribute(Constants.FORM) @Validated ServiceTask serviceTask, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(null, Constants.TEXT.SUCCESS));
 

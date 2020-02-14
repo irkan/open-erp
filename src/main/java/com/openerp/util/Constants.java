@@ -131,5 +131,6 @@ public class Constants {
         public static final String PERIOD = "period";
         public static final String SERVICE_EMPLOYEE = "service-employee";
         public static final String SERVICE_REGULATOR = "service-regulator";
+        public static final String SERVICE_TASK = "service-task";
     }
 }
