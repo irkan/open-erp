@@ -125,7 +125,8 @@ public class ExportController extends SkeletonController {
     public ResponseEntity<Resource> generateInvoice(@RequestParam(name = "data", value = "") String data) throws IOException, Docx4JException, DocumentException {
         List<Integer> invoiceIds = Util.getInvoiceIds(data);
         List<Invoice> invoices = invoiceRepository.getInvoicesByActiveTrueAndIdIn(invoiceIds);
-        File file = GeneratePDFFile.generateInvoice(invoices, resourceLoader, configurationRepository);
+        List<Dictionary> months = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("month");
+        File file = GeneratePDFFile.generateInvoice(invoices, resourceLoader, configurationRepository, months);
         InputStreamResource resourceIS = new InputStreamResource(new FileInputStream(file));
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=invoice-" + file.getName())

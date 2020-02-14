@@ -108,11 +108,11 @@ public class Sales {
     @Column(name = "is_saled", nullable = false, columnDefinition="boolean default false")
     private Boolean saled = false;
 
-    @Column(name = "is_not_service_next", nullable = false, columnDefinition="boolean default true")
+    @Column(name = "is_not_service_next", nullable = false, columnDefinition="boolean default false")
     private Boolean notServiceNext = false;
 
     @Column(name = "not_service_next_reason")
-    private Boolean notServiceNextReason;
+    private String notServiceNextReason;
 
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;

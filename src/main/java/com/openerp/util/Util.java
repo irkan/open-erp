@@ -646,4 +646,13 @@ public class Util {
 
         return 6;
     }
+
+    public static int parseInt(String value){
+        try {
+            return Integer.parseInt(value);
+        } catch (Exception e){
+            log.error(e);
+        }
+        return 0;
+    }
 }
