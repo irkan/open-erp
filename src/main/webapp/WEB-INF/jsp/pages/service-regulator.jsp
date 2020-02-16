@@ -83,6 +83,15 @@
                                                 <form:errors path="servicedDate" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="serviceNotification">Filter</form:label>
+                                                <form:select path="serviceNotification.id" cssClass="custom-select form-control">
+                                                    <form:option value=""></form:option>
+                                                    <form:options items="${service_notifications}" itemLabel="name" itemValue="id"/>
+                                                </form:select>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-1 text-right">
@@ -108,18 +117,14 @@
                 <div class="kt-portlet__body">
                     <c:choose>
                         <c:when test="${not empty list}">
-                            <c:set var="transfer" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'transfer')}"/>
-                            <table class="table table-striped- table-bordered table-hover table-checkable" id="group_table">
+                            <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
+                            <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
                                 <thead>
                                 <tr>
-                                    <th>Task #</th>
+                                    <th>ID #</th>
                                     <th>Satış nömrəsi</th>
-                                    <th>Satış tarxi</th>
-                                    <th>Son servis tarxi</th>
-                                    <th>Tarix</th>
-                                    <th>Müştəri</th>
-                                    <th>Müştəri ilə əlaqə</th>
-                                    <th>Açıqlama</th>
+                                    <th>Xəbərdarlıq tarixi</th>
+                                    <th>Filter</th>
                                     <th>Əməliyyat</th>
                                 </tr>
                                 </thead>
@@ -138,32 +143,20 @@
                                             </c:choose>
                                         </td>
                                         <td>
-                                            <fmt:formatDate value = "${t.sales.saleDate}" pattern = "dd, MMMM" />
+                                            <fmt:formatDate value = "${t.servicedDate}" pattern = "dd.MM.yyyy" />
                                         </td>
                                         <td>
-                                            <fmt:formatDate value = "${t.sales.saleDate}" pattern = "dd.MM.yyyy" />
+                                            <c:out value="${t.serviceNotification.name}"/>
                                         </td>
-                                        <td>
-                                            <fmt:formatDate value = "${t.taskDate}" pattern = "dd.MM.yyyy" />
-                                        </td>
-                                        <td>
-                                            <a href="javascript:window.open('/crm/customer/<c:out value="${t.sales.customer.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.sales.customer.id}" />: <c:out value="${t.sales.customer.person.fullName}"/></a>
-                                        </td>
-                                        <td>
-                                            <c:out value="${t.sales.customer.person.contact.mobilePhone}"/>
-                                            <c:out value="${t.sales.customer.person.contact.city.name}"/>
-                                            <c:out value="${t.sales.customer.person.contact.address}"/>
-                                        </td>
-                                        <td><c:out value="${t.description}" /></td>
                                         <td nowrap class="text-center">
-                                            <c:if test="${transfer.status}">
-                                                <a href="javascript:edit($('#transfer-form'), '<c:out value="${utl:toJson(t)}" />', 'transfer-modal-operation', '<c:out value="${transfer.object.name}" />');check('<c:out value="${utl:toJson(t.serviceRegulatorTasks)}" />')" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
-                                                    <i class="la <c:out value="${transfer.object.icon}"/>"></i>
+                                            <c:if test="${edit.status}">
+                                                <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                                                    <i class="la <c:out value="${edit.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
                                             <c:if test="${delete.status}">
-                                                <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.description}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
-                                                    <i class="flaticon2-cancel"></i>
+                                                <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.serviceNotification.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
+                                                    <i class="la <c:out value="${delete.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
                                         </td>
@@ -186,7 +179,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="transfer-modal-operation" tabindex="100" role="dialog">
+<div class="modal fade" id="modal-operation" tabindex="100" role="dialog">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -196,57 +189,57 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form:form modelAttribute="form" id="transfer-form" method="post" action="/collect/service-regulator/transfer" cssClass="form-group">
+                <form:form modelAttribute="form" id="form" method="post" action="/sale/service-regulator" cssClass="form-group">
                     <form:hidden path="id"/>
-                    <form:hidden path="sales"/>
-                    <form:hidden path="organization"/>
-                    <div class="form-group text-center">
-                        <form:label path="description" cssStyle="letter-spacing: 4px; font-weight: bold; font-size: 1.3rem;">Filterlər</form:label>
-                        <div class="row text-left filters">
-                            <c:forEach var="t" items="${service_notifications}" varStatus="loop">
-                                <form:hidden path="serviceRegulatorTasks[${loop.index}].serviceRegulator.serviceNotification.attr2" value="${t.attr2}"/>
-                                <div class="col-md-6">
-                                    <label class="kt-checkbox kt-checkbox--brand">
-                                        <form:checkbox path="serviceRegulatorTasks[${loop.index}].serviceRegulator.serviceNotification.id" value="${t.id}"/> <c:out value="${t.name}"/>
-                                        <span></span>
-                                    </label>
-                                </div>
-                            </c:forEach>
+                    <div class="form-group">
+                        <form:label path="sales">Satış KOD</form:label>
+                        <form:input path="sales" cssClass="form-control" placeholder="Satış kodu" />
+                        <form:errors path="sales" cssClass="alert-danger"/>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="serviceNotification">Filter</form:label>
+                        <form:select path="serviceNotification" cssClass="custom-select form-control">
+                            <form:option value=""></form:option>
+                            <form:options items="${service_notifications}" itemLabel="name" itemValue="id"/>
+                        </form:select>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="servicedDate">Xəbərdarlıq tarixi</form:label>
+                        <div class="input-group date">
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
+                            <form:input path="servicedDate" autocomplete="off" cssClass="form-control datepicker-element" date="date" placeholder="dd.MM.yyyy"/>
                         </div>
-                        <form:errors path="description" cssClass="control-label alert alert-danger" />
-                    </div>
-                    <div class="form-group">
-                        <form:label path="description">Açıqlama</form:label>
-                        <form:textarea path="description" cssClass="form-control" placeholder="Açıqlama daxil edin" />
-                        <form:errors path="description" cssClass="alert alert-danger"/>
-                    </div>
-                    <div class="form-group">
-                        <label class="kt-checkbox kt-checkbox--brand">
-                            <form:checkbox path="sales.notServiceNext" onclick="reason($(this))"/> Bir daha narahat edilməsin
-                            <span></span>
-                        </label>
-                    </div>
-                    <div class="form-group notServiceNextReason kt-hide">
-                        <form:label path="sales.notServiceNextReason">Səbəb</form:label>
-                        <form:textarea path="sales.notServiceNextReason" cssClass="form-control" placeholder="Səbəbi daxil edin"/>
-                        <form:errors path="sales.notServiceNextReason" cssClass="alert alert-danger"/>
+                        <form:errors path="servicedDate" cssClass="control-label alert-danger"/>
                     </div>
                 </form:form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="submitTransferForm($('#transfer-form'));">Yadda saxla</button>
+                <button type="button" class="btn btn-primary" onclick="submit($('#form'));">Yadda saxla</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
             </div>
         </div>
     </div>
 </div>
 
-<script src="<c:url value="/assets/js/demo4/pages/crud/datatables/advanced/row-grouping.js" />" type="text/javascript"></script>
-
 <script>
-    $( "#transfer-form" ).validate({
+    $("#datatable").DataTable({
+        responsive: true,
+        lengthMenu: [10, 25, 50, 75, 100, 200, 1000],
+        pageLength: 100,
+        order: [[1, 'desc']],
+        columnDefs: [
+            {
+                targets: 0,
+                width: '25px',
+                className: 'dt-center',
+                orderable: false
+            },
+        ],
+    });
+
+    $( "#form" ).validate({
         rules: {
-            description: {
+            serviceNotification: {
                 required: true
             }
         },
@@ -255,54 +248,5 @@
             swal.close();
         },
     })
-
-    function check(data){
-        data = data.replace(/\&#034;/g, '"');
-        var obj = jQuery.parseJSON(data);
-        console.log(obj);
-        $(".filters").find("input[type='checkbox']").prop('checked', false);
-        $(".filters").find("input[type='checkbox']").parent().find("span").removeClass(":after");
-        $.each( $(".filters").find("input[type='checkbox']"), function( key, element ) {
-            $.each(obj, function(i, v){
-                $(".filters").find($('input[type=checkbox][value="'+v.serviceRegulator.serviceNotification.id+'"]')).prop('checked', true);
-                $(".filters").find($('input[type=checkbox][value="'+v.serviceRegulator.serviceNotification.id+'"]')).parent().find("span").addClass(":after");
-            })
-        })
-    }
-
-    function reason(element){
-        if(!$(element).is(":checked")){
-            $(".notServiceNextReason").addClass("kt-hide");
-        } else {
-            $(".notServiceNextReason").removeClass("kt-hide");
-        }
-    }
-
-    function submitTransferForm(form){
-        var checkboxes = $(".filters").find("input[type='checkbox']:checked");
-        if($("input[name='sales.notServiceNext']").is(":checked") && checkboxes.length>0){
-            swal.fire({
-                title: 'Əminsinizmi?',
-                html: "Seçilmiş filterlər var. Servis yaradılmağına əminsinizmi?",
-                type: 'success',
-                allowEnterKey: true,
-                showCancelButton: true,
-                buttonsStyling: false,
-                cancelButtonText: 'İmtina',
-                cancelButtonColor: '#d1d5cf',
-                cancelButtonClass: 'btn btn-default',
-                confirmButtonText: 'Bəli, razıyam!',
-                confirmButtonColor: '#c40000',
-                confirmButtonClass: 'btn btn-danger',
-                footer: '<a href>Məlumatlar yenilənsinmi?</a>'
-            }).then(function(result) {
-                if (result.value) {
-                    submit(form);
-                }
-            })
-        } else {
-            submit(form);
-        }
-    }
 
 </script>
