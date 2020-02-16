@@ -123,6 +123,19 @@ public class SaleController extends SkeletonController {
             if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
                 return exportExcel(demonstrations, redirectAttributes, page);
             }
+        }  else if (page.equalsIgnoreCase(Constants.ROUTE.SERVICE_REGULATOR)){
+            model.addAttribute(Constants.SERVICE_NOTIFICATIONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("service-notification"));
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new ServiceRegulator(new Sales(getSessionOrganization())));
+            }
+            if(!model.containsAttribute(Constants.FILTER)){
+                model.addAttribute(Constants.FILTER, new ServiceRegulator(new Sales(!canViewAll()?getSessionOrganization():null)));
+            }
+            Page<ServiceRegulator> serviceRegulators = serviceRegulatorService.findAll((ServiceRegulator) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
+            model.addAttribute(Constants.LIST, serviceRegulators);
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(serviceRegulators, redirectAttributes, page);
+            }
         } else if(page.equalsIgnoreCase(Constants.ROUTE.CALCULATOR)){
             model.addAttribute(Constants.SALE_PRICES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("sale-price"));
             model.addAttribute(Constants.PAYMENT_SCHEDULES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-schedule"));
@@ -464,7 +477,17 @@ public class SaleController extends SkeletonController {
                 }
             }
             advanceRepository.saveAll(advances);
-            log("accounting_transaction", "create/edit", 0, advances.toString());
+
+            log("accounting_advance", "create/edit", 0, advances.toString());
+
+            Sales sales1 = salesRepository.getSalesById(sales.getId());
+            if(sales1!=null && sales1.getPayment()!=null && Util.calculateInvoice(sales1.getInvoices())>=sales1.getPayment().getLastPrice()){
+                sales1.setSaled(true);
+            } else if(sales1!=null && sales1.getPayment()!=null && Util.calculateInvoice(sales1.getInvoices())<sales1.getPayment().getLastPrice()){
+                sales1.setSaled(false);
+            }
+
+            log("sale_sales", "create/edit", sales1.getId(), sales1.toString(), "Satıldı statusu yeniləndi!");
         }
         return mapPost(invc, binding, redirectAttributes, "/sale/invoice/");
     }
@@ -480,10 +503,11 @@ public class SaleController extends SkeletonController {
             invoice1.setDescription("Kredit: " + invoice.getDescription());
             invoice1.setCreditable(false);
             invoice1.setPrice(-1*invc.getPrice());
+            invoice1.setApprove(false);
             invoiceRepository.save(invoice1);
             log("sale_invoice", "create/edit", invoice1.getId(), invoice1.toString());
 
-            Transaction transaction = new Transaction();
+            /*Transaction transaction = new Transaction();
             transaction.setApprove(false);
             transaction.setInventory(invc.getSales().getSalesInventories().get(0).getInventory());
             transaction.setOrganization(invc.getOrganization());
@@ -500,6 +524,7 @@ public class SaleController extends SkeletonController {
             );
             transactionRepository.save(transaction);
             log("accounting_transaction", "create/edit", transaction.getId(), transaction.toString());
+        */
         }
         return mapPost(invc, binding, redirectAttributes, "/sale/invoice/");
     }

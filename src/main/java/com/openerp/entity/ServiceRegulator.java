@@ -47,4 +47,8 @@ public class ServiceRegulator {
         this.serviceNotification = serviceNotification;
         this.servicedDate = servicedDate;
     }
+
+    public ServiceRegulator(Sales sales) {
+        this.sales = sales;
+    }
 }

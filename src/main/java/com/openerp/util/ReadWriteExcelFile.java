@@ -1230,4 +1230,27 @@ public class ReadWriteExcelFile {
 		return file;
 	}
 
+	public static File serviceRegulatorXLSXFile(Page<ServiceRegulator> serviceRegulators, String page) throws IOException {
+		File file = new File(page+".xlsx");
+		XSSFWorkbook wb = new XSSFWorkbook();
+		XSSFSheet sheet = wb.createSheet(page) ;
+		int rownum=0;
+		for(ServiceRegulator serviceRegulator: serviceRegulators){
+			XSSFRow row = sheet.createRow(rownum++);
+			XSSFCell cell = row.createCell(0);
+			cell.setCellValue(serviceRegulator.getId());
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(Util.checkNull(serviceRegulator.getServicedDate()));
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(serviceRegulator.getServiceNotification()!=null?serviceRegulator.getServiceNotification().getName():"");
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(serviceRegulator.getSales()!=null?Util.checkNull(serviceRegulator.getSales().getId()):"");
+		}
+		FileOutputStream fileOut = new FileOutputStream(file);
+		wb.write(fileOut);
+		fileOut.flush();
+		fileOut.close();
+		return file;
+	}
+
 }

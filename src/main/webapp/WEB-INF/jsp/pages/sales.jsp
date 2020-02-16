@@ -214,7 +214,7 @@
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${list.content}" varStatus="loop">
-                                    <tr data="<c:out value="${t.id}" />">
+                                    <tr data="<c:out value="${t.id}" />" style="<c:out value="${t.saled?'background-color: rgb(237, 239, 255) !important':''}"/>">
                                         <td style="<c:out value="${t.payment.cash?'background-color: #e6ffe7 !important':'background-color: #ffeaf1 !important'}"/>"><c:out value="${t.id}" /></td>
                                         <th>
                                             <c:forEach var="p" items="${t.salesInventories}" varStatus="lp">

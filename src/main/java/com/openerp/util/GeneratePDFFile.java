@@ -349,7 +349,7 @@ public class GeneratePDFFile {
                                     .setBorder(Border.NO_BORDER)
                                     .add(new Paragraph("Tarix:"));
                             table.addCell(cell);
-                            cell = new Cell(1, 3)
+                            cell = new Cell(1, 2)
                                     .setWidth(UnitValue.createPercentValue(25))
                                     .setTextAlignment(TextAlignment.CENTER)
                                     .setVerticalAlignment(VerticalAlignment.MIDDLE)
@@ -358,7 +358,7 @@ public class GeneratePDFFile {
                                     .add(new Paragraph(""));
                             table.addCell(cell);
                             Paragraph invoiceDate = new Paragraph("\" "+invoice.getInvoiceDate().getDate()+" \"  \" "+DateUtility.getMonthTextAZE(months, (invoice.getInvoiceDate().getMonth()+1))+" \"  " + (invoice.getInvoiceDate().getYear()+1900) + " ci il.");
-                            cell = new Cell(1, 6)
+                            cell = new Cell(1, 7)
                                     .setWidth(UnitValue.createPercentValue(75))
                                     .setTextAlignment(TextAlignment.CENTER)
                                     .setVerticalAlignment(VerticalAlignment.MIDDLE)
@@ -366,13 +366,15 @@ public class GeneratePDFFile {
                                     .setBorder(Border.NO_BORDER)
                                     .add(invoiceDate);
                             table.addCell(cell);
-                            cell = new Cell(1, 1)
+                            cell = new Cell(3, 1)
                                     .setWidth(UnitValue.createPercentValue(11))
-                                    .setTextAlignment(TextAlignment.CENTER)
-                                    .setVerticalAlignment(VerticalAlignment.MIDDLE)
-                                    .setFont(timesbi)
+                                    .setTextAlignment(TextAlignment.RIGHT)
+                                    .setVerticalAlignment(VerticalAlignment.BOTTOM)
+                                    .setFont(timesbd)
+                                    .setFontSize(11)
+                                    .setRotationAngle(1.5707963268)
                                     .setBorder(Border.NO_BORDER)
-                                    .add(new Paragraph(""));
+                                    .add(new Paragraph("Müştəri"));
                             table.addCell(cell);
                             cell = new Cell(1, 1)
                                     .setWidth(UnitValue.createPercentValue(14))
@@ -382,8 +384,7 @@ public class GeneratePDFFile {
                                     .setBorder(Border.NO_BORDER)
                                     .add(new Paragraph("S.A.A:"));
                             table.addCell(cell);
-                            cell = new Cell(1, 7)
-                                    .setWidth(UnitValue.createPercentValue(75))
+                            cell = new Cell(1, 3)
                                     .setTextAlignment(TextAlignment.LEFT)
                                     .setVerticalAlignment(VerticalAlignment.MIDDLE)
                                     .setFont(timesbd)
@@ -391,36 +392,40 @@ public class GeneratePDFFile {
                                     .add(new Paragraph(invoice.getSales().getCustomer().getPerson().getFullName()));
                             table.addCell(cell);
                             cell = new Cell(1, 1)
-                                    .setWidth(UnitValue.createPercentValue(11))
-                                    .setTextAlignment(TextAlignment.CENTER)
+                                    .setTextAlignment(TextAlignment.RIGHT)
                                     .setVerticalAlignment(VerticalAlignment.MIDDLE)
-                                    .setFont(timesbi)
+                                    .setFont(timesbd)
                                     .setBorder(Border.NO_BORDER)
-                                    .add(new Paragraph(""));
+                                    .add(new Paragraph("Məbləğ:"));
+                            table.addCell(cell);
+                            cell = new Cell(1, 3)
+                                    .setTextAlignment(TextAlignment.LEFT)
+                                    .setVerticalAlignment(VerticalAlignment.MIDDLE)
+                                    .setFont(timesbd)
+                                    .setBorder(Border.NO_BORDER)
+                                    .add(new Paragraph(invoice.getPrice() + " AZN" + " ("+Util.getDigitInWord(String.valueOf(invoice.getPrice()))+")"));
                             table.addCell(cell);
                             cell = new Cell(1, 1)
-                                    .setWidth(UnitValue.createPercentValue(14))
+                                    .setWidth(UnitValue.createPercentValue(20))
                                     .setTextAlignment(TextAlignment.RIGHT)
                                     .setVerticalAlignment(VerticalAlignment.MIDDLE)
                                     .setFont(timesbd)
                                     .setBorder(Border.NO_BORDER)
                                     .add(new Paragraph("Ünvan:"));
                             table.addCell(cell);
-                            cell = new Cell(1, 7)
-                                    .setWidth(UnitValue.createPercentValue(75))
+                            cell = new Cell(1, 4)
                                     .setTextAlignment(TextAlignment.LEFT)
                                     .setVerticalAlignment(VerticalAlignment.MIDDLE)
                                     .setFont(timesbd)
                                     .setBorder(Border.NO_BORDER)
                                     .add(new Paragraph(invoice.getSales().getCustomer().getPerson().getContact().getCity().getName() + ", " + invoice.getSales().getCustomer().getPerson().getContact().getAddress()));
                             table.addCell(cell);
-                            cell = new Cell(1, 1)
-                                    .setWidth(UnitValue.createPercentValue(11))
-                                    .setTextAlignment(TextAlignment.CENTER)
-                                    .setVerticalAlignment(VerticalAlignment.MIDDLE)
-                                    .setFont(timesbi)
+                            cell = new Cell(1, 3)
+                                    .setTextAlignment(TextAlignment.LEFT)
+                                    .setVerticalAlignment(VerticalAlignment.BOTTOM)
+                                    .setFont(timesbd)
                                     .setBorder(Border.NO_BORDER)
-                                    .add(new Paragraph(""));
+                                    .add(new Paragraph("______________________________"));
                             table.addCell(cell);
                             cell = new Cell(1, 1)
                                     .setWidth(UnitValue.createPercentValue(14))
@@ -430,13 +435,20 @@ public class GeneratePDFFile {
                                     .setBorder(Border.NO_BORDER)
                                     .add(new Paragraph("Əlaqə:"));
                             table.addCell(cell);
-                            cell = new Cell(1, 7)
+                            cell = new Cell(1, 4)
                                     .setWidth(UnitValue.createPercentValue(75))
                                     .setTextAlignment(TextAlignment.LEFT)
                                     .setVerticalAlignment(VerticalAlignment.MIDDLE)
                                     .setFont(timesbd)
                                     .setBorder(Border.NO_BORDER)
                                     .add(new Paragraph(invoice.getSales().getCustomer().getPerson().getContact().getMobilePhone() + " " + (invoice.getSales().getCustomer().getPerson().getContact().getHomePhone()!=null?invoice.getSales().getCustomer().getPerson().getContact().getHomePhone():"")+" " + (invoice.getSales().getCustomer().getPerson().getContact().getRelationalPhoneNumber1()!=null?invoice.getSales().getCustomer().getPerson().getContact().getRelationalPhoneNumber1():"")));
+                            table.addCell(cell);
+                            cell = new Cell(1, 3)
+                                    .setTextAlignment(TextAlignment.LEFT)
+                                    .setVerticalAlignment(VerticalAlignment.BOTTOM)
+                                    .setFont(timesbd)
+                                    .setBorder(Border.NO_BORDER)
+                                    .add(new Paragraph("______________________________"));
                             table.addCell(cell);
                             cell = new Cell(1, 1)
                                     .setWidth(UnitValue.createPercentValue(14))
@@ -811,7 +823,7 @@ public class GeneratePDFFile {
                                     .setVerticalAlignment(VerticalAlignment.MIDDLE)
                                     .setFont(timesbd)
                                     .setBorder(Border.NO_BORDER)
-                                    .add(new Paragraph("_________________________"));
+                                    .add(new Paragraph("____________________"));
                             table.addCell(cell);
                             cell = new Cell(1, 1)
                                     .setMarginTop(30)
@@ -825,7 +837,7 @@ public class GeneratePDFFile {
                                     .setVerticalAlignment(VerticalAlignment.MIDDLE)
                                     .setFont(timesbd)
                                     .setBorder(Border.NO_BORDER)
-                                    .add(new Paragraph("Müştəri / İmza"));
+                                    .add(new Paragraph("İcraçı / İmza"));
                             table.addCell(cell);
                             cell = new Cell(1, 2)
                                     .setWidth(UnitValue.createPercentValue(25))
@@ -834,7 +846,7 @@ public class GeneratePDFFile {
                                     .setVerticalAlignment(VerticalAlignment.MIDDLE)
                                     .setFont(timesbd)
                                     .setBorder(Border.NO_BORDER)
-                                    .add(new Paragraph("_________________________"));
+                                    .add(new Paragraph("____________________"));
                             table.addCell(cell);
 
                             cell = new Cell(1, 9)

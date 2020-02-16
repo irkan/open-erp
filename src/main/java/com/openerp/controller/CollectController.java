@@ -196,7 +196,7 @@ public class CollectController extends SkeletonController {
                         description += dictionaryRepository.getDictionaryById(srt.getServiceRegulator().getServiceNotification().getId()).getName() + " ";
                         List<ServiceRegulator> serviceRegulators = serviceRegulatorRepository.getServiceRegulatorsBySalesAndServiceNotification_Id(serviceTask.getSales(), srt.getServiceRegulator().getServiceNotification().getId());
                         for(ServiceRegulator serviceRegulator: serviceRegulators){
-                            serviceRegulator.setServicedDate(DateUtility.addMonth(today, Util.parseInt(serviceRegulator.getServiceNotification().getAttr2(), defaultValue)));
+                            serviceRegulator.setServicedDate(today);
                             serviceRegulatorRepository.save(serviceRegulator);
                         }
                     }
@@ -210,7 +210,7 @@ public class CollectController extends SkeletonController {
                         List<ServiceRegulator> serviceRegulators = serviceRegulatorRepository.getServiceRegulatorsBySalesAndServiceNotification_Id(serviceTaskOld.getSales(), srt.getServiceRegulator().getServiceNotification().getId());
                         for(ServiceRegulator serviceRegulator: serviceRegulators){
                             if(serviceRegulator.getServicedDate().getTime()<today.getTime()){
-                                serviceRegulator.setServicedDate(DateUtility.addMonth(today, Util.parseInt(defaultValue, defaultValue)));
+                                serviceRegulator.setServicedDate(DateUtility.addMonth(today, -1*Util.parseInt(defaultValue, defaultValue)));
                                 serviceRegulatorRepository.save(serviceRegulator);
                             }
                         }
@@ -243,6 +243,6 @@ public class CollectController extends SkeletonController {
             //muqahise ucun evvel olan service regulyatorar sales obyektinden yeniden goturulecekdir;
             //log("collect_contact_history", "create/edit", contactHistory.getId(), contactHistory.toString());
         }
-        return mapPost(serviceTask, binding, redirectAttributes, "/collect/service-regulator");
+        return mapPost(serviceTask, binding, redirectAttributes, "/collect/service-task");
     }
 }

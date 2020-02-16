@@ -32,8 +32,8 @@
                 </div>
                 <div id="filterContent" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionFilter">
                     <div class="card-body">
-                        <form:form modelAttribute="filter" id="filter" method="post" action="/sale/sales-service/filter">
-                            <form:hidden path="organization" />
+                        <form:form modelAttribute="filter" id="filter" method="post" action="/sale/sales-regulator/filter">
+                            <form:hidden path="sales.organization" />
                             <div class="row">
                                 <div class="col-md-11">
                                     <div class="row">
@@ -53,9 +53,9 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="taskDateFrom">Tarixdən</form:label>
+                                                <form:label path="servicedDateFrom">Tarixdən</form:label>
                                                 <div class="input-group date">
-                                                    <form:input path="taskDateFrom" autocomplete="off"
+                                                    <form:input path="servicedDateFrom" autocomplete="off"
                                                                 cssClass="form-control datepicker-element" date="date"
                                                                 placeholder="dd.MM.yyyy"/>
                                                     <div class="input-group-append">
@@ -64,14 +64,14 @@
                                         </span>
                                                     </div>
                                                 </div>
-                                                <form:errors path="taskDateFrom" cssClass="control-label alert-danger"/>
+                                                <form:errors path="servicedDateFrom" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="taskDate">Tarixədək</form:label>
+                                                <form:label path="servicedDate">Tarixədək</form:label>
                                                 <div class="input-group date">
-                                                    <form:input path="taskDate" autocomplete="off"
+                                                    <form:input path="servicedDate" autocomplete="off"
                                                                 cssClass="form-control datepicker-element" date="date"
                                                                 placeholder="dd.MM.yyyy"/>
                                                     <div class="input-group-append">
@@ -80,14 +80,7 @@
                                         </span>
                                                     </div>
                                                 </div>
-                                                <form:errors path="taskDate" cssClass="control-label alert-danger"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <form:label path="description">Açıqlama</form:label>
-                                                <form:input path="description" cssClass="form-control" placeholder="Açıqlama daxil edin"/>
-                                                <form:errors path="description" cssClass="alert alert-danger"/>
+                                                <form:errors path="servicedDate" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
                                     </div>
