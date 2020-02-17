@@ -35,6 +35,13 @@
         </function-signature>
     </function>
     <function>
+        <name>calculateInvoice</name>
+        <function-class>com.openerp.util.Util</function-class>
+        <function-signature>
+            java.lang.Double calculateInvoice(java.util.List)
+        </function-signature>
+    </function>
+    <function>
         <name>calculateApproveOperationCount</name>
         <function-class>com.openerp.util.Util</function-class>
         <function-signature>

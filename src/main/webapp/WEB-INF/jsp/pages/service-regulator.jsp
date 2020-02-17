@@ -12,7 +12,7 @@
 <%@ taglib prefix="utl" uri="/WEB-INF/tld/Util.tld"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <div class="kt-container  kt-grid__item kt-grid__item--fluid">
-    <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
+    <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'sales', 'delete')}"/>
     <c:set var="filter" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'filter')}"/>
     <c:if test="${filter.status}">
         <div class="accordion  accordion-toggle-arrow mb-2" id="accordionFilter">
@@ -32,7 +32,7 @@
                 </div>
                 <div id="filterContent" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionFilter">
                     <div class="card-body">
-                        <form:form modelAttribute="filter" id="filter" method="post" action="/sale/sales-regulator/filter">
+                        <form:form modelAttribute="filter" id="filter" method="post" action="/sale/service-regulator/filter">
                             <form:hidden path="sales.organization" />
                             <div class="row">
                                 <div class="col-md-11">
@@ -92,6 +92,16 @@
                                                 </form:select>
                                             </div>
                                         </div>
+                                        <c:if test="${delete.status}">
+                                            <div class="col-md-2" style="padding-top: 30px;">
+                                                <div class="form-group">
+                                                    <label class="kt-checkbox kt-checkbox--brand">
+                                                        <form:checkbox path="sales.active"/> Satış aktual məlumat
+                                                        <span></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </c:if>
                                     </div>
                                 </div>
                                 <div class="col-md-1 text-right">
@@ -118,6 +128,7 @@
                     <c:choose>
                         <c:when test="${not empty list}">
                             <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
+                            <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
                                 <thead>
                                 <tr>
@@ -149,6 +160,11 @@
                                             <c:out value="${t.serviceNotification.name}"/>
                                         </td>
                                         <td nowrap class="text-center">
+                                            <c:if test="${view.status}">
+                                                <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
+                                                    <i class="la <c:out value="${view.object.icon}"/>"></i>
+                                                </a>
+                                            </c:if>
                                             <c:if test="${edit.status}">
                                                 <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
                                                     <i class="la <c:out value="${edit.object.icon}"/>"></i>
@@ -192,7 +208,7 @@
                 <form:form modelAttribute="form" id="form" method="post" action="/sale/service-regulator" cssClass="form-group">
                     <form:hidden path="id"/>
                     <div class="form-group">
-                        <form:label path="sales">Satış KOD</form:label>
+                        <form:label path="sales">Satış kodu</form:label>
                         <form:input path="sales" cssClass="form-control" placeholder="Satış kodu" />
                         <form:errors path="sales" cssClass="alert-danger"/>
                     </div>
@@ -239,7 +255,14 @@
 
     $( "#form" ).validate({
         rules: {
+            sales: {
+                required: true,
+                digits: true
+            },
             serviceNotification: {
+                required: true
+            },
+            servicedDate: {
                 required: true
             }
         },
@@ -248,5 +271,11 @@
             swal.close();
         },
     })
+
+    <c:if test="${view.status}">
+    $('#datatable tbody').on('dblclick', 'tr', function () {
+        view($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${view.object.name}" />');
+    });
+    </c:if>
 
 </script>

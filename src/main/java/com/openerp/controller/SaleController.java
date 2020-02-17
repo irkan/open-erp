@@ -100,7 +100,9 @@ public class SaleController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new Invoice(getSessionOrganization()));
             }
             if(!model.containsAttribute(Constants.FILTER)){
-                model.addAttribute(Constants.FILTER, new Invoice(!canViewAll()?getSessionOrganization():null, null, null, null));
+                Sales sales = new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null);
+                sales.setService(null);
+                model.addAttribute(Constants.FILTER, new Invoice(!canViewAll()?getSessionOrganization():null, null, null, null, sales));
             }
             Page<Invoice> invoices = invoiceService.findAll((Invoice) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
             model.addAttribute(Constants.LIST, invoices);
@@ -129,7 +131,8 @@ public class SaleController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new ServiceRegulator(new Sales(getSessionOrganization())));
             }
             if(!model.containsAttribute(Constants.FILTER)){
-                model.addAttribute(Constants.FILTER, new ServiceRegulator(new Sales(!canViewAll()?getSessionOrganization():null)));
+                Sales sales = new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null, new Payment((Double) null));
+                model.addAttribute(Constants.FILTER, new ServiceRegulator(sales, null));
             }
             Page<ServiceRegulator> serviceRegulators = serviceRegulatorService.findAll((ServiceRegulator) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
             model.addAttribute(Constants.LIST, serviceRegulators);
@@ -264,11 +267,6 @@ public class SaleController extends SkeletonController {
         return mapFilter(sales, binding, redirectAttributes, "/sale/sales");
     }
 
-    @PostMapping(value = "/service-regulator/filter")
-    public String postServiceRegulatorFilter(@ModelAttribute(Constants.FILTER) @Validated ServiceTask serviceTask, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
-        return mapFilter(serviceTask, binding, redirectAttributes, "/sale/service-regulator");
-    }
-
     @ResponseBody
     @GetMapping(value = "/payment/schedule/{lastPrice}/{down}/{schedule}/{period}/{saleDate}", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Schedule> getPaymentSchedulePrice(Model model, @PathVariable("lastPrice") double lastPrice, @PathVariable("down") double down, @PathVariable("schedule") int scheduleId, @PathVariable("period") int periodId, @PathVariable(name = "saleDate", value = "") String saleDate){
@@ -339,6 +337,21 @@ public class SaleController extends SkeletonController {
             log("sale_invoice", "create/edit", invc.getId(), invc.toString());
         }
         return mapPost(invc, binding, redirectAttributes, "/sale/invoice/");
+    }
+
+    @PostMapping(value = "/service-regulator/filter")
+    public String postServiceRegulatorFilter(@ModelAttribute(Constants.FILTER) @Validated ServiceRegulator serviceRegulator, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        return mapFilter(serviceRegulator, binding, redirectAttributes, "/sale/service-regulator");
+    }
+
+    @PostMapping(value = "/service-regulator")
+    public String postServiceRegulator(@ModelAttribute(Constants.FORM) @Validated ServiceRegulator serviceRegulator, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()) {
+            serviceRegulatorRepository.save(serviceRegulator);
+            log("sale_service_regulator", "create/edit", serviceRegulator.getId(), serviceRegulator.toString());
+        }
+        return mapPost(serviceRegulator, binding, redirectAttributes);
     }
 
     @ResponseBody

@@ -195,8 +195,13 @@
                     <c:choose>
                         <c:when test="${not empty list}">
                             <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
+                            <c:set var="view1" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'contact-history', 'view')}"/>
+                            <c:set var="view2" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'schedule', 'view')}"/>
+                            <c:set var="view3" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'service-regulator', 'view')}"/>
+                            <c:set var="view4" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'customer', 'view')}"/>
+                            <c:set var="view5" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'invoice', 'view')}"/>
+                            <c:set var="view6" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'inventory', 'view')}"/>
                             <c:set var="approve" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
-                            <c:set var="detail" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'detail')}"/>
                             <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
                             <c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
@@ -207,6 +212,7 @@
                                     <th>Satış tarixi</th>
                                     <th>Müştəri</th>
                                     <th>Qiymət</th>
+                                    <th>Ödənilib</th>
                                     <th>Qrafik</th>
                                     <th>Satış komandası</th>
                                     <th>Əməliyyat</th>
@@ -225,7 +231,14 @@
                                         </th>
                                         <td><fmt:formatDate value = "${t.saleDate}" pattern = "dd.MM.yyyy" /></td>
                                         <th>
-                                            <a href="javascript:window.open('/crm/customer/<c:out value="${t.payment.sales.customer.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.payment.sales.customer.id}"/>: <c:out value="${t.payment.sales.customer.person.fullName}"/></a>
+                                            <c:choose>
+                                                <c:when test="${view4.status}">
+                                                    <a href="javascript:window.open('/crm/customer/<c:out value="${t.customer.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.customer.id}"/>: <c:out value="${t.customer.person.fullName}"/></a>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <c:out value="${t.payment.sales.customer.id}"/>: <c:out value="${t.customer.person.fullName}"/>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </th>
                                         <th>
                                             Qiymət: <c:out value="${t.payment.price}" /><br/>
@@ -242,7 +255,17 @@
                                                 Qrafik üzrə: <c:out value="${t.payment.schedulePrice}" /><br/>
                                             </c:if>
                                             Son qiymət: <c:out value="${t.payment.lastPrice}" />
-
+                                        </th>
+                                        <th>
+                                            <c:set var="payable" value="${utl:calculateInvoice(t.invoices)}"/>
+                                            <c:choose>
+                                                <c:when test="${view5.status}">
+                                                    <a href="javascript:window.open('/sale/invoice/<c:out value="${t.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${payable}"/> AZN</a>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <c:out value="${payable}"/>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </th>
                                         <td>
                                             <c:if test="${!t.payment.cash}">
@@ -276,14 +299,19 @@
                                                   <i class="la la-ellipsis-h"></i>
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                    <c:if test="${view.status}">
-                                                    <a href="/collect/contact-history/<c:out value="${t.id}"/>" class="dropdown-item" title="Qeydlər">
-                                                        <i class="la <c:out value="${view.object.icon}"/>"></i> Qeydlər
+                                                    <c:if test="${view1.status}">
+                                                    <a href="/collect/contact-history/<c:out value="${t.id}"/>" class="dropdown-item">
+                                                        <i class="la <c:out value="${view1.object.icon}"/>"></i> Qeydlər
                                                     </a>
                                                     </c:if>
-                                                    <c:if test="${detail.status}">
-                                                    <a href="/sale/schedule/<c:out value="${t.payment.id}"/>" class="dropdown-item" title="<c:out value="${detail.object.name}"/>">
-                                                        <i class="la <c:out value="${detail.object.icon}"/>"></i> <c:out value="${detail.object.name}"/>
+                                                    <c:if test="${view2.status}">
+                                                    <a href="/sale/schedule/<c:out value="${t.id}"/>" class="dropdown-item">
+                                                        <i class="la <c:out value="${view2.object.icon}"/>"></i> Ödəniş qrafiki
+                                                    </a>
+                                                    </c:if>
+                                                    <c:if test="${view3.status}">
+                                                    <a href="/sale/service-regulator/<c:out value="${t.id}"/>" class="dropdown-item">
+                                                        <i class="la <c:out value="${view3.object.icon}"/>"></i> Servis requlyatoru
                                                     </a>
                                                     </c:if>
                                                     <c:if test="${edit.status and !t.approve}">
@@ -416,11 +444,14 @@
                                                     <form:errors path="saleDate" cssClass="control-label alert-danger" />
                                                 </div>
                                             </div>
-                                            <div class="col-4">
-                                                <a href="javascript:window.open('/warehouse/inventory', 'mywindow', 'width=1250, height=800')" data-repeater-delete="" class="btn btn-label-success btn-block">
-                                                    İnventar
-                                                </a>
-                                            </div>
+                                            <c:if test="${view6.status}">
+                                                <div class="col-4">
+                                                    <a href="javascript:window.open('/warehouse/inventory', 'mywindow', 'width=1250, height=800')" data-repeater-delete="" class="btn btn-label-success btn-block">
+                                                        İnventar
+                                                    </a>
+                                                </div>
+                                            </c:if>
+
                                         </div>
                                         <div class="form-group">
                                             <label>Barkod üzrə inventar axtarışı</label>
@@ -1354,7 +1385,7 @@
         };
     }();
 
-    <c:if test="${detail.status}">
+    <c:if test="${view2.status}">
     $('#datatable tbody').on('dblclick', 'tr', function () {
         swal.showLoading();
         location.href = '/sale/schedule/'+ $(this).attr('data');

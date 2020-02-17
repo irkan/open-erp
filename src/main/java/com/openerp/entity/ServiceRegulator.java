@@ -35,7 +35,7 @@ public class ServiceRegulator {
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     @Column(name = "serviced_date")
-    private Date servicedDate;
+    private Date servicedDate=new Date();
 
     @Transient
     @Temporal(TemporalType.DATE)
@@ -48,6 +48,10 @@ public class ServiceRegulator {
         this.servicedDate = servicedDate;
     }
 
+    public ServiceRegulator(Sales sales, Date servicedDate) {
+        this.sales = sales;
+        this.servicedDate = servicedDate;
+    }
     public ServiceRegulator(Sales sales) {
         this.sales = sales;
     }

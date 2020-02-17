@@ -166,6 +166,9 @@
                     <c:choose>
                         <c:when test="${not empty list}">
                             <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
+                            <c:set var="view1" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'inventory', 'view')}"/>
+                            <c:set var="view2" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'customer', 'view')}"/>
+                            <c:set var="view3" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'invoice', 'view')}"/>
                             <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
                             <c:set var="approve" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
                             <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
@@ -178,6 +181,7 @@
                                     <th>Satış tarixi</th>
                                     <th>Müştəri</th>
                                     <th>Qiymət</th>
+                                    <th>Ödənilib</th>
                                     <th>Qarantiya</th>
                                     <th>Əməliyyat</th>
                                 </tr>
@@ -197,7 +201,14 @@
                                         </th>
                                         <td><fmt:formatDate value = "${t.saleDate}" pattern = "dd.MM.yyyy" /></td>
                                         <th>
-                                            <a href="javascript:window.open('/crm/customer/<c:out value="${t.customer.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.customer.id}" />: <c:out value="${t.customer.person.fullName}"/></a>
+                                            <c:choose>
+                                                <c:when test="${view2.status}">
+                                                    <a href="javascript:window.open('/crm/customer/<c:out value="${t.customer.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.customer.id}" />: <c:out value="${t.customer.person.fullName}"/></a>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <c:out value="${t.customer.id}" />: <c:out value="${t.customer.person.fullName}"/>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </th>
                                         <th>
                                             Qiymət: <c:out value="${t.payment.price}" /><br/>
@@ -211,6 +222,17 @@
                                                 İlkin ödəniş: <c:out value="${t.payment.down}" /><br/>
                                             </c:if>
                                             Son qiymət: <c:out value="${t.payment.lastPrice}" />
+                                        </th>
+                                        <th>
+                                            <c:set var="payable" value="${utl:calculateInvoice(t.invoices)}"/>
+                                            <c:choose>
+                                                <c:when test="${view3.status}">
+                                                    <a href="javascript:window.open('/sale/invoice/<c:out value="${t.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${payable}"/> AZN</a>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <c:out value="${payable}"/>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </th>
                                         <th>
                                             <fmt:formatDate value = "${t.guaranteeExpire}" pattern = "dd.MM.yyyy" />, <c:out value="${t.guarantee}" /> ay
@@ -321,11 +343,13 @@
                                             Axtar
                                         </a>
                                     </div>
+                                    <c:if test="${view2.status}">
                                     <div class="col-3">
                                         <a href="javascript:window.open('/crm/customer', 'mywindow', 'width=1250, height=800')" data-repeater-delete="" class="btn btn-bold btn-sm btn-label-primary">
                                             Müştəri
                                         </a>
                                     </div>
+                                    </c:if>
                                 </div>
                             </div>
                             <table id="customer-content" class="table table-striped- table-bordered table-hover table-checkable"></table>
@@ -365,12 +389,14 @@
                                             <i class="la la-plus"></i> Əlavə et
                                         </a>
                                     </div>
+                                    <c:if test="${view1.status}">
                                     <div class="col-lg-6 text-right">
                                         <a href="javascript:window.open('/warehouse/inventory', 'mywindow', 'width=1250, height=800')" data-repeater-delete="" class="btn-sm btn btn-label-success btn-bold">
-                                            <i class="la la-search"></i>
-                                            Axtar
+                                            <i class="la la-question"></i>
+                                            İnventar
                                         </a>
                                     </div>
+                                    </c:if>
                                 </div>
                             </div>
                         </div>
