@@ -90,18 +90,18 @@
                                 <div class="kt-widget12__content">
                                     <div class="kt-widget12__item">
                                         <div class="kt-widget12__info">
-                                            <span class="kt-widget12__desc">Annual Taxes EMS</span>
+                                            <span class="kt-widget12__desc">İllik avans</span>
                                             <span class="kt-widget12__value">$400,000</span>
                                         </div>
 
                                         <div class="kt-widget12__info">
-                                            <span class="kt-widget12__desc">Finance Review Date</span>
+                                            <span class="kt-widget12__desc">Son avans tarixi</span>
                                             <span class="kt-widget12__value">July 24,2019</span>
                                         </div>
                                     </div>
                                     <div class="kt-widget12__item">
                                         <div class="kt-widget12__info">
-                                            <span class="kt-widget12__desc">Avarage Revenue</span>
+                                            <span class="kt-widget12__desc">Qalıq avans limiti</span>
                                             <span class="kt-widget12__value">$60M</span>
                                         </div>
                                         <div class="kt-widget12__info">

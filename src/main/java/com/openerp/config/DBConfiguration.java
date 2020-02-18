@@ -1340,33 +1340,33 @@ public class DBConfiguration {
 
             List<Organization> organizations = new ArrayList<>();
 
-            Contact headBranchContact = new Contact("503442323", "125656776", "head.office@sual.az", "M.Xiyəbani 194A", baku);
+            Contact headBranchContact = new Contact("(050) 344-2323", "(012) 565-6776", "head.office@sual.az", "M.Xiyəbani 194A", baku);
             Organization headBranch = new Organization(headBranchContact,"Baş ofis", "Baş ofis", null, branchOrganization);
             organizations.add(headBranch);
 
-            Contact khirdalanBranchContact = new Contact("503442323", "125656776", "khirdalan.office@sual.az", "A.Şaiq 33", khirdalan);
+            Contact khirdalanBranchContact = new Contact("(050) 344-2323", "(012) 565-6776", "khirdalan.office@sual.az", "A.Şaiq 33", khirdalan);
             Organization khirdalanBranch = new Organization(khirdalanBranchContact, "Xırdalan flialı", "Xırdalan flialı", headBranch, branchOrganization);
             organizations.add(khirdalanBranch);
 
-            Contact lankaranBranchContact = new Contact("503442323", "125656776", "lankaran.office@sual.az", "X.Natəvan 24B", lankaran);
+            Contact lankaranBranchContact = new Contact("(050) 344-2323", "(012) 565-6776", "lankaran.office@sual.az", "X.Natəvan 24B", lankaran);
             Organization lankaranBranch = new Organization(lankaranBranchContact, "Lənkəran flialı", "Lənkəran flialı", headBranch, branchOrganization);
             organizations.add(lankaranBranch);
 
-            Contact ganjaBranchContact = new Contact("503442323", "125656776", "ganja.office@sual.az", "S.Rüstəm 144", ganja);
+            Contact ganjaBranchContact = new Contact("(050) 344-2323", "(012) 565-6776", "ganja.office@sual.az", "S.Rüstəm 144", ganja);
             Organization ganjaBranch = new Organization(ganjaBranchContact, "Gəncə flialı", "Gəncə flialı", headBranch, branchOrganization);
             organizations.add(ganjaBranch);
 
-            Contact khachmazBranchContact = new Contact("503442323", "125656776", "khachmaz.office@sual.az", "M.F.Axundov 32", khachmaz);
+            Contact khachmazBranchContact = new Contact("(050) 344-2323", "(012) 565-6776", "khachmaz.office@sual.az", "M.F.Axundov 32", khachmaz);
             Organization khachmazBranch = new Organization(khachmazBranchContact,"Xaçmaz flialı", "Xaçmaz flialı", headBranch, branchOrganization);
             organizations.add(khachmazBranch);
 
-            Contact yevlakhBranchContact = new Contact("503442323", "125656776", "yevlakh.office@sual.az", "T.Rəcəbli 784D", yevlakh);
+            Contact yevlakhBranchContact = new Contact("(050) 344-2323", "(012) 565-6776", "yevlakh.office@sual.az", "T.Rəcəbli 784D", yevlakh);
             Organization yevlakhBranch = new Organization(yevlakhBranchContact,"Yevlax flialı", "Yevlax flialı", headBranch, branchOrganization);
             organizations.add(yevlakhBranch);
 
             organizationRepository.saveAll(organizations);
 
-            Contact contact1 = new Contact("502535110", null, "irkan.ehmedov@gmail.com", "Ü.Hacıbəyov 195A", baku);
+            Contact contact1 = new Contact("(050) 253-5110", null, "irkan.ehmedov@gmail.com", "Ü.Hacıbəyov 195A", baku);
             Person person = new Person(contact1, "Paşa", "Hacıyev", "İlham", DateUtility.getUtilDate("25.09.1989"), male, azerbaijanNationality, married, "4HWL0AM", "AA0844002", false, null);
             Employee employee0 = new Employee(person, position1, new Date(), null, headBranch);
             List<EmployeePayrollDetail> employeePayrollDetails = new ArrayList<>();
