@@ -187,6 +187,8 @@
                     <c:choose>
                         <c:when test="${not empty list}">
                             <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
+                            <c:set var="view1" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'sales', 'view')}"/>
+                            <c:set var="view2" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'customer', 'view')}"/>
                             <c:set var="approve" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
                             <c:set var="consolidate" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'consolidate')}"/>
                             <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
@@ -214,11 +216,25 @@
                                         <td><c:out value="${t.id}" /></td>
                                         <td style="<c:out value="${t.sales.payment.cash?'background-color: #e6ffe7 !important':'background-color: #ffeaf1 !important'}"/>">
                                             <c:choose>
-                                                <c:when test="${t.sales.service}">
-                                                    <a href="javascript:window.open('/sale/service/<c:out value="${t.sales.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder">Servis: <c:out value="${t.sales.id}" /></a>
+                                                <c:when test="${view1.status}">
+                                                    <c:choose>
+                                                        <c:when test="${t.sales.service}">
+                                                            <a href="javascript:window.open('/sale/service/<c:out value="${t.sales.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder">Servis: <c:out value="${t.sales.id}" /></a>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <a href="javascript:window.open('/sale/sales/<c:out value="${t.sales.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder">Satış: <c:out value="${t.sales.id}" /></a>
+                                                        </c:otherwise>
+                                                    </c:choose>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <a href="javascript:window.open('/sale/sales/<c:out value="${t.sales.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder">Satış: <c:out value="${t.sales.id}" /></a>
+                                                    <c:choose>
+                                                        <c:when test="${t.sales.service}">
+                                                            Servis: <c:out value="${t.sales.id}" />
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            Satış: <c:out value="${t.sales.id}" />
+                                                        </c:otherwise>
+                                                    </c:choose>
                                                 </c:otherwise>
                                             </c:choose>
                                         </td>
@@ -233,7 +249,14 @@
                                             </c:choose>
                                         </td>
                                         <td>
-                                            <a href="javascript:window.open('/crm/customer/<c:out value="${t.sales.customer.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.sales.customer.id}" />: <c:out value="${t.sales.customer.person.fullName}"/></a>
+                                            <c:choose>
+                                                <c:when test="${view2.status}">
+                                                    <a href="javascript:window.open('/crm/customer/<c:out value="${t.sales.customer.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.sales.customer.id}" />: <c:out value="${t.sales.customer.person.fullName}"/></a>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <c:out value="${t.sales.customer.id}" />: <c:out value="${t.sales.customer.person.fullName}"/>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </td>
                                         <td class="<c:out value="${t.creditable?'kt-bg-light-info':''}"/>">
                                             <span class="kt-font-bold"><c:out value="${t.price}" /></span>

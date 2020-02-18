@@ -22,6 +22,10 @@
                     <c:choose>
                         <c:when test="${not empty list}">
                             <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
+                            <c:set var="view1" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'invoice', 'view')}"/>
+                            <c:set var="view2" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'customer', 'view')}"/>
+                            <c:set var="view3" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'sales', 'view')}"/>
+                            <c:set var="view4" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'schedule', 'view')}"/>
                             <c:set var="detail" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'detail')}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
                                 <thead>
@@ -47,28 +51,76 @@
                                                 <span class="kt-font-bold "><c:out value="${t.service?'Servis':'Satış'}"/></span>
                                             </td>
                                             <td style="<c:out value="${t.payment.cash?'background-color: #e6ffe7 !important':'background-color: #ffeaf1 !important'}"/>">
-                                                <c:if test="${!t.service}">
-                                                    <a href="javascript:window.open('/sale/sales/<c:out value="${t.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.id}" /></a>
-                                                </c:if>
-                                                <c:if test="${t.service}">
-                                                    <a href="javascript:window.open('/sale/service/<c:out value="${t.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.id}" /></a>
-                                                </c:if>
+                                                <c:choose>
+                                                    <c:when test="${view3.status}">
+                                                        <c:choose>
+                                                            <c:when test="${t.service}">
+                                                                <a href="javascript:window.open('/sale/service/<c:out value="${t.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder">Servis: <c:out value="${t.id}" /></a>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <a href="javascript:window.open('/sale/sales/<c:out value="${t.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder">Satış: <c:out value="${t.id}" /></a>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <c:choose>
+                                                            <c:when test="${t.service}">
+                                                                Servis: <c:out value="${t.id}" />
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                Satış: <c:out value="${t.id}" />
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </c:otherwise>
+                                                </c:choose>
                                             </td>
                                             <th>
-                                                <a href="javascript:window.open('/crm/customer/<c:out value="${t.payment.sales.customer.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.payment.sales.customer.id}"/>: <c:out value="${t.payment.sales.customer.person.fullName}"/></a>
+                                                <c:choose>
+                                                    <c:when test="${view2.status}">
+                                                        <a href="javascript:window.open('/crm/customer/<c:out value="${t.payment.sales.customer.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.payment.sales.customer.id}"/>: <c:out value="${t.payment.sales.customer.person.fullName}"/></a>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <c:out value="${t.payment.sales.customer.id}"/>: <c:out value="${t.payment.sales.customer.person.fullName}"/>
+                                                    </c:otherwise>
+                                                </c:choose>
                                             </th>
                                             <td>
-                                                <span class="kt-font-bold kt-font-success"><c:out value="${t.payment.sumOfInvoice}" /></span>
-                                                <span class="kt-font-bold kt-font-success font-italic font-size-10px">AZN</span>
+                                                <c:choose>
+                                                    <c:when test="${view1.status}">
+                                                        <a href="javascript:window.open('/sale/invoice/<c:out value="${t.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder">
+                                                            <span class="kt-font-bold kt-font-success"><c:out value="${t.payment.sumOfInvoice}" /></span>
+                                                            <span class="kt-font-bold kt-font-success font-italic font-size-10px">AZN</span>
+                                                        </a>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <span class="kt-font-bold kt-font-success"><c:out value="${t.payment.sumOfInvoice}" /></span>
+                                                        <span class="kt-font-bold kt-font-success font-italic font-size-10px">AZN</span>
+                                                    </c:otherwise>
+                                                </c:choose>
                                             </td>
                                             <td>
-                                                <a href="javascript:window.open('/sale/schedule/<c:out value="${t.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder">
-                                                    <span class="kt-font-bold kt-font-danger"><c:out value="${t.payment.unpaid}" /></span>
-                                                    <span class="kt-font-bold kt-font-danger font-italic font-size-10px">AZN</span>
-                                                </a>
+                                                <c:choose>
+                                                    <c:when test="${view4.status}">
+                                                        <a href="javascript:window.open('/sale/schedule/<c:out value="${t.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder">
+                                                            <span class="kt-font-bold kt-font-danger"><c:out value="${t.payment.unpaid}" /></span>
+                                                            <span class="kt-font-bold kt-font-danger font-italic font-size-10px">AZN</span>
+                                                        </a>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <span class="kt-font-bold kt-font-danger"><c:out value="${t.payment.unpaid}" /></span>
+                                                        <span class="kt-font-bold kt-font-danger font-italic font-size-10px">AZN</span>
+                                                    </c:otherwise>
+                                                </c:choose>
                                             </td>
                                             <td>
-                                                <a href="javascript:window.open('/sale/schedule/<c:out value="${t.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.payment.latency}" /> gün</a>
+                                                <c:choose>
+                                                    <c:when test="${view4.status}">
+                                                        <a href="javascript:window.open('/sale/schedule/<c:out value="${t.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.payment.latency}" /> gün</a>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <c:out value="${t.payment.latency}" /> gün
+                                                    </c:otherwise>
+                                                </c:choose>
                                             </td>
                                             <td><fmt:formatDate value = "${t.saleDate}" pattern = "dd.MM.yyyy" /></td>
                                             <td>
