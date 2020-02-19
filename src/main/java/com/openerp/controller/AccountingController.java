@@ -164,7 +164,6 @@ public class AccountingController extends SkeletonController {
     public String postTransaction(@ModelAttribute(Constants.FORM) @Validated Transaction transaction, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
-            transaction.setApprove(false);
             transactionRepository.save(transaction);
             log("accounting_transaction", "create/edit", transaction.getId(), transaction.toString());
             balance(transaction);
