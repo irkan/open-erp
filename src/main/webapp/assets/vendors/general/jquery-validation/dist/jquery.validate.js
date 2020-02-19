@@ -1449,6 +1449,15 @@ $.extend( $.validator, {
 			};
 		}() ),
 
+		datetime: function( value, element ) {
+
+			// From https://html.spec.whatwg.org/multipage/forms.html#valid-e-mail-address
+			// Retrieved 2014-01-14
+			// If you have a problem with this implementation, report a bug against the above spec
+			// Or use custom methods to implement your own email validation
+			return this.optional( element ) || /^([0-2][0-9]|(3)[0-1])(\.)(((0)[0-9])|((1)[0-2]))(\.)\d{4}(\.)([0-1][0-9]|(2)[0-3])(:)[0-5][0-9](:)[0-5][0-9]$/.test( value );
+		},
+
 		// https://jqueryvalidation.org/dateISO-method/
 		dateISO: function( value, element ) {
 			return this.optional( element ) || /^([0-2][0-9]|(3)[0-1])(\.)(((0)[0-9])|((1)[0-2]))(\.)\d{4}$/.test( value );

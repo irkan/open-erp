@@ -69,6 +69,18 @@ public class SalesService {
                 if(sales.getPayment()!=null && sales.getPayment().getCash()){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("payment").get("cash"), sales.getPayment().getCash())));
                 }
+                if(sales.getCanavasser()!=null && sales.getCanavasser().getId()!=null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("canavasser"), sales.getCanavasser().getId())));
+                }
+                if(sales.getDealer()!=null && sales.getDealer().getId()!=null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("dealer"), sales.getDealer().getId())));
+                }
+                if(sales.getVanLeader()!=null && sales.getVanLeader().getId()!=null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("vanLeader"), sales.getVanLeader().getId())));
+                }
+                if(sales.getConsole()!=null && sales.getConsole().getId()!=null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("console"), sales.getConsole().getId())));
+                }
                 return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
             }
         }, pageable);

@@ -118,9 +118,10 @@ public class Transaction {
         this.organization = organization;
     }
 
-    public Transaction(Organization organization, Dictionary action, Boolean active) {
+    public Transaction(Organization organization, Dictionary action, Boolean approve) {
         this.organization = organization;
         this.action = action;
+        this.approve = approve;
     }
 
     public Transaction(Organization organization, Double price) {

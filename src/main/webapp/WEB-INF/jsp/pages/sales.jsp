@@ -151,24 +151,90 @@
                                                 <form:errors path="payment.schedule" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
-                                        <div class="col-md-2" style="padding-top: 30px;">
-                                            <div class="form-group">
-                                                <label class="kt-checkbox kt-checkbox--brand">
-                                                    <form:checkbox path="payment.cash"/> Nağd alınanlar
-                                                    <span></span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <c:if test="${delete.status}">
-                                            <div class="col-md-2" style="padding-top: 30px;">
+                                        <div class="row" style="padding-top: 30px;">
+                                            <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label class="kt-checkbox kt-checkbox--brand">
-                                                        <form:checkbox path="active"/> Aktual məlumat
+                                                        <form:checkbox path="payment.cash"/> Nağdlar
                                                         <span></span>
                                                     </label>
                                                 </div>
                                             </div>
-                                        </c:if>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label class="kt-checkbox kt-checkbox--brand">
+                                                        <form:checkbox path="approve"/> Təsdiqlər
+                                                        <span></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <c:if test="${delete.status}">
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label class="kt-checkbox kt-checkbox--brand">
+                                                            <form:checkbox path="active"/> Aktual
+                                                            <span></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </c:if>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <form:label path="canavasser">Canavasser</form:label>
+                                                <form:select  path="canavasser.id" cssClass="custom-select form-control" multiple="single">
+                                                    <form:option value=""></form:option>
+                                                    <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
+                                                        <optgroup label="${itemGroup.key}">
+                                                            <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
+                                                        </optgroup>
+                                                    </c:forEach>
+                                                </form:select>
+                                                <form:errors path="canavasser" cssClass="control-label alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <form:label path="dealer">Diller</form:label>
+                                                <form:select  path="dealer.id" cssClass="custom-select form-control" multiple="single">
+                                                    <form:option value=""></form:option>
+                                                    <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
+                                                        <optgroup label="${itemGroup.key}">
+                                                            <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
+                                                        </optgroup>
+                                                    </c:forEach>
+                                                </form:select>
+                                                <form:errors path="dealer" cssClass="control-label alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <form:label path="console">Konsul</form:label>
+                                                <form:select  path="console.id" cssClass="custom-select form-control">
+                                                    <form:option value=""></form:option>
+                                                    <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
+                                                        <optgroup label="${itemGroup.key}">
+                                                            <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
+                                                        </optgroup>
+                                                    </c:forEach>
+                                                </form:select>
+                                                <form:errors path="console" cssClass="control-label alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <form:label path="vanLeader">Van lider</form:label>
+                                                <form:select  path="vanLeader.id" cssClass="custom-select form-control" multiple="single">
+                                                    <form:option value=""></form:option>
+                                                    <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
+                                                        <optgroup label="${itemGroup.key}">
+                                                            <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
+                                                        </optgroup>
+                                                    </c:forEach>
+                                                </form:select>
+                                                <form:errors path="vanLeader" cssClass="control-label alert-danger"/>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-1 text-right">

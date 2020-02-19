@@ -262,7 +262,7 @@
 </div>
 
 <div class="modal fade" id="modal-operation" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"></h5>
@@ -275,39 +275,24 @@
                     <form:hidden path="id"/>
                     <form:hidden path="organization" />
                     <form:hidden path="inventory" />
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <form:label path="action">Xərc</form:label>
-                                <form:select path="action" cssClass="custom-select form-control">
-                                    <form:option value=""></form:option>
-                                    <form:options items="${actions}" itemLabel="name" itemValue="id"/>
-                                </form:select>
-                            </div>
+                    <form:hidden path="approve" />
+                    <div class="form-group">
+                        <form:label path="action">Xərc</form:label>
+                        <form:select path="action" cssClass="custom-select form-control">
+                            <form:option value=""></form:option>
+                            <form:options items="${actions}" itemLabel="name" itemValue="id"/>
+                        </form:select>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="transactionDate">Tarix</form:label>
+                        <div class="input-group">
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
+                            <form:input path="transactionDate" autocomplete="off" cssClass="form-control datetimepicker-element" date="datetime" placeholder="dd.MM.yyyy HH:mm"/>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <form:label path="account">Hesab</form:label>
-                                <form:select  path="account" cssClass="custom-select form-control">
-                                    <form:option value=""></form:option>
-                                    <form:options items="${accounts}" itemLabel="accountNumberWithCurrency" itemValue="id" />
-                                </form:select>
-                                <form:errors path="account" cssClass="alert-danger control-label"/>
-                            </div>
-                        </div>
+                        <form:errors path="transactionDate" cssClass="control-label alert-danger" />
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <form:label path="price">Məbləğ</form:label>
-                                <div class="input-group" >
-                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
-                                    <form:input path="price" autocomplete="off" cssClass="form-control" placeholder="Balansı daxil edin"/>
-                                </div>
-                                <form:errors path="price" cssClass="alert-danger control-label"/>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
+                        <div class="col-md-8">
                             <div class="form-group">
                                 <form:label path="amount">Say</form:label>
                                 <div class="input-group" >
@@ -317,19 +302,7 @@
                                 <form:errors path="amount" cssClass="alert-danger control-label"/>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <form:label path="transactionDate">Tarix</form:label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
-                                    <form:input path="transactionDate" cssClass="form-control datetimepicker-element" date="datetime" placeholder="dd.MM.yyyy HH:mm"/>
-                                </div>
-                                <form:errors path="transactionDate" cssClass="control-label alert-danger" />
-                            </div>
-                        </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group" style="padding-top: 30px;">
                                 <label class="kt-checkbox kt-checkbox--brand">
                                     <form:checkbox path="debt"/> Debt
@@ -443,6 +416,10 @@
         </c:if>
     });
 
+    $(function(){
+        $("#transactionDate").attr('date', 'datetime');
+    });
+
 
 $("#datatable").DataTable({
     responsive: true,
@@ -461,28 +438,23 @@ $("#datatable").DataTable({
 
 $( "#form" ).validate({
     rules: {
+        action: {
+            required: true
+        },
         amount: {
             required: false,
             digits: true,
             min: 1
         },
-        price: {
-            required: true,
-            number: true,
-            min: 0.1
-        },
-        account: {
-            required: true
-        },
         transactionDate: {
-            required: false,
-            pattern: "."
+            required: true
         }
     },
     invalidHandler: function(event, validator) {
                     KTUtil.scrollTop();
         swal.close();
     },
+
 })
 $( "#transaction-approve-form" ).validate({
     rules: {
