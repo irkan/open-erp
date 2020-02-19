@@ -70,7 +70,7 @@
                                                 <form:label path="demonstrateDateFrom">Tarixdən</form:label>
                                                 <div class="input-group date">
                                                     <form:input path="demonstrateDateFrom" autocomplete="off"
-                                                                cssClass="form-control datepicker-element" date="date"
+                                                                cssClass="form-control datepicker-element" date_="date_"
                                                                 placeholder="dd.MM.yyyy"/>
                                                     <div class="input-group-append">
                                         <span class="input-group-text">
@@ -86,7 +86,7 @@
                                                 <form:label path="demonstrateDate">Tarixədək</form:label>
                                                 <div class="input-group date">
                                                     <form:input path="demonstrateDate" autocomplete="off"
-                                                                cssClass="form-control datepicker-element" date="date"
+                                                                cssClass="form-control datepicker-element" date_="date_"
                                                                 placeholder="dd.MM.yyyy"/>
                                                     <div class="input-group-append">
                                         <span class="input-group-text">
@@ -220,7 +220,7 @@
                                 <form:label path="demonstrateDate">Nümayiş tarixi</form:label>
                                 <div class="input-group date">
                                     <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
-                                    <form:input path="demonstrateDate" autocomplete="off" date="date" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
+                                    <form:input path="demonstrateDate" autocomplete="off" date_="date_" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
                                 </div>
                                 <form:errors path="demonstrateDate" cssClass="control-label alert-danger" />
                             </div>

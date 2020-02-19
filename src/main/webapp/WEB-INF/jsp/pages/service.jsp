@@ -57,7 +57,7 @@
                                                 <form:label path="saleDateFrom">Satış tarixdən</form:label>
                                                 <div class="input-group date">
                                                     <form:input path="saleDateFrom" autocomplete="off"
-                                                                cssClass="form-control datepicker-element" date="date"
+                                                                cssClass="form-control datepicker-element" date_="date_"
                                                                 placeholder="dd.MM.yyyy"/>
                                                     <div class="input-group-append">
                                         <span class="input-group-text">
@@ -73,7 +73,7 @@
                                                 <form:label path="saleDate">Tarixədək</form:label>
                                                 <div class="input-group date">
                                                     <form:input path="saleDate" autocomplete="off"
-                                                                cssClass="form-control datepicker-element" date="date"
+                                                                cssClass="form-control datepicker-element" date_="date_"
                                                                 placeholder="dd.MM.yyyy"/>
                                                     <div class="input-group-append">
                                         <span class="input-group-text">
@@ -89,7 +89,7 @@
                                                 <form:label path="guaranteeExpireFrom">Qarantiya bitir - tarixdən</form:label>
                                                 <div class="input-group date">
                                                     <form:input path="guaranteeExpireFrom" autocomplete="off"
-                                                                cssClass="form-control datepicker-element" date="date"
+                                                                cssClass="form-control datepicker-element" date_="date_"
                                                                 placeholder="dd.MM.yyyy"/>
                                                     <div class="input-group-append">
                                         <span class="input-group-text">
@@ -105,7 +105,7 @@
                                                 <form:label path="guaranteeExpire">Tarixədək</form:label>
                                                 <div class="input-group date">
                                                     <form:input path="guaranteeExpire" autocomplete="off"
-                                                                cssClass="form-control datepicker-element" date="date"
+                                                                cssClass="form-control datepicker-element" date_="date_"
                                                                 placeholder="dd.MM.yyyy"/>
                                                     <div class="input-group-append">
                                         <span class="input-group-text">
@@ -300,7 +300,7 @@
                                 <form:label path="saleDate">Satış tarixi</form:label>
                                 <div class="input-group date" >
                                     <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
-                                    <form:input path="saleDate" cssClass="form-control datepicker-element" date="date" placeholder="dd.MM.yyyy"/>
+                                    <form:input path="saleDate" cssClass="form-control datepicker-element" date_="date_" placeholder="dd.MM.yyyy"/>
                                 </div>
                                 <form:errors path="saleDate" cssClass="control-label alert-danger" />
                             </div>

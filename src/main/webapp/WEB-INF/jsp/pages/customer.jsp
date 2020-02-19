@@ -66,7 +66,7 @@
                                                 <form:label path="person.birthday">Doğum tarixi</form:label>
                                                 <div class="input-group date">
                                                     <form:input path="person.birthday" autocomplete="off"
-                                                                cssClass="form-control datepicker-element" date="date"
+                                                                cssClass="form-control datepicker-element" date_="date_"
                                                                 placeholder="dd.MM.yyyy"/>
                                                     <div class="input-group-append">
                                         <span class="input-group-text">
@@ -311,7 +311,7 @@
                                 <form:label path="person.birthday">Doğum tarixi</form:label>
                                 <div class="input-group date">
                                     <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
-                                    <form:input path="person.birthday" autocomplete="off" cssClass="form-control datepicker-element" date="date" placeholder="dd.MM.yyyy"/>
+                                    <form:input path="person.birthday" autocomplete="off" cssClass="form-control datepicker-element" date_="date_" placeholder="dd.MM.yyyy"/>
                                 </div>
                                 <form:errors path="person.birthday" cssClass="control-label alert-danger"/>
                             </div>

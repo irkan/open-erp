@@ -222,7 +222,7 @@
                         <form:label path="invoiceDate">Hesab-faktura tarixi</form:label>
                         <div class="input-group date" >
                             <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
-                            <form:input path="invoiceDate" autocomplete="off" date="date" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
+                            <form:input path="invoiceDate" autocomplete="off" date_="date_" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
                         </div>
                         <form:errors path="invoiceDate" cssClass="control-label alert-danger" />
                     </div>

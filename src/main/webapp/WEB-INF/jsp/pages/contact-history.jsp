@@ -74,7 +74,7 @@
                                                 <form:label path="nextContactDateFrom">Tarixdən</form:label>
                                                 <div class="input-group date">
                                                     <form:input path="nextContactDateFrom" autocomplete="off"
-                                                                cssClass="form-control datepicker-element" date="date"
+                                                                cssClass="form-control datepicker-element" date_="date_"
                                                                 placeholder="dd.MM.yyyy"/>
                                                     <div class="input-group-append">
                                         <span class="input-group-text">
@@ -90,7 +90,7 @@
                                                 <form:label path="nextContactDate">Tarixədək</form:label>
                                                 <div class="input-group date">
                                                     <form:input path="nextContactDate" autocomplete="off"
-                                                                cssClass="form-control datepicker-element" date="date"
+                                                                cssClass="form-control datepicker-element" date_="date_"
                                                                 placeholder="dd.MM.yyyy"/>
                                                     <div class="input-group-append">
                                         <span class="input-group-text">
@@ -225,7 +225,7 @@
                         <form:label path="nextContactDate">Növbəti əlaqə taixi</form:label>
                         <div class="input-group date" >
                             <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
-                            <form:input path="nextContactDate" autocomplete="off" date="date" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
+                            <form:input path="nextContactDate" autocomplete="off" date_="date_" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
                         </div>
                         <form:errors path="nextContactDate" cssClass="control-label alert-danger" />
                     </div>

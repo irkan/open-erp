@@ -87,7 +87,7 @@
                                             <div class="form-group">
                                                 <form:label path="inventoryDateFrom">Tarixdən</form:label>
                                                 <div class="input-group date" >
-                                                    <form:input path="inventoryDateFrom" autocomplete="off" date="date" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
+                                                    <form:input path="inventoryDateFrom" autocomplete="off" date_="date_" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
                                                     <div class="input-group-append">
                                     <span class="input-group-text">
                                         <i class="la la-calendar"></i>
@@ -101,7 +101,7 @@
                                             <div class="form-group">
                                                 <form:label path="inventoryDate">Tarixədək</form:label>
                                                 <div class="input-group date" >
-                                                    <form:input path="inventoryDate" autocomplete="off" date="date" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
+                                                    <form:input path="inventoryDate" autocomplete="off" date_="date_" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
                                                     <div class="input-group-append">
                                     <span class="input-group-text">
                                         <i class="la la-calendar"></i>

@@ -64,7 +64,7 @@
                                                 <form:label path="nonWorkingDateFrom">Tarixdən</form:label>
                                                 <div class="input-group date">
                                                     <form:input path="nonWorkingDateFrom" autocomplete="off"
-                                                                cssClass="form-control datepicker-element" date="date"
+                                                                cssClass="form-control datepicker-element" date_="date_"
                                                                 placeholder="dd.MM.yyyy"/>
                                                     <div class="input-group-append">
                                         <span class="input-group-text">
@@ -80,7 +80,7 @@
                                                 <form:label path="nonWorkingDate">Tarixədək</form:label>
                                                 <div class="input-group date">
                                                     <form:input path="nonWorkingDate" autocomplete="off"
-                                                                cssClass="form-control datepicker-element" date="date"
+                                                                cssClass="form-control datepicker-element" date_="date_"
                                                                 placeholder="dd.MM.yyyy"/>
                                                     <div class="input-group-append">
                                         <span class="input-group-text">
@@ -201,7 +201,7 @@
                         <form:label path="nonWorkingDate">Qeyri iş günü</form:label>
                         <div class="input-group date" >
                             <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
-                            <form:input path="nonWorkingDate" autocomplete="off" cssClass="form-control datepicker-element" date="date" placeholder="dd.MM.yyyy"/>
+                            <form:input path="nonWorkingDate" autocomplete="off" cssClass="form-control datepicker-element" date_="date_" placeholder="dd.MM.yyyy"/>
                         </div>
                         <form:errors path="nonWorkingDate" cssClass="control-label alert-danger" />
                     </div>

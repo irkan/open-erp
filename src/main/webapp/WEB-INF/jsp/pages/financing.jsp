@@ -87,7 +87,7 @@
                                                 <form:label path="financingDateFrom">Tarixdən</form:label>
                                                 <div class="input-group date">
                                                     <form:input path="financingDateFrom" autocomplete="off"
-                                                                cssClass="form-control datetimepicker-element" date="datetime"
+                                                                cssClass="form-control datetimepicker-element" date_="datetime_"
                                                                 placeholder="dd.MM.yyyy HH:mm"/>
                                                     <div class="input-group-append">
                                         <span class="input-group-text">
@@ -103,7 +103,7 @@
                                                 <form:label path="financingDate">Tarixədək</form:label>
                                                 <div class="input-group date">
                                                     <form:input path="financingDate" autocomplete="off"
-                                                                cssClass="form-control datetimepicker-element" date="datetime"
+                                                                cssClass="form-control datetimepicker-element" date_="datetime_"
                                                                 placeholder="dd.MM.yyyy HH:mm"/>
                                                     <div class="input-group-append">
                                         <span class="input-group-text">

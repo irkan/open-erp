@@ -88,7 +88,7 @@
                                                 <form:label path="sendingDateFrom">Tarixdən</form:label>
                                                 <div class="input-group date">
                                                     <form:input path="sendingDateFrom" autocomplete="off"
-                                                                cssClass="form-control datetimepicker-element" date="datetime"
+                                                                cssClass="form-control datetimepicker-element" date_="datetime_"
                                                                 placeholder="dd.MM.yyyy HH:mm"/>
                                                     <div class="input-group-append">
                                         <span class="input-group-text">
@@ -104,7 +104,7 @@
                                                 <form:label path="sendingDate">Tarixədək</form:label>
                                                 <div class="input-group date">
                                                     <form:input path="sendingDate" autocomplete="off"
-                                                                cssClass="form-control datetimepicker-element" date="datetime"
+                                                                cssClass="form-control datetimepicker-element" date_="datetime_"
                                                                 placeholder="dd.MM.yyyy HH:mm"/>
                                                     <div class="input-group-append">
                                         <span class="input-group-text">

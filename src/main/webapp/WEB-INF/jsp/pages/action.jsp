@@ -51,7 +51,7 @@
                                             <div class="form-group">
                                                 <form:label path="actionDateFrom">Tarixdən</form:label>
                                                 <div class="input-group date" >
-                                                    <form:input path="actionDateFrom" autocomplete="off" date="date" cssClass="form-control datetimepicker-element" placeholder="dd.MM.yyyy HH:mm"/>
+                                                    <form:input path="actionDateFrom" autocomplete="off" date_="date_" cssClass="form-control datetimepicker-element" placeholder="dd.MM.yyyy HH:mm"/>
                                                     <div class="input-group-append">
                                     <span class="input-group-text">
                                         <i class="la la-calendar"></i>
@@ -65,7 +65,7 @@
                                             <div class="form-group">
                                                 <form:label path="actionDate">Tarixədək</form:label>
                                                 <div class="input-group date" >
-                                                    <form:input path="actionDate" autocomplete="off" date="date" cssClass="form-control datetimepicker-element" placeholder="dd.MM.yyyy HH:mm"/>
+                                                    <form:input path="actionDate" autocomplete="off" date_="date_" cssClass="form-control datetimepicker-element" placeholder="dd.MM.yyyy HH:mm"/>
                                                     <div class="input-group-append">
                                     <span class="input-group-text">
                                         <i class="la la-calendar"></i>

@@ -89,7 +89,7 @@
                                                 <form:label path="transactionDateFrom">Tarixdən</form:label>
                                                 <div class="input-group">
                                                     <form:input path="transactionDateFrom" autocomplete="off"
-                                                                cssClass="form-control datetimepicker-element" date="datetime"
+                                                                cssClass="form-control datetimepicker-element" date_="datetime_"
                                                                 placeholder="dd.MM.yyyy HH:mm"/>
                                                     <div class="input-group-append">
                                         <span class="input-group-text">
@@ -105,7 +105,7 @@
                                                 <form:label path="transactionDate">Tarixədək</form:label>
                                                 <div class="input-group date">
                                                     <form:input path="transactionDate" autocomplete="off"
-                                                                cssClass="form-control datetimepicker-element" date="datetime"
+                                                                cssClass="form-control datetimepicker-element" date_="datetime_"
                                                                 placeholder="dd.MM.yyyy HH:mm"/>
                                                     <div class="input-group-append">
                                         <span class="input-group-text">
@@ -287,7 +287,7 @@
                         <form:label path="transactionDate">Tarix</form:label>
                         <div class="input-group">
                             <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
-                            <form:input path="transactionDate" autocomplete="off" cssClass="form-control datetimepicker-element" date="datetime" placeholder="dd.MM.yyyy HH:mm"/>
+                            <form:input path="transactionDate" autocomplete="off" cssClass="form-control datetimepicker-element" date_="datetime_" placeholder="dd.MM.yyyy HH:mm"/>
                         </div>
                         <form:errors path="transactionDate" cssClass="control-label alert-danger" />
                     </div>

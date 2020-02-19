@@ -56,7 +56,7 @@
                                                 <form:label path="taskDateFrom">Tarixdən</form:label>
                                                 <div class="input-group date">
                                                     <form:input path="taskDateFrom" autocomplete="off"
-                                                                cssClass="form-control datepicker-element" date="date"
+                                                                cssClass="form-control datepicker-element" date_="date_"
                                                                 placeholder="dd.MM.yyyy"/>
                                                     <div class="input-group-append">
                                         <span class="input-group-text">
@@ -72,7 +72,7 @@
                                                 <form:label path="taskDate">Tarixədək</form:label>
                                                 <div class="input-group date">
                                                     <form:input path="taskDate" autocomplete="off"
-                                                                cssClass="form-control datepicker-element" date="date"
+                                                                cssClass="form-control datepicker-element" date_="date_"
                                                                 placeholder="dd.MM.yyyy"/>
                                                     <div class="input-group-append">
                                         <span class="input-group-text">

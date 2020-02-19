@@ -105,7 +105,7 @@
                                                 <form:label path="advanceDateFrom">Tarixdən</form:label>
                                                 <div class="input-group date">
                                                     <form:input path="advanceDateFrom" autocomplete="off"
-                                                                cssClass="form-control datepicker-element" date="date"
+                                                                cssClass="form-control datepicker-element" date_="date_"
                                                                 placeholder="dd.MM.yyyy"/>
                                                     <div class="input-group-append">
                                         <span class="input-group-text">
@@ -121,7 +121,7 @@
                                                 <form:label path="advanceDate">Tarixədək</form:label>
                                                 <div class="input-group date">
                                                     <form:input path="advanceDate" autocomplete="off"
-                                                                cssClass="form-control datepicker-element" date="date"
+                                                                cssClass="form-control datepicker-element" date_="date_"
                                                                 placeholder="dd.MM.yyyy"/>
                                                     <div class="input-group-append">
                                         <span class="input-group-text">
@@ -324,7 +324,7 @@
                                 <form:label path="advanceDate">Avans tarixi</form:label>
                                 <div class="input-group date" >
                                     <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
-                                    <form:input path="advanceDate" cssClass="form-control datepicker-element" date="date" placeholder="dd.MM.yyyy"/>
+                                    <form:input path="advanceDate" cssClass="form-control datepicker-element" date_="date_" placeholder="dd.MM.yyyy"/>
                                 </div>
                                 <form:errors path="advanceDate" cssClass="control-label alert-danger" />
                             </div>

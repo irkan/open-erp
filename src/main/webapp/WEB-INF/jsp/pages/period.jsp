@@ -99,7 +99,7 @@
                                 <form:label path="startDate">Başlama</form:label>
                                 <div class="input-group date" >
                                     <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
-                                    <form:input path="startDate" cssClass="form-control datepicker-element" date="date" placeholder="dd.MM.yyyy"/>
+                                    <form:input path="startDate" cssClass="form-control datepicker-element" date_="date_" placeholder="dd.MM.yyyy"/>
                                 </div>
                                 <form:errors path="startDate" cssClass="control-label alert-danger" />
                             </div>
@@ -109,7 +109,7 @@
                                 <form:label path="endDate">Bitmə</form:label>
                                 <div class="input-group date" >
                                     <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
-                                    <form:input path="endDate" cssClass="form-control datepicker-element" date="date" placeholder="dd.MM.yyyy"/>
+                                    <form:input path="endDate" cssClass="form-control datepicker-element" date_="date_" placeholder="dd.MM.yyyy"/>
                                 </div>
                                 <form:errors path="endDate" cssClass="control-label alert-danger" />
                             </div>
