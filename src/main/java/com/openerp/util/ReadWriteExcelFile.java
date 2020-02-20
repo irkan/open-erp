@@ -89,21 +89,20 @@ public class ReadWriteExcelFile {
 		fileOut.close();
 	}
 
-	public static List<Item> readXLSXFileItems(InputStream inputStream) throws IOException {
+	public static List<IDDiscount> readXLSXFileItems(InputStream inputStream) throws IOException {
 		XSSFWorkbook  wb = new XSSFWorkbook(inputStream);
 		XSSFSheet sheet = wb.getSheetAt(0);
 		XSSFRow row;
 		Iterator rows = sheet.rowIterator();
-		List<Item> items = new ArrayList<>();
+		List<IDDiscount> items = new ArrayList<>();
 		while (rows.hasNext()) {
 			row=(XSSFRow) rows.next();
 			if(row.getRowNum()>0){
-				Item item = new Item();
-				item.setBarcode(row.getCell(0).getStringCellValue());
-				item.setName(row.getCell(1).getStringCellValue());
+				IDDiscount item = new IDDiscount();
+				item.setCode(row.getCell(0).getStringCellValue());
+				item.setDiscount((double) row.getCell(1).getNumericCellValue());
 				item.setDescription(row.getCell(2).getStringCellValue());
-				item.setAmount((int)row.getCell(3).getNumericCellValue());
-				item.setPrice((double) row.getCell(4).getNumericCellValue());
+
 				items.add(item);
 			}
 		}
@@ -1245,6 +1244,33 @@ public class ReadWriteExcelFile {
 			cell.setCellValue(serviceRegulator.getServiceNotification()!=null?serviceRegulator.getServiceNotification().getName():"");
 			cell = row.createCell(row.getLastCellNum());
 			cell.setCellValue(serviceRegulator.getSales()!=null?Util.checkNull(serviceRegulator.getSales().getId()):"");
+		}
+		FileOutputStream fileOut = new FileOutputStream(file);
+		wb.write(fileOut);
+		fileOut.flush();
+		fileOut.close();
+		return file;
+	}
+
+	public static File idDiscountXLSXFile(List<IDDiscount> idDiscounts, String page) throws IOException {
+		File file = new File(page+".xlsx");
+		XSSFWorkbook wb = new XSSFWorkbook();
+		XSSFSheet sheet = wb.createSheet(page) ;
+		int rownum=0;
+		for(IDDiscount idDiscount: idDiscounts){
+			XSSFRow row = sheet.createRow(rownum++);
+			XSSFCell cell = row.createCell(0);
+			cell.setCellValue(idDiscount.getId());
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(Util.checkNull(idDiscount.getCreatedDate()));
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(idDiscount.getCode());
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(idDiscount.getDiscount());
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(idDiscount.getDescription());
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(idDiscount.getActive());
 		}
 		FileOutputStream fileOut = new FileOutputStream(file);
 		wb.write(fileOut);

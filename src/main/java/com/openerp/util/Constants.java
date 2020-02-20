@@ -114,7 +114,6 @@ public class Constants {
         public static final String CONSOLIDATE = "consolidate";
         public static final String CALCULATOR = "calculator";
         public static final String PAYMENT_LATENCY = "payment-latency";
-        public static final String ITEM = "item";
         public static final String CONTACT_HISTORY = "contact-history";
         public static final String INVOICE = "invoice";
         public static final String TROUBLED_CUSTOMER = "troubled-customer";
@@ -132,5 +131,6 @@ public class Constants {
         public static final String SERVICE_EMPLOYEE = "service-employee";
         public static final String SERVICE_REGULATOR = "service-regulator";
         public static final String SERVICE_TASK = "service-task";
+        public static final String IDDISCOUNT = "iddiscount";
     }
 }

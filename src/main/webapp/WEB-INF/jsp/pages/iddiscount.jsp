@@ -19,15 +19,16 @@
 
 <c:choose>
     <c:when test="${not empty list}">
-<table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+        <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
+        <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
+        <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
+        <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
     <thead>
     <tr>
         <th>№</th>
         <th>ID</th>
-        <th>Barkod</th>
-        <th>Ad</th>
-        <th>Say</th>
-        <th>Qiymət</th>
+        <th>Butik kodu</th>
+        <th>Endirim faizi</th>
         <th>Açıqlama</th>
         <th>Əməliyyat</th>
     </tr>
@@ -37,28 +38,25 @@
         <tr data="<c:out value="${utl:toJson(t)}" />">
             <td>${loop.index + 1}</td>
             <td><c:out value="${t.id}" /></td>
-            <td><c:out value="${t.barcode}" /></td>
-            <td><c:out value="${t.name}" /></td>
-            <td><c:out value="${t.amount}" /></td>
-            <td><c:out value="${t.price}" /></td>
+            <td><c:out value="${t.code}" /></td>
+            <td><c:out value="${t.discount}" /></td>
             <td><c:out value="${t.description}" /></td>
             <td nowrap class="text-center">
-                <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
-                <c:choose>
-                    <c:when test="${edit.status}">
-                        <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
-                            <i class="<c:out value="${edit.object.icon}"/>"></i>
-                        </a>
-                    </c:when>
-                </c:choose>
-                <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
-                <c:choose>
-                    <c:when test="${delete.status}">
-                        <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.barcode}" /><br/><c:out value="${t.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
-                            <i class="<c:out value="${delete.object.icon}"/>"></i>
-                        </a>
-                    </c:when>
-                </c:choose>
+                <c:if test="${view.status}">
+                    <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
+                        <i class="<c:out value="${view.object.icon}"/>"></i>
+                    </a>
+                </c:if>
+                <c:if test="${edit.status}">
+                    <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                        <i class="<c:out value="${edit.object.icon}"/>"></i>
+                    </a>
+                </c:if>
+                <c:if test="${delete.status}">
+                    <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.code}" /><br/><c:out value="${t.discount}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
+                        <i class="<c:out value="${delete.object.icon}"/>"></i>
+                    </a>
+                </c:if>
             </td>
         </tr>
     </c:forEach>
@@ -81,7 +79,7 @@
 
 
 <div class="modal fade" id="modal-operation" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"></h5>
@@ -90,41 +88,21 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form:form modelAttribute="form" id="form" method="post" action="/idgroup/item" cssClass="form-group">
-                    <form:input type="hidden" name="id" path="id"/>
+                <form:form modelAttribute="form" id="form" method="post" action="/idgroup/iddiscount" cssClass="form-group">
+                    <form:hidden path="id"/>
+                    <form:hidden path="active"/>
                     <div class="form-group">
-                        <form:label path="name">Adı</form:label>
-                        <form:input path="name" cssClass="form-control"/>
-                        <form:errors path="name" cssClass="control-label alert-danger" />
+                        <form:label path="code">ERP kodu</form:label>
+                        <form:input path="code" cssClass="form-control" placeholder="Daxil edin"/>
+                        <form:errors path="code" cssClass="control-label alert-danger" />
                     </div>
                     <div class="form-group">
-                        <form:label path="barcode">Barkod</form:label>
-                        <form:input path="barcode" cssClass="form-control"/>
-                        <form:errors path="barcode" cssClass="control-label alert-danger" />
-                    </div>
-                    <div class="form-group">
-                        <form:label path="price">Sayı</form:label>
+                        <form:label path="discount">Endirim faizi</form:label>
                         <div class="input-group" >
-                            <form:input path="amount" cssClass="form-control" placeholder="Sayı daxil edin"/>
-                            <div class="input-group-append">
-                                                    <span class="input-group-text">
-                                                        <i class="la la-calculator"></i>
-                                                    </span>
-                            </div>
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
+                            <form:input path="discount" cssClass="form-control" placeholder="Endirimi daxil edin"/>
                         </div>
-                        <form:errors path="amount" cssClass="alert-danger control-label"/>
-                    </div>
-                    <div class="form-group">
-                        <form:label path="price">Qiyməti</form:label>
-                        <div class="input-group" >
-                            <form:input path="price" cssClass="form-control" placeholder="Qiyməti daxil edin"/>
-                            <div class="input-group-append">
-                                                    <span class="input-group-text">
-                                                        <i class="la la-usd"></i>
-                                                    </span>
-                            </div>
-                        </div>
-                        <form:errors path="price" cssClass="alert-danger control-label"/>
+                        <form:errors path="discount" cssClass="alert-danger control-label"/>
                     </div>
                     <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>
@@ -156,17 +134,17 @@
                         <div class="alert-icon"><i class="flaticon-warning kt-font-brand"></i></div>
                         <div class="alert-text">
                             Yüklənmə Excel faylından nəzərdə tutulmuşdur. [.xlsx] formatlı fayldan məlumatı yükləyə bilərsiniz.
-                            Şablon excel faylı formasını <a href="<c:url value="/assets/template/item.xlsx" />" target="_blank">buradan endirə</a> bilərsiniz.
+                            Şablon excel faylı formasını <a href="<c:url value="/assets/template/discount.xlsx" />" target="_blank">buradan endirə</a> bilərsiniz.
                         </div>
                     </div>
                 </div>
-                <form id="upload-form" action="/idgroup/item/upload" method="post" enctype="multipart/form-data">
+                <form id="upload-form" action="/idgroup/iddiscount/upload" method="post" enctype="multipart/form-data">
                     <div class="form-group">
                         <label>İnventar excel faylı</label>
                         <div></div>
                         <div class="custom-file">
                             <input type="file" name="file" class="custom-file-input" id="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-                            <label class="custom-file-label" for="file">İnventar faylını seçin</label>
+                            <label class="custom-file-label" for="file">Endirim faylını seçin</label>
                         </div>
                     </div>
                 </form>
@@ -184,12 +162,47 @@
         var fileName = $(this).val();
         $(this).next('.custom-file-label').addClass("selected").html(fileName);
     });
-</script>
 
-<script>
-    <c:if test="${edit.status}">
-    $('#kt_table_1 tbody').on('dblclick', 'tr', function () {
-        edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
+    $('#datatable tbody').on('dblclick', 'tr', function () {
+        <c:if test="${view.status}">
+        view($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${view.object.name}" />');
+        </c:if>
     });
-    </c:if>
+
+    $( "#form" ).validate({
+        rules: {
+            code: {
+                required: true
+            },
+            discount: {
+                required: true,
+                number: true,
+                min: 0.1
+
+            }
+        },
+        invalidHandler: function(event, validator) {
+            KTUtil.scrollTop();
+            swal.close();
+        }
+    });
+
+    $("#datatable").DataTable({
+        responsive: true,
+        lengthMenu: [10, 25, 50, 75, 100, 200, 1000],
+        pageLength: 100,
+        order: [[1, 'desc']],
+        columnDefs: [
+            {
+                targets: 0,
+                width: '25px',
+                className: 'dt-center',
+                orderable: false
+            },
+        ],
+    });
+
+    $("input[name='discount']").inputmask('decimal', {
+        rightAlignNumerics: false
+    });
 </script>

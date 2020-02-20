@@ -14,11 +14,11 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "idgroup_item")
+@Table(name = "idgroup_id_discount")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Item {
+public class IDDiscount {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO, generator = "idgroup_sequence")
@@ -26,19 +26,13 @@ public class Item {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
-    @Pattern(regexp=".{3,255}",message="Minimum 3 maksimum 255 simvol ola bilər")
-    @Column(name = "barcode", nullable = false)
-    private String barcode;
-
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "amount", nullable = false)
-    private int amount=0;
+    @Pattern(regexp=".{1,255}",message="Minimum 1 maksimum 255 simvol ola bilər")
+    @Column(name = "code", nullable = false)
+    private String code;
 
     @DecimalMin(value = "0", message = "Minimum 0 olmalıdır")
-    @Column(name = "price", nullable = false, columnDefinition="Decimal(10,2) default 0")
-    private double price=0d;
+    @Column(name = "discount", nullable = false, columnDefinition="Decimal(10,2) default 0")
+    private Double discount=0d;
 
     @Pattern(regexp=".{0,255}",message="Maksimum 255 simvol ola bilər")
     @Column(name = "description")

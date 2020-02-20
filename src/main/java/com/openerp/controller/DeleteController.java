@@ -4,13 +4,11 @@ import com.openerp.entity.*;
 import com.openerp.util.Constants;
 import com.openerp.util.*;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -177,11 +175,11 @@ public class DeleteController extends SkeletonController {
                 log("warehouse_action", "create/edit", buy.getId(), buy.toString(), "Yeni alış əməliyyatı");
             }
             return "redirect:/"+parent+"/"+path+"/"+action.getInventory().getId();
-        } else if(path.equalsIgnoreCase(Constants.ROUTE.ITEM)){
-            Item item = itemRepository.getItemById(Integer.parseInt(id));
-            item.setActive(false);
-            itemRepository.save(item);
-            log("idgroup_item", "create/edit", item.getId(), item.toString());
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.IDDISCOUNT)){
+            IDDiscount idDiscount = iDDiscountRepository.getIDDiscountById(Integer.parseInt(id));
+            idDiscount.setActive(false);
+            iDDiscountRepository.save(idDiscount);
+            log("idgroup_id_discount", "delete", idDiscount.getId(), idDiscount.toString());
         } else if(path.equalsIgnoreCase(Constants.ROUTE.CONTACT_HISTORY)){
             ContactHistory contactHistory = contactHistoryRepository.getContactHistoryById(Integer.parseInt(id));
             contactHistory.setActive(false);

@@ -170,7 +170,7 @@ public class SkeletonController {
     CustomerRepository customerRepository;
 
     @Autowired
-    ItemRepository itemRepository;
+    IDDiscountRepository iDDiscountRepository;
 
     @Autowired
     InvoiceRepository invoiceRepository;

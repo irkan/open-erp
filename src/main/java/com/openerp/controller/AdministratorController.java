@@ -93,15 +93,15 @@ public class AdministratorController extends SkeletonController {
                 return exportExcel(moduleOperationRepository.findAll(), redirectAttributes, page);
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.USER_MODULE_OPERATION)){
-            model.addAttribute(Constants.USERS, userRepository.getUsersByActiveTrue());
-            List<ModuleOperation>  list = moduleOperationRepository.findAll();
+            List<ModuleOperation> list = Util.getModuleOperations(userModuleOperationRepository.getUserModuleOperationsByUser_IdAndUser_Active(getSessionUser().getId(), true));
+            model.addAttribute(Constants.USERS, Util.getAccessibleUsers(userRepository.getUsersByActiveTrue(), list.size()));
             model.addAttribute(Constants.MODULES, Util.removeDuplicateModules(list));
             model.addAttribute(Constants.OPERATIONS, Util.removeDuplicateOperations(list));
             model.addAttribute(Constants.LIST, list);
             model.addAttribute(Constants.TEMPLATES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("template"));
             model.addAttribute(Constants.FORM, new UserModuleOperation());
         } else if (page.equalsIgnoreCase(Constants.ROUTE.TEMPLATE_MODULE_OPERATION)){
-            List<ModuleOperation>  list = moduleOperationRepository.findAll();
+            List<ModuleOperation> list = Util.getModuleOperations(userModuleOperationRepository.getUserModuleOperationsByUser_IdAndUser_Active(getSessionUser().getId(), true));
             model.addAttribute(Constants.TEMPLATES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("template"));
             model.addAttribute(Constants.MODULES, Util.removeDuplicateModules(list));
             model.addAttribute(Constants.OPERATIONS, Util.removeDuplicateOperations(list));

@@ -1,5 +1,6 @@
 package com.openerp.repository;
 
+import com.openerp.entity.ModuleOperation;
 import com.openerp.entity.UserModuleOperation;
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -655,4 +655,22 @@ public class Util {
         }
         return 0;
     }
+
+    public static List<ModuleOperation> getModuleOperations(List<UserModuleOperation> userModuleOperations){
+        List<ModuleOperation> list = new ArrayList<>();
+        for(UserModuleOperation umo: userModuleOperations){
+            list.add(umo.getModuleOperation());
+        }
+        return list;
+    }
+
+    public static List<User> getAccessibleUsers(List<User> users, int accesses){
+        List<User> list = new ArrayList<>();
+        for(User user: users){
+            if(user.getUserModuleOperations()!=null && user.getUserModuleOperations().size()<=accesses){
+                list.add(user);
+            }
+        }
+        return list;
+    }
 }

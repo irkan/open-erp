@@ -87,4 +87,23 @@ public class ApiController extends SkeletonController {
         log("sale_invoice", "create/edit", invoiceId, response.toString(), username);
         return response;
     }
+
+    @ResponseBody
+    @GetMapping(value = "/iddiscount/{username}/{password}/{boutique}")
+    public WSResponse getDicount(@PathVariable("username") String username, @PathVariable("password") String password,  @PathVariable("boutique") String boutique){
+        WSResponse response = new WSResponse("404", "Xəta baş verdi!");
+        try {
+            WebServiceAuthenticator webServiceAuthenticator = webServiceAuthenticatorRepository.getWebServiceAuthenticatorByUsernameAndPasswordAndActiveTrue(username, password);
+            if(webServiceAuthenticator!=null){
+                response = new WSResponse("400", "Ödəniş tapılmadı!");
+                List<IDDiscount> idDiscounts = iDDiscountRepository.getIDDiscountByCode(boutique);
+                if(idDiscounts!=null && idDiscounts.size()>0){
+                    response = new WSResponse("200", "OK", idDiscounts.get(0));
+                }
+            }
+        } catch (Exception e){
+            log.error(e);
+        }
+        return response;
+    }
 }
