@@ -245,6 +245,9 @@ public class DeleteController extends SkeletonController {
         } else if(path.equalsIgnoreCase(Constants.ROUTE.SERVICE_REGULATOR)){
             serviceRegulatorRepository.deleteById(Integer.parseInt(id));
             log("sale_service_regulator", "delete", Integer.parseInt(id), "");
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.ENDPOINT)){
+            endpointRepository.deleteById(Integer.parseInt(id));
+            log("admin_endpoint", "delete", Integer.parseInt(id), "");
         }
         return "redirect:/"+parent+"/"+path;
     }

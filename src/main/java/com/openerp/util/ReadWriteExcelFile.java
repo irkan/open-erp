@@ -1279,4 +1279,35 @@ public class ReadWriteExcelFile {
 		return file;
 	}
 
+	public static File endpointXLSXFile(Page<Endpoint> endpoints, String page) throws IOException {
+		File file = new File(page+".xlsx");
+		XSSFWorkbook wb = new XSSFWorkbook();
+		XSSFSheet sheet = wb.createSheet(page) ;
+		int rownum=0;
+		for(Endpoint endpoint: endpoints){
+			XSSFRow row = sheet.createRow(rownum++);
+			XSSFCell cell = row.createCell(0);
+			cell.setCellValue(endpoint.getId());
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(Util.checkNull(endpoint.getConnectionType()!=null?endpoint.getConnectionType().getName():""));
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(endpoint.getHost());
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(endpoint.getPort());
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(endpoint.getUrl());
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(endpoint.getDescription());
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(endpoint.getFixedDelay());
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(endpoint.getLastStatusDate());
+		}
+		FileOutputStream fileOut = new FileOutputStream(file);
+		wb.write(fileOut);
+		fileOut.flush();
+		fileOut.close();
+		return file;
+	}
+
 }

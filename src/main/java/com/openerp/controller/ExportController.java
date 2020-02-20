@@ -99,6 +99,8 @@ public class ExportController extends SkeletonController {
             file = ReadWriteExcelFile.serviceRegulatorXLSXFile((Page<ServiceRegulator>) object, page);
         } else if(page.equalsIgnoreCase(Constants.ROUTE.IDDISCOUNT)){
             file = ReadWriteExcelFile.idDiscountXLSXFile((List<IDDiscount>) object, page);
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.ENDPOINT)){
+            file = ReadWriteExcelFile.endpointXLSXFile((Page<Endpoint>) object, page);
         }
 
         InputStreamResource resourceIS = new InputStreamResource(new FileInputStream(file));

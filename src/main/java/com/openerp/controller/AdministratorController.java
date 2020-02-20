@@ -156,6 +156,19 @@ public class AdministratorController extends SkeletonController {
             if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
                 return exportExcel(logs, redirectAttributes, page);
             }
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.ENDPOINT)){
+            model.addAttribute(Constants.CONNECTION_TYPES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("connection-type"));
+            if(!model.containsAttribute(Constants.FILTER)){
+                model.addAttribute(Constants.FILTER, new Endpoint());
+            }
+            Page<Endpoint> endpoints = endpointService.findAll((Endpoint) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
+            model.addAttribute(Constants.LIST, endpoints);
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new Endpoint());
+            }
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(endpoints, redirectAttributes, page);
+            }
         }
         return "layout";
     }
@@ -176,6 +189,21 @@ public class AdministratorController extends SkeletonController {
     @PostMapping(value = "/notification/filter")
     public String postNotificationFilter(@ModelAttribute(Constants.FILTER) @Validated Notification notification, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         return mapFilter(notification, binding, redirectAttributes, "/admin/notification");
+    }
+
+    @PostMapping(value = "/endpoint")
+    public String postEndpoint(@ModelAttribute(Constants.FORM) @Validated Endpoint endpoint, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()){
+            endpointRepository.save(endpoint);
+            log("admin_endpoint", "create/edit", endpoint.getId(), endpoint.toString());
+        }
+        return mapPost(endpoint, binding, redirectAttributes);
+    }
+
+    @PostMapping(value = "/endpoint/filter")
+    public String postEndpointFilter(@ModelAttribute(Constants.FILTER) @Validated Endpoint endpoint, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        return mapFilter(endpoint, binding, redirectAttributes, "/admin/endpoint");
     }
 
     @PostMapping(value = "/module")

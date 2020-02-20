@@ -200,6 +200,9 @@ public class SkeletonController {
     ServiceRegulatorRepository serviceRegulatorRepository;
 
     @Autowired
+    EndpointRepository endpointRepository;
+
+    @Autowired
     CustomerService customerService;
 
     @Autowired
@@ -255,6 +258,9 @@ public class SkeletonController {
 
     @Autowired
     ServiceRegulatorService serviceRegulatorService;
+
+    @Autowired
+    EndpointService endpointService;
 
     @Autowired
     HttpServletRequest request;
