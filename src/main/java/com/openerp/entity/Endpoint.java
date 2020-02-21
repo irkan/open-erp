@@ -31,7 +31,7 @@ public class Endpoint {
 
     @Pattern(regexp=".{0,10}",message="Maksimum 100 simvol ola bilər")
     @Column(name = "port")
-    private String port;
+    private Integer port;
 
     @Pattern(regexp=".{0,256}",message="Maksimum 256 simvol ola bilər")
     @Column(name = "url")

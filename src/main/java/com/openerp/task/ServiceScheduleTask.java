@@ -39,7 +39,7 @@ public class ServiceScheduleTask {
     @Scheduled(fixedDelay = 43200000)
     public void service() {
         try{
-            log.info("Service Regulator Task Start");
+            log.info("Service Schedule Task Start");
             serviceTaskRepository.deleteAllInBatch();
             serviceRegulatorTaskRepository.deleteAllInBatch();
             Configuration configuration = configurationRepository.getConfigurationByKey("service");
@@ -74,7 +74,7 @@ public class ServiceScheduleTask {
                     log.error(e);
                 }
             }
-            log.info("Service Regulator Task End");
+            log.info("Service Schedule Task End");
         } catch (Exception e){
             log.error(e);
         }

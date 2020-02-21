@@ -42,8 +42,8 @@ public class EndpointService {
                 if(endpoint.getHost()!=null && !endpoint.getHost().isEmpty()) {
                     predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("host"), "%"+endpoint.getHost()+"%")));
                 }
-                if(endpoint.getPort()!=null && !endpoint.getPort().isEmpty()) {
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("port"), "%"+endpoint.getPort()+"%")));
+                if(endpoint.getPort()!=null) {
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("port"), endpoint.getPort())));
                 }
                 if(endpoint.getUrl()!=null && !endpoint.getUrl().isEmpty()) {
                     predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("url"), "%"+endpoint.getUrl()+"%")));

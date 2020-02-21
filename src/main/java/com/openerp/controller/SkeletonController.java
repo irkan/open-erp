@@ -484,6 +484,12 @@ public class SkeletonController {
         sessionLog(log);
     }
 
+    public void log(String type, String tableName, String operation, int rowId, String encapsulate, String description){
+        Log log = new Log(type, tableName, operation, rowId, encapsulate, getSessionUser()!=null?getSessionUser().getUsername():"", description);
+        logRepository.save(log);
+        sessionLog(log);
+    }
+
     void log(String operation, String description){
         Log log = new Log(operation, description, getSessionUser()!=null?getSessionUser().getUsername():"");
         logRepository.save(log);

@@ -45,7 +45,7 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="connectionType">Tip</form:label>
+                                                <form:label path="connectionType">Bağlanma tipi</form:label>
                                                 <form:select path="connectionType.id" cssClass="custom-select form-control">
                                                     <form:option value=""></form:option>
                                                     <form:options items="${connection_types}" itemLabel="name" itemValue="id"/>
@@ -127,17 +127,18 @@
                 <div class="kt-portlet__body">
                     <c:choose>
                         <c:when test="${not empty list}">
+                            <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
                             <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
                                 <thead>
                                 <tr>
                                     <th>ID</th>
                                     <th>Bağlanma tipi</th>
-                                    <th>Struktur</th>
                                     <th>Tarix</th>
-                                    <th>Say</th>
+                                    <th>Host</th>
+                                    <th>Port</th>
+                                    <th>Url</th>
                                     <th>Açıqlama</th>
-                                    <th>Yaradılma tarixi</th>
                                     <th>Əməliyyat</th>
                                 </tr>
                                 </thead>
@@ -146,18 +147,24 @@
                                      <tr data="<c:out value="${utl:toJson(t)}" />">
                                          <td><c:out value="${t.id}" /></td>
                                          <th><c:out value="${t.connectionType.name}" /></th>
-                                         <th><fmt:formatDate value = "${t.demonstrateDate}" pattern = "dd.MM.yyyy" /></th>
-                                         <td><c:out value="${t.amount}" /></td>
+                                         <th><fmt:formatDate value = "${t.lastStatusDate}" pattern = "dd.MM.yyyy HH:mm" /></th>
+                                         <td><c:out value="${t.host}" /></td>
+                                         <td><c:out value="${t.port}" /></td>
+                                         <td><c:out value="${t.url}" /></td>
                                          <td><c:out value="${t.description}" /></td>
-                                         <td><fmt:formatDate value = "${t.createdDate}" pattern = "dd.MM.yyyy HH:mm" /></td>
                                          <td nowrap class="text-center">
                                              <c:if test="${view.status}">
                                                  <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
                                                      <i class="<c:out value="${view.object.icon}"/>"></i>
                                                  </a>
                                              </c:if>
+                                             <c:if test="${edit.status}">
+                                                 <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                                                     <i class="<c:out value="${edit.object.icon}"/>"></i>
+                                                 </a>
+                                             </c:if>
                                              <c:if test="${delete.status}">
-                                                 <a href="javascript:deleteData('<c:out value="${t.id}" />', '<fmt:formatDate value = "${t.demonstrateDate}" pattern = "dd.MM.yyyy" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
+                                                 <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.connectionType.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
                                                      <i class="<c:out value="${delete.object.icon}"/>"></i>
                                                  </a>
                                              </c:if>
@@ -192,43 +199,31 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form:form modelAttribute="form" id="form" method="post" action="/sale/demonstration" cssClass="form-group">
+                <form:form modelAttribute="form" id="form" method="post" action="/admin/endpoint" cssClass="form-group">
                     <form:hidden path="id"/>
                     <form:hidden path="active"/>
-                    <form:hidden path="organization"/>
                     <div class="form-group">
-                        <form:label path="employee">Əməkdaş</form:label>
-                        <form:select  path="employee" cssClass="custom-select form-control select2-single">
+                        <form:label path="connectionType">Bağlanma tipi</form:label>
+                        <form:select path="connectionType" cssClass="custom-select form-control">
                             <form:option value=""></form:option>
-                            <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
-                                <optgroup label="${itemGroup.key}">
-                                    <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
-                                </optgroup>
-                            </c:forEach>
+                            <form:options items="${connection_types}" itemLabel="name" itemValue="id"/>
                         </form:select>
-                        <form:errors path="employee" cssClass="control-label alert-danger"/>
+                        <form:errors path="connectionType" cssClass="alert-danger"/>
                     </div>
-                    <div class="row">
-                        <div class="col-7">
-                            <div class="form-group">
-                                <form:label path="demonstrateDate">Nümayiş tarixi</form:label>
-                                <div class="input-group date">
-                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
-                                    <form:input path="demonstrateDate" autocomplete="off" date_="date_" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
-                                </div>
-                                <form:errors path="demonstrateDate" cssClass="control-label alert-danger" />
-                            </div>
-                        </div>
-                        <div class="col-5">
-                            <div class="form-group">
-                                <form:label path="amount">Say</form:label>
-                                <div class="input-group date">
-                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calculator"></i></span></div>
-                                    <form:input path="amount" autocomplete="off" cssClass="form-control" placeholder="Sayı daxil edin"/>
-                                </div>
-                                <form:errors path="amount" cssClass="control-label alert-danger" />
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <form:label path="host">Host</form:label>
+                        <form:input path="host" cssClass="form-control"/>
+                        <form:errors path="host" cssClass="alert-danger control-label"/>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="port">Port</form:label>
+                        <form:input path="port" cssClass="form-control"/>
+                        <form:errors path="port" cssClass="alert-danger control-label"/>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="url">URL</form:label>
+                        <form:input path="url" cssClass="form-control"/>
+                        <form:errors path="url" cssClass="alert-danger control-label"/>
                     </div>
                     <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>

@@ -1050,7 +1050,7 @@ public class DBConfiguration {
             moduleOperations.add(deleteModuleOperation39);
             ModuleOperation deleteModuleOperation40 = new ModuleOperation(serviceRegulator, delete, null);
             moduleOperations.add(deleteModuleOperation40);
-            ModuleOperation deleteModuleOperation41 = new ModuleOperation(serviceRegulator, delete, null);
+            ModuleOperation deleteModuleOperation41 = new ModuleOperation(endpoint, delete, null);
             moduleOperations.add(deleteModuleOperation41);
 
             ModuleOperation viewModuleOperation1 = new ModuleOperation(subModule5, view, null);
@@ -1350,7 +1350,7 @@ public class DBConfiguration {
             moduleOperations.add(filterModuleOperation20);
             ModuleOperation filterModuleOperation21 = new ModuleOperation(serviceRegulator, filter, null); //ok
             moduleOperations.add(filterModuleOperation21);
-            ModuleOperation filterModuleOperation22 = new ModuleOperation(serviceRegulator, filter, null); //ok
+            ModuleOperation filterModuleOperation22 = new ModuleOperation(endpoint, filter, null); //ok
             moduleOperations.add(filterModuleOperation22);
 
             ModuleOperation creditModuleOperation1 = new ModuleOperation(invoice, credit, null); //ok

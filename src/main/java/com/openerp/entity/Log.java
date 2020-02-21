@@ -84,6 +84,16 @@ public class Log {
         this.username = username;
     }
 
+    public Log(String type, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String tableName, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String operation, int rowId, String encapsulate, String username, String description) {
+        this.type = type;
+        this.tableName = tableName;
+        this.operation = operation;
+        this.rowId = rowId;
+        this.encapsulate = encapsulate;
+        this.username = username;
+        this.description = description;
+    }
+
     public Log(@Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String operation, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String description, String username) {
         this.operation = operation;
         this.description = description;
