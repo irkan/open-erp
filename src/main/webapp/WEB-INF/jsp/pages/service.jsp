@@ -332,10 +332,10 @@
                             <div class="form-group">
                                 <form:label path="customer">Müştəri</form:label>
                                 <div class="row">
-                                    <div class="col-6">
+                                    <div class="col-9">
                                         <div class="input-group">
                                             <div class="input-group-prepend"><span class="input-group-text"><i class="la la-user"></i></span></div>
-                                            <form:input path="customer" autocomplete="false" class="form-control" placeholder="M.kodu..."/>
+                                            <form:input path="customer" autocomplete="false" class="form-control" placeholder="Müştəri kodu..."/>
                                         </div>
                                     </div>
                                     <div class="col-3">
@@ -343,18 +343,18 @@
                                             Axtar
                                         </a>
                                     </div>
-                                    <c:if test="${view2.status}">
-                                    <div class="col-3">
-                                        <a href="javascript:window.open('/crm/customer', 'mywindow', 'width=1250, height=800')" data-repeater-delete="" class="btn btn-bold btn-sm btn-label-primary">
-                                            Müştəri
-                                        </a>
-                                    </div>
-                                    </c:if>
                                 </div>
+                                <c:if test="${view2.status}">
+                                    <div class="row">
+                                        <div class="col-md-9 text-right">
+                                            <a href="javascript:window.open('/crm/customer', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-sm kt-font-bold kt-margin-t-5">Müştərilərin siyahısı</a>
+                                        </div>
+                                    </div>
+                                </c:if>
                             </div>
                             <table id="customer-content" class="table table-striped- table-bordered table-hover table-checkable"></table>
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-md-6">
                             <div id="kt_repeater_1">
                                 <div class="form-group form-group-last row" id="kt_repeater_2">
                                     <div data-repeater-list="" class="col-lg-12" id="data-repeater-list">
@@ -400,7 +400,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <form:label path="payment.price">Qiymət</form:label>
                                 <div class="input-group" >
