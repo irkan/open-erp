@@ -142,6 +142,8 @@ public class DBConfiguration {
             types.add(serviceNotificationType);
             DictionaryType connectionType = new DictionaryType("Bağlantı tipi", "connection-type", null);
             types.add(connectionType);
+            DictionaryType salesType = new DictionaryType("Satış tipi", "sales-type", null);
+            types.add(salesType);
 
             dictionaryTypeRepository.saveAll(types);
 
@@ -648,7 +650,12 @@ public class DBConfiguration {
             dictionaries.add(connectionType1);
             Dictionary connectionType2 = new Dictionary("Telnet", "telnet", null, connectionType);
             dictionaries.add(connectionType2);
-
+            Dictionary salesType1 = new Dictionary("Satış", "sales", null, salesType);
+            dictionaries.add(salesType1);
+            Dictionary salesType2 = new Dictionary("Zəmanət", "guarantee", null, salesType);
+            dictionaries.add(salesType2);
+            Dictionary salesType3 = new Dictionary("Hədiyyə", "gift", null, salesType);
+            dictionaries.add(salesType3);
             dictionaryRepository.saveAll(dictionaries);
 
 

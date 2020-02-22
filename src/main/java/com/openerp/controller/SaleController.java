@@ -77,6 +77,7 @@ public class SaleController extends SkeletonController {
             List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization());
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
             model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployeesByPosition(employees, positions));
+            model.addAttribute(Constants.SALES_TYPES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("sales-type"));
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Sales(getSessionOrganization(), true));
             }
@@ -159,7 +160,7 @@ public class SaleController extends SkeletonController {
             salesInventoryRepository.deleteInBatch(salesInventoryRepository.getSalesInventoriesByActiveTrueAndSales_Id(sales.getId()));
             List<SalesInventory> salesInventories = new ArrayList<>();
             for(SalesInventory salesInventory: sales.getSalesInventories()){
-                salesInventories.add(new SalesInventory(salesInventory.getInventory(), sales));
+                salesInventories.add(new SalesInventory(salesInventory.getInventory(), sales, salesInventory.getSalesType()));
             }
             sales.setSalesInventories(salesInventories);
 

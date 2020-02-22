@@ -26,6 +26,10 @@ public class SalesInventory {
     @JoinColumn(name = "warehouse_inventory_id")
     private Inventory inventory;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "admin_dictionary_sales_type_id")
+    private Dictionary salesType;
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sale_sales_id")
@@ -45,5 +49,11 @@ public class SalesInventory {
     public SalesInventory(Inventory inventory, Sales sales) {
         this.inventory = inventory;
         this.sales = sales;
+    }
+
+    public SalesInventory(Inventory inventory, Sales sales, Dictionary salesType) {
+        this.inventory = inventory;
+        this.sales = sales;
+        this.salesType = salesType;
     }
 }

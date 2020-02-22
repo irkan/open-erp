@@ -295,7 +295,7 @@
                     <form:hidden path="service"/>
                     <form:hidden path="payment.cash" value="1"/>
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-4 col-6">
                             <div class="form-group">
                                 <form:label path="saleDate">Satış tarixi</form:label>
                                 <div class="input-group date" >
@@ -305,14 +305,7 @@
                                 <form:errors path="saleDate" cssClass="control-label alert-danger" />
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <form:label path="payment.description">Açıqlama</form:label>
-                                <form:input path="payment.description" cssClass="form-control" placeholder="Açıqlama daxil edin"/>
-                                <form:errors path="payment.description" cssClass="alert-danger control-label"/>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
+                        <div class="col-md-4 col-6">
                             <div class="form-group">
                                 <form:label path="servicer">Servis əməkdaşı</form:label>
                                 <form:select  path="servicer" cssClass="custom-select form-control">
@@ -324,6 +317,13 @@
                                     </c:forEach>
                                 </form:select>
                                 <form:errors path="servicer" cssClass="control-label alert-danger"/>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <form:label path="payment.description">Açıqlama</form:label>
+                                <form:input path="payment.description" cssClass="form-control" placeholder="Açıqlama daxil edin"/>
+                                <form:errors path="payment.description" cssClass="alert-danger control-label"/>
                             </div>
                         </div>
                     </div>
@@ -346,7 +346,7 @@
                                 </div>
                                 <c:if test="${view2.status}">
                                     <div class="row">
-                                        <div class="col-md-9 text-right">
+                                        <div class="col-md-9">
                                             <a href="javascript:window.open('/crm/customer', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-sm kt-font-bold kt-margin-t-5">Müştərilərin siyahısı</a>
                                         </div>
                                     </div>
@@ -365,9 +365,21 @@
                                                         <label>İnventar:</label>
                                                     </div>
                                                     <div class="kt-form__control">
-                                                        <input type="text" attr="barcode" name="inventory.barcode" class="form-control" placeholder="Barkodu daxil edin..." onchange="findInventory($(this))">
-                                                        <label attr="name" name="inventory.name"></label>
-                                                        <input type="hidden" attr="id" name="inventory" class="form-control" placeholder="Barkodu daxil edin..." >
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <input type="text" attr="barcode" name="inventory.barcode" class="form-control" placeholder="Barkodu daxil edin..." onchange="findInventory($(this))">
+                                                                <label attr="name" name="inventory.name"></label>
+                                                                <input type="hidden" attr="id" name="inventory" class="form-control">
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <select attr="type" name="salesType" class="form-control">
+                                                                    <option value=""></option>
+                                                                    <c:forEach var="t" items="${sales_types}" varStatus="loop">
+                                                                        <option value="${t.id}">${t.name}</option>
+                                                                    </c:forEach>
+                                                                </select>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="d-md-none kt-margin-b-10"></div>
@@ -384,13 +396,13 @@
                                     </div>
                                 </div>
                                 <div class="form-group form-group-last row">
-                                    <div class="col-lg-6">
+                                    <div class="col-6">
                                         <a href="javascript:;" data-repeater-create="" class="btn btn-bold btn-sm btn-label-primary">
                                             <i class="la la-plus"></i> Əlavə et
                                         </a>
                                     </div>
                                     <c:if test="${view1.status}">
-                                    <div class="col-lg-6 text-right">
+                                    <div class="col-6 text-right">
                                         <a href="javascript:window.open('/warehouse/inventory', 'mywindow', 'width=1250, height=800')" data-repeater-delete="" class="btn-sm btn btn-label-success btn-bold">
                                             <i class="la la-question"></i>
                                             İnventar
@@ -401,29 +413,37 @@
                             </div>
                         </div>
                         <div class="col-md-2">
-                            <div class="form-group">
-                                <form:label path="payment.price">Qiymət</form:label>
-                                <div class="input-group" >
-                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
-                                    <form:input path="payment.price" cssClass="form-control" placeholder="Qiyməti daxil edin" onchange="calculate($('input[name=\"payment.price\"]').val(), $('input[name=\"payment.discount\"]').val())" onkeyup="calculate($('input[name=\"payment.price\"]').val(), $('input[name=\"payment.discount\"]').val())"/>
+                            <div class="row">
+                                <div class="col-md-12 col-4">
+                                    <div class="form-group">
+                                        <form:label path="payment.price">Qiymət</form:label>
+                                        <div class="input-group" >
+                                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
+                                            <form:input path="payment.price" cssClass="form-control" placeholder="Qiyməti daxil edin" onchange="calculate($('input[name=\"payment.price\"]').val(), $('input[name=\"payment.discount\"]').val())" onkeyup="calculate($('input[name=\"payment.price\"]').val(), $('input[name=\"payment.discount\"]').val())"/>
+                                        </div>
+                                        <form:errors path="payment.price" cssClass="alert-danger control-label"/>
+                                    </div>
                                 </div>
-                                <form:errors path="payment.price" cssClass="alert-danger control-label"/>
-                            </div>
-                            <div class="form-group">
-                                <form:label path="payment.discount">Endirim</form:label>
-                                <div class="input-group" >
-                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
-                                    <form:input path="payment.discount" cssClass="form-control" placeholder="Endirim varsa daxil edin" onchange="calculate($('input[name=\"payment.price\"]').val(), $('input[name=\"payment.discount\"]').val())" onkeyup="calculate($('input[name=\"payment.price\"]').val(), $('input[name=\"payment.discount\"]').val())"/>
+                                <div class="col-md-12 col-4">
+                                    <div class="form-group">
+                                        <form:label path="payment.discount">Endirim</form:label>
+                                        <div class="input-group" >
+                                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
+                                            <form:input path="payment.discount" cssClass="form-control" placeholder="Endirim varsa daxil edin" onchange="calculate($('input[name=\"payment.price\"]').val(), $('input[name=\"payment.discount\"]').val())" onkeyup="calculate($('input[name=\"payment.price\"]').val(), $('input[name=\"payment.discount\"]').val())"/>
+                                        </div>
+                                        <form:errors path="payment.discount" cssClass="alert-danger control-label"/>
+                                    </div>
                                 </div>
-                                <form:errors path="payment.discount" cssClass="alert-danger control-label"/>
-                            </div>
-                            <div class="form-group">
-                                <form:label path="payment.lastPrice">Son qiymət</form:label>
-                                <div class="input-group" >
-                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
-                                    <form:input path="payment.lastPrice" cssClass="form-control" placeholder="Son qiyməti daxil edin" readonly="true"/>
+                                <div class="col-md-12 col-4">
+                                    <div class="form-group">
+                                        <form:label path="payment.lastPrice">Son qiymət</form:label>
+                                        <div class="input-group" >
+                                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
+                                            <form:input path="payment.lastPrice" cssClass="form-control" placeholder="Son qiyməti daxil edin" readonly="true"/>
+                                        </div>
+                                        <form:errors path="payment.lastPrice" cssClass="alert-danger control-label"/>
+                                    </div>
                                 </div>
-                                <form:errors path="payment.lastPrice" cssClass="alert-danger control-label"/>
                             </div>
                         </div>
                     </div>

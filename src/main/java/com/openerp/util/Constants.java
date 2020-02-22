@@ -59,6 +59,7 @@ public class Constants {
     public static final String EXPORTS = "exports";
     public static final String SERVICE_NOTIFICATIONS = "service_notifications";
     public static final String CONNECTION_TYPES = "connection_types";
+    public static final String SALES_TYPES = "sales_types";
 
     public static final class STATUS{
         public static final String RESPONSE = "response";
