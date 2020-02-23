@@ -510,49 +510,60 @@
                                                     <form:errors path="saleDate" cssClass="control-label alert-danger" />
                                                 </div>
                                             </div>
-                                            <c:if test="${view6.status}">
-                                                <div class="col-4">
-                                                    <a href="javascript:window.open('/warehouse/inventory', 'mywindow', 'width=1250, height=800')" data-repeater-delete="" class="btn btn-label-success btn-block">
-                                                        İnventar
-                                                    </a>
-                                                </div>
-                                            </c:if>
-
                                         </div>
-                                        <div class="form-group">
-                                            <label>Barkod üzrə inventar axtarışı</label>
-                                            <div class="row">
-                                                <div class="col-8">
-                                                    <div class="form-group">
-                                                        <div class="input-group">
-                                                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-search"></i></span></div>
-                                                            <form:input path="salesInventories[0].inventory.barcode" class="form-control" placeholder="Barkodu daxil edin..." />
+                                        <div id="kt_repeater_1">
+                                            <div class="form-group form-group-last row" id="kt_repeater_2">
+                                                <div data-repeater-list="" class="col-lg-12" id="data-repeater-list">
+                                                    <div data-repeater-item class="form-group row align-items-center">
+                                                        <div class="col-9">
+                                                            <div class="kt-form__group--inline">
+                                                                <div class="kt-form__label">
+                                                                    <label>İnventar:</label>
+                                                                </div>
+                                                                <div class="kt-form__control">
+                                                                    <div class="row">
+                                                                        <div class="col-7">
+                                                                            <input type="text" attr="barcode" name="inventory.barcode" class="form-control" placeholder="Barkodu daxil edin..." onchange="findInventory($(this))">
+                                                                            <label attr="name" name="inventory.name"></label>
+                                                                            <input type="hidden" attr="id" name="inventory.id" class="form-control">
+                                                                        </div>
+                                                                        <div class="col-5">
+                                                                            <select attr="type" name="salesType" class="form-control">
+                                                                                <c:forEach var="t" items="${sales_types}" varStatus="loop">
+                                                                                    <option value="${t.id}">${t.name}</option>
+                                                                                </c:forEach>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-md-none kt-margin-b-10"></div>
+                                                        </div>
+                                                        <div class="col-3">
+                                                            <div>
+                                                                <a href="javascript:;" data-repeater-delete="" class="btn-sm btn btn-label-danger btn-bold">
+                                                                    <i class="la la-trash-o"></i>
+                                                                    Sil
+                                                                </a>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-4">
-                                                    <a href="javascript:findInventory($('#form'), $('#form').find('input[name=\'salesInventories[0].inventory.barcode\']'));" data-repeater-delete="" class="btn btn-label-brand btn-block">
-                                                        Axtar
+                                            </div>
+                                            <div class="form-group form-group-last row">
+                                                <div class="col-6">
+                                                    <a href="javascript:;" data-repeater-create="" class="btn btn-bold btn-sm btn-label-primary">
+                                                        <i class="la la-plus"></i> Əlavə et
                                                     </a>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-7">
-                                                <div class="form-group">
-                                                    <label>İnventar</label>
-                                                    <form:input path="salesInventories[0].inventory.name" class="form-control" readonly="true"/>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Qrup</label>
-                                                    <form:input path="salesInventories[0].inventory.group.name" class="form-control" readonly="true"/>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-5">
-                                                <div class="form-group">
-                                                    <label>Açıqlama</label>
-                                                    <form:textarea rows="4" path="salesInventories[0].inventory.description" class="form-control" readonly="true" />
-                                                </div>
+                                                <c:if test="${view6.status}">
+                                                    <div class="col-6 text-right">
+                                                        <a href="javascript:window.open('/warehouse/inventory', 'mywindow', 'width=1250, height=800')" data-repeater-delete="" class="btn-sm btn btn-label-success btn-bold">
+                                                            <i class="la la-question"></i>
+                                                            İnventar
+                                                        </a>
+                                                    </div>
+                                                </c:if>
                                             </div>
                                         </div>
                                     </div>
@@ -1348,7 +1359,118 @@
         }
     }
 
-    function findInventory(form, element){
+    function getInventories(salesId){
+        var content = '';
+        swal.fire({
+            text: 'Proses davam edir...',
+            allowOutsideClick: false,
+            onOpen: function() {
+                swal.showLoading();
+                $.ajax({
+                    url: '/sale/api/service/inventory/'+salesId,
+                    type: 'GET',
+                    dataType: 'json',
+                    beforeSend: function() {
+                        $("#kt_repeater_1").find("#data-repeater-list").html(content);
+                    },
+                    success: function(data) {
+                        console.log(data);
+
+                        $.each(data, function( index, value ) {
+                            content='<div data-repeater-item="" class="form-group row align-items-center">\n' +
+                                '                                            <div class="col-9">\n' +
+                                '                                                <div class="kt-form__group--inline">\n' +
+                                '                                                    <div class="kt-form__label">\n' +
+                                '                                                        <label>İnventar:</label>\n' +
+                                '                                                    </div>\n' +
+                                '                                                    <div class="kt-form__control">\n' +
+                                '                                                       <div class="row">\n' +
+                                '                                                            <div class="col-6">\n' +
+                                '                                                                <input type="text" attr="barcode" name="barcode" name="salesInventories['+index+'].inventory.barcode" class="form-control" placeholder="Barkodu daxil edin..." onchange="findInventory($(this))" value="'+value.inventory.barcode+'">\n' +
+                                '                                                                <label attr="name" name="salesInventories['+index+'].inventory.name">'+value.inventory.name+'</label>\n' +
+                                '                                                                <input type="hidden" attr="id" name="salesInventories['+index+'].inventory.id" class="form-control" value="'+value.inventory.id+'">\n' +
+                                '                                                            </div>\n' +
+                                '                                                            <div class="col-6">\n' +
+                                '                                                                <select attr="type" name="salesInventories['+index+'].salesType" class="form-control">\n' +
+                                '                                                                    <c:forEach var="t" items="${sales_types}" varStatus="loop">\n' +
+                                '                                                                        <option value="${t.id}">${t.name}</option>\n' +
+                                '                                                                    </c:forEach>\n' +
+                                '                                                                </select>\n' +
+                                '                                                            </div>\n' +
+                                '                                                        </div>' +
+                                '                                                    </div>\n' +
+                                '                                                </div>\n' +
+                                '                                                <div class="d-md-none kt-margin-b-10"></div>\n' +
+                                '                                            </div>\n' +
+                                '                                            <div class="col-3">\n' +
+                                '                                                <div>\n' +
+                                '                                                    <a href="javascript:;" data-repeater-delete="" class="btn-sm btn btn-label-danger btn-bold">\n' +
+                                '                                                        <i class="la la-trash-o"></i>\n' +
+                                '                                                        Sil\n' +
+                                '                                                    </a>\n' +
+                                '                                                </div>\n' +
+                                '                                            </div>\n' +
+                                '                                        </div>';
+                            $("#kt_repeater_1").find("#data-repeater-list").append(content);
+                            $("select[name='salesInventories["+index+"].salesType'] option[value="+value.salesType.id+"]").attr("selected", "selected");
+                        });
+
+
+                        swal.close();
+                    },
+                    error: function() {
+                        swal.fire({
+                            title: "Xəta baş verdi!",
+                            html: "<c:out value="${sessionScope.user.employee.person.lastName}"/> <c:out value="${sessionScope.user.employee.person.firstName}"/> adına inventar təhkim edilməyib",
+                            type: "error",
+                            cancelButtonText: 'Bağla',
+                            cancelButtonColor: '#c40000',
+                            cancelButtonClass: 'btn btn-danger',
+                            footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+                        });
+                    }
+                })
+            }
+        });
+    }
+
+    function findInventory(element){
+        if($(element).val().trim().length>0){
+            swal.fire({
+                text: 'Proses davam edir...',
+                allowOutsideClick: false,
+                onOpen: function() {
+                    swal.showLoading();
+                    $.ajax({
+                        url: '/warehouse/api/inventory/'+$(element).val(),
+                        type: 'GET',
+                        dataType: 'json',
+                        beforeSend: function() {
+                        },
+                        success: function(inventory) {
+                            $(element).parent().find("input[attr='id']").val(inventory.id);
+                            $(element).parent().find("label[attr='name']").text(inventory.name);
+                            console.log(inventory);
+                            swal.close();
+                        },
+                        error: function() {
+                            swal.fire({
+                                title: "Xəta baş verdi!",
+                                html: $("#form").find("input[name='servicer'] option:selected").text() + " adına inventar təhkim edilməyib",
+                                type: "error",
+                                cancelButtonText: 'Bağla',
+                                cancelButtonColor: '#c40000',
+                                cancelButtonClass: 'btn btn-danger',
+                                footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+                            });
+                        }
+                    })
+                }
+            });
+        }
+    }
+
+    function findInventory2(form, element){
         if($(element).val().trim().length>0){
             swal.fire({
                 text: 'Proses davam edir...',
@@ -1554,4 +1676,56 @@
             }
         })
     }
+
+    var KTFormRepeater = function() {
+        var demo1 = function() {
+            $('#kt_repeater_1').repeater({
+                initEmpty: false,
+
+                defaultValues: {
+                    'text-input': 'foo'
+                },
+
+                show: function () {
+                    $(this).slideDown();
+                    var elements = $($(this).parent()).find(".align-items-center");
+                    var lastBefore = $(elements).eq(-2);
+                    var barcode = $(lastBefore).find("input[attr='barcode']");
+                    if(barcode.val().trim().length>0){
+                        findInventory(barcode);
+                    }
+                },
+
+                hide: function (deleteElement) {
+                    swal.fire({
+                        title: 'İnventarı ləğv etməyə əminsinizmi?',
+                        type: 'info',
+                        allowEnterKey: true,
+                        showCancelButton: true,
+                        buttonsStyling: false,
+                        cancelButtonText: 'Xeyr, edilməsin!',
+                        cancelButtonClass: 'btn btn-danger',
+                        confirmButtonText: 'Bəli, edilsin!',
+                        confirmButtonClass: 'btn btn-success',
+                        reverseButtons: true,
+                        allowOutsideClick: false,
+                        footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+                    }).then(function(result){
+                        if(result.value){
+                            $(this).slideUp(deleteElement);
+                        }
+                    })
+                }
+            });
+        };
+        return {
+            init: function() {
+                demo1();
+            }
+        };
+    }();
+
+    jQuery(document).ready(function() {
+        KTFormRepeater.init();
+    });
 </script>

@@ -366,12 +366,12 @@
                                                     </div>
                                                     <div class="kt-form__control">
                                                         <div class="row">
-                                                            <div class="col-6">
+                                                            <div class="col-7">
                                                                 <input type="text" attr="barcode" name="inventory.barcode" class="form-control" placeholder="Barkodu daxil edin..." onchange="findInventory($(this))">
                                                                 <label attr="name" name="inventory.name"></label>
                                                                 <input type="hidden" attr="id" name="inventory" class="form-control">
                                                             </div>
-                                                            <div class="col-6">
+                                                            <div class="col-5">
                                                                 <select attr="type" name="salesType" class="form-control">
                                                                     <option value=""></option>
                                                                     <c:forEach var="t" items="${sales_types}" varStatus="loop">
@@ -601,16 +601,28 @@
                         console.log(data);
 
                         $.each(data, function( index, value ) {
-                            content+='<div data-repeater-item="" class="form-group row align-items-center">\n' +
+                            content='<div data-repeater-item="" class="form-group row align-items-center">\n' +
                                 '                                            <div class="col-9">\n' +
                                 '                                                <div class="kt-form__group--inline">\n' +
                                 '                                                    <div class="kt-form__label">\n' +
                                 '                                                        <label>İnventar:</label>\n' +
                                 '                                                    </div>\n' +
                                 '                                                    <div class="kt-form__control">\n' +
-                                '                                                        <input type="text" attr="barcode" name="salesInventories['+index+'].inventory.barcode" class="form-control" placeholder="Barkodu daxil edin..." onchange="findInventory($(this))" value="'+value.inventory.barcode+'">\n' +
-                                '                                                        <label attr="name" name="salesInventories['+index+'].inventory.name">'+value.inventory.name+'</label>\n' +
-                                '                                                        <input type="hidden" attr="id" name="salesInventories['+index+'].inventory" class="form-control" placeholder="Barkodu daxil edin..." value="'+value.inventory.id+'">\n' +
+                                '                                                       <div class="row">\n' +
+                                '                                                            <div class="col-6">\n' +
+                                '                                                                <input type="text" attr="barcode" name="barcode" name="salesInventories['+index+'].inventory.barcode" class="form-control" placeholder="Barkodu daxil edin..." onchange="findInventory($(this))" value="'+value.inventory.barcode+'">\n' +
+                                '                                                                <label attr="name" name="salesInventories['+index+'].inventory.name">'+value.inventory.name+'</label>\n' +
+                                '                                                                <input type="hidden" attr="id" name="salesInventories['+index+'].inventory" class="form-control" value="'+value.inventory.id+'">\n' +
+                                '                                                            </div>\n' +
+                                '                                                            <div class="col-6">\n' +
+                                '                                                                <select attr="type" name="salesInventories['+index+'].salesType" class="form-control">\n' +
+                                '                                                                    <option value=""></option>\n' +
+                                '                                                                    <c:forEach var="t" items="${sales_types}" varStatus="loop">\n' +
+                                '                                                                        <option value="${t.id}">${t.name}</option>\n' +
+                                '                                                                    </c:forEach>\n' +
+                                '                                                                </select>\n' +
+                                '                                                            </div>\n' +
+                                '                                                        </div>' +
                                 '                                                    </div>\n' +
                                 '                                                </div>\n' +
                                 '                                                <div class="d-md-none kt-margin-b-10"></div>\n' +
@@ -624,9 +636,11 @@
                                 '                                                </div>\n' +
                                 '                                            </div>\n' +
                                 '                                        </div>';
+                            $("#kt_repeater_1").find("#data-repeater-list").append(content);
+                            $("select[name='salesInventories["+index+"].salesType'] option[value="+value.salesType.id+"]").attr("selected", "selected");
                         });
 
-                        $("#kt_repeater_1").find("#data-repeater-list").html(content);
+
                         swal.close();
                     },
                     error: function() {
@@ -737,24 +751,45 @@
             'salesInventories[0].inventory.barcode': {
                 required: true
             },
+            'salesInventories[0].salesType': {
+                required: true
+            },
             'salesInventories[1].inventory.barcode': {
+                required: true
+            },
+            'salesInventories[1].salesType': {
                 required: true
             },
             'salesInventories[2].inventory.barcode': {
                 required: true
             },
+            'salesInventories[2].salesType': {
+                required: true
+            },
             'salesInventories[3].inventory.barcode': {
+                required: true
+            },
+            'salesInventories[3].salesType': {
                 required: true
             },
             'salesInventories[4].inventory.barcode': {
                 required: true
             },
+            'salesInventories[4].salesType': {
+                required: true
+            },
             'salesInventories[5].inventory.barcode': {
+                required: true
+            },
+            'salesInventories[5].salesType': {
                 required: true
             },
             'salesInventories[6].inventory.barcode': {
                 required: true
-            }
+            },
+            'salesInventories[6].salesType': {
+                required: true
+            },
         },
         invalidHandler: function(event, validator) {
             KTUtil.scrollTop();
