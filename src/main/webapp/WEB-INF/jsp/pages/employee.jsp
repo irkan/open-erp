@@ -425,7 +425,7 @@
 </div>
 
 <div class="modal fade" id="modal-sale" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Satış məlumatları</h5>
@@ -447,6 +447,20 @@
                     <c:forEach var="t" items="${employee_sale_fields}" varStatus="loop">
                         <div class="form-group-0_5">
                             <div class="row">
+                                <div class="col-md-4 text-right" style="padding-top: 2px;">
+                                    <input type="text" class="form-control" name="employeeSaleDetails[${loop.index}].employeeSaleField.name" style="border: none; background: none;  width: 100%" readonly/>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="hidden" name="employeeSaleDetails[${loop.index}].employeeSaleField.id" value="${t.id}"/>
+                                    <input type="hidden" name="employeeSaleDetails[${loop.index}].key" value="${t.attr1}"/>
+                                    <input type="text" name="employeeSaleDetails[${loop.index}].value" value="${t.attr2}" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </c:forEach>
+                    <%--<c:forEach var="t" items="${employee_sale_fields}" varStatus="loop">
+                        <div class="form-group-0_5">
+                            <div class="row">
                                 <div class="col-md-3 text-right" style="padding-top: 8px;">
                                     <label><c:out value="${t.name}"/></label>
                                 </div>
@@ -457,7 +471,7 @@
                                 </div>
                             </div>
                         </div>
-                    </c:forEach>
+                    </c:forEach>--%>
                 </form:form>
             </div>
             <div class="modal-footer">
@@ -667,8 +681,7 @@
         rules: {
             <c:forEach var="t" items="${employee_sale_fields}" varStatus="loop">
             "employeeSaleDetails[<c:out value="${loop.index}"/>].value" : {
-                required: true,
-                number: true
+                required: false
             },
             </c:forEach>
         },

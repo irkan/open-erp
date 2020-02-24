@@ -356,7 +356,7 @@
                                                 </a>
                                             </c:if>
                                             <c:if test="${view.status}">
-                                                <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
+                                                <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');getInventories('<c:out value="${t.id}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
                                                     <i class="<c:out value="${view.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
@@ -381,7 +381,7 @@
                                                     </a>
                                                     </c:if>
                                                     <c:if test="${edit.status and !t.approve}">
-                                                    <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="dropdown-item" title="<c:out value="${edit.object.name}"/>">
+                                                    <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');getInventories('<c:out value="${t.id}" />');" class="dropdown-item" title="<c:out value="${edit.object.name}"/>">
                                                         <i class="<c:out value="${edit.object.icon}"/>"></i> <c:out value="${edit.object.name}"/>
                                                     </a>
                                                     </c:if>
@@ -528,7 +528,7 @@
                                                                             <input type="hidden" attr="id" name="inventory.id" class="form-control">
                                                                         </div>
                                                                         <div class="col-5">
-                                                                            <select attr="type" name="salesType" class="form-control">
+                                                                            <select attr="type" name="salesType" class="form-control" style="padding: 5px;">
                                                                                 <c:forEach var="t" items="${sales_types}" varStatus="loop">
                                                                                     <option value="${t.id}">${t.name}</option>
                                                                                 </c:forEach>
@@ -1385,13 +1385,13 @@
                                 '                                                    </div>\n' +
                                 '                                                    <div class="kt-form__control">\n' +
                                 '                                                       <div class="row">\n' +
-                                '                                                            <div class="col-6">\n' +
+                                '                                                            <div class="col-7">\n' +
                                 '                                                                <input type="text" attr="barcode" name="barcode" name="salesInventories['+index+'].inventory.barcode" class="form-control" placeholder="Barkodu daxil edin..." onchange="findInventory($(this))" value="'+value.inventory.barcode+'">\n' +
                                 '                                                                <label attr="name" name="salesInventories['+index+'].inventory.name">'+value.inventory.name+'</label>\n' +
                                 '                                                                <input type="hidden" attr="id" name="salesInventories['+index+'].inventory.id" class="form-control" value="'+value.inventory.id+'">\n' +
                                 '                                                            </div>\n' +
-                                '                                                            <div class="col-6">\n' +
-                                '                                                                <select attr="type" name="salesInventories['+index+'].salesType" class="form-control">\n' +
+                                '                                                            <div class="col-5">\n' +
+                                '                                                                <select attr="type" name="salesInventories['+index+'].salesType" class="form-control" style="padding: 5px;">\n' +
                                 '                                                                    <c:forEach var="t" items="${sales_types}" varStatus="loop">\n' +
                                 '                                                                        <option value="${t.id}">${t.name}</option>\n' +
                                 '                                                                    </c:forEach>\n' +
