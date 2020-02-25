@@ -239,7 +239,7 @@
                                         </th>
                                         <td nowrap class="text-center">
                                             <c:if test="${view.status}">
-                                                <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');getInventories('<c:out value="${t.id}" />');findCustomer('<c:out value="${t.id}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
+                                                <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');getInventories('<c:out value="${t.id}" />');findCustomer('<c:out value="${t.customer.id}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
                                                     <i class="<c:out value="${view.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
@@ -249,7 +249,7 @@
                                                 </a>
                                             </c:if>
                                             <c:if test="${edit.status and !t.approve}">
-                                                <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');getInventories('<c:out value="${t.id}" />');findCustomer('<c:out value="${t.id}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                                                <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');getInventories('<c:out value="${t.id}" />');findCustomer('<c:out value="${t.customer.id}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
                                                     <i class="<c:out value="${edit.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
