@@ -61,7 +61,7 @@
                                         <div class="col-lg-2">
                                             <div class="kt-avatar kt-avatar--outline" id="kt_user_avatar">
                                                 <div class="kt-avatar__holder" style="background-image: url('<c:url value="/assets/media/users/default.jpg" />');"></div>
-                                                <label class="kt-avatar__upload" data-toggle="kt-tooltip" title="" data-original-title="Change avatar">
+                                                <label class="kt-avatar__upload" data-toggle="kt-tooltip" title="" data-original-title="Avatarı dəyiş">
                                                     <i class="fa fa-pen"></i>
                                                     <input type="file" name="profile_avatar" accept=".png, .jpg, .jpeg">
                                                 </label>

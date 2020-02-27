@@ -1,5 +1,6 @@
 package com.openerp.controller;
 
+import com.openerp.dao.ReportingDao;
 import com.openerp.domain.Schedule;
 import com.openerp.entity.*;
 import com.openerp.service.*;
@@ -261,6 +262,9 @@ public class SkeletonController {
 
     @Autowired
     EndpointService endpointService;
+
+    @Autowired
+    ReportingDao reportingDao;
 
     @Autowired
     HttpServletRequest request;

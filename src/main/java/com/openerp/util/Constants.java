@@ -60,6 +60,7 @@ public class Constants {
     public static final String SERVICE_NOTIFICATIONS = "service_notifications";
     public static final String CONNECTION_TYPES = "connection_types";
     public static final String SALES_TYPES = "sales_types";
+    public static final String REPORTS = "reports";
 
     public static final class STATUS{
         public static final String RESPONSE = "response";
@@ -135,5 +136,6 @@ public class Constants {
         public static final String SERVICE_TASK = "service-task";
         public static final String IDDISCOUNT = "iddiscount";
         public static final String ENDPOINT = "endpoint";
+        public static final String OVERVIEW = "overview";
     }
 }
