@@ -61,6 +61,9 @@ public class Constants {
     public static final String CONNECTION_TYPES = "connection_types";
     public static final String SALES_TYPES = "sales_types";
     public static final String REPORTS = "reports";
+    public static final String ANNUAL_ADVANCE = "annual_advance";
+    public static final String LAST_ADVANCE = "last_advance";
+    public static final String ANNUAL_NON_PAYED_ADVANCE = "annual_non_payed_advance";
 
     public static final class STATUS{
         public static final String RESPONSE = "response";

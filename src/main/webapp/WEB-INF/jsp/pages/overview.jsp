@@ -29,21 +29,22 @@
                                     <div class="kt-widget12__item">
                                         <div class="kt-widget12__info">
                                             <span class="kt-widget12__desc">İllik avans</span>
-                                            <span class="kt-widget12__value">$400,000</span>
+                                            <span class="kt-widget12__value"><fmt:parseNumber value="${annual_advance}" pattern="#,##"/> AZN</span>
                                         </div>
 
                                         <div class="kt-widget12__info">
                                             <span class="kt-widget12__desc">Son avans tarixi</span>
-                                            <span class="kt-widget12__value">July 24,2019</span>
+                                            <fmt:formatDate var="month" value = "${last_advance.advanceDate}" pattern = "M" />
+                                            <span class="kt-widget12__value"><c:out value="${utl:findMonthName(month)}"/> <fmt:formatDate value = "${last_advance.advanceDate}" pattern = "dd, yyyy" /></span>
                                         </div>
                                     </div>
                                     <div class="kt-widget12__item">
                                         <div class="kt-widget12__info">
                                             <span class="kt-widget12__desc">Qalıq avans limiti</span>
-                                            <span class="kt-widget12__value">$60M</span>
+                                            <span class="kt-widget12__value"><fmt:parseNumber value="${annual_non_payed_advance}" pattern="#,##"/> AZN</span>
                                         </div>
                                         <div class="kt-widget12__info">
-                                            <span class="kt-widget12__desc">Revenue Margin</span>
+                                            <span class="kt-widget12__desc">Gəlir marjı</span>
                                             <div class="kt-widget12__progress">
                                                 <div class="progress kt-progress--sm">
                                                     <div class="progress-bar kt-bg-brand" role="progressbar" style="width: 40%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>

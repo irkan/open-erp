@@ -12,4 +12,5 @@ public interface AdvanceRepository extends JpaRepository<Advance, Integer>, JpaS
     List<Advance> getAdvancesByActiveTrueAndOrganizationOrderByIdDesc(Organization organization);
     Advance getAdvanceById(int id);
     List<Advance> getAdvancesByActiveTrueAndApproveTrueAndTransactionFalseAndAdvanceDateBetweenAndEmployee(Date date1, Date date2, Employee employee);
+    Advance findTopByActiveTrueAndApproveTrueAndTransactionTrueAndEmployeeOrderByAdvanceDateDesc(Employee employee);
 }

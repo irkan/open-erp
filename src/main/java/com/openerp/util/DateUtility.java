@@ -162,4 +162,40 @@ public class DateUtility {
         }
         return "";
     }
+
+    public static String findMonthShortName(int month){
+        switch (month){
+            case 1: return "yan";
+            case 2: return "fev";
+            case 3: return "mar";
+            case 4: return "apr";
+            case 5: return "may";
+            case 6: return "iyn";
+            case 7: return "iyl";
+            case 8: return "avq";
+            case 9: return "sen";
+            case 10: return "okt";
+            case 11: return "noy";
+            case 12: return "dek";
+        }
+        return "";
+    }
+
+    public static String findMonthName(int month){
+        switch (month){
+            case 1: return "yanvar";
+            case 2: return "fevral";
+            case 3: return "mart";
+            case 4: return "aprel";
+            case 5: return "may";
+            case 6: return "iyun";
+            case 7: return "iyul";
+            case 8: return "avqust";
+            case 9: return "sentyabr";
+            case 10: return "oktyabr";
+            case 11: return "noyabr";
+            case 12: return "dekabr";
+        }
+        return "";
+    }
 }

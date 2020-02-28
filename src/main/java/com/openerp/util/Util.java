@@ -1,5 +1,6 @@
 package com.openerp.util;
 
+import com.openerp.domain.Report;
 import com.openerp.domain.Response;
 import com.openerp.domain.Schedule;
 import com.openerp.entity.*;
@@ -672,5 +673,13 @@ public class Util {
             }
         }
         return list;
+    }
+
+    public static Double annualAdvance(List<Report> reports) {
+        Double annual = 0d;
+        for(Report report: reports){
+            annual+=report.getDouble1();
+        }
+        return annual;
     }
 }

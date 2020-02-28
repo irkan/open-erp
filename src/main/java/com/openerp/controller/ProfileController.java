@@ -1,6 +1,7 @@
 package com.openerp.controller;
 
 import com.openerp.domain.ChangePassword;
+import com.openerp.domain.Report;
 import com.openerp.entity.*;
 import com.openerp.util.Constants;
 import com.openerp.util.Util;
@@ -47,7 +48,13 @@ public class ProfileController extends SkeletonController {
                 model.addAttribute(Constants.FORM, getSessionUser().getUserDetail());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.OVERVIEW)) {
-            model.addAttribute(Constants.REPORTS, reportingDao.reportLast12MonthAdvance(getUserOrganization().getId(), getSessionUser().getEmployee().getId()));
+            List<Report> reports = reportingDao.reportLast12MonthAdvance(getUserOrganization().getId(), getSessionUser().getEmployee().getId());
+            List<Report> nonPayedReports = reportingDao.reportLast12MonthNonPayedAdvance(getUserOrganization().getId(), getSessionUser().getEmployee().getId());
+            Advance advance = advanceRepository.findTopByActiveTrueAndApproveTrueAndTransactionTrueAndEmployeeOrderByAdvanceDateDesc(getSessionUser().getEmployee());
+            model.addAttribute(Constants.REPORTS, reports);
+            model.addAttribute(Constants.ANNUAL_ADVANCE, Util.annualAdvance(reports));
+            model.addAttribute(Constants.ANNUAL_NON_PAYED_ADVANCE, Util.annualAdvance(nonPayedReports));
+            model.addAttribute(Constants.LAST_ADVANCE, advance);
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, getSessionUser().getEmployee().getPerson().getContact());
             }

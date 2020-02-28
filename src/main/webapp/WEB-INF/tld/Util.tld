@@ -83,4 +83,18 @@
             java.lang.String calculateTime(java.util.Date)
         </function-signature>
     </function>
+    <function>
+        <name>findMonthShortName</name>
+        <function-class>com.openerp.util.DateUtility</function-class>
+        <function-signature>
+            java.lang.String findMonthShortName(int)
+        </function-signature>
+    </function>
+    <function>
+        <name>findMonthName</name>
+        <function-class>com.openerp.util.DateUtility</function-class>
+        <function-signature>
+            java.lang.String findMonthName(int)
+        </function-signature>
+    </function>
 </taglib>
