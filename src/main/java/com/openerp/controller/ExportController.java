@@ -141,6 +141,17 @@ public class ExportController extends SkeletonController {
                 .body(resourceIS);
     }
 
+    @RequestMapping(value = "/invoice2", method = RequestMethod.GET)
+    public ResponseEntity<Resource> generateInvoice2() throws IOException, Docx4JException, DocumentException {
+        File file = GeneratePDFFile2.generateInvoice(resourceLoader);
+        InputStreamResource resourceIS = new InputStreamResource(new FileInputStream(file));
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=invoice-test-" + file.getName())
+                .contentLength(file.length())
+                .contentType(MediaType.parseMediaType(MediaType.APPLICATION_PDF_VALUE))
+                .body(resourceIS);
+    }
+
     @RequestMapping(value = "/sale/contract", method = RequestMethod.POST)
     public ResponseEntity<Resource> generateContract(@RequestParam(name = "data", value = "") String data) throws IOException, Docx4JException, DocumentException {
 
