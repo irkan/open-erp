@@ -39,7 +39,7 @@ public class GeneratePDFFile2 {
             document.setMargins(6, 6, 6, 6);
             PdfFont times = PdfFontFactory.createFont(resourceLoader.getResource("classpath:/fonts/DejaVuSansMono.ttf").getFile().getPath(), BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             times.setSubset(true);
-            PdfFont timesbd = PdfFontFactory.createFont(resourceLoader.getResource("classpath:/fonts/timesbd.ttf").getFile().getPath(), BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            PdfFont timesbd = PdfFontFactory.createFont(resourceLoader.getResource("classpath:/fonts/DejaVuSansMono-Bold.ttf").getFile().getPath(), BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             timesbd.setSubset(true);
             PdfFont timesbi = PdfFontFactory.createFont(resourceLoader.getResource("classpath:/fonts/timesbi.ttf").getFile().getPath(), BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             timesbi.setSubset(true);
@@ -153,14 +153,14 @@ public class GeneratePDFFile2 {
             paragraph.setTextAlignment(TextAlignment.LEFT);
             document.add(paragraph);
 
-            paragraph = new Paragraph("Bijuteriya...................*ƏDV 18%");
+            paragraph = new Paragraph("Bijuteriya.....................*ƏDV 18%");
             paragraph.setFont(times);
             paragraph.setFontSize(6.3f);
             paragraph.setMargin(0).setPadding(0).setMultipliedLeading(1.2f);
             paragraph.setTextAlignment(TextAlignment.LEFT);
             document.add(paragraph);
 
-            paragraph = new Paragraph("()     1.0     144.00     144.00");
+            paragraph = new Paragraph("()    1.0    144.00    144.00");
             paragraph.setFont(times);
             paragraph.setFontSize(6.3f);
             paragraph.setMargin(0).setPadding(0).setMultipliedLeading(1.2f);
@@ -174,28 +174,28 @@ public class GeneratePDFFile2 {
             paragraph.setTextAlignment(TextAlignment.LEFT);
             document.add(paragraph);
 
-            paragraph = new Paragraph("ENDIRIM...............0.00");
+            paragraph = new Paragraph("ENDIRIM...........................0.00");
+            paragraph.setFont(timesbd);
+            paragraph.setFontSize(6.3f);
+            paragraph.setMargin(0).setPadding(0).setMultipliedLeading(1.2f);
+            paragraph.setTextAlignment(TextAlignment.LEFT);
+            document.add(paragraph);
+
+            paragraph = new Paragraph("YEKUN MƏBLƏĞ.....................144.00");
+            paragraph.setFont(timesbd);
+            paragraph.setFontSize(6.3f);
+            paragraph.setMargin(0).setPadding(0).setMultipliedLeading(1.2f);
+            paragraph.setTextAlignment(TextAlignment.LEFT);
+            document.add(paragraph);
+
+            paragraph = new Paragraph("*ƏDV 18%.........................144.00");
             paragraph.setFont(times);
             paragraph.setFontSize(6.3f);
             paragraph.setMargin(0).setPadding(0).setMultipliedLeading(1.2f);
             paragraph.setTextAlignment(TextAlignment.LEFT);
             document.add(paragraph);
 
-            paragraph = new Paragraph("YEKUN MƏBLƏĞ...............144.00");
-            paragraph.setFont(times);
-            paragraph.setFontSize(6.3f);
-            paragraph.setMargin(0).setPadding(0).setMultipliedLeading(1.2f);
-            paragraph.setTextAlignment(TextAlignment.LEFT);
-            document.add(paragraph);
-
-            paragraph = new Paragraph("*ƏDV 18%.................144.00");
-            paragraph.setFont(times);
-            paragraph.setFontSize(6.3f);
-            paragraph.setMargin(0).setPadding(0).setMultipliedLeading(1.2f);
-            paragraph.setTextAlignment(TextAlignment.LEFT);
-            document.add(paragraph);
-
-            paragraph = new Paragraph("*Toplam ƏDV 18%...........144.00");
+            paragraph = new Paragraph("*Toplam ƏDV 18%..................144.00");
             paragraph.setFont(times);
             paragraph.setFontSize(6.3f);
             paragraph.setMargin(0).setPadding(0).setMultipliedLeading(1.2f);
@@ -216,42 +216,42 @@ public class GeneratePDFFile2 {
             paragraph.setTextAlignment(TextAlignment.LEFT);
             document.add(paragraph);
 
-            paragraph = new Paragraph("Nağdsız................0.00");
+            paragraph = new Paragraph("Nağdsız...........................0.00");
             paragraph.setFont(times);
             paragraph.setFontSize(6.3f);
             paragraph.setMargin(0).setPadding(0).setMultipliedLeading(1.2f);
             paragraph.setTextAlignment(TextAlignment.LEFT);
             document.add(paragraph);
 
-            paragraph = new Paragraph("Nağd...................144.00");
+            paragraph = new Paragraph("Nağd.............................144.00");
             paragraph.setFont(times);
             paragraph.setFontSize(6.3f);
             paragraph.setMargin(0).setPadding(0).setMultipliedLeading(1.2f);
             paragraph.setTextAlignment(TextAlignment.LEFT);
             document.add(paragraph);
 
-            paragraph = new Paragraph("Bonus................0.00");
+            paragraph = new Paragraph("Bonus.............................0.00");
             paragraph.setFont(times);
             paragraph.setFontSize(6.3f);
             paragraph.setMargin(0).setPadding(0).setMultipliedLeading(1.2f);
             paragraph.setTextAlignment(TextAlignment.LEFT);
             document.add(paragraph);
 
-            paragraph = new Paragraph("Avans................0.00");
+            paragraph = new Paragraph("Avans.............................0.00");
             paragraph.setFont(times);
             paragraph.setFontSize(6.3f);
             paragraph.setMargin(0).setPadding(0).setMultipliedLeading(1.2f);
             paragraph.setTextAlignment(TextAlignment.LEFT);
             document.add(paragraph);
 
-            paragraph = new Paragraph("Kredit................0.00");
+            paragraph = new Paragraph("Kredit............................0.00");
             paragraph.setFont(times);
             paragraph.setFontSize(6.3f);
             paragraph.setMargin(0).setPadding(0).setMultipliedLeading(1.2f);
             paragraph.setTextAlignment(TextAlignment.LEFT);
             document.add(paragraph);
 
-            paragraph = new Paragraph("Qaliq qaytarılıb nağd AZN.....0.00");
+            paragraph = new Paragraph("Qaliq qaytarılıb nağd AZN.........0.00");
             paragraph.setFont(times);
             paragraph.setFontSize(6.3f);
             paragraph.setMargin(0).setPadding(0).setMultipliedLeading(1.2f);
