@@ -289,18 +289,21 @@ public class AdministratorController extends SkeletonController {
             if(user.getId()!=null){
                 user.setPassword(userRepository.getUserByActiveTrueAndId(user.getId()).getPassword());
             }
-            userRepository.save(user);
-            log("admin_user", "create/edit", user.getId(), user.toString());
-            if(user.getId()==null || user.getId()==0){
+            if(user.getId()==null || user.getId()==0) {
                 String message = "Hörmətli " + user.getEmployee().getPerson().getFirstName() + ",<br/><br/>" +
-                        "Sizin məlumatlarınıza əsasən yeni istifadəçi yaradılmışdır.<br/><br/>" +
-                        "İstifadəçi adınız: "+user.getUsername()+"<br/>" +
-                        "Şifrəniz: "+password+"<br/><br/>";
+                        "Sizin məlumatlarınıza əsasən istifadəçi adı və şifrəsi.<br/><br/>" +
+                        "İstifadəçi adınız: " + user.getUsername() + "<br/>" +
+                        "Şifrəniz: " + password + "<br/><br/>";
                 sendEmail(user.getEmployee().getOrganization(), user.getEmployee().getPerson().getContact().getEmail(),
                         "Yeni istifadəçi!",
                         message,
                         null
                 );
+                log("admin_notification", "create/edit", 0, "");
+            }
+            userRepository.save(user);
+            log("admin_user", "create/edit", user.getId(), user.toString());
+            if(user.getId()==null || user.getId()==0){
                 List<ModuleOperation> moduleOperations = moduleOperationRepository.getModuleOperationsByModuleIn(moduleRepository.getModulesByActiveTrueAndPath("profile").get(0).getChildren());
                 for(ModuleOperation mo: moduleOperations){
                     userModuleOperationRepository.save(new UserModuleOperation(user, mo));
