@@ -355,6 +355,15 @@ public class AdministratorController extends SkeletonController {
             }
             userDetailRepository.save(userModuleOperation.getUser().getUserDetail());
             log("admin_user_module_operation", "create/edit", 0, userModuleOperation.toString(), userModuleOperation.getUser().getUsername() + " icazələri yeniləndi");
+
+            String message = "Hörmətli " + userModuleOperation.getUser().getEmployee().getPerson().getFirstName() + ",<br/><br/>" +
+                    "Sistemdə icazələriniz yeniləndi.<br/><br/>";
+            sendEmail(userModuleOperation.getUser().getEmployee().getOrganization(), userModuleOperation.getUser().getEmployee().getPerson().getContact().getEmail(),
+                    "İcazələriniz yeniləndi!",
+                    message,
+                    null
+            );
+            log("admin_notification", "create/edit", 0, "");
         }
         return mapPost(userModuleOperation, binding, redirectAttributes);
     }

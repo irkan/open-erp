@@ -1750,6 +1750,7 @@ public class DBConfiguration {
             configurations.add(new Configuration("Email", "company_email", "sual.office@gmail.com", "Şirkətin email ünvanı"));
             configurations.add(new Configuration("Servis", "service", "6", "Servis xidməti göstərilmədikdə növbəti xəbərdarlıq 6 ay sonra gələcəkdir"));
             configurations.add(new Configuration("Endirim faizi", "id_discount", "20", "Susmaya görə endirim faizi - 20%"));
+            configurations.add(new Configuration("Susmaya görə email qəbul edilsin", "default_email_receiver", "irkan.ehmedov@gmail.com", "Susmaya görə email qəbul edilsin"));
             configurationRepository.saveAll(configurations);
 
             List<WebServiceAuthenticator> webServiceAuthenticators = new ArrayList<>();
