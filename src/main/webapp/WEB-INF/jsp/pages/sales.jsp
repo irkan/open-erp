@@ -268,6 +268,7 @@
                             <c:set var="view5" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'invoice', 'view')}"/>
                             <c:set var="view6" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'inventory', 'view')}"/>
                             <c:set var="approve" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
+                            <c:set var="return1" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'return')}"/>
                             <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
                             <c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
@@ -356,7 +357,7 @@
                                                 </a>
                                             </c:if>
                                             <c:if test="${view.status}">
-                                                <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');getInventories('<c:out value="${t.id}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
+                                                <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');getInventories('<c:out value="${t.id}" />', $('#data-repeater-list'));" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
                                                     <i class="<c:out value="${view.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
@@ -378,6 +379,11 @@
                                                     <c:if test="${view3.status}">
                                                     <a href="/sale/service-regulator/<c:out value="${t.id}"/>" class="dropdown-item">
                                                         <i class="la <c:out value="${view3.object.icon}"/>"></i> Servis requlyatoru
+                                                    </a>
+                                                    </c:if>
+                                                    <c:if test="${return1.status and t.approve}">
+                                                    <a href="javascript:returnOper($('#return-form'), '<c:out value="${t.id}"/>', 'return-modal-operation', '<c:out value="${return1.object.name}"/>');getInventories('<c:out value="${t.id}" />', $('#return-data-repeater-list'));" class="dropdown-item" title="<c:out value="${return1.object.name}"/>">
+                                                        <i class="<c:out value="${return1.object.icon}"/>"></i> <c:out value="${return1.object.name}"/>
                                                     </a>
                                                     </c:if>
                                                     <c:if test="${edit.status and !t.approve}">
@@ -511,7 +517,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div id="kt_repeater_1">
+                                        <div class="kt_repeater_1">
                                             <div class="form-group form-group-last row" id="kt_repeater_2">
                                                 <div data-repeater-list="" class="col-lg-12" id="data-repeater-list">
                                                     <div data-repeater-item class="form-group row align-items-center">
@@ -991,6 +997,91 @@
     </div>
 </div>
 
+<div class="modal fade" id="return-modal-operation" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form:form modelAttribute="return_form" id="return-form" method="post" action="/sale/sales/return" cssClass="form-group">
+                    <form:hidden path="salesId"/>
+                    <div class="kt_repeater_1">
+                        <div class="form-group form-group-last row">
+                            <div data-repeater-list="" class="col-lg-12" id="return-data-repeater-list">
+                                <div data-repeater-item class="form-group row align-items-center">
+                                    <div class="col-9">
+                                        <div class="kt-form__group--inline">
+                                            <div class="kt-form__label">
+                                                <label>İnventar:</label>
+                                            </div>
+                                            <div class="kt-form__control">
+                                                <div class="row">
+                                                    <div class="col-7">
+                                                        <input type="text" attr="barcode" name="inventory.barcode" class="form-control" placeholder="Barkodu daxil edin..." onchange="findInventory($(this))">
+                                                        <label attr="name" name="inventory.name"></label>
+                                                        <input type="hidden" attr="id" name="inventory.id" class="form-control">
+                                                    </div>
+                                                    <div class="col-5">
+                                                        <select attr="type" name="salesType" class="form-control" style="padding: 5px;">
+                                                            <c:forEach var="t" items="${sales_types}" varStatus="loop">
+                                                                <option value="${t.id}">${t.name}</option>
+                                                            </c:forEach>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-md-none kt-margin-b-10"></div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div>
+                                            <a href="javascript:;" data-repeater-delete="" class="btn-sm btn btn-label-danger btn-bold">
+                                                <i class="la la-trash-o"></i>
+                                                Sil
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group form-group-last row">
+                            <c:if test="${view6.status}">
+                                <div class="col-6 offset-6 text-right">
+                                    <a href="javascript:window.open('/warehouse/inventory', 'mywindow', 'width=1250, height=800')" data-repeater-delete="" class="btn-sm btn btn-label-success btn-bold">
+                                        <i class="la la-question"></i>
+                                        İnventar
+                                    </a>
+                                </div>
+                            </c:if>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="reason">Səbəbi</form:label>
+                        <form:textarea path="reason" cssClass="form-control" placeholder="Daxil edin"/>
+                        <form:errors path="reason" cssClass="alert-danger control-label"/>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="returnPrice">Qaytarılacağ məbləğ</form:label>
+                        <div class="input-group" >
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
+                            <form:input path="returnPrice" cssClass="form-control" placeholder="Qiyməti daxil edin"/>
+                        </div>
+                        <form:errors path="returnPrice" cssClass="alert-danger control-label"/>
+                    </div>
+                </form:form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="submit($('#return-form'));">Bəli, təsdiq edirəm!</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <form id="form-export-contract" method="post" action="/export/sale/contract" style="display: none">
     <input type="hidden" name="data" />
 </form>
@@ -1359,7 +1450,7 @@
         }
     }
 
-    function getInventories(salesId){
+    function getInventories(salesId, repeater){
         var content = '';
         swal.fire({
             text: 'Proses davam edir...',
@@ -1371,7 +1462,7 @@
                     type: 'GET',
                     dataType: 'json',
                     beforeSend: function() {
-                        $("#kt_repeater_1").find("#data-repeater-list").html(content);
+                        $(".kt_repeater_1").find(repeater).html(content);
                     },
                     success: function(data) {
                         console.log(data);
@@ -1411,7 +1502,7 @@
                                 '                                                </div>\n' +
                                 '                                            </div>\n' +
                                 '                                        </div>';
-                            $("#kt_repeater_1").find("#data-repeater-list").append(content);
+                            $(".kt_repeater_1").find(repeater).append(content);
                             $("select[name='salesInventories["+index+"].salesType'] option[value="+value.salesType.id+"]").attr("selected", "selected");
                         });
 
@@ -1634,6 +1725,10 @@
         rightAlignNumerics: false
     });
 
+    $("input[name='returnPrice']").inputmask('decimal', {
+        rightAlignNumerics: false
+    });
+
     function showPosition(position) {
         var geolocation =  $("#form").find("input[name='customer.person.contact.geolocation']");
         if($(geolocation).val().trim().length==0){
@@ -1679,7 +1774,7 @@
 
     var KTFormRepeater = function() {
         var demo1 = function() {
-            $('#kt_repeater_1').repeater({
+            $('.kt_repeater_1').repeater({
                 initEmpty: false,
 
                 defaultValues: {
@@ -1728,4 +1823,27 @@
     jQuery(document).ready(function() {
         KTFormRepeater.init();
     });
+
+    function returnOper(form, saleId, modal, title) {
+        $(form).find("input[name='salesId']").val(saleId);
+        $('#' + modal).find(".modal-title").html(title);
+        $('#' + modal).modal('toggle');
+    }
+
+    $( "#return-form" ).validate({
+        rules: {
+            returnPrice: {
+                required: true,
+                number: true,
+                min: 0.1
+            },
+            reason: {
+                required: true
+            }
+        },
+        invalidHandler: function(event, validator) {
+            KTUtil.scrollTop();
+            swal.close();
+        },
+    })
 </script>

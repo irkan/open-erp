@@ -455,7 +455,7 @@ $( "#form" ).validate({
         swal.close();
     },
 
-})
+});
 $( "#transaction-approve-form" ).validate({
     rules: {
         price: {

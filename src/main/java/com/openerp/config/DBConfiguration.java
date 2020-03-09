@@ -1280,6 +1280,8 @@ public class DBConfiguration {
             moduleOperations.add(returnModuleOperation1);
             ModuleOperation returnModuleOperation2 = new ModuleOperation(consolidate, returnOperation, null);
             moduleOperations.add(returnModuleOperation2);
+            ModuleOperation returnModuleOperation3 = new ModuleOperation(sales, returnOperation, null);
+            moduleOperations.add(returnModuleOperation3);
 
             ModuleOperation payrollModuleOperation1 = new ModuleOperation(employee, payrollOperation, null);
             moduleOperations.add(payrollModuleOperation1);
@@ -1658,6 +1660,7 @@ public class DBConfiguration {
 
             userModuleOperations.add(new UserModuleOperation(user, returnModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, returnModuleOperation2));
+            userModuleOperations.add(new UserModuleOperation(user, returnModuleOperation3));
 
             userModuleOperations.add(new UserModuleOperation(user, payrollModuleOperation1));
 

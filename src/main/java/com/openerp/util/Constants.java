@@ -64,6 +64,7 @@ public class Constants {
     public static final String ANNUAL_ADVANCE = "annual_advance";
     public static final String LAST_ADVANCE = "last_advance";
     public static final String ANNUAL_NON_PAYED_ADVANCE = "annual_non_payed_advance";
+    public static final String RETURN_FORM = "return_form";
 
     public static final class STATUS{
         public static final String RESPONSE = "response";

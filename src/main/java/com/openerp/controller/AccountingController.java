@@ -7,6 +7,7 @@ import com.openerp.repository.InventoryRepository;
 import com.openerp.repository.TransactionRepository;
 import com.openerp.util.Constants;
 import com.openerp.util.Util;
+import lombok.extern.log4j.Log4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;

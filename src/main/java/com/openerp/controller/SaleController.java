@@ -1,5 +1,6 @@
 package com.openerp.controller;
 
+import com.openerp.domain.Return;
 import com.openerp.domain.SalesSchedules;
 import com.openerp.domain.Schedule;
 import com.openerp.entity.*;
@@ -43,6 +44,9 @@ public class SaleController extends SkeletonController {
             model.addAttribute(Constants.SALES_TYPES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("sales-type"));
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Sales(getSessionOrganization()));
+            }
+            if(!model.containsAttribute(Constants.RETURN_FORM)){
+                model.addAttribute(Constants.RETURN_FORM, new Return());
             }
             if(!model.containsAttribute(Constants.FILTER)){
                 Sales sales = new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null, new Payment((Double) null));
@@ -194,7 +198,13 @@ public class SaleController extends SkeletonController {
         return mapPost(sales, binding, redirectAttributes);
     }
 
-    @PostMapping(value = "/sales/approve")
+    @PostMapping(value = "/sales/return")
+    public String postSalesReturn(@ModelAttribute(Constants.RETURN_FORM) @Validated Return returnForm, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        //sales = salesRepository.getSalesById(sales.getId());
+        return mapPost(returnForm, binding, redirectAttributes, "/sale/sales");
+    }
+
+        @PostMapping(value = "/sales/approve")
     public String postSalesApprove(@ModelAttribute(Constants.FORM) @Validated Sales sales, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         sales = salesRepository.getSalesById(sales.getId());
         Employee employee = (sales.getService() && sales.getServicer()!=null)?sales.getServicer():getSessionUser().getEmployee();
