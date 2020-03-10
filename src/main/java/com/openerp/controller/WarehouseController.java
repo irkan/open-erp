@@ -228,7 +228,6 @@ public class WarehouseController extends SkeletonController {
                 inventory.setBarcode(actn.getInventory().getBarcode());
                 inventory.setName(actn.getInventory().getName());
                 inventory.setDescription(actn.getInventory().getDescription());
-                inventory.setOld(actn.getInventory().getOld());
                 inventoryRepository.save(inventory);
 
                 Action acceptAction = new Action(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("accept", "action"),

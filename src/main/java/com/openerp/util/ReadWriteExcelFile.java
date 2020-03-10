@@ -1164,8 +1164,6 @@ public class ReadWriteExcelFile {
 		cell = row.createCell(row.getLastCellNum());
 		cell.setCellValue("Struktur");
 		cell = row.createCell(row.getLastCellNum());
-		cell.setCellValue("İşlənmişdirmi?");
-		cell = row.createCell(row.getLastCellNum());
 		cell.setCellValue("Aktiv");
 		row.setHeightInPoints(30);
 		XSSFCellStyle headerStyle = wb.createCellStyle();
@@ -1192,8 +1190,6 @@ public class ReadWriteExcelFile {
 			cell.setCellValue(inventory.getInventoryDate());
 			cell = row.createCell(row.getLastCellNum());
 			cell.setCellValue(inventory.getOrganization()!=null?inventory.getOrganization().getName():"");
-			cell = row.createCell(row.getLastCellNum());
-			cell.setCellValue(inventory.getOld());
 			cell = row.createCell(row.getLastCellNum());
 			cell.setCellValue(inventory.getActive());
 		}
@@ -1295,6 +1291,8 @@ public class ReadWriteExcelFile {
 		cell.setCellValue("Təhkim edilib");
 		cell = row.createCell(row.getLastCellNum());
 		cell.setCellValue("Tədarükçü");
+		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("İşlənmişdirmi?");
 		row.setHeightInPoints(30);
 		XSSFCellStyle headerStyle = wb.createCellStyle();
 		headerStyle.setAlignment(HorizontalAlignment.CENTER);
@@ -1326,6 +1324,8 @@ public class ReadWriteExcelFile {
 			cell.setCellValue((action.getEmployee()!=null && action.getEmployee().getPerson()!=null)?action.getEmployee().getPerson().getFullName():"");
 			cell = row.createCell(row.getLastCellNum());
 			cell.setCellValue(action.getSupplier()!=null?action.getSupplier().getName():"");
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(action.getOld());
 		}
 		FileOutputStream fileOut = new FileOutputStream(file);
 		wb.write(fileOut);

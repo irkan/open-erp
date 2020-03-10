@@ -43,9 +43,6 @@ public class Inventory {
     @Column(name = "barcode", nullable = false)
     private String barcode;
 
-    @Column(name = "is_old", nullable = false, columnDefinition="boolean default true")
-    private Boolean old = false;
-
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     @Column(name = "inventory_date", nullable = false)

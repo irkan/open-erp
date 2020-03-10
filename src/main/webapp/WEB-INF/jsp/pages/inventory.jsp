@@ -75,14 +75,6 @@
                                                 <form:errors path="description" cssClass="alert-danger control-label"/>
                                             </div>
                                         </div>
-                                        <div class="col-md-2" style="padding-top: 30px;">
-                                            <div class="form-group">
-                                                <label class="kt-checkbox kt-checkbox--brand">
-                                                    <form:checkbox path="old"/> İşlənmiş
-                                                    <span></span>
-                                                </label>
-                                            </div>
-                                        </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <form:label path="inventoryDateFrom">Tarixdən</form:label>
@@ -182,14 +174,7 @@
                                             </button>
                                         </td>
                                         <td>
-                                            <c:choose>
-                                                <c:when test="${t.old}">
-                                                    <span class="kt-badge kt-badge--danger kt-badge--inline kt-badge--pill">İşlənmiş</span>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <span class="kt-badge kt-badge--success kt-badge--inline kt-badge--pill">Yeni</span>
-                                                </c:otherwise>
-                                            </c:choose>
+                                             5 / 3 ishlenmish
                                         </td>
                                         <td><c:out value="${utl:calculateInventoryAmount(t.actions, sessionScope.organization.id)}"/> ədəd
                                         <td class="text-center">
@@ -265,14 +250,14 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-7">
                             <div class="form-group">
                                 <form:label path="name">Ad</form:label>
                                 <form:input path="name" cssClass="form-control" placeholder="Adı daxil edin"/>
                                 <form:errors path="name" cssClass="alert-danger control-label"/>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-5">
                             <div class="form-group">
                                 <form:label path="actions[0].amount">Say</form:label>
                                 <div class="input-group" >
@@ -280,14 +265,6 @@
                                     <form:input path="actions[0].amount" cssClass="form-control" placeholder="Say daxil edin"/>
                                 </div>
                                 <form:errors path="actions[0].amount" cssClass="alert-danger control-label"/>
-                            </div>
-                        </div>
-                        <div class="col-md-2 pt-md-4" style="top: 10px;">
-                            <div class="form-group">
-                                <label class="kt-checkbox kt-checkbox--brand">
-                                    <form:checkbox path="old"/> İşlənmiş
-                                    <span></span>
-                                </label>
                             </div>
                         </div>
                     </div>

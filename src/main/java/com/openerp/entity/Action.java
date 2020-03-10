@@ -60,6 +60,9 @@ public class Action {
     @JoinColumn(name = "hr_employee_id")
     private Employee employee;
 
+    @Column(name = "is_old", nullable = false, columnDefinition="boolean default false")
+    private Boolean old = false;
+
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;
 

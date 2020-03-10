@@ -200,11 +200,12 @@ public class SaleController extends SkeletonController {
 
     @PostMapping(value = "/sales/return")
     public String postSalesReturn(@ModelAttribute(Constants.RETURN_FORM) @Validated Return returnForm, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
-        //sales = salesRepository.getSalesById(sales.getId());
+        Sales sales = salesRepository.getSalesById(returnForm.getSalesId());
+
         return mapPost(returnForm, binding, redirectAttributes, "/sale/sales");
     }
 
-        @PostMapping(value = "/sales/approve")
+    @PostMapping(value = "/sales/approve")
     public String postSalesApprove(@ModelAttribute(Constants.FORM) @Validated Sales sales, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         sales = salesRepository.getSalesById(sales.getId());
         Employee employee = (sales.getService() && sales.getServicer()!=null)?sales.getServicer():getSessionUser().getEmployee();

@@ -97,6 +97,14 @@
                                                 </label>
                                             </div>
                                         </div>
+                                        <div class="col-md-2" style="padding-top: 30px;">
+                                            <div class="form-group">
+                                                <label class="kt-checkbox kt-checkbox--brand">
+                                                    <form:checkbox path="old"/> İşlənmiş
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                        </div>
                                         <c:if test="${delete.status}">
                                             <div class="col-md-2" style="padding-top: 30px;">
                                                 <div class="form-group">
@@ -152,6 +160,7 @@
         <th>Miqdar</th>
         <th>Tarix</th>
         <th>Təhkim edilib</th>
+        <th>Vəziyyət</th>
         <th>Əməliyyat</th>
     </tr>
     </thead>
@@ -176,6 +185,16 @@
             <td><c:out value="${t.amount}" /></td>
             <td><fmt:formatDate value = "${t.createdDate}" pattern = "dd.MM.yyyy" /></td>
             <td><c:out value="${t.employee.person.fullName}" /></td>
+            <td>
+                <c:choose>
+                    <c:when test="${t.old}">
+                        <span class="kt-badge kt-badge--danger kt-badge--inline kt-badge--pill">İşlənmiş</span>
+                    </c:when>
+                    <c:otherwise>
+                        <span class="kt-badge kt-badge--success kt-badge--inline kt-badge--pill">Yeni</span>
+                    </c:otherwise>
+                </c:choose>
+            </td>
             <td nowrap class="text-center">
                 <c:if test="${!(t.action.attr1 eq 'sell') and !(t.action.attr1 eq 'cancellation') and !(t.action.attr1 eq 'send' and t.approve)}">
                     <c:if test="${return1.status and t.action.attr1 eq 'consolidate'}">

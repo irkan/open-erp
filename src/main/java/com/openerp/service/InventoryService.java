@@ -39,9 +39,6 @@ public class InventoryService {
                 if(inventory.getGroup()!=null && inventory.getGroup().getId()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("group"), inventory.getGroup().getId())));
                 }
-                if(inventory.getOld()){
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("old"), inventory.getOld())));
-                }
                 if(inventory.getName()!=null && !inventory.getName().isEmpty()) {
                     predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("name"), "%"+inventory.getName()+"%")));
                 }
