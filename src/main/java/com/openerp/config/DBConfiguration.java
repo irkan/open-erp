@@ -1282,6 +1282,8 @@ public class DBConfiguration {
             moduleOperations.add(returnModuleOperation2);
             ModuleOperation returnModuleOperation3 = new ModuleOperation(sales, returnOperation, null);
             moduleOperations.add(returnModuleOperation3);
+            ModuleOperation returnModuleOperation4 = new ModuleOperation(service, returnOperation, null);
+            moduleOperations.add(returnModuleOperation4);
 
             ModuleOperation payrollModuleOperation1 = new ModuleOperation(employee, payrollOperation, null);
             moduleOperations.add(payrollModuleOperation1);
@@ -1661,6 +1663,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, returnModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, returnModuleOperation2));
             userModuleOperations.add(new UserModuleOperation(user, returnModuleOperation3));
+            userModuleOperations.add(new UserModuleOperation(user, returnModuleOperation4));
 
             userModuleOperations.add(new UserModuleOperation(user, payrollModuleOperation1));
 

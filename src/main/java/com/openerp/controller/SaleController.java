@@ -85,6 +85,9 @@ public class SaleController extends SkeletonController {
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Sales(getSessionOrganization(), true));
             }
+            if(!model.containsAttribute(Constants.RETURN_FORM)){
+                model.addAttribute(Constants.RETURN_FORM, new Return());
+            }
             if(!model.containsAttribute(Constants.FILTER)){
                 Sales sales = new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null, true, null);
                 sales.setApprove(null);
@@ -201,8 +204,49 @@ public class SaleController extends SkeletonController {
     @PostMapping(value = "/sales/return")
     public String postSalesReturn(@ModelAttribute(Constants.RETURN_FORM) @Validated Return returnForm, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         Sales sales = salesRepository.getSalesById(returnForm.getSalesId());
+        for(SalesInventory salesInventory: returnForm.getSalesInventories()){
+            Action action = new Action();
+            action.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("return", "action"));
+            action.setOld(salesInventory.getInventory().getOld());
+            action.setInventory(salesInventory.getInventory());
+            action.setAmount(1);
+            action.setOrganization(sales.getOrganization());
+            actionRepository.save(action);
 
-        return mapPost(returnForm, binding, redirectAttributes, "/sale/sales");
+            log("warehouse_action", "create/edit", action.getId(), action.toString());
+        }
+
+        if(returnForm.getReturnPrice()>0){
+            Invoice invoice = new Invoice();
+            invoice.setSales(sales);
+            invoice.setApprove(false);
+            invoice.setPrice(-1*returnForm.getReturnPrice());
+            invoice.setOrganization(sales.getOrganization());
+            invoice.setDescription("Qaytarılmaya görə müştəriyə ediləcək ödəniş " + returnForm.getReturnPrice() + " AZN");
+            invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
+            invoiceRepository.save(invoice);
+            log("sale_invoice", "create/edit", invoice.getId(), invoice.toString());
+            invoice.setChannelReferenceCode(String.valueOf(invoice.getId()));
+            invoiceRepository.save(invoice);
+            log("sale_invoice", "create/edit", invoice.getId(), invoice.toString());
+        }
+
+        ContactHistory contactHistory = new ContactHistory();
+        contactHistory.setOrganization(sales.getOrganization());
+        contactHistory.setDescription(returnForm.getReason());
+        contactHistory.setSales(sales);
+        contactHistoryRepository.save(contactHistory);
+        log("collect_contact_history", "create/edit", contactHistory.getId(), contactHistory.toString());
+
+        sales.setActive(false);
+        salesRepository.save(sales);
+
+        log("sale_sales", "delete", sales.getId(), sales.toString(), "Qaytarılma icra edildi");
+
+        if(sales.getService()){
+            return mapPost(sales, binding, redirectAttributes, "/sale/service");
+        }
+        return mapPost(sales, binding, redirectAttributes, "/sale/sales");
     }
 
     @PostMapping(value = "/sales/approve")
@@ -401,7 +445,7 @@ public class SaleController extends SkeletonController {
             double sumPrice = Util.amountChecker(transaction.getAmount()) * transaction.getPrice() * transaction.getRate();
             transaction.setSumPrice(sumPrice);
             transaction.setAction(invc.getSales().getSalesInventories().get(0).getInventory().getActions().get(0).getAction()); //burda duzelis edilmelidir
-            transaction.setDescription("Satış, Kod: "+invc.getSales().getId() + " -> "
+            transaction.setDescription("Satış|Servis, Kod: "+invc.getSales().getId() + " -> "
                     + invc.getSales().getCustomer().getPerson().getFullName() + " -> "
                     + " barkod: " + invc.getSales().getSalesInventories().get(0).getInventory().getName()
                     + " " + invc.getSales().getSalesInventories().get(0).getInventory().getBarcode()

@@ -298,6 +298,7 @@ public class WarehouseController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()) {
             action.setId(null);
+            action.setOld(actn.getOld());
             action.setInventory(actn.getInventory());
             action.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("consolidate", "action"));
             action.setSupplier(actn.getSupplier());

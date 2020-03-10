@@ -206,6 +206,7 @@
                                     <th>Yığımçı|Servis</th>
                                     <th>Kanal</th>
                                     <th>Referans</th>
+                                    <th>Açıqlama</th>
                                     <th>Avans</th>
                                     <th>Əməliyyat</th>
                                 </tr>
@@ -267,6 +268,7 @@
                                             <c:out value="${t.sales.servicer.person.fullName}"/></td>
                                         <td><c:out value="${t.paymentChannel.name}" /></td>
                                         <td><c:out value="${t.channelReferenceCode}" /></td>
+                                        <td><c:out value="${t.description}" /></td>
                                         <td class="text-center">
                                             <c:if test="${t.advance}">
                                                 <i class="flaticon2-check-mark kt-font-success"></i>

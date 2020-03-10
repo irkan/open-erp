@@ -53,6 +53,9 @@ public class Inventory {
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date inventoryDateFrom;
 
+    @Transient
+    private Boolean old = false;
+
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;
 

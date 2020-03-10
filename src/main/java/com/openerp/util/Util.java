@@ -87,6 +87,8 @@ public class Util {
                     amount+=action.getAmount();
                 } else if(action.getAction().getAttr1().equalsIgnoreCase("accept") && action.getOrganization().getId()==organizationId){
                     amount+=action.getAmount();
+                } else if(action.getAction().getAttr1().equalsIgnoreCase("return") && action.getOrganization().getId()==organizationId){
+                    amount+=action.getAmount();
                 }
             }
         }
