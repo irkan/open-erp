@@ -1,5 +1,6 @@
 package com.openerp.util;
 
+import com.openerp.domain.InventoryAmount;
 import com.openerp.domain.Report;
 import com.openerp.domain.Response;
 import com.openerp.domain.Schedule;
@@ -75,24 +76,30 @@ public class Util {
         return null;
     }
 
-    public static int calculateInventoryAmount(List<Action> actions, int organizationId){
-        int amount = 0;
+    public static InventoryAmount calculateInventoryAmount(List<Action> actions, int organizationId){
+        int allItemsCount = 0;
+        int oldItemsCount = 0;
         for(Action action: actions){
             if(action.getActive()){
                 if(action.getAction().getAttr1().equalsIgnoreCase("send") && !action.getApprove() && action.getOrganization().getId()==organizationId){
-                    amount+=action.getAmount();
+                    allItemsCount+=action.getAmount();
+                    oldItemsCount+=action.getOld()?action.getAmount():0;
                 } else if(action.getAction().getAttr1().equalsIgnoreCase("buy") && (action.getOrganization().getId()==organizationId || organizationId==0)){
-                    amount+=action.getAmount();
+                    allItemsCount+=action.getAmount();
+                    oldItemsCount+=action.getOld()?action.getAmount():0;
                 } else if(action.getAction().getAttr1().equalsIgnoreCase("consolidate") && (action.getOrganization().getId()==organizationId || organizationId==0)){
-                    amount+=action.getAmount();
+                    allItemsCount+=action.getAmount();
+                    oldItemsCount+=action.getOld()?action.getAmount():0;
                 } else if(action.getAction().getAttr1().equalsIgnoreCase("accept") && action.getOrganization().getId()==organizationId){
-                    amount+=action.getAmount();
+                    allItemsCount+=action.getAmount();
+                    oldItemsCount+=action.getOld()?action.getAmount():0;
                 } else if(action.getAction().getAttr1().equalsIgnoreCase("return") && action.getOrganization().getId()==organizationId){
-                    amount+=action.getAmount();
+                    allItemsCount+=action.getAmount();
+                    oldItemsCount+=action.getOld()?action.getAmount():0;
                 }
             }
         }
-        return amount;
+        return new InventoryAmount(allItemsCount, oldItemsCount);
     }
 
     public static int calculateApproveOperationCount(List<Action> actions, int organizationId){

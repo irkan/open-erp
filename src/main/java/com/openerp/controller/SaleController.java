@@ -327,7 +327,7 @@ public class SaleController extends SkeletonController {
     @GetMapping(value = "/payment/schedule/{lastPrice}/{down}/{schedule}/{period}/{saleDate}", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Schedule> getPaymentSchedulePrice(Model model, @PathVariable("lastPrice") double lastPrice, @PathVariable("down") double down, @PathVariable("schedule") int scheduleId, @PathVariable("period") int periodId, @PathVariable(name = "saleDate", value = "") String saleDate){
         try {
-            return getSchedulePayment(saleDate, scheduleId, periodId, lastPrice, down);
+            return getSchedulePayment(saleDate.equalsIgnoreCase("0")?DateUtility.getFormattedDate(new Date()):saleDate, scheduleId, periodId, lastPrice, down);
         } catch (Exception e){
             log.error(e);
         }

@@ -149,7 +149,6 @@
                                     <th>Ad</th>
                                     <th>Açıqlama</th>
                                     <th>Barkod</th>
-                                    <th>Vəziyyət</th>
                                     <th>Miqdar</th>
                                     <th>Təsdiq gözləyir</th>
                                     <th>Əməliyyat</th>
@@ -174,9 +173,9 @@
                                             </button>
                                         </td>
                                         <td>
-                                             5 / 3 ishlenmish
+                                            <c:set var="ia" value="${utl:calculateInventoryAmount(t.actions, sessionScope.organization.id)}"/>
+                                            <span class="kt-badge kt-badge--success kt-badge--inline kt-badge--pill"><c:out value="${ia.allItemsCount}"/></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kt-badge kt-badge--danger kt-badge--inline kt-badge--pill"><c:out value="${ia.oldItemsCount}"/></span>
                                         </td>
-                                        <td><c:out value="${utl:calculateInventoryAmount(t.actions, sessionScope.organization.id)}"/> ədəd
                                         <td class="text-center">
                                             <c:set var="approveCount" value="${utl:calculateApproveOperationCount(t.actions, sessionScope.organization.id)}"/>
                                             <c:if test="${approveCount gt 0}">

@@ -31,7 +31,7 @@
         <name>calculateInventoryAmount</name>
         <function-class>com.openerp.util.Util</function-class>
         <function-signature>
-            int calculateInventoryAmount(java.util.List, int)
+            com.openerp.domain.InventoryAmount calculateInventoryAmount(java.util.List,int)
         </function-signature>
     </function>
     <function>

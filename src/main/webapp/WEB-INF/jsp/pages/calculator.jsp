@@ -127,7 +127,7 @@
             onOpen: function() {
                 swal.showLoading();
                 $.ajax({
-                    url: '/sale/payment/schedule/' + $(lastPrice).val() + '/' + $(down).val() + '/' + $(schedule).val() + '/' + $(period).val(),
+                    url: '/sale/payment/schedule/' + $(lastPrice).val() + '/' + $(down).val() + '/' + $(schedule).val() + '/' + $(period).val() + '/0',
                     type: 'GET',
                     dataType: 'json',
                     beforeSend: function() {

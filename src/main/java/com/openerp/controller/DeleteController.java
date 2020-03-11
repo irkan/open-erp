@@ -139,7 +139,7 @@ public class DeleteController extends SkeletonController {
             log("payroll_advance", "create/edit", advance.getId(), advance.toString());
         } else if(path.equalsIgnoreCase(Constants.ROUTE.INVENTORY)){
             Inventory inventory = inventoryRepository.getInventoryById(Integer.parseInt(id));
-            int amount = Util.calculateInventoryAmount(inventory.getActions(), getSessionOrganization().getId());
+            int amount = Util.calculateInventoryAmount(inventory.getActions(), getSessionOrganization().getId()).getAllItemsCount();
             if(amount==0){
                 inventory.setActive(false);
                 inventoryRepository.save(inventory);

@@ -361,7 +361,7 @@
                             <table id="customer-content" class="table table-striped- table-bordered table-hover table-checkable"></table>
                         </div>
                         <div class="col-md-6">
-                            <div id="kt_repeater_1">
+                            <div class="kt_repeater_1">
                                 <div class="form-group form-group-last row" id="kt_repeater_2">
                                     <div data-repeater-list="" class="col-lg-12" id="data-repeater-list">
                                         <div data-repeater-item class="form-group row align-items-center">
@@ -815,7 +815,6 @@
                             $(".kt_repeater_1").find(repeater).append(content);
                             $("select[name='salesInventories["+index+"].salesType'] option[value="+value.salesType.id+"]").attr("selected", "selected");
                         });
-
 
                         swal.close();
                     },
