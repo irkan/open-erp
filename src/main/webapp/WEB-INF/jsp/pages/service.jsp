@@ -419,37 +419,29 @@
                             </div>
                         </div>
                         <div class="col-md-2">
-                            <div class="row">
-                                <div class="col-md-12 col-4">
-                                    <div class="form-group">
-                                        <form:label path="payment.price">Qiymət</form:label>
-                                        <div class="input-group" >
-                                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
-                                            <form:input path="payment.price" cssClass="form-control" placeholder="Qiyməti daxil edin" onchange="calculate($('input[name=\"payment.price\"]').val(), $('input[name=\"payment.discount\"]').val())" onkeyup="calculate($('input[name=\"payment.price\"]').val(), $('input[name=\"payment.discount\"]').val())"/>
-                                        </div>
-                                        <form:errors path="payment.price" cssClass="alert-danger control-label"/>
-                                    </div>
+                            <div class="form-group">
+                                <form:label path="payment.price">Qiymət</form:label>
+                                <div class="input-group" >
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
+                                    <form:input path="payment.price" cssClass="form-control" placeholder="Qiyməti daxil edin" onchange="calculate($('input[name=\"payment.price\"]').val(), $('input[name=\"payment.discount\"]').val())" onkeyup="calculate($('input[name=\"payment.price\"]').val(), $('input[name=\"payment.discount\"]').val())"/>
                                 </div>
-                                <div class="col-md-12 col-4">
-                                    <div class="form-group">
-                                        <form:label path="payment.discount">Endirim</form:label>
-                                        <div class="input-group" >
-                                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
-                                            <form:input path="payment.discount" cssClass="form-control" placeholder="Endirim varsa daxil edin" onchange="calculate($('input[name=\"payment.price\"]').val(), $('input[name=\"payment.discount\"]').val())" onkeyup="calculate($('input[name=\"payment.price\"]').val(), $('input[name=\"payment.discount\"]').val())"/>
-                                        </div>
-                                        <form:errors path="payment.discount" cssClass="alert-danger control-label"/>
-                                    </div>
+                                <form:errors path="payment.price" cssClass="alert-danger control-label"/>
+                            </div>
+                            <div class="form-group">
+                                <form:label path="payment.discount">Endirim</form:label>
+                                <div class="input-group" >
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
+                                    <form:input path="payment.discount" cssClass="form-control" placeholder="Endirim varsa daxil edin" onchange="calculate($('input[name=\"payment.price\"]').val(), $('input[name=\"payment.discount\"]').val())" onkeyup="calculate($('input[name=\"payment.price\"]').val(), $('input[name=\"payment.discount\"]').val())"/>
                                 </div>
-                                <div class="col-md-12 col-4">
-                                    <div class="form-group">
-                                        <form:label path="payment.lastPrice">Son qiymət</form:label>
-                                        <div class="input-group" >
-                                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
-                                            <form:input path="payment.lastPrice" cssClass="form-control" placeholder="Son qiyməti daxil edin" readonly="true"/>
-                                        </div>
-                                        <form:errors path="payment.lastPrice" cssClass="alert-danger control-label"/>
-                                    </div>
+                                <form:errors path="payment.discount" cssClass="alert-danger control-label"/>
+                            </div>
+                            <div class="form-group">
+                                <form:label path="payment.lastPrice">Son qiymət</form:label>
+                                <div class="input-group" >
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
+                                    <form:input path="payment.lastPrice" cssClass="form-control" placeholder="Son qiyməti daxil edin" readonly="true"/>
                                 </div>
+                                <form:errors path="payment.lastPrice" cssClass="alert-danger control-label"/>
                             </div>
                         </div>
                     </div>
@@ -848,7 +840,7 @@
 
     var KTFormRepeater = function() {
         var demo1 = function() {
-            $('#kt_repeater_1').repeater({
+            $('.kt_repeater_1').repeater({
                 initEmpty: false,
 
                 defaultValues: {

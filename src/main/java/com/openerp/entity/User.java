@@ -14,6 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class User implements Serializable {
 
     @Id
@@ -48,6 +49,7 @@ public class User implements Serializable {
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;
 
+    @ToString.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<UserModuleOperation> userModuleOperations;
@@ -58,6 +60,7 @@ public class User implements Serializable {
 
     //@UniqueElements(message = "Bu istifadəçi adı mövcuddur")
     //@OneToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @ToString.Exclude
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hr_employee_id", unique = true, nullable = false)
     private Employee employee;

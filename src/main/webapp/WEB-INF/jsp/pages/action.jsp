@@ -548,7 +548,9 @@
             $(form).find("input[name='id']").val(obj["id"]);
             $(form).find("input[name='inventory']").val(obj["inventory"]["id"]);
             $(form).find("input[name='action']").val(obj["action"]["id"]);
-            $(form).find("input[name='supplier']").val(obj["supplier"]["id"]);
+            if(obj["supplier"]!==null){
+                $(form).find("input[name='supplier']").val(obj["supplier"]["id"]);
+            }
             $('#' + modal).modal('toggle');
         } catch (e) {
             console.error(e);

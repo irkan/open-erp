@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
@@ -14,6 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class DictionaryType {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO, generator = "admin_sequence")
@@ -34,6 +36,7 @@ public class DictionaryType {
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;
 
+    @ToString.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "dictionaryType")
     private List<Dictionary> dictionaries;
@@ -42,17 +45,5 @@ public class DictionaryType {
         this.name = name;
         this.attr1 = attr1;
         this.attr2 = attr2;
-    }
-
-    @Override
-    public String toString() {
-        return "DictionaryType{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", attr1='" + attr1 + '\'' +
-                ", attr2='" + attr2 + '\'' +
-                ", active=" + active +
-                ", dictionaries=" + dictionaries +
-                '}';
     }
 }

@@ -253,12 +253,22 @@ public class SaleController extends SkeletonController {
     public String postSalesApprove(@ModelAttribute(Constants.FORM) @Validated Sales sales, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         sales = salesRepository.getSalesById(sales.getId());
         Employee employee = (sales.getService() && sales.getServicer()!=null)?sales.getServicer():getSessionUser().getEmployee();
-        for(SalesInventory salesInventory: sales.getSalesInventories()) {
-            List<Action> oldActions = actionRepository.getActionsByActiveTrueAndInventory_ActiveAndInventoryAndEmployeeAndAction_Attr1AndAmountGreaterThanOrderById(true, salesInventory.getInventory(), employee, "consolidate", 0);
-            if (oldActions.size() == 0) {
-                FieldError fieldError = new FieldError("", "", salesInventory.getInventory().getBarcode() + " barkodlu " + salesInventory.getInventory().getName() + " " + employee.getPerson().getFullName() + " adına təhkim edilməmişdir");
-                binding.addError(fieldError);
+        if(sales.getSalesInventories().size()>0){
+            for(SalesInventory salesInventory: sales.getSalesInventories()) {
+                List<Action> oldActions = actionRepository.getActionsByActiveTrueAndInventory_ActiveAndInventoryAndEmployeeAndAction_Attr1AndAmountGreaterThanOrderById(true, salesInventory.getInventory(), employee, "consolidate", 0);
+                if (oldActions.size() == 0) {
+                    FieldError fieldError = new FieldError("", "", salesInventory.getInventory().getBarcode() + " barkodlu " + salesInventory.getInventory().getName() + " " + employee.getPerson().getFullName() + " adına təhkim edilməmişdir");
+                    binding.addError(fieldError);
+                }
             }
+        } else {
+            FieldError fieldError = new FieldError("", "", "İnventar əlavə edilməyib!");
+            binding.addError(fieldError);
+        }
+
+        if(sales.getService() && sales.getServicer()==null){
+            FieldError fieldError = new FieldError("servicer", "service", "Servis əməkdaşı seçilməyib!");
+            binding.addError(fieldError);
         }
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){

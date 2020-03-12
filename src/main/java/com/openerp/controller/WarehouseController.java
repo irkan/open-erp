@@ -205,9 +205,14 @@ public class WarehouseController extends SkeletonController {
             if(action.getFromOrganization().getId().intValue()==action.getOrganization().getId().intValue()){
                 messages.add(action.getOrganization().getName() + " - özündən özünə Göndərmə əməliyyatı edilə bilməz!");
             }
+
+            Action actn = actionRepository.getActionById(action.getId());
+            if(actn.getAmount()-action.getAmount()<0){
+                messages.add("Say maksimum "+ actn.getAmount() + " olmalıdır!");
+            }
+
             redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, new Response(Constants.STATUS.ERROR, messages));
             if(messages.size()==0){
-                Action actn = actionRepository.getActionById(action.getId());
                 actn.setAmount(actn.getAmount()-action.getAmount());
                 actionRepository.save(actn);
                 log("warehouse_action", "create/edit", actn.getId(), actn.toString());

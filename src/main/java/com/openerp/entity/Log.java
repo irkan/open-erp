@@ -39,7 +39,8 @@ public class Log {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "encapsulate")
+    @Lob
+    @Column(name = "encapsulate", columnDefinition = "CLOB")
     private String encapsulate;
 
     @Temporal(TemporalType.TIMESTAMP)

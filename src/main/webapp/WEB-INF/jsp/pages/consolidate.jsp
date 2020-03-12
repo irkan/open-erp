@@ -138,7 +138,6 @@
         <th>№</th>
         <th>ID</th>
         <th>Flial</th>
-        <th>Hərəkət</th>
         <th>Təchizatçı</th>
         <th>İnventar</th>
         <th>Barkod</th>
@@ -154,11 +153,19 @@
             <td>${loop.index + 1}</td>
             <td><c:out value="${t.id}" /></td>
             <td><c:out value="${t.organization.name}" /></td>
-            <td><c:out value="${t.action.name}" /></td>
             <td><c:out value="${t.supplier.name}" /></td>
             <td><c:out value="${t.inventory.name}" /></td>
             <td><c:out value="${t.inventory.barcode}" /></td>
-            <td><c:out value="${t.amount}" /></td>
+            <td>
+                <c:choose>
+                    <c:when test="${t.old}">
+                        <span class="kt-badge kt-badge--danger kt-badge--inline kt-badge--pill"><c:out value="${t.amount}" /></span>
+                    </c:when>
+                    <c:otherwise>
+                        <span class="kt-badge kt-badge--success kt-badge--inline kt-badge--pill"><c:out value="${t.amount}" /></span>
+                    </c:otherwise>
+                </c:choose>
+            </td>
             <td><fmt:formatDate value = "${t.createdDate}" pattern = "dd.MM.yyyy" /></td>
             <td><c:out value="${t.employee.person.fullName}" /></td>
             <td nowrap class="text-center">
