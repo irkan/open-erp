@@ -60,7 +60,7 @@ public class User implements Serializable {
 
     //@UniqueElements(message = "Bu istifadəçi adı mövcuddur")
     //@OneToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-    @ToString.Exclude
+    @ToString.Include()
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hr_employee_id", unique = true, nullable = false)
     private Employee employee;

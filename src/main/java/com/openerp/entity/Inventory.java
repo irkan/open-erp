@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -16,6 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class Inventory {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO, generator = "warehouse_sequence")
@@ -48,6 +50,7 @@ public class Inventory {
     @Column(name = "inventory_date", nullable = false)
     private Date inventoryDate = new Date();
 
+    @ToString.Exclude
     @Transient
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd.MM.yyyy")
@@ -63,10 +66,7 @@ public class Inventory {
     @Column(name = "created_date", nullable = false)
     private Date createdDate = new Date();
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "created_by_admin_user_id")
-    private User createdUser;
-
+    @ToString.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "inventory")
     private List<Action> actions;

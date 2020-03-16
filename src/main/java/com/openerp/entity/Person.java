@@ -6,6 +6,7 @@ import com.openerp.validation.EmployeeGroup;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -18,6 +19,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class Person {
 
     @Id
@@ -70,18 +72,17 @@ public class Person {
     @Column(name = "created_date", nullable = false)
     private Date createdDate = new Date();
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "created_by_admin_user_id")
-    private User createdUser;
-
+    @ToString.Exclude
     @JsonIgnore
     @OneToOne(mappedBy = "person", cascade=CascadeType.ALL)
     private Customer customer;
 
+    @ToString.Exclude
     @JsonIgnore
     @OneToOne(mappedBy = "person", cascade=CascadeType.ALL)
     private Employee employee;
 
+    @ToString.Exclude
     @JsonIgnore
     @OneToOne(mappedBy = "person", cascade=CascadeType.ALL)
     private Supplier supplier;
@@ -90,6 +91,7 @@ public class Person {
     @JoinColumn(name = "common_contact_id")
     private Contact contact;
 
+    @ToString.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "person")
     private List<PersonDocument> personDocuments;
@@ -98,7 +100,7 @@ public class Person {
         return firstName+" "+lastName+" "+ Util.checkNull(fatherName);
     }
 
-    public Person(Contact contact, String firstName, String lastName, String fatherName, Date birthday, Dictionary gender, Dictionary nationality, Dictionary maritalStatus, String idCardPinCode, String idCardSerialNumber, boolean disability, User createdUser) {
+    public Person(Contact contact, String firstName, String lastName, String fatherName, Date birthday, Dictionary gender, Dictionary nationality, Dictionary maritalStatus, String idCardPinCode, String idCardSerialNumber, boolean disability) {
         this.contact = contact;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -110,6 +112,5 @@ public class Person {
         this.idCardPinCode = idCardPinCode;
         this.idCardSerialNumber = idCardSerialNumber;
         this.disability = disability;
-        this.createdUser = createdUser;
     }
 }

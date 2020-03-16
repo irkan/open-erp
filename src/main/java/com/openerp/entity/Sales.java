@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -17,6 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class Sales {
 
     @Id
@@ -73,11 +75,13 @@ public class Sales {
     @JoinColumn(name = "hr_employee_servicer_id")
     private Employee servicer;
 
+    @ToString.Exclude
     @JsonIgnore
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "sales")
     private List<Invoice> invoices;
 
+    @ToString.Exclude
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "sales", cascade = CascadeType.ALL)
     private List<ServiceRegulator> serviceRegulators;
@@ -90,6 +94,7 @@ public class Sales {
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date saleDate = new Date();
 
+    @ToString.Exclude
     @Transient
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd.MM.yyyy")
@@ -100,6 +105,7 @@ public class Sales {
     @Column(name = "guarantee_expire", nullable = false)
     private Date guaranteeExpire;
 
+    @ToString.Exclude
     @Transient
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd.MM.yyyy")
@@ -120,10 +126,6 @@ public class Sales {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_date", nullable = false)
     private Date createdDate = new Date();
-
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "created_by_admin_user_id")
-    private User createdUser;
 
     public Sales(Integer id) {
         this.id = id;

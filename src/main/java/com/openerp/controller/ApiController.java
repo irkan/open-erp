@@ -52,7 +52,7 @@ public class ApiController extends SkeletonController {
         } catch (Exception e){
             log.error(e);
         }
-        log("sale_sales", "find", saleId, response.toString(), username);
+        log(response, "sale_sales", "find", saleId, response.toString(), username);
         return response;
     }
 
@@ -84,7 +84,7 @@ public class ApiController extends SkeletonController {
         } catch (Exception e){
             log.error(e);
         }
-        log("sale_invoice", "create/edit", invoiceId, response.toString(), username);
+        log(response,"sale_invoice", "create/edit", invoiceId, response.toString(), username);
         return response;
     }
 

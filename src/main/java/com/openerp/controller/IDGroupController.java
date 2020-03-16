@@ -41,7 +41,7 @@ public class IDGroupController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             iDDiscountRepository.save(idDiscount);
-            log("idgroup_id_discount", "create/edit", idDiscount.getId(), idDiscount.toString());
+            log(idDiscount, "idgroup_id_discount", "create/edit", idDiscount.getId(), idDiscount.toString());
         }
         return mapPost(idDiscount, binding, redirectAttributes);
     }
@@ -59,13 +59,13 @@ public class IDGroupController extends SkeletonController {
                     idDiscount.setDescription((item.getDescription()!=null && item.getDescription().length()>0)?item.getDescription():idDiscount.getDescription());
                     idDiscount.setDiscount((item.getDiscount()!=null && item.getDiscount()>0)?item.getDiscount():Double.parseDouble(configuration.getAttribute()));
                     iDDiscountRepository.save(idDiscount);
-                    log("idgroup_id_discount", "create/edit", idDiscount.getId(), idDiscount.toString());
+                    log(idDiscount, "idgroup_id_discount", "create/edit", idDiscount.getId(), idDiscount.toString());
                 } else {
                     item.setActive(true);
                     item.setDescription((item.getDescription()!=null && item.getDescription().length()>0)?item.getDescription():"");
                     item.setDiscount((item.getDiscount()!=null && item.getDiscount()>0)?item.getDiscount():Double.parseDouble(configuration.getAttribute()));
                     iDDiscountRepository.save(item);
-                    log("idgroup_id_discount", "create/edit", item.getId(), item.toString());
+                    log(item, "idgroup_id_discount", "create/edit", item.getId(), item.toString());
                 }
             }
         }

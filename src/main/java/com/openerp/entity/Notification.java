@@ -3,6 +3,7 @@ package com.openerp.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class Notification {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO, generator = "admin_notification_sequence")
@@ -59,6 +61,7 @@ public class Notification {
     @Column(name = "sending_date", nullable = false)
     private Date sendingDate = new Date();
 
+    @ToString.Exclude
     @Transient
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
@@ -70,10 +73,6 @@ public class Notification {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_date", nullable = false)
     private Date createdDate = new Date();
-
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "created_by_admin_user_id")
-    private User createdUser;
 
     public Notification(Dictionary type, Organization organization, String from, @Pattern(regexp = ".{4,250}", message = "Minimum 4 maksimum 10 simvol ola bilər") String to, @Pattern(regexp = ".{1,250}", message = "Minimum 1 maksimum 250 simvol ola bilər") String subject, @Pattern(regexp = ".{1,1000}", message = "Minimum 1 maksimum 1000 simvol ola bilər") String message, @Pattern(regexp = ".{1,1000}", message = "Minimum 1 maksimum 1000 simvol ola bilər") String description, String attachment) {
         this.type = type;

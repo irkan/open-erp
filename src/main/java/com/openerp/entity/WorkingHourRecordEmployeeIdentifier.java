@@ -3,6 +3,7 @@ package com.openerp.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
@@ -12,6 +13,7 @@ import javax.validation.constraints.Pattern;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class WorkingHourRecordEmployeeIdentifier {
 
     @Id
@@ -20,6 +22,7 @@ public class WorkingHourRecordEmployeeIdentifier {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "hr_working_hour_record_employee_id")
     private WorkingHourRecordEmployee workingHourRecordEmployee;

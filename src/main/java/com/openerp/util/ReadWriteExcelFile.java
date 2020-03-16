@@ -617,6 +617,8 @@ public class ReadWriteExcelFile {
 		cell.setCellValue("Row ID");
 		cell = row.createCell(row.getLastCellNum());
 		cell.setCellValue("Encapsulate");
+		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("JSON");
 		row.setHeightInPoints(30);
 		XSSFCellStyle headerStyle = wb.createCellStyle();
 		headerStyle.setAlignment(HorizontalAlignment.CENTER);
@@ -648,6 +650,8 @@ public class ReadWriteExcelFile {
 			cell.setCellValue(log.getRowId());
 			cell = row.createCell(row.getLastCellNum());
 			cell.setCellValue(log.getEncapsulate());
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(log.getJson());
 		}
 		FileOutputStream fileOut = new FileOutputStream(file);
 		wb.write(fileOut);

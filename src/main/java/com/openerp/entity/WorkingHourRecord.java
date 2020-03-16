@@ -1,10 +1,10 @@
 package com.openerp.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.openerp.util.DateUtility;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -15,6 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class WorkingHourRecord {
 
     @Id
@@ -46,20 +47,12 @@ public class WorkingHourRecord {
     @Column(name = "approve_date")
     private Date approveDate;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "approved_by_admin_user_id")
-    private User approvedUser;
-
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_date", nullable = false)
     private Date createdDate = new Date();
-
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "created_by_admin_user_id")
-    private User createdUser;
 
     public WorkingHourRecord(int month, int year, Organization organization) {
         this.month = month;

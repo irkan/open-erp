@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
@@ -16,6 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class Module {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO, generator = "admin_sequence")
@@ -36,10 +38,12 @@ public class Module {
     @Column(name = "icon")
     private String icon;
 
+    @ToString.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "module")
     private List<ModuleOperation> moduleOperations;
 
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "module_id", referencedColumnName = "id")
     private Module module;
@@ -47,6 +51,7 @@ public class Module {
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;
 
+    @ToString.Exclude
     @JsonIgnore
     @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="module")
     private List<Module> children;

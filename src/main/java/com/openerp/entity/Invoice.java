@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -17,6 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class Invoice {
 
     @Id
@@ -45,6 +47,7 @@ public class Invoice {
     @Column(name = "price", nullable = false, columnDefinition="Decimal(10,2) default 0")
     private Double price=0d;
 
+    @ToString.Exclude
     @Transient
     private Double priceFrom;
 
@@ -53,6 +56,7 @@ public class Invoice {
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date invoiceDate = new Date();
 
+    @ToString.Exclude
     @Transient
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd.MM.yyyy")
@@ -85,10 +89,6 @@ public class Invoice {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_date", nullable = false)
     private Date createdDate = new Date();
-
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "created_by_admin_user_id")
-    private User createdUser;
 
     public Invoice(Organization organization) {
         this.organization = organization;

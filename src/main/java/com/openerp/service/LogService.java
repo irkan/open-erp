@@ -44,7 +44,7 @@ public class LogService {
                 if(log.getOperation()!=null && log.getOperation().trim().length()>0) {
                     predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("operation"), "%"+log.getOperation()+"%")));
                 }
-                if(log.getRowId()!=0){
+                if(log.getRowId()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("rowId"), log.getRowId())));
                 }
                 if(log.getDescription()!=null && log.getDescription().trim().length()>0) {
@@ -58,6 +58,12 @@ public class LogService {
                 }
                 if(log.getOperationDate()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.lessThanOrEqualTo(root.get("operationDate"), log.getOperationDate())));
+                }
+                if(log.getEncapsulate()!=null && !log.getEncapsulate().isEmpty()) {
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("encapsulate"), "%"+log.getEncapsulate()+"%")));
+                }
+                if(log.getJson()!=null && !log.getJson().isEmpty()) {
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("json"), "%"+log.getJson()+"%")));
                 }
                 return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
             }

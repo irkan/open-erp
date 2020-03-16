@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
@@ -15,6 +16,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class WorkingHourRecordEmployee {
 
     @Id
@@ -23,6 +25,7 @@ public class WorkingHourRecordEmployee {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
+    @ToString.Exclude
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "payroll_working_hour_record_id")

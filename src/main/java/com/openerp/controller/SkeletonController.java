@@ -8,6 +8,7 @@ import com.openerp.util.Constants;
 import com.openerp.repository.*;
 import com.openerp.util.DateUtility;
 import com.openerp.util.Util;
+import com.openerp.util.UtilJson;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -285,8 +286,14 @@ public class SkeletonController {
     }
 
     protected User getSessionUser() {
-        HttpSession session = request.getSession();
-        return (User) session.getAttribute(Constants.USER);
+        User user = null;
+        try{
+            HttpSession session = request.getSession();
+            user =  (User) session.getAttribute(Constants.USER);
+        } catch (Exception e){
+            log.error(e);
+        }
+        return user;
     }
 
     int paginationSize() {
@@ -459,6 +466,8 @@ public class SkeletonController {
                 notification.setSubject(subject);
                 notification.setMessage(message);
                 notificationRepository.save(notification);
+
+                log(notification, "admin_notification", "create/edit", notification.getId(), notification.toString());
             }
         }
     }
@@ -469,32 +478,62 @@ public class SkeletonController {
             double balance = account.getBalance() + Double.parseDouble(Util.format((transaction.getDebt() ? transaction.getSumPrice() : -1 * transaction.getSumPrice())/getRate(account.getCurrency())));
             account.setBalance(balance);
             accountRepository.save(account);
-            log("accounting_account", "create/edit", account.getId(), account.toString());
+            log(account, "accounting_account", "create/edit", account.getId(), account.toString());
             transaction.setBalance(account.getBalance());
             transactionRepository.save(transaction);
-            log("accounting_transaction", "create/edit", transaction.getId(), transaction.toString());
+            log(transaction, "accounting_transaction", "create/edit", transaction.getId(), transaction.toString());
         }
     }
 
-    public void log(String tableName, String operation, int rowId, String encapsulate){
-        Log log = new Log(tableName, operation, rowId, encapsulate, getSessionUser()!=null?getSessionUser().getUsername():"");
+    public void log(Object object, String tableName, String operation, String description){
+        String json = "";
+        try{
+            json = UtilJson.toJson(object);
+        } catch (Exception e){
+            log.error(e);
+        }
+        Log log = new Log(tableName, operation, null, getSessionUser()!=null?getSessionUser().getUsername():"", description, json);
         logRepository.save(log);
         sessionLog(log);
     }
 
-    void log(String tableName, String operation, int rowId, String encapsulate, String description){
-        Log log = new Log(tableName, operation, rowId, encapsulate, getSessionUser()!=null?getSessionUser().getUsername():"", description);
+    public void log(Object object, String tableName, String operation, Integer rowId, String encapsulate){
+        String json = "";
+        try{
+            json = UtilJson.toJson(object);
+        } catch (Exception e){
+            log.error(e);
+        }
+        Log log = new Log(tableName, operation, rowId, encapsulate, getSessionUser()!=null?getSessionUser().getUsername():"", json);
         logRepository.save(log);
         sessionLog(log);
     }
 
-    public void log(String type, String tableName, String operation, int rowId, String encapsulate, String description){
-        Log log = new Log(type, tableName, operation, rowId, encapsulate, getSessionUser()!=null?getSessionUser().getUsername():"", description);
+    public void log(Object object, String tableName, String operation, Integer rowId, String encapsulate, String description){
+        String json = "";
+        try{
+            json = UtilJson.toJson(object);
+        } catch (Exception e){
+            log.error(e);
+        }
+        Log log = new Log(tableName, operation, rowId, encapsulate, getSessionUser()!=null?getSessionUser().getUsername():"", description, json);
         logRepository.save(log);
         sessionLog(log);
     }
 
-    void log(String operation, String description){
+    public void log(Object object, String type, String tableName, String operation, Integer rowId, String encapsulate, String description){
+        String json = "";
+        try{
+            json = UtilJson.toJson(object);
+        } catch (Exception e){
+            log.error(e);
+        }
+        Log log = new Log(type, tableName, operation, rowId, encapsulate, getSessionUser()!=null?getSessionUser().getUsername():"", description, json);
+        logRepository.save(log);
+        sessionLog(log);
+    }
+
+    public void log(String operation, String description){
         Log log = new Log(operation, description, getSessionUser()!=null?getSessionUser().getUsername():"");
         logRepository.save(log);
         sessionLog(log);

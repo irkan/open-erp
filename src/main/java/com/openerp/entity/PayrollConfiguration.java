@@ -3,6 +3,7 @@ package com.openerp.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
@@ -13,6 +14,7 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class PayrollConfiguration {
 
     @Id
@@ -43,10 +45,6 @@ public class PayrollConfiguration {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_date", nullable = false)
     private Date createdDate = new Date();
-
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "created_by_admin_user_id")
-    private User createdUser;
 
     public PayrollConfiguration(Dictionary type, @Pattern(regexp = ".{2,100}", message = "Minimum 2 maksimum 100 simvol ola bilər") String name, @Pattern(regexp = ".{2,300}", message = "Minimum 2 maksimum 300 simvol ola bilər") String formula, @Pattern(regexp = ".{0,400}", message = "Maksimum 400 simvol ola bilər") String description) {
         this.type = type;

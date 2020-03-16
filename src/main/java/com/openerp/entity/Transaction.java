@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -16,6 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class Transaction {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO, generator = "accounting_sequence")
@@ -27,6 +29,7 @@ public class Transaction {
     @JoinColumn(name = "hr_organization_id")
     private Organization organization;
 
+    @ToString.Exclude
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "warehouse_inventory_id")
     private Inventory inventory;
@@ -60,6 +63,7 @@ public class Transaction {
     @Column(name = "price", nullable = false, columnDefinition="Decimal(10,2) default 0")
     private Double price=0d;
 
+    @ToString.Exclude
     @Transient
     private Double priceFrom;
 
@@ -77,6 +81,7 @@ public class Transaction {
     @Column(name = "transaction_date", nullable = false)
     private Date transactionDate = new Date();
 
+    @ToString.Exclude
     @Transient
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
@@ -92,14 +97,12 @@ public class Transaction {
     @Column(name = "created_date", nullable = false)
     private Date createdDate = new Date();
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "created_by_admin_user_id")
-    private User createdUser;
-
+    @ToString.Exclude
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "transaction_id", referencedColumnName = "id")
     private Transaction transaction;
 
+    @ToString.Exclude
     @JsonIgnore
     @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="transaction")
     private List<Transaction> children;

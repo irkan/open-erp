@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -17,6 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class Employee {
 
     @Id
@@ -63,15 +65,19 @@ public class Employee {
     @Column(name = "description")
     private String description;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<EmployeePayrollDetail> employeePayrollDetails;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<EmployeeSaleDetail> employeeSaleDetails;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<EmployeeRestDay> employeeRestDays;
 
+    @ToString.Exclude
     @JsonIgnore
     @OneToOne(mappedBy = "employee")
     private User user;
@@ -79,10 +85,6 @@ public class Employee {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_date", nullable = false)
     private Date createdDate = new Date();
-
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "created_by_admin_user_id")
-    private User createdUser;
 
     public Employee(Person person, Dictionary position, Date contractStartDate, Date contractEndDate, Organization organization) {
         this.person = person;

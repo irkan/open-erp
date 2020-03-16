@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -15,6 +16,7 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class EmployeePayrollDetail {
 
     @Id
@@ -23,6 +25,7 @@ public class EmployeePayrollDetail {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
+    @ToString.Exclude
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hr_employee_id")

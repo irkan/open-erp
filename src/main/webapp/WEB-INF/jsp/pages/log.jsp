@@ -119,6 +119,20 @@
                                                 <form:errors path="operationDate" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="encapsulate">Enkapsulyasiya</form:label>
+                                                <form:input path="encapsulate" cssClass="form-control" placeholder="Daxil edin" />
+                                                <form:errors path="encapsulate" cssClass="alert alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="json">JSON</form:label>
+                                                <form:input path="json" cssClass="form-control" placeholder="Daxil edin" />
+                                                <form:errors path="json" cssClass="alert alert-danger"/>
+                                            </div>
+                                        </div>
                                         <c:if test="${delete.status}">
                                             <div class="col-md-2" style="padding-top: 30px;">
                                                 <div class="form-group">
@@ -166,7 +180,6 @@
         <th>Əməliyyat</th>
         <th>Yazı №</th>
         <th>Açıqlama</th>
-        <th>Enkapsulasiya</th>
         <th>Tarix</th>
         <th>İstifadəçi</th>
         <th>Əməliyyat</th>
@@ -185,7 +198,6 @@
             <th><c:out value="${t.operation}" /></th>
             <td><c:out value="${t.rowId}" /></td>
             <td><c:out value="${t.description}" /></td>
-            <td><c:out value="${t.encapsulate}" /></td>
             <td><fmt:formatDate value = "${t.operationDate}" pattern = "dd.MM.yyyy HH:mm:ss" /></td>
             <td><c:out value="${t.username}" /></td>
             <td nowrap class="text-center">
@@ -276,7 +288,6 @@
                         <form:textarea path="description" cssClass="form-control" placeholder="Açıqlamanı daxil edin" />
                         <form:errors path="description" cssClass="alert alert-danger"/>
                     </div>
-
                 </form:form>
             </div>
             <div class="modal-footer">
@@ -289,11 +300,8 @@
 
 <script>
     $('#datatable tbody').on('dblclick', 'tr', function () {
-        <c:if test="${edit.status}">
-        edit($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${edit.object.name}" />');
-        </c:if>
-        <c:if test="${!edit.status and view.status}">
-        view($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${view.object.name}" />');
+        <c:if test="${view.status}">
+            view($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${view.object.name}" />');
         </c:if>
     });
 

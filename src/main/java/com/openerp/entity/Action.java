@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -15,6 +16,7 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class Action {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO, generator = "warehouse_sequence")
@@ -38,6 +40,7 @@ public class Action {
     @Column(name = "amount")
     private Integer amount;
 
+    @ToString.Exclude
     @Transient
     private Integer amountFrom;
 
@@ -71,6 +74,7 @@ public class Action {
     @Column(name = "action_date", nullable = false)
     private Date actionDate = new Date();
 
+    @ToString.Exclude
     @Transient
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
@@ -79,10 +83,6 @@ public class Action {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_date", nullable = false)
     private Date createdDate = new Date();
-
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "created_by_admin_user_id")
-    private User createdUser;
 
     public Action(Organization organization) {
         this.organization = organization;

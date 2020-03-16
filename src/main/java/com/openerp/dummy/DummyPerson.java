@@ -115,8 +115,7 @@ public class DummyPerson {
                 DummyUtil.randomDictionary(maritalStatuses),
                 DummyUtil.randomIdCardPinCode(),
                 DummyUtil.randomIdCardSerialNumber(),
-                DummyUtil.randomBoolean(),
-                null
+                DummyUtil.randomBoolean()
         );
         return person;
     }

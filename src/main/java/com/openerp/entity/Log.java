@@ -1,5 +1,6 @@
 package com.openerp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,7 +30,7 @@ public class Log {
     private String tableName;
 
     @Column(name = "row_id")
-    private int rowId;
+    private Integer rowId;
 
     @Pattern(regexp=".{0,250}",message="Maksimum 250 simvol ola bilər")
     @Column(name = "operation")
@@ -39,9 +40,15 @@ public class Log {
     @Column(name = "description")
     private String description;
 
+    @JsonIgnore
     @Lob
-    @Column(name = "encapsulate", columnDefinition = "CLOB")
+    @Column(name = "encapsulate")
     private String encapsulate;
+
+    @JsonIgnore
+    @Lob
+    @Column(name = "json")
+    private String json;
 
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
@@ -59,33 +66,36 @@ public class Log {
     @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
     private Date operationDateFrom;
 
-    public Log(@Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String tableName, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String operation, int rowId, String encapsulate, String username) {
+    public Log(@Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String tableName, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String operation, Integer rowId, String encapsulate, String username, String json) {
         this.tableName = tableName;
         this.operation = operation;
         this.rowId = rowId;
         this.encapsulate = encapsulate;
         this.username = username;
+        this.json = json;
     }
 
-    public Log(@Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String tableName, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String operation, int rowId, String encapsulate, String username, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String description) {
+    public Log(@Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String tableName, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String operation, Integer rowId, String encapsulate, String username, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String description, String json) {
         this.tableName = tableName;
         this.operation = operation;
         this.rowId = rowId;
         this.encapsulate = encapsulate;
         this.username = username;
         this.description = description;
+        this.json = json;
     }
 
-    public Log(String type, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String tableName, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String operation, int rowId, String encapsulate, String username) {
+    public Log(String type, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String tableName, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String operation, Integer rowId, String encapsulate, String username, String json) {
         this.type = type;
         this.tableName = tableName;
         this.operation = operation;
         this.rowId = rowId;
         this.encapsulate = encapsulate;
         this.username = username;
+        this.json = json;
     }
 
-    public Log(String type, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String tableName, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String operation, int rowId, String encapsulate, String username, String description) {
+    public Log(String type, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String tableName, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String operation, Integer rowId, String encapsulate, String username, String description, String json) {
         this.type = type;
         this.tableName = tableName;
         this.operation = operation;
@@ -93,6 +103,7 @@ public class Log {
         this.encapsulate = encapsulate;
         this.username = username;
         this.description = description;
+        this.json = json;
     }
 
     public Log(@Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String operation, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String description, String username) {

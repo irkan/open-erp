@@ -113,7 +113,7 @@ public class CollectController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             contactHistoryRepository.save(contactHistory);
-            log("collect_contact_history", "create/edit", contactHistory.getId(), contactHistory.toString());
+            log(contactHistory, "collect_contact_history", "create/edit", contactHistory.getId(), contactHistory.toString());
         }
         return mapPost(contactHistory, binding, redirectAttributes);
     }
@@ -134,17 +134,17 @@ public class CollectController extends SkeletonController {
         invoice.setDescription("Satışdan əldə edilən ödəniş " + invoice.getPrice() + " AZN");
         invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
         invoiceRepository.save(invoice);
-        log("sale_invoice", "transfer", invoice.getId(), invoice.toString());
+        log(invoice, "sale_invoice", "transfer", invoice.getId(), invoice.toString());
         invoice.setChannelReferenceCode(String.valueOf(invoice.getId()));
         invoiceRepository.save(invoice);
-        log("sale_invoice", "create/edit", invoice.getId(), invoice.toString());
+        log(invoice, "sale_invoice", "create/edit", invoice.getId(), invoice.toString());
         String desc = "Hesab faktura yaradıldı: " + invoice.getId();
         if(sales!=null){
             ContactHistory contactHistory = new ContactHistory();
             contactHistory.setDescription(desc);
             contactHistory.setSales(sales);
             contactHistoryRepository.save(contactHistory);
-            log("collect_payment_regulator_note", "create/edit", contactHistory.getId(), contactHistory.toString());
+            log(contactHistory, "collect_payment_regulator_note", "create/edit", contactHistory.getId(), contactHistory.toString());
         }
         return mapPost(redirectAttributes, "/collect/payment-regulator");
     }
@@ -165,13 +165,13 @@ public class CollectController extends SkeletonController {
         invoice.setDescription("Satışdan əldə edilən ödəniş " + invoice.getPrice() + " AZN");
         invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
         invoiceRepository.save(invoice);
-        log("sale_invoice", "transfer", invoice.getId(), invoice.toString());
+        log(invoice, "sale_invoice", "transfer", invoice.getId(), invoice.toString());
         String desc = "Hesab faktura yaradıldı: " + invoice.getId();
         if(sales!=null){
             ContactHistory contactHistory = new ContactHistory();
             contactHistory.setDescription(desc);
             contactHistoryRepository.save(contactHistory);
-            log("collect_payment_regulator_note", "create/edit", contactHistory.getId(), contactHistory.toString());
+            log(contactHistory, "collect_payment_regulator_note", "create/edit", contactHistory.getId(), contactHistory.toString());
         }
         return mapPost(redirectAttributes, "/collect/troubled-customer");
     }
@@ -238,7 +238,7 @@ public class CollectController extends SkeletonController {
                 service.setPayment(payment);
                 salesRepository.save(service);
 
-                log("sale_sales", "create/edit", service.getId(), service.toString(), "Servis yaradıldı");
+                log(service, "sale_sales", "create/edit", service.getId(), service.toString(), "Servis yaradıldı");
             }
             //muqahise ucun evvel olan service regulyatorar sales obyektinden yeniden goturulecekdir;
             //log("collect_contact_history", "create/edit", contactHistory.getId(), contactHistory.toString());

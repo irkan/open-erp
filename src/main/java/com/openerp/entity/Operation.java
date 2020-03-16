@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
@@ -14,6 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class Operation {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO, generator = "admin_sequence")
@@ -34,6 +36,7 @@ public class Operation {
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;
 
+    @ToString.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "operation")
     private List<ModuleOperation> moduleOperations;

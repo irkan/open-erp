@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
@@ -16,6 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class Payment {
 
     @Id
@@ -32,6 +34,7 @@ public class Payment {
     @Column(name = "last_price", nullable = false, columnDefinition="Decimal(10,2) default 0")
     private Double lastPrice=0d;
 
+    @ToString.Exclude
     @Transient
     private Double lastPriceFrom;
 
@@ -74,6 +77,7 @@ public class Payment {
     @Transient
     private Double unpaid;
 
+    @ToString.Exclude
     @JsonIgnore
     @OneToOne(mappedBy = "payment")
     private Sales sales;
@@ -84,10 +88,6 @@ public class Payment {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_date", nullable = false)
     private Date createdDate = new Date();
-
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "created_by_admin_user_id")
-    private User createdUser;
 
     public Payment(Integer id) {
         this.id = id;

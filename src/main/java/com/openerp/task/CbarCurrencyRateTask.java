@@ -1,5 +1,6 @@
 package com.openerp.task;
 
+import com.openerp.controller.SkeletonController;
 import com.openerp.repository.CurrencyRateRepository;
 import com.openerp.util.Util;
 import org.apache.log4j.Logger;
@@ -16,6 +17,9 @@ public class CbarCurrencyRateTask {
     String cbarCurrenciesEndpoint;
 
     @Autowired
+    SkeletonController skeletonController;
+
+    @Autowired
     CurrencyRateRepository currencyRateRepository;
 
     @Scheduled(fixedDelay = 14400000)
@@ -24,6 +28,7 @@ public class CbarCurrencyRateTask {
             log.info("Cbar Currency Rate Task Start");
             currencyRateRepository.deleteAll();
             currencyRateRepository.saveAll(Util.getCurrenciesRate(cbarCurrenciesEndpoint));
+            skeletonController.log("admin_currency_rate", "reload", null, null, "CbarCurrencyRateTask ilə məzənnə yeniləndi");
             log.info("Cbar Currency Rate Task End");
         } catch (Exception e){
             log.error(e);

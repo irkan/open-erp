@@ -4,6 +4,7 @@ import com.github.javafaker.Bool;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -16,6 +17,7 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class Advance {
 
     @Id
@@ -39,6 +41,7 @@ public class Advance {
     @Column(name = "payed", columnDefinition="Decimal(10,2) default 0")
     private Double payed=0d;
 
+    @ToString.Exclude
     @Transient
     private Double payedFrom;
 
@@ -55,6 +58,7 @@ public class Advance {
     @Column(name = "advance_date")
     private Date advanceDate=new Date();
 
+    @ToString.Exclude
     @Transient
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd.MM.yyyy")
@@ -82,10 +86,6 @@ public class Advance {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_date", nullable = false)
     private Date createdDate = new Date();
-
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "created_by_admin_user_id")
-    private User createdUser;
 
     public Advance(Dictionary advance, Employee employee, Organization organization, @Pattern(regexp = ".{0,250}", message = "Maksimum 50 simvol ola bilər") String description, @Pattern(regexp = ".{0,250}", message = "Maksimum 50 simvol ola bilər") String formula, Date advanceDate, double payed) {
         this.advance = advance;

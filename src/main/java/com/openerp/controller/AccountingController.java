@@ -89,7 +89,7 @@ public class AccountingController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             accountRepository.save(account);
-            log("accounting_account", "create/edit", account.getId(), account.toString());
+            log(account, "accounting_account", "create/edit", account.getId(), account.toString());
         }
         return mapPost(account, binding, redirectAttributes);
     }
@@ -124,7 +124,7 @@ public class AccountingController extends SkeletonController {
             fromTransaction.setAccount(from);
             fromTransaction.setDescription(to.getOrganization().getName() + " : " + to.getAccountNumber() + " hesabına göndərildi. " + account.getDescription());
             transactionRepository.save(fromTransaction);
-            log("accounting_transaction", "create/edit", fromTransaction.getId(), fromTransaction.toString());
+            log(fromTransaction, "accounting_transaction", "create/edit", fromTransaction.getId(), fromTransaction.toString());
             balance(fromTransaction);
 
             Transaction toTransaction = new Transaction();
@@ -140,7 +140,7 @@ public class AccountingController extends SkeletonController {
             toTransaction.setDebt(true);
             toTransaction.setDescription(from.getOrganization().getName() + " : " + from.getAccountNumber() + " hesabından köçürmə ilə qəbul edilib. " + account.getDescription());
             transactionRepository.save(toTransaction);
-            log("accounting_transaction", "create/edit", toTransaction.getId(), toTransaction.toString());
+            log(toTransaction, "accounting_transaction", "create/edit", toTransaction.getId(), toTransaction.toString());
             balance(toTransaction);
         }
         return mapPost(account, binding, redirectAttributes, "/accounting/account");
@@ -151,7 +151,7 @@ public class AccountingController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             financingRepository.save(financing);
-            log("accounting_financing", "create/edit", financing.getId(), financing.toString());
+            log(financing, "accounting_financing", "create/edit", financing.getId(), financing.toString());
         }
         return mapPost(financing, binding, redirectAttributes);
     }
@@ -166,7 +166,7 @@ public class AccountingController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             transactionRepository.save(transaction);
-            log("accounting_transaction", "create/edit", transaction.getId(), transaction.toString());
+            log(transaction, "accounting_transaction", "create/edit", transaction.getId(), transaction.toString());
             balance(transaction);
         }
         return mapPost(transaction, binding, redirectAttributes);
@@ -191,7 +191,7 @@ public class AccountingController extends SkeletonController {
                 trn.setSumPrice(sumPrice);
                 trn.setAccount(transaction.getAccount());
                 transactionRepository.save(trn);
-                log("accounting_transaction", "create/edit", trn.getId(), trn.toString());
+                log(trn, "accounting_transaction", "create/edit", trn.getId(), trn.toString());
                 balance(trn);
 
                 if (expenses != null) {
@@ -200,7 +200,7 @@ public class AccountingController extends SkeletonController {
                         String description = action.getName() + ", " + trn.getDescription();
                         Transaction transaction1 = new Transaction(trn.getOrganization(), trn.getInventory(), action, description, false, trn);
                         transactionRepository.save(transaction1);
-                        log("admin_dictionary", "create/edit", transaction1.getId(), transaction1.toString());
+                        log(transaction1, "admin_dictionary", "create/edit", transaction1.getId(), transaction1.toString());
                     }
                 }
 
@@ -214,7 +214,7 @@ public class AccountingController extends SkeletonController {
                         financing = new Financing(trn.getInventory(), financingPrice, trn.getOrganization());
                     }
                     financingRepository.save(financing);
-                    log("accounting_financing", "approve", financing.getId(), financing.toString());
+                    log(financing, "accounting_financing", "approve", financing.getId(), financing.toString());
                 }
             } else {
                 List<String> messages = new ArrayList<>();

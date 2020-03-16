@@ -83,7 +83,7 @@ public class PayrollController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             payrollConfigurationRepository.save(payrollConfiguration);
-            log("payroll_configuration", "create/edit", payrollConfiguration.getId(), payrollConfiguration.toString());
+            log(payrollConfiguration, "payroll_configuration", "create/edit", payrollConfiguration.getId(), payrollConfiguration.toString());
         }
         return mapPost(payrollConfiguration, binding, redirectAttributes);
     }
@@ -105,7 +105,6 @@ public class PayrollController extends SkeletonController {
                     WorkingHourRecord owhr = workingHourRecordRepository.getWorkingHourRecordByActiveTrueAndMonthAndYearAndOrganization(workingHourRecord.getMonth()-1, workingHourRecord.getYear(), workingHourRecord.getOrganization());
                     workingHourRecord.setId(null);
                     workingHourRecordRepository.save(workingHourRecord);
-                    log("payroll_working_hour_record", "create/edit", workingHourRecord.getId(), workingHourRecord.toString());
                     List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(workingHourRecord.getOrganization());
                     List<WorkingHourRecordEmployee> workingHourRecordEmployees = new ArrayList<>();
                     List<Dictionary> identifiers = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("identifier");
@@ -115,7 +114,6 @@ public class PayrollController extends SkeletonController {
 
                         WorkingHourRecordEmployee workingHourRecordEmployee = new WorkingHourRecordEmployee(workingHourRecord, employee, employee.getPerson().getFullName(), employee.getPosition().getName(), employee.getOrganization().getName());
                         workingHourRecordEmployeeRepository.save(workingHourRecordEmployee);
-                        log("payroll_working_hour_record_employee", "create/edit", workingHourRecordEmployee.getId(), workingHourRecordEmployee.toString());
                         List<WorkingHourRecordEmployeeIdentifier> workingHourRecordEmployeeIdentifiers = new ArrayList<>();
                         for(int i=1; i<=daysInMonth; i++){
                             Date date = DateUtility.generate(i, workingHourRecord.getMonth(), workingHourRecord.getYear());
@@ -124,17 +122,14 @@ public class PayrollController extends SkeletonController {
                         }
                         workingHourRecordEmployee.setWorkingHourRecordEmployeeIdentifiers(workingHourRecordEmployeeIdentifiers);
                         workingHourRecordEmployeeIdentifierRepository.saveAll(workingHourRecordEmployeeIdentifiers);
-                        // yuxarida workingHourRecordEmployeeIdentifierRepository-da Id de seflik olur
-                        //log("payroll_working_hour_record_employee", "create/edit", workingHourRecordEmployeeIdentifiers.getId(), workingHourRecordEmployeeIdentifiers.toString());
                         List<WorkingHourRecordEmployeeDayCalculation> workingHourRecordEmployeeDayCalculations = new ArrayList<>();
                         for(WorkingHourRecordEmployeeDayCalculation whredc: Util.calculateWorkingHourRecordEmployeeDay(workingHourRecordEmployee, identifiers, balanceVacationDays)){
                             workingHourRecordEmployeeDayCalculations.add(whredc);
                         }
                         workingHourRecordEmployeeDayCalculationRepository.saveAll(workingHourRecordEmployeeDayCalculations);
-                       // Id de sef olur
-                        // log("payroll_working_hour_record_employee", "create/edit", workingHourRecordEmployeeDayCalculations.getId(), workingHourRecordEmployeeDayCalculations.toString());
                     }
                     workingHourRecord.setWorkingHourRecordEmployees(workingHourRecordEmployees);
+                    log(workingHourRecord, "payroll_working_hour_record", "create/edit", workingHourRecord.getId(), workingHourRecord.toString());
                 }
                 whr = workingHourRecordRepository.getWorkingHourRecordByActiveTrueAndMonthAndYearAndOrganization(workingHourRecord.getMonth(), workingHourRecord.getYear(), workingHourRecord.getOrganization());
                 whr.setWorkingHourRecordEmployees(workingHourRecordEmployeeRepository.getWorkingHourRecordEmployeesByWorkingHourRecord_Id(whr.getId()));
@@ -151,12 +146,9 @@ public class PayrollController extends SkeletonController {
         WorkingHourRecord workingHourRecord = workingHourRecordRepository.getWorkingHourRecordById(workingHourRecord2.getId());
         if(!binding.hasErrors()) {
             workingHourRecord.setApprove(!workingHourRecord.getApprove());
-            if (workingHourRecord.getApprove()) {
-                workingHourRecord.setApproveDate(new Date());
-                workingHourRecord.setApprovedUser(getSessionUser());
-            }
+            workingHourRecord.setApproveDate(workingHourRecord.getApprove()?new Date():null);
             workingHourRecordRepository.save(workingHourRecord);
-            log("payroll_working_hour_record", "create/edit", workingHourRecord.getId(), workingHourRecord.toString());
+            log(workingHourRecord, "payroll_working_hour_record", "approve", workingHourRecord.getId(), workingHourRecord.toString());
             YearMonth yearMonthObject = YearMonth.of(workingHourRecord.getYear(), workingHourRecord.getMonth());
             int daysInMonth = yearMonthObject.lengthOfMonth();
             redirectAttributes.addFlashAttribute(Constants.DAYS_IN_MONTH, daysInMonth);
@@ -180,15 +172,14 @@ public class PayrollController extends SkeletonController {
                 double balanceVacationDays = owhedcs.size()>0?owhedcs.get(0).getValue():0;
                 for(WorkingHourRecordEmployeeIdentifier whrei: whre.getWorkingHourRecordEmployeeIdentifiers()){
                     workingHourRecordEmployeeIdentifierRepository.save(whrei);
-                    log("payroll_working_hour_record_employee_identifier", "create/edit", whrei.getId(), whrei.toString());
                 }
                 List<WorkingHourRecordEmployeeDayCalculation> workingHourRecordEmployeeDayCalculations = workingHourRecordEmployeeDayCalculationRepository.getWorkingHourRecordEmployeeDayCalculationsByWorkingHourRecordEmployee(whre);
                 whre.setWorkingHourRecordEmployeeDayCalculations(workingHourRecordEmployeeDayCalculations);
                 for(WorkingHourRecordEmployeeDayCalculation whredc: Util.calculateWorkingHourRecordEmployeeDay(whre, identifiers, balanceVacationDays)){
                     workingHourRecordEmployeeDayCalculationRepository.save(whredc);
-                    log("payroll_working_hour_record_employee_day_calculation", "create/edit", whredc.getId(), whredc.toString());
                 }
             }
+            log(workingHourRecord, "payroll_working_hour_record", "create/edit", workingHourRecord.getId(), workingHourRecord.toString());
         }
         WorkingHourRecord whr = workingHourRecordRepository.getWorkingHourRecordById(workingHourRecord.getId());
         whr.setWorkingHourRecordEmployees(workingHourRecordEmployeeRepository.getWorkingHourRecordEmployeesByWorkingHourRecord_Id(whr.getId()));
@@ -239,7 +230,7 @@ public class PayrollController extends SkeletonController {
         if(!binding.hasErrors()){
             advance.setOrganization(getSessionOrganization());
             advanceRepository.save(advance);
-            log("payroll_advance", "create/edit", advance.getId(), advance.toString());
+            log(advance, "payroll_advance", "create/edit", advance.getId(), advance.toString());
         }
         return mapPost(advance, binding, redirectAttributes);
     }
@@ -258,7 +249,7 @@ public class PayrollController extends SkeletonController {
             adv.setApprove(true);
             adv.setApproveDate(new Date());
             advanceRepository.save(adv);
-            log("payroll_advance", "create/edit", adv.getId(), adv.toString());
+            log(adv, "payroll_advance", "approve", adv.getId(), adv.toString());
         }
         return mapPost(advance, binding, redirectAttributes, "/payroll/advance");
     }
@@ -282,11 +273,11 @@ public class PayrollController extends SkeletonController {
                     + adv.getEmployee().getPerson().getFullName()
             );
             transactionRepository.save(transaction);
-            log("accounting_transaction", "create/edit", transaction.getId(), transaction.toString());
+            log(transaction, "accounting_transaction", "create/edit", transaction.getId(), transaction.toString());
             adv.setTransaction(true);
             adv.setTransactionDate(transaction.getTransactionDate());
             advanceRepository.save(adv);
-            log("payroll_advance", "create/edit", adv.getId(), adv.toString(), "Transaction-a yollandı!");
+            log(adv, "payroll_advance", "create/edit", adv.getId(), adv.toString(), "Transaction-a yollandı!");
         }
         return mapPost(advance, binding, redirectAttributes, "/payroll/advance");
     }
@@ -309,7 +300,7 @@ public class PayrollController extends SkeletonController {
             credit.setApproveDate(new Date());
             credit.setTransaction(false);
             advanceRepository.save(credit);
-            log("payroll_advance", "create/edit", adv.getId(), adv.toString(), "Kredit əməliyyatı!");
+            log(adv, "payroll_advance", "create/edit", adv.getId(), adv.toString(), "Kredit əməliyyatı!");
         }
         return mapPost(advance, binding, redirectAttributes, "/payroll/advance");
     }
@@ -674,7 +665,7 @@ public class PayrollController extends SkeletonController {
                         slry.setSumOfTotalAmountPayableNonOfficial(sumOfTotalAmountPayableNonOfficial);
 
                         salaryRepository.save(slry);
-                        log("payroll_salary", "create/edit", slry.getId(), slry.toString());
+                        log(slry, "payroll_salary", "create/edit", slry.getId(), slry.toString());
                     }
                 }
             }
@@ -701,10 +692,11 @@ public class PayrollController extends SkeletonController {
         );
         transaction.setPrice(salary.getSumOfCompulsoryHealthInsurance());
         transactionRepository.save(transaction);
-
+        log(transaction, "accounting_transaction", "credit/edit", transaction.getId(), transaction.toString());
         salary.setApprove(true);
         salary.setApproveDate(now);
         salaryRepository.save(salary);
+        log(salary, "payroll_salary", "approve", salary.getId(), salary.toString());
         return mapPost2(slry, binding, redirectAttributes, "/payroll/salary");
     }
 }

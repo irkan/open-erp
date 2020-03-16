@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -16,6 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class Vacation {
 
     @Id
@@ -54,6 +56,7 @@ public class Vacation {
     @Column(name = "description")
     private String description;
 
+    @ToString.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "vacation", cascade = CascadeType.ALL)
     private List<VacationDetail> vacationDetails;
@@ -64,10 +67,6 @@ public class Vacation {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_date", nullable = false)
     private Date createdDate = new Date();
-
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "created_by_admin_user_id")
-    private User createdUser;
 
     public Vacation(Organization organization) {
         this.organization = organization;

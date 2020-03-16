@@ -111,7 +111,7 @@
                     </div>
                     <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>
-                        <form:textarea path="description" cssClass="form-control" placeholder="Açıqlama daxil edin" ></form:textarea>
+                        <form:textarea path="description" cssClass="form-control" placeholder="Açıqlama daxil edin" />
                         <form:errors path="description" cssClass="alert alert-danger"/>
                     </div>
                 </form:form>

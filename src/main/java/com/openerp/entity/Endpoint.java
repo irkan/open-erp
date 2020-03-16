@@ -3,6 +3,7 @@ package com.openerp.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class Endpoint {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO, generator = "admin_sequence")
@@ -29,7 +31,6 @@ public class Endpoint {
     @Column(name = "host")
     private String host;
 
-    @Pattern(regexp=".{0,10}",message="Maksimum 100 simvol ola bilər")
     @Column(name = "port")
     private Integer port;
 
