@@ -42,7 +42,7 @@
                     <td><c:out value="${t.id}" /></td>
                     <td><c:out value="${t.module.module.name}" /></td>
                     <td><c:out value="${t.module.name}" /></td>
-                    <td><c:out value="${t.operation.name}" /></td>>
+                    <td><c:out value="${t.operation.name}" /></td>
                     <td nowrap class="text-center">
                         <c:if test="${view.status}">
                             <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">

@@ -232,7 +232,7 @@
                     </a>
                 </c:if>
                 <c:if test="${credit.status and t.transaction and t.payed gt 0}">
-                    <a href="javascript:transfer($('#advance-credit-form'), $('#advance-credit-modal'), '<c:out value="${t.id}" />', '<c:out value="${t.payed}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${credit.object.name}"/>">
+                    <a href="javascript:credit($('#advance-credit-form'), $('#advance-credit-modal'), '<c:out value="${t.id}" />', '<c:out value="${t.payed}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${credit.object.name}"/>">
                         <i class="<c:out value="${credit.object.icon}"/>"></i>
                     </a>
                 </c:if>
@@ -470,7 +470,7 @@
         $(form).find("#id").val(id);
         $(form).find("#payed").val(payed);
         $(form).find("#description").val(description);
-        $(modal).find(".modal-title").html('Tranzaksiya et!');
+        $(modal).find(".modal-title").html('Kredit əməliyyatı!');
         $(modal).modal('toggle');
     }
 

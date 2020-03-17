@@ -2,8 +2,6 @@ package com.openerp.repository;
 
 import com.openerp.entity.Organization;
 import com.openerp.entity.User;
-import org.springframework.data.domain.Example;
-import org.springframework.data.jpa.datatables.repository.DataTablesRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

@@ -27,6 +27,7 @@
                             <c:set var="view3" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'sales', 'view')}"/>
                             <c:set var="view4" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'schedule', 'view')}"/>
                             <c:set var="detail" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'detail')}"/>
+                            <c:set var="transfer" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'transfer')}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
                                 <thead>
                                 <tr>
@@ -161,6 +162,11 @@
                                                         <i class="la <c:out value="${detail.object.icon}"/>"></i>
                                                     </a>
                                                 </c:if>
+                                                <c:if test="${transfer.status}">
+                                                    <a href="javascript:transfer($('#transfer-modal-operation'), $('#transfer-form'), '<c:out value="${t.id}" />', '<c:out value="${t.payment.unpaid}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
+                                                        <i class="la <c:out value="${transfer.object.icon}"/>"></i>
+                                                    </a>
+                                                </c:if>
                                             </td>
                                         </tr>
                                     </c:if>
@@ -182,17 +188,17 @@
     </div>
 </div>
 
-<div class="modal fade" id="modal-operation" tabindex="-1" role="dialog">
+<div class="modal fade" id="transfer-modal-operation" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"></h5>
+                <h5 class="modal-title">Hesab fakturaya yolla</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form:form modelAttribute="form" id="form" method="post" action="/sale/invoice" cssClass="form-group">
+                <form:form modelAttribute="form" id="transfer-form" method="post" action="/collect/${page}/transfer" cssClass="form-group">
                     <form:hidden path="id"/>
                     <form:hidden path="active"/>
                     <form:hidden path="organization"/>
@@ -234,7 +240,7 @@
                 </form:form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="submit($('#form'));">Yadda saxla</button>
+                <button type="button" class="btn btn-primary" onclick="submit($('#transfer-form'));">Yadda saxla</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
             </div>
         </div>
@@ -293,4 +299,10 @@
     $("input[name='sales']").inputmask('decimal', {
         rightAlignNumerics: false
     });
+
+    function transfer(modal, form, salesId, price){
+        $(form).find("input[name='sales']").val(salesId);
+        $(form).find("input[name='price']").val(price);
+        $(modal).modal('toggle');
+    }
 </script>

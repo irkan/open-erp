@@ -277,7 +277,7 @@ public class PayrollController extends SkeletonController {
             adv.setTransaction(true);
             adv.setTransactionDate(transaction.getTransactionDate());
             advanceRepository.save(adv);
-            log(adv, "payroll_advance", "create/edit", adv.getId(), adv.toString(), "Transaction-a yollandı!");
+            log(adv, "payroll_advance", "transfer", adv.getId(), adv.toString(), "Transaction-a yollandı!");
         }
         return mapPost(advance, binding, redirectAttributes, "/payroll/advance");
     }

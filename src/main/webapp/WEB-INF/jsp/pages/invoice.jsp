@@ -290,7 +290,7 @@
                                                   <i class="la la-ellipsis-h"></i>
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                    <c:if test="${consolidate.status}">
+                                                    <c:if test="${consolidate.status and !t.approve}">
                                                     <a href="javascript:consolidate($('#form-consolidate'), '<c:out value="${utl:toJson(t)}" />', 'consolidate-modal');" class="dropdown-item" title="<c:out value="${consolidate.object.name}"/>">
                                                         <i class="<c:out value="${consolidate.object.icon}"/>"></i> <c:out value="${consolidate.object.name}"/>
                                                     </a>

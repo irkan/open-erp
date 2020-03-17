@@ -595,4 +595,26 @@ public class SkeletonController {
         }
         return binding;
     }
+
+    Invoice invoice(Invoice invoice){
+        Invoice invc;
+        if(invoice.getId()==null){
+            invoice.setDescription("Satışdan əldə edilən ödəniş " + invoice.getPrice() + " AZN");
+            invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
+            invoice.setApprove(false);
+            invc = invoice;
+        } else {
+            invc = invoiceRepository.getInvoiceById(invoice.getId());
+            invc.setSales(invoice.getSales());
+            invc.setPrice(invoice.getPrice());
+            invc.setInvoiceDate(invoice.getInvoiceDate());
+            invc.setDescription(invoice.getDescription());
+        }
+        invoiceRepository.save(invc);
+        log(invc, "sale_invoice", "create/edit", invc.getId(), invc.toString());
+        invc.setChannelReferenceCode(String.valueOf(invc.getId()));
+        invoiceRepository.save(invc);
+        log(invc, "sale_invoice", "create/edit", invc.getId(), invc.toString(), "Kanal referans kodu update edildi");
+        return invc;
+    }
 }

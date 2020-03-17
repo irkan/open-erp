@@ -24,7 +24,7 @@ import com.openerp.entity.Dictionary;
 import com.openerp.entity.Invoice;
 import com.openerp.repository.ConfigurationRepository;
 import org.apache.log4j.Logger;
-import org.springframework.core.io.ResourceLoader;
+import org.springframework.core.io.ClassPathResource;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -34,7 +34,7 @@ import java.util.List;
 public class GeneratePDFFile {
     private static final Logger log = Logger.getLogger(GeneratePDFFile.class);
 
-    public static File generateInvoice(List<Invoice> invoices, ResourceLoader resourceLoader, ConfigurationRepository configurationRepository, List<Dictionary> months) throws FileNotFoundException {
+    public static File generateInvoice(List<Invoice> invoices, ConfigurationRepository configurationRepository, List<Dictionary> months) throws FileNotFoundException {
         String invoiceCount = configurationRepository.getConfigurationByKey("invoice_count").getAttribute();
         String companyName = configurationRepository.getConfigurationByKey("company_name").getAttribute();
         String companyHotLine = configurationRepository.getConfigurationByKey("company_hot_line").getAttribute();
@@ -44,16 +44,20 @@ public class GeneratePDFFile {
         PdfDocument pdfDocument = new PdfDocument(new PdfWriter(file.getPath()));
         try(Document document = new Document(pdfDocument, PageSize.A4)){
             document.setMargins(20, 20, 20, 20);
-            PdfFont times = PdfFontFactory.createFont(resourceLoader.getResource("classpath:/fonts/times.ttf").getFile().getPath(), BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            ClassPathResource timesCPR = new ClassPathResource("/fonts/times.ttf");
+            PdfFont times = PdfFontFactory.createFont(timesCPR.getPath(), BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             times.setSubset(true);
-            PdfFont timesbd = PdfFontFactory.createFont(resourceLoader.getResource("classpath:/fonts/timesbd.ttf").getFile().getPath(), BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            ClassPathResource timesbdCPR = new ClassPathResource("/fonts/timesbd.ttf");
+            PdfFont timesbd = PdfFontFactory.createFont(timesbdCPR.getPath(), BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             timesbd.setSubset(true);
-            PdfFont timesbi = PdfFontFactory.createFont(resourceLoader.getResource("classpath:/fonts/timesbi.ttf").getFile().getPath(), BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            ClassPathResource timesbiCPR = new ClassPathResource("/fonts/timesbi.ttf");
+            PdfFont timesbi = PdfFontFactory.createFont(timesbiCPR.getPath(), BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             timesbi.setSubset(true);
-            PdfFont timesi = PdfFontFactory.createFont(resourceLoader.getResource("classpath:/fonts/timesi.ttf").getFile().getPath(), BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            ClassPathResource timesiCPR = new ClassPathResource("/fonts/timesi.ttf");
+            PdfFont timesi = PdfFontFactory.createFont(timesiCPR.getPath(), BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             timesi.setSubset(true);
-            String paidFile = resourceLoader.getResource("classpath:/stamp/paid.png").getFile().getPath();
-            ImageData stampData = ImageDataFactory.create(paidFile);
+            ClassPathResource paidCPR = new ClassPathResource("/stamp/paid.png");
+            ImageData stampData = ImageDataFactory.create(paidCPR.getPath());
             Image stamp = new Image(stampData);
             if(invoices.size()==0){
                 Paragraph paragraph = new Paragraph("Hesab-faktura tapılmadı!");

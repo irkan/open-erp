@@ -150,30 +150,25 @@ public class CollectController extends SkeletonController {
     }
 
     @PostMapping(value = "/troubled-customer/transfer")
-    public String postTroubledCustomerTransfer(@RequestParam(value = "sale", defaultValue = "0") String sale,
-                                               @RequestParam(value = "price", defaultValue = "0") String price,
-                                               @RequestParam(value = "description") String description,
+    public String postTroubledCustomerTransfer(@ModelAttribute(Constants.FORM) @Validated Invoice invoice,
+                                               BindingResult binding,
                                                RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(null, Constants.TEXT.SUCCESS));
-        Sales sales = salesRepository.getSalesByIdAndActiveTrue(Integer.parseInt(sale));
-        Invoice invoice = new Invoice();
-        invoice.setSales(sales);
-        invoice.setApprove(false);
-        invoice.setPrice(Double.parseDouble(price));
-        invoice.setDescription(description);
-        invoice.setOrganization(getUserOrganization());
-        invoice.setDescription("Satışdan əldə edilən ödəniş " + invoice.getPrice() + " AZN");
-        invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
-        invoiceRepository.save(invoice);
-        log(invoice, "sale_invoice", "transfer", invoice.getId(), invoice.toString());
-        String desc = "Hesab faktura yaradıldı: " + invoice.getId();
-        if(sales!=null){
-            ContactHistory contactHistory = new ContactHistory();
-            contactHistory.setDescription(desc);
-            contactHistoryRepository.save(contactHistory);
-            log(contactHistory, "collect_payment_regulator_note", "create/edit", contactHistory.getId(), contactHistory.toString());
+        if(!binding.hasErrors()){
+            invoice(invoice);
         }
         return mapPost(redirectAttributes, "/collect/troubled-customer");
+    }
+
+    @PostMapping(value = "/payment-latency/transfer")
+    public String postPaymentLatencyTransfer(@ModelAttribute(Constants.FORM) @Validated Invoice invoice,
+                                               BindingResult binding,
+                                               RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(null, Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()){
+            invoice(invoice);
+        }
+        return mapPost(redirectAttributes, "/collect/payment-latency");
     }
 
     @PostMapping(value = "/service-task/transfer")
@@ -238,10 +233,8 @@ public class CollectController extends SkeletonController {
                 service.setPayment(payment);
                 salesRepository.save(service);
 
-                log(service, "sale_sales", "create/edit", service.getId(), service.toString(), "Servis yaradıldı");
+                log(service, "sale_sales", "create/edit", service.getId(), service.toString(), "Servis Requlyatordan Servis yaradıldı");
             }
-            //muqahise ucun evvel olan service regulyatorar sales obyektinden yeniden goturulecekdir;
-            //log("collect_contact_history", "create/edit", contactHistory.getId(), contactHistory.toString());
         }
         return mapPost(serviceTask, binding, redirectAttributes, "/collect/service-task");
     }

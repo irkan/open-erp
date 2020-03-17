@@ -132,21 +132,10 @@ public class ExportController extends SkeletonController {
         List<Integer> invoiceIds = Util.getInvoiceIds(data);
         List<Invoice> invoices = invoiceRepository.getInvoicesByActiveTrueAndIdIn(invoiceIds);
         List<Dictionary> months = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("month");
-        File file = GeneratePDFFile.generateInvoice(invoices, resourceLoader, configurationRepository, months);
+        File file = GeneratePDFFile.generateInvoice(invoices, configurationRepository, months);
         InputStreamResource resourceIS = new InputStreamResource(new FileInputStream(file));
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=invoice-" + file.getName())
-                .contentLength(file.length())
-                .contentType(MediaType.parseMediaType(MediaType.APPLICATION_PDF_VALUE))
-                .body(resourceIS);
-    }
-
-    @RequestMapping(value = "/invoice2", method = RequestMethod.GET)
-    public ResponseEntity<Resource> generateInvoice2() throws IOException, Docx4JException, DocumentException {
-        File file = GeneratePDFFile2.generateInvoice(resourceLoader);
-        InputStreamResource resourceIS = new InputStreamResource(new FileInputStream(file));
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=invoice-test-" + file.getName())
                 .contentLength(file.length())
                 .contentType(MediaType.parseMediaType(MediaType.APPLICATION_PDF_VALUE))
                 .body(resourceIS);
