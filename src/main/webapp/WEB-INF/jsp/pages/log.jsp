@@ -170,6 +170,7 @@
 <c:choose>
     <c:when test="${not empty list}">
     <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
+    <c:set var="detail" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'detail')}"/>
     <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
     <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
     <thead>
@@ -204,6 +205,11 @@
                 <c:if test="${view.status}">
                     <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
                         <i class="<c:out value="${view.object.icon}"/>"></i>
+                    </a>
+                </c:if>
+                <c:if test="${detail.status}">
+                    <a href="javascript:detail('<c:out value="${t.id}" />', $('#detail-modal-operation'));" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${detail.object.name}"/>">
+                        <i class="<c:out value="${detail.object.icon}"/>"></i>
                     </a>
                 </c:if>
                 <c:if test="${edit.status}">
@@ -298,6 +304,49 @@
     </div>
 </div>
 
+<div class="modal fade" id="detail-modal-operation" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detal</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row bg-light text-center">
+                    <div class="col-md-12">
+                        <label id="label-info"></label>
+                    </div>
+                </div>
+                <div class="row mt-4 mb-2 bg-light text-center">
+                    <div class="col-md-12" style="letter-spacing: 10px; font-weight: bold">
+                        JSON
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label id="label-json" style="width: 100%"></label>
+                    </div>
+                </div>
+                <div class="row mt-4 mb-2 bg-light text-center">
+                    <div class="col-md-12" style="letter-spacing: 10px; font-weight: bold;">
+                        Enkapsulyasiya
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label id="label-encapsulate" style="width: 100%"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     $('#datatable tbody').on('dblclick', 'tr', function () {
         <c:if test="${view.status}">
@@ -338,6 +387,43 @@
     $("input[name='rowId']").inputmask('decimal', {
         rightAlignNumerics: false
     });
+
+    function detail(id, modal){
+        swal.fire({
+            text: 'Proses davam edir...',
+            allowOutsideClick: false,
+            onOpen: function() {
+                swal.showLoading();
+                $.ajax({
+                    url: '/admin/log/id/'+id,
+                    type: 'GET',
+                    dataType: 'json',
+                    beforeSend: function() {
+                        $(modal).find("#label-info").text('');
+                        $(modal).find("#label-encapsulate").text('');
+                        $(modal).find("#label-json").text('');
+                    },
+                    success: function(data) {
+                        $(modal).find("#label-info").text(data.id);
+                        $(modal).find("#label-encapsulate").text(data.encapsulateTransient);
+                        $(modal).find("#label-json").text(data.jsonTransient);
+                        $(modal).modal('toggle');
+                        swal.close();
+                    },
+                    error: function() {
+                        swal.fire({
+                            title: "Xəta baş verdi!",
+                            type: "error",
+                            cancelButtonText: 'Bağla',
+                            cancelButtonColor: '#c40000',
+                            cancelButtonClass: 'btn btn-danger',
+                            footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+                        });
+                    }
+                })
+            }
+        });
+    }
 
 </script>
 

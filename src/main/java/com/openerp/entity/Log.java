@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -66,6 +67,13 @@ public class Log {
     @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
     private Date operationDateFrom;
 
+
+    @Transient
+    private String encapsulateTransient;
+
+    @Transient
+    private String jsonTransient;
+
     public Log(@Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String tableName, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String operation, Integer rowId, String encapsulate, String username, String json) {
         this.tableName = tableName;
         this.operation = operation;
@@ -115,4 +123,12 @@ public class Log {
     public Log(Date operationDate) {
         this.operationDate = operationDate;
     }
+
+    public Log(Integer id, String encapsulateTransient, String jsonTransient) {
+        this.id = id;
+        this.encapsulateTransient = encapsulateTransient;
+        this.jsonTransient = jsonTransient;
+    }
+
+
 }

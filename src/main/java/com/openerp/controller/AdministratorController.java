@@ -414,6 +414,18 @@ public class AdministratorController extends SkeletonController {
         return employees;
     }
 
+    @ResponseBody
+    @GetMapping(value = "/log/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Log getLog(@PathVariable("id") int id) {
+        try{
+            Log log = logRepository.getLogById(id);
+            return new Log(log.getId(), log.getEncapsulate(), log.getJson());
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     @PostMapping(value = "/currency-rate")
     public String postCurrencyRate(@ModelAttribute(Constants.FORM) @Validated CurrencyRate currencyRate, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         currencyRateRepository.deleteAll();

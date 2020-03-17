@@ -1301,6 +1301,8 @@ public class DBConfiguration {
             moduleOperations.add(detailModuleOperation6);
             ModuleOperation detailModuleOperation7 = new ModuleOperation(collector, detail, null);
             moduleOperations.add(detailModuleOperation7);
+            ModuleOperation detailModuleOperation8 = new ModuleOperation(log, detail, null);
+            moduleOperations.add(detailModuleOperation8);
 
             ModuleOperation changePasswordModuleOperation1 = new ModuleOperation(subModule5, changePassword, null);
             moduleOperations.add(changePasswordModuleOperation1);
@@ -1674,6 +1676,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, detailModuleOperation3));
             userModuleOperations.add(new UserModuleOperation(user, detailModuleOperation6));
             userModuleOperations.add(new UserModuleOperation(user, detailModuleOperation7));
+            userModuleOperations.add(new UserModuleOperation(user, detailModuleOperation8));
 
             userModuleOperations.add(new UserModuleOperation(user, changePasswordModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, changePasswordModuleOperation2));
