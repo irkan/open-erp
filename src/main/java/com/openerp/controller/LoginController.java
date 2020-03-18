@@ -53,7 +53,6 @@ public class LoginController extends SkeletonController {
                         parentModules.add(umo.getModuleOperation().getModule().getModule());
                     }
                 }
-
             }
         }
         if(parentModules.size()>0){
