@@ -56,7 +56,7 @@ public class GeneratePDFFile {
             ClassPathResource timesiCPR = new ClassPathResource("/fonts/timesi.ttf");
             PdfFont timesi = PdfFontFactory.createFont(timesiCPR.getPath(), BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             timesi.setSubset(true);
-            ClassPathResource paidCPR = new ClassPathResource("/stamp/paid.png");
+            ClassPathResource paidCPR = new ClassPathResource("classpath:/stamp/paid.png");
             ImageData stampData = ImageDataFactory.create(paidCPR.getPath());
             Image stamp = new Image(stampData);
             if(invoices.size()==0){
@@ -872,6 +872,7 @@ public class GeneratePDFFile {
                 }
             }
         } catch (Exception e){
+            e.printStackTrace();
             log.error(e);
         }
         return file;
