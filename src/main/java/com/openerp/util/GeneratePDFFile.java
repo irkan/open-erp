@@ -863,8 +863,6 @@ public class GeneratePDFFile {
                             table.addCell(cell);
 
                         }
-
-
                         document.add(table);
                     } catch (Exception e) {
                         log.error(e);
@@ -872,7 +870,6 @@ public class GeneratePDFFile {
                 }
             }
         } catch (Exception e){
-            e.printStackTrace();
             log.error(e);
         }
         return file;
