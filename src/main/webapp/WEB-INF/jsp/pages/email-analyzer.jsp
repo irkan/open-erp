@@ -79,7 +79,7 @@
 </div>
 
 
-<div class="modal fade" id="modal-operation" tabindex="-1" role="dialog">
+<%--<div class="modal fade" id="modal-operation" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -115,9 +115,51 @@
             </div>
         </div>
     </div>
+</div>--%>
+
+<div class="modal fade" id="upload-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group form-group-last">
+                    <div class="alert alert-secondary" role="alert">
+                        <div class="alert-icon"><i class="flaticon-warning kt-font-brand"></i></div>
+                        <div class="alert-text">
+                            Yüklənmə TXT faylından nəzərdə tutulmuşdur. [.txt] formatlı fayldan məlumatı yükləyə bilərsiniz.
+                        </div>
+                    </div>
+                </div>
+                <form id="upload-form" action="/idgroup/email-analyzer/upload" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label>Email log fayl</label>
+                        <div></div>
+                        <div class="custom-file">
+                            <input type="file" name="file" class="custom-file-input" id="file" accept="text/plain">
+                            <label class="custom-file-label" for="file">Email log txt faylını seçin</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="submit($('#upload-form'));">Yüklə</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
+    $('.custom-file-input').on('change', function() {
+        var fileName = $(this).val();
+        $(this).next('.custom-file-label').addClass("selected").html(fileName);
+    });
+
     $('#datatable tbody').on('dblclick', 'tr', function () {
         <c:if test="${view.status}">
             view($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${view.object.name}" />');

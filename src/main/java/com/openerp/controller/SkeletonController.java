@@ -205,6 +205,9 @@ public class SkeletonController {
     EndpointRepository endpointRepository;
 
     @Autowired
+    EmailAnalyzerRepository emailAnalyzerRepository;
+
+    @Autowired
     CustomerService customerService;
 
     @Autowired

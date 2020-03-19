@@ -13,6 +13,16 @@ import java.util.List;
 public class DateUtility {
     private static final Logger log = Logger.getLogger(DateUtility.class);
 
+    public static Date getUtilDateFromEmailAnalyzer(String date) {
+        Date utilDate= null;
+        try {
+            utilDate = new SimpleDateFormat("dd/Mon/yyyy HH:mm:ss").parse(date);
+        } catch (ParseException e) {
+            log.error(e);
+        }
+        return utilDate;
+    }
+
     public static Date getUtilDate(String date) {
         Date utilDate= null;
         try {
