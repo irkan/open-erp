@@ -43,7 +43,7 @@
                                         <td><c:out value="${t.id}" /></td>
                                         <td><c:out value="${t.name}" /></td>
                                         <td><c:out value="${t.description}" /></td>
-                                        <td><c:out value="${t.person.firstName}" /> <c:out value="${t.person.firstName}" /> <c:out value="${t.person.lastName}" /> <c:out value="${t.person.fatherName}" /></td>
+                                        <td><c:out value="${t.person.fullName}" /></td>
                                         <td><c:out value="${t.person.contact.email}" /></td>
                                         <td><c:out value="${t.person.contact.mobilePhone}" /></td>
                                         <td><c:out value="${t.person.contact.homePhone}" /></td>

@@ -272,10 +272,7 @@
     });
 
     $('#datatable tbody').on('dblclick', 'tr', function () {
-        <c:if test="${edit.status}">
-        edit($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${edit.object.name}" />');
-        </c:if>
-        <c:if test="${!edit.status and view.status}">
+        <c:if test="${view.status}">
         view($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${view.object.name}" />');
         </c:if>
     });

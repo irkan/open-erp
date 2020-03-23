@@ -29,7 +29,7 @@
                                     <div class="kt-widget12__item">
                                         <div class="kt-widget12__info">
                                             <span class="kt-widget12__desc">İllik avans</span>
-          s                                  <span class="kt-widget12__value"><fmt:parseNumber value="${annual_advance}" pattern="#,##"/> AZN</span>
+                                            <span class="kt-widget12__value"><fmt:parseNumber value="${annual_advance}" pattern="#,##"/> AZN</span>
                                         </div>
 
                                         <div class="kt-widget12__info">
