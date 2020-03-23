@@ -141,5 +141,6 @@ public class Constants {
         public static final String IDDISCOUNT = "iddiscount";
         public static final String ENDPOINT = "endpoint";
         public static final String OVERVIEW = "overview";
+        public static final String EMAIL_ANALYZER = "email-analyzer";
     }
 }

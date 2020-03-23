@@ -16,7 +16,7 @@ public class DateUtility {
     public static Date getUtilDateFromEmailAnalyzer(String date) {
         Date utilDate= null;
         try {
-            utilDate = new SimpleDateFormat("dd/Mon/yyyy HH:mm:ss").parse(date);
+            utilDate = new SimpleDateFormat("dd/MMM/yyyy HH:mm:ss").parse(date);
         } catch (ParseException e) {
             log.error(e);
         }

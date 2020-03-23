@@ -766,7 +766,7 @@ public class DBConfiguration {
             modules.add(idgroup);
             Module iddiscount = new Module("Endirim", "Endirim", "iddiscount", "flaticon2-open-box", idgroup);
             modules.add(iddiscount);
-            Module emailAnalyzer = new Module("Email analiz", "Email analiz", "email-analyzer", "flaticon2-open-box", idgroup);
+            Module emailAnalyzer = new Module("Email analiz", "Email analiz", "email-analyzer", "flaticon-email", idgroup);
             modules.add(emailAnalyzer);
             Module crm = new Module("CRM", "CRM", "crm", "flaticon-rotate", null);
             modules.add(crm);

@@ -3,10 +3,14 @@ package com.openerp.controller;
 import com.openerp.entity.Configuration;
 import com.openerp.entity.EmailAnalyzer;
 import com.openerp.entity.IDDiscount;
+import com.openerp.entity.NonWorkingDay;
 import com.openerp.util.Constants;
 import com.openerp.util.DateUtility;
 import com.openerp.util.ReadWriteExcelFile;
 import com.openerp.util.Util;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -37,6 +41,18 @@ public class IDGroupController extends SkeletonController {
 
             if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
                 return exportExcel(iDDiscountRepository.findAll(), redirectAttributes, page);
+            }
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.EMAIL_ANALYZER)){
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new EmailAnalyzer());
+            }
+            if(!model.containsAttribute(Constants.FILTER)){
+                model.addAttribute(Constants.FILTER, new EmailAnalyzer());
+            }
+            Page<EmailAnalyzer> emailAnalyzers = emailAnalyzerService.findAll((EmailAnalyzer) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
+            model.addAttribute(Constants.LIST, emailAnalyzers);
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(emailAnalyzers, redirectAttributes, page);
             }
         }
         return "layout";

@@ -12,69 +12,164 @@
 <%@ taglib prefix="utl" uri="/WEB-INF/tld/Util.tld"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <div class="kt-container  kt-grid__item kt-grid__item--fluid">
+    <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
+    <c:set var="filter" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'filter')}"/>
+    <c:if test="${filter.status}">
+        <div class="accordion accordion-toggle-arrow mb-2" id="accordionFilter">
+            <div class="card" style="border-radius: 4px;">
+                <div class="card-header">
+                    <div class="card-title w-100" data-toggle="collapse" data-target="#filterContent" aria-expanded="true" aria-controls="collapseOne4">
+                        <div class="row w-100">
+                            <div class="col-3">
+                                <i class="<c:out value="${filter.object.icon}"/>"></i>
+                                <c:out value="${list.totalElements>0?list.totalElements:0} sətr"/>
+                            </div>
+                            <div class="col-6 text-center" style="letter-spacing: 10px;">
+                                <c:out value="${filter.object.name}"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="filterContent" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionFilter">
+                    <div class="card-body">
+                        <form:form modelAttribute="filter" id="filter" method="post" action="/hr/non-working-day/filter">
+                            <div class="row">
+                                <div class="col-md-11">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="id">KOD</form:label>
+                                                <form:input path="id" cssClass="form-control" placeholder="######"/>
+                                                <form:errors path="id" cssClass="control-label alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="operationDateFrom">Tarixdən</form:label>
+                                                <div class="input-group date">
+                                                    <form:input path="operationDateFrom" autocomplete="off"
+                                                                cssClass="form-control datepicker-element" date_="date_"
+                                                                placeholder="dd.MM.yyyy"/>
+                                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-calendar"></i>
+                                        </span>
+                                                    </div>
+                                                </div>
+                                                <form:errors path="operationDateFrom" cssClass="control-label alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="operationDate">Tarixədək</form:label>
+                                                <div class="input-group date">
+                                                    <form:input path="operationDate" autocomplete="off"
+                                                                cssClass="form-control datepicker-element" date_="date_"
+                                                                placeholder="dd.MM.yyyy"/>
+                                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-calendar"></i>
+                                        </span>
+                                                    </div>
+                                                </div>
+                                                <form:errors path="operationDate" cssClass="control-label alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <c:if test="${delete.status}">
+                                            <div class="col-md-2" style="padding-top: 30px;">
+                                                <div class="form-group">
+                                                    <label class="kt-checkbox kt-checkbox--brand">
+                                                        <form:checkbox path="active"/> Aktual məlumat
+                                                        <span></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </c:if>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 text-right">
+                                    <div class="form-group">
+                                        <a href="#" onclick="location.reload();" class="btn btn-danger btn-elevate btn-icon-sm btn-block mb-2" style="padding: 0.35rem 0.6rem;">
+                                            <i class="la la-trash"></i> Sil
+                                        </a>
+                                        <a href="#" onclick="submit($('#filter'))" class="btn btn-warning btn-elevate btn-icon-sm btn-block mt-2" style="padding: 0.35rem 0.6rem">
+                                            <i class="la la-search"></i> Axtar
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form:form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </c:if>
     <div class="row">
         <div class="col-lg-12">
             <div class="kt-portlet kt-portlet--mobile">
                 <div class="kt-portlet__body">
 
-<c:choose>
-    <c:when test="${not empty list}">
-        <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
-        <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
-        <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
-        <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
-    <thead>
-    <tr>
-        <th>№</th>
-        <th>ID</th>
-        <th>Ad</th>
-        <th>Atribut#1</th>
-        <th>Atribut#2</th>
-        <th>Əməliyyat</th>
-    </tr>
-    </thead>
-    <tbody>
-    <c:forEach var="t" items="${list}" varStatus="loop">
-        <tr data="<c:out value="${utl:toJson(t)}" />">
-            <td>${loop.index + 1}</td>
-            <td><c:out value="${t.id}" /> <%--${utl:toJson(t)}--%></td>
-            <th><c:out value="${t.name}" /></th>
-            <th><c:out value="${t.attr1}" /></th>
-            <td><c:out value="${t.attr2}" /></td>
-            <td nowrap class="text-center">
-                <c:if test="${view.status}">
-                    <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
-                        <i class="<c:out value="${view.object.icon}"/>"></i>
-                    </a>
-                </c:if>
-                <c:if test="${edit.status}">
-                    <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
-                        <i class="<c:out value="${edit.object.icon}"/>"></i>
-                    </a>
-                </c:if>
-                <c:if test="${delete.status}">
-                    <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
-                        <i class="<c:out value="${delete.object.icon}"/>"></i>
-                    </a>
-                </c:if>
-            </td>
-        </tr>
-    </c:forEach>
-    </tbody>
-</table>
-    </c:when>
-    <c:otherwise>
-        <div class="row">
+                    <c:choose>
+                        <c:when test="${not empty list}">
+                            <c:set var="detail" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'detail')}"/>
+                            <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
+                            <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
+                            <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
+                                <thead>
+                                <tr>
+                                    <th>№</th>
+                                    <th>ID</th>
+                                    <th>İdentifikator</th>
+                                    <th>Qeyri iş günü</th>
+                                    <th>Açıqlama</th>
+                                    <th>Service</th>
+                                    <th>Recipient</th>
+                                    <th>Əməliyyat</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <c:forEach var="t" items="${list.content}" varStatus="loop">
+                                    <tr data="<c:out value="${utl:toJson(t)}" />">
+                                        <td>${loop.index + 1}</td>
+                                        <td><c:out value="${t.id}" /></td>
+                                        <td><c:out value="${t.operation}" /></td>
+                                        <td><fmt:formatDate value = "${t.operationDate}" pattern = "dd.MM.yyyy" /></td>
+                                        <td><c:out value="${t.queueID}" /></td>
+                                        <td><c:out value="${t.service}" /></td>
+                                        <td><c:out value="${t.recipient}" /></td>
+                                        <td nowrap class="text-center">
+                                            <c:if test="${view.status}">
+                                                <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
+                                                    <i class="<c:out value="${view.object.icon}"/>"></i>
+                                                </a>
+                                            </c:if>
+                                            <c:if test="${edit.status}">
+                                                <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                                                    <i class="<c:out value="${edit.object.icon}"/>"></i>
+                                                </a>
+                                            </c:if>
+                                            <c:if test="${delete.status}">
+                                                <a href="javascript:deleteData('<c:out value="${t.id}" />', '<fmt:formatDate value = "${t.operationDate}" pattern = "dd.MM.yyyy" /><br/><c:out value="${t.queueID}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
+                                                    <i class="<c:out value="${delete.object.icon}"/>"></i>
+                                                </a>
+                                            </c:if>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                                </tbody>
+                            </table>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="row">
                                 <div class="col-md-12 text-center" style="letter-spacing: 10px;">
                                     Məlumat yoxdur
                                 </div>
                             </div>
-    </c:otherwise>
-</c:choose>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 

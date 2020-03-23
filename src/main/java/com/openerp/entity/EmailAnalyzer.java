@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
@@ -24,11 +25,16 @@ public class EmailAnalyzer {
     private Integer id;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "operation_date", nullable = false)
+    @Column(name = "operation_date")
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date operationDate = new Date();
 
-    @Pattern(regexp=".{1,255}",message="Minimum 1 maksimum 255 simvol ola bilər")
-    @Column(name = "operation", nullable = false)
+    @Transient
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    private Date operationDateFrom;
+
+    @Column(name = "operation")
     private String operation;
 
     @Column(name = "queue_id")

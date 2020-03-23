@@ -268,6 +268,9 @@ public class SkeletonController {
     EndpointService endpointService;
 
     @Autowired
+    EmailAnalyzerService emailAnalyzerService;
+
+    @Autowired
     ReportingDao reportingDao;
 
     @Autowired
