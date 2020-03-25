@@ -288,7 +288,9 @@
                                 <tbody>
                                 <c:forEach var="t" items="${list.content}" varStatus="loop">
                                     <tr data="<c:out value="${t.id}" />" style="<c:out value="${t.saled?'background-color: rgb(237, 239, 255) !important':''}"/>">
-                                        <td style="<c:out value="${t.payment.cash?'background-color: #e6ffe7 !important':'background-color: #ffeaf1 !important'}"/>"><c:out value="${t.id}" /></td>
+                                        <td style="<c:out value="${t.payment.cash?'background-color: #e6ffe7 !important':'background-color: #ffeaf1 !important'}"/>">
+                                            <a href="javascript:copyToClipboard('<c:out value="${t.id}" />')" class="kt-link kt-font-lg kt-font-bold kt-margin-t-5"><c:out value="${t.id}"/></a>
+                                        </td>
                                         <th>
                                             <c:forEach var="p" items="${t.salesInventories}" varStatus="lp">
                                                 <c:out value="${lp.index+1}" />.
@@ -327,7 +329,7 @@
                                             <c:set var="payable" value="${utl:calculateInvoice(t.invoices)}"/>
                                             <c:choose>
                                                 <c:when test="${view5.status}">
-                                                    <a href="javascript:window.open('/sale/invoice/<c:out value="${t.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${payable}"/> AZN</a>
+                                                    <a href="javascript:window.open('/sale/invoice/<c:out value="${t.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-lg kt-font-bolder"><c:out value="${payable}"/> AZN</a>
                                                 </c:when>
                                                 <c:otherwise>
                                                     <c:out value="${payable}"/>
@@ -707,6 +709,17 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <c:if test="${view4.status}">
+                                            <div class="col-md-6 text-right">
+                                                <div class="form-group pt-4">
+                                                    <form:label path="customer">&nbsp;</form:label>
+                                                    <a href="javascript:window.open('/crm/customer', 'mywindow', 'width=1250, height=800')" data-repeater-delete="" class="btn-sm btn btn-label-success btn-bold">
+                                                        <i class="la la-user"></i>
+                                                        Müştərilərin siyahısı
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </c:if>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-4">
@@ -751,7 +764,7 @@
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <form:label path="customer.person.idCardPinCode">Ş.v - nin pin kodu</form:label>
-                                                <form:input path="customer.person.idCardPinCode" cssClass="form-control" placeholder="Məs: 4HWL0AM"/>
+                                                <form:input path="customer.person.idCardPinCode" cssClass="form-control" cssStyle="text-transform: uppercase;" maxlength="7" placeholder="Məs: 4HWL0AM"/>
                                                 <form:errors path="customer.person.idCardPinCode" cssClass="control-label alert-danger" />
                                             </div>
                                         </div>
@@ -1306,6 +1319,11 @@
                     'customer.person.lastName': {
                         required: true
                     },
+                    'customer.person.idCardPinCode': {
+                        required: true,
+                        maxlength: 7,
+                        minlength: 7
+                    },
                     'customer.person.contact.mobilePhone': {
                         required: true
                     },
@@ -1633,7 +1651,7 @@
                         error: function() {
                             swal.fire({
                                 title: "Xəta baş verdi!",
-                                html: $("#form").find("input[name='servicer'] option:selected").text() + " adına inventar təhkim edilməyib",
+                                html: "<c:out value="${sessionScope.user.employee.person.lastName}"/> <c:out value="${sessionScope.user.employee.person.firstName}"/>  adına inventar təhkim edilməyib",
                                 type: "error",
                                 cancelButtonText: 'Bağla',
                                 cancelButtonColor: '#c40000',

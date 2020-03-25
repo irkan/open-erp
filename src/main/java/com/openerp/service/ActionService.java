@@ -39,6 +39,9 @@ public class ActionService {
                 if(action.getOrganization()!=null && action.getOrganization().getId()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("organization"), action.getOrganization().getId())));
                 }
+                if(action.getEmployee()!=null && action.getEmployee().getId()!=null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("employee"), action.getEmployee().getId())));
+                }
                 if(action.getAction()!=null && action.getAction().getId()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("action"), action.getAction().getId())));
                 }

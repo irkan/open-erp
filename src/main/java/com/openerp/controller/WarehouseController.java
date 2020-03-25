@@ -52,44 +52,6 @@ public class WarehouseController extends SkeletonController {
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
             model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployeesByPosition(employees, positions));
 
-            /*List<Action> actions;
-            if(!data.equals(Optional.empty())){
-                if(canViewAll()){
-                    actions = actionRepository.getActionsByActiveTrueAndInventory_IdAndInventory_Active(Integer.parseInt(data.get()), true);
-                } else {
-                    actions = actionRepository.getActionsByActiveTrueAndInventory_IdAndInventory_ActiveAndOrganization(Integer.parseInt(data.get()), true, getSessionOrganization());
-                    actions.addAll(actionRepository.getActionsByActiveTrueAndInventory_IdAndInventory_ActiveAndFromOrganization(Integer.parseInt(data.get()), true, getSessionOrganization()));
-                }
-            } else {
-                if(canViewAll()){
-                    actions = actionRepository.getActionsByActiveTrueAndInventory_Active(true);
-                } else {
-                    actions = actionRepository.getActionsByActiveTrueAndInventory_ActiveAndOrganization(true, getSessionOrganization());
-                    actions.addAll(actionRepository.getActionsByActiveTrueAndInventory_ActiveAndFromOrganizationAndApproveFalse(true, getSessionOrganization()));
-                }
-            }
-            model.addAttribute(Constants.LIST, actions);
-            if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new Action());
-            }
-
-            List<Action> actions;
-            if(!data.equals(Optional.empty())){
-                if(canViewAll()){
-                    actions = actionRepository.getActionsByActiveTrueAndInventory_IdAndInventory_Active(Integer.parseInt(data.get()), true);
-                } else {
-                    actions = actionRepository.getActionsByActiveTrueAndInventory_IdAndInventory_ActiveAndOrganization(Integer.parseInt(data.get()), true, getSessionOrganization());
-                    actions.addAll(actionRepository.getActionsByActiveTrueAndInventory_IdAndInventory_ActiveAndFromOrganization(Integer.parseInt(data.get()), true, getSessionOrganization()));
-                }
-            } else {
-                if(canViewAll()){
-                    actions = actionRepository.getActionsByActiveTrueAndInventory_Active(true);
-                } else {
-                    actions = actionRepository.getActionsByActiveTrueAndInventory_ActiveAndOrganization(true, getSessionOrganization());
-                    actions.addAll(actionRepository.getActionsByActiveTrueAndInventory_ActiveAndFromOrganizationAndApproveFalse(true, getSessionOrganization()));
-                }
-            }*/
-
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Action(getSessionOrganization()));
             }

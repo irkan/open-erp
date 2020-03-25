@@ -419,6 +419,10 @@ public class SaleController extends SkeletonController {
     @PostMapping(value = "/invoice/approve")
     public String postInvoiceApprove(@ModelAttribute(Constants.FORM) @Validated Invoice invoice, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         Invoice invc = invoiceRepository.getInvoiceById(invoice.getId());
+        if(!invc.getSales().getService() && invc.getCollector()==null){
+            FieldError fieldError = new FieldError("", "", "Yığımçı təyin edilməlidir!");
+            binding.addError(fieldError);
+        }
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()) {
             invc.setApprove(true);

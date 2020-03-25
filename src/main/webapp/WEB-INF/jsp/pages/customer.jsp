@@ -217,7 +217,7 @@
                                 <tbody>
                                 <c:forEach var="t" items="${list.content}" varStatus="loop">
                                     <tr data="<c:out value="${utl:toJson(t)}" />">
-                                        <td><c:out value="${t.id}"/></td>
+                                        <td><a href="javascript:copyToClipboard('<c:out value="${t.id}" />')" class="kt-link kt-font-lg kt-font-bold kt-margin-t-5"><c:out value="${t.id}"/></a></td>
                                         <th>
                                             <c:out value="${t.person.fullName}"/>
                                         </th>
@@ -329,8 +329,8 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <form:label path="person.idCardPinCode">Ş.v - nin pin kodu</form:label>
-                                <form:input path="person.idCardPinCode" cssClass="form-control" placeholder="Məs: 4HWL0AM"/>
-                                <form:errors path="person.idCardPinCode" cssClass="control-label alert-danger" />
+                                <form:input path="person.idCardPinCode" cssClass="form-control" cssStyle="text-transform: uppercase;" maxlength="7" placeholder="Məs: 4HWL0AM"/>
+                                <form:errors path="person.idCardPinCode" cssClass="control-label alert-danger"/>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -484,6 +484,11 @@
             },
             "person.lastName": {
                 required: true
+            },
+            'person.idCardPinCode': {
+                required: true,
+                maxlength: 7,
+                minlength: 7
             },
             "person.contact.mobilePhone": {
                 required: true

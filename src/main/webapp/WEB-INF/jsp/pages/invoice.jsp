@@ -214,7 +214,9 @@
                                 <tbody>
                                 <c:forEach var="t" items="${list.content}" varStatus="loop">
                                     <tr data="<c:out value="${utl:toJson(t)}" />" class="<c:out value="${(t.price lt 0 and t.approve)?'strikeout':''}"/> ">
-                                        <td><c:out value="${t.id}" /></td>
+                                        <td>
+                                            <a href="javascript:copyToClipboard('<c:out value="${t.id}" />')" class="kt-link kt-font-lg kt-font-bold kt-margin-t-5"><c:out value="${t.id}"/></a>
+                                        </td>
                                         <td style="<c:out value="${t.sales.payment.cash?'background-color: #e6ffe7 !important':'background-color: #ffeaf1 !important'}"/>">
                                             <c:choose>
                                                 <c:when test="${view1.status}">

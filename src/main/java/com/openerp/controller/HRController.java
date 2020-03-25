@@ -150,7 +150,7 @@ public class HRController extends SkeletonController {
         if (!binding.hasErrors()) {
             if(employee!=null && employee.getId()!=null){
                 employeeRestDayRepository.deleteInBatch(employeeRestDayRepository.getEmployeeRestDaysByEmployee(employee));
-                 log(employee, "hr_employee_rest_day", "delete-in-batch", employee.getId(), employee.toString());
+                log(employee, "hr_employee_rest_day", "delete-in-batch", employee.getId(), employee.toString());
             }
             List<EmployeeRestDay> erds = new ArrayList<>();
             if(ids[0]!=0){
@@ -250,7 +250,7 @@ public class HRController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             nonWorkingDayRepository.save(nonWorkingDay);
-             log(nonWorkingDay, "hr_non_working_day", "create/edit", nonWorkingDay.getId(), nonWorkingDay.toString());
+            log(nonWorkingDay, "hr_non_working_day", "create/edit", nonWorkingDay.getId(), nonWorkingDay.toString());
         }
         return mapPost(nonWorkingDay, binding, redirectAttributes);
     }

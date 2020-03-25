@@ -190,7 +190,9 @@
                                 <tbody>
                                 <c:forEach var="t" items="${list.content}" varStatus="loop">
                                     <tr data="<c:out value="${utl:toJson(t)}" />" rowId="<c:out value="${t.id}" />" customerId="<c:out value="${t.customer.id}" />">
-                                        <td style="<c:out value="${t.payment.cash?'background-color: #e6ffe7 !important':'background-color: #ffeaf1 !important'}"/>"><c:out value="${t.id}" /></td>
+                                        <td style="<c:out value="${t.payment.cash?'background-color: #e6ffe7 !important':'background-color: #ffeaf1 !important'}"/>">
+                                            <a href="javascript:copyToClipboard('<c:out value="${t.id}" />')" class="kt-link kt-font-lg kt-font-bold kt-margin-t-5"><c:out value="${t.id}"/></a>
+                                        </td>
                                         <td><c:out value="${t.servicer.person.fullName}"/></td>
                                         <th>
                                             <c:forEach var="p" items="${t.salesInventories}" varStatus="lp">
