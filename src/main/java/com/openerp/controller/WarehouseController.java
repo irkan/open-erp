@@ -418,10 +418,12 @@ public class WarehouseController extends SkeletonController {
     @ResponseBody
     @GetMapping(value = "/api/inventory/{barcode}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Inventory findInventory(@PathVariable("barcode") String barcode){
-        Inventory inventory = inventoryRepository.getInventoryByBarcodeAndActiveTrue(barcode);
-        int amount = Util.calculateInventoryAmount(inventory.getActions(), getSessionOrganization().getId()).getAllItemsCount();
-        if(amount>0){
-            return inventory;
+        List<Inventory> inventories = inventoryRepository.getInventoriesByActiveTrueAndBarcodeAndOrganizationOrderByIdAsc(barcode, getSessionOrganization());
+        for(Inventory inventory: inventories){
+            int amount = Util.calculateInventoryAmount(inventory.getActions(), getSessionOrganization().getId()).getAllItemsCount();
+            if(amount>0){
+                return inventory;
+            }
         }
         return null;
     }
