@@ -1,5 +1,7 @@
 package com.openerp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -59,6 +61,13 @@ public class Payment {
 
     @OneToMany(mappedBy = "payment", fetch = FetchType.LAZY)
     private List<Schedule> schedules;
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "payment")
+    private Sales sales;
+
+    @Column(name = "priority")
+    private int priority=5;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_date", nullable = false)

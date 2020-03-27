@@ -38,18 +38,7 @@ public class SaleController extends SkeletonController {
         }
         session.setAttribute(Constants.MODULE_DESCRIPTION, description);
 
-        if (page.equalsIgnoreCase(Constants.ROUTE.SALE_GROUP)){
-            List<Employee> employees;
-            if(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getOrganization()==null){
-                employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization_Id(Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getId());
-            } else {
-                employees = employeeRepository.getEmployeesByContractEndDateIsNull();
-            }
-            model.addAttribute(Constants.EMPLOYEES, employees);
-            if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new SaleGroup());
-            }
-        } else if (page.equalsIgnoreCase(Constants.ROUTE.SALES)){
+        if (page.equalsIgnoreCase(Constants.ROUTE.SALES)){
             List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization_Id(getSessionUser().getEmployee().getOrganization().getId());
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
             Util.convertedEmployees(employees, positions);
@@ -109,15 +98,6 @@ public class SaleController extends SkeletonController {
             actionRepository.save(oldAction);
         }
         return mapPost(sales, binding, redirectAttributes);
-    }
-
-    @PostMapping(value = "/sale-group")
-    public String postInventory(@ModelAttribute(Constants.FORM) @Validated SaleGroup saleGroup, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
-        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
-        if(!binding.hasErrors()){
-            saleGroupRepository.save(saleGroup);
-        }
-        return mapPost(saleGroup, binding, redirectAttributes);
     }
 
     @ResponseBody

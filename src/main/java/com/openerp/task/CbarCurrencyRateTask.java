@@ -19,7 +19,7 @@ public class CbarCurrencyRateTask {
     CurrencyRateRepository currencyRateRepository;
 
     @Scheduled(fixedDelay = 14400000)
-    public void rateUpdate() {
+    public void task() {
         try{
             log.info("Cbar Currency Rate Task Start");
             currencyRateRepository.deleteAll();

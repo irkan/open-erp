@@ -145,13 +145,10 @@ public class SkeletonController {
     SalaryEmployeeDetailRepository salaryEmployeeDetailRepository;
 
     @Autowired
-    SaleGroupRepository saleGroupRepository;
-
-    @Autowired
-    SaleGroupEmployeeRepository saleGroupEmployeeRepository;
-
-    @Autowired
     SalesRepository salesRepository;
+
+    @Autowired
+    PaymentRepository paymentRepository;
 
     @Autowired
     ScheduleRepository scheduleRepository;

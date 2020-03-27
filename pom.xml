@@ -105,6 +105,11 @@
 			<artifactId>docx4j</artifactId>
 			<version>6.1.2</version>
 		</dependency>
+		<dependency>
+			<groupId>net.emaze</groupId>
+			<artifactId>emaze-dysfunctional</artifactId>
+			<version>5.1</version>
+		</dependency>
 		<!--<dependency>
 			<groupId>com.googlecode.jaxb-namespaceprefixmapper-interfaces</groupId>
 			<artifactId>JAXBNamespacePrefixMapper</artifactId>

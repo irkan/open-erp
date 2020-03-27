@@ -56,13 +56,23 @@
                                         <th><c:out value="${t.action.warehouse.name}" /></th>
                                         <th><c:out value="${t.customer.person.fullName}" /></th>
                                         <th>
-                                            <c:out value="${t.customer.person.contact.email}" /><br/>
-                                            <c:out value="${t.customer.person.contact.mobilePhone}" />,&nbsp;
-                                            <c:out value="${t.customer.person.contact.homePhone}" /><br/>
-                                            <c:out value="${t.customer.person.contact.city.name}" />,&nbsp;
-                                            <c:out value="${t.customer.person.contact.address}" /><br/>
-                                            <c:out value="${t.customer.person.contact.livingCity.name}" />,&nbsp;
-                                            <c:out value="${t.customer.person.contact.livingAddress}" />
+                                            <c:if test="${not empty t.customer.person.contact.email}">
+                                                <c:out value="${t.customer.person.contact.email}" /><br/>
+                                            </c:if>
+                                            <c:if test="${not empty t.customer.person.contact.mobilePhone}">
+                                                <c:out value="${t.customer.person.contact.mobilePhone}" />&nbsp;
+                                            </c:if>
+                                            <c:if test="${not empty t.customer.person.contact.homePhone}">
+                                                <c:out value="${t.customer.person.contact.homePhone}" /><br/>
+                                            </c:if>
+                                            <c:if test="${not empty t.customer.person.contact.address}">
+                                                <c:out value="${t.customer.person.contact.city.name}" />,&nbsp;
+                                                <c:out value="${t.customer.person.contact.address}" /><br/>
+                                            </c:if>
+                                            <c:if test="${not empty t.customer.person.contact.livingAddress}">
+                                                <c:out value="${t.customer.person.contact.livingCity.name}" />,&nbsp;
+                                                <c:out value="${t.customer.person.contact.livingAddress}" />
+                                            </c:if>
                                         </th>
                                         <th><c:out value="${t.payment.price}" /></th>
                                         <th><c:out value="${t.payment.lastPrice}" /></th>
@@ -706,7 +716,7 @@
                     error: function() {
                         swal.fire({
                             title: "Xəta baş verdi!",
-                            html: "Əlaqə saxlamağınızı xahiş edirik.",
+                            html: "İstifadəçinin adına təhkim olunan inventar yoxdur!",
                             type: "error",
                             cancelButtonText: 'Bağla',
                             cancelButtonColor: '#c40000',
@@ -717,7 +727,7 @@
                     complete: function(){
                         table+="</table>";
                         $("#schedule-div").html(table);
-                        $("#schedule-table").DataTable();
+                        $("#schedule-table").DataTable({pageLength: 50});
                     }
                 })
             }
@@ -808,6 +818,9 @@
             })
 
         } else {
+            var price = $("select[name='payment.price']").val();
+            $("#lastPriceLabel").text(price);
+            $("input[name='payment.lastPrice']").val(price);
             $("#cash-div").addClass("kt-hidden");
             $("#credit-div").removeClass("kt-hidden");
         }

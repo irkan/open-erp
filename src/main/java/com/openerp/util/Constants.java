@@ -97,10 +97,11 @@ public class Constants {
         public static final String ILLNESS = "illness";
         public static final String ADVANCE = "advance";
         public static final String FINANCING = "financing";
-        public static final String SALE_GROUP = "sale-group";
         public static final String SALARY_EMPLOYEE = "salary-employee";
         public static final String SALES = "sales";
         public static final String CONSOLIDATE = "consolidate";
         public static final String CALCULATOR = "calculator";
+        public static final String PAYMENT_REGULATOR = "payment-regulator";
+        public static final String PAYMENT_REGULATOR_DETAIL = "payment-regulator-detail";
     }
 }

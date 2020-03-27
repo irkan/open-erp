@@ -3,6 +3,8 @@ package com.openerp.util;
 import com.openerp.domain.Response;
 import com.openerp.entity.*;
 import com.openerp.entity.Dictionary;
+import net.emaze.dysfunctional.Groups;
+import net.emaze.dysfunctional.dispatching.delegates.Pluck;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -429,4 +431,27 @@ public class Util {
         return cal.getTime();
     }
 
+    public static List<Schedule> convertPaymentSchedule(List<Schedule> schedules) {
+        List<Schedule> list = new ArrayList<>();
+        Map<Payment, List<Schedule>> scheduleMap = Groups.groupBy(schedules, new Pluck<Payment, Schedule>(Schedule.class, "payment"));
+        for(Payment payment: scheduleMap.keySet()){
+            double sumAmount=0, sumPayableAmount = 0;
+            Date scheduleDate = new Date();
+            Schedule sch = new Schedule();
+            for(Schedule schedule: scheduleMap.get(payment)){
+                sumAmount+=schedule.getAmount();
+                sumPayableAmount+=schedule.getPayableAmount();
+                if(scheduleDate.getTime()>schedule.getScheduleDate().getTime()){
+                    scheduleDate = schedule.getScheduleDate();
+                }
+                sch.setPayment(schedule.getPayment());
+                sch.setId(schedule.getId());
+            }
+            sch.setScheduleDate(scheduleDate);
+            sch.setAmount(sumAmount);
+            sch.setPayableAmount(sumPayableAmount);
+            list.add(sch);
+        }
+        return list;
+    }
 }

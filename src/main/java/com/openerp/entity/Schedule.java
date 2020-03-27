@@ -38,8 +38,8 @@ public class Schedule {
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date scheduleDate;
 
-    @Column(name = "is_payable", nullable = false, columnDefinition="boolean default false")
-    private Boolean payable = false;
+    @Column(name = "is_invoicing", nullable = false, columnDefinition="boolean default false")
+    private Boolean invoicing = false;
 
     @DecimalMin(value = "0", message = "Minimum 0 olmalıdır")
     @Column(name = "payable_amount", nullable = false, columnDefinition="Decimal(10,2) default 0")
