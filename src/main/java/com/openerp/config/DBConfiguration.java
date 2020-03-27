@@ -572,14 +572,24 @@ public class DBConfiguration {
             dictionaries.add(periodPayment4);
             Dictionary periodPayment5 = new Dictionary("Hər ayın 5-i", "5", null, periodPaymentType);
             dictionaries.add(periodPayment5);
+            Dictionary periodPayment7 = new Dictionary("Hər ayın 7-si", "7", null, periodPaymentType);
+            dictionaries.add(periodPayment7);
             Dictionary periodPayment10 = new Dictionary("Hər ayın 10-u", "10", null, periodPaymentType);
             dictionaries.add(periodPayment10);
+            Dictionary periodPayment12 = new Dictionary("Hər ayın 12-si", "12", null, periodPaymentType);
+            dictionaries.add(periodPayment12);
             Dictionary periodPayment15 = new Dictionary("Hər ayın 15-i", "15", null, periodPaymentType);
             dictionaries.add(periodPayment15);
+            Dictionary periodPayment17 = new Dictionary("Hər ayın 17-si", "17", null, periodPaymentType);
+            dictionaries.add(periodPayment17);
             Dictionary periodPayment20 = new Dictionary("Hər ayın 20-si", "20", null, periodPaymentType);
             dictionaries.add(periodPayment20);
+            Dictionary periodPayment22 = new Dictionary("Hər ayın 22-si", "22", null, periodPaymentType);
+            dictionaries.add(periodPayment22);
             Dictionary periodPayment25 = new Dictionary("Hər ayın 25-i", "25", null, periodPaymentType);
             dictionaries.add(periodPayment25);
+            Dictionary periodPayment28 = new Dictionary("Hər ayın 28-i", "28", null, periodPaymentType);
+            dictionaries.add(periodPayment28);
             Dictionary guarantee24 = new Dictionary("24 ay", "24", null, guaranteeType);
             dictionaries.add(guarantee24);
             Dictionary contactChannel1 = new Dictionary("Zəng", "call", null, contactChannelType);
@@ -1361,6 +1371,8 @@ public class DBConfiguration {
             moduleOperations.add(filterModuleOperation22);
             ModuleOperation filterModuleOperation23 = new ModuleOperation(emailAnalyzer, filter, null); //ok
             moduleOperations.add(filterModuleOperation23);
+            ModuleOperation filterModuleOperation24 = new ModuleOperation(schedule, filter, null); //ok
+            moduleOperations.add(filterModuleOperation24);
 
             ModuleOperation creditModuleOperation1 = new ModuleOperation(invoice, credit, null); //ok
             moduleOperations.add(creditModuleOperation1);
@@ -1637,6 +1649,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation21));
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation22));
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation23));
+            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation24));
 
             userModuleOperations.add(new UserModuleOperation(user, approveModuleOperation3));
             userModuleOperations.add(new UserModuleOperation(user, approveModuleOperation4));

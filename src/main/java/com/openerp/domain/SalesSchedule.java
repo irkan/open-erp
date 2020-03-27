@@ -12,11 +12,19 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class SalesSchedules {
+public class SalesSchedule {
+
     private List<Schedule> schedules;
+
     private Sales sales;
 
-    public SalesSchedules(List<Schedule> schedules, Sales sales) {
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    private Date scheduleDate=new Date();
+
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    private Date scheduleDateFrom=new Date();
+
+    public SalesSchedule(List<Schedule> schedules, Sales sales) {
         this.schedules = schedules;
         this.sales = sales;
     }

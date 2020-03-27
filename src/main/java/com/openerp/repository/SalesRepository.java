@@ -1,5 +1,6 @@
 package com.openerp.repository;
 
+import com.openerp.entity.Dictionary;
 import com.openerp.entity.Organization;
 import com.openerp.entity.Sales;
 import com.openerp.entity.Transaction;
@@ -16,4 +17,5 @@ public interface SalesRepository extends JpaRepository<Sales, Integer>, JpaSpeci
     List<Sales> getSalesByActiveTrueAndOrganizationOrderByIdDesc(Organization organization);
     Sales getSalesByIdAndActiveTrue(int salesId);
     Sales getSalesById(int salesId);
+    List<Sales> getSalesByActiveTrueAndApproveTrueAndPayment_Period(Dictionary paymentPeriod);
 }

@@ -1,14 +1,16 @@
 package com.openerp.controller;
 
 import com.openerp.domain.Return;
-import com.openerp.domain.SalesSchedules;
+import com.openerp.domain.SalesSchedule;
 import com.openerp.domain.Schedule;
 import com.openerp.entity.*;
 import com.openerp.entity.Dictionary;
+import com.openerp.service.SalesService;
 import com.openerp.util.Constants;
 import com.openerp.util.DateUtility;
 import com.openerp.util.*;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
@@ -62,7 +64,40 @@ public class SaleController extends SkeletonController {
                 return exportExcel(sales, redirectAttributes, page);
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.SCHEDULE)){
-            List<Schedule> schedules = new ArrayList<>();
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new SalesSchedule());
+            }
+            if(!model.containsAttribute(Constants.FILTER)){
+                model.addAttribute(Constants.FILTER, new SalesSchedule());
+            }
+
+            SalesSchedule salesSchedule = (SalesSchedule) model.asMap().get(Constants.FILTER);
+            Dictionary paymentPeriod = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1(String.valueOf(salesSchedule.getScheduleDate().getDate()), "payment-period");
+
+            List<Sales> salesList = salesRepository.getSalesByActiveTrueAndApproveTrueAndPayment_Period(paymentPeriod);
+
+            List<SalesSchedule> salesSchedules = new ArrayList<>();
+            for(Sales sales: salesList){
+                List<Schedule> schedules = new ArrayList<>();
+                if(sales!=null && sales.getPayment()!=null && !sales.getPayment().getCash()){
+                    double sumOfInvoices = Util.calculateInvoice(sales.getInvoices());
+                    schedules = getSchedulePayment(DateUtility.getFormattedDate(sales.getSaleDate()), sales.getPayment().getSchedule().getId(), sales.getPayment().getPeriod().getId(), sales.getPayment().getLastPrice(), sales.getPayment().getDown());
+                    double plannedPayment = Util.calculatePlannedPayment(sales, schedules);
+                    schedules = Util.calculateSchedule(sales, schedules, sumOfInvoices);
+                    sales.getPayment().setLatency(Util.calculateLatency(schedules, sumOfInvoices, sales));
+                    sales.getPayment().setSumOfInvoice(sumOfInvoices);
+                    sales.getPayment().setUnpaid(plannedPayment-sumOfInvoices);
+                }
+                salesSchedules.add(new SalesSchedule(schedules, sales));
+            }
+
+            Page<SalesSchedule> salesSchedulePage = new PageImpl<>(salesSchedules);
+            model.addAttribute(Constants.LIST, salesSchedulePage);
+
+
+
+
+            /*List<Schedule> schedules = new ArrayList<>();
             Sales sale = null;
             if(!data.equals(Optional.empty())){
                 sale = salesRepository.getSalesById(Integer.parseInt(data.get()));
@@ -76,7 +111,7 @@ public class SaleController extends SkeletonController {
                     sale.getPayment().setUnpaid(plannedPayment-sumOfInvoices);
                 }
             }
-            model.addAttribute(Constants.LIST, new SalesSchedules(schedules, sale));
+            model.addAttribute(Constants.LIST, new SalesSchedule(schedules, sale));*/
         } else if(page.equalsIgnoreCase(Constants.ROUTE.SERVICE)){
             List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization());
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
@@ -356,6 +391,11 @@ public class SaleController extends SkeletonController {
     @PostMapping(value = "/invoice/filter")
     public String postInvoiceFilter(@ModelAttribute(Constants.FILTER) @Validated Invoice invoice, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         return mapFilter(invoice, binding, redirectAttributes, "/sale/invoice");
+    }
+
+    @PostMapping(value = "/schedule/filter")
+    public String postScheduleFilter(@ModelAttribute(Constants.FILTER) @Validated SalesSchedule salesSchedule, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        return mapFilter(salesSchedule, binding, redirectAttributes, "/sale/schedule");
     }
 
     @PostMapping(value = "/demonstration")

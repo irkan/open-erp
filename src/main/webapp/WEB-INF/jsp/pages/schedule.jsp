@@ -12,31 +12,101 @@
 <%@ taglib prefix="utl" uri="/WEB-INF/tld/Util.tld"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <div class="kt-container  kt-grid__item kt-grid__item--fluid">
+    <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
+    <c:set var="filter" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'filter')}"/>
+    <c:if test="${filter.status}">
+        <div class="accordion  accordion-toggle-arrow mb-2" id="accordionFilter">
+            <div class="card" style="border-radius: 4px;">
+                <div class="card-header">
+                    <div class="card-title w-100" data-toggle="collapse" data-target="#filterContent" aria-expanded="true" aria-controls="collapseOne4">
+                        <div class="row w-100">
+                            <div class="col-3">
+                                <i class="<c:out value="${filter.object.icon}"/>"></i>
+                                <%--<c:out value="${list.totalElements>0?list.totalElements:0} sətr"/>--%>
+                            </div>
+                            <div class="col-6 text-center" style="letter-spacing: 10px;">
+                                <c:out value="${filter.object.name}"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="filterContent" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionFilter">
+                    <div class="card-body">
+                        <form:form modelAttribute="filter" id="filter" method="post" action="/sale/schedule/filter">
+                            <div class="row">
+                                <div class="col-md-11">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="sales">Satış kodu</form:label>
+                                                <form:input path="sales" cssClass="form-control" placeholder="#######" />
+                                                <form:errors path="sales" cssClass="alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="sales.customer">Müştəri kodu</form:label>
+                                                <form:input path="sales.customer" cssClass="form-control" placeholder="#######" />
+                                                <form:errors path="sales.customer" cssClass="alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="scheduleDateFrom">Tarixdən</form:label>
+                                                <div class="input-group date" >
+                                                    <form:input path="scheduleDateFrom" autocomplete="off" date_="date_" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
+                                                    <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="la la-calendar"></i>
+                                </span>
+                                                    </div>
+                                                </div>
+                                                <form:errors path="scheduleDateFrom" cssClass="control-label alert-danger" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="scheduleDate">Tarixədək</form:label>
+                                                <div class="input-group date" >
+                                                    <form:input path="scheduleDate" autocomplete="off" date_="date_" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
+                                                    <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="la la-calendar"></i>
+                                </span>
+                                                    </div>
+                                                </div>
+                                                <form:errors path="scheduleDate" cssClass="control-label alert-danger" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 text-right">
+                                    <div class="form-group">
+                                        <a href="#" onclick="location.reload();" class="btn btn-danger btn-elevate btn-icon-sm btn-block mb-2" style="padding: 0.35rem 0.6rem;">
+                                            <i class="la la-trash"></i> Sil
+                                        </a>
+                                        <a href="#" onclick="submit($('#filter'))" class="btn btn-warning btn-elevate btn-icon-sm btn-block mt-2" style="padding: 0.35rem 0.6rem">
+                                            <i class="la la-search"></i> Axtar
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form:form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </c:if>
     <div class="row">
         <div class="col-lg-12">
             <div class="kt-portlet kt-portlet--mobile">
                 <div class="kt-portlet__body">
+
                     <c:choose>
-                        <c:when test="${not empty list}">
+                        <c:when test="${not empty list.content}">
                             <c:set var="transfer" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'transfer')}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
                                 <thead>
-                                <tr class="bg-light">
-                                    <th colspan="8" class="text-center">
-                                        <span style="font-size: 16px; font-weight: bold"><c:out value="${list.sales.customer.person.fullName}"/></span><br/>
-                                        <span style="font-size: 16px; font-weight: bold">Satış kodu: <c:out value="${list.sales.id}"/></span>
-                                        <c:if test="${not empty list.sales.customer.person.contact.mobilePhone}">
-                                            <br/><c:out value="${list.sales.customer.person.contact.mobilePhone}"/>&nbsp;
-                                        </c:if>
-                                        <c:if test="${not empty list.sales.customer.person.contact.homePhone}">
-                                            <c:out value="${list.sales.customer.person.contact.homePhone}"/>&nbsp;
-                                        </c:if>
-                                        <c:if test="${not empty list.sales.customer.person.contact.address}">
-                                            <br/><c:out value="${list.sales.customer.person.contact.city.name}"/>,&nbsp;&nbsp;
-                                            <c:out value="${list.sales.customer.person.contact.address}"/>
-                                        </c:if>
-                                    </th>
-                                </tr>
                                 <tr>
                                     <th>№</th>
                                     <th>Satış kodu</th>
@@ -48,12 +118,13 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <c:forEach var="t" items="${list.schedules}" varStatus="loop">
+                                <c:forEach var="p" items="${list.content}" varStatus="loop">
+                                <c:forEach var="t" items="${p.schedules}" varStatus="loop">
                                     <c:set var="now" value="<%=new Date().getTime()%>"/>
                                     <fmt:parseNumber var = "days" integerOnly = "true" type = "number" value = "${(now-t.scheduleDate.time)/86400000}" />
                                     <tr>
                                         <th>${loop.index+1}</th>
-                                        <th><c:out value="${list.sales.id}" /></th>
+                                        <th><c:out value="${p.sales.id}" /></th>
                                         <td><fmt:formatDate value = "${t.scheduleDate}" pattern = "dd.MM.yyyy" /></td>
                                         <th><c:out value="${t.amount}" /> AZN</th>
                                         <th>
@@ -76,6 +147,7 @@
                                             </span>
                                         </th>
                                     </tr>
+                                </c:forEach>
                                 </c:forEach>
                                 </tbody>
                             </table>
