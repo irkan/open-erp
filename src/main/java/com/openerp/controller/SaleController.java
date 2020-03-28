@@ -67,37 +67,55 @@ public class SaleController extends SkeletonController {
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new SalesSchedule());
             }
+            Sales filterSales = null;
             if(!model.containsAttribute(Constants.FILTER)){
-                Sales sales = new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null, new Payment((Double) null));
-                model.addAttribute(Constants.FILTER, new SalesSchedule(sales));
+                filterSales = new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null, new Payment((Double) null));
+                model.addAttribute(Constants.FILTER, new SalesSchedule(filterSales));
             }
-
-            SalesSchedule salesSchedule = (SalesSchedule) model.asMap().get(Constants.FILTER);
-            Dictionary paymentPeriod = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1(String.valueOf(salesSchedule.getScheduleDate().getDate()), "payment-period");
-
-            List<Sales> salesList = salesRepository.getSalesByActiveTrueAndApproveTrueAndPayment_Period(paymentPeriod);
-
-            List<SalesSchedule> salesSchedules = new ArrayList<>();
-            for(Sales sales: salesList){
+            if(filterSales!=null && filterSales.getId()!=null){
                 List<Schedule> schedules = new ArrayList<>();
-                if(sales!=null && sales.getPayment()!=null && !sales.getPayment().getCash()){
-                    double sumOfInvoices = Util.calculateInvoice(sales.getInvoices());
-                    schedules = getSchedulePayment(DateUtility.getFormattedDate(sales.getSaleDate()), sales.getPayment().getSchedule().getId(), sales.getPayment().getPeriod().getId(), sales.getPayment().getLastPrice(), sales.getPayment().getDown());
-                    double plannedPayment = Util.calculatePlannedPayment(sales, schedules);
-                    schedules = Util.calculateSchedule(sales, schedules, sumOfInvoices);
-                    sales.getPayment().setLatency(Util.calculateLatency(schedules, sumOfInvoices, sales));
-                    sales.getPayment().setSumOfInvoice(sumOfInvoices);
-                    sales.getPayment().setUnpaid(plannedPayment-sumOfInvoices);
-                    schedules = Util.getDatedSchedule(schedules, salesSchedule.getScheduleDate());
+                Sales sale = null;
+                if(!data.equals(Optional.empty())){
+                    sale = salesRepository.getSalesById(Integer.parseInt(data.get()));
+                    if(sale!=null && sale.getPayment()!=null && !sale.getPayment().getCash()){
+                        double sumOfInvoices = Util.calculateInvoice(sale.getInvoices());
+                        schedules = getSchedulePayment(DateUtility.getFormattedDate(sale.getSaleDate()), sale.getPayment().getSchedule().getId(), sale.getPayment().getPeriod().getId(), sale.getPayment().getLastPrice(), sale.getPayment().getDown());
+                        double plannedPayment = Util.calculatePlannedPayment(sale, schedules);
+                        schedules = Util.calculateSchedule(sale, schedules, sumOfInvoices);
+                        sale.getPayment().setLatency(Util.calculateLatency(schedules, sumOfInvoices, sale));
+                        sale.getPayment().setSumOfInvoice(sumOfInvoices);
+                        sale.getPayment().setUnpaid(plannedPayment-sumOfInvoices);
+                    }
                 }
-                salesSchedules.add(new SalesSchedule(schedules, sales));
+                List<SalesSchedule> salesSchedules = new ArrayList<>();
+                salesSchedules.add(new SalesSchedule(schedules, sale));
+                Page<SalesSchedule> salesSchedulePage = new PageImpl<>(salesSchedules);
+                model.addAttribute(Constants.LIST, salesSchedulePage);
+            } else {
+                SalesSchedule salesSchedule = (SalesSchedule) model.asMap().get(Constants.FILTER);
+                Dictionary paymentPeriod = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1(String.valueOf(salesSchedule.getScheduleDate().getDate()), "payment-period");
+
+                List<Sales> salesList = salesRepository.getSalesByActiveTrueAndApproveTrueAndPayment_Period(paymentPeriod);
+
+                List<SalesSchedule> salesSchedules = new ArrayList<>();
+                for(Sales sales: salesList){
+                    List<Schedule> schedules = new ArrayList<>();
+                    if(sales!=null && sales.getPayment()!=null && !sales.getPayment().getCash()){
+                        double sumOfInvoices = Util.calculateInvoice(sales.getInvoices());
+                        schedules = getSchedulePayment(DateUtility.getFormattedDate(sales.getSaleDate()), sales.getPayment().getSchedule().getId(), sales.getPayment().getPeriod().getId(), sales.getPayment().getLastPrice(), sales.getPayment().getDown());
+                        double plannedPayment = Util.calculatePlannedPayment(sales, schedules);
+                        schedules = Util.calculateSchedule(sales, schedules, sumOfInvoices);
+                        sales.getPayment().setLatency(Util.calculateLatency(schedules, sumOfInvoices, sales));
+                        sales.getPayment().setSumOfInvoice(sumOfInvoices);
+                        sales.getPayment().setUnpaid(plannedPayment-sumOfInvoices);
+                        schedules = Util.getDatedSchedule(schedules, salesSchedule.getScheduleDate());
+                    }
+                    salesSchedules.add(new SalesSchedule(schedules, sales));
+                }
+
+                Page<SalesSchedule> salesSchedulePage = new PageImpl<>(salesSchedules);
+                model.addAttribute(Constants.LIST, salesSchedulePage);
             }
-
-            Page<SalesSchedule> salesSchedulePage = new PageImpl<>(salesSchedules);
-            model.addAttribute(Constants.LIST, salesSchedulePage);
-
-
-
 
             /*List<Schedule> schedules = new ArrayList<>();
             Sales sale = null;
