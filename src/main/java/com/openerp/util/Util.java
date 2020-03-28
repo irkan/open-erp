@@ -691,4 +691,14 @@ public class Util {
         }
         return annual;
     }
+
+    public static List<Schedule> getDatedSchedule(List<Schedule> schedules, Date scheduleDate) {
+        List<Schedule> newSchedules = new ArrayList<>();
+        for(Schedule schedule: schedules){
+            if(schedule.getScheduleDate().getTime()==scheduleDate.getTime()){
+                newSchedules.add(schedule);
+            }
+        }
+        return newSchedules;
+    }
 }

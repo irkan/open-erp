@@ -28,4 +28,8 @@ public class SalesSchedule {
         this.schedules = schedules;
         this.sales = sales;
     }
+
+    public SalesSchedule(Sales sales) {
+        this.sales = sales;
+    }
 }

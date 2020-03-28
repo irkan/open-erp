@@ -68,7 +68,8 @@ public class SaleController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new SalesSchedule());
             }
             if(!model.containsAttribute(Constants.FILTER)){
-                model.addAttribute(Constants.FILTER, new SalesSchedule());
+                Sales sales = new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null, new Payment((Double) null));
+                model.addAttribute(Constants.FILTER, new SalesSchedule(sales));
             }
 
             SalesSchedule salesSchedule = (SalesSchedule) model.asMap().get(Constants.FILTER);
@@ -87,6 +88,7 @@ public class SaleController extends SkeletonController {
                     sales.getPayment().setLatency(Util.calculateLatency(schedules, sumOfInvoices, sales));
                     sales.getPayment().setSumOfInvoice(sumOfInvoices);
                     sales.getPayment().setUnpaid(plannedPayment-sumOfInvoices);
+                    schedules = Util.getDatedSchedule(schedules, salesSchedule.getScheduleDate());
                 }
                 salesSchedules.add(new SalesSchedule(schedules, sales));
             }
