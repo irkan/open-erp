@@ -7,6 +7,7 @@ import com.openerp.entity.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
+import java.util.Date;
 import java.util.List;
 
 public interface SalesRepository extends JpaRepository<Sales, Integer>, JpaSpecificationExecutor<Sales> {
@@ -17,5 +18,6 @@ public interface SalesRepository extends JpaRepository<Sales, Integer>, JpaSpeci
     List<Sales> getSalesByActiveTrueAndOrganizationOrderByIdDesc(Organization organization);
     Sales getSalesByIdAndActiveTrue(int salesId);
     Sales getSalesById(int salesId);
-    List<Sales> getSalesByActiveTrueAndApproveTrueAndPayment_Period(Dictionary paymentPeriod);
+    List<Sales> getSalesByActiveTrueAndApproveTrueAndPayment_CashAndPayment_Period(Boolean cash, Dictionary paymentPeriod);
+    List<Sales> getSalesByActiveTrueAndApproveTrueAndPayment_CashAndSaleDate(Boolean cash, Date saleDate);
 }

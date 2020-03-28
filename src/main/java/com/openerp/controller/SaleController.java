@@ -77,8 +77,8 @@ public class SaleController extends SkeletonController {
                 Sales sale = null;
                 if(!data.equals(Optional.empty())){
                     sale = salesRepository.getSalesById(Integer.parseInt(data.get()));
+                    double sumOfInvoices = Util.calculateInvoice(sale.getInvoices());
                     if(sale!=null && sale.getPayment()!=null && !sale.getPayment().getCash()){
-                        double sumOfInvoices = Util.calculateInvoice(sale.getInvoices());
                         schedules = getSchedulePayment(DateUtility.getFormattedDate(sale.getSaleDate()), sale.getPayment().getSchedule().getId(), sale.getPayment().getPeriod().getId(), sale.getPayment().getLastPrice(), sale.getPayment().getDown());
                         double plannedPayment = Util.calculatePlannedPayment(sale, schedules);
                         schedules = Util.calculateSchedule(sale, schedules, sumOfInvoices);
@@ -94,14 +94,13 @@ public class SaleController extends SkeletonController {
             } else {
                 SalesSchedule salesSchedule = (SalesSchedule) model.asMap().get(Constants.FILTER);
                 Dictionary paymentPeriod = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1(String.valueOf(salesSchedule.getScheduleDate().getDate()), "payment-period");
-
-                List<Sales> salesList = salesRepository.getSalesByActiveTrueAndApproveTrueAndPayment_Period(paymentPeriod);
-
                 List<SalesSchedule> salesSchedules = new ArrayList<>();
+
+                List<Sales> salesList = salesRepository.getSalesByActiveTrueAndApproveTrueAndPayment_CashAndPayment_Period(false, paymentPeriod);
                 for(Sales sales: salesList){
                     List<Schedule> schedules = new ArrayList<>();
+                    double sumOfInvoices = Util.calculateInvoice(sales.getInvoices());
                     if(sales!=null && sales.getPayment()!=null && !sales.getPayment().getCash()){
-                        double sumOfInvoices = Util.calculateInvoice(sales.getInvoices());
                         schedules = getSchedulePayment(DateUtility.getFormattedDate(sales.getSaleDate()), sales.getPayment().getSchedule().getId(), sales.getPayment().getPeriod().getId(), sales.getPayment().getLastPrice(), sales.getPayment().getDown());
                         double plannedPayment = Util.calculatePlannedPayment(sales, schedules);
                         schedules = Util.calculateSchedule(sales, schedules, sumOfInvoices);
@@ -109,6 +108,16 @@ public class SaleController extends SkeletonController {
                         sales.getPayment().setSumOfInvoice(sumOfInvoices);
                         sales.getPayment().setUnpaid(plannedPayment-sumOfInvoices);
                         schedules = Util.getDatedSchedule(schedules, salesSchedule.getScheduleDate());
+                    }
+                    salesSchedules.add(new SalesSchedule(schedules, sales));
+                }
+
+                salesList = salesRepository.getSalesByActiveTrueAndApproveTrueAndPayment_CashAndSaleDate(true, salesSchedule.getScheduleDate());
+                for(Sales sales: salesList){
+                    List<Schedule> schedules = new ArrayList<>();
+                    double sumOfInvoices = Util.calculateInvoice(sales.getInvoices());
+                    if(sumOfInvoices<sales.getPayment().getLastPrice()){
+                        schedules.add(new Schedule(sales.getPayment().getLastPrice()-sumOfInvoices, salesSchedule.getScheduleDate()));
                     }
                     salesSchedules.add(new SalesSchedule(schedules, sales));
                 }

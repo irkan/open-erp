@@ -287,15 +287,15 @@
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${list.content}" varStatus="loop">
-                                    <tr data="<c:out value="${t.id}" />" style="<c:out value="${t.saled?'background-color: rgb(237, 239, 255) !important':''}"/>">
+                                    <tr data="<c:out value="${t.id}" />" cash="<c:out value="${t.payment.cash}" />" style="<c:out value="${t.saled?'background-color: rgb(237, 239, 255) !important':''}"/>">
                                         <td style="<c:out value="${t.payment.cash?'background-color: #e6ffe7 !important':'background-color: #ffeaf1 !important'}"/>">
                                             <a href="javascript:copyToClipboard('<c:out value="${t.id}" />')" class="kt-link kt-font-lg kt-font-bold kt-margin-t-5"><c:out value="${t.id}"/></a>
                                         </td>
                                         <th>
                                             <c:forEach var="p" items="${t.salesInventories}" varStatus="lp">
-                                                <c:out value="${lp.index+1}" />.
-                                                <c:out value="${p.inventory.name}" /><br/>
-                                                <c:out value="${p.inventory.barcode}" />
+                                                <c:out value="${p.inventory.id}" />.&nbsp;
+                                                <c:out value="${p.inventory.name}" />&nbsp;&nbsp;
+                                                <c:out value="${p.inventory.barcode}" /><br/>
                                             </c:forEach>
                                         </th>
                                         <td><fmt:formatDate value = "${t.saleDate}" pattern = "dd.MM.yyyy" /></td>
@@ -373,7 +373,7 @@
                                                         <i class="la <c:out value="${view1.object.icon}"/>"></i> Qeydlər
                                                     </a>
                                                     </c:if>
-                                                    <c:if test="${view2.status}">
+                                                    <c:if test="${view2.status and !t.payment.cash}">
                                                     <a href="/sale/schedule/<c:out value="${t.id}"/>" class="dropdown-item">
                                                         <i class="la <c:out value="${view2.object.icon}"/>"></i> Ödəniş qrafiki
                                                     </a>
@@ -1771,7 +1771,11 @@
     <c:if test="${view2.status}">
     $('#datatable tbody').on('dblclick', 'tr', function () {
         swal.showLoading();
-        location.href = '/sale/schedule/'+ $(this).attr('data');
+        if($(this).attr('cash')==="true"){
+            location.href = '/collect/contact-history/'+ $(this).attr('data');
+        } else {
+            location.href = '/sale/schedule/'+ $(this).attr('data');
+        }
         window.reload();
     });
     </c:if>
