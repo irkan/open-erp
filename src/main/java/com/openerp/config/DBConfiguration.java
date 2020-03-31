@@ -1148,6 +1148,8 @@ public class DBConfiguration {
             moduleOperations.add(viewModuleOperation46);
             ModuleOperation viewModuleOperation47 = new ModuleOperation(endpoint, view, null);
             moduleOperations.add(viewModuleOperation47);
+            ModuleOperation viewModuleOperation48 = new ModuleOperation(supplier, view, null);
+            moduleOperations.add(viewModuleOperation48);
 
             ModuleOperation exportModuleOperation1 = new ModuleOperation(subModule1, export, null);
             moduleOperations.add(exportModuleOperation1);
@@ -1626,6 +1628,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation45));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation46));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation47));
+            userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation48));
 
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation2));

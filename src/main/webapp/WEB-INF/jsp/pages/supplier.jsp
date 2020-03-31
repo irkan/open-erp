@@ -20,6 +20,7 @@
                         <c:when test="${not empty list}">
                             <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
                             <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
+                            <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
                                 <thead>
                                 <tr>
@@ -240,11 +241,12 @@
 </div>
 
 <script>
-    <c:if test="${edit.status}">
+
     $('#datatable tbody').on('dblclick', 'tr', function () {
-        edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
+        <c:if test="${view.status}">
+            view($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
+        </c:if>
     });
-    </c:if>
 
     $("#datatable").DataTable({
         responsive: true,
