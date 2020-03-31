@@ -1,6 +1,7 @@
 package com.openerp.controller;
 
 import com.openerp.dao.ReportingDao;
+import com.openerp.domain.SalesSchedule;
 import com.openerp.domain.Schedule;
 import com.openerp.entity.*;
 import com.openerp.service.*;
@@ -622,5 +623,15 @@ public class SkeletonController {
         invoiceRepository.save(invc);
         log(invc, "sale_invoice", "create/edit", invc.getId(), invc.toString(), "Kanal referans kodu update edildi");
         return invc;
+    }
+
+    boolean checkContactHistory(Sales sales, SalesSchedule salesSchedule) {
+        List<ContactHistory> contactHistories = contactHistoryRepository.getContactHistoriesByActiveTrueAndSalesOrderByIdDesc(sales);
+        for(ContactHistory contactHistory: contactHistories){
+            if(contactHistory.getNextContactDate().getTime()>salesSchedule.getScheduleDate().getTime()){
+                return true;
+            }
+        }
+        return false;
     }
 }

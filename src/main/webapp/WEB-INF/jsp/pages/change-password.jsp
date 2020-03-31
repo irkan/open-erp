@@ -51,20 +51,6 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <form:label path="oldPassword" cssClass="col-xl-3 col-lg-3 col-form-label">Hazırkı şifrə</form:label>
-                                            <div class="col-lg-9 col-xl-6">
-                                                <form:password path="oldPassword" cssClass="form-control" placeholder="Hazırki şifrənizi daxil edin" />
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <form:errors path="oldPassword" cssClass="control-label alert-danger"/>
-                                                    </div>
-                                                    <div class="col-md-6 text-right">
-                                                        <a href="#" class="kt-link kt-font-sm kt-font-bold kt-margin-t-5">Şifrəni unutmusunuzsa adminstratora müraciət edin</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
                                             <form:label path="newPassword" cssClass="col-xl-3 col-lg-3 col-form-label">Yeni şifrə</form:label>
                                             <div class="col-lg-9 col-xl-6">
                                                 <form:password path="newPassword" cssClass="form-control" value="" placeholder="Yeni şifrənizi daxil edin"/>
@@ -87,7 +73,7 @@
                                             <div class="col-lg-3 col-xl-3">
                                             </div>
                                             <div class="col-lg-9 col-xl-9">
-                                                <button type="submit" class="btn btn-brand btn-bold" onclick="submit($('#form'))">Şifrəni dəyişdir</button>&nbsp;
+                                                <button type="button" class="btn btn-brand btn-bold" onclick="submit($('#form'))">Şifrəni dəyişdir</button>&nbsp;
                                                 <button type="reset" class="btn btn-secondary" onclick="$('#form').reset();">Təmizlə</button>
                                             </div>
                                         </div>
@@ -101,3 +87,22 @@
         </div>
     </div>
 </div>
+<script>
+    $( "#form" ).validate({
+        rules: {
+            newPassword: {
+                required: true,
+                minlength: 6
+            },
+            verifyPassword: {
+                required: true,
+                equalTo: "#newPassword",
+                minlength: 6
+            }
+        },
+        invalidHandler: function(event, validator) {
+            KTUtil.scrollTop();
+            swal.close();
+        },
+    });
+</script>

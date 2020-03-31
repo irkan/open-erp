@@ -66,7 +66,8 @@
                                                         <label class="kt-checkbox kt-checkbox--brand">
                                                             <input type="checkbox" onclick="checkedRow(this)">
                                                             <span style="top: -11px; left: 7px;"></span>
-                                                        </label></td>
+                                                        </label>
+                                                    </td>
                                                     <c:forEach var="o" items="${operations}" varStatus="loop">
                                                         <td class="text-center">
                                                             <c:set var="status" value="${utl:checkAccess(list, user_module_operations, template_module_operations, m.id, o.id)}"/>
@@ -113,9 +114,35 @@
     </div>
 </div>
 
-<script src="<c:url value="/assets/js/demo4/pages/crud/datatables/advanced/row-grouping.js" />" type="text/javascript"></script>
-
 <script>
+    $('#group_table').DataTable({
+        responsive: true,
+        pageLength: 100,
+        order: [[2, 'asc']],
+        drawCallback: function(settings) {
+            var api = this.api();
+            var rows = api.rows({page: 'current'}).nodes();
+            var last = null;
+
+            api.column(2, {page: 'current'}).data().each(function(group, i) {
+                if (last !== group) {
+                    $(rows).eq(i).before(
+                        '<tr class="group"><td colspan="30">' + group + '</td></tr>'
+                    );
+                    last = group;
+                }
+            });
+        },
+        columnDefs: [
+            {
+                targets: [2],
+                visible: false
+            }
+        ]
+    });
+
+    $('#group_table').destroy();
+
     function checkedRow(element){
         var row = $(element).closest("tr");
         if($(element).prop("checked") == true){

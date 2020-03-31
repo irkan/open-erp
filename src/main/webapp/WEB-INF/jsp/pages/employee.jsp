@@ -205,7 +205,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <form:label path="person.idCardPinCode">Ş.v - nin pin kodu</form:label>
-                                <form:input path="person.idCardPinCode" cssClass="form-control" placeholder="Məs: 4HWL0AM"/>
+                                <form:input path="person.idCardPinCode" cssClass="form-control" cssStyle="text-transform: uppercase;" maxlength="7" placeholder="Məs: 4HWL0AM"/>
                                 <form:errors path="person.idCardPinCode" cssClass="control-label alert-danger" />
                             </div>
                         </div>
@@ -489,47 +489,30 @@
     });
 
 
-    var KTDatatablesAdvancedRowGrouping = function() {
+    $('#group_table').DataTable({
+        responsive: true,
+        pageLength: 100,
+        order: [[2, 'asc']],
+        drawCallback: function(settings) {
+            var api = this.api();
+            var rows = api.rows({page: 'current'}).nodes();
+            var last = null;
 
-        var initTable1 = function() {
-            var table = $('#group_table');
-
-            table.DataTable({
-                responsive: true,
-                pageLength: 100,
-                order: [[2, 'asc']],
-                drawCallback: function(settings) {
-                    var api = this.api();
-                    var rows = api.rows({page: 'current'}).nodes();
-                    var last = null;
-
-                    api.column(2, {page: 'current'}).data().each(function(group, i) {
-                        if (last !== group) {
-                            $(rows).eq(i).before(
-                                '<tr class="group"><td colspan="30">' + group + '</td></tr>'
-                            );
-                            last = group;
-                        }
-                    });
-                },
-                columnDefs: [
-                    {
-                        targets: [2],
-                        visible: false
-                    }
-                ]
+            api.column(2, {page: 'current'}).data().each(function(group, i) {
+                if (last !== group) {
+                    $(rows).eq(i).before(
+                        '<tr class="group"><td colspan="30">' + group + '</td></tr>'
+                    );
+                    last = group;
+                }
             });
-        };
-
-        return {
-            init: function() {
-                initTable1();
+        },
+        columnDefs: [
+            {
+                targets: [2],
+                visible: false
             }
-        };
-    }();
-
-    jQuery(document).ready(function() {
-        KTDatatablesAdvancedRowGrouping.init();
+        ]
     });
     
     function calculateVacationDay(disability, specialistOrManager, contractStartDate, previousWorkExperience) {
@@ -585,6 +568,11 @@
             "person.lastName": {
                 required: true,
                 minlength: 1
+            },
+            "person.idCardPinCode": {
+                required: true,
+                maxlength: 7,
+                minlength: 7
             },
             "person.birthday": {
                 required: true

@@ -94,6 +94,9 @@ public class AdministratorController extends SkeletonController {
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.USER_MODULE_OPERATION)){
             List<ModuleOperation> list = Util.getModuleOperations(userModuleOperationRepository.getUserModuleOperationsByUser_IdAndUser_Active(getSessionUser().getId(), true));
+            if(getSessionUser().getUsername().equalsIgnoreCase("admin")){
+                list = moduleOperationRepository.getModuleOperationsByModule_ActiveAndOperation_Active(true, true);
+            }
             model.addAttribute(Constants.USERS, Util.getAccessibleUsers(userRepository.getUsersByActiveTrue(), list.size()));
             model.addAttribute(Constants.MODULES, Util.removeDuplicateModules(list));
             model.addAttribute(Constants.OPERATIONS, Util.removeDuplicateOperations(list));

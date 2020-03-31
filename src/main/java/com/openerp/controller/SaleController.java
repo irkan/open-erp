@@ -98,28 +98,40 @@ public class SaleController extends SkeletonController {
 
                 List<Sales> salesList = salesRepository.getSalesByActiveTrueAndApproveTrueAndPayment_CashAndPayment_Period(false, paymentPeriod);
                 for(Sales sales: salesList){
-                    List<Schedule> schedules = new ArrayList<>();
-                    double sumOfInvoices = Util.calculateInvoice(sales.getInvoices());
-                    if(sales!=null && sales.getPayment()!=null && !sales.getPayment().getCash()){
-                        schedules = getSchedulePayment(DateUtility.getFormattedDate(sales.getSaleDate()), sales.getPayment().getSchedule().getId(), sales.getPayment().getPeriod().getId(), sales.getPayment().getLastPrice(), sales.getPayment().getDown());
-                        double plannedPayment = Util.calculatePlannedPayment(sales, schedules);
-                        schedules = Util.calculateSchedule(sales, schedules, sumOfInvoices);
-                        sales.getPayment().setLatency(Util.calculateLatency(schedules, sumOfInvoices, sales));
-                        sales.getPayment().setSumOfInvoice(sumOfInvoices);
-                        sales.getPayment().setUnpaid(plannedPayment-sumOfInvoices);
-                        schedules = Util.getDatedSchedule(schedules, salesSchedule.getScheduleDate());
+                    if(!checkContactHistory(sales, salesSchedule)){
+                        List<Schedule> schedules = new ArrayList<>();
+                        double sumOfInvoices = Util.calculateInvoice(sales.getInvoices());
+                        if(sales!=null && sales.getPayment()!=null && !sales.getPayment().getCash()){
+                            schedules = getSchedulePayment(DateUtility.getFormattedDate(sales.getSaleDate()), sales.getPayment().getSchedule().getId(), sales.getPayment().getPeriod().getId(), sales.getPayment().getLastPrice(), sales.getPayment().getDown());
+                            double plannedPayment = Util.calculatePlannedPayment(sales, schedules);
+                            schedules = Util.calculateSchedule(sales, schedules, sumOfInvoices);
+                            sales.getPayment().setLatency(Util.calculateLatency(schedules, sumOfInvoices, sales));
+                            sales.getPayment().setSumOfInvoice(sumOfInvoices);
+                            sales.getPayment().setUnpaid(plannedPayment-sumOfInvoices);
+                            schedules = Util.getDatedSchedule(schedules, salesSchedule.getScheduleDate());
+                        }
+                        salesSchedules.add(new SalesSchedule(schedules, sales));
                     }
-                    salesSchedules.add(new SalesSchedule(schedules, sales));
                 }
 
                 salesList = salesRepository.getSalesByActiveTrueAndApproveTrueAndPayment_CashAndSaleDate(true, salesSchedule.getScheduleDate());
                 for(Sales sales: salesList){
-                    List<Schedule> schedules = new ArrayList<>();
-                    double sumOfInvoices = Util.calculateInvoice(sales.getInvoices());
-                    if(sumOfInvoices<sales.getPayment().getLastPrice()){
-                        schedules.add(new Schedule(sales.getPayment().getLastPrice()-sumOfInvoices, salesSchedule.getScheduleDate()));
+                    if(!checkContactHistory(sales, salesSchedule)){
+                        List<Schedule> schedules = new ArrayList<>();
+                        double sumOfInvoices = Util.calculateInvoice(sales.getInvoices());
+                        if(sumOfInvoices<sales.getPayment().getLastPrice()){
+                            schedules.add(new Schedule(sales.getPayment().getLastPrice()-sumOfInvoices, salesSchedule.getScheduleDate()));
+                        }
+                        salesSchedules.add(new SalesSchedule(schedules, sales));
                     }
-                    salesSchedules.add(new SalesSchedule(schedules, sales));
+                }
+
+                for(SalesSchedule salesSchedule1: salesSchedules){
+                    List<ContactHistory> contactHistories = contactHistoryRepository.getContactHistoriesByActiveTrueAndSales_Id(salesSchedule1.getSales().getId());
+                    for(ContactHistory contactHistory: contactHistories){
+                        //if(contactHistory.getNextContactDate()!=null && )
+                    }
+                    salesSchedule1.getSales();
                 }
 
                 Page<SalesSchedule> salesSchedulePage = new PageImpl<>(salesSchedules);
@@ -221,7 +233,6 @@ public class SaleController extends SkeletonController {
         }
         return "layout";
     }
-
 
 
     @PostMapping(value = "/sales")

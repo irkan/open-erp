@@ -322,7 +322,7 @@
             },
             username: {
                 required: true,
-                minlength: 4
+                 minlength: 5
             },
             password: {
                 required: true,

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.DigestUtils;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -64,19 +65,24 @@ public class ProfileController extends SkeletonController {
 
     @PostMapping(value = "/change-password")
     public String postChangePassword(Model model, @ModelAttribute(Constants.FORM) @Valid ChangePassword changePassword,
-                                    BindingResult binding) throws Exception {
+                                    BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        if(!changePassword.getNewPassword().equalsIgnoreCase(changePassword.getVerifyPassword())
+                || changePassword.getNewPassword().length()==0
+                || changePassword.getVerifyPassword().length()==0
+        ){
+
+            FieldError fieldError = new FieldError("newPassword", "newPassword", "Xəta baş verdi!");
+            binding.addError(fieldError);
+        }
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             User user = getSessionUser();
-            if(user.getPassword().equalsIgnoreCase(DigestUtils.md5DigestAsHex(changePassword.getOldPassword().getBytes()))){
-                user.setPassword(DigestUtils.md5DigestAsHex(changePassword.getNewPassword().getBytes()));
-                userRepository.save(user);
-                log(user, "admin_user", "create/edit", user.getId(), user.toString());
-                model.addAttribute(Constants.FORM, new ChangePassword());
-                return "layout";
-            }
+            user.setPassword(DigestUtils.md5DigestAsHex(changePassword.getNewPassword().getBytes()));
+            userRepository.save(user);
+            log(user, "admin_user", "create/edit", user.getId(), user.toString(), "Şifrə dəyişdirildi profildən");
+            model.addAttribute(Constants.FORM, new ChangePassword());
         }
-        model.addAttribute(Constants.FORM, changePassword);
-        return "layout";
+        return mapPost(changePassword, binding, redirectAttributes, "/profile/change-password");
     }
 
     @PostMapping(value = "/personal-information")
