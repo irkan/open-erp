@@ -517,18 +517,7 @@
                         targets: [2],
                         visible: false
                     }
-                ]/*,
-                columns: [
-                    {data: 'id'},
-                    {data: 'organization.name'},
-                    {data: 'organization.name'},
-                    {data: 'organization.name'},
-                    {data: 'organization.name'},
-                    {data: 'organization.name'},
-                    {data: 'organization.name'},
-                    {data: 'organization.name'},
-                    {data: 'organization.name'}
-                ]*/
+                ]
             });
         };
 
@@ -573,10 +562,7 @@
         return parseFloat(array2[2])-parseFloat(array1[2])
     }
     $('#group_table tbody').on('dblclick', 'tr', function () {
-        <c:if test="${edit.status}">
-        edit($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${edit.object.name}" />');
-        </c:if>
-        <c:if test="${!edit.status and view.status}">
+        <c:if test="${view.status}">
         view($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${view.object.name}" />');
         </c:if>
     });
