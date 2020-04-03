@@ -51,6 +51,11 @@
                                         <td><c:out value="${t.person.contact.city.name}" />, <c:out value="${t.person.contact.address}" /></td>
                                         <td><fmt:formatDate value = "${t.contractDate}" pattern = "dd.MM.yyyy" /></td>
                                         <td nowrap class="text-center">
+                                            <c:if test="${view.status}">
+                                                <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
+                                                    <i class="<c:out value="${view.object.icon}"/>"></i>
+                                                </a>
+                                            </c:if>
                                             <c:if test="${edit.status}">
                                                 <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
                                                     <i class="<c:out value="${edit.object.icon}"/>"></i>
