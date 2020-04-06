@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecificationExecutor<User> {
     User findByUsernameAndPasswordAndActiveTrue(String username, String password);
+    List<User> getUsersByActiveTrueAndUsernameAndPassword(String username, String password);
     User getUserByActiveTrueAndId(int id);
     List<User> getUsersByActiveTrue();
     List<User> getUsersByActiveTrueAndEmployee_Organization(Organization organization);

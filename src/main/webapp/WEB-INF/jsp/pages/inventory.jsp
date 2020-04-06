@@ -306,7 +306,7 @@
         var divToPrint=document.getElementById('barcodePrint');
         var newWin=window.open('','Print-Window');
         newWin.document.open();
-        newWin.document.write('<html><body style="width: 220px; height: 90px; padding-left: 40px;" onload="window.print()"><div style="text-align: center;margin-bottom: 3px; font-size: 12px; font-weight: bold">'+description+'</div>'+divToPrint.innerHTML+'</body></html>');
+        newWin.document.write('<html><body style="width: 220px; height: 151px; padding-left: 55px; padding-right: 5px; padding-top: 30px;" onload="window.print()"><div style="text-align: center;margin-bottom: 3px; font-size: 12px; font-weight: bold">'+description+'</div>'+divToPrint.innerHTML+'</body></html>');
         newWin.document.close();
         setTimeout(function(){newWin.close();},10);
     }
@@ -317,13 +317,13 @@
             bgColor: '#FFFFFF',
             color: '#000000',
             barWidth: 2,
-            barHeight: 50,
-            moduleSize: 5,
+            barHeight: 55,
+            moduleSize: 50,
             fontSize: 18,
             marginHRI: 1,
-            posX: 30,
-            posY: 5,
-            addQuietZone: 1
+            posX: 0,
+            posY: 10,
+            addQuietZone: 10
         };
         $("#barcodeTarget").html("").show().barcode(value, btype, settings);
     }

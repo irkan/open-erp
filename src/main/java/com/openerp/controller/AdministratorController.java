@@ -1,5 +1,6 @@
 package com.openerp.controller;
 
+import com.openerp.domain.Session;
 import com.openerp.entity.*;
 import com.openerp.util.Constants;
 import com.openerp.util.Util;
@@ -16,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -122,6 +124,13 @@ public class AdministratorController extends SkeletonController {
             model.addAttribute(Constants.LIST, configurationRepository.getConfigurationsByActiveTrue());
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Configuration());
+            }
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.SESSION)){
+            List<HttpSession> httpSessions = httpSessionConfig.getActiveSessions();
+            List<Session> sessions = Util.convertHttpSession(httpSessions);
+            model.addAttribute(Constants.LIST, sessions);
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(sessions, redirectAttributes, page);
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.WEB_SERVICE_AUTHENTICATOR)){
             model.addAttribute(Constants.LIST, webServiceAuthenticatorRepository.findAll());

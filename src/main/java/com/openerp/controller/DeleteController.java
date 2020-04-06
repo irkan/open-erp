@@ -9,6 +9,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -248,6 +249,17 @@ public class DeleteController extends SkeletonController {
         } else if(path.equalsIgnoreCase(Constants.ROUTE.ENDPOINT)){
             endpointRepository.deleteById(Integer.parseInt(id));
             log(null, "admin_endpoint", "delete", Integer.parseInt(id), "");
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.SESSION)){
+            String username = "";
+            for(HttpSession httpSession: httpSessionConfig.getActiveSessions()){
+                if(httpSession.getId().equalsIgnoreCase(id)){
+                    User user1 = (User) httpSession.getAttribute(Constants.USER);
+                    username = user1.getUsername();
+                    httpSession.invalidate();
+                    break;
+                }
+            }
+            log(null, "", "destroy", null, username+" istifadəçisinin sessiyası destroy edildi");
         }
         return "redirect:/"+parent+"/"+path;
     }

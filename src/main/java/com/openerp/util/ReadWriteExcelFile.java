@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.itextpdf.text.Font;
+import com.openerp.domain.Session;
 import com.openerp.entity.*;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -2359,6 +2360,48 @@ public class ReadWriteExcelFile {
 			cell.setCellValue(emailAnalyzer.getSize());
 			cell = row.createCell(row.getLastCellNum());
 			cell.setCellValue(emailAnalyzer.getMsgId());
+		}
+		FileOutputStream fileOut = new FileOutputStream(file);
+		wb.write(fileOut);
+		fileOut.flush();
+		fileOut.close();
+		return file;
+	}
+
+	public static File sessionXLSXFile(List<Session> sessions, String page) throws IOException {
+		File file = new File(page+".xlsx");
+		XSSFWorkbook wb = new XSSFWorkbook();
+		XSSFSheet sheet = wb.createSheet(page) ;
+		int rownum=0;
+		XSSFRow row = sheet.createRow(rownum++);
+		XSSFCell cell = row.createCell(0);
+		cell.setCellValue("ID");
+		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("İstifadəçi");
+		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("Əməkdaş");
+		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("Bitir");
+		cell = row.createCell(row.getLastCellNum());
+		row.setHeightInPoints(30);
+		XSSFCellStyle headerStyle = wb.createCellStyle();
+		headerStyle.setAlignment(HorizontalAlignment.CENTER);
+		headerStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+		XSSFFont headerFont= wb.createFont();
+		headerFont.setFontHeightInPoints((short)14);
+		headerFont.setBold(true);
+		headerStyle.setFont(headerFont);
+		row.setRowStyle(headerStyle);
+		for(Session session: sessions){
+			row = sheet.createRow(rownum++);
+			cell = row.createCell(0);
+			cell.setCellValue(session.getId());
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(session.getUsername());
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(session.getFullName());
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(Util.checkNull(session.getExpire()));
 		}
 		FileOutputStream fileOut = new FileOutputStream(file);
 		wb.write(fileOut);

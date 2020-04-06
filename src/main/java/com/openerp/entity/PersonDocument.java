@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "common_person_document")
@@ -32,7 +33,7 @@ public class PersonDocument {
 
     @Lob
     @Column(name = "document", length=300000,  columnDefinition="BLOB")
-    private byte[] bytes;
+    private String bytes;
 
     @Column(name = "extension")
     private String extension;

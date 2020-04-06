@@ -1,5 +1,6 @@
 package com.openerp.controller;
 
+import com.openerp.config.HttpSessionConfig;
 import com.openerp.dao.ReportingDao;
 import com.openerp.domain.SalesSchedule;
 import com.openerp.domain.Schedule;
@@ -36,6 +37,9 @@ public class SkeletonController {
 
     @Value("${spring.mail.username}")
     String springEmailUserName;
+
+    @Autowired
+    HttpSessionConfig httpSessionConfig;
 
     @Autowired
     UserRepository userRepository;

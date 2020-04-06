@@ -1,8 +1,10 @@
 package com.openerp.controller;
 
+import com.openerp.config.HttpSessionConfig;
 import com.openerp.entity.*;
 import com.openerp.util.Constants;
 import com.openerp.util.Util;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.DigestUtils;
@@ -39,7 +41,8 @@ public class LoginController extends SkeletonController {
     public String loginDo(Model model, @RequestParam(name="username") String username,
                                 @RequestParam(name="password") String password,
                                 RedirectAttributes redirectAttributes) throws Exception {
-        User user = userRepository.findByUsernameAndPasswordAndActiveTrue(username, DigestUtils.md5DigestAsHex(password.getBytes()));
+        List<User> users = userRepository.getUsersByActiveTrueAndUsernameAndPassword(username, DigestUtils.md5DigestAsHex(password.getBytes()));
+        User user = users.size()==1?users.get(0):null;
         if(user==null){
             model.addAttribute("error", "true");
             model.addAttribute(Constants.MESSAGE, "İstifadəçi adı və ya şifrəniz yanlışdır!");

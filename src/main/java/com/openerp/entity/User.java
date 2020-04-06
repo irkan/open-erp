@@ -15,7 +15,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @ToString
-public class User implements Serializable {
+public class User {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO, generator = "admin_sequence")

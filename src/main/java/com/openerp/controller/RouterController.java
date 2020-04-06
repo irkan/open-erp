@@ -15,7 +15,7 @@ import java.util.Optional;
 public class RouterController extends SkeletonController {
 
     @GetMapping(value = "/{path}")
-    public String getModules(@PathVariable("path") String path) throws Exception {
+    public String getModules(@PathVariable("path") String path, RedirectAttributes redirectAttributes) throws Exception {
         User user = getSessionUser();
         List<Module> modules = new ArrayList<>();
         Module parent = null;

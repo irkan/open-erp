@@ -1,9 +1,6 @@
 package com.openerp.util;
 
-import com.openerp.domain.InventoryAmount;
-import com.openerp.domain.Report;
-import com.openerp.domain.Response;
-import com.openerp.domain.Schedule;
+import com.openerp.domain.*;
 import com.openerp.entity.*;
 import com.openerp.entity.Dictionary;
 import net.emaze.dysfunctional.Groups;
@@ -21,6 +18,7 @@ import org.w3c.dom.NodeList;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+import javax.servlet.http.HttpSession;
 import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
@@ -700,5 +698,28 @@ public class Util {
             }
         }
         return newSchedules;
+    }
+
+    public static List<Session> convertHttpSession(List<HttpSession> httpSessions) {
+        List<Session> sessions = new ArrayList<>();
+        Session session;
+        for(HttpSession httpSession: httpSessions){
+            String username = "";
+            session = new Session(httpSession.getId(), new Date(httpSession.getLastAccessedTime()+httpSession.getMaxInactiveInterval()*1000));
+            try {
+                User user = (User) httpSession.getAttribute(Constants.USER);
+                if(user!=null){
+                    username = user.getUsername();
+                    session.setUsername(username);
+                    session.setFullName(user.getEmployee().getPerson().getFullName());
+                }
+            } catch (Exception e){
+                log.error(e);
+            }
+            if(username!=null && username.trim().length()>0){
+                sessions.add(session);
+            }
+        }
+        return sessions;
     }
 }

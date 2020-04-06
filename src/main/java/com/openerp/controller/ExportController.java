@@ -1,6 +1,7 @@
 package com.openerp.controller;
 
 import com.itextpdf.text.DocumentException;
+import com.openerp.domain.Session;
 import com.openerp.entity.*;
 import com.openerp.util.*;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
@@ -103,6 +104,8 @@ public class ExportController extends SkeletonController {
             file = ReadWriteExcelFile.endpointXLSXFile((Page<Endpoint>) object, page);
         } else if(page.equalsIgnoreCase(Constants.ROUTE.EMAIL_ANALYZER)){
             file = ReadWriteExcelFile.emailAnalyzerXLSXFile((Page<EmailAnalyzer>) object, page);
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.SESSION)){
+            file = ReadWriteExcelFile.sessionXLSXFile((List<Session>) object, page);
         }
 
         InputStreamResource resourceIS = new InputStreamResource(new FileInputStream(file));

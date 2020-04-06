@@ -7,10 +7,12 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
+//import org.springframework.session.jdbc.config.annotation.web.http.EnableJdbcHttpSession;
 
 @SpringBootApplication
 @Configuration
 @EnableScheduling
+//@EnableJdbcHttpSession
 @ComponentScan(basePackages = "com.openerp")
 @EntityScan("com.openerp.entity")
 //@EnableFeignClients

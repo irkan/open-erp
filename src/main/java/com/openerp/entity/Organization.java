@@ -18,7 +18,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @ToString
-public class Organization implements Serializable {
+public class Organization {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO, generator = "hr_sequence")
     @SequenceGenerator(sequenceName = "aa_hr_sequence", allocationSize = 1, name = "hr_sequence")
