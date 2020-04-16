@@ -35,7 +35,7 @@ public class SaleController extends SkeletonController {
     public String route(Model model, @PathVariable("page") String page, @PathVariable("data") Optional<String> data, RedirectAttributes redirectAttributes) throws Exception {
 
         if (page.equalsIgnoreCase(Constants.ROUTE.SALES)){
-            List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization());
+            List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganizationAndActiveTrue(getSessionOrganization());
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
             model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployeesByPosition(employees, positions));
             model.addAttribute(Constants.CITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("city"));
@@ -154,7 +154,7 @@ public class SaleController extends SkeletonController {
             }
             model.addAttribute(Constants.LIST, new SalesSchedule(schedules, sale));*/
         } else if(page.equalsIgnoreCase(Constants.ROUTE.SERVICE)){
-            List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization());
+            List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganizationAndActiveTrue(getSessionOrganization());
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
             model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployeesByPosition(employees, positions));
             model.addAttribute(Constants.SALES_TYPES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("sales-type"));
@@ -175,7 +175,7 @@ public class SaleController extends SkeletonController {
                 return exportExcel(sales, redirectAttributes, page);
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.INVOICE)){
-            List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization());
+            List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganizationAndActiveTrue(getSessionOrganization());
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
             Util.convertedEmployeesByPosition(employees, positions);
             model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployeesByPosition(employees, positions));
@@ -194,7 +194,7 @@ public class SaleController extends SkeletonController {
                 return exportExcel(invoices, redirectAttributes, page);
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.DEMONSTRATION)){
-            List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization());
+            List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganizationAndActiveTrue(getSessionOrganization());
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
             Util.convertedEmployeesByPosition(employees, positions);
             model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployeesByPosition(employees, positions));
@@ -414,7 +414,9 @@ public class SaleController extends SkeletonController {
         try {
             return getSchedulePayment(saleDate.equalsIgnoreCase("0")?DateUtility.getFormattedDate(new Date()):saleDate, scheduleId, periodId, lastPrice, down);
         } catch (Exception e){
-            log.error(e);
+            log(null, "error", "", "", null, "", e.getMessage());
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return null;
     }
@@ -491,7 +493,9 @@ public class SaleController extends SkeletonController {
         try {
              return salesRepository.getSalesByIdAndActiveTrue(Integer.parseInt(saleId));
         } catch (Exception e){
-            log.error(e);
+            log(null, "error", "", "", null, "", e.getMessage());
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return null;
     }

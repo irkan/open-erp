@@ -72,10 +72,10 @@ public class AdministratorController extends SkeletonController {
             List<Organization> organizations = organizationRepository.getOrganizationsByActiveTrueAndType_Attr1("branch");
             List<User> users;
             if(canViewAll()){
-                employees = employeeRepository.getEmployeesByContractEndDateIsNull();
+                employees = employeeRepository.getEmployeesByContractEndDateIsNullAndActiveTrue();
                 users = userRepository.getUsersByActiveTrue();
             } else {
-                employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization());
+                employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganizationAndActiveTrue(getSessionOrganization());
                 users = userRepository.getUsersByActiveTrueAndEmployee_Organization(getSessionOrganization());
             }
             model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployeesByOrganization(employees, organizations));
@@ -419,9 +419,11 @@ public class AdministratorController extends SkeletonController {
     public List<Employee> getEmployees(@PathVariable("organizationId") int organizationId) {
         List<Employee> employees = new ArrayList<>();
         try{
-            employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(organizationRepository.getOrganizationByIdAndActiveTrue(organizationId));
+            employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganizationAndActiveTrue(organizationRepository.getOrganizationByIdAndActiveTrue(organizationId));
         } catch (Exception e){
+            log(null, "error", "", "", null, "", e.getMessage());
             e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return employees;
     }
@@ -433,7 +435,9 @@ public class AdministratorController extends SkeletonController {
             Log log = logRepository.getLogById(id);
             return new Log(log.getId(), log.getEncapsulate(), log.getJson());
         } catch (Exception e){
+            log(null, "error", "", "", null, "", e.getMessage());
             e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return null;
     }

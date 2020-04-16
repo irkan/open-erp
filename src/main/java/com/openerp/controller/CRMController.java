@@ -67,7 +67,9 @@ public class CRMController extends SkeletonController {
         try {
             return customerRepository.getCustomerByIdAndActiveTrue(Integer.parseInt(id));
         } catch (Exception e){
-            log.error(e);
+            log(null, "error", "", "", null, "", e.getMessage());
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return null;
     }

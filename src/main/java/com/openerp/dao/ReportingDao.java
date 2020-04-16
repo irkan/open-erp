@@ -47,8 +47,8 @@ public class ReportingDao implements IReportingDao {
                 }
             }
             return list;
-        }
-        catch(Exception e) {
+        } catch(Exception e){
+            e.printStackTrace();
             log.error(e.getMessage(), e);
         }
         return null;
@@ -80,8 +80,8 @@ public class ReportingDao implements IReportingDao {
                 }
             }
             return list;
-        }
-        catch(Exception e) {
+        } catch(Exception e){
+            e.printStackTrace();
             log.error(e.getMessage(), e);
         }
         return null;

@@ -63,15 +63,19 @@ public class EndpointStatusTask {
                             endpointRepository.save(endpoint);
                         }
                         System.out.println(data);
-                    } catch (UnknownHostException ex) {
-                        log.error("Server not found: " + ex.getMessage());
+                    } catch (UnknownHostException e){
+                        skeletonController.log(null, "error", "", "", null, "", e.getMessage());
+                        e.printStackTrace();
+                        log.error("Server not found: " + e.getMessage());
                         type="error";
-                        description = "Telnet "+ endpoint.getHost() + ":" + endpoint.getPort() +" server not found: " + ex.getMessage();
-                    } catch (IOException ex) {
-                        log.error("I/O error: " + ex.getMessage());
+                        description = "Telnet "+ endpoint.getHost() + ":" + endpoint.getPort() +" server not found: " + e.getMessage();
+                    } catch (IOException e){
+                        skeletonController.log(null, "error", "", "", null, "", e.getMessage());
+                        e.printStackTrace();
+                        log.error("I/O error: " + e.getMessage());
                         type="error";
-                        description = "Telnet "+ endpoint.getHost() + ":" + endpoint.getPort() +" I/O error: " + ex.getMessage();
-                    } finally {
+                        description = "Telnet "+ endpoint.getHost() + ":" + endpoint.getPort() +" I/O error: " + e.getMessage();
+                    } finally{
                         reader.close();
                         input.close();
                     }
@@ -81,7 +85,9 @@ public class EndpointStatusTask {
 
             log.info("Endpoint Status Task End");
         } catch (Exception e){
-            log.error(e);
+            skeletonController.log(null, "error", "", "", null, "", e.getMessage());
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 }

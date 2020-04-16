@@ -33,9 +33,6 @@ public class ServiceScheduleTask {
     @Autowired
     ConfigurationRepository configurationRepository;
 
-    @Autowired
-    SkeletonController skeletonController;
-
     @Scheduled(fixedDelay = 43200000)
     public void service() {
         try{
@@ -71,12 +68,13 @@ public class ServiceScheduleTask {
                     }
                 } catch (Exception e){
                     e.printStackTrace();
-                    log.error(e);
+                    log.error(e.getMessage(), e);
                 }
             }
             log.info("Service Schedule Task End");
         } catch (Exception e){
-            log.error(e);
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 }

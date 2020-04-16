@@ -66,6 +66,9 @@ public class Employee {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
+    private Boolean active = true;
+
     @ToString.Exclude
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<EmployeePayrollDetail> employeePayrollDetails;

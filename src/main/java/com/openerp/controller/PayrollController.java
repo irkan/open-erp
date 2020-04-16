@@ -42,7 +42,7 @@ public class PayrollController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new PayrollConfiguration());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.ADVANCE)){
-            List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization());
+            List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganizationAndActiveTrue(getSessionOrganization());
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
             model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployeesByPosition(employees, positions));
             model.addAttribute(Constants.ADVANCES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("advance"));
@@ -105,7 +105,7 @@ public class PayrollController extends SkeletonController {
                     WorkingHourRecord owhr = workingHourRecordRepository.getWorkingHourRecordByActiveTrueAndMonthAndYearAndOrganization(workingHourRecord.getMonth()-1, workingHourRecord.getYear(), workingHourRecord.getOrganization());
                     workingHourRecord.setId(null);
                     workingHourRecordRepository.save(workingHourRecord);
-                    List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(workingHourRecord.getOrganization());
+                    List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganizationAndActiveTrue(workingHourRecord.getOrganization());
                     List<WorkingHourRecordEmployee> workingHourRecordEmployees = new ArrayList<>();
                     List<Dictionary> identifiers = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("identifier");
                     for(Employee employee: employees){

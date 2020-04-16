@@ -1,5 +1,7 @@
+/*
 package com.openerp.config;
 
+import com.openerp.controller.SkeletonController;
 import com.openerp.util.DateUtility;
 import com.openerp.entity.*;
 import com.openerp.repository.*;
@@ -71,6 +73,9 @@ public class DBConfiguration {
 
     @Autowired
     WebServiceAuthenticatorRepository webServiceAuthenticatorRepository;
+
+    @Autowired
+    SkeletonController skeletonController;
 
     @Value("${default.admin.username}")
     private String defaultAdminUsername;
@@ -1806,10 +1811,12 @@ public class DBConfiguration {
             webServiceAuthenticatorRepository.saveAll(webServiceAuthenticators);
 
         } catch (Exception e){
+            //skeletonController.log(null, "error", "", "", null, "", e.getMessage());
             e.printStackTrace();
-            log.error(e);
+            log.error(e.getMessage(), e);
         } finally {
             log.info("System was running!");
         }
     }
 }
+*/

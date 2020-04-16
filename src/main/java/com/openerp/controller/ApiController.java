@@ -50,7 +50,9 @@ public class ApiController extends SkeletonController {
                 }
             }
         } catch (Exception e){
-            log.error(e);
+            log(null, "error", "", "", null, "", e.getMessage());
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         log(response, "sale_sales", "find", saleId, response.toString(), username);
         return response;
@@ -82,7 +84,9 @@ public class ApiController extends SkeletonController {
                 }
             }
         } catch (Exception e){
-            log.error(e);
+            log(null, "error", "", "", null, "", e.getMessage());
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         log(response,"sale_invoice", "create/edit", invoiceId, response.toString(), username);
         return response;
@@ -102,7 +106,9 @@ public class ApiController extends SkeletonController {
                 }
             }
         } catch (Exception e){
-            log.error(e);
+            log(null, "error", "", "", null, "", e.getMessage());
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return response;
     }

@@ -11,14 +11,16 @@ import java.util.Date;
 import java.util.List;
 
 public class DateUtility {
+
     private static final Logger log = Logger.getLogger(DateUtility.class);
 
     public static Date getUtilDateFromEmailAnalyzer(String date) {
         Date utilDate= null;
         try {
             utilDate = new SimpleDateFormat("dd/MMM/yyyy HH:mm:ss").parse(date);
-        } catch (ParseException e) {
-            log.error(e);
+        } catch (ParseException e){
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return utilDate;
     }
@@ -27,8 +29,9 @@ public class DateUtility {
         Date utilDate= null;
         try {
             utilDate = new SimpleDateFormat("dd.MM.yyyy").parse(date);
-        } catch (ParseException e) {
-            log.error(e);
+        } catch (ParseException e){
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return utilDate;
     }
@@ -59,8 +62,9 @@ public class DateUtility {
         Date utilDate= null;
         try {
             utilDate = new SimpleDateFormat("dd.MM.yyyy").parse(date);
-        } catch (ParseException e) {
-            log.error(e);
+        } catch (ParseException e){
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return utilDate;
     }
@@ -87,8 +91,9 @@ public class DateUtility {
                 weekDay="b";
             }
             return weekDay;
-        } catch (ParseException e) {
-            log.error(e);
+        } catch (Exception e){
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return null;
     }

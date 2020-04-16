@@ -32,7 +32,8 @@ public class Util {
             if(object!=null)
                 return object;
         } catch (Exception e){
-            log.error(e);
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return null;
     }
@@ -42,7 +43,8 @@ public class Util {
             if(object!=null)
                 return (String) String.valueOf(object);
         } catch (Exception e){
-            log.error(e);
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return "";
     }
@@ -548,8 +550,9 @@ public class Util {
                         digitInWord += " qəpik";
                     }
                 }
-            } catch (Exception e) {
-                log.error(e);
+            } catch (Exception e){
+                e.printStackTrace();
+                log.error(e.getMessage(), e);
             }
         }
         return digitInWord;
@@ -635,6 +638,7 @@ public class Util {
             return Double.parseDouble(Util.formatRate(rate1/rate2));
         } catch (Exception e){
             e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return 1d;
     }
@@ -643,13 +647,15 @@ public class Util {
         try {
             return Integer.parseInt(value);
         } catch (Exception e){
-            log.error(e);
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
 
         try {
             return Integer.parseInt(defaultValue);
         } catch (Exception e){
-            log.error(e);
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
 
         return 6;
@@ -659,7 +665,8 @@ public class Util {
         try {
             return Integer.parseInt(value);
         } catch (Exception e){
-            log.error(e);
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return 0;
     }
@@ -714,7 +721,8 @@ public class Util {
                     session.setFullName(user.getEmployee().getPerson().getFullName());
                 }
             } catch (Exception e){
-                log.error(e);
+                e.printStackTrace();
+                log.error(e.getMessage(), e);
             }
             if(username!=null && username.trim().length()>0){
                 sessions.add(session);

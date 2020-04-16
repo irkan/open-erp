@@ -37,7 +37,6 @@ public class Log {
     @Column(name = "operation")
     private String operation;
 
-    @Pattern(regexp=".{0,250}",message="Maksimum 250 simvol ola bilər")
     @Column(name = "description")
     private String description;
 
@@ -83,7 +82,7 @@ public class Log {
         this.json = json;
     }
 
-    public Log(@Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String tableName, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String operation, Integer rowId, String encapsulate, String username, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String description, String json) {
+    public Log(@Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String tableName, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String operation, Integer rowId, String encapsulate, String username, String description, String json) {
         this.tableName = tableName;
         this.operation = operation;
         this.rowId = rowId;
@@ -114,7 +113,7 @@ public class Log {
         this.json = json;
     }
 
-    public Log(@Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String operation, @Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String description, String username) {
+    public Log(@Pattern(regexp = ".{0,250}", message = "Maksimum 250 simvol ola bilər") String operation, String description, String username) {
         this.operation = operation;
         this.description = description;
         this.username = username;

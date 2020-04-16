@@ -231,7 +231,9 @@ public class AccountingController extends SkeletonController {
         try {
             return accountRepository.getAccountByAccountNumberAndActiveTrue(accountNumber.trim());
         } catch (Exception e){
-            log.error(e);
+            log(null, "error", "", "", null, "", e.getMessage());
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return null;
     }

@@ -80,19 +80,27 @@ public class DeleteController extends SkeletonController {
         } else if(path.equalsIgnoreCase(Constants.ROUTE.USER_MODULE_OPERATION)){
             User userObject = userRepository.getUserByActiveTrueAndId(Integer.parseInt(id));
             userRepository.save(userObject);
-            log(userObject, "admin_user", "create/edit", userObject.getId(), userObject.toString());
+            log(userObject, "admin_user", "delete", userObject.getId(), userObject.toString());
             List<UserModuleOperation> userModuleOperations = userModuleOperationRepository.getUserModuleOperationsByUser_IdAndUser_Active(user.getId(), true);
             userModuleOperationRepository.deleteInBatch(userModuleOperations);
-            //Listin icinde nie metod hell etmek olmur
-            //log("admin_user_module_operation", "delete-in-batch", userModuleOperations.getId(), userModuleOperations.toString());
         } else if(path.equalsIgnoreCase(Constants.ROUTE.EMPLOYEE)){
             Employee employee = employeeRepository.getEmployeeById(Integer.parseInt(id));
-            log(employee, "admin_module_operation", "delete", employee.getId(), employee.toString());
-            employeeRepository.delete(employee);
+            List<User> users = userRepository.getUsersByEmployeeAndActiveTrue(employee);
+            if(employee!=null && users.size()>0){
+                FieldError fieldError = new FieldError("", "",  "Əməkdaş silinə bilməz! "+users.get(0).getUsername()+" adı ilə aktiv istifadəçi mövcuddur! Öncə istifadəçini deaktiv edin!");
+                binding.addError(fieldError);
+            }
+            redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
+            if(!binding.hasErrors()){
+                employee.setActive(false);
+                employeeRepository.save(employee);
+                log(employee, "hr_employee", "delete", employee.getId(), employee.toString());
+            }
         } else if(path.equalsIgnoreCase(Constants.ROUTE.ORGANIZATION)){
             Organization organization = organizationRepository.getOrganizationByIdAndActiveTrue(Integer.parseInt(id));
-            log(organization, "admin_module_operation", "delete", organization.getId(), organization.toString());
-            organizationRepository.delete(organization);
+            organization.setActive(false);
+            organizationRepository.save(organization);
+            log(organization, "hr_organization", "delete", organization.getId(), organization.toString());
         } else if(path.equalsIgnoreCase(Constants.ROUTE.SUPPLIER)){
             Supplier supplier = supplierRepository.getSuppliersById(Integer.parseInt(id));
             supplier.setActive(false);

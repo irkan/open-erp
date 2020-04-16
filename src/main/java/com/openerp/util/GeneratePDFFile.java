@@ -864,13 +864,15 @@ public class GeneratePDFFile {
 
                         }
                         document.add(table);
-                    } catch (Exception e) {
-                        log.error(e);
+                    } catch (Exception e){
+                        e.printStackTrace();
+                        log.error(e.getMessage(), e);
                     }
                 }
             }
         } catch (Exception e){
-            log.error(e);
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return file;
     }

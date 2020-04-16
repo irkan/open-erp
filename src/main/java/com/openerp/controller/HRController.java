@@ -48,9 +48,9 @@ public class HRController extends SkeletonController {
             model.addAttribute(Constants.ORGANIZATIONS, organizationRepository.getOrganizationsByActiveTrue());
             List<Employee> employees;
             if(canViewAll()){
-                employees = employeeRepository.getEmployeesByContractEndDateIsNull();
+                employees = employeeRepository.getEmployeesByContractEndDateIsNullAndActiveTrue();
             } else {
-                employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization());
+                employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganizationAndActiveTrue(getSessionOrganization());
             }
             model.addAttribute(Constants.LIST, employees);
             if(!model.containsAttribute(Constants.FORM)){
@@ -89,7 +89,7 @@ public class HRController extends SkeletonController {
         } else if (page.equalsIgnoreCase(Constants.ROUTE.WORK_ATTENDANCE)){
 
         } else if (page.equalsIgnoreCase(Constants.ROUTE.BUSINESS_TRIP)){
-            model.addAttribute(Constants.EMPLOYEES, canViewAll()?employeeRepository.getEmployeesByContractEndDateIsNull():employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization()));
+            model.addAttribute(Constants.EMPLOYEES, canViewAll()?employeeRepository.getEmployeesByContractEndDateIsNullAndActiveTrue():employeeRepository.getEmployeesByContractEndDateIsNullAndOrganizationAndActiveTrue(getSessionOrganization()));
             model.addAttribute(Constants.IDENTIFIERS, dictionaryRepository.getDictionariesByActiveTrueAndAttr2AndDictionaryType_Attr1("business-trip", "identifier"));
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new BusinessTrip(getSessionOrganization()));
@@ -103,7 +103,7 @@ public class HRController extends SkeletonController {
                 return exportExcel(businessTrips, redirectAttributes, page);
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.VACATION)){
-            model.addAttribute(Constants.EMPLOYEES, canViewAll()?employeeRepository.getEmployeesByContractEndDateIsNull():employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization()));
+            model.addAttribute(Constants.EMPLOYEES, canViewAll()?employeeRepository.getEmployeesByContractEndDateIsNullAndActiveTrue():employeeRepository.getEmployeesByContractEndDateIsNullAndOrganizationAndActiveTrue(getSessionOrganization()));
             model.addAttribute(Constants.IDENTIFIERS, dictionaryRepository.getDictionariesByActiveTrueAndAttr2AndDictionaryType_Attr1("vacation", "identifier"));
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Vacation(getSessionOrganization()));
@@ -117,7 +117,7 @@ public class HRController extends SkeletonController {
                 return exportExcel(vacations, redirectAttributes, page);
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.ILLNESS)){
-            model.addAttribute(Constants.EMPLOYEES, canViewAll()?employeeRepository.getEmployeesByContractEndDateIsNull():employeeRepository.getEmployeesByContractEndDateIsNullAndOrganization(getSessionOrganization()));
+            model.addAttribute(Constants.EMPLOYEES, canViewAll()?employeeRepository.getEmployeesByContractEndDateIsNullAndActiveTrue():employeeRepository.getEmployeesByContractEndDateIsNullAndOrganizationAndActiveTrue(getSessionOrganization()));
             model.addAttribute(Constants.IDENTIFIERS, dictionaryRepository.getDictionariesByActiveTrueAndAttr2AndDictionaryType_Attr1("illness", "identifier"));
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Illness(getSessionOrganization()));

@@ -1,5 +1,6 @@
 package com.openerp.repository;
 
+import com.openerp.entity.Employee;
 import com.openerp.entity.Organization;
 import com.openerp.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,4 +14,5 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
     User getUserByActiveTrueAndId(int id);
     List<User> getUsersByActiveTrue();
     List<User> getUsersByActiveTrueAndEmployee_Organization(Organization organization);
+    List<User> getUsersByEmployeeAndActiveTrue(Employee employee);
 }

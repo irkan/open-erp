@@ -302,7 +302,8 @@ public class SkeletonController {
             HttpSession session = request.getSession();
             user =  (User) session.getAttribute(Constants.USER);
         } catch (Exception e){
-            log.error(e);
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return user;
     }
@@ -313,7 +314,9 @@ public class SkeletonController {
                 return getSessionUser().getUserDetail().getPaginationSize();
             }
         } catch (Exception e){
+            log(null, "error", "", "", null, "", e.getMessage());
             e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return 100;
     }
@@ -395,7 +398,9 @@ public class SkeletonController {
                 }
             }
         } catch (Exception e){
-            log.error(e);
+            log(null, "error", "", "", null, "", e.getMessage());
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return 1;
     }
@@ -501,7 +506,8 @@ public class SkeletonController {
         try{
             json = UtilJson.toJson(object);
         } catch (Exception e){
-            log.error(e);
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         Log log = new Log(tableName, operation, null, getSessionUser()!=null?getSessionUser().getUsername():"", description, json);
         logRepository.save(log);
@@ -513,7 +519,8 @@ public class SkeletonController {
         try{
             json = UtilJson.toJson(object);
         } catch (Exception e){
-            log.error(e);
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         Log log = new Log(tableName, operation, rowId, encapsulate, getSessionUser()!=null?getSessionUser().getUsername():"", json);
         logRepository.save(log);
@@ -525,7 +532,8 @@ public class SkeletonController {
         try{
             json = UtilJson.toJson(object);
         } catch (Exception e){
-            log.error(e);
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         Log log = new Log(tableName, operation, rowId, encapsulate, getSessionUser()!=null?getSessionUser().getUsername():"", description, json);
         logRepository.save(log);
@@ -537,7 +545,8 @@ public class SkeletonController {
         try{
             json = UtilJson.toJson(object);
         } catch (Exception e){
-            log.error(e);
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         Log log = new Log(type, tableName, operation, rowId, encapsulate, getSessionUser()!=null?getSessionUser().getUsername():"", description, json);
         logRepository.save(log);

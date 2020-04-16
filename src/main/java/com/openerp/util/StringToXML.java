@@ -18,8 +18,9 @@ public class StringToXML {
             builder = factory.newDocumentBuilder();
             Document doc = builder.parse(new InputSource(new StringReader(xmlString)));
             return doc;
-        } catch (Exception e) {
-            log.error(e);
+        } catch (Exception e){
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return null;
     }
