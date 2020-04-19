@@ -271,11 +271,12 @@
                             <c:set var="return1" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'return')}"/>
                             <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
                             <c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
-                            <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
+                            <table class="table table-striped- table-bordered table-hover table-checkable" id="group_table">
                                 <thead>
                                 <tr>
                                     <th>Kod</th>
                                     <th>İnventar</th>
+                                    <th>Struktur</th>
                                     <th>Satış tarixi</th>
                                     <th>Müştəri</th>
                                     <th>Qiymət</th>
@@ -298,6 +299,7 @@
                                                 <c:out value="${p.inventory.barcode}" /><br/>
                                             </c:forEach>
                                         </th>
+                                        <td><c:out value="${t.organization.name}"/></td>
                                         <td><fmt:formatDate value = "${t.saleDate}" pattern = "dd.MM.yyyy" /></td>
                                         <th>
                                             <c:choose>
@@ -1110,19 +1112,30 @@
 
 <script>
 
-    $("#datatable").DataTable({
+    $('#group_table').DataTable({
         responsive: true,
-        lengthMenu: [10, 25, 50, 75, 100, 200, 1000],
         pageLength: 100,
-        order: [[1, 'desc']],
+        order: [[2, 'asc']],
+        drawCallback: function(settings) {
+            var api = this.api();
+            var rows = api.rows({page: 'current'}).nodes();
+            var last = null;
+
+            api.column(2, {page: 'current'}).data().each(function(group, i) {
+                if (last !== group) {
+                    $(rows).eq(i).before(
+                        '<tr class="group"><td colspan="30">' + group + '</td></tr>'
+                    );
+                    last = group;
+                }
+            });
+        },
         columnDefs: [
             {
-                targets: 0,
-                width: '50px',
-                className: 'dt-center',
-                orderable: false
-            },
-        ],
+                targets: [2],
+                visible: false
+            }
+        ]
     });
 
     function schedule(form){
@@ -1769,7 +1782,7 @@
     }();
 
     <c:if test="${view2.status}">
-    $('#datatable tbody').on('dblclick', 'tr', function () {
+    $('#group_table tbody').on('dblclick', 'tr', function () {
         swal.showLoading();
         if($(this).attr('cash')==="true"){
             location.href = '/collect/contact-history/'+ $(this).attr('data');
