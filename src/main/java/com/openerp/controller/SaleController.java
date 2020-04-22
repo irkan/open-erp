@@ -327,7 +327,7 @@ public class SaleController extends SkeletonController {
     @PostMapping(value = "/sales/approve")
     public String postSalesApprove(@ModelAttribute(Constants.FORM) @Validated Sales sales, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         sales = salesRepository.getSalesById(sales.getId());
-        Employee employee = (sales.getService() && sales.getServicer()!=null)?sales.getServicer():getSessionUser().getEmployee();
+        Employee employee = sales.getService()?sales.getServicer():sales.getVanLeader();// (sales.getService() && sales.getServicer()!=null)?sales.getServicer():getSessionUser().getEmployee();
         if(sales.getSalesInventories().size()>0){
             for(SalesInventory salesInventory: sales.getSalesInventories()) {
                 List<Action> oldActions = actionRepository.getActionsByActiveTrueAndInventory_ActiveAndInventoryAndEmployeeAndAction_Attr1AndAmountGreaterThanOrderById(true, salesInventory.getInventory(), employee, "consolidate", 0);
@@ -343,6 +343,11 @@ public class SaleController extends SkeletonController {
 
         if(sales.getService() && sales.getServicer()==null){
             FieldError fieldError = new FieldError("servicer", "service", "Servis əməkdaşı seçilməyib!");
+            binding.addError(fieldError);
+        }
+
+        if(!sales.getService() && sales.getVanLeader().getId()!=getSessionUser().getEmployee().getId() && approverExceptionRepository.getApproverExceptionsByUser(getSessionUser()).size()==0){
+            FieldError fieldError = new FieldError("", "", "Təsdiq əməliyyatı " + sales.getVanLeader().getPerson().getFullName() + " tərəfindən edilməlidir!");
             binding.addError(fieldError);
         }
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
@@ -667,5 +672,9 @@ public class SaleController extends SkeletonController {
         return salesInventoryRepository.getSalesInventoriesByActiveTrueAndSales_Id(salesId);
     }
 
-
+    @ResponseBody
+    @GetMapping(value = "/api/sales/{salesId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Sales getSales(@PathVariable("salesId") Integer salesId){
+        return salesRepository.getSalesById(salesId);
+    }
 }

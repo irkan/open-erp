@@ -2382,7 +2382,6 @@ public class ReadWriteExcelFile {
 		cell.setCellValue("Əməkdaş");
 		cell = row.createCell(row.getLastCellNum());
 		cell.setCellValue("Bitir");
-		cell = row.createCell(row.getLastCellNum());
 		row.setHeightInPoints(30);
 		XSSFCellStyle headerStyle = wb.createCellStyle();
 		headerStyle.setAlignment(HorizontalAlignment.CENTER);
@@ -2402,6 +2401,51 @@ public class ReadWriteExcelFile {
 			cell.setCellValue(session.getFullName());
 			cell = row.createCell(row.getLastCellNum());
 			cell.setCellValue(Util.checkNull(session.getExpire()));
+		}
+		FileOutputStream fileOut = new FileOutputStream(file);
+		wb.write(fileOut);
+		fileOut.flush();
+		fileOut.close();
+		return file;
+	}
+
+	public static File approverExceptionXLSXFile(List<ApproverException> approverExceptions, String page) throws IOException {
+		File file = new File(page+".xlsx");
+		XSSFWorkbook wb = new XSSFWorkbook();
+		XSSFSheet sheet = wb.createSheet(page) ;
+		int rownum=0;
+		XSSFRow row = sheet.createRow(rownum++);
+		XSSFCell cell = row.createCell(0);
+		cell.setCellValue("ID");
+		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("Struktur");
+		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("İstifadəçi");
+		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("Əməkdaş");
+		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("Açıqlama");
+		row.setHeightInPoints(30);
+		XSSFCellStyle headerStyle = wb.createCellStyle();
+		headerStyle.setAlignment(HorizontalAlignment.CENTER);
+		headerStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+		XSSFFont headerFont= wb.createFont();
+		headerFont.setFontHeightInPoints((short)14);
+		headerFont.setBold(true);
+		headerStyle.setFont(headerFont);
+		row.setRowStyle(headerStyle);
+		for(ApproverException approverException: approverExceptions){
+			row = sheet.createRow(rownum++);
+			cell = row.createCell(0);
+			cell.setCellValue(approverException.getId());
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(approverException.getOrganization()!=null?approverException.getOrganization().getName():"");
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(approverException.getUser()!=null?approverException.getUser().getUsername():"");
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue((approverException.getUser()!=null && approverException.getUser().getEmployee()!=null && approverException.getUser().getEmployee().getPerson()!=null)?approverException.getUser().getEmployee().getPerson().getFullName():"");
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(approverException.getDescription());
 		}
 		FileOutputStream fileOut = new FileOutputStream(file);
 		wb.write(fileOut);

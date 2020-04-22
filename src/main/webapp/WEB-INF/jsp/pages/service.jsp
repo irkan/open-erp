@@ -241,7 +241,7 @@
                                         </th>
                                         <td nowrap class="text-center">
                                             <c:if test="${view.status}">
-                                                <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');getInventories('<c:out value="${t.id}" />', $('#data-repeater-list'));findCustomer('<c:out value="${t.customer.id}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
+                                                <a href="javascript:sales('view', $('#form'), '<c:out value="${t.id}" />', 'modal-operation', '<c:out value="${view.object.name}" />', '<c:out value="${t.customer.id}"/>');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
                                                     <i class="<c:out value="${view.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
@@ -256,7 +256,7 @@
                                                 </a>
                                             </c:if>
                                             <c:if test="${edit.status and !t.approve}">
-                                                <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');getInventories('<c:out value="${t.id}" />', $('#data-repeater-list'));findCustomer('<c:out value="${t.customer.id}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                                                <a href="javascript:sales('edit', $('#form'), '<c:out value="${t.id}" />', 'modal-operation', '<c:out value="${edit.object.name}" />', '<c:out value="${t.customer.id}"/>');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
                                                     <i class="<c:out value="${edit.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
@@ -1031,5 +1031,44 @@
             KTUtil.scrollTop();
             swal.close();
         },
-    })
+    });
+
+    function sales(oper, form, dataId, modal, modal_title, customerId){
+        swal.fire({
+            text: 'Proses davam edir...',
+            allowOutsideClick: false,
+            onOpen: function() {
+                swal.showLoading();
+                $.ajax({
+                    url: '/sale/api/sales/'+dataId,
+                    type: 'GET',
+                    dataType: 'text',
+                    beforeSend: function() {
+
+                    },
+                    success: function(data) {
+                        if(oper==="view"){
+                            view(form, data, modal, modal_title)
+                        } else if(oper==="edit"){
+                            edit(form, data, modal, modal_title)
+                        }
+                        getInventories(dataId, $('#data-repeater-list'));
+                        findCustomer(customerId);
+                        swal.close();
+                    },
+                    error: function() {
+                        swal.fire({
+                            title: "Xəta",
+                            html: "Xəta baş verdi!",
+                            type: "error",
+                            cancelButtonText: 'Bağla',
+                            cancelButtonColor: '#c40000',
+                            cancelButtonClass: 'btn btn-danger',
+                            footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+                        });
+                    }
+                })
+            }
+        });
+    }
 </script>

@@ -186,6 +186,9 @@ public class SkeletonController {
     ConfigurationRepository configurationRepository;
 
     @Autowired
+    ApproverExceptionRepository approverExceptionRepository;
+
+    @Autowired
     NotificationRepository notificationRepository;
 
     @Autowired

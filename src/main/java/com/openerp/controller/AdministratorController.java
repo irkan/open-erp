@@ -125,6 +125,16 @@ public class AdministratorController extends SkeletonController {
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Configuration());
             }
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.APPROVER_EXCEPTION)){
+            model.addAttribute(Constants.USERS, canViewAll()?userRepository.getUsersByActiveTrue():userRepository.getUsersByActiveTrueAndEmployee_Organization(getSessionOrganization()));
+            List<ApproverException> approverExceptions = canViewAll()?approverExceptionRepository.findAll():approverExceptionRepository.getApproverExceptionsByOrganization(getSessionOrganization());
+            model.addAttribute(Constants.LIST, approverExceptions);
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new ApproverException(getSessionOrganization()));
+            }
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(approverExceptions, redirectAttributes, page);
+            }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.SESSION)){
             List<HttpSession> httpSessions = httpSessionConfig.getActiveSessions();
             List<Session> sessions = Util.convertHttpSession(httpSessions);
@@ -459,6 +469,16 @@ public class AdministratorController extends SkeletonController {
             log(configuration, "admin_configuration", "create/edit", configuration.getId(), configuration.toString());
         }
         return mapPost(configuration, binding, redirectAttributes);
+    }
+
+    @PostMapping(value = "/approver-exception")
+    public String postApproverException(@ModelAttribute(Constants.FORM) @Validated ApproverException approverException, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()){
+            approverExceptionRepository.save(approverException);
+            log(approverException, "admin_approver_exception", "create/edit", approverException.getId(), approverException.toString());
+        }
+        return mapPost(approverException, binding, redirectAttributes);
     }
 
     @PostMapping(value = "/web-service-authenticator")

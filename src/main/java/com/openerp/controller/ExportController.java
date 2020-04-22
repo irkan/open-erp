@@ -106,6 +106,8 @@ public class ExportController extends SkeletonController {
             file = ReadWriteExcelFile.emailAnalyzerXLSXFile((Page<EmailAnalyzer>) object, page);
         } else if(page.equalsIgnoreCase(Constants.ROUTE.SESSION)){
             file = ReadWriteExcelFile.sessionXLSXFile((List<Session>) object, page);
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.APPROVER_EXCEPTION)){
+            file = ReadWriteExcelFile.approverExceptionXLSXFile((List<ApproverException>) object, page);
         }
 
         InputStreamResource resourceIS = new InputStreamResource(new FileInputStream(file));

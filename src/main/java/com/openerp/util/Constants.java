@@ -143,5 +143,6 @@ public class Constants {
         public static final String OVERVIEW = "overview";
         public static final String EMAIL_ANALYZER = "email-analyzer";
         public static final String SESSION = "session";
+        public static final String APPROVER_EXCEPTION = "approver-exception";
     }
 }

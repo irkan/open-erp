@@ -268,6 +268,9 @@ public class DeleteController extends SkeletonController {
                 }
             }
             log(null, "", "destroy", null, username+" istifadəçisinin sessiyası destroy edildi");
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.APPROVER_EXCEPTION)){
+            approverExceptionRepository.deleteById(Integer.parseInt(id));
+            log(null, "admin_approver_exception", "delete", Integer.parseInt(id), "");
         }
         return "redirect:/"+parent+"/"+path;
     }
