@@ -177,7 +177,6 @@
             } else if(getIndex(name[1])!=null){
                 value = obj[name[0]][getName(name[1])][getIndex(name[1])];
             } else {
-                console.log(name[0]+"."+name[1]);
                 value = obj[name[0]][name[1]];
             }
         } else if(name.length===3){
