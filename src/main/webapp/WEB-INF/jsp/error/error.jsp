@@ -18,7 +18,6 @@
     <link href="<c:url value="/assets/css/demo4/pages/error/error-6.css" />" rel="stylesheet" type="text/css"/>
     <link href="<c:url value="/assets/css/demo4/style.bundle.css" />" rel="stylesheet" type="text/css"/>
     <link rel="shortcut icon" href="<c:url value="/assets/media/logos/sual-favicon.ico" />"/>
-    <%@include file="../include/header.jsp" %>
 </head>
 <body class="kt-page--loading-enabled kt-page--loading kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header--minimize-menu kt-header-mobile--fixed kt-subheader--enabled kt-subheader--transparent kt-page--loading">
 <div class="kt-grid kt-grid--ver kt-grid--root kt-page">
@@ -34,7 +33,6 @@
         </div>
     </div>
 </div>
-<%@include file="../include/js.jsp" %>
 <script src="<c:url value="/assets/vendors/general/jquery/dist/jquery.js" />" type="text/javascript"></script>
 <script src="<c:url value="/assets/vendors/general/jquery-form/dist/jquery.form.min.js" />" type="text/javascript"></script>
 <script src="<c:url value="/assets/vendors/general/bootstrap/dist/js/bootstrap.min.js" />" type="text/javascript"></script>

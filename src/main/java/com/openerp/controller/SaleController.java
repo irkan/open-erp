@@ -677,4 +677,10 @@ public class SaleController extends SkeletonController {
     public Sales getSales(@PathVariable("salesId") Integer salesId){
         return salesRepository.getSalesById(salesId);
     }
+
+    @ResponseBody
+    @GetMapping(value = "/api/invoice/{invoiceId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Invoice getInvoice(@PathVariable("invoiceId") Integer invoiceId){
+        return invoiceRepository.getInvoiceById(invoiceId);
+    }
 }

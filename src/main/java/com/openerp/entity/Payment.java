@@ -69,6 +69,9 @@ public class Payment {
     private Boolean cash = false;
 
     @Transient
+    private Boolean hasDiscount = false;
+
+    @Transient
     private Integer latency;
 
     @Transient

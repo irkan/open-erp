@@ -507,20 +507,53 @@
                         <div class="kt-form__section kt-form__section--first">
                             <div class="kt-wizard-v1__form">
                                 <div class="row">
-                                    <div class="col-md-5">
-                                        <input type="hidden" name="salesInventories[0].inventory" class="form-control"/>
+                                    <div class="col-sm-3">
                                         <form:label path="saleDate">Satış tarixi</form:label>
+                                        <div class="form-group">
+                                            <div class="input-group date" >
+                                                <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
+                                                <form:input path="saleDate" cssClass="form-control datepicker-element" date_="date_" placeholder="dd.MM.yyyy"/>
+                                            </div>
+                                            <form:errors path="saleDate" cssClass="control-label alert-danger" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <form:label path="guarantee">Zəmanət müddəti</form:label>
+                                        <form:select  path="guarantee" cssClass="custom-select form-control">
+                                            <form:options items="${guarantees}" itemLabel="name" itemValue="attr1" />
+                                        </form:select>
+                                        <form:errors path="guarantee" cssClass="control-label alert-danger"/>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <form:label path="payment.price">Qiymət</form:label>
+                                        <form:select  path="payment.price" onchange="calculate($(this))" cssClass="custom-select form-control">
+                                            <form:options items="${sale_prices}" itemLabel="name" itemValue="attr1" />
+                                        </form:select>
+                                        <form:errors path="payment.price" cssClass="control-label alert-danger"/>
+                                    </div>
+                                    <div class="col-sm-5 text-center">
                                         <div class="row">
-                                            <div class="col-8">
-                                                <div class="form-group">
-                                                    <div class="input-group date" >
-                                                        <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
-                                                        <form:input path="saleDate" cssClass="form-control datepicker-element" date_="date_" placeholder="dd.MM.yyyy"/>
-                                                    </div>
-                                                    <form:errors path="saleDate" cssClass="control-label alert-danger" />
+                                            <div class="col-sm-6">
+                                                <div class="form-group mt-3 pt-4">
+                                                    <label class="kt-checkbox kt-checkbox--brand">
+                                                        <form:checkbox path="payment.cash" onclick="doCash($(this))"/> Nağdırmı?
+                                                        <span></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group mt-3 pt-4">
+                                                    <label class="kt-checkbox kt-checkbox--brand">
+                                                        <form:checkbox path="payment.hasDiscount" onclick="doDiscount($(this), '10%')"/> Endirim varmı?
+                                                        <span></span>
+                                                    </label>
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-5">
                                         <div class="kt_repeater_1">
                                             <div class="form-group form-group-last row" id="kt_repeater_2">
                                                 <div data-repeater-list="" class="col-lg-12" id="data-repeater-list">
@@ -579,30 +612,6 @@
                                     </div>
                                     <div class="col-md-7">
                                         <div class="row">
-                                            <div class="col-sm-4">
-                                                <form:label path="payment.price">Qiymət</form:label>
-                                                <form:select  path="payment.price" onchange="calculate($(this))" cssClass="custom-select form-control">
-                                                    <form:options items="${sale_prices}" itemLabel="name" itemValue="attr1" />
-                                                </form:select>
-                                                <form:errors path="payment.price" cssClass="control-label alert-danger"/>
-                                            </div>
-                                            <div class="col-sm-4 text-center">
-                                                <div class="form-group mt-3 pt-4">
-                                                    <label class="kt-checkbox kt-checkbox--brand">
-                                                        <form:checkbox path="payment.cash" onclick="doCash($(this), '10%')"/> Nağd ödəniş?
-                                                        <span></span>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <form:label path="guarantee">Zəmanət müddəti</form:label>
-                                                <form:select  path="guarantee" cssClass="custom-select form-control">
-                                                    <form:options items="${guarantees}" itemLabel="name" itemValue="attr1" />
-                                                </form:select>
-                                                <form:errors path="guarantee" cssClass="control-label alert-danger"/>
-                                            </div>
-                                        </div>
-                                        <div class="row kt-hidden animated zoomIn" id="cash-div">
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <form:label path="payment.discount">Endirim dəyəri</form:label>
@@ -1208,12 +1217,21 @@
 
     $(function(){
         $("select[name='payment.price']").change();
-    })
+    });
 
-    function doCash(element, defaultCash){
+    function doCash(element){
         if($(element).is(":checked")){
-            $("#cash-div").removeClass("kt-hidden");
             $("#credit-div").addClass("kt-hidden");
+        } else {
+            $("#form").find("input[name='payment.discount']").val('');
+            $("#form").find("input[name='payment.description']").val('');
+            $("#credit-div").removeClass("kt-hidden");
+
+        }
+    }
+
+    function doDiscount(element, defaultCash){
+        if($(element).is(":checked")){
             $("#schedule-div").html('');
             swal.fire({
                 title: 'Endirimi təsdiq edirsinizmi?',
@@ -1277,8 +1295,6 @@
             var price = $("select[name='payment.price']").val();
             $("#lastPriceLabel").text(price);
             $("input[name='payment.lastPrice']").val(price);
-            $("#cash-div").addClass("kt-hidden");
-            $("#credit-div").removeClass("kt-hidden");
         }
     }
 
