@@ -118,7 +118,7 @@ public class MigrationController extends SkeletonController {
             row=(XSSFRow) rows.next();
             Employee vanLeader = parseEmployee(row.getCell(4));
             if(row.getRowNum()>0 && vanLeader!=null){
-                String inventoryName = row.getCell(16).getStringCellValue().length()>0?row.getCell(16).getStringCellValue():"Empty";
+                String inventoryName = getString(row.getCell(16)).length()>0?getString(row.getCell(16)):"Empty";
                 inventoryName = inventoryName.toUpperCase();
                 List<Inventory> inventories = inventoryRepository.getInventoriesByNameAndActiveTrue(inventoryName);
                 Inventory inventory = null;
@@ -310,9 +310,14 @@ public class MigrationController extends SkeletonController {
     }
 
     private boolean parseCash(XSSFRow row) {
-        double value = row.getCell(15).getNumericCellValue();
-        if(value!=0){
-            return false;
+        try{
+            double value = row.getCell(15).getNumericCellValue();
+            if(value!=0){
+                return false;
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return true;
     }
