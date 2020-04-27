@@ -360,7 +360,7 @@ public class SaleController extends SkeletonController {
                     action.setAmount(1);
                     action.setInventory(salesInventory.getInventory());
                     action.setOrganization(sales.getOrganization());
-                    action.setEmployee(getSessionUser().getEmployee());
+                    action.setEmployee(employee);
                     action.setSupplier(oldActions.get(0).getSupplier());
                     actionRepository.save(action);
                     log(action, "warehouse_action", "create/edit", action.getId(), action.toString());

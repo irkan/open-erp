@@ -115,12 +115,14 @@
                                                 <form:errors path="sendingDate" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
-                                        <div class="col-md-2" style="padding-top: 30px;">
+                                        <div class="col-md-2">
                                             <div class="form-group">
-                                                <label class="kt-checkbox kt-checkbox--brand">
-                                                    <form:checkbox path="sent"/> Göndərilmişdir
-                                                    <span></span>
-                                                </label>
+                                                <form:label path="send">Tip</form:label>
+                                                <form:select path="send" cssClass="custom-select form-control">
+                                                    <form:option value="0">0</form:option>
+                                                    <form:option value="1">1</form:option>
+                                                    <form:option value="2">2</form:option>
+                                                </form:select>
                                             </div>
                                         </div>
                                         <c:if test="${delete.status}">
@@ -190,8 +192,11 @@
             <td><fmt:formatDate value = "${t.sendingDate}" pattern = "dd.MM.yyyy hh:mm:ss" /></td>
             <td class="text-center">
                 <c:choose>
-                    <c:when test="${t.sent}">
+                    <c:when test="${t.send==1}">
                         <span class="kt-font-bold kt-font-success"><i class="la la-check"></i></span>
+                    </c:when>
+                    <c:when test="${t.send==2}">
+                        <span class="kt-font-bold kt-font-danger"><i class="la la-remove"></i></span>
                     </c:when>
                     <c:otherwise>
                         <span class="kt-spinner kt-spinner--md kt-spinner--danger" style="margin-left: -20px;"></span>

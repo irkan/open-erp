@@ -36,8 +36,8 @@ public class NotificationService {
                 if(notification.getActive()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("active"), notification.getActive())));
                 }
-                if(notification.getSent()){
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("sent"), notification.getSent())));
+                if(notification.getSend()!=null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("send"), notification.getSend())));
                 }
                 if(notification.getType()!=null && notification.getType().getId()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("type"), notification.getType().getId())));

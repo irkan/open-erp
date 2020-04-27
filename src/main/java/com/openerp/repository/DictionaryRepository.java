@@ -12,4 +12,5 @@ public interface DictionaryRepository extends JpaRepository<Dictionary, Integer>
     Dictionary getDictionaryById(int id);
     List<Dictionary> getDictionariesByActiveTrueAndDictionaryType_Active(boolean dictionaryTypeActive);
     Dictionary getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1(String attr1, String typeAttr1);
+    List<Dictionary> getDictionariesByActiveTrueAndDictionaryType_Attr1AndNameStartingWith(String typeAttr1, String name);
 }

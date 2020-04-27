@@ -7,6 +7,7 @@ import com.openerp.repository.CurrencyRateRepository;
 import com.openerp.repository.DictionaryRepository;
 import com.openerp.repository.LogRepository;
 import com.openerp.repository.NotificationRepository;
+import com.openerp.util.Constants;
 import com.openerp.util.Util;
 import com.openerp.util.UtilJson;
 import org.apache.log4j.Logger;
@@ -21,6 +22,8 @@ import org.springframework.stereotype.Component;
 import javax.mail.internet.MimeMessage;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Component
 public class NotificationTask {
@@ -35,12 +38,12 @@ public class NotificationTask {
     @Autowired
     LogRepository logRepository;
 
-    @Scheduled(fixedDelay = 30000)
+    @Scheduled(fixedDelay = 120000, initialDelay = 5000)
     public void email() {
         try{
             log.info("Email Notification Task Start");
             //System.setProperty("java.net.useSystemProxies", "true");
-            List<Notification> emails = notificationRepository.getNotificationsByActiveTrueAndSentFalseAndType_Attr1AndType_DictionaryType_Attr1AndType_Active("email", "notification", true);
+            List<Notification> emails = notificationRepository.getNotificationsByActiveTrueAndSendAndType_Attr1AndType_DictionaryType_Attr1AndType_Active(0,"email", "notification", true);
             for(Notification notification: emails){
                 try {
                     MimeMessage msg = javaMailSender.createMimeMessage();
@@ -50,17 +53,16 @@ public class NotificationTask {
                     helper.setText(notification.getMessage(), true);
                     javaMailSender.send(msg);
 
-                    notification.setSent(true);
+                    Log logObject = new Log("admin_notification", "send", null, notification.toString(), "", "Email göndərildi: " + notification.getTo(), UtilJson.toJson(notification));
+                    logRepository.save(logObject);
+
+                    notification.setSend(1);
                     notification.setSendingDate(new Date());
-                    notificationRepository.save(notification);
                 } catch (Exception e){
                     e.printStackTrace();
                     log.error(e.getMessage(), e);
                 }
-            }
-            if(emails.size()>0){
-                Log logObject = new Log("admin_currency_rate", "reload", null, "", "", "Notification task ilə email yeniləndi", UtilJson.toJson(emails));
-                logRepository.save(logObject);
+                notificationRepository.save(notification);
             }
             log.info("Email Notification Task End");
         } catch (Exception e){
@@ -69,6 +71,42 @@ public class NotificationTask {
         }
     }
 
+    @Scheduled(fixedDelay = 1200000, initialDelay = 15000)
+    public void checkEmailError() {
+        try{
+            log.info("Check Email Error Notification Task Start");
+            //System.setProperty("java.net.useSystemProxies", "true");
+            List<Notification> emails = notificationRepository.getNotificationsByActiveTrueAndSendAndType_Attr1AndType_DictionaryType_Attr1AndType_Active(0,"email", "notification", true);
+            for(Notification notification: emails){
+                try {
+                    MimeMessage msg = javaMailSender.createMimeMessage();
+                    MimeMessageHelper helper = new MimeMessageHelper(msg, true);
+                    helper.setTo(notification.getTo());
+                    helper.setSubject(notification.getSubject());
+                    helper.setText(notification.getMessage(), true);
+                    javaMailSender.send(msg);
+
+                    Log logObject = new Log("admin_notification", "send", null, notification.toString(), "", "Email göndərildi: " + notification.getTo(), UtilJson.toJson(notification));
+                    logRepository.save(logObject);
+
+                    notification.setSend(1);
+                    notification.setSendingDate(new Date());
+                } catch (Exception e){
+                    e.printStackTrace();
+                    log.error(e.getMessage(), e);
+                    notification.setSend(2);
+                    Log logObject = new Log("error", "admin_notification", "send", null, notification.toString(), "", "Email göndərilmədi: " + notification.getTo() + e.getMessage(), UtilJson.toJson(notification));
+                    logRepository.save(logObject);
+                }
+                notificationRepository.save(notification);
+            }
+            log.info("Check Email Error Notification Task End");
+        } catch (Exception e){
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
+        }
+    }
+/*
     @Scheduled(fixedDelay = 600000)
     public void sms() {
         try{
@@ -81,5 +119,5 @@ public class NotificationTask {
             e.printStackTrace();
             log.error(e.getMessage(), e);
         }
-    }
+    }*/
 }

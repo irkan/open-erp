@@ -79,6 +79,8 @@ public class Constants {
         public static final String REGEX2 = "[0-9\\-\\s]+";
         public static final String REGEX3 = "[0-9\\s]+";
         public static final String REGEX4 = "^[A-Za-z0-9+_.-]+@(.+)$";
+        public static final String REGEX5 =  "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
+
     }
 
     public static final class TEXT{
@@ -144,5 +146,6 @@ public class Constants {
         public static final String EMAIL_ANALYZER = "email-analyzer";
         public static final String SESSION = "session";
         public static final String APPROVER_EXCEPTION = "approver-exception";
+        public static final String MIGRATION = "migration";
     }
 }

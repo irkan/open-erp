@@ -16,4 +16,5 @@ public interface InventoryRepository extends JpaRepository<Inventory, Integer>, 
     Inventory getInventoryById(int id);
     List<Inventory> getInventoriesByActiveTrueAndBarcodeAndOrganizationOrderByIdAsc(String barcode, Organization organization);
     Inventory getInventoryByBarcodeAndActiveTrue(String barcode);
+    List<Inventory> getInventoriesByNameAndActiveTrue(String name);
 }

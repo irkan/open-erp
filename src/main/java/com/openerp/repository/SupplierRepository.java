@@ -9,4 +9,5 @@ import java.util.List;
 public interface SupplierRepository extends JpaRepository<Supplier, Integer> {
     List<Supplier> getSuppliersByActiveTrue();
     Supplier getSuppliersById(int id);
+    List<Supplier> getSuppliersByName(String name);
 }

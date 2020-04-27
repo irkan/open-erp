@@ -191,6 +191,8 @@ public class AdministratorController extends SkeletonController {
             if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
                 return exportExcel(endpoints, redirectAttributes, page);
             }
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.MIGRATION)){
+            model.addAttribute(Constants.ORGANIZATIONS, organizationRepository.getOrganizationsByActiveTrue());
         }
         return "layout";
     }
@@ -234,11 +236,11 @@ public class AdministratorController extends SkeletonController {
         if(!binding.hasErrors()){
             moduleRepository.save(module);
             log(module, "admin_module", "create/edit", module.getId(), module.toString());
-            File source = new File(request.getRealPath("/WEB-INF/jsp/pages/empty.jsp"));
+            /*File source = new File(request.getRealPath("/WEB-INF/jsp/pages/empty.jsp"));
             File dest = new File(request.getRealPath("/WEB-INF/jsp/pages/"+module.getPath()+".jsp"));
             if(Files.notExists(dest.toPath())){
                 Files.copy(source.toPath(), dest.toPath());
-            }
+            }*/
         }
         return mapPost(module, binding, redirectAttributes);
     }

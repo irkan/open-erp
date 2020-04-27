@@ -53,8 +53,8 @@ public class Notification {
     @Column(name = "attachment")
     private String attachment;
 
-    @Column(name = "is_send", nullable = false, columnDefinition="boolean default false")
-    private Boolean sent = false;
+    @Column(name = "send_status", nullable = false)
+    private Integer send = 0;
 
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")

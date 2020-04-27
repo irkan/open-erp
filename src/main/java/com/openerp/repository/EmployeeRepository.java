@@ -10,4 +10,5 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer>, Jp
     List<Employee> getEmployeesByContractEndDateIsNullAndOrganizationAndActiveTrue(Organization organization);
     List<Employee> getEmployeesByContractEndDateIsNullAndActiveTrue();
     Employee getEmployeeById(int id);
+    List<Employee> getEmployeesByPersonFirstNameStartingWithAndPersonLastNameStartingWith(String firstName, String lastName);
 }

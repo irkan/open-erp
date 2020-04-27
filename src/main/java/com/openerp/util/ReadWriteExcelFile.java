@@ -581,7 +581,7 @@ public class ReadWriteExcelFile {
 			cell = row.createCell(row.getLastCellNum());
 			cell.setCellValue(notification.getSendingDate());
 			cell = row.createCell(row.getLastCellNum());
-			cell.setCellValue(notification.getSent());
+			cell.setCellValue(notification.getSend());
 			cell = row.createCell(row.getLastCellNum());
 			cell.setCellValue(notification.getCreatedDate());
 			cell = row.createCell(row.getLastCellNum());

@@ -425,15 +425,15 @@ public class DBConfiguration {
             dictionaries.add(otherExpenseAction);
             Dictionary reason1 = new Dictionary("Xarabdır", "break", null, reasonType);
             dictionaries.add(reason1);
-            Dictionary inventoryGroup1 = new Dictionary("Filterlər", "group1", null, inventoryGroupType);
+            Dictionary inventoryGroup1 = new Dictionary("Filterlər", "filters", null, inventoryGroupType);
             dictionaries.add(inventoryGroup1);
-            Dictionary inventoryGroup2 = new Dictionary("Relelər", "group2", null, inventoryGroupType);
+            Dictionary inventoryGroup2 = new Dictionary("Avadanlıqlar", "equipments", null, inventoryGroupType);
             dictionaries.add(inventoryGroup2);
-            Dictionary inventoryGroup3 = new Dictionary("Krantlar", "group3", null, inventoryGroupType);
+            Dictionary inventoryGroup3 = new Dictionary("Ehtiyyat hissələri", "spare-parts", null, inventoryGroupType);
             dictionaries.add(inventoryGroup3);
-            Dictionary inventoryGroup4 = new Dictionary("Elektron hissələr", "group4", null, inventoryGroupType);
+            Dictionary inventoryGroup4 = new Dictionary("Ofis ləvazimatları", "office-appliances", null, inventoryGroupType);
             dictionaries.add(inventoryGroup4);
-            Dictionary inventoryGroup5 = new Dictionary("Digər", "group5", null, inventoryGroupType);
+            Dictionary inventoryGroup5 = new Dictionary("Digər", "other", null, inventoryGroupType);
             dictionaries.add(inventoryGroup5);
             Dictionary AZN = new Dictionary("AZN", "AZN", null, currencyType);
             dictionaries.add(AZN);
@@ -771,6 +771,8 @@ public class DBConfiguration {
             modules.add(endpoint);
             Module approverException = new Module("Təsdiq edənlər - istisna", "Təsdiq edənlər - istisna", "approver-exception", "flaticon2-avatar", configuration);
             modules.add(approverException);
+            Module migration = new Module("Baza miqrasiya", "Baza miqrasiya", "migration", "flaticon2-download-2", configuration);
+            modules.add(migration);
             Module subModule5 = new Module("İstifadəçi", "İstifadəçi", "user", "flaticon-users", module);
             modules.add(subModule5);
             Module subModule9 = new Module("İstifadəçi icazəsi", "İstifadəçi icazəsi", "user-module-operation", "flaticon-clipboard", subModule5);
@@ -1361,6 +1363,8 @@ public class DBConfiguration {
             moduleOperations.add(uploadModuleOperation3);
             ModuleOperation uploadModuleOperation4 = new ModuleOperation(emailAnalyzer, upload, null);
             moduleOperations.add(uploadModuleOperation4);
+            ModuleOperation uploadModuleOperation5 = new ModuleOperation(migration, upload, null);
+            moduleOperations.add(uploadModuleOperation5);
 
             ModuleOperation reloadModuleOperation1 = new ModuleOperation(currencyRate, reload, null);
             moduleOperations.add(reloadModuleOperation1);
@@ -1780,6 +1784,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, uploadModuleOperation2));
             userModuleOperations.add(new UserModuleOperation(user, uploadModuleOperation3));
             userModuleOperations.add(new UserModuleOperation(user, uploadModuleOperation4));
+            userModuleOperations.add(new UserModuleOperation(user, uploadModuleOperation5));
 
             userModuleOperations.add(new UserModuleOperation(user, reloadModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, reloadModuleOperation2));
@@ -1851,10 +1856,15 @@ public class DBConfiguration {
             Supplier supplier4 = new Supplier("Sədərək", "Təminatçı", supplier4Person);
             suppliers.add(supplier4);
 
-            Contact supplier5Contact = new Contact(null, null, "other.supplier@gmail.com", null, baku);
-            Person supplier5Person = new Person(supplier5Contact, "Digər", "Təminatçı", null, null, male, azerbaijanNationality, single, null, null, false);
-            Supplier supplier5 = new Supplier("Digər", "Təminatçı", supplier5Person);
+            Contact supplier5Contact = new Contact(null, null, "novruzov_emil@mail.ru", null, baku);
+            Person supplier5Person = new Person(supplier5Contact, "Emil", "Novruzov", null, null, male, azerbaijanNationality, single, null, null, false);
+            Supplier supplier5 = new Supplier("Anbar qalıq", "Köhnə anbardan qebul", supplier5Person);
             suppliers.add(supplier5);
+
+            Contact supplier6Contact = new Contact(null, null, "other.supplier@gmail.com", null, baku);
+            Person supplier6Person = new Person(supplier5Contact, "Digər", "Təminatçı", null, null, male, azerbaijanNationality, single, null, null, false);
+            Supplier supplier6 = new Supplier("Digər", "Təminatçı", supplier5Person);
+            suppliers.add(supplier6);
 
             supplierRepository.saveAll(suppliers);
 

@@ -238,7 +238,7 @@
         '<div class="col-sm-6">' +
             '<label class="view-label-1">'+obj.name+'</label><br/>' +
             '<label class="view-label-2">'+obj.description+'</label><br/>' +
-            '<label class="view-label-2">/'+obj.path+'</label><br/>' +
+            '<label class="view-label-2">'+obj.path+'</label><br/>' +
             '<label class="view-label-2">'+obj.icon+'</label>' +
         '</div>';
 
