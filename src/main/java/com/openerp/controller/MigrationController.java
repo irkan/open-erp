@@ -116,7 +116,7 @@ public class MigrationController extends SkeletonController {
         Organization organization = organizationRepository.getOrganizationByIdAndActiveTrue(organziationId);
         while (rows.hasNext()) {
             row=(XSSFRow) rows.next();
-            Employee vanLeader = parseEmployee(row.getCell(4));
+            Employee vanLeader = parseEmployee(row.getCell(4), organization);
             if(row.getRowNum()>0 && vanLeader!=null){
                 String inventoryName = getString(row.getCell(16)).length()>0?getString(row.getCell(16)):"Empty";
                 inventoryName = inventoryName.toUpperCase();
@@ -162,9 +162,9 @@ public class MigrationController extends SkeletonController {
                 Customer customer = parseCustomer(row, organization);
                 customerRepository.save(customer);
 
-                Employee canvasser = parseEmployee(row.getCell(5));
-                Employee dealer = parseEmployee(row.getCell(6));
-                Employee servicer = parseEmployee(row.getCell(7));
+                Employee canvasser = parseEmployee(row.getCell(5), organization);
+                Employee dealer = parseEmployee(row.getCell(6), organization);
+                Employee servicer = parseEmployee(row.getCell(7), organization);
                 Sales sales = new Sales();
                 SalesInventory si = new SalesInventory();
                 si.setInventory(inventory);
@@ -199,7 +199,8 @@ public class MigrationController extends SkeletonController {
                     payment.setDown(getNumeric(row.getCell(10)));
                     payment.setSchedule(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1(getString(row.getCell(15)).split(Pattern.quote("."))[0], "payment-schedule"));
                     payment.setPeriod(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1(getString(row.getCell(13)).split(Pattern.quote("."))[0], "payment-period"));
-                    payment.setSchedulePrice(schedulePrice(payment.getSchedule().getId(), payment.getLastPrice(), payment.getDown()));
+                    double schedulePrice = schedulePrice(payment.getSchedule().getId(), payment.getLastPrice(), payment.getDown());
+                    payment.setSchedulePrice(schedulePrice<0?0:schedulePrice);
                 }
                 sales.setPayment(payment);
                 salesRepository.save(sales);
@@ -291,8 +292,15 @@ public class MigrationController extends SkeletonController {
 
     private double getNumeric(XSSFCell cell){
         double value = 0;
-        if(cell!=null && cell.getCellType()==0){
-            value = cell.getNumericCellValue();
+        try{
+            if(cell!=null && cell.getCellType()==0){
+                value = cell.getNumericCellValue();
+            } else if(cell!=null && cell.getCellType()==1){
+                value = Double.parseDouble(cell.getStringCellValue());
+            }
+        } catch (Exception e){
+            
+            log.error(e.getMessage(), e);
         }
         return value;
     }
@@ -311,25 +319,35 @@ public class MigrationController extends SkeletonController {
 
     private boolean parseCash(XSSFRow row) {
         try{
-            double value = row.getCell(15).getNumericCellValue();
+            double value = getNumeric(row.getCell(15));
             if(value!=0){
                 return false;
             }
         } catch (Exception e){
-            e.printStackTrace();
+            
             log.error(e.getMessage(), e);
         }
         return true;
     }
 
-    private Employee parseEmployee(XSSFCell cell) {
+    private Employee parseEmployee(XSSFCell cell, Organization organization) {
         try{
             Person person = parsePerson2(cell);
-            List<Employee> employees = employeeRepository.getEmployeesByPersonFirstNameStartingWithAndPersonLastNameStartingWith(person.getFirstName(), person.getLastName());
+            List<Employee> employees = new ArrayList<>();
+            if(person.getFirstName()!=null && 
+                    person.getLastName()!=null && 
+                    person.getFirstName().trim().length()>0 && 
+                    person.getLastName().trim().length()>0){
+                employees = employeeRepository.getEmployeesByPersonFirstNameStartingWithAndPersonLastNameStartingWithAndOrganization(person.getFirstName(), person.getLastName(), organization);
+            } else if(employees.size()==0 &&
+                    person.getFirstName()!=null &&
+                    person.getFirstName().trim().length()>0){
+                employees = employeeRepository.getEmployeesByPersonFirstNameStartingWithAndOrganization(person.getFirstName(), organization);
+            }
             return employees.size()>0?employees.get(0):null;
         } catch (Exception e){
             log.error(e.getMessage(), e);
-            e.printStackTrace();
+            
         }
         return null;
     }
@@ -369,7 +387,7 @@ public class MigrationController extends SkeletonController {
             return person;
         } catch (Exception e){
             log.error(e.getMessage(), e);
-            e.printStackTrace();
+            
         }
         return null;
     }

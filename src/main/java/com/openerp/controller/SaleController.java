@@ -53,6 +53,7 @@ public class SaleController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 Sales sales = new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null, new Payment((Double) null));
                 sales.setApprove(null);
+                sales.getPayment().setLastPrice(null);
                 model.addAttribute(Constants.FILTER, sales);
             }
             Page<Sales> sales = salesService.findAll((Sales) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
@@ -96,25 +97,35 @@ public class SaleController extends SkeletonController {
                 Dictionary paymentPeriod = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1(String.valueOf(salesSchedule.getScheduleDate().getDate()), "payment-period");
                 List<SalesSchedule> salesSchedules = new ArrayList<>();
 
-                List<Sales> salesList = salesRepository.getSalesByActiveTrueAndApproveTrueAndPayment_CashAndPayment_Period(false, paymentPeriod);
+                List<Sales> salesList = salesRepository.getSalesByActiveTrueAndApproveTrueAndPayment_CashAndPayment_PeriodAndSaledFalseAndOrganization(false, paymentPeriod, getSessionOrganization());
+                if(canViewAll()){
+                    salesList = salesRepository.getSalesByActiveTrueAndApproveTrueAndPayment_CashAndPayment_PeriodAndSaledFalse(false, paymentPeriod);
+                }
                 for(Sales sales: salesList){
-                    if(!checkContactHistory(sales, salesSchedule)){
-                        List<Schedule> schedules = new ArrayList<>();
-                        double sumOfInvoices = Util.calculateInvoice(sales.getInvoices());
-                        if(sales!=null && sales.getPayment()!=null && !sales.getPayment().getCash()){
-                            schedules = getSchedulePayment(DateUtility.getFormattedDate(sales.getSaleDate()), sales.getPayment().getSchedule().getId(), sales.getPayment().getPeriod().getId(), sales.getPayment().getLastPrice(), sales.getPayment().getDown());
-                            double plannedPayment = Util.calculatePlannedPayment(sales, schedules);
-                            schedules = Util.calculateSchedule(sales, schedules, sumOfInvoices);
-                            sales.getPayment().setLatency(Util.calculateLatency(schedules, sumOfInvoices, sales));
-                            sales.getPayment().setSumOfInvoice(sumOfInvoices);
-                            sales.getPayment().setUnpaid(plannedPayment-sumOfInvoices);
-                            schedules = Util.getDatedSchedule(schedules, salesSchedule.getScheduleDate());
+                    try {
+                        if(!checkContactHistory(sales, salesSchedule)){
+                            List<Schedule> schedules = new ArrayList<>();
+                            double sumOfInvoices = Util.calculateInvoice(sales.getInvoices());
+                            if(sales!=null && sales.getPayment()!=null && !sales.getPayment().getCash()){
+                                schedules = getSchedulePayment(DateUtility.getFormattedDate(sales.getSaleDate()), sales.getPayment().getSchedule().getId(), sales.getPayment().getPeriod().getId(), sales.getPayment().getLastPrice(), sales.getPayment().getDown());
+                                double plannedPayment = Util.calculatePlannedPayment(sales, schedules);
+                                schedules = Util.calculateSchedule(sales, schedules, sumOfInvoices);
+                                sales.getPayment().setLatency(Util.calculateLatency(schedules, sumOfInvoices, sales));
+                                sales.getPayment().setSumOfInvoice(sumOfInvoices);
+                                sales.getPayment().setUnpaid(plannedPayment-sumOfInvoices);
+                                schedules = Util.getDatedSchedule(schedules, salesSchedule.getScheduleDate());
+                            }
+                            salesSchedules.add(new SalesSchedule(schedules, sales));
                         }
-                        salesSchedules.add(new SalesSchedule(schedules, sales));
+                    } catch (Exception e){
+                        log.error(e.getMessage(), e);
                     }
                 }
 
-                salesList = salesRepository.getSalesByActiveTrueAndApproveTrueAndPayment_CashAndSaleDate(true, salesSchedule.getScheduleDate());
+                salesList = salesRepository.getSalesByActiveTrueAndApproveTrueAndPayment_CashAndSaleDateAndSaledFalseAndOrganization(true, salesSchedule.getScheduleDate(), getSessionOrganization());
+                if (canViewAll()){
+                    salesList = salesRepository.getSalesByActiveTrueAndApproveTrueAndPayment_CashAndSaleDateAndSaledFalse(true, salesSchedule.getScheduleDate());
+                }
                 for(Sales sales: salesList){
                     if(!checkContactHistory(sales, salesSchedule)){
                         List<Schedule> schedules = new ArrayList<>();
@@ -126,33 +137,40 @@ public class SaleController extends SkeletonController {
                     }
                 }
 
-                for(SalesSchedule salesSchedule1: salesSchedules){
-                    List<ContactHistory> contactHistories = contactHistoryRepository.getContactHistoriesByActiveTrueAndSales_Id(salesSchedule1.getSales().getId());
-                    for(ContactHistory contactHistory: contactHistories){
-                        //if(contactHistory.getNextContactDate()!=null && )
+                List<ContactHistory> contactHistories = contactHistoryRepository.getContactHistoriesByActiveTrueAndNextContactDateAndSalesApproveAndSalesSaledAndOrganization(salesSchedule.getScheduleDate(), true, false, getSessionOrganization());
+                if(canViewAll()){
+                    contactHistories = contactHistoryRepository.getContactHistoriesByActiveTrueAndNextContactDateAndSalesApproveAndSalesSaled(salesSchedule.getScheduleDate(), true, false);
+                }
+
+                for(ContactHistory contactHistory: contactHistories){
+                    try {
+                        Sales sales = contactHistory.getSales();
+                        if(!checkContactHistory(sales, salesSchedule)){
+                            List<Schedule> schedules = new ArrayList<>();
+                            double sumOfInvoices = Util.calculateInvoice(sales.getInvoices());
+                            if(sales!=null && sales.getPayment()!=null && !sales.getPayment().getCash()){
+                                schedules = getSchedulePayment(DateUtility.getFormattedDate(sales.getSaleDate()), sales.getPayment().getSchedule().getId(), sales.getPayment().getPeriod().getId(), sales.getPayment().getLastPrice(), sales.getPayment().getDown());
+                                double plannedPayment = Util.calculatePlannedPayment(sales, schedules);
+                                schedules = Util.calculateSchedule(sales, schedules, sumOfInvoices);
+                                sales.getPayment().setLatency(Util.calculateLatency(schedules, sumOfInvoices, sales));
+                                sales.getPayment().setSumOfInvoice(sumOfInvoices);
+                                sales.getPayment().setUnpaid(plannedPayment-sumOfInvoices);
+                                schedules = Util.getDatedSchedule(schedules, salesSchedule.getScheduleDate());
+                            } else {
+                                if(sumOfInvoices<sales.getPayment().getLastPrice()){
+                                    schedules.add(new Schedule(sales.getPayment().getLastPrice()-sumOfInvoices, salesSchedule.getScheduleDate()));
+                                }
+                            }
+                            salesSchedules.add(new SalesSchedule(schedules, sales));
+                        }
+                    } catch (Exception e){
+                        log.error(e.getMessage(), e);
                     }
-                    salesSchedule1.getSales();
                 }
 
                 Page<SalesSchedule> salesSchedulePage = new PageImpl<>(salesSchedules);
                 model.addAttribute(Constants.LIST, salesSchedulePage);
             }
-
-            /*List<Schedule> schedules = new ArrayList<>();
-            Sales sale = null;
-            if(!data.equals(Optional.empty())){
-                sale = salesRepository.getSalesById(Integer.parseInt(data.get()));
-                if(sale!=null && sale.getPayment()!=null && !sale.getPayment().getCash()){
-                    double sumOfInvoices = Util.calculateInvoice(sale.getInvoices());
-                    schedules = getSchedulePayment(DateUtility.getFormattedDate(sale.getSaleDate()), sale.getPayment().getSchedule().getId(), sale.getPayment().getPeriod().getId(), sale.getPayment().getLastPrice(), sale.getPayment().getDown());
-                    double plannedPayment = Util.calculatePlannedPayment(sale, schedules);
-                    schedules = Util.calculateSchedule(sale, schedules, sumOfInvoices);
-                    sale.getPayment().setLatency(Util.calculateLatency(schedules, sumOfInvoices, sale));
-                    sale.getPayment().setSumOfInvoice(sumOfInvoices);
-                    sale.getPayment().setUnpaid(plannedPayment-sumOfInvoices);
-                }
-            }
-            model.addAttribute(Constants.LIST, new SalesSchedule(schedules, sale));*/
         } else if(page.equalsIgnoreCase(Constants.ROUTE.SERVICE)){
             List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganizationAndActiveTrue(getSessionOrganization());
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");

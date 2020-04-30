@@ -295,6 +295,7 @@ public class WarehouseController extends SkeletonController {
 
     @PostMapping(value = "/action/return")
     public String postActionReturn(@ModelAttribute(Constants.FORM) @Validated Action action, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        boolean status = false;
         Action actn = actionRepository.getActionById(action.getId());
         if(actn.getAmount()-action.getAmount()<0){
             FieldError fieldError = new FieldError("amount", "amount", "Maksimum "+ actn.getAmount() + " ədəd qaytara bilərsiniz!");
@@ -307,22 +308,24 @@ public class WarehouseController extends SkeletonController {
                 Action buy = actions.get(0);
                 buy.setAmount(buy.getAmount()+action.getAmount());
                 actionRepository.save(buy);
-                log(buy, "warehouse_action", "create/edit", buy.getId(), buy.toString());
+                log(buy, "warehouse_action", "create/edit", buy.getId(), buy.toString(), buy.getId() + " nömrəli Alış hərəkətinə əlavə edildi");
+                status = true;
             } else {
-                Action buy = new Action(
-                        dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("buy", "action"),
-                        action.getOrganization(),
-                        action.getAmount(),
-                        action.getInventory(),
-                        action.getSupplier(),
-                        false
-                );
-                actionRepository.save(buy);
-                log(buy, "warehouse_action", "create/edit", buy.getId(), buy.toString(), "Yeni alış əməliyyatı");
+                actions = actionRepository.getActionsByActiveTrueAndInventory_IdAndInventory_ActiveAndActionOrderByIdDesc(actn.getInventory().getId(), true, dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("accept", "action"));
+                if(actions.size()>0){
+                    Action accept = actions.get(0);
+                    accept.setAmount(accept.getAmount()+action.getAmount());
+                    actionRepository.save(accept);
+                    log(accept, "warehouse_action", "create/edit", accept.getId(), accept.toString(), accept.getId() + " nömrəli Qəbuledilmə hərəkətinə əlavə edildi");
+                    status = true;
+                }
             }
-            actn.setAmount(actn.getAmount() - action.getAmount());
-            actionRepository.save(actn);
-            log(actn, "warehouse_action", "create/edit", actn.getId(), actn.toString(), "Qaytarılma əməliyyatı");
+
+            if(status){
+                actn.setAmount(actn.getAmount() - action.getAmount());
+                actionRepository.save(actn);
+                log(actn, "warehouse_action", "create/edit", actn.getId(), actn.toString(), "Qaytarılma əməliyyatı");
+            }
         }
         return mapPost(action, binding, redirectAttributes, "/warehouse/action/"+actn.getInventory().getId());
     }

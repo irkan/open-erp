@@ -152,7 +152,7 @@
                                             </div>
                                         </div>
                                         <div class="row" style="padding-top: 30px;">
-                                            <div class="col-md-4">
+                                            <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label class="kt-checkbox kt-checkbox--brand">
                                                         <form:checkbox path="payment.cash"/> Nağdlar
@@ -160,16 +160,16 @@
                                                     </label>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="kt-checkbox kt-checkbox--brand">
-                                                        <form:checkbox path="approve"/> Təsdiqlər
+                                                        <form:checkbox path="approve"/> Təsdiq edilməyənlər
                                                         <span></span>
                                                     </label>
                                                 </div>
                                             </div>
                                             <c:if test="${delete.status}">
-                                                <div class="col-md-4">
+                                                <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label class="kt-checkbox kt-checkbox--brand">
                                                             <form:checkbox path="active"/> Aktual

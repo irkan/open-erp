@@ -52,21 +52,7 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="scheduleDateFrom">Tarixdən</form:label>
-                                                <div class="input-group date" >
-                                                    <form:input path="scheduleDateFrom" autocomplete="off" date_="date_" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
-                                                    <div class="input-group-append">
-                                <span class="input-group-text">
-                                    <i class="la la-calendar"></i>
-                                </span>
-                                                    </div>
-                                                </div>
-                                                <form:errors path="scheduleDateFrom" cssClass="control-label alert-danger" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <form:label path="scheduleDate">Tarixədək</form:label>
+                                                <form:label path="scheduleDate">Tarix</form:label>
                                                 <div class="input-group date" >
                                                     <form:input path="scheduleDate" autocomplete="off" date_="date_" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
                                                     <div class="input-group-append">
@@ -105,11 +91,14 @@
                     <c:choose>
                         <c:when test="${not empty list.content}">
                             <c:set var="transfer" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'transfer')}"/>
+                            <c:set var="view1" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'sales', 'view')}"/>
+                            <c:set var="view2" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'customer', 'view')}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
                                 <thead>
                                 <tr>
                                     <th>№</th>
                                     <th>Satış kodu</th>
+                                    <th>Müştəri</th>
                                     <th>Ödəniş tarixi</th>
                                     <th>Qrafik üzrə</th>
                                     <th>Ödənilib</th>
@@ -118,13 +107,46 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <c:forEach var="p" items="${list.content}" varStatus="loop">
+                                <c:forEach var="p" items="${list.content}" varStatus="loop1">
                                 <c:forEach var="t" items="${p.schedules}" varStatus="loop">
                                     <c:set var="now" value="<%=new Date().getTime()%>"/>
                                     <fmt:parseNumber var = "days" integerOnly = "true" type = "number" value = "${(now-t.scheduleDate.time)/86400000}" />
                                     <tr>
                                         <th>${loop.index+1}</th>
-                                        <th><c:out value="${p.sales.id}" /></th>
+                                        <th style="<c:out value="${p.sales.payment.cash?'background-color: #e6ffe7 !important':'background-color: #ffeaf1 !important'}"/>">
+                                            <c:choose>
+                                                <c:when test="${view1.status}">
+                                                    <c:choose>
+                                                        <c:when test="${p.sales.service}">
+                                                            <a href="javascript:window.open('/sale/service/<c:out value="${p.sales.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder">Servis: <c:out value="${p.sales.id}" /></a>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <a href="javascript:window.open('/sale/sales/<c:out value="${p.sales.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder">Satış: <c:out value="${p.sales.id}" /></a>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <c:choose>
+                                                        <c:when test="${p.sales.service}">
+                                                            Servis: <c:out value="${p.sales.id}" />
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            Satış: <c:out value="${p.sales.id}" />
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </th>
+                                        <th>
+                                            <c:choose>
+                                                <c:when test="${view2.status}">
+                                                    <a href="javascript:window.open('/crm/customer/<c:out value="${p.sales.customer.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${p.sales.customer.id}" />: <c:out value="${p.sales.customer.person.fullName}"/></a>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <c:out value="${p.sales.customer.id}" />: <c:out value="${p.sales.customer.person.fullName}"/>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </th>
                                         <td><fmt:formatDate value = "${t.scheduleDate}" pattern = "dd.MM.yyyy" /></td>
                                         <th><c:out value="${t.amount}" /> AZN</th>
                                         <th>

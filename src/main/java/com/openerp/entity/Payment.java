@@ -85,9 +85,6 @@ public class Payment {
     @OneToOne(mappedBy = "payment")
     private Sales sales;
 
-    @Column(name = "priority")
-    private int priority=5;
-
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_date", nullable = false)
     private Date createdDate = new Date();

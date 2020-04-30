@@ -33,11 +33,14 @@ public class SalesService {
                 if(sales.getOrganization()!=null && sales.getOrganization().getId()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("organization"), sales.getOrganization().getId())));
                 }
+                if(sales.getCustomer()!=null && sales.getCustomer().getId()!=null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("customer"), sales.getCustomer().getId())));
+                }
                 if(sales.getActive()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("active"), sales.getActive())));
                 }
                 if(sales.getApprove()!=null){
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("approve"), sales.getApprove())));
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("approve"), !sales.getApprove())));
                 }
                 if(sales.getService()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("service"), sales.getService())));
