@@ -235,13 +235,13 @@ public class MigrationController extends SkeletonController {
                     Invoice invoice = new Invoice();
                     invoice.setSales(sales);
                     invoice.setApprove(false);
-                    invoice.setCreditable(false);
+                    invoice.setCreditable(true);
                     if(!sales.getService()){
                         invoice.setAdvance(true);
                     }
                     invoice.setPrice(invoicePrice);
                     invoice.setOrganization(sales.getOrganization());
-                    invoice.setDescription("Satışdan əldə edilən ödəniş " + invoicePrice + " AZN");
+                    invoice.setDescription("Satışdan əldə edilən ilkin ödəniş " + invoicePrice + " AZN");
                     invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
                     invoiceRepository.save(invoice);
                     invoice.setChannelReferenceCode(String.valueOf(invoice.getId()));

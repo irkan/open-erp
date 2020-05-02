@@ -10,7 +10,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import java.util.List;
 
 public interface CustomerRepository extends JpaRepository<Customer, Integer>, JpaSpecificationExecutor<Customer> {
-    Customer getCustomerByIdAndActiveTrue(int id);
+    Customer getCustomerByIdAndActiveTrue(Integer id);
+    Customer getCustomerByIdAndActiveTrueAndOrganization(Integer id, Organization organization);
     List<Customer> getCustomersByActiveTrue();
     List<Customer> getCustomersByActiveTrueAndOrganization(Organization organization);
 }

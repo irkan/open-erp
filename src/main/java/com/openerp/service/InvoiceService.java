@@ -37,7 +37,7 @@ public class InvoiceService {
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("collector"), invoice.getCollector().getId())));
                 }
                 if(invoice.getSales()!=null && invoice.getSales().getId()!=null){
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("sales"), invoice.getSales().getId())));
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("sales").get("id"), invoice.getSales().getId())));
                 }
                 if(invoice.getSales()!=null && invoice.getSales().getCustomer()!=null && invoice.getSales().getCustomer().getId()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("sales").get("customer"), invoice.getSales().getCustomer().getId())));
@@ -45,8 +45,8 @@ public class InvoiceService {
                 if(invoice.getActive()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("active"), invoice.getActive())));
                 }
-                if(invoice.getApprove()!=null){
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("approve"), invoice.getApprove())));
+                if(invoice.getApprove()!=null && invoice.getApprove()){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("approve"), !invoice.getApprove())));
                 }
                 if(invoice.getPaymentChannel()!=null && invoice.getPaymentChannel().getId()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("paymentChannel"), invoice.getPaymentChannel().getId())));
@@ -69,7 +69,7 @@ public class InvoiceService {
                 if(invoice.getChannelReferenceCode()!=null && !invoice.getChannelReferenceCode().isEmpty()) {
                     predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("channelReferenceCode"), "%"+invoice.getChannelReferenceCode()+"%")));
                 }
-                if(invoice.getSales()!=null && invoice.getSales().getService()!=null){
+                if(invoice.getSales()!=null && invoice.getSales().getService()!=null && invoice.getSales().getService()){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("sales").get("service"), invoice.getSales().getService())));
                 }
                 if(invoice.getSales()!=null && invoice.getSales().getServicer()!=null && invoice.getSales().getServicer().getId()!=null){

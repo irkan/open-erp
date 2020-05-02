@@ -66,7 +66,7 @@
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <form:label path="sales">Satış kodu</form:label>
-                                                <form:input path="sales" cssClass="form-control" placeholder="#######" />
+                                                <form:input path="sales.id" cssClass="form-control" placeholder="#######" />
                                                 <form:errors path="sales" cssClass="alert-danger"/>
                                             </div>
                                         </div>
@@ -119,21 +119,25 @@
                                                 <form:errors path="invoiceDate" cssClass="control-label alert-danger" />
                                             </div>
                                         </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <form:label path="priceFrom">Qiymətdən</form:label>
-                                                <form:input path="priceFrom" cssClass="form-control" placeholder="Qiyməti daxil edin"/>
-                                                <form:errors path="priceFrom" cssClass="alert-danger control-label"/>
+                                        <div class="col-md-3">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <form:label path="priceFrom">Qiymətdən</form:label>
+                                                        <form:input path="priceFrom" cssClass="form-control" placeholder="Qiyməti daxil edin"/>
+                                                        <form:errors path="priceFrom" cssClass="alert-danger control-label"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <form:label path="price">Qiymətədək</form:label>
+                                                        <form:input path="price" cssClass="form-control" placeholder="Qiyməti daxil edin"/>
+                                                        <form:errors path="price" cssClass="alert-danger control-label"/>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <form:label path="price">Qiymətədək</form:label>
-                                                <form:input path="price" cssClass="form-control" placeholder="Qiyməti daxil edin"/>
-                                                <form:errors path="price" cssClass="alert-danger control-label"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
+                                        <div class="col-md-1">
                                             <div class="form-group">
                                                 <form:label path="paymentChannel">Ödəniş kanalı</form:label>
                                                 <form:select  path="paymentChannel.id" cssClass="custom-select form-control">
@@ -146,7 +150,15 @@
                                         <div class="col-md-2" style="padding-top: 30px;">
                                             <div class="form-group">
                                                 <label class="kt-checkbox kt-checkbox--brand">
-                                                    <form:checkbox path="approve"/> Təsdiq edilənlər
+                                                    <form:checkbox path="approve"/> Təsdiq edilməyənlər
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2" style="padding-top: 30px;">
+                                            <div class="form-group">
+                                                <label class="kt-checkbox kt-checkbox--brand">
+                                                    <form:checkbox path="sales.service"/> Servisdirmi?
                                                     <span></span>
                                                 </label>
                                             </div>
@@ -213,7 +225,7 @@
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${list.content}" varStatus="loop">
-                                    <tr data="<c:out value="${utl:toJson(t)}" />" class="<c:out value="${(t.price lt 0 and t.approve)?'strikeout':''}"/> ">
+                                    <tr data="<c:out value="${t.id}" />" class="<c:out value="${(t.price lt 0 and t.approve)?'strikeout':''}"/> ">
                                         <td>
                                             <a href="javascript:copyToClipboard('<c:out value="${t.id}" />')" class="kt-link kt-font-lg kt-font-bold kt-margin-t-5"><c:out value="${t.id}"/></a>
                                         </td>
@@ -278,12 +290,12 @@
                                         </td>
                                         <th nowrap class="text-center">
                                             <c:if test="${approve.status and !t.approve}">
-                                                <a href="javascript:edit($('#form-approve'), '<c:out value="${utl:toJson(t)}" />', 'approve-modal', '<c:out value="${approve.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${approve.object.name}"/>">
+                                                <a href="javascript:invoice('edit', $('#form-approve'), '<c:out value="${t.id}" />', 'approve-modal', '<c:out value="${approve.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${approve.object.name}"/>">
                                                     <i class="<c:out value="${approve.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
                                             <c:if test="${view.status}">
-                                                <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
+                                                <a href="javascript:invoice('view', $('#form'), '<c:out value="${t.id}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
                                                     <i class="<c:out value="${view.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
@@ -293,17 +305,17 @@
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-right">
                                                     <c:if test="${consolidate.status and !t.approve and !t.sales.service}">
-                                                    <a href="javascript:consolidate($('#form-consolidate'), '<c:out value="${utl:toJson(t)}" />', 'consolidate-modal');" class="dropdown-item" title="<c:out value="${consolidate.object.name}"/>">
+                                                    <a href="javascript:invoice('edit', $('#form-consolidate'), '<c:out value="${t.id}" />', 'consolidate-modal', '<c:out value="${consolidate.object.name}" />');" class="dropdown-item" title="<c:out value="${consolidate.object.name}"/>">
                                                         <i class="<c:out value="${consolidate.object.icon}"/>"></i> <c:out value="${consolidate.object.name}"/>
                                                     </a>
                                                     </c:if>
                                                     <c:if test="${edit.status and !t.approve}">
-                                                    <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="dropdown-item" title="<c:out value="${edit.object.name}"/>">
+                                                    <a href="javascript:invoice('edit', $('#form'), '<c:out value="${t.id}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="dropdown-item" title="<c:out value="${edit.object.name}"/>">
                                                         <i class="<c:out value="${edit.object.icon}"/>"></i> <c:out value="${edit.object.name}"/>
                                                     </a>
-                                                    </c:if>
+                                                    </c:if>                                                    
                                                     <c:if test="${credit.status and t.creditable and t.approve}">
-                                                    <a href="javascript:edit($('#credit-form'), '<c:out value="${utl:toJson(t)}" />', 'credit-modal-operation', '<c:out value="${credit.object.name}" />');" class="dropdown-item" title="<c:out value="${credit.object.name}"/>">
+                                                    <a href="javascript:invoice('edit', $('#credit-form'), '<c:out value="${t.id}" />', 'credit-modal-operation', '<c:out value="${credit.object.name}" />');" class="dropdown-item" title="<c:out value="${credit.object.name}"/>">
                                                         <i class="<c:out value="${credit.object.icon}"/>"></i> <c:out value="${credit.object.name}"/>
                                                     </a>
                                                     </c:if>
@@ -534,20 +546,6 @@
 <script src="<c:url value="/assets/js/demo4/pages/crud/datatables/advanced/row-grouping.js" />" type="text/javascript"></script>
 
 <script>
-    function consolidate(form, data, modal){
-        try {
-            data = data.replace(/\&#034;/g, '"');
-            var obj = jQuery.parseJSON(data);
-            console.log(obj);
-            $(form).find("#id").val(obj["id"]);
-            if(obj["collector"]!=null){
-                $("#collector option[value="+obj["collector"]["id"]+"]").attr("selected", "selected");
-            }
-            $('#' + modal).modal('toggle');
-        } catch (e) {
-            console.error(e);
-        }
-    }
 
     function exportInvoice(form, id, modal){
         try {
@@ -558,24 +556,9 @@
         }
     }
 
-    function approve(form, data, modal){
-        try {
-            data = data.replace(/\&#034;/g, '"');
-            var obj = jQuery.parseJSON(data);
-            console.log(obj);
-            $(form).find("#id").val(obj["id"]);
-            if(obj["collector"]!=null){
-                $("#collector option[value="+obj["collector"]["id"]+"]").attr("selected", "selected");
-            }
-            $('#' + modal).modal('toggle');
-        } catch (e) {
-            console.error(e);
-        }
-    }
-
     $('#group_table tbody').on('dblclick', 'tr', function () {
         <c:if test="${view.status}">
-        view($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${view.object.name}" />');
+        invoice('view', $('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${view.object.name}" />');
         </c:if>
     });
 
@@ -633,6 +616,43 @@
     $("input[name='sales']").inputmask('decimal', {
         rightAlignNumerics: false
     });
+
+    function invoice(oper, form, dataId, modal, modal_title){
+        swal.fire({
+            text: 'Proses davam edir...',
+            allowOutsideClick: false,
+            onOpen: function() {
+                swal.showLoading();
+                $.ajax({
+                    url: '/sale/api/invoice/'+dataId,
+                    type: 'GET',
+                    dataType: 'text',
+                    beforeSend: function() {
+
+                    },
+                    success: function(data) {
+                        if(oper==="view"){
+                            view(form, data, modal, modal_title)
+                        } else if(oper==="edit"){
+                            edit(form, data, modal, modal_title)
+                        }
+                        swal.close();
+                    },
+                    error: function() {
+                        swal.fire({
+                            title: "Xəta",
+                            html: "Xəta baş verdi!",
+                            type: "error",
+                            cancelButtonText: 'Bağla',
+                            cancelButtonColor: '#c40000',
+                            cancelButtonClass: 'btn btn-danger',
+                            footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+                        });
+                    }
+                })
+            }
+        });
+    }
 </script>
 
 

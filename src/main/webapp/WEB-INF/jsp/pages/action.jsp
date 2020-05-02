@@ -75,14 +75,14 @@
                                                 <form:errors path="actionDate" cssClass="control-label alert-danger" />
                                             </div>
                                         </div>
-                                        <div class="col-md-2">
+                                        <div class="col-md-1">
                                             <div class="form-group">
                                                 <form:label path="amountFrom">Saydan</form:label>
                                                 <form:input path="amountFrom" cssClass="form-control" placeholder="Sayı daxil edin"/>
                                                 <form:errors path="amountFrom" cssClass="alert-danger control-label"/>
                                             </div>
                                         </div>
-                                        <div class="col-md-2">
+                                        <div class="col-md-1">
                                             <div class="form-group">
                                                 <form:label path="amount">Sayadək</form:label>
                                                 <form:input path="amount" cssClass="form-control" placeholder="Qiyməti daxil edin"/>

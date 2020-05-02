@@ -383,12 +383,18 @@ public class WarehouseController extends SkeletonController {
     @ResponseBody
     @GetMapping(value = "/api/inventory/{barcode}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Inventory findInventory(@PathVariable("barcode") String barcode){
-        List<Inventory> inventories = inventoryRepository.getInventoriesByActiveTrueAndBarcodeAndOrganizationOrderByIdAsc(barcode, getSessionOrganization());
-        for(Inventory inventory: inventories){
-            int amount = Util.calculateInventoryAmount(inventory.getActions(), getSessionOrganization().getId()).getAllItemsCount();
-            if(amount>0){
-                return inventory;
+        try {
+            List<Inventory> inventories = inventoryRepository.getInventoriesByActiveTrueAndBarcodeAndOrganizationOrderByIdAsc(barcode, getSessionOrganization());
+            for(Inventory inventory: inventories){
+                int amount = Util.calculateInventoryAmount(inventory.getActions(), getSessionOrganization().getId()).getAllItemsCount();
+                if(amount>0){
+                    return inventory;
+                }
             }
+        } catch (Exception e){
+            log(null, "error", "warehouse_inventory", "", null, "", "WAREHOUSE API INVENTORY Xəta baş verdi! " + e.getMessage());
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return null;
     }

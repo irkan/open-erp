@@ -524,14 +524,15 @@
                                         </form:select>
                                         <form:errors path="guarantee" cssClass="control-label alert-danger"/>
                                     </div>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-3">
                                         <form:label path="payment.price">Qiymət</form:label>
-                                        <form:select  path="payment.price" onchange="calculate($(this))" cssClass="custom-select form-control">
-                                            <form:options items="${sale_prices}" itemLabel="name" itemValue="attr1" />
-                                        </form:select>
+                                        <div class="input-group" >
+                                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
+                                            <form:input path="payment.price" onchange="calculate($(this))" cssClass="form-control" placeholder="Qiyməti daxil edin"/>
+                                        </div>
                                         <form:errors path="payment.price" cssClass="control-label alert-danger"/>
                                     </div>
-                                    <div class="col-sm-5 text-center">
+                                    <div class="col-sm-4 text-center">
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <div class="form-group mt-3 pt-4">
@@ -1119,6 +1120,9 @@
     <input type="hidden" name="id" />
 </form>
 
+<script src="<c:url value="/assets/vendors/general/typeahead.js/dist/typeahead.bundle.js" />" type="text/javascript"></script>
+<script src="<c:url value="/assets/vendors/general/typeahead.js/dist/typeahead.jquery.js" />" type="text/javascript"></script>
+
 <script>
 
     $('#group_table').DataTable({
@@ -1216,7 +1220,7 @@
     }
 
     $(function(){
-        $("select[name='payment.price']").change();
+        $("input[name='payment.price']").change();
     });
 
     function doCash(element){
@@ -1262,7 +1266,7 @@
                 $("input[name='payment.description']").val('');
                 if (result.value) {
                     $("input[name='payment.discount']").val($('#sale-value').val());
-                    $("select[name='payment.price']").change();
+                    $("input[name='payment.price']").change();
                     if($('#sale-value').val()!==defaultCash){
                         swal.fire({
                             title: $('#sale-value').val()+' - Səbəbini daxil edin',
@@ -1292,7 +1296,7 @@
             })
 
         } else {
-            var price = $("select[name='payment.price']").val();
+            var price = $("input[name='payment.price']").val();
             $("#lastPriceLabel").text(price);
             $("input[name='payment.lastPrice']").val(price);
         }
@@ -1371,6 +1375,11 @@
                     'salesInventories[0].inventory.barcode': {
                         required: true
                     },
+                    'payment.price': {
+                        required: false,
+                        number: true,
+                        pattern: /^(1499|1599|1699)$/
+                    },
                     'payment.down': {
                         required: true,
                         number: true,
@@ -1393,6 +1402,9 @@
                     canavasser: {
                         required: true
                     },
+                },
+                messages: {
+                    'payment.price': "Qiymət 1499, 1599 və ya 1699 ola bilər",
                 },
                 invalidHandler: function(event, validator) {
                     KTUtil.scrollTop();
@@ -1852,6 +1864,10 @@
 
     $("input[name='customer.person.contact.relationalPhoneNumber3']").inputmask("mask", {
         "mask": "(999) 999-9999"
+    });
+
+    $("input[name='payment.price']").inputmask('decimal', {
+        rightAlignNumerics: false
     });
 
     $("input[name='payment.down']").inputmask('decimal', {

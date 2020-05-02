@@ -65,9 +65,9 @@ public class CRMController extends SkeletonController {
     @GetMapping(value = "/api/customer/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Customer findCustomer(@PathVariable("id") String id){
         try {
-            return customerRepository.getCustomerByIdAndActiveTrue(Integer.parseInt(id));
+            return customerRepository.getCustomerByIdAndActiveTrueAndOrganization(Integer.parseInt(id), getSessionOrganization());
         } catch (Exception e){
-            log(null, "error", "", "", null, "", e.getMessage());
+            log(null, "error", "crm_customer", "", null, "", "CRM API CUSTOMER Xəta baş verdi! " + e.getMessage());
             e.printStackTrace();
             log.error(e.getMessage(), e);
         }

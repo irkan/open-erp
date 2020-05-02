@@ -401,13 +401,13 @@ public class SaleController extends SkeletonController {
                 Invoice invoice = new Invoice();
                 invoice.setSales(sales);
                 invoice.setApprove(false);
-                invoice.setCreditable(false);
+                invoice.setCreditable(true);
                 if(!sales.getService()){
                     invoice.setAdvance(true);
                 }
                 invoice.setPrice(invoicePrice);
                 invoice.setOrganization(sales.getOrganization());
-                invoice.setDescription("Satışdan əldə edilən ödəniş " + invoicePrice + " AZN");
+                invoice.setDescription("Satışdan əldə edilən ilkin ödəniş " + invoicePrice + " AZN");
                 invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
                 invoiceRepository.save(invoice);
                 log(invoice, "sale_invoice", "create/edit", invoice.getId(), invoice.toString());
@@ -526,10 +526,10 @@ public class SaleController extends SkeletonController {
     @PostMapping(value = "/invoice/approve")
     public String postInvoiceApprove(@ModelAttribute(Constants.FORM) @Validated Invoice invoice, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         Invoice invc = invoiceRepository.getInvoiceById(invoice.getId());
-        if(!invc.getSales().getService() && invc.getCollector()==null){
+        /*if(!invc.getSales().getService() && invc.getCollector()==null){
             FieldError fieldError = new FieldError("", "", "Yığımçı təyin edilməlidir!");
             binding.addError(fieldError);
-        }
+        }*/
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()) {
             invc.setApprove(true);
