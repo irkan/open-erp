@@ -153,9 +153,8 @@ public class Sales {
         this.organization = organization;
     }
 
-    public Sales(Integer id, Organization organization, Payment payment) {
+    public Sales(Integer id, Organization organization) {
         this.id = id;
         this.organization = organization;
-        this.payment = payment;
     }
 }

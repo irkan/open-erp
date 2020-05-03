@@ -32,7 +32,7 @@ public class Payment {
 
     @DecimalMin(value = "0", message = "Minimum 0 olmalıdır")
     @Column(name = "last_price", nullable = false, columnDefinition="Decimal(10,2) default 0")
-    private Double lastPrice=0d;
+    private Double lastPrice;
 
     @ToString.Exclude
     @Transient

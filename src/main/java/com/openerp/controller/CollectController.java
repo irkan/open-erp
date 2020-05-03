@@ -30,7 +30,7 @@ public class CollectController extends SkeletonController {
         if(page.equalsIgnoreCase(Constants.ROUTE.PAYMENT_LATENCY) ||
                 page.equalsIgnoreCase(Constants.ROUTE.TROUBLED_CUSTOMER)){
             model.addAttribute(Constants.CONFIGURATION_TROUBLED_CUSTOMER, configurationRepository.getConfigurationByKey("troubled_customer").getAttribute());
-            Sales salesObject = new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null, new Payment((Double) null));
+            Sales salesObject = new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null);
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Invoice(salesObject, getSessionOrganization()));
             }

@@ -51,9 +51,8 @@ public class SaleController extends SkeletonController {
                 model.addAttribute(Constants.RETURN_FORM, new Return());
             }
             if(!model.containsAttribute(Constants.FILTER)){
-                Sales sales = new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null, new Payment((Double) null));
+                Sales sales = new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null);
                 sales.setApprove(null);
-                sales.getPayment().setLastPrice(null);
                 model.addAttribute(Constants.FILTER, sales);
             }
             Page<Sales> sales = salesService.findAll((Sales) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
@@ -70,7 +69,7 @@ public class SaleController extends SkeletonController {
             }
             Sales filterSales = null;
             if(!model.containsAttribute(Constants.FILTER)){
-                filterSales = new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null, new Payment((Double) null));
+                filterSales = new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null);
                 model.addAttribute(Constants.FILTER, new SalesSchedule(filterSales));
             }
             if(filterSales!=null && filterSales.getId()!=null){
@@ -130,8 +129,9 @@ public class SaleController extends SkeletonController {
                     if(!checkContactHistory(sales, salesSchedule)){
                         List<Schedule> schedules = new ArrayList<>();
                         double sumOfInvoices = Util.calculateInvoice(sales.getInvoices());
-                        if(sumOfInvoices<sales.getPayment().getLastPrice()){
-                            schedules.add(new Schedule(sales.getPayment().getLastPrice()-sumOfInvoices, salesSchedule.getScheduleDate()));
+                        double lastPrice = sales.getPayment().getLastPrice()==null?0:sales.getPayment().getLastPrice();
+                        if(sumOfInvoices<lastPrice){
+                            schedules.add(new Schedule(lastPrice-sumOfInvoices, salesSchedule.getScheduleDate()));
                         }
                         salesSchedules.add(new SalesSchedule(schedules, sales));
                     }
@@ -233,7 +233,7 @@ public class SaleController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new ServiceRegulator(new Sales(getSessionOrganization())));
             }
             if(!model.containsAttribute(Constants.FILTER)){
-                Sales sales = new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null, new Payment((Double) null));
+                Sales sales = new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null);
                 model.addAttribute(Constants.FILTER, new ServiceRegulator(sales, null));
             }
             Page<ServiceRegulator> serviceRegulators = serviceRegulatorService.findAll((ServiceRegulator) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));

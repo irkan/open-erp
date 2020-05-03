@@ -1541,7 +1541,7 @@ public class DBConfiguration {
 
             employeeRepository.save(employee0);
 
-            User user = new User(defaultAdminUsername, DigestUtils.md5DigestAsHex("admin".getBytes()), employee0, new UserDetail("az", true));
+            User user = new User(defaultAdminUsername, DigestUtils.md5DigestAsHex(defaultAdminPassword.getBytes()), employee0, new UserDetail("az", true));
             userRepository.save(user);
 
             List<UserModuleOperation> userModuleOperations = new ArrayList<>();

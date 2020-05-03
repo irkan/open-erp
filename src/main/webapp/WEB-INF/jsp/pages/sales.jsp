@@ -528,7 +528,7 @@
                                         <form:label path="payment.price">Qiymət</form:label>
                                         <div class="input-group" >
                                             <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
-                                            <form:input path="payment.price" onchange="calculate($(this))" cssClass="form-control" placeholder="Qiyməti daxil edin"/>
+                                            <form:input path="payment.price" onchange="calculate($('#form'), $(this))" cssClass="form-control" placeholder="Qiyməti daxil edin"/>
                                         </div>
                                         <form:errors path="payment.price" cssClass="control-label alert-danger"/>
                                     </div>
@@ -1203,7 +1203,7 @@
         });
 
     }
-    function calculate(element){
+    function calculate(form, element){
         var price = $(element).val();
         var discount = $("input[name='payment.discount']").val();
         if(discount.trim().length>0){
@@ -1216,7 +1216,7 @@
             price = Math.ceil(price);
         }
         $("#lastPriceLabel").text(price);
-        $("input[name='payment.lastPrice']").val(price);
+        $(form).find("input[name='payment.lastPrice']").val(price);
     }
 
     $(function(){
@@ -1298,7 +1298,7 @@
         } else {
             var price = $("input[name='payment.price']").val();
             $("#lastPriceLabel").text(price);
-            $("input[name='payment.lastPrice']").val(price);
+            $('#form').find("input[name='payment.lastPrice']").val(price);
         }
     }
 

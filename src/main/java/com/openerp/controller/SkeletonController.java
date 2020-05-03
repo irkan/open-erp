@@ -579,6 +579,7 @@ public class SkeletonController {
     }
 
     List<Schedule> getSchedulePayment(String saleDate, Integer scheduleId, Integer periodId, Double lastPrice, Double down){
+        lastPrice = lastPrice==null?0:lastPrice;
         Dictionary schedule = dictionaryRepository.getDictionaryById(scheduleId);
         Dictionary period = dictionaryRepository.getDictionaryById(periodId);
         int scheduleCount = Integer.parseInt(schedule.getAttr1());
