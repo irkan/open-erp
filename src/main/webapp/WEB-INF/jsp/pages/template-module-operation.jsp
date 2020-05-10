@@ -268,7 +268,6 @@
                 scrollX: true,
                 paging: false,
                 autoWidth: false,
-                searching: false,
                 drawCallback: function(settings) {
                     var api = this.api();
                     var rows = api.rows({page: 'current'}).nodes();

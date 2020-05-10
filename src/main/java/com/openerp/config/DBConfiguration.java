@@ -1340,8 +1340,6 @@ public class DBConfiguration {
             moduleOperations.add(exportModuleOperation41);
             ModuleOperation exportModuleOperation42 = new ModuleOperation(session, export, null);
             moduleOperations.add(exportModuleOperation42);
-            ModuleOperation exportModuleOperation43 = new ModuleOperation(logFile, export, null);
-            moduleOperations.add(exportModuleOperation43);
 
             ModuleOperation approveModuleOperation3 = new ModuleOperation(transaction, approve, null);
             moduleOperations.add(approveModuleOperation3);
@@ -1705,7 +1703,6 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation40));
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation41));
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation42));
-            userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation43));
 
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation2));
