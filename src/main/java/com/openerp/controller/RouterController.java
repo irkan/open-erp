@@ -71,6 +71,6 @@ public class RouterController extends SkeletonController {
             session.setAttribute(Constants.ORGANIZATION_SELECTED, organization);
         }
         redirectAttributes.addFlashAttribute(Constants.MODULE_DESCRIPTION, description);
-        return "redirect:/"+path1+"/"+path2+(!data.equals(Optional.empty())?("/"+data.toString().trim()):"");
+        return "redirect:/"+path1+"/"+path2+(!data.equals(Optional.empty())?("/"+data.get().toString().trim()):"");
     }
 }

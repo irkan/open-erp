@@ -97,4 +97,25 @@
             java.lang.String findMonthName(int)
         </function-signature>
     </function>
+    <function>
+        <name>checkDirectory</name>
+        <function-class>com.openerp.util.Util</function-class>
+        <function-signature>
+            java.lang.Boolean checkDirectory(java.io.File)
+        </function-signature>
+    </function>
+    <function>
+        <name>getPath</name>
+        <function-class>com.openerp.util.Util</function-class>
+        <function-signature>
+            java.lang.String getPath(java.io.File)
+        </function-signature>
+    </function>
+    <function>
+        <name>checkTXTFile</name>
+        <function-class>com.openerp.util.Util</function-class>
+        <function-signature>
+            java.lang.Boolean checkTXTFile(java.io.File)
+        </function-signature>
+    </function>
 </taglib>

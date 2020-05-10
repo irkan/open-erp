@@ -586,6 +586,9 @@
             "person.nationality": {
                 required: true
             },
+            "person.contact.email": {
+                required: true
+            },
             "person.contact.mobilePhone": {
                 required: true
             },

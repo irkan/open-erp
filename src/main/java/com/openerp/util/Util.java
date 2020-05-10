@@ -19,6 +19,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
@@ -534,6 +535,19 @@ public class Util {
 
     public static String getPersonLFF(Person person){
         return person.getLastName() + " " + person.getFirstName() + " " + (person.getFatherName()!=null?person.getFatherName():"");
+    }
+
+    public static Boolean checkDirectory(File file){
+        return file.isDirectory();
+    }
+
+    public static Boolean checkTXTFile(File file){
+        Pattern pattern = Pattern.compile(Constants.REGEX.REGEX6);
+        return pattern.matcher(file.getName()).matches();
+    }
+
+    public static String getPath(File file){
+        return file.getPath().split("logs")[1].replaceAll(Pattern.quote("\'"), "/");
     }
 
     public static String getDigitInWord(String digit){

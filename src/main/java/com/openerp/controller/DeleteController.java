@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.util.List;
 
 @Controller
@@ -271,6 +272,10 @@ public class DeleteController extends SkeletonController {
         } else if(path.equalsIgnoreCase(Constants.ROUTE.APPROVER_EXCEPTION)){
             approverExceptionRepository.deleteById(Integer.parseInt(id));
             log(null, "admin_approver_exception", "delete", Integer.parseInt(id), "");
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.LOG_FILE)){
+            File file = new File(id);
+            file.delete();
+            log(null, "LOG FILE", "delete", null, "", id + " log file silindi");
         }
         return "redirect:/"+parent+"/"+path;
     }

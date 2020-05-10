@@ -65,6 +65,9 @@ public class Constants {
     public static final String LAST_ADVANCE = "last_advance";
     public static final String ANNUAL_NON_PAYED_ADVANCE = "annual_non_payed_advance";
     public static final String RETURN_FORM = "return_form";
+    public static final String FILES = "files";
+    public static final String CONTENTS = "contents";
+    public static final String PATH = "path";
 
     public static final class STATUS{
         public static final String RESPONSE = "response";
@@ -80,6 +83,7 @@ public class Constants {
         public static final String REGEX3 = "[0-9\\s]+";
         public static final String REGEX4 = "^[A-Za-z0-9+_.-]+@(.+)$";
         public static final String REGEX5 =  "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
+        public static final String REGEX6 = "([^\\s]+(\\.(?i)(gz))$)";
 
     }
 
@@ -147,5 +151,6 @@ public class Constants {
         public static final String SESSION = "session";
         public static final String APPROVER_EXCEPTION = "approver-exception";
         public static final String MIGRATION = "migration";
+        public static final String LOG_FILE = "log-file";
     }
 }

@@ -56,7 +56,7 @@
                                         <td></td>
                                         <td style="width: 20px"></td>
                                         <c:forEach var="t" items="${operations}" varStatus="loop">
-                                            <td nowrap style="vertical-align: bottom;">
+                                            <td nowrap style="vertical-align: bottom; background-color: #ffffb6">
                                                 <div class="rotate" style="width: 30px;"><c:out value="${t.name}" /></div><br/><i class="icon-custom <c:out value="${t.icon}" />"></i>
                                             </td>
                                         </c:forEach>
@@ -68,7 +68,7 @@
                                             <c:when test="${not empty m.module}">
                                                 <tr>
                                                     <td>${loop.index + 1}</td>
-                                                    <td class="text-right"><div style="width: 100%; min-width: 150px;"><span><c:out value="${m.name}" /></span><i class="icon-custom <c:out value="${m.icon}" />"></i></div></td>
+                                                    <td class="text-right" style="background-color: #caf1ff"><div style="width: 100%; min-width: 150px;"><span><c:out value="${m.name}" /></span><i class="icon-custom <c:out value="${m.icon}" />"></i></div></td>
                                                     <td>
                                                         <c:choose>
                                                             <c:when test="${empty m.module.module}">
@@ -79,7 +79,7 @@
                                                             </c:otherwise>
                                                         </c:choose>
                                                     </td>
-                                                    <td class="text-center" style="width: 8px; background-color: #f7f8fa">
+                                                    <td class="text-center" style="width: 10px; background-color: #fad9de">
                                                         <label class="kt-checkbox kt-checkbox--brand">
                                                             <input type="checkbox" onclick="checkedRow(this)">
                                                             <span style="top: -11px; left: 5px;"></span>
@@ -287,7 +287,7 @@
         });
     }
 
-    var KTDatatablesAdvancedRowGrouping = function() {
+    /*var KTDatatablesAdvancedRowGrouping = function() {
 
         var initTable1 = function() {
             var table = $('#group_table');
@@ -329,5 +329,71 @@
 
     jQuery(document).ready(function() {
         KTDatatablesAdvancedRowGrouping.init();
-    });
+    });*/
+
+
+    var KTDatatablesBasicScrollable = function() {
+        var initTable2 = function() {
+            var table = $('#group_table');
+            table.DataTable({
+                responsive: true,
+                scrollY: 480,
+                scrollX: true,
+                paging: false,
+                autoWidth: false,
+                searching: false,
+                drawCallback: function(settings) {
+                    var api = this.api();
+                    var rows = api.rows({page: 'current'}).nodes();
+                    var last = null;
+
+                    api.column(2, {page: 'current'}).data().each(function(group, i) {
+                        if (last !== group) {
+                            $(rows).eq(i).before(
+                                '<tr class="group"><td colspan="30">' + group + '</td></tr>'
+                            );
+                            last = group;
+                        }
+                    });
+                },
+                columnDefs: [
+                    {targets: 0, orderable: false},
+                    {targets: 2, visible: false},
+                    {targets: 3, orderable: false},
+                    {targets: 4, orderable: false},
+                    {targets: 5, orderable: false},
+                    {targets: 6, orderable: false},
+                    {targets: 7, orderable: false},
+                    {targets: 8, orderable: false},
+                    {targets: 9, orderable: false},
+                    {targets: 10, orderable: false},
+                    {targets: 11, orderable: false},
+                    {targets: 12, orderable: false},
+                    {targets: 13, orderable: false},
+                    {targets: 14, orderable: false},
+                    {targets: 15, orderable: false},
+                    {targets: 16, orderable: false},
+                    {targets: 17, orderable: false},
+                    {targets: 18, orderable: false},
+                    {targets: 19, orderable: false},
+                    {targets: 20, orderable: false},
+                    {targets: 21, orderable: false},
+                    {targets: 22, orderable: false},
+                    {targets: 23, orderable: false},
+                    {targets: 24, orderable: false}
+                ],
+                fixedColumns:   {
+                    leftColumns: 2
+                },
+                order: [[1, 'asc']]
+            });
+        };
+        return {
+            init: function() {
+                initTable2();
+            }
+        };
+    }();
+
+    KTDatatablesBasicScrollable.init();
 </script>

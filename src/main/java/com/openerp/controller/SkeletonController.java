@@ -38,6 +38,9 @@ public class SkeletonController {
     @Value("${spring.mail.username}")
     String springEmailUserName;
 
+    @Value("${log.file.path}")
+    String logFilePath;
+
     @Autowired
     HttpSessionConfig httpSessionConfig;
 

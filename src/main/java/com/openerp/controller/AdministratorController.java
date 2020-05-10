@@ -1,8 +1,10 @@
 package com.openerp.controller;
 
+import com.openerp.domain.LogFile;
 import com.openerp.domain.Session;
 import com.openerp.entity.*;
 import com.openerp.util.Constants;
+import com.openerp.util.Tail;
 import com.openerp.util.Util;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,6 +25,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -178,6 +181,27 @@ public class AdministratorController extends SkeletonController {
             if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
                 return exportExcel(logs, redirectAttributes, page);
             }
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.LOG_FILE)){
+            if(!model.containsAttribute(Constants.FILTER)){
+                model.addAttribute(Constants.FILTER, new LogFile());
+            }
+            String path = "";
+            if(!data.equals(Optional.empty())){
+                for(String s: data.get().split("---")){
+                    path+=s+"/";
+                }
+            }
+            path = path.trim().length()>0?path:logFilePath;
+            model.addAttribute(Constants.PATH, path);
+            File logs = new File(path);
+            if(!logs.isDirectory() && !logs.getName().matches(Constants.REGEX.REGEX6)){
+                LogFile logFile = (LogFile) model.asMap().get(Constants.FILTER);
+                List<String> content = Tail.tailFile(logs.toPath(), logFile.getCount());
+                Collections.reverse(content);
+                model.addAttribute(Constants.CONTENTS, content);
+            } else {
+                model.addAttribute(Constants.FILES, logs.listFiles());
+            }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.ENDPOINT)){
             model.addAttribute(Constants.CONNECTION_TYPES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("connection-type"));
             if(!model.containsAttribute(Constants.FILTER)){
@@ -294,6 +318,11 @@ public class AdministratorController extends SkeletonController {
         return mapFilter(log, binding, redirectAttributes, "/admin/log");
     }
 
+    @PostMapping(value = "/log-file/filter")
+    public String postLogFileFilter(@ModelAttribute(Constants.FILTER) @Validated LogFile logFile, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        return mapFilter(logFile, binding, redirectAttributes, "/admin/log-file");
+    }
+
     @PostMapping(value = "/dictionary")
     public String postDictionary(@ModelAttribute(Constants.FORM) @Validated Dictionary dictionary, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
@@ -313,19 +342,27 @@ public class AdministratorController extends SkeletonController {
             if(user.getId()!=null){
                 user.setPassword(userRepository.getUserByActiveTrueAndId(user.getId()).getPassword());
             }
-            if(user.getId()==null || user.getId()==0) {
-                String message = "Hörmətli " + user.getEmployee().getPerson().getFirstName() + ",<br/><br/>" +
-                        "Sizin məlumatlarınıza əsasən istifadəçi adı və şifrəsi.<br/><br/>" +
-                        "İstifadəçi adınız: " + user.getUsername() + "<br/>" +
-                        "Şifrəniz: " + password + "<br/><br/>";
-                sendEmail(user.getEmployee().getOrganization(), user.getEmployee().getPerson().getContact().getEmail(),
-                        "Yeni istifadəçi!",
-                        message,
-                        null
-                );
-            }
             userRepository.save(user);
             log(user, "admin_user", "create/edit", user.getId(), user.toString());
+
+            try{
+                if(user.getId()==null || user.getId()==0) {
+                    String message = "Hörmətli " + user.getEmployee().getPerson().getFirstName() + ",<br/><br/>" +
+                            "Sizin məlumatlarınıza əsasən istifadəçi adı və şifrəsi.<br/><br/>" +
+                            "İstifadəçi adınız: " + user.getUsername() + "<br/>" +
+                            "Şifrəniz: " + password + "<br/><br/>";
+                    sendEmail(user.getEmployee().getOrganization(), user.getEmployee().getPerson().getContact().getEmail(),
+                            "Yeni istifadəçi!",
+                            message,
+                            null
+                    );
+                }
+            } catch (Exception e){
+                log.error(e.getMessage(), e);
+                log(null, "error", "admin_notification", "", null, "", e.getMessage());
+            }
+
+
             if(user.getId()==null || user.getId()==0){
                 List<ModuleOperation> moduleOperations = moduleOperationRepository.getModuleOperationsByModuleIn(moduleRepository.getModulesByActiveTrueAndPath("profile").get(0).getChildren());
                 List<UserModuleOperation> userModuleOperations = new ArrayList<>();
@@ -343,18 +380,23 @@ public class AdministratorController extends SkeletonController {
     public String postUserChangePassword(@ModelAttribute(Constants.FORM) @Validated User user, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
-            User usr = userRepository.getUserByActiveTrueAndId(user.getId());
-            usr.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
-            log(usr, "admin_user", "change-password", usr.getId(), usr.toString());
-            String message = "Hörmətli " + usr.getEmployee().getPerson().getFirstName() + ",<br/><br/>" +
-                    "Sizin məlumatlarınıza əsasən yeni istifadəçi yaradılmışdır.<br/><br/>" +
-                    "İstifadəçi adınız: "+usr.getUsername()+"<br/>" +
-                    "Şifrəniz: "+user.getPassword()+"<br/><br/>";
-            sendEmail(usr.getEmployee().getOrganization(), usr.getEmployee().getPerson().getContact().getEmail(),
-                    "Yeni istifadəçi!",
-                    message,
-                    null
-            );
+            try{
+                User usr = userRepository.getUserByActiveTrueAndId(user.getId());
+                usr.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
+                log(usr, "admin_user", "change-password", usr.getId(), usr.toString());
+                String message = "Hörmətli " + usr.getEmployee().getPerson().getFirstName() + ",<br/><br/>" +
+                        "Sizin məlumatlarınıza əsasən yeni istifadəçi yaradılmışdır.<br/><br/>" +
+                        "İstifadəçi adınız: "+usr.getUsername()+"<br/>" +
+                        "Şifrəniz: "+user.getPassword()+"<br/><br/>";
+                sendEmail(usr.getEmployee().getOrganization(), usr.getEmployee().getPerson().getContact().getEmail(),
+                        "Yeni istifadəçi!",
+                        message,
+                        null
+                );
+            } catch (Exception e){
+                log.error(e.getMessage(), e);
+                log(null, "error", "admin_notification", "", null, "", e.getMessage());
+            }
         }
         return mapPost(user, binding, redirectAttributes, "/admin/user");
     }
@@ -381,13 +423,18 @@ public class AdministratorController extends SkeletonController {
             userDetailRepository.save(userModuleOperation.getUser().getUserDetail());
             log(userModuleOperation, "admin_user_module_operation", "create/edit", userModuleOperation.getUser().getId(), userModuleOperation.toString(), userModuleOperation.getUser().getUsername() + " icazələri yeniləndi");
 
-            String message = "Hörmətli " + userModuleOperation.getUser().getEmployee().getPerson().getFirstName() + ",<br/><br/>" +
-                    "Sistemdə icazələriniz yeniləndi.<br/><br/>";
-            sendEmail(userModuleOperation.getUser().getEmployee().getOrganization(), userModuleOperation.getUser().getEmployee().getPerson().getContact().getEmail(),
-                    "İcazələriniz yeniləndi!",
-                    message,
-                    null
-            );
+            try{
+                String message = "Hörmətli " + userModuleOperation.getUser().getEmployee().getPerson().getFirstName() + ",<br/><br/>" +
+                        "Sistemdə icazələriniz yeniləndi.<br/><br/>";
+                sendEmail(userModuleOperation.getUser().getEmployee().getOrganization(), userModuleOperation.getUser().getEmployee().getPerson().getContact().getEmail(),
+                        "İcazələriniz yeniləndi!",
+                        message,
+                        null
+                );
+            } catch (Exception e){
+                log.error(e.getMessage(), e);
+                log(null, "error", "admin_notification", "", null, "", e.getMessage());
+            }
         }
         return mapPost(userModuleOperation, binding, redirectAttributes);
     }

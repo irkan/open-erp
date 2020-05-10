@@ -34,7 +34,7 @@ public class Notification {
     @Column(name = "message_from")
     private String from;
 
-    @Pattern(regexp=".{4,250}",message="Minimum 4 maksimum 10 simvol ola bilər")
+    @Pattern(regexp=".{4,250}",message="Minimum 4 maksimum 250 simvol ola bilər")
     @Column(name = "message_to")
     private String to;
 
@@ -74,7 +74,7 @@ public class Notification {
     @Column(name = "created_date", nullable = false)
     private Date createdDate = new Date();
 
-    public Notification(Dictionary type, Organization organization, String from, @Pattern(regexp = ".{4,250}", message = "Minimum 4 maksimum 10 simvol ola bilər") String to, @Pattern(regexp = ".{1,250}", message = "Minimum 1 maksimum 250 simvol ola bilər") String subject, @Pattern(regexp = ".{1,1000}", message = "Minimum 1 maksimum 1000 simvol ola bilər") String message, @Pattern(regexp = ".{1,1000}", message = "Minimum 1 maksimum 1000 simvol ola bilər") String description, String attachment) {
+    public Notification(Dictionary type, Organization organization, String from, @Pattern(regexp = ".{4,250}", message = "Minimum 4 maksimum 250 simvol ola bilər") String to, @Pattern(regexp = ".{1,250}", message = "Minimum 1 maksimum 250 simvol ola bilər") String subject, @Pattern(regexp = ".{1,1000}", message = "Minimum 1 maksimum 1000 simvol ola bilər") String message, @Pattern(regexp = ".{1,1000}", message = "Minimum 1 maksimum 1000 simvol ola bilər") String description, String attachment) {
         this.type = type;
         this.organization = organization;
         this.from = from;
