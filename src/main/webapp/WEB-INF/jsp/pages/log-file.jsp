@@ -94,7 +94,7 @@
                                     </a>
                                 </c:when>
                                 <c:otherwise>
-                                    <a href="/route/sub/admin/log-file/<c:out value="${fn:replace(t.path, '\\\\', '---')}"/>" class="m-2 item">
+                                    <a href="/route/sub/admin/log-file/<c:out value="${fn:replace(fn:replace(t.path, '\\\\', '---'), '/', '---')}"/>" class="m-2 item">
                                         <i class="flaticon-file-1 font-weight-bolder" style="font-size: 100px;"></i>
                                         <div><c:out value="${t.name}"/></div>
                                     </a>
