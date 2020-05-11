@@ -80,7 +80,7 @@
                 <div class="col-md-2 text-center">
                     <c:choose>
                         <c:when test="${utl:checkDirectory(t)}">
-                        <a href="/route/sub/admin/log-file/<c:out value="${fn:replace(t.path, '\\\\', '---')}"/>" class="m-2 item">
+                        <a href="/route/sub/admin/log-file/<c:out value="${fn:replace(fn:replace(t.path, '\\\\', '---'), '/', '---')}"/>" class="m-2 item">
                             <i class="flaticon-folder-1 font-weight-bolder" style="font-size: 100px; color: #cfbb13"></i>
                             <div><c:out value="${t.name}"/></div>
                         </a>
