@@ -335,6 +335,31 @@ public class AdministratorController extends SkeletonController {
 
     @PostMapping(value = "/user")
     public String postUser(@ModelAttribute(Constants.FORM) @Validated User user, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        if(user.getEmployee()==null){
+            FieldError fieldError = new FieldError("", "", "İstifadəçi yaradılmadı! Əməkdaş tapılmadı!");
+            binding.addError(fieldError);
+        }
+        if(user.getEmployee()!=null &&
+                user.getEmployee().getPerson()==null){
+            FieldError fieldError = new FieldError("", "", "İstifadəçi yaradılmadı! Əməkdaşın şəxs məlumatları tapılmadı!");
+            binding.addError(fieldError);
+        }
+        if(user.getEmployee()!=null &&
+                user.getEmployee().getPerson()!=null &&
+                user.getEmployee().getPerson().getContact()==null){
+            FieldError fieldError = new FieldError("", "", "İstifadəçi yaradılmadı! "+user.getEmployee().getPerson().getFullName()+" aid laqə məlumatları tapılmadı!");
+            binding.addError(fieldError);
+        }
+        if(user.getEmployee()!=null &&
+                user.getEmployee().getPerson()!=null &&
+                user.getEmployee().getPerson().getContact()!=null &&
+                (user.getEmployee().getPerson().getContact().getEmail()==null ||
+                user.getEmployee().getPerson().getContact().getEmail().trim().length()<5 ||
+                user.getEmployee().getPerson().getContact().getEmail().trim().length()>249)){
+            FieldError fieldError = new FieldError("", "", "İstifadəçi yaradılmadı! " + user.getEmployee().getPerson().getFullName() + " - əməkdaşa doğru email təyin edin!");
+            binding.addError(fieldError);
+        }
+
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             String password = user.getPassword();
