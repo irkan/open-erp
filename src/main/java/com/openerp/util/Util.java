@@ -485,6 +485,20 @@ public class Util {
         return convertedEmployees;
     }
 
+    public static Map<String, List<User>> convertedUsersByOrganization(List<User> users, List<Organization> organizations){
+        Map<String, List<User>> convertedUsers = new HashMap<>();
+        for(Organization organization: organizations){
+            List<User> items = new ArrayList<>();
+            for(User user: users){
+                if(organization.getId().intValue()==user.getEmployee().getOrganization().getId().intValue()){
+                    items.add(user);
+                }
+            }
+            convertedUsers.put(organization.getName(), items);
+        }
+        return convertedUsers;
+    }
+
     public static Date guarantee(Date saleDate, int guarantee){
         Calendar cal = Calendar.getInstance();
         cal.setTime(saleDate);
@@ -544,6 +558,15 @@ public class Util {
     public static Boolean checkTXTFile(File file){
         Pattern pattern = Pattern.compile(Constants.REGEX.REGEX6);
         return pattern.matcher(file.getName()).matches();
+    }
+
+    public static Boolean isAdministrator(User user){
+        try {
+            return user.getUserDetail().getAdministrator();
+        } catch (Exception e){
+            log.error(e.getMessage(), e);
+        }
+        return false;
     }
 
     public static String getPath(File file){

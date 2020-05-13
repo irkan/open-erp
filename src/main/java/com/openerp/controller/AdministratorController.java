@@ -102,7 +102,14 @@ public class AdministratorController extends SkeletonController {
             if(getSessionUser().getUsername().equalsIgnoreCase("admin")){
                 list = moduleOperationRepository.getModuleOperationsByModule_ActiveAndOperation_Active(true, true);
             }
-            model.addAttribute(Constants.USERS, Util.getAccessibleUsers(userRepository.getUsersByActiveTrue(), list.size()));
+            List<Organization> organizations = organizationRepository.getOrganizationsByActiveTrue();
+            List<User> users;
+            if(canViewAll()){
+                users = userRepository.getUsersByActiveTrue();
+            } else {
+                users = userRepository.getUsersByActiveTrueAndEmployee_Organization(getSessionOrganization());
+            }
+            model.addAttribute(Constants.USERS, Util.convertedUsersByOrganization(Util.getAccessibleUsers(users, list.size()), organizations));
             model.addAttribute(Constants.MODULES, Util.removeDuplicateModules(list));
             model.addAttribute(Constants.OPERATIONS, Util.removeDuplicateOperations(list));
             model.addAttribute(Constants.LIST, list);

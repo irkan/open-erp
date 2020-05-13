@@ -27,9 +27,13 @@
                                 </select>
                             </div>
                             <div class="col-md-3">
-                                <form:select  path="user" cssClass="custom-select form-control" onchange="getUserModuleOperation($(this).val())">
+                                <form:select  path="user" cssClass="custom-select form-control select2-single" multiple="single" onchange="getUserModuleOperation($(this).val())">
                                     <form:option value="" label="İstifadəçini seçin"/>
-                                    <form:options items="${users}" itemLabel="employee.person.fullName" itemValue="id"  />
+                                    <c:forEach var="itemGroup" items="${users}" varStatus="itemGroupIndex">
+                                        <optgroup label="${itemGroup.key}">
+                                            <form:options items="${itemGroup.value}" itemLabel="employee.person.fullName" itemValue="id"/>
+                                        </optgroup>
+                                    </c:forEach>
                                 </form:select>
                             </div>
                             <div class="col-md-2 offset-md-1 text-right">

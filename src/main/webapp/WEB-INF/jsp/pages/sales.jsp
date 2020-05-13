@@ -512,7 +512,14 @@
                                         <div class="form-group">
                                             <div class="input-group date" >
                                                 <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
-                                                <form:input path="saleDate" cssClass="form-control datepicker-element" date_="date_" placeholder="dd.MM.yyyy"/>
+                                                <c:choose>
+                                                    <c:when test="${utl:isAdministrator(sessionScope.user)}">
+                                                        <form:input path="saleDate" autocomplete="off" date_="date_" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <form:input path="saleDate" autocomplete="off" date_="date_" cssClass="form-control" placeholder="dd.MM.yyyy" readonly="true"/>
+                                                    </c:otherwise>
+                                                </c:choose>
                                             </div>
                                             <form:errors path="saleDate" cssClass="control-label alert-danger" />
                                         </div>
