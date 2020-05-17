@@ -10,7 +10,7 @@
 		</parent>
 	<groupId>com.openerp</groupId>
 	<artifactId>open-erp</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<packaging>war</packaging>
 	<name>open-erp</name>
 	<description>Open ERP Web Application</description>
@@ -216,13 +216,42 @@
 		</dependency>
 	</dependencies>
 
+	<scm>
+		<connection>scm:git:https://github.com/irkan/open-erp.git</connection>
+		<developerConnection>scm:git:https://github.com/irkan/open-erp.git</developerConnection>
+		<tag>HEAD</tag>
+		<url>https://github.com/irkan/open-erp.git</url>
+	</scm>
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>buildnumber-maven-plugin</artifactId>
+				<version>1.4</version>
+				<executions>
+					<execution>
+						<id>buildnumber</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>create</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<format>{0,number}</format>
+					<items>
+						<item>buildNumber</item>
+					</items>
+					<doCheck>false</doCheck>
+					<doUpdate>false</doUpdate>
+					<revisionOnScmFailure>unknownbuild</revisionOnScmFailure>
+				</configuration>
+			</plugin>
 		</plugins>
+		<finalName>${project.artifactId}-${project.version}.${buildNumber}</finalName>
 	</build>
-
 </project>
