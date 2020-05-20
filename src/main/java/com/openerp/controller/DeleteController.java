@@ -276,6 +276,11 @@ public class DeleteController extends SkeletonController {
             File file = new File(id);
             file.delete();
             log(null, "LOG FILE", "delete", null, "", id + " log file silindi");
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.MIGRATION)){
+            Migration migration = migrationRepository.getMigrationById(Integer.parseInt(id));
+            migration.setActive(false);
+            migrationRepository.save(migration);
+            log(migration, "admin_migration", "delete", migration.getId(), migration.toString());
         }
         return "redirect:/"+parent+"/"+path;
     }

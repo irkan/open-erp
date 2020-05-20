@@ -219,6 +219,12 @@ public class SkeletonController {
     EmailAnalyzerRepository emailAnalyzerRepository;
 
     @Autowired
+    MigrationRepository migrationRepository;
+
+    @Autowired
+    MigrationDetailRepository migrationDetailRepository;
+
+    @Autowired
     CustomerService customerService;
 
     @Autowired
