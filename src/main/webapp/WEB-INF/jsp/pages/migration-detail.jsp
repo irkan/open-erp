@@ -27,15 +27,32 @@
                                 <tr>
                                     <th>№</th>
                                     <th>ID</th>
-                                    <th>Tip</th>
-                                    <th>Struktur</th>
-                                    <th>Faylın adı</th>
-                                    <th>Məlumat</th>
-                                    <th>Yüklənmişdir</th>
-                                    <th>Tamamlanmışdır</th>
-                                    <th>Yüklənmə tarixi</th>
                                     <th>Status</th>
                                     <th>Əməliyyat</th>
+                                    <th>İnventarın adı</th>
+                                    <th>Satış tarixi</th>
+                                    <th>Müştəri</th>
+                                    <th>Son qiymət</th>
+                                    <th>İlkin ödəniş</th>
+                                    <th>Ödənilib</th>
+                                    <th>Ödəniş periodu</th>
+                                    <th>Ödəniş periodu kodu</th>
+                                    <th>Ödəniş qrafiki</th>
+                                    <th>Ödəniş qrafiki kodu</th>
+                                    <th>Nağdırmı?</th>
+                                    <th>Hədiyyədirmi?</th>
+                                    <th>Ven lider</th>
+                                    <th>Ven lider kodu</th>
+                                    <th>Müştəri ünvanı</th>
+                                    <th>Müştəri əlaqə nömrəsi</th>
+                                    <th>Konsul</th>
+                                    <th>Konsul kodu</th>
+                                    <th>Canvasser</th>
+                                    <th>Canvasser kodu</th>
+                                    <th>Satıcı</th>
+                                    <th>Satıcı kodu</th>
+                                    <th>Servis işçisi</th>
+                                    <th>Servis işçisi kodu</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -43,17 +60,10 @@
                                     <tr data="<c:out value="${t.id}" />">
                                         <td>${loop.index + 1}</td>
                                         <td><c:out value="${t.id}" /></td>
-                                        <td><c:out value="${t.operationType}" /></td>
-                                        <td><c:out value="${t.organization.name}" /></td>
-                                        <th><c:out value="${t.fileName}"/></th>
-                                        <td><c:out value="${t.dataCount}" /></td>
-                                        <td><c:out value="${t.insertedCount}" /></td>
-                                        <td><c:out value="${t.processedCount}" /></td>
-                                        <td><fmt:formatDate value = "${t.uploadDate}" pattern = "dd.MM.yyyy HH:mm:ss" /></td>
                                         <td><c:out value="${t.status}" /></td>
                                         <td nowrap class="text-center">
                                             <c:if test="${delete.status and  t.status eq 1}">
-                                                <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.fileName}"/>');" class="dbtn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
+                                                <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.customerFullName}"/>');" class="dbtn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
                                                     <i class="la la-play"></i>
                                                 </a>
                                             </c:if>
@@ -73,11 +83,35 @@
                                                 </a>
                                             </c:if>
                                             <c:if test="${delete.status}">
-                                                <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.fileName}"/>');" class="dbtn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
+                                                <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.customerFullName}"/>');" class="dbtn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
                                                     <i class="<c:out value="${delete.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
                                         </td>
+                                        <td><c:out value="${t.salesInventoryName}" /></td>
+                                        <td><fmt:formatDate value = "${t.salesDate}" pattern = "dd.MM.yyyy" /></td>
+                                        <td><c:out value="${t.customerFullName}" /></td>
+                                        <td><c:out value="${t.salesPaymentLastPrice}" /></td>
+                                        <td><c:out value="${t.salesPaymentDown}" /></td>
+                                        <td><c:out value="${t.salesPaymentPayed}" /></td>
+                                        <td><c:out value="${t.salesPaymentPeriod}" /></td>
+                                        <td><c:out value="${t.period.id}" /> <c:out value="${t.period.name}" /></td>
+                                        <td><c:out value="${t.salesPaymentSchedule}" /></td>
+                                        <td><c:out value="${t.schedule.id}" /> <c:out value="${t.schedule.name}" /></td>
+                                        <td><c:out value="${t.salesPaymentCash}" /></td>
+                                        <td><c:out value="${t.salesPaymentGift}" /></td>
+                                        <td><c:out value="${t.employeeVanLeader}" /></td>
+                                        <td><c:out value="${t.vanLeader.id}" /> <c:out value="${t.vanLeader.person.fullName}" /></td>
+                                        <th><c:out value="${t.customerContactAddress}"/></th>
+                                        <td><c:out value="${t.customerContactPhoneNumbers}" /></td>
+                                        <td><c:out value="${t.employeeConsole}" /></td>
+                                        <td><c:out value="${t.console.id}" /> <c:out value="${t.console.person.fullName}" /></td>
+                                        <td><c:out value="${t.employeeCanvasser}" /></td>
+                                        <td><c:out value="${t.canvasser.id}" /> <c:out value="${t.canvasser.person.fullName}" /></td>
+                                        <td><c:out value="${t.employeeDealer}" /></td>
+                                        <td><c:out value="${t.dealer.id}" /> <c:out value="${t.dealer.person.fullName}" /></td>
+                                        <td><c:out value="${t.employeeServicer}" /></td>
+                                        <td><c:out value="${t.servicer.id}" /> <c:out value="${t.servicer.person.fullName}" /></td>
                                     </tr>
                                 </c:forEach>
                                 </tbody>
@@ -97,7 +131,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="upload-modal" tabindex="-1" role="dialog">
+<%--<div class="modal fade" id="upload-modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -158,12 +192,7 @@
             </div>
         </div>
     </div>
-</div>
-
-
-<form:form modelAttribute="form" id="migration-reload-form" method="post" action="/admin/migration/reload" cssClass="form-group">
-    <form:input type="hidden" path="id"/>
-</form:form>
+</div>--%>
 
 <script>
     $('.custom-file-input').on('change', function() {

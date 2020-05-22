@@ -98,8 +98,16 @@ public class MigrationDetail {
     @Column(name = "sales_payment_period")
     private Integer salesPaymentPeriod;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "admin_dictionary_payment_period_id")
+    private Dictionary period;
+
     @Column(name = "sales_payment_schedule")
     private Integer salesPaymentSchedule;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "admin_dictionary_payment_schedule_id")
+    private Dictionary schedule;
 
     @Column(name = "sales_payment_is_cash")
     private Boolean salesPaymentCash;

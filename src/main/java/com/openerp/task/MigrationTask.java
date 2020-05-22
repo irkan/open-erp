@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Component
 public class MigrationTask {
@@ -78,9 +79,14 @@ public class MigrationTask {
                                 md.setSalesPaymentLastPrice(getNumeric(row.getCell(9)));
                                 md.setSalesPaymentDown(getNumeric(row.getCell(10)));
                                 md.setSalesPaymentPayed(getNumeric(row.getCell(12))-md.getSalesPaymentDown());
-                                //aradakilar qalibdir
+                                md.setSalesPaymentPeriod(getInteger(row.getCell(13)));
+                                md.setPeriod(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1(String.valueOf(md.getSalesPaymentPeriod()), "payment-period"));
+                                md.setSalesPaymentSchedule(getInteger(row.getCell(15)));
+                                md.setSchedule(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1(String.valueOf(md.getSalesPaymentSchedule()), "payment-schedule"));
+
                                 md.setSalesPaymentGift(md.getSalesPaymentLastPrice()==0?true:false);
                                 md.setSalesInventoryName(getString(row.getCell(16)).trim().toUpperCase());
+
                                 migrationDetailRepository.save(md);
                             }
                         } catch (Exception e){
@@ -180,5 +186,19 @@ public class MigrationTask {
             log.error(e.getMessage(), e);
         }
         return value;
+    }
+
+    private Integer getInteger(XSSFCell cell){
+        Double value = 0d;
+        try{
+            if(cell!=null && cell.getCellType()==0){
+                value = cell.getNumericCellValue();
+            } else if(cell!=null && cell.getCellType()==1){
+                value = Double.parseDouble(cell.getStringCellValue());
+            }
+        } catch (Exception e){
+            log.error(e.getMessage(), e);
+        }
+        return value.intValue();
     }
 }

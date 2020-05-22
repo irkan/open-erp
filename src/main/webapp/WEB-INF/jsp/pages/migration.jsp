@@ -186,6 +186,14 @@
         ],
     });
 
+    <c:if test="${detail.status}">
+    $('#datatable tbody').on('dblclick', 'tr', function () {
+        swal.showLoading();
+        location.href = '/admin/migration-detail/'+ $(this).attr('data');
+        window.reload();
+    });
+    </c:if>
+
     $( "#upload-form" ).validate({
         rules: {
             organization: {
