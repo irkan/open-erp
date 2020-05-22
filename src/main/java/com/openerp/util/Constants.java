@@ -152,5 +152,6 @@ public class Constants {
         public static final String APPROVER_EXCEPTION = "approver-exception";
         public static final String MIGRATION = "migration";
         public static final String LOG_FILE = "log-file";
+        public static final String MIGRATION_DETAIL = "migration-detail";
     }
 }

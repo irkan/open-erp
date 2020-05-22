@@ -69,6 +69,6 @@ public class Migration {
 
     @ToString.Exclude
     @JsonIgnore
-    @OneToMany(mappedBy = "migration", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "migration", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<MigrationDetail> migrationDetails;
 }

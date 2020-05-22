@@ -1455,6 +1455,8 @@ public class DBConfiguration {
             moduleOperations.add(detailModuleOperation8);
             ModuleOperation detailModuleOperation9 = new ModuleOperation(emailAnalyzer, detail, null);
             moduleOperations.add(detailModuleOperation9);
+            ModuleOperation detailModuleOperation10 = new ModuleOperation(migration, detail, null);
+            moduleOperations.add(detailModuleOperation10);
 
             ModuleOperation changePasswordModuleOperation1 = new ModuleOperation(subModule5, changePassword, null);
             moduleOperations.add(changePasswordModuleOperation1);
@@ -1858,6 +1860,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, detailModuleOperation7));
             userModuleOperations.add(new UserModuleOperation(user, detailModuleOperation8));
             userModuleOperations.add(new UserModuleOperation(user, detailModuleOperation9));
+            userModuleOperations.add(new UserModuleOperation(user, detailModuleOperation10));
 
             userModuleOperations.add(new UserModuleOperation(user, changePasswordModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, changePasswordModuleOperation2));

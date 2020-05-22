@@ -38,6 +38,9 @@ public class MigrationTask {
     @Autowired
     DictionaryRepository dictionaryRepository;
 
+    @Autowired
+    MigrationDetailRepository migrationDetailRepository;
+
     @Scheduled(fixedDelay = 120000, initialDelay = 5000)
     public void writeTable() {
         try{
@@ -78,6 +81,7 @@ public class MigrationTask {
                                 //aradakilar qalibdir
                                 md.setSalesPaymentGift(md.getSalesPaymentLastPrice()==0?true:false);
                                 md.setSalesInventoryName(getString(row.getCell(16)).trim().toUpperCase());
+                                migrationDetailRepository.save(md);
                             }
                         } catch (Exception e){
                             e.printStackTrace();
@@ -88,7 +92,8 @@ public class MigrationTask {
                     e.printStackTrace();
                     log.error(e.getMessage(), e);
                 }
-                //migrationRepository.save(notification);
+                migration.setStatus(1);
+                migrationRepository.save(migration);
             }
             log.info("Migration Task End read data from excel and insert table");
         } catch (Exception e){

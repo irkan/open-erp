@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface MigrationDetailRepository extends JpaRepository<MigrationDetail, Integer> {
     List<MigrationDetail> getMigrationDetailsByActiveTrue();
+    List<MigrationDetail> getMigrationDetailsByMigrationId(Integer migrationId);
+    List<MigrationDetail> getMigrationDetailsByActiveTrueAndMigrationId(Integer migrationId);
 }

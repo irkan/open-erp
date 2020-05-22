@@ -3,6 +3,7 @@ package com.openerp.controller;
 import com.openerp.domain.LogFile;
 import com.openerp.domain.Session;
 import com.openerp.entity.*;
+import com.openerp.task.MigrationTask;
 import com.openerp.util.Constants;
 import com.openerp.util.Tail;
 import com.openerp.util.Util;
@@ -226,7 +227,14 @@ public class AdministratorController extends SkeletonController {
         } else if (page.equalsIgnoreCase(Constants.ROUTE.MIGRATION)) {
             model.addAttribute(Constants.ORGANIZATIONS, organizationRepository.getOrganizationsByActiveTrue());
             model.addAttribute(Constants.FORM, new Migration());
-            model.addAttribute(Constants.LIST, migrationRepository.getMigrationsByActiveTrue());
+            List<Migration> migrations = new ArrayList<>();
+            for(Migration migration: migrationRepository.getMigrationsByActiveTrue()){
+                migration.setDataCount(migrationDetailRepository.getMigrationDetailsByActiveTrueAndMigrationId(migration.getId()).size());
+                migrations.add(migration);
+            }
+            model.addAttribute(Constants.LIST, migrations);
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.MIGRATION_DETAIL)) {
+            model.addAttribute(Constants.LIST, migrationDetailRepository.getMigrationDetailsByActiveTrueAndMigrationId(Integer.parseInt(data.get())));
         }
         return "layout";
     }
@@ -603,8 +611,13 @@ public class AdministratorController extends SkeletonController {
         return mapPost(migration, binding, redirectAttributes, "/admin/migration");
     }
 
-    /*@PostMapping(value = "/migration/upload", consumes = {"multipart/form-data"})
-    public String postMigrationUpload(@RequestParam("file") MultipartFile file, @RequestParam("organization") int organziationId, RedirectAttributes redirectAttributes) throws Exception {
-        return mapPost(user, binding, redirectAttributes, "/admin/user");
-    }*/
+    @PostMapping(value = "/migration/reload")
+    public String postMigrationReload(@ModelAttribute(Constants.FORM) @Validated Migration migration, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        Migration mg = migrationRepository.getMigrationById(migration.getId());
+        mg.setStatus(0);
+        migrationRepository.save(mg);
+        migrationDetailRepository.deleteAll(migrationDetailRepository.getMigrationDetailsByMigrationId(mg.getId()));
+        migrationTask.writeTable();
+        return mapPost(mg, binding, redirectAttributes, "/admin/migration");
+    }
 }

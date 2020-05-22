@@ -6,6 +6,7 @@ import com.openerp.domain.SalesSchedule;
 import com.openerp.domain.Schedule;
 import com.openerp.entity.*;
 import com.openerp.service.*;
+import com.openerp.task.MigrationTask;
 import com.openerp.util.Constants;
 import com.openerp.repository.*;
 import com.openerp.util.DateUtility;
@@ -295,6 +296,9 @@ public class SkeletonController {
 
     @Autowired
     HttpSession session;
+
+    @Autowired
+    MigrationTask migrationTask;
 
     @PostConstruct
     public void init() {
