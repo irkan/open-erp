@@ -231,6 +231,8 @@ public class AdministratorController extends SkeletonController {
             List<Migration> migrations = new ArrayList<>();
             for(Migration migration: migrationRepository.getMigrationsByActiveTrue()){
                 migration.setDataCount(migrationDetailRepository.getMigrationDetailsByActiveTrueAndMigrationId(migration.getId()).size());
+                migration.setInsertedCount(migrationDetailRepository.getMigrationDetailsByActiveTrueAndMigrationIdAndStatus(migration.getId(), 1).size());
+                migration.setErrorCount(migrationDetailRepository.getMigrationDetailsByActiveTrueAndMigrationIdAndStatus(migration.getId(), 2).size());
                 migrations.add(migration);
             }
             model.addAttribute(Constants.LIST, migrations);
@@ -625,8 +627,7 @@ public class AdministratorController extends SkeletonController {
     @PostMapping(value = "/migration/start")
     public String postMigrationStart(@ModelAttribute(Constants.FORM) @Validated Migration migration, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         Migration mg = migrationRepository.getMigrationById(migration.getId());
-
-
+        migrationTask.startMigration(mg);
         return mapPost(mg, binding, redirectAttributes, "/admin/migration");
     }
 }

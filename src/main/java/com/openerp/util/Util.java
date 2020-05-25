@@ -805,4 +805,16 @@ public class Util {
         int scheduleCount = Integer.parseInt(schedule.getAttr1());
         return Math.ceil(lastPrice/scheduleCount);
     }
+
+    public static double getRate(CurrencyRate currencyRate){
+        try {
+            if(currencyRate!=null && currencyRate.getValue()>0){
+                return currencyRate.getValue();
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
+        }
+        return 1;
+    }
 }

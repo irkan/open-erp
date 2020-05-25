@@ -265,7 +265,7 @@ public class PayrollController extends SkeletonController {
             transaction.setOrganization(adv.getOrganization());
             transaction.setPrice(Math.abs(adv.getPayed()));
             transaction.setCurrency("AZN");
-            transaction.setRate(getRate(transaction.getCurrency()));
+            transaction.setRate(Util.getRate(currencyRateRepository.getCurrencyRateByCode(transaction.getCurrency().toUpperCase())));
             double sumPrice = Util.amountChecker(transaction.getAmount()) * transaction.getPrice() * transaction.getRate();
             transaction.setSumPrice(sumPrice);
             transaction.setAction(adv.getAdvance());

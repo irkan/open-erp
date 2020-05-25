@@ -33,7 +33,7 @@
                                     <th>Faylın adı</th>
                                     <th>Məlumat</th>
                                     <th>Yüklənmişdir</th>
-                                    <th>Tamamlanmışdır</th>
+                                    <th>Xətalı</th>
                                     <th>Yüklənmə tarixi</th>
                                     <th>Status</th>
                                     <th>Əməliyyat</th>
@@ -50,7 +50,7 @@
                                         <th><c:out value="${t.fileName}"/></th>
                                         <td><c:out value="${t.dataCount}" /></td>
                                         <td><c:out value="${t.insertedCount}" /></td>
-                                        <td><c:out value="${t.processedCount}" /></td>
+                                        <td><c:out value="${t.errorCount}" /></td>
                                         <td><fmt:formatDate value = "${t.uploadDate}" pattern = "dd.MM.yyyy HH:mm:ss" /></td>
                                         <td><c:out value="${t.status}" /></td>
                                         <td nowrap class="text-center">

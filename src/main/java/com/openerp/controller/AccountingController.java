@@ -118,7 +118,7 @@ public class AccountingController extends SkeletonController {
             fromTransaction.setApproveDate(new Date());
             fromTransaction.setPrice(account.getBalance());
             fromTransaction.setCurrency(from.getCurrency());
-            fromTransaction.setRate(getRate(fromTransaction.getCurrency()));
+            fromTransaction.setRate(Util.getRate(currencyRateRepository.getCurrencyRateByCode(fromTransaction.getCurrency().toUpperCase())));
             double sumPrice1 = Util.amountChecker(fromTransaction.getAmount()) * fromTransaction.getPrice() * fromTransaction.getRate();
             fromTransaction.setSumPrice(sumPrice1);
             fromTransaction.setAccount(from);
@@ -132,7 +132,7 @@ public class AccountingController extends SkeletonController {
             toTransaction.setOrganization(to.getOrganization());
             toTransaction.setApproveDate(new Date());
             toTransaction.setCurrency(to.getCurrency());
-            toTransaction.setRate(getRate(toTransaction.getCurrency()));
+            toTransaction.setRate(Util.getRate(currencyRateRepository.getCurrencyRateByCode(toTransaction.getCurrency().toUpperCase())));
             toTransaction.setPrice(fromTransaction.getPrice()*Util.exchangeRate(fromTransaction.getRate(), toTransaction.getRate()));
             double sumPrice2 = Util.amountChecker(toTransaction.getAmount()) * toTransaction.getPrice() * toTransaction.getRate();
             toTransaction.setSumPrice(sumPrice2);
@@ -186,7 +186,7 @@ public class AccountingController extends SkeletonController {
                 trn.setApproveDate(new Date());
                 trn.setPrice(transaction.getPrice());
                 trn.setCurrency(transaction.getCurrency());
-                trn.setRate(getRate(transaction.getCurrency()));
+                trn.setRate(Util.getRate(currencyRateRepository.getCurrencyRateByCode(transaction.getCurrency().toUpperCase())));
                 double sumPrice = Util.amountChecker(trn.getAmount()) * transaction.getPrice() * trn.getRate();
                 trn.setSumPrice(sumPrice);
                 trn.setAccount(transaction.getAccount());

@@ -60,6 +60,15 @@ public class MigrationTask {
     @Autowired
     InvoiceRepository invoiceRepository;
 
+    @Autowired
+    TransactionRepository transactionRepository;
+
+    @Autowired
+    CurrencyRateRepository currencyRateRepository;
+
+    @Autowired
+    AccountRepository accountRepository;
+
     @Scheduled(fixedDelay = 1000000, initialDelay = 5000)
     public void writeTable() {
         try{
@@ -98,6 +107,7 @@ public class MigrationTask {
                                 md.setSalesPaymentDown(getNumeric(row.getCell(10)));
                                 md.setSalesPaymentPayed(getNumeric(row.getCell(12))-md.getSalesPaymentDown());
                                 md.setSalesPaymentPeriod(getInteger(row.getCell(13)));
+                                md.setSalesPaymentCash(false); //Payment cash tamamlanmalidir
                                 if(md.getSalesPaymentPeriod()==29){
                                     md.setSalesPaymentPeriod(1);
                                 } else if(md.getSalesPaymentPeriod()==30){
@@ -261,10 +271,16 @@ public class MigrationTask {
                                 invoicePrice = sales.getPayment().getDown();
                             }
 
+                            sales.setApprove(true);
+                            sales.setApproveDate(new Date());
+                            salesRepository.save(sales);
+
+                            Dictionary sell = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sell", "action");
                             if(invoicePrice>0){
                                 Invoice invoice = new Invoice();
                                 invoice.setSales(sales);
-                                invoice.setApprove(false);
+                                invoice.setApprove(true);
+                                invoice.setApproveDate(new Date());
                                 invoice.setCreditable(true);
                                 if(!sales.getService()){
                                     invoice.setAdvance(true);
@@ -276,11 +292,67 @@ public class MigrationTask {
                                 invoiceRepository.save(invoice);
                                 invoice.setChannelReferenceCode(String.valueOf(invoice.getId()));
                                 invoiceRepository.save(invoice);
-                            }
-                            sales.setApprove(true);
-                            sales.setApproveDate(new Date());
-                            salesRepository.save(sales);
 
+                                Transaction transaction = new Transaction();
+                                transaction.setApprove(true);
+                                transaction.setApproveDate(new Date());
+                                transaction.setDebt(invoice.getPrice()>0?true:false);
+                                transaction.setInventory(invoice.getSales().getSalesInventories().get(0).getInventory());
+                                transaction.setOrganization(invoice.getOrganization());
+                                transaction.setPrice(Math.abs(invoice.getPrice()));
+                                transaction.setCurrency("AZN");
+                                transaction.setAccount(accountRepository.getAccountsByActiveTrueAndCurrency(transaction.getCurrency()).get(0));
+                                transaction.setRate(Util.getRate(currencyRateRepository.getCurrencyRateByCode(transaction.getCurrency().toUpperCase())));
+                                double sumPrice = Util.amountChecker(transaction.getAmount()) * transaction.getPrice() * transaction.getRate();
+                                transaction.setSumPrice(sumPrice);
+                                transaction.setAction(sell); //burda duzelis edilmelidir
+                                transaction.setDescription("Satış|Servis, Kod: "+invoice.getSales().getId() + " -> "
+                                        + invoice.getSales().getCustomer().getPerson().getFullName() + " -> "
+                                        + " barkod: " + invoice.getSales().getSalesInventories().get(0).getInventory().getName()
+                                        + " " + invoice.getSales().getSalesInventories().get(0).getInventory().getBarcode()
+                                );
+                                transactionRepository.save(transaction);
+                                balance(transaction);
+                            }
+
+                            if(md.getSalesPaymentPayed()>0){
+                                Invoice invoice = new Invoice();
+                                invoice.setSales(sales);
+                                invoice.setApprove(true);
+                                invoice.setApproveDate(new Date());
+                                invoice.setCreditable(true);
+                                if(!sales.getService()){
+                                    invoice.setAdvance(true);
+                                }
+                                invoice.setPrice(md.getSalesPaymentPayed());
+                                invoice.setOrganization(sales.getOrganization());
+                                invoice.setDescription("Satışdan əldə edilən ilkin ödəniş " + md.getSalesPaymentPayed() + " AZN");
+                                invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
+                                invoiceRepository.save(invoice);
+                                invoice.setChannelReferenceCode(String.valueOf(invoice.getId()));
+                                invoiceRepository.save(invoice);
+
+                                Transaction transaction = new Transaction();
+                                transaction.setApprove(true);
+                                transaction.setApproveDate(new Date());
+                                transaction.setDebt(invoice.getPrice()>0?true:false);
+                                transaction.setInventory(invoice.getSales().getSalesInventories().get(0).getInventory());
+                                transaction.setOrganization(invoice.getOrganization());
+                                transaction.setPrice(Math.abs(invoice.getPrice()));
+                                transaction.setCurrency("AZN");
+                                transaction.setAccount(accountRepository.getAccountsByActiveTrueAndCurrency(transaction.getCurrency()).get(0));
+                                transaction.setRate(Util.getRate(currencyRateRepository.getCurrencyRateByCode(transaction.getCurrency().toUpperCase())));
+                                double sumPrice = Util.amountChecker(transaction.getAmount()) * transaction.getPrice() * transaction.getRate();
+                                transaction.setSumPrice(sumPrice);
+                                transaction.setAction(sell); //burda duzelis edilmelidir
+                                transaction.setDescription("Satış|Servis, Kod: "+invoice.getSales().getId() + " -> "
+                                        + invoice.getSales().getCustomer().getPerson().getFullName() + " -> "
+                                        + " barkod: " + invoice.getSales().getSalesInventories().get(0).getInventory().getName()
+                                        + " " + invoice.getSales().getSalesInventories().get(0).getInventory().getBarcode()
+                                );
+                                transactionRepository.save(transaction);
+                                balance(transaction);
+                            }
                         } else {
                             md.setStatus(2);
                         }
@@ -538,5 +610,16 @@ public class MigrationTask {
             log.error(e.getMessage(), e);
         }
         return addresses;
+    }
+
+    void balance(Transaction transaction){
+        if(transaction!=null && transaction.getAccount()!=null){
+            Account account = transaction.getAccount();
+            double balance = account.getBalance() + Double.parseDouble(Util.format((transaction.getDebt() ? transaction.getSumPrice() : -1 * transaction.getSumPrice())/Util.getRate(currencyRateRepository.getCurrencyRateByCode(account.getCurrency().toUpperCase()))));
+            account.setBalance(balance);
+            accountRepository.save(account);
+            transaction.setBalance(account.getBalance());
+            transactionRepository.save(transaction);
+        }
     }
 }

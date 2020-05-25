@@ -60,7 +60,7 @@ public class Migration {
     private Integer insertedCount;
 
     @Transient
-    private Integer processedCount;
+    private Integer errorCount;
 
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;

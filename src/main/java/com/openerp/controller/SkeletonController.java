@@ -403,31 +403,6 @@ public class SkeletonController {
         return "redirect:"+redirect;
     }
 
-    double getRate(String currency){
-        try {
-            if(currency!=null && currency.trim().length()>0){
-                CurrencyRate currencyRate = currencyRateRepository.getCurrencyRateByCode(currency.toUpperCase());
-                if(currencyRate!=null){
-                    if(currencyRate.getValue()>0){
-                        return currencyRate.getValue();
-                    }
-                }
-            }
-        } catch (Exception e){
-            log(null, "error", "", "", null, "", e.getMessage());
-            e.printStackTrace();
-            log.error(e.getMessage(), e);
-        }
-        return 1;
-    }
-
-    double price(boolean debt, double price){
-        if(!debt){
-            return price*(-1.0d);
-        }
-        return price;
-    }
-
     public static String identify(Employee employee, Date date){
         if(employee.getContractStartDate().getTime()>date.getTime()) {
             EmployeeRestDay employeeRestDay = StaticUtils.getEmployeeRestDayByEmployeeAndDay(employee, date);
@@ -507,7 +482,7 @@ public class SkeletonController {
     void balance(Transaction transaction){
         if(transaction!=null && transaction.getAccount()!=null){
             Account account = accountRepository.getAccountById(transaction.getAccount().getId());
-            double balance = account.getBalance() + Double.parseDouble(Util.format((transaction.getDebt() ? transaction.getSumPrice() : -1 * transaction.getSumPrice())/getRate(account.getCurrency())));
+            double balance = account.getBalance() + Double.parseDouble(Util.format((transaction.getDebt() ? transaction.getSumPrice() : -1 * transaction.getSumPrice())/Util.getRate(currencyRateRepository.getCurrencyRateByCode(account.getCurrency().toUpperCase()))));
             account.setBalance(balance);
             accountRepository.save(account);
             log(account, "accounting_account", "create/edit", account.getId(), account.toString());

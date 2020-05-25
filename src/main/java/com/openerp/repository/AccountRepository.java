@@ -14,4 +14,5 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
     List<Account> getAccountsByActiveTrueAndOrganization(Organization branch);
     Account getAccountById(int id);
     Account getAccountByAccountNumberAndActiveTrue(String accountNumber);
+    List<Account> getAccountsByActiveTrueAndCurrency(String currency);
 }

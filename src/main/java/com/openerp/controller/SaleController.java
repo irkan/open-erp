@@ -546,7 +546,7 @@ public class SaleController extends SkeletonController {
             transaction.setOrganization(invc.getOrganization());
             transaction.setPrice(Math.abs(invc.getPrice()));
             transaction.setCurrency("AZN");
-            transaction.setRate(getRate(transaction.getCurrency()));
+            transaction.setRate(Util.getRate(currencyRateRepository.getCurrencyRateByCode(transaction.getCurrency().toUpperCase())));
             double sumPrice = Util.amountChecker(transaction.getAmount()) * transaction.getPrice() * transaction.getRate();
             transaction.setSumPrice(sumPrice);
             transaction.setAction(invc.getSales().getSalesInventories().get(0).getInventory().getActions().get(0).getAction()); //burda duzelis edilmelidir

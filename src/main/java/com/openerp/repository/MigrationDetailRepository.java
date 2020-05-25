@@ -10,4 +10,5 @@ public interface MigrationDetailRepository extends JpaRepository<MigrationDetail
     List<MigrationDetail> getMigrationDetailsByActiveTrue();
     List<MigrationDetail> getMigrationDetailsByMigrationId(Integer migrationId);
     List<MigrationDetail> getMigrationDetailsByActiveTrueAndMigrationId(Integer migrationId);
+    List<MigrationDetail> getMigrationDetailsByActiveTrueAndMigrationIdAndStatus(Integer migrationId, Integer status);;
 }
