@@ -107,7 +107,12 @@ public class MigrationTask {
                                 md.setSalesPaymentDown(getNumeric(row.getCell(10)));
                                 md.setSalesPaymentPayed(getNumeric(row.getCell(12))-md.getSalesPaymentDown());
                                 md.setSalesPaymentPeriod(getInteger(row.getCell(13)));
-                                md.setSalesPaymentCash(false); //Payment cash tamamlanmalidir
+                                md.setSalesPaymentCash(false);
+                                md.setSalesSaled(false);
+                                if(md.getSalesPaymentDown()+md.getSalesPaymentPayed()>=md.getSalesPaymentLastPrice()){
+                                    md.setSalesPaymentCash(true);
+                                    md.setSalesSaled(true);
+                                }
                                 if(md.getSalesPaymentPeriod()==29){
                                     md.setSalesPaymentPeriod(1);
                                 } else if(md.getSalesPaymentPeriod()==30){
@@ -220,8 +225,9 @@ public class MigrationTask {
                             sales.setOrganization(md.getMigration().getOrganization());
                             sales.setServicer(servicer);
                             sales.setActive(true);
-                            sales.setApprove(false);
-                            sales.setSaled(false);
+                            sales.setApprove(true);
+                            sales.setApproveDate(new Date());
+                            sales.setSaled(md.getSalesSaled());
                             sales.setSaleDate(md.getSalesDate());
                             sales.setGuarantee(24);
                             sales.setGuaranteeExpire(Util.guarantee(sales.getSaleDate()==null?new Date():sales.getSaleDate(), sales.getGuarantee()));
@@ -243,8 +249,6 @@ public class MigrationTask {
                                 double schedulePrice = Util.schedulePrice(payment.getSchedule(), payment.getLastPrice(), payment.getDown());
                                 payment.setSchedulePrice(schedulePrice<0?0:schedulePrice);
                             }
-                            sales.setPayment(payment);
-                            salesRepository.save(sales);
 
                             for(SalesInventory salesInventory: sales.getSalesInventories()){
                                 List<Action> oldActions = actionRepository.getActionsByActiveTrueAndInventory_ActiveAndInventoryAndEmployeeAndAction_Attr1AndAmountGreaterThanOrderById(true, salesInventory.getInventory(), vanLeader, "consolidate", 0);

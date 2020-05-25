@@ -109,6 +109,9 @@ public class MigrationDetail {
     @JoinColumn(name = "admin_dictionary_payment_schedule_id")
     private Dictionary schedule;
 
+    @Column(name = "sales_saled")
+    private Boolean salesSaled;
+
     @Column(name = "sales_payment_is_cash")
     private Boolean salesPaymentCash;
 

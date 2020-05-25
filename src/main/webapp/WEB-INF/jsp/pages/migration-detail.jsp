@@ -42,6 +42,7 @@
                                     <th>Ven lider kodu</th>
                                     <th>Nağdırmı?</th>
                                     <th>Hədiyyədirmi?</th>
+                                    <th>Satılıb</th>
                                     <th>Müştəri ünvanı</th>
                                     <th>Müştəri əlaqə nömrəsi</th>
                                     <th>Konsul</th>
@@ -101,6 +102,7 @@
                                         <td><c:out value="${t.vanLeader.id}" /> <c:out value="${t.vanLeader.person.fullName}" /></td>
                                         <td><c:out value="${t.salesPaymentCash}" /></td>
                                         <td><c:out value="${t.salesPaymentGift}" /></td>
+                                        <td><c:out value="${t.salesSaled}" /></td>
                                         <th><c:out value="${t.customerContactAddress}"/></th>
                                         <td><c:out value="${t.customerContactPhoneNumbers}" /></td>
                                         <td><c:out value="${t.employeeConsole}" /></td>
