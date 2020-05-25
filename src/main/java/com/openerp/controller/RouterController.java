@@ -14,8 +14,8 @@ import java.util.Optional;
 @RequestMapping("/route")
 public class RouterController extends SkeletonController {
 
-    @GetMapping(value = "/{path}")
-    public String getModules(@PathVariable("path") String path, RedirectAttributes redirectAttributes) throws Exception {
+    @GetMapping(value = {"/{path}", "/{path}/{path1}"})
+    public String getModules(@PathVariable("path") String path, @PathVariable(name = "path1", value = "", required = false) String path1, RedirectAttributes redirectAttributes) throws Exception {
         User user = getSessionUser();
         List<Module> modules = new ArrayList<>();
         Module parent = null;
@@ -35,7 +35,8 @@ public class RouterController extends SkeletonController {
         }
         session.setAttribute(Constants.PARENT, parent);
         session.setAttribute(Constants.MODULES, modules);
-        return "redirect:sub/"+path+"/"+modules.get(0).getPath();
+        String page = (path1!=null && path1.trim().length()>0)?path1:modules.get(0).getPath();
+        return "redirect:/route/sub/"+path+"/"+page;
     }
 
     @GetMapping(value = {"/sub/{path1}/{path2}", "/sub/{path1}/{path2}/{data}", "/sub/{path1}/{path2}/org/{id}", "/sub/{path1}/{path2}/{data}/org/{id}"})

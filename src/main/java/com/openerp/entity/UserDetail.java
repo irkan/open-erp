@@ -37,6 +37,10 @@ public class UserDetail {
     @Column(name = "is_administrator", nullable = false, columnDefinition="boolean default false")
     private Boolean administrator = false;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "admin_start_module_id")
+    private Module startModule;
+
     public UserDetail(String language) {
         this.language = language;
     }

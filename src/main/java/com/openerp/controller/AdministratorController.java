@@ -226,6 +226,7 @@ public class AdministratorController extends SkeletonController {
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.MIGRATION)) {
             model.addAttribute(Constants.ORGANIZATIONS, organizationRepository.getOrganizationsByActiveTrue());
+            model.addAttribute(Constants.SUPPLIERS, supplierRepository.getSuppliersByActiveTrue());
             model.addAttribute(Constants.FORM, new Migration());
             List<Migration> migrations = new ArrayList<>();
             for(Migration migration: migrationRepository.getMigrationsByActiveTrue()){
@@ -618,6 +619,14 @@ public class AdministratorController extends SkeletonController {
         migrationRepository.save(mg);
         migrationDetailRepository.deleteAll(migrationDetailRepository.getMigrationDetailsByMigrationId(mg.getId()));
         migrationTask.writeTable();
+        return mapPost(mg, binding, redirectAttributes, "/admin/migration");
+    }
+
+    @PostMapping(value = "/migration/start")
+    public String postMigrationStart(@ModelAttribute(Constants.FORM) @Validated Migration migration, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        Migration mg = migrationRepository.getMigrationById(migration.getId());
+
+
         return mapPost(mg, binding, redirectAttributes, "/admin/migration");
     }
 }

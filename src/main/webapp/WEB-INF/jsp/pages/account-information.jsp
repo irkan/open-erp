@@ -67,6 +67,20 @@
                                                 <input class="form-control" type="text" value="<c:out value="${sessionScope.user.userDetail.paginationSize}"/>"/>
                                             </div>
                                         </div>
+                                        <div class="form-group row">
+                                            <label class="col-xl-3 col-lg-3 col-form-label">Hansı moduldan başlasın?</label>
+                                            <div class="col-lg-3 col-xl-3">
+                                                <form:select  path="startModule.id" cssClass="custom-select form-control">
+                                                    <form:option value=""/>
+                                                    <c:forEach var="itemGroup" items="${modules_map}" varStatus="itemGroupIndex">
+                                                        <optgroup label="${itemGroup.key.name}">
+                                                            <form:options items="${itemGroup.value}" itemLabel="name" itemValue="id"/>
+                                                        </optgroup>
+                                                    </c:forEach>
+                                                </form:select>
+                                                <form:errors path="startModule" cssClass="control-label alert-danger"/>
+                                            </div>
+                                        </div>
                                         <div class="form-group form-group-last row">
                                             <label class="col-xl-3 col-lg-3 col-form-label">Xəbərdarlıqlar</label>
                                             <div class="col-lg-9 col-xl-6">

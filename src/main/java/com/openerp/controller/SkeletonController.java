@@ -584,23 +584,14 @@ public class SkeletonController {
         }
     }
 
-    Double schedulePrice(Integer scheduleId, Double lastPrice, Double down){
-        Dictionary schedule = dictionaryRepository.getDictionaryById(scheduleId);
-        lastPrice = lastPrice - down;
-        int scheduleCount = Integer.parseInt(schedule.getAttr1());
-        return Math.ceil(lastPrice/scheduleCount);
-    }
-
-    List<Schedule> getSchedulePayment(String saleDate, Integer scheduleId, Integer periodId, Double lastPrice, Double down){
+    List<Schedule> getSchedulePayment(String saleDate, Dictionary schedule, Dictionary period, Double lastPrice, Double down){
         lastPrice = lastPrice==null?0:lastPrice;
-        Dictionary schedule = dictionaryRepository.getDictionaryById(scheduleId);
-        Dictionary period = dictionaryRepository.getDictionaryById(periodId);
         int scheduleCount = Integer.parseInt(schedule.getAttr1());
         Date saleDt = saleDate.trim().length()>0? DateUtility.getUtilDate(saleDate):new Date();
         Date startDate = DateUtility.generate(Integer.parseInt(period.getAttr1()), saleDt.getMonth(), saleDt.getYear()+1900);
         List<Schedule> schedules = new ArrayList<>();
         Date scheduleDate = DateUtils.addMonths(startDate, 1);
-        Double schedulePrice = schedulePrice(scheduleId, lastPrice, down);
+        Double schedulePrice = Util.schedulePrice(schedule, lastPrice, down);
         for(int i=0; i<scheduleCount; i++){
             scheduleDate = DateUtils.addMonths(scheduleDate, 1);
             Schedule schedule1 = new Schedule(schedulePrice, scheduleDate);

@@ -79,7 +79,7 @@ public class SaleController extends SkeletonController {
                     sale = salesRepository.getSalesById(Integer.parseInt(data.get()));
                     double sumOfInvoices = Util.calculateInvoice(sale.getInvoices());
                     if(sale!=null && sale.getPayment()!=null && !sale.getPayment().getCash()){
-                        schedules = getSchedulePayment(DateUtility.getFormattedDate(sale.getSaleDate()), sale.getPayment().getSchedule().getId(), sale.getPayment().getPeriod().getId(), sale.getPayment().getLastPrice(), sale.getPayment().getDown());
+                        schedules = getSchedulePayment(DateUtility.getFormattedDate(sale.getSaleDate()), sale.getPayment().getSchedule(), sale.getPayment().getPeriod(), sale.getPayment().getLastPrice(), sale.getPayment().getDown());
                         double plannedPayment = Util.calculatePlannedPayment(sale, schedules);
                         schedules = Util.calculateSchedule(sale, schedules, sumOfInvoices);
                         sale.getPayment().setLatency(Util.calculateLatency(schedules, sumOfInvoices, sale));
@@ -106,7 +106,7 @@ public class SaleController extends SkeletonController {
                             List<Schedule> schedules = new ArrayList<>();
                             double sumOfInvoices = Util.calculateInvoice(sales.getInvoices());
                             if(sales!=null && sales.getPayment()!=null && !sales.getPayment().getCash()){
-                                schedules = getSchedulePayment(DateUtility.getFormattedDate(sales.getSaleDate()), sales.getPayment().getSchedule().getId(), sales.getPayment().getPeriod().getId(), sales.getPayment().getLastPrice(), sales.getPayment().getDown());
+                                schedules = getSchedulePayment(DateUtility.getFormattedDate(sales.getSaleDate()), sales.getPayment().getSchedule(), sales.getPayment().getPeriod(), sales.getPayment().getLastPrice(), sales.getPayment().getDown());
                                 double plannedPayment = Util.calculatePlannedPayment(sales, schedules);
                                 schedules = Util.calculateSchedule(sales, schedules, sumOfInvoices);
                                 sales.getPayment().setLatency(Util.calculateLatency(schedules, sumOfInvoices, sales));
@@ -149,7 +149,7 @@ public class SaleController extends SkeletonController {
                             List<Schedule> schedules = new ArrayList<>();
                             double sumOfInvoices = Util.calculateInvoice(sales.getInvoices());
                             if(sales!=null && sales.getPayment()!=null && !sales.getPayment().getCash()){
-                                schedules = getSchedulePayment(DateUtility.getFormattedDate(sales.getSaleDate()), sales.getPayment().getSchedule().getId(), sales.getPayment().getPeriod().getId(), sales.getPayment().getLastPrice(), sales.getPayment().getDown());
+                                schedules = getSchedulePayment(DateUtility.getFormattedDate(sales.getSaleDate()), sales.getPayment().getSchedule(), sales.getPayment().getPeriod(), sales.getPayment().getLastPrice(), sales.getPayment().getDown());
                                 double plannedPayment = Util.calculatePlannedPayment(sales, schedules);
                                 schedules = Util.calculateSchedule(sales, schedules, sumOfInvoices);
                                 sales.getPayment().setLatency(Util.calculateLatency(schedules, sumOfInvoices, sales));
@@ -270,7 +270,7 @@ public class SaleController extends SkeletonController {
                 sales.getPayment().setSchedulePrice(null);
                 sales.getPayment().setDown(sales.getPayment().getLastPrice());
             } else {
-                sales.getPayment().setSchedulePrice(schedulePrice(sales.getPayment().getSchedule().getId(), sales.getPayment().getLastPrice(), sales.getPayment().getDown()));
+                sales.getPayment().setSchedulePrice(Util.schedulePrice(sales.getPayment().getSchedule(), sales.getPayment().getLastPrice(), sales.getPayment().getDown()));
             }
             sales.setGuarantee(sales.getGuarantee()!=null?sales.getGuarantee():6);
             sales.setGuaranteeExpire(Util.guarantee(sales.getSaleDate()==null?new Date():sales.getSaleDate(), sales.getGuarantee()));
@@ -435,7 +435,7 @@ public class SaleController extends SkeletonController {
     @GetMapping(value = "/payment/schedule/{lastPrice}/{down}/{schedule}/{period}/{saleDate}", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Schedule> getPaymentSchedulePrice(Model model, @PathVariable("lastPrice") double lastPrice, @PathVariable("down") double down, @PathVariable("schedule") int scheduleId, @PathVariable("period") int periodId, @PathVariable(name = "saleDate", value = "") String saleDate){
         try {
-            return getSchedulePayment(saleDate.equalsIgnoreCase("0")?DateUtility.getFormattedDate(new Date()):saleDate, scheduleId, periodId, lastPrice, down);
+            return getSchedulePayment(saleDate.equalsIgnoreCase("0")?DateUtility.getFormattedDate(new Date()):saleDate, dictionaryRepository.getDictionaryById(scheduleId), dictionaryRepository.getDictionaryById(periodId), lastPrice, down);
         } catch (Exception e){
             log(null, "error", "", "", null, "", e.getMessage());
             e.printStackTrace();

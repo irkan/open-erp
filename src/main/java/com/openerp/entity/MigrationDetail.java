@@ -117,4 +117,8 @@ public class MigrationDetail {
 
     @Column(name = "sales_inventory_name")
     private String salesInventoryName;
+
+    @Lob
+    @Column(name = "errors")
+    private String errors;
 }

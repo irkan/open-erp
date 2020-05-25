@@ -69,7 +69,8 @@ public class LoginController extends SkeletonController {
             session.setAttribute(Constants.PARENT_MODULES_MAP, Util.convertParentModulesMap(parentModules));
             session.setAttribute(Constants.PARENT_MODULES, parentModules);
             session.setAttribute(Constants.VACATION_DETAIL_REPOSITORY, vacationDetailRepository);
-            return "redirect:/route/"+parentModules.get(0).getPath();
+            String page = user.getUserDetail().getStartModule()!=null?userModuleOperationRepository.getUserModuleOperationsByUserAndModuleOperationModule(user, user.getUserDetail().getStartModule()).size()>0?user.getUserDetail().getStartModule().getModule().getPath()+"/"+user.getUserDetail().getStartModule().getPath():parentModules.get(0).getPath():parentModules.get(0).getPath();
+            return "redirect:/route/"+page;
         }
         model.addAttribute("error", "true");
         model.addAttribute(Constants.MESSAGE, "Sistemdən istifadə icazələri ilə təmin edilməmisiniz!");

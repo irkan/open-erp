@@ -133,6 +133,7 @@
                 <form:form modelAttribute="form" id="form" method="post" action="/admin/user" cssClass="form-group">
                     <form:hidden path="id"/>
                     <form:hidden path="userDetail.administrator"/>
+                    <form:hidden path="userDetail.startModule"/>
                     <div class="form-group">
                         <form:label path="employee">Əməkdaş</form:label>
                         <form:select  path="employee" cssClass="custom-select form-control select2-single" multiple="single">

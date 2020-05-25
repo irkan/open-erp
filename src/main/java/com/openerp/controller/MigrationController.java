@@ -200,7 +200,7 @@ public class MigrationController extends SkeletonController {
                         payment.setDown(getNumeric(row.getCell(10)));
                         payment.setSchedule(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1(getString(row.getCell(15)).split(Pattern.quote("."))[0], "payment-schedule"));
                         payment.setPeriod(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1(getString(row.getCell(13)).split(Pattern.quote("."))[0], "payment-period"));
-                        double schedulePrice = schedulePrice(payment.getSchedule().getId(), payment.getLastPrice(), payment.getDown());
+                        double schedulePrice = Util.schedulePrice(payment.getSchedule(), payment.getLastPrice(), payment.getDown());
                         payment.setSchedulePrice(schedulePrice<0?0:schedulePrice);
                     }
                     sales.setPayment(payment);

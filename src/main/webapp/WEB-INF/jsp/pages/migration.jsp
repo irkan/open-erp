@@ -29,6 +29,7 @@
                                     <th>ID</th>
                                     <th>Tip</th>
                                     <th>Struktur</th>
+                                    <th>Təchizatçı</th>
                                     <th>Faylın adı</th>
                                     <th>Məlumat</th>
                                     <th>Yüklənmişdir</th>
@@ -45,6 +46,7 @@
                                         <td><c:out value="${t.id}" /></td>
                                         <td><c:out value="${t.operationType}" /></td>
                                         <td><c:out value="${t.organization.name}" /></td>
+                                        <td><c:out value="${t.supplier.name}" /></td>
                                         <th><c:out value="${t.fileName}"/></th>
                                         <td><c:out value="${t.dataCount}" /></td>
                                         <td><c:out value="${t.insertedCount}" /></td>
@@ -53,7 +55,7 @@
                                         <td><c:out value="${t.status}" /></td>
                                         <td nowrap class="text-center">
                                             <c:if test="${delete.status and  t.status eq 1}">
-                                                <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.fileName}"/>');" class="dbtn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
+                                                <a href="javascript:migrationStart('<c:out value="${t.id}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Başla">
                                                     <i class="la la-play"></i>
                                                 </a>
                                             </c:if>
@@ -118,15 +120,23 @@
                 </div>
                 <form:form modelAttribute="form" id="upload-form" method="post" action="/admin/migration/upload" cssClass="form-group" enctype="multipart/form-data">
                     <form:input type="hidden" name="id" path="id"/>
+                    <div class="form-group">
+                        <form:label path="organization">Struktur</form:label>
+                        <form:select  path="organization" cssClass="custom-select form-control">
+                            <form:option value=""/>
+                            <form:options items="${organizations}" itemLabel="name" itemValue="id" />
+                        </form:select>
+                        <form:errors path="organization" cssClass="control-label alert-danger" />
+                    </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <form:label path="organization">Struktur</form:label>
-                                <form:select  path="organization" cssClass="custom-select form-control">
+                                <form:label path="supplier">Təchizatçı</form:label>
+                                <form:select  path="supplier" cssClass="custom-select form-control">
                                     <form:option value=""/>
-                                    <form:options items="${organizations}" itemLabel="name" itemValue="id" />
+                                    <form:options items="${suppliers}" itemLabel="name" itemValue="id" />
                                 </form:select>
-                                <form:errors path="organization" cssClass="control-label alert-danger" />
+                                <form:errors path="supplier" cssClass="control-label alert-danger" />
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -162,7 +172,11 @@
 
 
 <form:form modelAttribute="form" id="migration-reload-form" method="post" action="/admin/migration/reload" cssClass="form-group">
-    <form:input type="hidden" path="id"/>
+    <form:hidden path="id"/>
+</form:form>
+
+<form:form modelAttribute="form" id="migration-start-form" method="post" action="/admin/migration/start" cssClass="form-group">
+    <form:hidden path="id"/>
 </form:form>
 
 <script>
@@ -199,6 +213,9 @@
             organization: {
                 required: true
             },
+            supplier: {
+                required: true
+            },
             operationType: {
                 required: true
             }
@@ -212,5 +229,10 @@
     function migrationReload(id) {
         $("#migration-reload-form").find("input[name='id']").val(id);
         submit($("#migration-reload-form"));
+    }
+
+    function migrationStart(id) {
+        $("#migration-start-form").find("input[name='id']").val(id);
+        submit($("#migration-start-form"));
     }
 </script>

@@ -10,4 +10,5 @@ public interface SupplierRepository extends JpaRepository<Supplier, Integer> {
     List<Supplier> getSuppliersByActiveTrue();
     Supplier getSuppliersById(int id);
     List<Supplier> getSuppliersByName(String name);
+    List<Supplier> getSuppliersByNameAndActiveTrue(String name);
 }

@@ -1,3 +1,4 @@
+/*
 package com.openerp.config;
 
 import com.openerp.controller.SkeletonController;
@@ -1965,3 +1966,4 @@ public class DBConfiguration {
         }
     }
 }
+*/

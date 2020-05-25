@@ -26,7 +26,6 @@
                                 <thead>
                                 <tr>
                                     <th>№</th>
-                                    <th>ID</th>
                                     <th>Status</th>
                                     <th>Əməliyyat</th>
                                     <th>İnventarın adı</th>
@@ -39,10 +38,10 @@
                                     <th>Ödəniş periodu kodu</th>
                                     <th>Ödəniş qrafiki</th>
                                     <th>Ödəniş qrafiki kodu</th>
-                                    <th>Nağdırmı?</th>
-                                    <th>Hədiyyədirmi?</th>
                                     <th>Ven lider</th>
                                     <th>Ven lider kodu</th>
+                                    <th>Nağdırmı?</th>
+                                    <th>Hədiyyədirmi?</th>
                                     <th>Müştəri ünvanı</th>
                                     <th>Müştəri əlaqə nömrəsi</th>
                                     <th>Konsul</th>
@@ -53,12 +52,12 @@
                                     <th>Satıcı kodu</th>
                                     <th>Servis işçisi</th>
                                     <th>Servis işçisi kodu</th>
+                                    <th>Xətalar</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${list}" varStatus="loop">
                                     <tr data="<c:out value="${t.id}" />">
-                                        <td>${loop.index + 1}</td>
                                         <td><c:out value="${t.id}" /></td>
                                         <td><c:out value="${t.status}" /></td>
                                         <td nowrap class="text-center">
@@ -98,10 +97,10 @@
                                         <td><c:out value="${t.period.id}" /> <c:out value="${t.period.name}" /></td>
                                         <td><c:out value="${t.salesPaymentSchedule}" /></td>
                                         <td><c:out value="${t.schedule.id}" /> <c:out value="${t.schedule.name}" /></td>
-                                        <td><c:out value="${t.salesPaymentCash}" /></td>
-                                        <td><c:out value="${t.salesPaymentGift}" /></td>
                                         <td><c:out value="${t.employeeVanLeader}" /></td>
                                         <td><c:out value="${t.vanLeader.id}" /> <c:out value="${t.vanLeader.person.fullName}" /></td>
+                                        <td><c:out value="${t.salesPaymentCash}" /></td>
+                                        <td><c:out value="${t.salesPaymentGift}" /></td>
                                         <th><c:out value="${t.customerContactAddress}"/></th>
                                         <td><c:out value="${t.customerContactPhoneNumbers}" /></td>
                                         <td><c:out value="${t.employeeConsole}" /></td>
@@ -112,6 +111,7 @@
                                         <td><c:out value="${t.dealer.id}" /> <c:out value="${t.dealer.person.fullName}" /></td>
                                         <td><c:out value="${t.employeeServicer}" /></td>
                                         <td><c:out value="${t.servicer.id}" /> <c:out value="${t.servicer.person.fullName}" /></td>
+                                        <td><c:out value="${t.errors}" /></td>
                                     </tr>
                                 </c:forEach>
                                 </tbody>

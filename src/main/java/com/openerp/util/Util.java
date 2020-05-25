@@ -767,4 +767,42 @@ public class Util {
         }
         return sessions;
     }
+
+    public static Map<Module, List<Module>> accessModuleList(List<UserModuleOperation> userModuleOperations) {
+        Map<Module, List<Module>> convertedModules = new HashMap<>();
+        for(UserModuleOperation umo: userModuleOperations){
+            convertedModules = checkModule(convertedModules, umo.getModuleOperation().getModule());
+        }
+        return convertedModules;
+    }
+
+    private static Map<Module, List<Module>> checkModule(Map<Module, List<Module>> moduleListMap, Module module){
+        try {
+            Boolean setFlag = false;
+            if(!moduleListMap.containsKey(module.getModule()) && module.getModule().getModule()==null /*&& !module.getModule().getPath().equalsIgnoreCase("profile")*/){
+                moduleListMap.put(module.getModule(), new ArrayList<>());
+            }
+
+            List<Module> modules = moduleListMap.get(module.getModule())==null?new ArrayList<>():moduleListMap.get(module.getModule());
+            for(Module m: modules){
+                if(m.equals(module)){
+                    setFlag = true;
+                }
+            }
+            if(!setFlag){
+                modules.add(module);
+                moduleListMap.replace(module, modules);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
+        }
+        return moduleListMap;
+    }
+
+    public static Double schedulePrice(Dictionary schedule, Double lastPrice, Double down){
+        lastPrice = lastPrice - down;
+        int scheduleCount = Integer.parseInt(schedule.getAttr1());
+        return Math.ceil(lastPrice/scheduleCount);
+    }
 }

@@ -44,6 +44,7 @@ public class ProfileController extends SkeletonController {
                 model.addAttribute(Constants.FORM, getSessionUser().getEmployee().getPerson().getContact());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.ACCOUNT_INFORMATION)) {
+            model.addAttribute(Constants.MODULES_MAP, Util.accessModuleList(userModuleOperationRepository.getUserModuleOperationsByUser_IdAndUser_Active(getSessionUser().getId(), true)));
             model.addAttribute(Constants.LANGUAGES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("language"));
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, getSessionUser().getUserDetail());

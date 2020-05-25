@@ -32,6 +32,11 @@ public class Migration {
     @JoinColumn(name = "hr_organization_id")
     private Organization organization;
 
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "warehouse_supplier_id")
+    private Supplier supplier;
+
     @Column(name = "operation_type")
     private String operationType;  //Satış - S    Qaytarılma - Q
 
