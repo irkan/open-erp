@@ -236,14 +236,12 @@ public class MigrationTask {
                             payment.setActive(true);
                             payment.setPrice(md.getSalesPaymentLastPrice());
                             payment.setLastPrice(md.getSalesPaymentLastPrice());
-
+                            payment.setDown(md.getSalesPaymentDown());
                             if(payment.getCash()){
                                 payment.setPeriod(null);
                                 payment.setSchedule(null);
                                 payment.setSchedulePrice(null);
-                                payment.setDown(payment.getLastPrice());
                             } else {
-                                payment.setDown(md.getSalesPaymentDown());
                                 payment.setSchedule(md.getSchedule());
                                 payment.setPeriod(md.getPeriod());
                                 double schedulePrice = Util.schedulePrice(payment.getSchedule(), payment.getLastPrice(), payment.getDown());
@@ -267,20 +265,13 @@ public class MigrationTask {
                                     actionRepository.save(oldAction);
                                 }
                             }
-
-                            double invoicePrice = 0d;
-                            if(sales.getPayment().getCash()){
-                                invoicePrice = sales.getPayment().getLastPrice();
-                            } else {
-                                invoicePrice = sales.getPayment().getDown();
-                            }
-
+                            sales.setPayment(payment);
                             sales.setApprove(true);
                             sales.setApproveDate(new Date());
                             salesRepository.save(sales);
 
                             Dictionary sell = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sell", "action");
-                            if(invoicePrice>0){
+                            if(payment.getDown()>0){
                                 Invoice invoice = new Invoice();
                                 invoice.setSales(sales);
                                 invoice.setApprove(true);
@@ -289,9 +280,9 @@ public class MigrationTask {
                                 if(!sales.getService()){
                                     invoice.setAdvance(true);
                                 }
-                                invoice.setPrice(invoicePrice);
+                                invoice.setPrice(payment.getDown());
                                 invoice.setOrganization(sales.getOrganization());
-                                invoice.setDescription("Satışdan əldə edilən ilkin ödəniş " + invoicePrice + " AZN");
+                                invoice.setDescription("Satışdan əldə edilən ilkin ödəniş " + payment.getDown() + " AZN");
                                 invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
                                 invoiceRepository.save(invoice);
                                 invoice.setChannelReferenceCode(String.valueOf(invoice.getId()));
@@ -305,7 +296,7 @@ public class MigrationTask {
                                 transaction.setOrganization(invoice.getOrganization());
                                 transaction.setPrice(Math.abs(invoice.getPrice()));
                                 transaction.setCurrency("AZN");
-                                transaction.setAccount(accountRepository.getAccountsByActiveTrueAndCurrency(transaction.getCurrency()).get(0));
+                                transaction.setAccount(accountRepository.getAccountsByActiveTrueAndCurrencyAndOrganization(transaction.getCurrency(), transaction.getOrganization()).get(0));
                                 transaction.setRate(Util.getRate(currencyRateRepository.getCurrencyRateByCode(transaction.getCurrency().toUpperCase())));
                                 double sumPrice = Util.amountChecker(transaction.getAmount()) * transaction.getPrice() * transaction.getRate();
                                 transaction.setSumPrice(sumPrice);
@@ -344,7 +335,7 @@ public class MigrationTask {
                                 transaction.setOrganization(invoice.getOrganization());
                                 transaction.setPrice(Math.abs(invoice.getPrice()));
                                 transaction.setCurrency("AZN");
-                                transaction.setAccount(accountRepository.getAccountsByActiveTrueAndCurrency(transaction.getCurrency()).get(0));
+                                transaction.setAccount(accountRepository.getAccountsByActiveTrueAndCurrencyAndOrganization(transaction.getCurrency(), transaction.getOrganization()).get(0));
                                 transaction.setRate(Util.getRate(currencyRateRepository.getCurrencyRateByCode(transaction.getCurrency().toUpperCase())));
                                 double sumPrice = Util.amountChecker(transaction.getAmount()) * transaction.getPrice() * transaction.getRate();
                                 transaction.setSumPrice(sumPrice);
@@ -618,7 +609,7 @@ public class MigrationTask {
 
     void balance(Transaction transaction){
         if(transaction!=null && transaction.getAccount()!=null){
-            Account account = transaction.getAccount();
+            Account account = transaction.getAccount(); // accountRepository.getAccountById(transaction.getAccount().getId());
             double balance = account.getBalance() + Double.parseDouble(Util.format((transaction.getDebt() ? transaction.getSumPrice() : -1 * transaction.getSumPrice())/Util.getRate(currencyRateRepository.getCurrencyRateByCode(account.getCurrency().toUpperCase()))));
             account.setBalance(balance);
             accountRepository.save(account);
