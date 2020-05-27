@@ -268,6 +268,11 @@ public class MigrationTask {
                             sales.setPayment(payment);
                             sales.setApprove(true);
                             sales.setApproveDate(new Date());
+                            List<ServiceRegulator> serviceRegulators = new ArrayList<>();
+                            for(Dictionary serviceNotification: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("service-notification")){
+                                serviceRegulators.add(new ServiceRegulator(sales, serviceNotification, sales.getSaleDate()));
+                            }
+                            sales.setServiceRegulators(serviceRegulators);
                             salesRepository.save(sales);
 
                             Dictionary sell = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sell", "action");
