@@ -627,7 +627,14 @@ public class AdministratorController extends SkeletonController {
     @PostMapping(value = "/migration/start")
     public String postMigrationStart(@ModelAttribute(Constants.FORM) @Validated Migration migration, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         Migration mg = migrationRepository.getMigrationById(migration.getId());
-        migrationTask.startMigration(mg);
+        if(mg.getOperationType().equalsIgnoreCase("satış")){
+            migrationTask.startMigrationSalesItems(mg);
+        } else if(mg.getOperationType().equalsIgnoreCase("qaytarılma")){
+            migrationTask.startMigrationReturnedItems(mg);
+        } else if(mg.getOperationType().equalsIgnoreCase("servis yenilənməsi")){
+            migrationTask.startMigrationServiceRefreshItems(mg);
+        }
+
         return mapPost(mg, binding, redirectAttributes, "/admin/migration");
     }
 }
