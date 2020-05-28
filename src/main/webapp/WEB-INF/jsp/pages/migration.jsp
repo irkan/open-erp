@@ -145,7 +145,6 @@
                                 <form:select  path="operationType" cssClass="custom-select form-control">
                                     <form:option value=""/>
                                     <form:option value="Satış" label="Satış"/>
-                                    <form:option value="Qaytarılma" label="Qaytarılma"/>
                                     <form:option value="Servis Yenilənməsi" label="Servis Yenilənməsi"/>
                                 </form:select>
                                 <form:errors path="operationType" cssClass="control-label alert-danger" />

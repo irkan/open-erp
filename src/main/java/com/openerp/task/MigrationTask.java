@@ -156,7 +156,14 @@ public class MigrationTask {
     }
 
     public void startMigrationServiceRefreshItems(Migration migration) {
+        try{
+            log.info("Migration Task Start Service Regulator Migration");
 
+            log.info("Migration Task End Service Regulator Migration");
+        } catch (Exception e){
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
+        }
     }
 
     public void startMigrationSalesItems(Migration migration) {
