@@ -592,7 +592,7 @@ public class MigrationTask {
             String[] array2 = telephone.split(Pattern.quote("\\"));
             String[] telephoneArray = array1.length>array2.length?array1:array2;
             for (String s: telephoneArray){
-                String number = s.replaceAll("[^0123456789]","");
+                String number = "000" + s.replaceAll("[^0123456789]","");
                 if(number.length()>8){
                     String value = "(0" + number.substring(number.length()-9, number.length()-7)+") "+number.substring(number.length()-7, number.length()-4)+"-"+number.substring(number.length()-4, number.length());
                     telephones.add(value);
