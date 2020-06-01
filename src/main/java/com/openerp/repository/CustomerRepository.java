@@ -14,4 +14,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer>, Jp
     Customer getCustomerByIdAndActiveTrueAndOrganization(Integer id, Organization organization);
     List<Customer> getCustomersByActiveTrue();
     List<Customer> getCustomersByActiveTrueAndOrganization(Organization organization);
+    List<Customer> getCustomersByPersonFirstNameStartingWithAndPersonLastNameStartingWithAndPersonFatherNameStartingWithAndOrganization(String firstName, String lastName, String fatherName, Organization organization);
+    List<Customer> getCustomersByPersonFirstNameStartingWithAndPersonLastNameStartingWithAndOrganization(String firstName, String lastName, Organization organization);
 }

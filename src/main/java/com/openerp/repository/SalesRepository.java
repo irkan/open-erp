@@ -1,9 +1,6 @@
 package com.openerp.repository;
 
-import com.openerp.entity.Dictionary;
-import com.openerp.entity.Organization;
-import com.openerp.entity.Sales;
-import com.openerp.entity.Transaction;
+import com.openerp.entity.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
@@ -22,4 +19,5 @@ public interface SalesRepository extends JpaRepository<Sales, Integer>, JpaSpeci
     List<Sales> getSalesByActiveTrueAndApproveTrueAndPayment_CashAndPayment_PeriodAndSaledFalseAndOrganization(Boolean cash, Dictionary paymentPeriod, Organization organization);
     List<Sales> getSalesByActiveTrueAndApproveTrueAndPayment_CashAndSaleDateAndSaledFalse(Boolean cash, Date saleDate);
     List<Sales> getSalesByActiveTrueAndApproveTrueAndPayment_CashAndSaleDateAndSaledFalseAndOrganization(Boolean cash, Date saleDate, Organization organization);
+    List<Sales> getSalesByActiveTrueAndApproveTrueAndServiceFalseAndCustomerAndOrganization(Customer customer, Organization organization);
 }
