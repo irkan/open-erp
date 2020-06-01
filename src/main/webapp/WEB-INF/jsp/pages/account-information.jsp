@@ -32,6 +32,7 @@
                             <div class="kt-section kt-section--first">
                                 <form:form modelAttribute="form" id="form" method="post" action="/profile/account-information" cssClass="kt-form kt-form--label-right">
                                     <form:hidden path="id"/>
+                                    <form:hidden path="administrator"/>
                                     <div class="kt-section__body">
                                         <div class="row">
                                             <label class="col-xl-3"></label>

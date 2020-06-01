@@ -81,60 +81,72 @@ public class MigrationTask {
                     XSSFSheet sheet = wb.getSheetAt(0);
                     XSSFRow row;
                     Iterator rows = sheet.rowIterator();
+                    int i=1,j = 1;
                     while (rows.hasNext()) {
+                        j++;
                         try{
                             row=(XSSFRow) rows.next();
-                            if(row.getRowNum()>0){
-                                MigrationDetail md = new MigrationDetail();
-                                md.setMigration(migration);
-                                md.setActive(true);
-                                md.setStatus(0);
-                                md.setSalesDate(row.getCell(8).getDateCellValue());
-                                md.setCustomerFullName(getString(row.getCell(1)));
-                                md.setCustomerContactAddress(getString(row.getCell(2)));
-                                md.setCustomerContactPhoneNumbers(getString(row.getCell(3)));
-                                md.setEmployeeVanLeader(getString(row.getCell(4)));
-                                md.setVanLeader(parseEmployeeVanLeader(row.getCell(4), migration.getOrganization()));
-                                md.setEmployeeConsole(getString(row.getCell(4)));
-                                md.setConsole(parseEmployee(row.getCell(4), migration.getOrganization()));
-                                md.setEmployeeCanvasser(getString(row.getCell(5)));
-                                md.setCanvasser(parseEmployee(row.getCell(5), migration.getOrganization()));
-                                md.setEmployeeDealer(getString(row.getCell(6)));
-                                md.setDealer(parseEmployee(row.getCell(6), migration.getOrganization()));
-                                md.setEmployeeServicer(getString(row.getCell(7)));
-                                md.setServicer(parseEmployee(row.getCell(7), migration.getOrganization()));
-                                md.setSalesPaymentLastPrice(getNumeric(row.getCell(9)));
-                                md.setSalesPaymentDown(getNumeric(row.getCell(10)));
-                                md.setSalesPaymentPayed(getNumeric(row.getCell(12))-md.getSalesPaymentDown());
-                                md.setSalesPaymentPeriod(getInteger(row.getCell(13)));
-                                md.setSalesPaymentCash(false);
-                                md.setSalesSaled(false);
-                                if(md.getSalesPaymentDown()+md.getSalesPaymentPayed()>=md.getSalesPaymentLastPrice()){
-                                    md.setSalesPaymentCash(true);
-                                    md.setSalesSaled(true);
-                                }
-                                if(md.getSalesPaymentPeriod()==29){
-                                    md.setSalesPaymentPeriod(1);
-                                } else if(md.getSalesPaymentPeriod()==30){
-                                    md.setSalesPaymentPeriod(2);
-                                } else if(md.getSalesPaymentPeriod()==31){
-                                    md.setSalesPaymentPeriod(3);
-                                }
-                                md.setPeriod(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1(String.valueOf(md.getSalesPaymentPeriod()), "payment-period"));
-                                md.setSalesPaymentSchedule(getInteger(row.getCell(15)));
-                                if(md.getSalesPaymentSchedule()>30){
-                                    md.setSalesPaymentSchedule(30);
-                                }
-                                md.setSchedule(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1(String.valueOf(md.getSalesPaymentSchedule()), "payment-schedule"));
+                            if(row.getRowNum()>1){
+                                String customerFullName = getString(row.getCell(1));
+                                String vanLeader = getString(row.getCell(4));
+                                if(customerFullName.trim().length()>2 && vanLeader.trim().length()>2){
+                                    i++;
+                                    MigrationDetail md = new MigrationDetail();
+                                    md.setMigration(migration);
+                                    md.setActive(true);
+                                    md.setStatus(0);
+                                    md.setSalesDate(getDate(row.getCell(8)));
+                                    md.setCustomerFullName(customerFullName);
+                                    md.setCustomerContactAddress(getString(row.getCell(2)));
+                                    md.setCustomerContactPhoneNumbers(getString(row.getCell(3)));
+                                    md.setEmployeeVanLeader(vanLeader);
+                                    md.setVanLeader(parseEmployeeVanLeader(row.getCell(4), migration.getOrganization()));
+                                    md.setEmployeeConsole(getString(row.getCell(4)));
+                                    md.setConsole(parseEmployee(row.getCell(4), migration.getOrganization()));
+                                    md.setEmployeeCanvasser(getString(row.getCell(5)));
+                                    md.setCanvasser(parseEmployee(row.getCell(5), migration.getOrganization()));
+                                    md.setEmployeeDealer(getString(row.getCell(6)));
+                                    md.setDealer(parseEmployee(row.getCell(6), migration.getOrganization()));
+                                    md.setEmployeeServicer(getString(row.getCell(7)));
+                                    md.setServicer(parseEmployee(row.getCell(7), migration.getOrganization()));
+                                    md.setSalesPaymentLastPrice(getNumeric(row.getCell(9)));
+                                    md.setSalesPaymentDown(getNumeric(row.getCell(10)));
+                                    md.setSalesPaymentPayed(getNumeric(row.getCell(12))-md.getSalesPaymentDown());
+                                    md.setSalesPaymentPeriod(getInteger(row.getCell(13)));
+                                    md.setSalesPaymentCash(false);
+                                    md.setSalesSaled(false);
+                                    if(md.getSalesPaymentDown()+md.getSalesPaymentPayed()>=md.getSalesPaymentLastPrice()){
+                                        md.setSalesPaymentCash(true);
+                                        md.setSalesSaled(true);
+                                    }
+                                    if(md.getSalesPaymentPeriod()==29){
+                                        md.setSalesPaymentPeriod(1);
+                                    } else if(md.getSalesPaymentPeriod()==30){
+                                        md.setSalesPaymentPeriod(2);
+                                    } else if(md.getSalesPaymentPeriod()==31){
+                                        md.setSalesPaymentPeriod(3);
+                                    }
+                                    md.setPeriod(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1(String.valueOf(md.getSalesPaymentPeriod()), "payment-period"));
+                                    md.setSalesPaymentSchedule(getInteger(row.getCell(15)));
+                                    if(md.getSalesPaymentSchedule()>30){
+                                        md.setSalesPaymentSchedule(30);
+                                    }
+                                    md.setSchedule(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1(String.valueOf(md.getSalesPaymentSchedule()), "payment-schedule"));
 
-                                md.setSalesPaymentGift(md.getSalesPaymentLastPrice()==0?true:false);
-                                md.setSalesInventoryName(getString(row.getCell(16)).trim().toUpperCase());
+                                    md.setSalesPaymentGift(md.getSalesPaymentLastPrice()==0?true:false);
+                                    md.setSalesInventoryName(getString(row.getCell(16)).trim().toUpperCase());
 
-                                migrationDetailRepository.save(md);
+                                    migrationDetailRepository.save(md);
+
+                                    log.info(i + ": Migration detailed inserted: InsertID: " + md.getId());
+                                }
                             }
                         } catch (Exception e){
                             e.printStackTrace();
                             log.error(e.getMessage(), e);
+                        }
+                        if(j-i>10){
+                            break;
                         }
                     }
                 } catch (Exception e){
@@ -170,8 +182,10 @@ public class MigrationTask {
         try{
             log.info("Migration Task Start Sales Migration");
             if (migration.getOperationType().equalsIgnoreCase("satış")){
+                int i = 1;
                 for(MigrationDetail md: migration.getMigrationDetails()){
-                    if(md.getStatus()==0){
+                    i++;
+                    if(md.getStatus()!=1){
                         String errors = "";
                         try {
                             Employee vanLeader = md.getVanLeader();
@@ -366,8 +380,11 @@ public class MigrationTask {
                                     );
                                     transactionRepository.save(transaction);
                                     balance(transaction);
+
+                                    log.info(i + ":   " + md.getId() + " migrated");
                                 }
                             } else {
+                                errors = md.getVanLeader() + " VAN LEADER tapılmadı!";
                                 md.setStatus(2);
                             }
                         } catch (Exception e){
@@ -497,6 +514,14 @@ public class MigrationTask {
             log.error(e.getMessage(), e);
         }
         return value;
+    }
+
+    private Date getDate(XSSFCell cell){
+        try{
+            return cell.getDateCellValue();
+        } catch (Exception e){
+        }
+        return null;
     }
 
     private Integer getInteger(XSSFCell cell){
