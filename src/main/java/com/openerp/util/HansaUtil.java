@@ -14,6 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
+import java.util.regex.Pattern;
 
 public class HansaUtil {
     public static void main(String[] args) throws IOException {
@@ -27,12 +28,19 @@ public class HansaUtil {
             row = sheet.getRow(0);
             for(int j=1; j<row.getLastCellNum(); j++){
                 cell = row.getCell(j);
-                System.out.println("if(bpnr.name==\""+cell.getStringCellValue()+"\") then begin");
+                System.out.println("if(bpnr.Name==\""+cell.getStringCellValue()+"\") then begin");
                 for(int k=1; k<=sheet.getLastRowNum(); k++){
                     if(getNumeric(sheet.getRow(k).getCell(j)).intValue()==1){
-                        System.out.println("  newINrw."+getString(sheet.getRow(k).getCell(0)).split("-")[1]+"=\"*\";");
+                        String[] value = getString(sheet.getRow(k).getCell(0)).split(Pattern.quote("-"));
+                        if(value.length>1){
+                            if(value[1].equalsIgnoreCase("SetQty")){
+                                System.out.println("  newINrw."+value[1]+"=0;");
+                            } else {
+                                System.out.println("  newINrw."+value[1]+"=\"*\";");
+                            }
+
+                        }
                     }
-                   // System.out.println(getString(sheet.getRow(k).getCell(0)) + " " + k + ". " + getNumeric(sheet.getRow(k).getCell(j)));
                 }
                 System.out.println("end;");
                 System.out.println();
