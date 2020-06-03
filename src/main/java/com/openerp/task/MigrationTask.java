@@ -176,6 +176,7 @@ public class MigrationTask {
                     XSSFRow row;
                     Iterator rows = sheet.rowIterator();
                     int i=1,j = 1;
+                    Organization organization = migration.getOrganization();
                     while (rows.hasNext()) {
                         j++;
                         try{
@@ -184,11 +185,13 @@ public class MigrationTask {
                                 String customerFullName = getString(row.getCell(0));
                                 if(customerFullName.trim().length()>2){
                                     i++;
-                                    Sales sales = findSales(customerFullName, migration.getOrganization());
+                                    Sales sales = findSales(customerFullName, organization);
                                     MigrationDetailServiceRegulator mdsr = new MigrationDetailServiceRegulator();
                                     mdsr.setSales(sales);
                                     mdsr.setCustomerFullName(customerFullName);
                                     mdsr.setStatus(0);
+                                    mdsr.setEmployeeServicer(getString(row.getCell(1)));
+                                    mdsr.setServicer(parseEmployee(row.getCell(1), organization));
 
 
 
