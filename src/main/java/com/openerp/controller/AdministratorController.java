@@ -622,8 +622,9 @@ public class AdministratorController extends SkeletonController {
         if(mg.getOperationType().equalsIgnoreCase("satış")){
             migrationDetailRepository.deleteAll(migrationDetailRepository.getMigrationDetailsByMigrationId(mg.getId()));
             migrationTask.writeTable();
-        } else if(mg.getOperationType().equalsIgnoreCase("servis yenilənməsi")){
-
+        } else if(mg.getOperationType().equalsIgnoreCase("servis")){
+            migrationDetailServiceRegulatorRepository.deleteAll(migrationDetailServiceRegulatorRepository.getMigrationDetailServiceRegulatorsByMigrationId(mg.getId()));
+            migrationTask.writeTableServiceRegulator();
         }
         return mapPost(mg, binding, redirectAttributes, "/admin/migration");
     }
@@ -633,7 +634,7 @@ public class AdministratorController extends SkeletonController {
         Migration mg = migrationRepository.getMigrationById(migration.getId());
         if(mg.getOperationType().equalsIgnoreCase("satış")){
             migrationTask.startMigrationSalesItems(mg);
-        } else if(mg.getOperationType().equalsIgnoreCase("servis yenilənməsi")){
+        } else if(mg.getOperationType().equalsIgnoreCase("servis")){
             migrationTask.startMigrationServiceRefreshItems(mg);
         }
         return mapPost(mg, binding, redirectAttributes, "/admin/migration");

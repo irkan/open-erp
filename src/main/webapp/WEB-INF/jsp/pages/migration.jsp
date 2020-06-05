@@ -18,7 +18,6 @@
                 <div class="kt-portlet__body">
                     <c:choose>
                         <c:when test="${not empty list}">
-                            <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
                             <c:set var="detail" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'detail')}"/>
                             <c:set var="reload" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'reload')}"/>
                             <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
@@ -55,13 +54,8 @@
                                         <td><c:out value="${t.status}" /></td>
                                         <td nowrap class="text-center">
                                             <c:if test="${delete.status and  t.status eq 1}">
-                                                <a href="javascript:migrationStart('<c:out value="${t.id}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Başla">
+                                                <a href="javascript:migrationStart('<c:out value="${t.id}" />', '<c:out value="${t.operationType}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Başla">
                                                     <i class="la la-play"></i>
-                                                </a>
-                                            </c:if>
-                                            <c:if test="${view.status}">
-                                                <a href="javascript:;" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
-                                                    <i class="<c:out value="${view.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
                                             <c:if test="${detail.status}">
@@ -70,7 +64,7 @@
                                                 </a>
                                             </c:if>
                                             <c:if test="${reload.status}">
-                                                <a href="javascript:migrationReload('<c:out value="${t.id}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${reload.object.name}"/>">
+                                                <a href="javascript:migrationReload('<c:out value="${t.id}" />', '<c:out value="${t.operationType}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${reload.object.name}"/>">
                                                     <i class="<c:out value="${reload.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
@@ -145,7 +139,7 @@
                                 <form:select  path="operationType" cssClass="custom-select form-control">
                                     <form:option value=""/>
                                     <form:option value="Satış" label="Satış"/>
-                                    <form:option value="Servis Yenilənməsi" label="Servis Yenilənməsi"/>
+                                    <form:option value="Servis" label="Servis"/>
                                 </form:select>
                                 <form:errors path="operationType" cssClass="control-label alert-danger" />
                             </div>
@@ -172,10 +166,12 @@
 
 <form:form modelAttribute="form" id="migration-reload-form" method="post" action="/admin/migration/reload" cssClass="form-group">
     <form:hidden path="id"/>
+    <form:hidden path="operationType"/>
 </form:form>
 
 <form:form modelAttribute="form" id="migration-start-form" method="post" action="/admin/migration/start" cssClass="form-group">
     <form:hidden path="id"/>
+    <form:hidden path="operationType"/>
 </form:form>
 
 <script>
@@ -223,15 +219,17 @@
             KTUtil.scrollTop();
             swal.close();
         },
-    })
+    });
 
-    function migrationReload(id) {
+    function migrationReload(id, operationType) {
         $("#migration-reload-form").find("input[name='id']").val(id);
+        $("#migration-reload-form").find("input[name='operationType']").val(operationType);
         submit($("#migration-reload-form"));
     }
 
-    function migrationStart(id) {
+    function migrationStart(id, operationType) {
         $("#migration-start-form").find("input[name='id']").val(id);
+        $("#migration-start-form").find("input[name='operationType']").val(operationType);
         submit($("#migration-start-form"));
     }
 </script>

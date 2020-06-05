@@ -226,6 +226,9 @@ public class SkeletonController {
     MigrationDetailRepository migrationDetailRepository;
 
     @Autowired
+    MigrationDetailServiceRegulatorRepository migrationDetailServiceRegulatorRepository;
+
+    @Autowired
     CustomerService customerService;
 
     @Autowired

@@ -97,12 +97,6 @@ public class MigrationDetailServiceRegulator {
     @Column(name = "sales_payment_is_cash")
     private Boolean salesPaymentCash;
 
-    @Column(name = "sales_payment_is_gift")
-    private Boolean salesPaymentGift;
-
-    @Column(name = "sales_inventory_names")
-    private String salesInventoryNames;
-
     @Lob
     @Column(name = "errors")
     private String errors;

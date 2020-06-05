@@ -46,6 +46,9 @@ public class MigrationTask {
     MigrationDetailRepository migrationDetailRepository;
 
     @Autowired
+    MigrationDetailServiceRegulatorRepository migrationDetailServiceRegulatorRepository;
+
+    @Autowired
     InventoryRepository inventoryRepository;
 
     @Autowired
@@ -192,59 +195,45 @@ public class MigrationTask {
                                     mdsr.setStatus(0);
                                     mdsr.setEmployeeServicer(getString(row.getCell(1)));
                                     mdsr.setServicer(parseEmployee(row.getCell(1), organization));
-
-
-
-
-                                    String vanLeader = getString(row.getCell(4));
-                                    MigrationDetail md = new MigrationDetail();
-                                    md.setMigration(migration);
-                                    md.setActive(true);
-                                    md.setStatus(0);
-                                    md.setSalesDate(getDate(row.getCell(8)));
-                                    md.setCustomerFullName(customerFullName);
-                                    md.setCustomerContactAddress(getString(row.getCell(2)));
-                                    md.setCustomerContactPhoneNumbers(getString(row.getCell(3)));
-                                    md.setEmployeeVanLeader(vanLeader);
-                                    md.setVanLeader(parseEmployeeVanLeader(row.getCell(4), migration.getOrganization()));
-                                    md.setEmployeeConsole(getString(row.getCell(4)));
-                                    md.setConsole(parseEmployee(row.getCell(4), migration.getOrganization()));
-                                    md.setEmployeeCanvasser(getString(row.getCell(5)));
-                                    md.setCanvasser(parseEmployee(row.getCell(5), migration.getOrganization()));
-                                    md.setEmployeeDealer(getString(row.getCell(6)));
-                                    md.setDealer(parseEmployee(row.getCell(6), migration.getOrganization()));
-                                    md.setEmployeeServicer(getString(row.getCell(7)));
-                                    md.setServicer(parseEmployee(row.getCell(7), migration.getOrganization()));
-                                    md.setSalesPaymentLastPrice(getNumeric(row.getCell(9)));
-                                    md.setSalesPaymentDown(getNumeric(row.getCell(10)));
-                                    md.setSalesPaymentPayed(getNumeric(row.getCell(12))-md.getSalesPaymentDown());
-                                    md.setSalesPaymentPeriod(getInteger(row.getCell(13)));
-                                    md.setSalesPaymentCash(false);
-                                    md.setSalesSaled(false);
-                                    if(md.getSalesPaymentDown()+md.getSalesPaymentPayed()>=md.getSalesPaymentLastPrice()){
-                                        md.setSalesPaymentCash(true);
-                                        md.setSalesSaled(true);
+                                    mdsr.setServicedDate(getDate(row.getCell(2)));
+                                    if(getInteger(row.getCell(7))==1){
+                                        mdsr.setPambiq(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sn1", "service-notification"));
                                     }
-                                    if(md.getSalesPaymentPeriod()==29){
-                                        md.setSalesPaymentPeriod(1);
-                                    } else if(md.getSalesPaymentPeriod()==30){
-                                        md.setSalesPaymentPeriod(2);
-                                    } else if(md.getSalesPaymentPeriod()==31){
-                                        md.setSalesPaymentPeriod(3);
+                                    if(getInteger(row.getCell(8))==1){
+                                        mdsr.setKomur(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sn2", "service-notification"));
                                     }
-                                    md.setPeriod(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1(String.valueOf(md.getSalesPaymentPeriod()), "payment-period"));
-                                    md.setSalesPaymentSchedule(getInteger(row.getCell(15)));
-                                    if(md.getSalesPaymentSchedule()>30){
-                                        md.setSalesPaymentSchedule(30);
+                                    if(getInteger(row.getCell(9))==1){
+                                        mdsr.setKristal(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sn3", "service-notification"));
                                     }
-                                    md.setSchedule(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1(String.valueOf(md.getSalesPaymentSchedule()), "payment-schedule"));
+                                    boolean isMembran=true;
+                                    if(getInteger(row.getCell(10))==1){
+                                        mdsr.setMembran(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sn4", "service-notification"));
+                                        isMembran=false;
+                                    }
+                                    if(getInteger(row.getCell(11))==1 && isMembran){
+                                        mdsr.setMembran(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sn4", "service-notification"));
+                                        isMembran=false;
+                                    }
+                                    if(getInteger(row.getCell(12))==1 && isMembran){
+                                        mdsr.setMembran(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sn4", "service-notification"));
+                                        isMembran=false;
+                                    }
+                                    if(getInteger(row.getCell(13))==1 && isMembran){
+                                        mdsr.setMembran(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sn4", "service-notification"));
+                                    }
+                                    if(getInteger(row.getCell(14))==1){
+                                        mdsr.setKakos(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sn5", "service-notification"));
+                                    }
+                                    if(getInteger(row.getCell(15))==1){
+                                        mdsr.setMineral(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sn5", "service-notification"));
+                                    }
+                                    mdsr.setSalesPaymentLastPrice(getNumeric(row.getCell(69)));
+                                    mdsr.setSalesPaymentDown(getNumeric(row.getCell(70)));
+                                    mdsr.setSalesPaymentDown(Double.parseDouble(row.getCell(71).getRawValue()));
 
-                                    md.setSalesPaymentGift(md.getSalesPaymentLastPrice()==0?true:false);
-                                    md.setSalesInventoryName(getString(row.getCell(16)).trim().toUpperCase());
+                                    migrationDetailServiceRegulatorRepository.save(mdsr);
 
-                                    migrationDetailRepository.save(md);
-
-                                    log.info(i + ": Migration detailed inserted: InsertID: " + md.getId());
+                                    log.info(i + ": Migration detailed Service Regulator inserted: InsertID: " + mdsr.getId());
                                 }
                             }
                         } catch (Exception e){
@@ -271,17 +260,6 @@ public class MigrationTask {
 
     public void startMigrationReturnedItems(Migration migration) {
 
-    }
-
-    public void startMigrationServiceRefreshItems(Migration migration) {
-        try{
-            log.info("Migration Task Start Service Regulator Migration");
-
-            log.info("Migration Task End Service Regulator Migration");
-        } catch (Exception e){
-            e.printStackTrace();
-            log.error(e.getMessage(), e);
-        }
     }
 
     public void startMigrationSalesItems(Migration migration) {
@@ -506,6 +484,234 @@ public class MigrationTask {
 
             }
             log.info("Migration Task End Sales Migration");
+        } catch (Exception e){
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
+        }
+    }
+
+    public void startMigrationServiceRefreshItems(Migration migration) {
+        try{
+            log.info("Migration Task Start Sales Service Migration");
+            if (migration.getOperationType().equalsIgnoreCase("satış")){
+                int i = 1;
+                for(MigrationDetail md: migration.getMigrationDetails()){
+                    i++;
+                    if(md.getStatus()!=1){
+                        String errors = "";
+                        try {
+                            Employee vanLeader = md.getVanLeader();
+                            md.setStatus(1);
+                            if(vanLeader!=null){
+                                String inventoryName = (md.getSalesInventoryName()!=null && md.getSalesInventoryName().length()>0)?md.getSalesInventoryName():"AVADANLIQ NONAME";
+                                inventoryName = inventoryName.toUpperCase();
+                                List<Inventory> inventories = inventoryRepository.getInventoriesByNameAndActiveTrue(inventoryName);
+                                Inventory inventory = null;
+                                if(inventories.size()>0){
+                                    inventory = inventories.get(0);
+                                } else {
+                                    inventory = new Inventory();
+                                    inventory.setOrganization(migration.getOrganization());
+                                    inventory.setOld(false);
+                                    inventory.setName(inventoryName);
+                                    inventory.setGroup(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("filters", "inventory-group"));
+                                    inventory.setBarcode(Util.generateBarcode(inventory.getGroup().getId()));
+                                    inventory.setInventoryDate(new Date());
+                                    inventoryRepository.save(inventory);
+                                }
+
+                                Action buy = new Action();
+                                buy.setInventory(inventory);
+                                buy.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("buy", "action"));
+                                buy.setOrganization(inventory.getOrganization());
+                                buy.setAmount(1);
+                                buy.setSupplier(migration.getSupplier());
+                                actionRepository.save(buy);
+
+                                Action consolidate = new Action();
+                                consolidate.setOld(buy.getOld());
+                                consolidate.setInventory(buy.getInventory());
+                                consolidate.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("consolidate", "action"));
+                                consolidate.setSupplier(buy.getSupplier());
+                                consolidate.setOrganization(buy.getOrganization());
+                                consolidate.setEmployee(vanLeader);
+                                consolidate.setApprove(true);
+                                consolidate.setApproveDate(new Date());
+                                consolidate.setAmount(1);
+                                actionRepository.save(consolidate);
+
+                                buy.setAmount(buy.getAmount() - consolidate.getAmount());
+                                actionRepository.save(buy);
+
+
+                                Customer customer = parseCustomer(md);
+                                customerRepository.save(customer);
+
+                                Employee canvasser = md.getCanvasser();
+                                Employee dealer = md.getDealer();
+                                Employee console = md.getDealer();
+                                Employee servicer = md.getServicer();
+                                Sales sales = new Sales();
+                                SalesInventory si = new SalesInventory();
+                                si.setInventory(inventory);
+                                si.setSales(sales);
+                                si.setSalesType(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sales", "sales-type"));
+                                List<SalesInventory> sis = new ArrayList<>();
+                                sis.add(si);
+                                sales.setSalesInventories(sis);
+                                sales.setCustomer(customer);
+                                sales.setVanLeader(vanLeader);
+                                sales.setCanavasser(canvasser);
+                                sales.setDealer(dealer);
+                                sales.setConsole(console);
+                                sales.setOrganization(md.getMigration().getOrganization());
+                                sales.setServicer(servicer);
+                                sales.setActive(true);
+                                sales.setApprove(true);
+                                sales.setApproveDate(new Date());
+                                sales.setSaled(md.getSalesSaled());
+                                sales.setSaleDate(md.getSalesDate());
+                                sales.setGuarantee(24);
+                                sales.setGuaranteeExpire(Util.guarantee(sales.getSaleDate()==null?new Date():sales.getSaleDate(), sales.getGuarantee()));
+                                Payment payment = new Payment();
+                                payment.setCash(md.getSalesPaymentCash());
+                                payment.setActive(true);
+                                payment.setPrice(md.getSalesPaymentLastPrice());
+                                payment.setLastPrice(md.getSalesPaymentLastPrice());
+                                payment.setDown(md.getSalesPaymentDown());
+                                if(payment.getCash()){
+                                    payment.setPeriod(null);
+                                    payment.setSchedule(null);
+                                    payment.setSchedulePrice(null);
+                                } else {
+                                    payment.setSchedule(md.getSchedule());
+                                    payment.setPeriod(md.getPeriod());
+                                    double schedulePrice = Util.schedulePrice(payment.getSchedule(), payment.getLastPrice(), payment.getDown());
+                                    payment.setSchedulePrice(schedulePrice<0?0:schedulePrice);
+                                }
+
+                                for(SalesInventory salesInventory: sales.getSalesInventories()){
+                                    List<Action> oldActions = actionRepository.getActionsByActiveTrueAndInventory_ActiveAndInventoryAndEmployeeAndAction_Attr1AndAmountGreaterThanOrderById(true, salesInventory.getInventory(), vanLeader, "consolidate", 0);
+                                    if(oldActions.size()>0){
+                                        Action action = new Action();
+                                        action.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sell", "action"));
+                                        action.setAmount(1);
+                                        action.setInventory(salesInventory.getInventory());
+                                        action.setOrganization(sales.getOrganization());
+                                        action.setEmployee(vanLeader);
+                                        action.setSupplier(oldActions.get(0).getSupplier());
+                                        actionRepository.save(action);
+
+                                        Action oldAction = oldActions.get(0);
+                                        oldAction.setAmount(oldAction.getAmount()-1);
+                                        actionRepository.save(oldAction);
+                                    }
+                                }
+                                sales.setPayment(payment);
+                                sales.setApprove(true);
+                                sales.setApproveDate(new Date());
+                                List<ServiceRegulator> serviceRegulators = new ArrayList<>();
+                                for(Dictionary serviceNotification: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("service-notification")){
+                                    serviceRegulators.add(new ServiceRegulator(sales, serviceNotification, sales.getSaleDate()));
+                                }
+                                sales.setServiceRegulators(serviceRegulators);
+                                salesRepository.save(sales);
+
+                                Dictionary sell = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sell", "action");
+                                if(payment.getDown()>0){
+                                    Invoice invoice = new Invoice();
+                                    invoice.setSales(sales);
+                                    invoice.setApprove(true);
+                                    invoice.setApproveDate(new Date());
+                                    invoice.setAdvance(false);
+                                    invoice.setCreditable(true);
+                                    invoice.setPrice(payment.getDown());
+                                    invoice.setOrganization(sales.getOrganization());
+                                    invoice.setDescription("Satışdan əldə edilən ilkin ödəniş " + payment.getDown() + " AZN");
+                                    invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
+                                    invoiceRepository.save(invoice);
+                                    invoice.setChannelReferenceCode(String.valueOf(invoice.getId()));
+                                    invoiceRepository.save(invoice);
+
+                                    Transaction transaction = new Transaction();
+                                    transaction.setApprove(true);
+                                    transaction.setApproveDate(new Date());
+                                    transaction.setDebt(invoice.getPrice()>0?true:false);
+                                    transaction.setInventory(invoice.getSales().getSalesInventories().get(0).getInventory());
+                                    transaction.setOrganization(invoice.getOrganization());
+                                    transaction.setPrice(Math.abs(invoice.getPrice()));
+                                    transaction.setCurrency("AZN");
+                                    transaction.setAccount(accountRepository.getAccountsByActiveTrueAndCurrencyAndOrganization(transaction.getCurrency(), transaction.getOrganization()).get(0));
+                                    transaction.setRate(Util.getRate(currencyRateRepository.getCurrencyRateByCode(transaction.getCurrency().toUpperCase())));
+                                    double sumPrice = Util.amountChecker(transaction.getAmount()) * transaction.getPrice() * transaction.getRate();
+                                    transaction.setSumPrice(sumPrice);
+                                    transaction.setAction(sell); //burda duzelis edilmelidir
+                                    transaction.setDescription("Satış|Servis, Kod: "+invoice.getSales().getId() + " -> "
+                                            + invoice.getSales().getCustomer().getPerson().getFullName() + " -> "
+                                            + " barkod: " + invoice.getSales().getSalesInventories().get(0).getInventory().getName()
+                                            + " " + invoice.getSales().getSalesInventories().get(0).getInventory().getBarcode()
+                                    );
+                                    transactionRepository.save(transaction);
+                                    balance(transaction);
+                                }
+
+                                if(md.getSalesPaymentPayed()>0){
+                                    Invoice invoice = new Invoice();
+                                    invoice.setSales(sales);
+                                    invoice.setApprove(true);
+                                    invoice.setApproveDate(new Date());
+                                    invoice.setCreditable(true);
+                                    if(!sales.getService()){
+                                        invoice.setAdvance(true);
+                                    }
+                                    invoice.setPrice(md.getSalesPaymentPayed());
+                                    invoice.setOrganization(sales.getOrganization());
+                                    invoice.setDescription("Satışdan əldə edilən ilkin ödəniş " + md.getSalesPaymentPayed() + " AZN");
+                                    invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
+                                    invoiceRepository.save(invoice);
+                                    invoice.setChannelReferenceCode(String.valueOf(invoice.getId()));
+                                    invoiceRepository.save(invoice);
+
+                                    Transaction transaction = new Transaction();
+                                    transaction.setApprove(true);
+                                    transaction.setApproveDate(new Date());
+                                    transaction.setDebt(invoice.getPrice()>0?true:false);
+                                    transaction.setInventory(invoice.getSales().getSalesInventories().get(0).getInventory());
+                                    transaction.setOrganization(invoice.getOrganization());
+                                    transaction.setPrice(Math.abs(invoice.getPrice()));
+                                    transaction.setCurrency("AZN");
+                                    transaction.setAccount(accountRepository.getAccountsByActiveTrueAndCurrencyAndOrganization(transaction.getCurrency(), transaction.getOrganization()).get(0));
+                                    transaction.setRate(Util.getRate(currencyRateRepository.getCurrencyRateByCode(transaction.getCurrency().toUpperCase())));
+                                    double sumPrice = Util.amountChecker(transaction.getAmount()) * transaction.getPrice() * transaction.getRate();
+                                    transaction.setSumPrice(sumPrice);
+                                    transaction.setAction(sell); //burda duzelis edilmelidir
+                                    transaction.setDescription("Satış|Servis, Kod: "+invoice.getSales().getId() + " -> "
+                                            + invoice.getSales().getCustomer().getPerson().getFullName() + " -> "
+                                            + " barkod: " + invoice.getSales().getSalesInventories().get(0).getInventory().getName()
+                                            + " " + invoice.getSales().getSalesInventories().get(0).getInventory().getBarcode()
+                                    );
+                                    transactionRepository.save(transaction);
+                                    balance(transaction);
+
+                                    log.info(i + ":   " + md.getId() + " migrated");
+                                }
+                            } else {
+                                errors = md.getVanLeader() + " VAN LEADER tapılmadı!";
+                                md.setStatus(2);
+                            }
+                        } catch (Exception e){
+                            e.printStackTrace();
+                            log.error(e.getMessage(), e);
+                            md.setStatus(2);
+                            errors += e.getMessage() + "\n";
+                        }
+                        md.setErrors(errors);
+                        migrationDetailRepository.save(md);
+                    }
+                }
+
+            }
+            log.info("Migration Task End Sales Service Migration");
         } catch (Exception e){
             e.printStackTrace();
             log.error(e.getMessage(), e);
