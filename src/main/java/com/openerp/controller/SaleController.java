@@ -289,12 +289,19 @@ public class SaleController extends SkeletonController {
             salesRepository.save(sales);
             log(sales, "sale_sales", "create/edit", sales.getId(), sales.toString());
 
-            PersonDocument document1 = new PersonDocument(sales.getCustomer().getPerson(), dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("id card", "document-type"), file1.getBytes(), null, file1.getOriginalFilename());
-            personDocumentRepository.save(document1);
-            log(sales, "common_person_document", "create/edit", document1.getId(), document1.toString());
-            PersonDocument document2 = new PersonDocument(sales.getCustomer().getPerson(), dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("id card", "document-type"), file2.getBytes(), null, file2.getOriginalFilename());
-            personDocumentRepository.save(document2);
-            log(sales, "common_person_document", "create/edit", document2.getId(), document2.toString());
+            Person person = sales.getCustomer().getPerson();
+            Dictionary documentType = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("id card", "document-type");
+            personDocumentRepository.deleteInBatch(personDocumentRepository.getPersonDocumentsByPersonAndDocumentType(person, documentType));
+            if(file1.getBytes().length>0){
+                PersonDocument document1 = new PersonDocument(person, documentType, ImageResizer.resize(file1.getInputStream()), null, file1.getOriginalFilename());
+                personDocumentRepository.save(document1);
+                log(sales, "common_person_document", "create/edit", document1.getId(), document1.toString());
+            }
+            if(file2.getBytes().length>0){
+                PersonDocument document2 = new PersonDocument(person, documentType, file2.getBytes(), null, file2.getOriginalFilename());
+                personDocumentRepository.save(document2);
+                log(sales, "common_person_document", "create/edit", document2.getId(), document2.toString());
+            }
         }
         if(sales.getService()){
             return mapPost(sales, binding, redirectAttributes, "/sale/service");

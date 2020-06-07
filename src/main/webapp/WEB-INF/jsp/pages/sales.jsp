@@ -372,17 +372,17 @@
                                                 <div class="dropdown-menu dropdown-menu-right">
                                                     <c:if test="${view1.status}">
                                                     <a href="/collect/contact-history/<c:out value="${t.id}"/>" class="dropdown-item">
-                                                        <i class="la <c:out value="${view1.object.icon}"/>"></i> Qeydlər
+                                                        <i class="flaticon-whatsapp"></i> Qeydlər
                                                     </a>
                                                     </c:if>
                                                     <c:if test="${view2.status and !t.payment.cash}">
                                                     <a href="/sale/schedule/<c:out value="${t.id}"/>" class="dropdown-item">
-                                                        <i class="la <c:out value="${view2.object.icon}"/>"></i> Ödəniş qrafiki
+                                                        <i class="flaticon-folder-1"></i> Ödəniş qrafiki
                                                     </a>
                                                     </c:if>
                                                     <c:if test="${view3.status}">
                                                     <a href="/sale/service-regulator/<c:out value="${t.id}"/>" class="dropdown-item">
-                                                        <i class="la <c:out value="${view3.object.icon}"/>"></i> Servis requlyatoru
+                                                        <i class="flaticon-folder-2"></i> Servis requlyatoru
                                                     </a>
                                                     </c:if>
                                                     <c:if test="${return1.status and t.approve}">
@@ -396,7 +396,7 @@
                                                     </a>
                                                     </c:if>
                                                     <c:if test="${delete.status and !t.approve}">
-                                                    <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.salesInventories.get(0).inventory.name}" /> <br/> <c:out value="${t.customer.person.fullName}" />');" class="dropdown-item" title="<c:out value="${delete.object.name}"/>">
+                                                    <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.id}" /> <br/> <c:out value="${t.customer.person.fullName}" />');" class="dropdown-item" title="<c:out value="${delete.object.name}"/>">
                                                         <i class="<c:out value="${delete.object.icon}"/>"></i> <c:out value="${delete.object.name}"/>
                                                     </a>
                                                     </c:if>
