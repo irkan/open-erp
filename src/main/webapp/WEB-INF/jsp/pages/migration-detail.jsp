@@ -53,6 +53,7 @@
                                     <th>Satıcı kodu</th>
                                     <th>Servis işçisi</th>
                                     <th>Servis işçisi kodu</th>
+                                    <th>Açıqlama</th>
                                     <th>Xətalar</th>
                                 </tr>
                                 </thead>
@@ -113,6 +114,7 @@
                                         <td><c:out value="${t.dealer.id}" /> <c:out value="${t.dealer.person.fullName}" /></td>
                                         <td><c:out value="${t.employeeServicer}" /></td>
                                         <td><c:out value="${t.servicer.id}" /> <c:out value="${t.servicer.person.fullName}" /></td>
+                                        <td><c:out value="${t.salesPaymentDescription}" /></td>
                                         <td><c:out value="${t.errors}" /></td>
                                     </tr>
                                 </c:forEach>

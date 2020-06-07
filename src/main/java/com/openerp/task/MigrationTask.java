@@ -118,6 +118,7 @@ public class MigrationTask {
                                     md.setSalesPaymentPeriod(getInteger(row.getCell(13)));
                                     md.setSalesPaymentCash(false);
                                     md.setSalesSaled(false);
+                                    md.setSalesPaymentDescription(getDescription(row));
                                     if(md.getSalesPaymentDown()+md.getSalesPaymentPayed()>=md.getSalesPaymentLastPrice()){
                                         md.setSalesPaymentCash(true);
                                         md.setSalesSaled(true);
@@ -269,6 +270,7 @@ public class MigrationTask {
             if (migration.getOperationType().equalsIgnoreCase("satış")){
                 int i = 1;
                 for(MigrationDetail md: migration.getMigrationDetails()){
+                    System.gc();
                     i++;
                     boolean status = true;
                     if(md.getStatus()!=1){
@@ -363,6 +365,7 @@ public class MigrationTask {
                                 payment.setPrice(md.getSalesPaymentLastPrice());
                                 payment.setLastPrice(md.getSalesPaymentLastPrice());
                                 payment.setDown(md.getSalesPaymentDown());
+                                payment.setDescription(md.getSalesPaymentDescription());
                                 if(payment.getCash()){
                                     payment.setPeriod(null);
                                     payment.setSchedule(null);
@@ -727,6 +730,50 @@ public class MigrationTask {
             e.printStackTrace();
             log.error(e.getMessage(), e);
         }
+    }
+
+    private String getDescription(XSSFRow row){
+        String description = "";
+        try{
+             description += getString(row.getCell(2)) + "\n";
+             description += getString(row.getCell(115)) + "\n";
+             description += getString(row.getCell(3)) + "\n";
+             description += "TDS: " + getString(row.getCell(14)) + "\n";
+             description += "DT: " + getString(row.getCell(18)) + " DM: " + getNumeric(row.getCell(19)) + "\n";
+             description += "1. ÖT: " + getString(row.getCell(21)) + " ÖM: " + getNumeric(row.getCell(20)) + "\n";
+             description += "2. ÖT: " + getString(row.getCell(23)) + " ÖM: " + getNumeric(row.getCell(22)) + "\n";
+             description += "3. ÖT: " + getString(row.getCell(25)) + " ÖM: " + getNumeric(row.getCell(24)) + "\n";
+             description += "4. ÖT: " + getString(row.getCell(27)) + " ÖM: " + getNumeric(row.getCell(26)) + "\n";
+             description += "5. ÖT: " + getString(row.getCell(29)) + " ÖM: " + getNumeric(row.getCell(28)) + "\n";
+             description += "6. ÖT: " + getString(row.getCell(31)) + " ÖM: " + getNumeric(row.getCell(30)) + "\n";
+             description += "7. ÖT: " + getString(row.getCell(33)) + " ÖM: " + getNumeric(row.getCell(32)) + "\n";
+             description += "8. ÖT: " + getString(row.getCell(35)) + " ÖM: " + getNumeric(row.getCell(34)) + "\n";
+             description += "9. ÖT: " + getString(row.getCell(37)) + " ÖM: " + getNumeric(row.getCell(36)) + "\n";
+             description += "10. ÖT: " + getString(row.getCell(39)) + " ÖM: " + getNumeric(row.getCell(38)) + "\n";
+             description += "11. ÖT: " + getString(row.getCell(41)) + " ÖM: " + getNumeric(row.getCell(40)) + "\n";
+             description += "12. ÖT: " + getString(row.getCell(43)) + " ÖM: " + getNumeric(row.getCell(42)) + "\n";
+             description += "13. ÖT: " + getString(row.getCell(45)) + " ÖM: " + getNumeric(row.getCell(44)) + "\n";
+             description += "14. ÖT: " + getString(row.getCell(47)) + " ÖM: " + getNumeric(row.getCell(46)) + "\n";
+             description += "15. ÖT: " + getString(row.getCell(49)) + " ÖM: " + getNumeric(row.getCell(48)) + "\n";
+             description += "16. ÖT: " + getString(row.getCell(51)) + " ÖM: " + getNumeric(row.getCell(50)) + "\n";
+             description += "17. ÖT: " + getString(row.getCell(53)) + " ÖM: " + getNumeric(row.getCell(52)) + "\n";
+             description += "18. ÖT: " + getString(row.getCell(55)) + " ÖM: " + getNumeric(row.getCell(54)) + "\n";
+             description += "19. ÖT: " + getString(row.getCell(57)) + " ÖM: " + getNumeric(row.getCell(56)) + "\n";
+             description += "20. ÖT: " + getString(row.getCell(59)) + " ÖM: " + getNumeric(row.getCell(58)) + "\n";
+             description += "21. ÖT: " + getString(row.getCell(61)) + " ÖM: " + getNumeric(row.getCell(60)) + "\n";
+             description += "22. ÖT: " + getString(row.getCell(63)) + " ÖM: " + getNumeric(row.getCell(62)) + "\n";
+             description += "23. ÖT: " + getString(row.getCell(65)) + " ÖM: " + getNumeric(row.getCell(64)) + "\n";
+             description += "24. ÖT: " + getString(row.getCell(67)) + " ÖM: " + getNumeric(row.getCell(66)) + "\n";
+             description += "25. ÖT: " + getString(row.getCell(69)) + " ÖM: " + getNumeric(row.getCell(68)) + "\n";
+             description += "26. ÖT: " + getString(row.getCell(71)) + " ÖM: " + getNumeric(row.getCell(70)) + "\n";
+             description += "27. ÖT: " + getString(row.getCell(73)) + " ÖM: " + getNumeric(row.getCell(72)) + "\n";
+             description += "28. ÖT: " + getString(row.getCell(75)) + " ÖM: " + getNumeric(row.getCell(74)) + "\n";
+             description += "29. ÖT: " + getString(row.getCell(77)) + " ÖM: " + getNumeric(row.getCell(76)) + "\n";
+             description += "30. ÖT: " + getString(row.getCell(79)) + " ÖM: " + getNumeric(row.getCell(78));
+        } catch (Exception e){
+            log.error(e.getMessage(), e);
+        }
+        return description;
     }
 
     public String getString(XSSFCell cell){

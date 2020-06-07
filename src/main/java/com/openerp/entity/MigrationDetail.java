@@ -118,6 +118,10 @@ public class MigrationDetail {
     @Column(name = "sales_payment_is_gift")
     private Boolean salesPaymentGift;
 
+    @Lob
+    @Column(name = "sales_payment_description")
+    private String salesPaymentDescription;
+
     @Column(name = "sales_inventory_name")
     private String salesInventoryName;
 

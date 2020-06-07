@@ -58,7 +58,7 @@ public class Payment {
     @Column(name = "discount")
     private String discount;
 
-    @Pattern(regexp=".{0,250}", message="Maksimum 250 simvol ola bilər")
+    @Lob
     @Column(name = "description")
     private String description;
 
