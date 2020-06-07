@@ -56,22 +56,15 @@
                                                     <c:when test="${view3.status}">
                                                         <c:choose>
                                                             <c:when test="${t.service}">
-                                                                <a href="javascript:window.open('/sale/service/<c:out value="${t.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder">Servis: <c:out value="${t.id}" /></a>
+                                                                <a href="javascript:window.open('/sale/service/<c:out value="${t.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.id}" /></a>
                                                             </c:when>
                                                             <c:otherwise>
-                                                                <a href="javascript:window.open('/sale/sales/<c:out value="${t.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder">Satış: <c:out value="${t.id}" /></a>
+                                                                <a href="javascript:window.open('/sale/sales/<c:out value="${t.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.id}" /></a>
                                                             </c:otherwise>
                                                         </c:choose>
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <c:choose>
-                                                            <c:when test="${t.service}">
-                                                                Servis: <c:out value="${t.id}" />
-                                                            </c:when>
-                                                            <c:otherwise>
-                                                                Satış: <c:out value="${t.id}" />
-                                                            </c:otherwise>
-                                                        </c:choose>
+                                                        <c:out value="${t.id}" />
                                                     </c:otherwise>
                                                 </c:choose>
                                             </td>
@@ -131,17 +124,17 @@
                                                 </c:if>
                                             </td>
                                             <th>
+                                                Qiymət: <c:out value="${t.payment.price}" /><br/>
+                                                Son qiymət: <c:out value="${t.payment.lastPrice}" /><br/>
                                                 <c:if test="${not empty t.payment.discount}">
                                                     Endirim: <c:out value="${t.payment.discount}" /><br/>
-                                                </c:if>
-                                                <c:if test="${not empty t.payment.description}">
-                                                    Səbəbi: <c:out value="${t.payment.description}" /><br/>
                                                 </c:if>
                                                 <c:if test="${t.payment.down>0}">
                                                     İlkin ödəniş: <c:out value="${t.payment.down}" /><br/>
                                                 </c:if>
-                                                Son qiymət: <c:out value="${t.payment.lastPrice}" />
-
+                                                <c:if test="${!t.payment.cash}">
+                                                    Qrafik üzrə: <c:out value="${t.payment.schedulePrice}" /><br/>
+                                                </c:if>
                                             </th>
                                             <td>
                                                 <c:if test="${t.contactHistories.size()>0}">

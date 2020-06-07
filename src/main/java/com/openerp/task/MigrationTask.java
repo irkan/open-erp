@@ -736,9 +736,9 @@ public class MigrationTask {
         String description = "";
         try{
              description += getString(row.getCell(2)) + "\n";
-             description += getString(row.getCell(115)) + "\n";
              description += getString(row.getCell(3)) + "\n";
              description += "TDS: " + getString(row.getCell(14)) + "\n";
+             description += getString(row.getCell(115)) + "\n";
              description += "DT: " + getString(row.getCell(18)) + " DM: " + getNumeric(row.getCell(19)) + "\n";
              description += "1. ÖT: " + getString(row.getCell(21)) + " ÖM: " + getNumeric(row.getCell(20)) + "\n";
              description += "2. ÖT: " + getString(row.getCell(23)) + " ÖM: " + getNumeric(row.getCell(22)) + "\n";
@@ -778,12 +778,28 @@ public class MigrationTask {
 
     public String getString(XSSFCell cell){
         String value = "";
-        if(cell!=null){
-            if(cell.getCellType()==1){
-                value = cell.getStringCellValue();
-            } else if(cell.getCellType()==0){
-                value = String.valueOf(cell.getNumericCellValue());
+        try{
+            if(cell!=null){
+                if(cell.getCellType()==1){
+                    value = cell.getStringCellValue();
+                } else if(cell.getCellType()==0){
+                    value = String.valueOf(cell.getNumericCellValue());
+                }
             }
+        } catch (Exception e){
+            log.error(e.getMessage(), e);
+        }
+        return value;
+    }
+
+    public String getRaw(XSSFCell cell){
+        String value = "";
+        try{
+            if(cell!=null){
+                value = String.valueOf(cell.getRawValue());
+            }
+        } catch (Exception e){
+            log.error(e.getMessage(), e);
         }
         return value;
     }
@@ -880,7 +896,6 @@ public class MigrationTask {
                 value = Double.parseDouble(cell.getRawValue());
             }
         } catch (Exception e){
-
             log.error(e.getMessage(), e);
         }
         return value;
