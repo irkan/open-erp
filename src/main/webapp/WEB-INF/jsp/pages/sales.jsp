@@ -317,7 +317,7 @@
                                                 Endirim: <c:out value="${t.payment.discount}" /><br/>
                                             </c:if>
                                             <c:if test="${not empty t.payment.description}">
-                                                Səbəbi: <c:out value="${t.payment.description}" /><br/>
+                                                Səbəbi: <c:out value="${fn:substring(t.payment.description, 0, 50)}" /><br/>
                                             </c:if>
                                             <c:if test="${t.payment.down>0}">
                                                 İlkin ödəniş: <c:out value="${t.payment.down}" /><br/>
@@ -497,7 +497,7 @@
                     <!--end: Form Wizard Nav -->
                 </div>
                 <div class="kt-grid__item kt-grid__item--fluid kt-wizard-v1__wrapper">
-                <form:form modelAttribute="form" id="form" method="post" action="/sale/sales" cssClass="form-group kt-form">
+                <form:form modelAttribute="form" id="form" method="post" action="/sale/sales" cssClass="form-group kt-form"  enctype="multipart/form-data">
                     <form:hidden path="id"/>
                     <form:hidden path="active"/>
                     <form:hidden path="service"/>
@@ -531,7 +531,7 @@
                                         </form:select>
                                         <form:errors path="guarantee" cssClass="control-label alert-danger"/>
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-2">
                                         <form:label path="payment.price">Qiymət</form:label>
                                         <div class="input-group" >
                                             <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
@@ -539,7 +539,7 @@
                                         </div>
                                         <form:errors path="payment.price" cssClass="control-label alert-danger"/>
                                     </div>
-                                    <div class="col-sm-4 text-center">
+                                    <div class="col-sm-3 text-center">
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <div class="form-group mt-3 pt-4">
@@ -557,6 +557,13 @@
                                                     </label>
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <form:label path="payment.discount">Endirim dəyəri</form:label>
+                                            <form:input path="payment.discount" cssClass="form-control" readonly="true" cssStyle="text-align: -webkit-center; text-align: center; font-weight: bold; letter-spacing: 3px;"/>
+                                            <form:errors path="payment.discount" cssClass="control-label alert-danger"/>
                                         </div>
                                     </div>
                                 </div>
@@ -619,21 +626,10 @@
                                         </div>
                                     </div>
                                     <div class="col-md-7">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <form:label path="payment.discount">Endirim dəyəri</form:label>
-                                                    <form:input path="payment.discount" cssClass="form-control" readonly="true" cssStyle="text-align: -webkit-center; text-align: center; font-weight: bold; letter-spacing: 3px;"/>
-                                                    <form:errors path="payment.discount" cssClass="control-label alert-danger"/>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <form:label path="payment.description">Açıqlama</form:label>
-                                                    <form:input path="payment.description" cssClass="form-control" readonly="true"/>
-                                                    <form:errors path="payment.description" cssClass="control-label alert-danger"/>
-                                                </div>
-                                            </div>
+                                        <div class="form-group">
+                                            <form:label path="payment.description">Açıqlama</form:label>
+                                            <form:textarea path="payment.description" cssClass="form-control" readonly="true" rows="3"/>
+                                            <form:errors path="payment.description" cssClass="control-label alert-danger"/>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-12">
@@ -801,8 +797,8 @@
                                                 <label>Ş.v-nin ön hissəsi</label>
                                                 <div></div>
                                                 <div class="custom-file">
-                                                    <input type="file" name="file" class="custom-file-input" id="file1" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-                                                    <label class="custom-file-label" for="file1">Ş.v-nin ön hissəsi</label>
+                                                    <input type="file" name="file1" class="custom-file-input" id="file1" accept="image/*">
+                                                    <label class="custom-file-label" for="file1">Şəxsiyyət vəsiqəsi</label>
                                                 </div>
                                             </div>
                                         </div>
@@ -811,8 +807,8 @@
                                                 <label>Ş.v-nin arxa hissəsi</label>
                                                 <div></div>
                                                 <div class="custom-file">
-                                                    <input type="file" name="file" class="custom-file-input" id="file2" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-                                                    <label class="custom-file-label" for="file2">Ş.v-nin arxa hissəsi</label>
+                                                    <input type="file" name="file2" class="custom-file-input" id="file2" accept="image/*">
+                                                    <label class="custom-file-label" for="file2">Şəxsiyyət vəsiqəsi</label>
                                                 </div>
                                             </div>
                                         </div>

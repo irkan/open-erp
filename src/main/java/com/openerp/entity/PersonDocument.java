@@ -1,12 +1,15 @@
 package com.openerp.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 @Table(name = "common_person_document")
@@ -17,8 +20,8 @@ import java.io.Serializable;
 public class PersonDocument {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "common_sequence")
-    @SequenceGenerator(sequenceName = "aa_common_sequence", allocationSize = 1, name = "common_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "common_person_document_sequence")
+    @SequenceGenerator(sequenceName = "aa_common_person_document_sequence", allocationSize = 1, name = "common_person_document_sequence")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
@@ -31,10 +34,28 @@ public class PersonDocument {
     @JoinColumn(name = "admin_dictionary_document_type_id")
     private Dictionary documentType;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+    @JsonFormat(pattern="dd.MM.yyyy HH:mm:ss")
+    @Column(name = "upload_date", nullable = false)
+    private Date uploadDate = new Date();
+
     @Lob
-    @Column(name = "document", length=300000,  columnDefinition="BLOB")
-    private String bytes;
+    @Column(name = "file_content")
+    private byte[] fileContent;
 
     @Column(name = "extension")
     private String extension;
+
+    @Column(name = "original_file_name")
+    private String originalFileName;
+
+
+    public PersonDocument(Person person, Dictionary documentType, byte[] fileContent,String extension, String originalFileName) {
+        this.person = person;
+        this.documentType = documentType;
+        this.fileContent = fileContent;
+        this.extension = extension;
+        this.originalFileName = originalFileName;
+    }
 }

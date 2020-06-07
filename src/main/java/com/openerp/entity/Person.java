@@ -94,7 +94,7 @@ public class Person {
 
     @ToString.Exclude
     @JsonIgnore
-    @OneToMany(mappedBy = "person")
+    @OneToMany(mappedBy = "person", fetch = FetchType.LAZY)
     private List<PersonDocument> personDocuments;
 
     public String getFullName() {

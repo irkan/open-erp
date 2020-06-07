@@ -20,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.script.ScriptEngine;
@@ -253,8 +254,8 @@ public class SaleController extends SkeletonController {
     }
 
 
-    @PostMapping(value = "/sales")
-    public String postSales(@ModelAttribute(Constants.FORM) @Validated Sales sales, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+    @PostMapping(value = "/sales", consumes = {"multipart/form-data"})
+    public String postSales(@RequestParam("file1") MultipartFile file1, @RequestParam("file2") MultipartFile file2, @ModelAttribute(Constants.FORM) @Validated Sales sales, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             salesInventoryRepository.deleteInBatch(salesInventoryRepository.getSalesInventoriesByActiveTrueAndSales_Id(sales.getId()));
@@ -287,6 +288,13 @@ public class SaleController extends SkeletonController {
             }
             salesRepository.save(sales);
             log(sales, "sale_sales", "create/edit", sales.getId(), sales.toString());
+
+            PersonDocument document1 = new PersonDocument(sales.getCustomer().getPerson(), dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("id card", "document-type"), file1.getBytes(), null, file1.getOriginalFilename());
+            personDocumentRepository.save(document1);
+            log(sales, "common_person_document", "create/edit", document1.getId(), document1.toString());
+            PersonDocument document2 = new PersonDocument(sales.getCustomer().getPerson(), dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("id card", "document-type"), file2.getBytes(), null, file2.getOriginalFilename());
+            personDocumentRepository.save(document2);
+            log(sales, "common_person_document", "create/edit", document2.getId(), document2.toString());
         }
         if(sales.getService()){
             return mapPost(sales, binding, redirectAttributes, "/sale/service");

@@ -927,6 +927,7 @@ public class MigrationTask {
         Customer customer = new Customer();
         customer.setOrganization(migrationDetail.getMigration().getOrganization());
         Person person = parsePerson(migrationDetail.getCustomerFullName(), migrationDetail.getCustomerContactAddress(), migrationDetail.getCustomerContactPhoneNumbers());
+        person.setIdCardPinCode("#######");
         customer.setPerson(person);
         return customer;
     }
