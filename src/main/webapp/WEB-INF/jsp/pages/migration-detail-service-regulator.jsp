@@ -28,8 +28,7 @@
                                     <th>№</th>
                                     <th>Status</th>
                                     <th>Əməliyyat</th>
-                                    <th>İnventarın adı</th>
-                                    <th>Satış tarixi</th>
+                                    <th>Servis tarixi</th>
                                     <th>Müştəri</th>
                                     <th>Son qiymət</th>
                                     <th>İlkin ödəniş</th>
@@ -41,15 +40,8 @@
                                     <th>Ven lider</th>
                                     <th>Ven lider kodu</th>
                                     <th>Nağdırmı?</th>
-                                    <th>Hədiyyədirmi?</th>
-                                    <th>Satılıb</th>
-                                    <th>Müştəri ünvanı</th>
-                                    <th>Müştəri əlaqə nömrəsi</th>
-                                    <th>Konsul</th>
-                                    <th>Konsul kodu</th>
-                                    <th>Canvasser</th>
-                                    <th>Canvasser kodu</th>
-                                    <th>Satıcı</th>
+                                    <th>Müştəri</th>
+                                    <th>Satış</th>
                                     <th>Satıcı kodu</th>
                                     <th>Servis işçisi</th>
                                     <th>Servis işçisi kodu</th>
@@ -62,7 +54,7 @@
                                         <td><c:out value="${t.id}" /></td>
                                         <td><c:out value="${t.status}" /></td>
                                         <td nowrap class="text-center">
-                                            <c:if test="${delete.status and  t.status eq 2}">
+                                            <c:if test="${delete.status and  t.status eq 1}">
                                                 <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.customerFullName}"/>');" class="dbtn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
                                                     <i class="la la-play"></i>
                                                 </a>

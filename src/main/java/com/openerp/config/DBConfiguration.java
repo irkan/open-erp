@@ -1421,6 +1421,8 @@ public class DBConfiguration {
             moduleOperations.add(transferModuleOperation5);
             ModuleOperation transferModuleOperation6 = new ModuleOperation(troubledCustomer, transfer, null);
             moduleOperations.add(transferModuleOperation6);
+            ModuleOperation transferModuleOperation7 = new ModuleOperation(schedule, transfer, null);
+            moduleOperations.add(transferModuleOperation7);
 
             ModuleOperation consolidateModuleOperation1 = new ModuleOperation(action, consolidateOperation, null);
             moduleOperations.add(consolidateModuleOperation1);
@@ -1841,6 +1843,7 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, transferModuleOperation4));
             userModuleOperations.add(new UserModuleOperation(user, transferModuleOperation5));
             userModuleOperations.add(new UserModuleOperation(user, transferModuleOperation6));
+            userModuleOperations.add(new UserModuleOperation(user, transferModuleOperation7));
 
             userModuleOperations.add(new UserModuleOperation(user, consolidateModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, consolidateModuleOperation2));

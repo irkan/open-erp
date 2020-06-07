@@ -104,6 +104,7 @@
                                     <th>Ödənilib</th>
                                     <th>Qalıq</th>
                                     <th>Gecikir</th>
+                                    <th>Əməliyyat</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -168,6 +169,13 @@
                                                 </c:if>
                                             </span>
                                         </th>
+                                        <td nowrap class="text-center">
+                                            <c:if test="${transfer.status}">
+                                                <a href="javascript:transfer($('#form-transfer'), 'transfer-modal-operation', '<c:out value="${p.sales.id}" />', '<c:out value="${t.amount-t.payableAmount}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
+                                                    <i class="<c:out value="${transfer.object.icon}"/>"></i>
+                                                </a>
+                                            </c:if>
+                                        </td>
                                     </tr>
                                 </c:forEach>
                                 </c:forEach>
@@ -189,7 +197,7 @@
     </div>
 </div>
 
-<%--<div class="modal fade" id="transfer-modal-operation" tabindex="-1" role="dialog">
+<div class="modal fade" id="transfer-modal-operation" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -200,15 +208,7 @@
             </div>
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form-transfer" method="post" action="/sale/schedule/transfer" cssClass="form-group">
-                    <form:hidden path="id"/>
-                    <div class="form-group">
-                        <form:label path="amount">Məbləğ</form:label>
-                        <div class="input-group" >
-                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
-                            <form:input path="amount" cssClass="form-control" placeholder="Daxil edin" readonly="true"/>
-                        </div>
-                        <form:errors path="amount" cssClass="alert-danger control-label"/>
-                    </div>
+                    <form:hidden path="sales"/>
                     <div class="form-group">
                         <form:label path="payableAmount">Ödəniləcək məbləğ</form:label>
                         <div class="input-group" >
@@ -225,7 +225,7 @@
             </div>
         </div>
     </div>
-</div>--%>
+</div>
 
 <script>
     $(function(){
@@ -234,13 +234,12 @@
             pageLength: 100,
             ordering: false
         });
-    })
+    });
 
-    function transfer(form, modal, id, amount, payableAmount){
+    function transfer(form, modal, salesId, payableAmount){
         try {
-            $(form).find("input[name='id']").val(id);
-            $(form).find("input[name='amount']").val(amount);
             $(form).find("input[name='payableAmount']").val(payableAmount);
+            $(form).find("input[name='sales']").val(salesId);
             $('#' + modal).modal('toggle');
         } catch (e) {
             console.error(e);

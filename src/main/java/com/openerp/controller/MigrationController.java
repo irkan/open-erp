@@ -492,7 +492,7 @@ public class MigrationController extends SkeletonController {
             for(String s: addressArray){
                 if(s.length()>3){
                     address1 = new Address();
-                    List<Dictionary> dictionaries = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1AndNameStartingWith("city", s.trim().substring(0, 3));
+                    List<Dictionary> dictionaries = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1AndNameStartingWithIgnoreCase("city", s.trim().substring(0, 3));
                     if(dictionaries.size()>0){
                         address1.setCity(dictionaries.get(0));
                     }

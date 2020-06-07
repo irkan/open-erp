@@ -59,7 +59,7 @@
                                                 </a>
                                             </c:if>
                                             <c:if test="${detail.status}">
-                                                <a href="/admin/migration-detail/<c:out value="${t.id}"/>" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${detail.object.name}"/>">
+                                                <a href="/admin/migration-detail<c:out value="${t.operationType eq 'Servis'?'-service-regulator':''}"/>/<c:out value="${t.id}"/>" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${detail.object.name}"/>">
                                                     <i class="<c:out value="${detail.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>

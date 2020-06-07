@@ -184,12 +184,13 @@ public class MigrationTask {
                         j++;
                         try{
                             row=(XSSFRow) rows.next();
-                            if(row.getRowNum()>0){
+                            if(row.getRowNum()>1){
                                 String customerFullName = getString(row.getCell(0));
                                 if(customerFullName.trim().length()>2){
                                     i++;
                                     Sales sales = findSales(customerFullName, organization);
                                     MigrationDetailServiceRegulator mdsr = new MigrationDetailServiceRegulator();
+                                    mdsr.setMigration(migration);
                                     mdsr.setSales(sales);
                                     mdsr.setCustomerFullName(customerFullName);
                                     mdsr.setStatus(0);
@@ -269,12 +270,25 @@ public class MigrationTask {
                 int i = 1;
                 for(MigrationDetail md: migration.getMigrationDetails()){
                     i++;
+                    boolean status = true;
                     if(md.getStatus()!=1){
                         String errors = "";
                         try {
-                            Employee vanLeader = md.getVanLeader();
                             md.setStatus(1);
-                            if(vanLeader!=null){
+                            Employee vanLeader = md.getVanLeader();
+                            if(vanLeader==null){
+                                errors += "\n"+md.getVanLeader() + " VAN LEADER tapılmadı!";
+                                status = false;
+                            }
+                            Customer customer = parseCustomer(md);
+                            if(customer!=null &&
+                                    customer.getPerson()!=null &&
+                                    customer.getPerson().getContact()!=null &&
+                                    customer.getPerson().getContact().getCity()==null){
+                                errors += "\n"+md.getCustomerContactAddress() + " ÜNVAN TAPILMADI!";
+                                status = false;
+                            }
+                            if(status){
                                 String inventoryName = (md.getSalesInventoryName()!=null && md.getSalesInventoryName().length()>0)?md.getSalesInventoryName():"AVADANLIQ NONAME";
                                 inventoryName = inventoryName.toUpperCase();
                                 List<Inventory> inventories = inventoryRepository.getInventoriesByNameAndActiveTrue(inventoryName);
@@ -315,8 +329,6 @@ public class MigrationTask {
                                 buy.setAmount(buy.getAmount() - consolidate.getAmount());
                                 actionRepository.save(buy);
 
-
-                                Customer customer = parseCustomer(md);
                                 customerRepository.save(customer);
 
                                 Employee canvasser = md.getCanvasser();
@@ -468,7 +480,6 @@ public class MigrationTask {
                                     log.info(i + ":   " + md.getId() + " migrated");
                                 }
                             } else {
-                                errors = md.getVanLeader() + " VAN LEADER tapılmadı!";
                                 md.setStatus(2);
                             }
                         } catch (Exception e){
@@ -991,7 +1002,7 @@ public class MigrationTask {
             for(String s: addressArray){
                 if(s.length()>3){
                     address1 = new Address();
-                    List<Dictionary> dictionaries = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1AndNameStartingWith("city", s.trim().substring(0, 3));
+                    List<Dictionary> dictionaries = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1AndNameStartingWithIgnoreCase("city", s.trim().substring(0, 3));
                     if(dictionaries.size()>0){
                         address1.setCity(dictionaries.get(0));
                     }

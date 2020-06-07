@@ -154,5 +154,6 @@ public class Constants {
         public static final String MIGRATION = "migration";
         public static final String LOG_FILE = "log-file";
         public static final String MIGRATION_DETAIL = "migration-detail";
+        public static final String MIGRATION_DETAIL_SERVICE_REGULATOR = "migration-detail-service-regulator";
     }
 }

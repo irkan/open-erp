@@ -65,7 +65,7 @@ public class SaleController extends SkeletonController {
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.SCHEDULE)){
             if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new SalesSchedule());
+                model.addAttribute(Constants.FORM, new Schedule());
             }
             Sales filterSales = null;
             if(!model.containsAttribute(Constants.FILTER)){
@@ -461,6 +461,26 @@ public class SaleController extends SkeletonController {
     @PostMapping(value = "/schedule/filter")
     public String postScheduleFilter(@ModelAttribute(Constants.FILTER) @Validated SalesSchedule salesSchedule, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         return mapFilter(salesSchedule, binding, redirectAttributes, "/sale/schedule");
+    }
+
+    @PostMapping(value = "/schedule/transfer")
+    public String postScheduleTransfer(@ModelAttribute(Constants.FORM) @Validated Schedule schedule, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()){
+            Invoice invoice = new Invoice();
+            invoice.setSales(schedule.getSales());
+            invoice.setApprove(false);
+            invoice.setPrice(schedule.getPayableAmount());
+            invoice.setOrganization(schedule.getSales().getOrganization());
+            invoice.setDescription("Satışdan əldə edilən ödəniş " + invoice.getPrice() + " AZN");
+            invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
+            invoiceRepository.save(invoice);
+            invoice.setChannelReferenceCode(String.valueOf(invoice.getId()));
+            invoiceRepository.save(invoice);
+            log(invoice, "sales_invoice", "create/edit", invoice.getId(), invoice.toString(), "Nümayişdən yaranan avans ödənişi");
+        }
+        Sales filterSales = new Sales(schedule.getSales().getId(), !canViewAll()?getSessionOrganization():null);
+        return mapPost(new SalesSchedule(filterSales), binding, redirectAttributes, "/sale/schedule/"+schedule.getSales().getId());
     }
 
     @PostMapping(value = "/demonstration")

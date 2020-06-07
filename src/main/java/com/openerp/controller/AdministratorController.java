@@ -238,6 +238,8 @@ public class AdministratorController extends SkeletonController {
             model.addAttribute(Constants.LIST, migrations);
         } else if (page.equalsIgnoreCase(Constants.ROUTE.MIGRATION_DETAIL)) {
             model.addAttribute(Constants.LIST, migrationDetailRepository.getMigrationDetailsByActiveTrueAndMigrationId(Integer.parseInt(data.get())));
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.MIGRATION_DETAIL_SERVICE_REGULATOR)) {
+            model.addAttribute(Constants.LIST, migrationDetailServiceRegulatorRepository.getMigrationDetailServiceRegulatorsByMigrationId(Integer.parseInt(data.get())));
         }
         return "layout";
     }
