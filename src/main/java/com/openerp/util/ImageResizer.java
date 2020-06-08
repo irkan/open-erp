@@ -3,9 +3,15 @@ package com.openerp.util;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.nio.file.Files;
+import java.util.Iterator;
 
+import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
- 
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
+
 /**
  * This program demonstrates how to resize an image.
  *
@@ -18,12 +24,12 @@ public class ImageResizer {
      * Resizes an image to a absolute width and height (the image may not be
      * proportional)
      * @param inputStream Path of the original image
-     * @param outputStream Path to save the resized image
+     * @param file Path to save the resized image
      * @param scaledWidth absolute width in pixels
      * @param scaledHeight absolute height in pixels
      * @throws IOException
      */
-    public static void resize(InputStream inputStream, OutputStream outputStream,
+    public static void resize(InputStream inputStream, File file,
                               int scaledWidth, int scaledHeight)
             throws IOException {
         // reads input image
@@ -39,7 +45,7 @@ public class ImageResizer {
         g2d.dispose();
  
         // writes to output file
-        ImageIO.write(outputImage, ".jpg", outputStream);
+        ImageIO.write(outputImage, ".jpg", file);
     }
 
     public static byte[] resize(InputStream inputStream) throws IOException {
@@ -51,9 +57,10 @@ public class ImageResizer {
         int scaledWidth = (int) (inputImage.getWidth() * percent);
         int scaledHeight = (int) (inputImage.getHeight() * percent);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        resize(inputStream, byteArrayOutputStream, scaledWidth, scaledHeight);
+        File file = new File("C:\\Users\\i.ahmadov\\test.jpg");
+        resize(inputStream, file, scaledWidth, scaledHeight);
         byteArrayOutputStream.close();
-        return byteArrayOutputStream.toByteArray();
+        return Files.readAllBytes(file.toPath());
     }
  
     /**
@@ -84,5 +91,29 @@ public class ImageResizer {
             ex.printStackTrace();
         }
     }*/
+
+    public static byte[] compress(InputStream inputStream, String originalFileName) throws IOException {
+        BufferedImage image = ImageIO.read(inputStream);
+
+        File compressedImageFile = new File(originalFileName);
+        OutputStream os = new FileOutputStream(compressedImageFile);
+
+        Iterator<ImageWriter> writers =  ImageIO.getImageWritersByFormatName("jpg");
+        ImageWriter writer = (ImageWriter) writers.next();
+
+        ImageOutputStream ios = ImageIO.createImageOutputStream(os);
+        writer.setOutput(ios);
+
+        ImageWriteParam param = writer.getDefaultWriteParam();
+
+        param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+        param.setCompressionQuality(0.2f);
+        writer.write(null, new IIOImage(image, null, null), param);
+
+        os.close();
+        ios.close();
+        writer.dispose();
+        return Files.readAllBytes(compressedImageFile.toPath());
+    }
  
 }
