@@ -255,15 +255,18 @@ public class SaleController extends SkeletonController {
 
 
     @PostMapping(value = "/sales", consumes = {"multipart/form-data"})
-    public String postSales(@RequestParam("file1") MultipartFile file1, @RequestParam("file2") MultipartFile file2, @ModelAttribute(Constants.FORM) @Validated Sales sales, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+    public String postSales(@RequestParam(name = "file1", required = false) MultipartFile file1, @RequestParam(name = "file2", required = false) MultipartFile file2, @ModelAttribute(Constants.FORM) @Validated Sales sales, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             salesInventoryRepository.deleteInBatch(salesInventoryRepository.getSalesInventoriesByActiveTrueAndSales_Id(sales.getId()));
-            List<SalesInventory> salesInventories = new ArrayList<>();
-            for(SalesInventory salesInventory: sales.getSalesInventories()){
-                salesInventories.add(new SalesInventory(salesInventory.getInventory(), sales, salesInventory.getSalesType()));
+            if(sales.getSalesInventories()!=null){
+                List<SalesInventory> salesInventories = new ArrayList<>();
+                for(SalesInventory salesInventory: sales.getSalesInventories()){
+                    salesInventories.add(new SalesInventory(salesInventory.getInventory(), sales, salesInventory.getSalesType()));
+                }
+                sales.setSalesInventories(salesInventories);
             }
-            sales.setSalesInventories(salesInventories);
+
 
             if(sales.getPayment().getCash()){
                 sales.getPayment().setPeriod(null);
@@ -292,12 +295,12 @@ public class SaleController extends SkeletonController {
             Person person = sales.getCustomer().getPerson();
             Dictionary documentType = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("id card", "document-type");
             personDocumentRepository.deleteInBatch(personDocumentRepository.getPersonDocumentsByPersonAndDocumentType(person, documentType));
-            if(file1.getBytes().length>0){
+            if(file1!=null){
                 PersonDocument document1 = new PersonDocument(person, documentType, ImageResizer.compress(file1.getInputStream(), file1.getOriginalFilename()), null, file1.getOriginalFilename());
                 personDocumentRepository.save(document1);
                 log(sales, "common_person_document", "create/edit", document1.getId(), document1.toString());
             }
-            if(file2.getBytes().length>0){
+            if(file2!=null){
                 PersonDocument document2 = new PersonDocument(person, documentType, ImageResizer.compress(file2.getInputStream(), file2.getOriginalFilename()), null, file2.getOriginalFilename());
                 personDocumentRepository.save(document2);
                 log(sales, "common_person_document", "create/edit", document2.getId(), document2.toString());

@@ -361,7 +361,7 @@
                                                 </a>
                                             </c:if>
                                             <c:if test="${view.status}">
-                                                <a href="javascript:sales('view', $('#form'), '<c:out value="${t.id}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
+                                                <a href="javascript:sales('view', $('#form'), '<c:out value="${t.id}" />', 'modal-operation', '<c:out value="${view.object.name}" />', '<c:out value="${t.customer.person.id}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
                                                     <i class="<c:out value="${view.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
@@ -391,7 +391,7 @@
                                                     </a>
                                                     </c:if>
                                                     <c:if test="${edit.status and !t.approve}">
-                                                    <a href="javascript:sales('edit', $('#form'), '<c:out value="${t.id}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="dropdown-item" title="<c:out value="${edit.object.name}"/>">
+                                                    <a href="javascript:sales('edit', $('#form'), '<c:out value="${t.id}" />', 'modal-operation', '<c:out value="${edit.object.name}" />', '<c:out value="${t.customer.person.id}" />');" class="dropdown-item" title="<c:out value="${edit.object.name}"/>">
                                                         <i class="<c:out value="${edit.object.icon}"/>"></i> <c:out value="${edit.object.name}"/>
                                                     </a>
                                                     </c:if>
@@ -812,6 +812,9 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="row" id="image-content">
+
                                     </div>
                                 </div>
                             </div>
@@ -1598,6 +1601,48 @@
         });
     }
 
+    function getImages(form, personId){
+        var content = '';
+        swal.fire({
+            text: 'Proses davam edir...',
+            allowOutsideClick: false,
+            onOpen: function() {
+                swal.showLoading();
+                $.ajax({
+                    url: '/common/api/person/document/'+personId,
+                    type: 'GET',
+                    dataType: 'json',
+                    beforeSend: function() {
+                        $(form).find("#image-content").html('');
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        $.each(data, function( index, value ) {
+                            if(value.fileContent!==""){
+                                content+='<div class="col-6 text-center">' +
+                                    '<img style="max-width: 90%; max-height: 240px" src="data:image/jpeg;base64, '+value.fileContent+'" />' +
+                                    '</div>';
+                            }
+                        });
+                        $(form).find("#image-content").html(content);
+                        swal.close();
+                    },
+                    error: function() {
+                        swal.fire({
+                            title: "Xəta baş verdi!",
+                            html: "Şəkil tapılmadı!",
+                            type: "error",
+                            cancelButtonText: 'Bağla',
+                            cancelButtonColor: '#c40000',
+                            cancelButtonClass: 'btn btn-danger',
+                            footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+                        });
+                    }
+                })
+            }
+        });
+    }
+
     function getInventories(salesId, repeater){
         var content = '';
         swal.fire({
@@ -2003,7 +2048,7 @@
         },
     });
 
-    function sales(oper, form, dataId, modal, modal_title){
+    function sales(oper, form, dataId, modal, modal_title, person_id){
         swal.fire({
             text: 'Proses davam edir...',
             allowOutsideClick: false,
@@ -2023,6 +2068,7 @@
                             edit(form, data, modal, modal_title)
                         }
                         getInventories(dataId, $('#data-repeater-list'));
+                        getImages(form, person_id);
                         swal.close();
                     },
                     error: function() {
