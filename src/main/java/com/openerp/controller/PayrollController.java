@@ -270,7 +270,7 @@ public class PayrollController extends SkeletonController {
             transaction.setSumPrice(sumPrice);
             transaction.setAction(adv.getAdvance());
             transaction.setDescription(transaction.getAction().getName() + ": avans ödənişi, Kod: "+adv.getId() + " -> "
-                    + adv.getEmployee().getPerson().getFullName()
+                    + adv.getEmployee().getPerson().getFullName() + " - - - " + advance.getDescription()
             );
             transactionRepository.save(transaction);
             log(transaction, "accounting_transaction", "create/edit", transaction.getId(), transaction.toString());

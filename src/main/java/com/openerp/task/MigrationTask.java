@@ -4,6 +4,7 @@ import com.openerp.controller.SkeletonController;
 import com.openerp.domain.Address;
 import com.openerp.entity.*;
 import com.openerp.repository.*;
+import com.openerp.util.DateUtility;
 import com.openerp.util.Util;
 import com.openerp.util.UtilJson;
 import org.apache.log4j.Logger;
@@ -399,7 +400,7 @@ public class MigrationTask {
                                 sales.setApproveDate(new Date());
                                 List<ServiceRegulator> serviceRegulators = new ArrayList<>();
                                 for(Dictionary serviceNotification: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("service-notification")){
-                                    serviceRegulators.add(new ServiceRegulator(sales, serviceNotification, sales.getSaleDate()));
+                                    serviceRegulators.add(new ServiceRegulator(sales, serviceNotification, getSRDate(sales.getSaleDate())));
                                 }
                                 sales.setServiceRegulators(serviceRegulators);
                                 salesRepository.save(sales);
@@ -904,6 +905,16 @@ public class MigrationTask {
     private Date getDate(XSSFCell cell){
         try{
             return cell.getDateCellValue();
+        } catch (Exception e){
+        }
+        return null;
+    }
+
+    private Date getSRDate(Date date){
+        try{
+            Date today = new Date();
+            DateUtility.generate(date.getDate(), date.getMonth(), today.getYear());
+            return date;
         } catch (Exception e){
         }
         return null;

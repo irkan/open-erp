@@ -33,6 +33,9 @@ public class TransactionService {
                 if(!transaction.getApprove()){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("approve"), transaction.getApprove())));
                 }
+                if(!transaction.getAccountable()){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("accountable"), transaction.getAccountable())));
+                }
                 if(transaction.getOrganization()!=null && transaction.getOrganization().getId()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("organization"), transaction.getOrganization().getId())));
                 }

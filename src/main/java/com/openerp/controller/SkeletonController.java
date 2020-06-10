@@ -488,7 +488,10 @@ public class SkeletonController {
     void balance(Transaction transaction){
         if(transaction!=null && transaction.getAccount()!=null){
             Account account = accountRepository.getAccountById(transaction.getAccount().getId());
-            double balance = account.getBalance() + Double.parseDouble(Util.format((transaction.getDebt() ? transaction.getSumPrice() : -1 * transaction.getSumPrice())/Util.getRate(currencyRateRepository.getCurrencyRateByCode(account.getCurrency().toUpperCase()))));
+            double balance = account.getBalance();
+            if(transaction.getAccountable()){
+                balance+=Double.parseDouble(Util.format((transaction.getDebt() ? transaction.getSumPrice() : -1 * transaction.getSumPrice())/Util.getRate(currencyRateRepository.getCurrencyRateByCode(account.getCurrency().toUpperCase()))));
+            }
             account.setBalance(balance);
             accountRepository.save(account);
             log(account, "accounting_account", "create/edit", account.getId(), account.toString());

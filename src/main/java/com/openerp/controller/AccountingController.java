@@ -190,6 +190,7 @@ public class AccountingController extends SkeletonController {
                 double sumPrice = Util.amountChecker(trn.getAmount()) * transaction.getPrice() * trn.getRate();
                 trn.setSumPrice(sumPrice);
                 trn.setAccount(transaction.getAccount());
+                trn.setAccountable(transaction.getAccountable());
                 transactionRepository.save(trn);
                 log(trn, "accounting_transaction", "create/edit", trn.getId(), trn.toString());
                 balance(trn);

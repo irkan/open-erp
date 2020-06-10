@@ -38,7 +38,7 @@ public class Transaction {
     @JoinColumn(name = "admin_dictionary_action_id")
     private Dictionary action;
 
-    @Pattern(regexp=".{0,250}",message="Maksimum 250 simvol ola bilər")
+    @Pattern(regexp=".{0,500}",message="Maksimum 500 simvol ola bilər")
     @Column(name = "description")
     private String description;
 
@@ -96,6 +96,9 @@ public class Transaction {
     @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
     @Column(name = "created_date", nullable = false)
     private Date createdDate = new Date();
+
+    @Column(name = "is_accountable", nullable = false, columnDefinition="boolean default true")
+    private Boolean accountable = true;
 
     @ToString.Exclude
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

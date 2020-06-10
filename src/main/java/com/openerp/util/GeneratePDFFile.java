@@ -193,7 +193,8 @@ public class GeneratePDFFile {
                                     .setHorizontalAlignment(HorizontalAlignment.RIGHT);
                             table.addCell(cell);
 
-                            if(invoice.getSales().getCustomer().getPerson().getContact().getLivingAddress().trim().length()>0){
+                            if(invoice.getSales().getCustomer().getPerson().getContact().getLivingAddress()!=null &&
+                                    invoice.getSales().getCustomer().getPerson().getContact().getLivingAddress().trim().length()>0){
                                 cell = new Cell(1, 1)
                                         .setFont(timesbd)
                                         .setBorder(Border.NO_BORDER)

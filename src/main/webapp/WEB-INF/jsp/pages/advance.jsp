@@ -227,7 +227,7 @@
                     </a>
                 </c:if>
                 <c:if test="${transfer.status and t.approve and !t.transaction}">
-                    <a href="javascript:transfer($('#advance-transfer-form'), $('#advance-transfer-modal'), '<c:out value="${t.id}" />', '<c:out value="${t.payed}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
+                    <a href="javascript:transfer($('#advance-transfer-form'), $('#advance-transfer-modal'), '<c:out value="${t.id}" />', '<c:out value="${t.payed}" />', '<c:out value="${t.description}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
                         <i class="<c:out value="${transfer.object.icon}"/>"></i>
                     </a>
                 </c:if>
@@ -393,17 +393,17 @@
                 <form:form modelAttribute="form" id="advance-transfer-form" method="post" action="/payroll/advance/transfer" cssClass="form-group">
                     <form:hidden path="id"/>
                     <div class="form-group">
-                        <form:label path="description">Açıqlama</form:label>
-                        <form:textarea path="description" cssClass="form-control"/>
-                        <form:errors path="description" cssClass="alert-danger control-label"/>
-                    </div>
-                    <div class="form-group">
                         <form:label path="payed">Məbləğ</form:label>
                         <div class="input-group">
                             <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
                             <form:input path="payed" cssClass="form-control" placeholder="Məbləği daxil edin" readonly="true"/>
                         </div>
                         <form:errors path="payed" cssClass="alert-danger control-label"/>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="description">Açıqlama</form:label>
+                        <form:textarea path="description" cssClass="form-control" rows="4"/>
+                        <form:errors path="description" cssClass="alert-danger control-label"/>
                     </div>
                 </form:form>
             </div>
@@ -459,9 +459,10 @@
         $(modal).modal('toggle');
     }
 
-    function transfer(form, modal, id, payed){
+    function transfer(form, modal, id, payed, description){
         $(form).find("#id").val(id);
         $(form).find("#payed").val(payed);
+        $(form).find("textarea[name='description']").val(description);
         $(modal).find(".modal-title").html('Tranzaksiya et!');
         $(modal).modal('toggle');
     }

@@ -124,6 +124,14 @@
                                                 </label>
                                             </div>
                                         </div>
+                                        <div class="col-md-2" style="padding-top: 30px;">
+                                            <div class="form-group">
+                                                <label class="kt-checkbox kt-checkbox--brand">
+                                                    <form:checkbox path="accountable"/> Hesablananlar
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-1 text-right">
@@ -210,8 +218,8 @@
                                             </c:choose>
                                             </div>
                                         </td>
-                                        <td>
-                                            <div style="width: 90px;">
+                                        <td class="<c:out value="${!t.accountable?'kt-bg-info kt-font-bold kt-font-light':''}"/>">
+                                            <div style="width: 93px;">
                                                 <span><c:out value="${t.balance}" /></span>
                                                 <span class="kt-font-bold font-italic font-size-10px"><c:out value="${t.account.currency}" /></span>
                                             </div>
@@ -313,7 +321,7 @@
                     </div>
                     <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>
-                        <form:textarea path="description" cssClass="form-control" />
+                        <form:textarea path="description" cssClass="form-control" rows="4"/>
                         <form:errors path="description" cssClass="alert-danger control-label"/>
                     </div>
                 </form:form>
@@ -327,7 +335,7 @@
 </div>
 
 <div class="modal fade" id="transaction-approve-modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"></h5>
@@ -338,21 +346,31 @@
             <div class="modal-body">
                 <form:form modelAttribute="form" id="transaction-approve-form" method="post" action="/accounting/transaction/approve" cssClass="form-group">
                     <form:hidden path="id"/>
-                    <div class="form-group">
-                        <form:label path="account">Hesab</form:label>
-                        <form:select  path="account" cssClass="custom-select form-control">
-                            <form:option value=""></form:option>
-                            <form:options items="${accounts}" itemLabel="accountNumberWithCurrency" itemValue="id" />
-                        </form:select>
-                        <form:errors path="account" cssClass="alert-danger control-label"/>
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="form-group">
+                                <form:label path="account">Hesab</form:label>
+                                <form:select  path="account" cssClass="custom-select form-control">
+                                    <form:option value=""></form:option>
+                                    <form:options items="${accounts}" itemLabel="accountNumberWithCurrency" itemValue="id" />
+                                </form:select>
+                                <form:errors path="account" cssClass="alert-danger control-label"/>
+                            </div>
+                        </div>
+                        <div class="col-4 pt-4">
+                            <label class="kt-checkbox kt-checkbox--brand" style="margin-top: 10px;">
+                                <form:checkbox path="accountable"/> Hesablansınmı?
+                                <span></span>
+                            </label>
+                        </div>
                     </div>
                     <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>
-                        <form:textarea path="description" cssClass="form-control"/>
+                        <form:textarea path="description" cssClass="form-control" rows="4"/>
                         <form:errors path="description" cssClass="alert-danger control-label"/>
                     </div>
                     <div class="row">
-                        <div class="col-sm-8">
+                        <div class="col-7">
                             <div class="form-group">
                                 <form:label path="price">Qiyməti</form:label>
                                 <div class="input-group" >
@@ -362,7 +380,7 @@
                                 <form:errors path="price" cssClass="alert-danger control-label"/>
                             </div>
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-5">
                             <div class="form-group">
                                 <form:label path="currency">&nbsp;</form:label>
                                 <form:select  path="currency" cssClass="custom-select form-control">
@@ -372,8 +390,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label>Digər xərclər varmı?</label>
+                    <div class="form-group text-center border-1 bg-light border-dark">
+                        <label class="font-weight-bold p-2">Digər xərclər varmı?</label>
                         <div class="row mt-1">
                             <div class="col-md-12">
                                 <c:forEach var="t" items="${expenses}" varStatus="loop">
