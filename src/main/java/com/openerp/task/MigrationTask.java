@@ -913,9 +913,13 @@ public class MigrationTask {
     private Date getSRDate(Date date){
         try{
             Date today = new Date();
-            DateUtility.generate(date.getDate(), date.getMonth(), today.getYear());
-            return date;
+            Date generateDate = DateUtility.generate(date.getDate(), date.getMonth(), today.getYear()+1900);
+            if(generateDate.getTime()>today.getTime()){
+                generateDate = DateUtility.addMonth(generateDate, -12);
+            }
+            return generateDate;
         } catch (Exception e){
+            log.error(e.getMessage(), e);
         }
         return null;
     }
