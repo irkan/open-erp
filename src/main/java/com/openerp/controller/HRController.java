@@ -48,9 +48,9 @@ public class HRController extends SkeletonController {
             model.addAttribute(Constants.ORGANIZATIONS, organizationRepository.getOrganizationsByActiveTrue());
             List<Employee> employees;
             if(canViewAll()){
-                employees = employeeRepository.getEmployeesByContractEndDateIsNullAndActiveTrue();
+                employees = employeeRepository.getEmployeesByActiveTrueOrderByContractEndDate();
             } else {
-                employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganizationAndActiveTrue(getSessionOrganization());
+                employees = employeeRepository.getEmployeesByOrganizationAndActiveTrueOrderByContractEndDate(getSessionOrganization());
             }
             model.addAttribute(Constants.LIST, employees);
             if(!model.containsAttribute(Constants.FORM)){

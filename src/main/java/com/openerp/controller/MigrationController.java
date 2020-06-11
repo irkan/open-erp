@@ -344,11 +344,11 @@ public class MigrationController extends SkeletonController {
                     person.getLastName()!=null && 
                     person.getFirstName().trim().length()>0 && 
                     person.getLastName().trim().length()>0){
-                employees = employeeRepository.getEmployeesByPersonFirstNameStartingWithAndPersonLastNameStartingWithAndOrganization(person.getFirstName(), person.getLastName(), organization);
+                employees = employeeRepository.getEmployeesByPersonFirstNameStartingWithAndPersonLastNameStartingWithAndOrganizationAndActiveTrue(person.getFirstName(), person.getLastName(), organization);
             } else if(employees.size()==0 &&
                     person.getFirstName()!=null &&
                     person.getFirstName().trim().length()>0){
-                employees = employeeRepository.getEmployeesByPersonFirstNameStartingWithAndOrganization(person.getFirstName(), organization);
+                employees = employeeRepository.getEmployeesByPersonFirstNameStartingWithAndOrganizationAndActiveTrue(person.getFirstName(), organization);
             }
             return employees.size()>0?employees.get(0):null;
         } catch (Exception e){

@@ -46,6 +46,10 @@ public class Employee {
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date contractEndDate;
 
+    @Pattern(regexp=".{0,250}", message="Maksimum 250 simvol ola bilər")
+    @Column(name = "leave_reason")
+    private String leaveReason;
+
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "hr_organization_id", nullable = false)
     private Organization organization;

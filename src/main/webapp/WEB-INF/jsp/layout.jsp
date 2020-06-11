@@ -129,9 +129,13 @@
                     } else if($(element).attr("type")==="radio"){
                         $("input[name='"+$(element).attr("name")+"'][value='"+value.id+"']").prop('checked', true);
                     } else if($(element).attr("date_")==='date_') {
-                        $(element).val(getFormattedDate(new Date(value)));
+                        if(value!==null){
+                            $(element).val(getFormattedDate(new Date(value)));
+                        }
                     } else if($(element).attr("date_")==='datetime_') {
-                        $(element).val(getFormattedDateTime(new Date(value)));
+                        if(value!==null){
+                            $(element).val(getFormattedDateTime(new Date(value)));
+                        }
                     }  else {
                         if($.type(value) !== "undefined" && $.type(value.id) !== "undefined"){
                             value = value.id;

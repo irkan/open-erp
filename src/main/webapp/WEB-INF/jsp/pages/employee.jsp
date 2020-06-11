@@ -245,25 +245,42 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
+                                        <form:label path="contractEndDate">İşdən ayrılma tarixi</form:label>
+                                        <div class="input-group date" >
+                                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
+                                            <form:input path="contractEndDate" autocomplete="off" date_="date_" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
+                                        </div>
+                                        <form:errors path="contractEndDate" cssClass="control-label alert-danger" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <form:label path="leaveReason">İşdən ayrılma səbəbi</form:label>
+                                        <form:input path="leaveReason" cssClass="form-control" placeholder=""/>
+                                        <form:errors path="leaveReason" cssClass="control-label alert-danger" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <form:label path="socialCardNumber">Sosial kart nömrəsi</form:label>
+                                        <form:input path="socialCardNumber" cssClass="form-control" placeholder="Daxil edin"/>
+                                        <form:errors path="socialCardNumber" cssClass="control-label alert-danger" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
                                         <form:label path="bankAccountNumber">Bank hesab nömrəsi</form:label>
                                         <form:input path="bankAccountNumber" cssClass="form-control" placeholder="Daxil edin"/>
                                         <form:errors path="bankAccountNumber" cssClass="control-label alert-danger" />
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <form:label path="bankCardNumber">Bank kart nömrəsi</form:label>
                                         <form:input path="bankCardNumber" cssClass="form-control" placeholder="Daxil edin"/>
                                         <form:errors path="bankCardNumber" cssClass="control-label alert-danger" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <form:label path="socialCardNumber">Sosial kart nömrəsi</form:label>
-                                        <form:input path="socialCardNumber" cssClass="form-control" placeholder="Daxil edin"/>
-                                        <form:errors path="socialCardNumber" cssClass="control-label alert-danger" />
                                     </div>
                                 </div>
                             </div>
@@ -284,7 +301,7 @@
                                 <div class="col-md-5">
                                     <div class="form-group">
                                         <label class="kt-checkbox kt-checkbox--brand">
-                                            <form:checkbox path="person.disability"/> Əlillik varmı?
+                                            <form:checkbox path="person.disability"/> Əlillik var
                                             <span></span>
                                         </label>
                                     </div>
@@ -292,7 +309,7 @@
                                 <div class="col-md-7">
                                     <div class="form-group">
                                         <label class="kt-checkbox kt-checkbox--brand">
-                                            <form:checkbox path="specialistOrManager"/> Mütəxəsis və ya rəhbərdirmi?
+                                            <form:checkbox path="specialistOrManager"/> Mütəxəsis və ya rəhbər
                                             <span></span>
                                         </label>
                                     </div>
