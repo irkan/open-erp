@@ -42,7 +42,7 @@
     </thead>
     <tbody>
     <c:forEach var="t" items="${list}" varStatus="loop">
-        <tr data="<c:out value="${utl:toJson(t)}" />">
+        <tr data="<c:out value="${t.id}" />">
             <td>${loop.index + 1}</td>
             <td><c:out value="${t.id}" /></td>
             <td><c:out value="${t.organization.name}" /></td>
@@ -69,12 +69,12 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">
                         <c:if test="${payroll.status}">
-                            <a href="javascript:edit($('#form-payroll'), '<c:out value="${utl:toJson(t)}" />', 'modal-payroll', '<c:out value="${payroll.object.name}" />');" class="dropdown-item" title="<c:out value="${payroll.object.name}"/>">
+                            <a href="javascript:employee('edit', $('#form-payroll'), '<c:out value="${t.id}" />', 'modal-payroll', '<c:out value="${payroll.object.name}" />');" class="dropdown-item" title="<c:out value="${payroll.object.name}"/>">
                                 <i class="<c:out value="${payroll.object.icon}"/>"></i> <c:out value="${payroll.object.name}"/>
                             </a>
                         </c:if>
                         <c:if test="${sale.status}">
-                            <a href="javascript:edit($('#form-sale'), '<c:out value="${utl:toJson(t)}" />', 'modal-sale', '<c:out value="${sale.object.name}" />');" class="dropdown-item" title="<c:out value="${sale.object.name}"/>">
+                            <a href="javascript:employee('edit', $('#form-sale'), '<c:out value="${t.id}" />', 'modal-sale', '<c:out value="${sale.object.name}" />');" class="dropdown-item" title="<c:out value="${sale.object.name}"/>">
                                 <i class="<c:out value="${sale.object.icon}"/>"></i> <c:out value="${sale.object.name}"/>
                             </a>
                         </c:if>
@@ -86,12 +86,12 @@
                     </div>
                 </span>
                 <c:if test="${view.status}">
-                    <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
+                    <a href="javascript:employee('view', $('#form'), '<c:out value="${t.id}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
                         <i class="<c:out value="${view.object.icon}"/>"></i>
                     </a>
                 </c:if>
                 <c:if test="${edit.status}">
-                    <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                    <a href="javascript:employee('edit', $('#form'), '<c:out value="${t.id}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
                         <i class="<c:out value="${edit.object.icon}"/>"></i>
                     </a>
                 </c:if>
@@ -563,7 +563,7 @@
     }
     $('#group_table tbody').on('dblclick', 'tr', function () {
         <c:if test="${view.status}">
-        view($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${view.object.name}" />');
+            employee('view', $('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${view.object.name}" />');
         </c:if>
     });
 
@@ -684,4 +684,41 @@
             swal.close();
         },
     });
+
+    function employee(oper, form, dataId, modal, modal_title){
+        swal.fire({
+            text: 'Proses davam edir...',
+            allowOutsideClick: false,
+            onOpen: function() {
+                swal.showLoading();
+                $.ajax({
+                    url: '/hr/api/employee/'+dataId,
+                    type: 'GET',
+                    dataType: 'text',
+                    beforeSend: function() {
+
+                    },
+                    success: function(data) {
+                        if(oper==="view"){
+                            view(form, data, modal, modal_title)
+                        } else if(oper==="edit"){
+                            edit(form, data, modal, modal_title)
+                        }
+                        swal.close();
+                    },
+                    error: function() {
+                        swal.fire({
+                            title: "Xəta",
+                            html: "Xəta baş verdi!",
+                            type: "error",
+                            cancelButtonText: 'Bağla',
+                            cancelButtonColor: '#c40000',
+                            cancelButtonClass: 'btn btn-danger',
+                            footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+                        });
+                    }
+                })
+            }
+        });
+    }
 </script>

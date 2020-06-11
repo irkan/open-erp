@@ -9,6 +9,7 @@ import com.openerp.util.Util;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.*;
@@ -482,6 +483,12 @@ public class HRController extends SkeletonController {
             }
         }
         return binding;
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/api/employee/{dataId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Employee getEmployee(@PathVariable("dataId") Integer dataId){
+        return employeeRepository.getEmployeeById(dataId);
     }
 
 
