@@ -386,6 +386,11 @@ public class SaleController extends SkeletonController {
             FieldError fieldError = new FieldError("", "", "Təsdiq əməliyyatı " + sales.getVanLeader().getPerson().getFullName() + " tərəfindən edilməlidir!");
             binding.addError(fieldError);
         }
+        if(sales.getApprove()){
+            List<Log> logs = logRepository.getLogsByActiveTrueAndTableNameAndRowIdAndOperationOrderByIdDesc("sale_sales", sales.getId(), "approve");
+            FieldError fieldError = new FieldError("", "", "Təsdiq əməliyyatı"+(logs.size()>0?(" "+logs.get(0).getUsername() + " tərəfindən " + DateUtility.getFormattedDateTime(logs.get(0).getOperationDate()) + " tarixində "):" ")+"icra edilmişdir!");
+            binding.addError(fieldError);
+        }
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             for(SalesInventory salesInventory: sales.getSalesInventories()){
@@ -568,6 +573,11 @@ public class SaleController extends SkeletonController {
             FieldError fieldError = new FieldError("", "", "Yığımçı təyin edilməlidir!");
             binding.addError(fieldError);
         }*/
+        if(invc.getApprove()){
+            List<Log> logs = logRepository.getLogsByActiveTrueAndTableNameAndRowIdAndOperationOrderByIdDesc("sale_invoice", invc.getId(), "approve");
+            FieldError fieldError = new FieldError("", "", "Təsdiq əməliyyatı"+(logs.size()>0?(" "+logs.get(0).getUsername() + " tərəfindən " + DateUtility.getFormattedDateTime(logs.get(0).getOperationDate()) + " tarixində "):" ")+"icra edilmişdir!");
+            binding.addError(fieldError);
+        }
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()) {
             invc.setApprove(true);

@@ -6,6 +6,7 @@ import com.openerp.repository.ActionRepository;
 import com.openerp.repository.InventoryRepository;
 import com.openerp.repository.TransactionRepository;
 import com.openerp.util.Constants;
+import com.openerp.util.DateUtility;
 import com.openerp.util.Util;
 import lombok.extern.log4j.Log4j;
 import org.springframework.data.domain.Page;
@@ -179,10 +180,16 @@ public class AccountingController extends SkeletonController {
 
     @PostMapping(value = "/transaction/approve")
     public String postTransactionApprove(@ModelAttribute(Constants.FORM) @Validated Transaction transaction, BindingResult binding, RedirectAttributes redirectAttributes, @RequestParam(name = "expense", required = false) int[] expenses) throws Exception {
+        Transaction trn = transactionRepository.getTransactionById(transaction.getId());
+        if(trn.getApprove()){
+            List<Log> logs = logRepository.getLogsByActiveTrueAndTableNameAndRowIdAndOperationOrderByIdDesc("accounting_transaction", trn.getId(), "approve");
+            FieldError fieldError = new FieldError("", "", "Təsdiq əməliyyatı"+(logs.size()>0?(" "+logs.get(0).getUsername() + " tərəfindən " + DateUtility.getFormattedDateTime(logs.get(0).getOperationDate()) + " tarixində "):" ")+"icra edilmişdir!");
+            binding.addError(fieldError);
+        }
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()) {
-            Transaction trn = transactionRepository.getTransactionById(transaction.getId());
-            if (trn.getOrganization().getId() == Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getId()){ trn.setApprove(true);
+            if (trn.getOrganization().getId() == Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getId()){
+                trn.setApprove(true);
                 trn.setApproveDate(new Date());
                 trn.setPrice(transaction.getPrice());
                 trn.setCurrency(transaction.getCurrency());
@@ -192,7 +199,7 @@ public class AccountingController extends SkeletonController {
                 trn.setAccount(transaction.getAccount());
                 trn.setAccountable(transaction.getAccountable());
                 transactionRepository.save(trn);
-                log(trn, "accounting_transaction", "create/edit", trn.getId(), trn.toString());
+                log(trn, "accounting_transaction", "approve", trn.getId(), trn.toString());
                 balance(trn);
 
                 if (expenses != null) {

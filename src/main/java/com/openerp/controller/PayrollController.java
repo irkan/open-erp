@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -242,8 +243,13 @@ public class PayrollController extends SkeletonController {
 
     @PostMapping(value = "/advance/approve")
     public String postAdvanceApprove(@ModelAttribute(Constants.FORM) @Validated Advance advance, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        Advance adv = advanceRepository.getAdvanceById(advance.getId());
+        if(adv.getApprove()){
+            List<Log> logs = logRepository.getLogsByActiveTrueAndTableNameAndRowIdAndOperationOrderByIdDesc("payroll_advance", adv.getId(), "approve");
+            FieldError fieldError = new FieldError("", "", "Təsdiq əməliyyatı"+(logs.size()>0?(" "+logs.get(0).getUsername() + " tərəfindən " + DateUtility.getFormattedDateTime(logs.get(0).getOperationDate()) + " tarixində "):" ")+"icra edilmişdir!");
+            binding.addError(fieldError);
+        }
         if(!binding.hasErrors()){
-            Advance adv = advanceRepository.getAdvanceById(advance.getId());
             adv.setDescription(advance.getDescription());
             adv.setPayed(advance.getPayed());
             adv.setApprove(true);
