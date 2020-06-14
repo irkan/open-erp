@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -237,5 +238,11 @@ public class CollectController extends SkeletonController {
             }
         }
         return mapPost(serviceTask, binding, redirectAttributes, "/collect/service-task");
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/api/contact-history/{dataId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ContactHistory getContactHistory(@PathVariable("dataId") Integer dataId){
+        return contactHistoryRepository.getContactHistoryById(dataId);
     }
 }

@@ -73,6 +73,10 @@ public class MigrationTask {
     @Autowired
     AccountRepository accountRepository;
 
+    @Autowired
+    ContactHistoryRepository contactHistoryRepository;
+
+
     @Scheduled(fixedDelay = 1000000, initialDelay = 5000)
     public void writeTable() {
         try{
@@ -269,6 +273,12 @@ public class MigrationTask {
         try{
             log.info("Migration Task Start Sales Migration");
             if (migration.getOperationType().equalsIgnoreCase("satış")){
+                List<Dictionary> serviceNotifications = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("service-notification");
+                Dictionary sell = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sell", "action");
+                Dictionary salesType = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sales", "sales-type");
+                Dictionary consolidateAction = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("consolidate", "action");
+                Dictionary buyAction = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("buy", "action");
+                Dictionary inventoryGroup = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("filters", "inventory-group");
                 int i = 1;
                 for(MigrationDetail md: migration.getMigrationDetails()){
                     System.gc();
@@ -303,7 +313,7 @@ public class MigrationTask {
                                     inventory.setOrganization(migration.getOrganization());
                                     inventory.setOld(false);
                                     inventory.setName(inventoryName);
-                                    inventory.setGroup(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("filters", "inventory-group"));
+                                    inventory.setGroup(inventoryGroup);
                                     inventory.setBarcode(Util.generateBarcode(inventory.getGroup().getId()));
                                     inventory.setInventoryDate(new Date());
                                     inventoryRepository.save(inventory);
@@ -311,7 +321,7 @@ public class MigrationTask {
 
                                 Action buy = new Action();
                                 buy.setInventory(inventory);
-                                buy.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("buy", "action"));
+                                buy.setAction(buyAction);
                                 buy.setOrganization(inventory.getOrganization());
                                 buy.setAmount(1);
                                 buy.setSupplier(migration.getSupplier());
@@ -320,7 +330,7 @@ public class MigrationTask {
                                 Action consolidate = new Action();
                                 consolidate.setOld(buy.getOld());
                                 consolidate.setInventory(buy.getInventory());
-                                consolidate.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("consolidate", "action"));
+                                consolidate.setAction(consolidateAction);
                                 consolidate.setSupplier(buy.getSupplier());
                                 consolidate.setOrganization(buy.getOrganization());
                                 consolidate.setEmployee(vanLeader);
@@ -342,7 +352,7 @@ public class MigrationTask {
                                 SalesInventory si = new SalesInventory();
                                 si.setInventory(inventory);
                                 si.setSales(sales);
-                                si.setSalesType(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sales", "sales-type"));
+                                si.setSalesType(salesType);
                                 List<SalesInventory> sis = new ArrayList<>();
                                 sis.add(si);
                                 sales.setSalesInventories(sis);
@@ -382,7 +392,7 @@ public class MigrationTask {
                                     List<Action> oldActions = actionRepository.getActionsByActiveTrueAndInventory_ActiveAndInventoryAndEmployeeAndAction_Attr1AndAmountGreaterThanOrderById(true, salesInventory.getInventory(), vanLeader, "consolidate", 0);
                                     if(oldActions.size()>0){
                                         Action action = new Action();
-                                        action.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sell", "action"));
+                                        action.setAction(sell);
                                         action.setAmount(1);
                                         action.setInventory(salesInventory.getInventory());
                                         action.setOrganization(sales.getOrganization());
@@ -399,13 +409,26 @@ public class MigrationTask {
                                 sales.setApprove(true);
                                 sales.setApproveDate(new Date());
                                 List<ServiceRegulator> serviceRegulators = new ArrayList<>();
-                                for(Dictionary serviceNotification: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("service-notification")){
+                                for(Dictionary serviceNotification: serviceNotifications){
                                     serviceRegulators.add(new ServiceRegulator(sales, serviceNotification, getSRDate(sales.getSaleDate())));
                                 }
                                 sales.setServiceRegulators(serviceRegulators);
                                 salesRepository.save(sales);
 
-                                Dictionary sell = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sell", "action");
+
+                                if(sales!=null &&
+                                        sales.getPayment()!=null &&
+                                        sales.getPayment().getDescription()!=null &&
+                                        sales.getPayment().getDescription().length()>1 &&
+                                        sales.getId()!=null){
+                                    ContactHistory contactHistory = new ContactHistory();
+                                    contactHistory.setSales(sales);
+                                    contactHistory.setDescription(sales.getPayment().getDescription());
+                                    contactHistory.setOrganization(sales.getOrganization());
+                                    contactHistoryRepository.save(contactHistory);
+                                }
+
+
                                 if(payment.getDown()>0){
                                     Invoice invoice = new Invoice();
                                     invoice.setSales(sales);
@@ -631,6 +654,7 @@ public class MigrationTask {
                                 }
                                 sales.setServiceRegulators(serviceRegulators);
                                 salesRepository.save(sales);
+
 
                                 Dictionary sell = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sell", "action");
                                 if(payment.getDown()>0){
@@ -913,15 +937,21 @@ public class MigrationTask {
     private Date getSRDate(Date date){
         try{
             Date today = new Date();
-            Date generateDate = DateUtility.generate(date.getDate(), date.getMonth(), today.getYear()+1900);
-            if(generateDate.getTime()>today.getTime()){
-                generateDate = DateUtility.addMonth(generateDate, -12);
+
+            if(today.getTime()-date.getTime()<31449600000l){
+                return date;
+            } else {
+                Date generateDate = DateUtility.generate(date.getDate(), date.getMonth(), today.getYear()+1900);
+                if(generateDate.getTime()>today.getTime()){
+                    return DateUtility.addMonth(generateDate, -12);
+                } else{
+                    return generateDate;
+                }
             }
-            return generateDate;
         } catch (Exception e){
             log.error(e.getMessage(), e);
         }
-        return null;
+        return date;
     }
 
     private Integer getInteger(XSSFCell cell){

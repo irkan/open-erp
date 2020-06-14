@@ -137,6 +137,7 @@
                     <c:choose>
                         <c:when test="${not empty list}">
                             <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
+                            <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
                                 <thead>
                                 <tr>
@@ -152,17 +153,22 @@
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${list.content}" varStatus="loop">
-                                    <tr data="<c:out value="${utl:toJson(t)}" />">
+                                    <tr data="<c:out value="${t.id}"/>">
                                         <td>${loop.index + 1}</td>
                                         <td><c:out value="${t.id}"/></td>
                                         <td><c:out value="${t.sales.id}"/></td>
                                         <td><c:out value="${t.contactChannel.name}"/></td>
                                         <td><fmt:formatDate value = "${t.createdDate}" pattern = "dd.MM.yyyy" /></td>
                                         <td><fmt:formatDate value = "${t.nextContactDate}" pattern = "dd.MM.yyyy" /></td>
-                                        <td><c:out value="${t.description}"/></td>
+                                        <td style="max-width: 500px"><c:out value="${t.description}"/></td>
                                         <td nowrap class="text-center">
+                                            <c:if test="${view.status}">
+                                                <a href="javascript:contactHistory('view', $('#form'), '<c:out value="${t.id}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
+                                                    <i class="<c:out value="${view.object.icon}"/>"></i>
+                                                </a>
+                                            </c:if>
                                             <c:if test="${edit.status}">
-                                                <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                                                <a href="javascript:contactHistory('edit', $('#form'), '<c:out value="${t.id}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
                                                     <i class="<c:out value="${edit.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
@@ -231,7 +237,7 @@
                     </div>
                     <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>
-                        <form:textarea path="description" cssClass="form-control"/>
+                        <form:textarea path="description" cssClass="form-control" rows="5"/>
                         <form:errors path="description" cssClass="control-label alert-danger" />
                     </div>
                 </form:form>
@@ -245,9 +251,9 @@
 </div>
 
 <script>
-    <c:if test="${edit.status}">
+    <c:if test="${view.status}">
     $('#datatable tbody').on('dblclick', 'tr', function () {
-        edit($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
+        contactHistory('view', $('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${view.object.name}" />');
     });
     </c:if>
 
@@ -280,6 +286,43 @@
             swal.close();
         },
     })
+
+    function contactHistory(oper, form, dataId, modal, modal_title){
+        swal.fire({
+            text: 'Proses davam edir...',
+            allowOutsideClick: false,
+            onOpen: function() {
+                swal.showLoading();
+                $.ajax({
+                    url: '/collect/api/contact-history/'+dataId,
+                    type: 'GET',
+                    dataType: 'text',
+                    beforeSend: function() {
+
+                    },
+                    success: function(data) {
+                        if(oper==="view"){
+                            view(form, data, modal, modal_title)
+                        } else if(oper==="edit"){
+                            edit(form, data, modal, modal_title)
+                        }
+                        swal.close();
+                    },
+                    error: function() {
+                        swal.fire({
+                            title: "Xəta",
+                            html: "Xəta baş verdi!",
+                            type: "error",
+                            cancelButtonText: 'Bağla',
+                            cancelButtonColor: '#c40000',
+                            cancelButtonClass: 'btn btn-danger',
+                            footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+                        });
+                    }
+                })
+            }
+        });
+    }
 </script>
 
 

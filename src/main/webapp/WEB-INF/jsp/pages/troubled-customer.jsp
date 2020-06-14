@@ -136,7 +136,7 @@
                                                     Qrafik üzrə: <c:out value="${t.payment.schedulePrice}" /><br/>
                                                 </c:if>
                                             </th>
-                                            <td>
+                                            <td style="max-width: 300px">
                                                 <c:if test="${t.contactHistories.size()>0}">
                                                     <c:set var="ch" value="${t.contactHistories.get(t.contactHistories.size()-1)}"/>
                                                     <fmt:formatDate value = "${ch.createdDate}" pattern = "dd.MM.yyyy" /> -

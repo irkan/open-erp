@@ -31,7 +31,6 @@ public class ContactHistory {
     private Organization organization;
 
     @ToString.Exclude
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sale_sales_id")
     private Sales sales;
@@ -40,7 +39,7 @@ public class ContactHistory {
     @JoinColumn(name = "admin_dictionary_contact_channel_id")
     private Dictionary contactChannel;
 
-    @Pattern(regexp=".{2,255}",message="Minimum 2 maksimum 255 simvol ola bilər")
+    @Lob
     @Column(name = "description")
     private String description;
 
