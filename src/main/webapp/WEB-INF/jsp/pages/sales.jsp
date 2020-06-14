@@ -316,9 +316,6 @@
                                             <c:if test="${not empty t.payment.discount}">
                                                 Endirim: <c:out value="${t.payment.discount}" /><br/>
                                             </c:if>
-                                            <c:if test="${not empty t.payment.description}">
-                                                Səbəbi: <c:out value="${fn:substring(t.payment.description, 0, 50)}" /><br/>
-                                            </c:if>
                                             <c:if test="${t.payment.down>0}">
                                                 İlkin ödəniş: <c:out value="${t.payment.down}" /><br/>
                                             </c:if>

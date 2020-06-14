@@ -175,7 +175,6 @@ public class CollectController extends SkeletonController {
     @PostMapping(value = "/service-task/transfer")
     public String postServiceRegulatorTransfer(@ModelAttribute(Constants.FORM) @Validated ServiceTask serviceTask, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(null, Constants.TEXT.SUCCESS));
-
         if(!binding.hasErrors()){
             Date today = new Date();
             Configuration configuration = configurationRepository.getConfigurationByKey("service");
@@ -230,19 +229,38 @@ public class CollectController extends SkeletonController {
                 service.setGuaranteeExpire(Util.guarantee(new Date(), service.getGuarantee()));
                 Payment payment = new Payment();
                 payment.setCash(true);
+                payment.setLastPrice(payment.getPrice());
                 payment.setDescription(description);
                 service.setPayment(payment);
                 salesRepository.save(service);
 
                 log(service, "sale_sales", "create/edit", service.getId(), service.toString(), "Servis Requlyatordan Servis yaradıldı");
+
+                addContactHistory(sales, description, service);
             }
         }
         return mapPost(serviceTask, binding, redirectAttributes, "/collect/service-task");
+    }
+
+    @PostMapping(value = "/service-task/filter")
+    public String postServiceTaskFilter(@ModelAttribute(Constants.FILTER) @Validated ServiceTask serviceTask, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        return mapFilter(serviceTask, binding, redirectAttributes, "/collect/service-task");
+    }
+
+    @PostMapping(value = "/contact-history/filter")
+    public String postContactHistoryFilter(@ModelAttribute(Constants.FILTER) @Validated ContactHistory contactHistory, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        return mapFilter(contactHistory, binding, redirectAttributes, "/collect/contact-history");
     }
 
     @ResponseBody
     @GetMapping(value = "/api/contact-history/{dataId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ContactHistory getContactHistory(@PathVariable("dataId") Integer dataId){
         return contactHistoryRepository.getContactHistoryById(dataId);
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/api/service-task/{dataId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ServiceTask getServiceTask(@PathVariable("dataId") Integer dataId){
+        return serviceTaskRepository.getServiceTaskById(dataId);
     }
 }

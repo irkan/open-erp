@@ -31,6 +31,7 @@ public class ContactHistory {
     private Organization organization;
 
     @ToString.Exclude
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sale_sales_id")
     private Sales sales;
@@ -53,6 +54,11 @@ public class ContactHistory {
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date nextContactDateFrom;
+
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "sale_child_sales_id")
+    private Sales childSales;
 
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;

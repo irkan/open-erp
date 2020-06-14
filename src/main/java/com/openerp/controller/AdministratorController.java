@@ -626,7 +626,6 @@ public class AdministratorController extends SkeletonController {
             migrationTask.writeTable();
         } else if(mg.getOperationType().equalsIgnoreCase("servis")){
             migrationDetailServiceRegulatorRepository.deleteAll(migrationDetailServiceRegulatorRepository.getMigrationDetailServiceRegulatorsByMigrationId(mg.getId()));
-            migrationTask.writeTableServiceRegulator();
         }
         return mapPost(mg, binding, redirectAttributes, "/admin/migration");
     }

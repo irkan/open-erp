@@ -36,6 +36,9 @@ public class ContactHistoryService {
                 if(contactHistory.getSales()!=null && contactHistory.getSales().getId()!=null) {
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("sales"), contactHistory.getSales().getId())));
                 }
+                if(contactHistory.getChildSales()!=null && contactHistory.getChildSales().getId()!=null) {
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("childSales"), contactHistory.getChildSales().getId())));
+                }
                 if(contactHistory.getContactChannel()!=null && contactHistory.getContactChannel().getId()!=null) {
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("contactChannel"), contactHistory.getContactChannel().getId())));
                 }

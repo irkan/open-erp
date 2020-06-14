@@ -32,7 +32,7 @@
                 </div>
                 <div id="filterContent" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionFilter">
                     <div class="card-body">
-                        <form:form modelAttribute="filter" id="filter" method="post" action="/sale/service-regulator/filter">
+                        <form:form modelAttribute="filter" id="filter" method="post" action="/collect/service-task/filter">
                             <form:hidden path="organization" />
                             <div class="row">
                                 <div class="col-md-11">
@@ -121,12 +121,13 @@
                                 <tr>
                                     <th>Task #</th>
                                     <th>Satış nömrəsi</th>
-                                    <th>Satış tarxi</th>
-                                    <th>Son servis tarxi</th>
                                     <th>Tarix</th>
+                                    <th>Struktur</th>
+                                    <th>Satış tarixi</th>
                                     <th>Müştəri</th>
                                     <th>Müştəri ilə əlaqə</th>
                                     <th>Açıqlama</th>
+                                    <th>Sonuncu əlaqə</th>
                                     <th>Əməliyyat</th>
                                 </tr>
                                 </thead>
@@ -145,26 +146,42 @@
                                             </c:choose>
                                         </td>
                                         <td>
-                                            <fmt:formatDate value = "${t.sales.saleDate}" pattern = "dd, MMMM" />
+                                            <fmt:formatDate value = "${t.taskDate}" pattern = "dd, MMMM" />
+                                        </td>
+                                        <td style="min-width: 110px">
+                                            <c:out value="${t.sales.organization.name}" />
                                         </td>
                                         <td>
                                             <fmt:formatDate value = "${t.sales.saleDate}" pattern = "dd.MM.yyyy" />
                                         </td>
-                                        <td>
-                                            <fmt:formatDate value = "${t.taskDate}" pattern = "dd.MM.yyyy" />
+                                        <td style="min-width: 185px">
+                                            <a href="javascript:window.open('/crm/customer/<c:out value="${t.sales.customer.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.sales.customer.person.fullName}"/></a>
                                         </td>
                                         <td>
-                                            <a href="javascript:window.open('/crm/customer/<c:out value="${t.sales.customer.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.sales.customer.id}" />: <c:out value="${t.sales.customer.person.fullName}"/></a>
-                                        </td>
-                                        <td>
-                                            <c:out value="${t.sales.customer.person.contact.mobilePhone}"/>
-                                            <c:out value="${t.sales.customer.person.contact.city.name}"/>
-                                            <c:out value="${t.sales.customer.person.contact.address}"/>
+                                            <div>
+                                                <a href="#" class="kt-link kt-font-bolder kt-font-danger"><c:out value="${t.sales.customer.person.contact.mobilePhone}"/></a>
+                                                <a href="#" class="kt-link kt-font-bolder kt-font-warning"><c:out value="${t.sales.customer.person.contact.homePhone}"/></a>
+                                                <a href="#" class="kt-link kt-font-bolder"><c:out value="${t.sales.customer.person.contact.relationalPhoneNumber1}"/></a>
+                                                <a href="#" class="kt-link kt-font-bolder"><c:out value="${t.sales.customer.person.contact.relationalPhoneNumber2}"/></a>
+                                                <a href="#" class="kt-link kt-font-bolder"><c:out value="${t.sales.customer.person.contact.relationalPhoneNumber3}"/></a>
+                                            </div>
+                                            <div>
+                                                <c:out value="${t.sales.customer.person.contact.city.name}"/>
+                                                <c:out value="${t.sales.customer.person.contact.address}"/>
+                                            </div>
                                         </td>
                                         <td><c:out value="${t.description}" /></td>
+                                        <td style="max-width: 300px">
+                                            <c:if test="${t.sales.contactHistories.size()>0}">
+                                                <c:set var="ch" value="${t.sales.contactHistories.get(t.sales.contactHistories.size()-1)}"/>
+                                                <fmt:formatDate value = "${ch.createdDate}" pattern = "dd.MM.yyyy" /> -
+                                                <fmt:formatDate value = "${ch.nextContactDate}" pattern = "dd.MM.yyyy" /><br/>
+                                                <c:out value="${ch.description}"/>
+                                            </c:if>
+                                        </td>
                                         <td nowrap class="text-center">
                                             <c:if test="${transfer.status}">
-                                                <a href="javascript:edit($('#transfer-form'), '<c:out value="${utl:toJson(t)}" />', 'transfer-modal-operation', '<c:out value="${transfer.object.name}" />');check('<c:out value="${utl:toJson(t.serviceRegulatorTasks)}" />')" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
+                                                <a href="javascript:serviceTask('edit', $('#transfer-form'), '<c:out value="${t.id}" />', 'transfer-modal-operation', '<c:out value="${transfer.object.name}" />');check('<c:out value="${utl:toJson(t.serviceRegulatorTasks)}" />')" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
                                                     <i class="la <c:out value="${transfer.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
@@ -194,7 +211,7 @@
 </div>
 
 <div class="modal fade" id="transfer-modal-operation" tabindex="100" role="dialog">
-    <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"></h5>
@@ -207,6 +224,17 @@
                     <form:hidden path="id"/>
                     <form:hidden path="sales"/>
                     <form:hidden path="organization"/>
+                    <div class="alert alert-info alert-elevate" role="alert">
+                        <div class="alert-icon"><i class="flaticon-warning kt-font-brand kt-font-light"></i></div>
+                        <div class="alert-text">
+                            Dəyişdiriləcək filterləri seçərək servis xidmətinə yolluyaraq yeni servis yaradacaqsınız. Susmaya görə seçilməmiş filterlərin xəbərdarlıq vaxtı 6 aydan sonra yenidən göstəriləcək. Servis yaradılmış filterlərin xəbərdarlıq müddəri isə 1 ildən sonra göstəriləcəkdir!
+                        </div>
+                        <div class="alert-close">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true"><i class="la la-close"></i></span>
+                            </button>
+                        </div>
+                    </div>
                     <div class="form-group text-center">
                         <form:label path="description" cssStyle="letter-spacing: 4px; font-weight: bold; font-size: 1.3rem;">Filterlər</form:label>
                         <div class="row text-left filters">
@@ -224,10 +252,10 @@
                     </div>
                     <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>
-                        <form:textarea path="description" cssClass="form-control" placeholder="Açıqlama daxil edin" />
+                        <form:textarea path="description" cssClass="form-control" placeholder="Açıqlama daxil edin"  readonly="true"/>
                         <form:errors path="description" cssClass="alert alert-danger"/>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group text-center pt-3">
                         <label class="kt-checkbox kt-checkbox--brand">
                             <form:checkbox path="sales.notServiceNext" onclick="reason($(this))"/> Bir daha narahat edilməsin
                             <span></span>
@@ -261,7 +289,7 @@
             KTUtil.scrollTop();
             swal.close();
         },
-    })
+    });
 
     function check(data){
         data = data.replace(/\&#034;/g, '"');
@@ -310,6 +338,43 @@
         } else {
             submit(form);
         }
+    }
+
+    function serviceTask(oper, form, dataId, modal, modal_title){
+        swal.fire({
+            text: 'Proses davam edir...',
+            allowOutsideClick: false,
+            onOpen: function() {
+                swal.showLoading();
+                $.ajax({
+                    url: '/collect/api/service-task/'+dataId,
+                    type: 'GET',
+                    dataType: 'text',
+                    beforeSend: function() {
+
+                    },
+                    success: function(data) {
+                        if(oper==="view"){
+                            view(form, data, modal, modal_title)
+                        } else if(oper==="edit"){
+                            edit(form, data, modal, modal_title)
+                        }
+                        swal.close();
+                    },
+                    error: function() {
+                        swal.fire({
+                            title: "Xəta",
+                            html: "Xəta baş verdi!",
+                            type: "error",
+                            cancelButtonText: 'Bağla',
+                            cancelButtonColor: '#c40000',
+                            cancelButtonClass: 'btn btn-danger',
+                            footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+                        });
+                    }
+                })
+            }
+        });
     }
 
 </script>

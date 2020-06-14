@@ -639,4 +639,33 @@ public class SkeletonController {
         }
         return false;
     }
+
+    void addContactHistory(Sales sales, String description, Sales childSales){
+        addContactHistory(sales, description, null, null, childSales);
+    }
+    void addContactHistory(Sales sales, String description, Dictionary contactChannel, Date nextContactDate, Sales childSales){
+        try{
+            ContactHistory ch = new ContactHistory();
+            ch.setSales(sales);
+            ch.setDescription(description);
+            if(contactChannel!=null){
+                ch.setContactChannel(contactChannel);
+            }
+            if(nextContactDate!=null){
+                ch.setNextContactDate(nextContactDate);
+            }
+            if(childSales!=null){
+                ch.setChildSales(childSales);
+            }
+            if(ch.getSales()!=null && ch.getSales().getOrganization()!=null){
+                ch.setOrganization(ch.getSales().getOrganization());
+            } else {
+                ch.setOrganization(getSessionOrganization());
+            }
+            contactHistoryRepository.save(ch);
+            log(ch, "collect_contact_history", "create/edit", ch.getId(), ch.toString());
+        } catch (Exception e){
+            log.error(e.getMessage(), e);
+        }
+    }
 }

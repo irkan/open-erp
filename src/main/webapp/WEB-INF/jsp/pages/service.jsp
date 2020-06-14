@@ -620,9 +620,15 @@
                         success: function(customer) {
                             console.log(customer);
                             tr += '<tr class="text-center"><td class="text-center" colspan="2">'+customer.person.fullName+'</td></tr>';
-                            tr += '<tr><td>Doğum tarixi</td><td>'+customer.person.birthday+'</td></tr>';
-                            tr += '<tr><td>Seriya nömrəsi</td><td>'+customer.person.idCardSerialNumber+'</td></tr>';
-                            tr += '<tr><td>Pin kodu</td><td>'+customer.person.idCardPinCode+'</td></tr>';
+                            if(customer.person.birthday!=null){
+                                tr += '<tr><td>Doğum tarixi</td><td>'+customer.person.birthday+'</td></tr>';
+                            }
+                            if(customer.person.birthday!=null){
+                                tr += '<tr><td>Seriya nömrəsi</td><td>'+customer.person.idCardSerialNumber+'</td></tr>';
+                            }
+                            if(customer.person.idCardPinCode!=null){
+                                tr += '<tr><td>Pin kodu</td><td>'+customer.person.idCardPinCode+'</td></tr>';
+                            }
                             $('#customer-content').html(tr);
                             swal.close();
                         },

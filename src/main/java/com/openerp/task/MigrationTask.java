@@ -123,7 +123,6 @@ public class MigrationTask {
                                     md.setSalesPaymentPeriod(getInteger(row.getCell(13)));
                                     md.setSalesPaymentCash(false);
                                     md.setSalesSaled(false);
-                                    md.setSalesPaymentDescription(getDescription(row));
                                     if(md.getSalesPaymentDown()+md.getSalesPaymentPayed()>=md.getSalesPaymentLastPrice()){
                                         md.setSalesPaymentCash(true);
                                         md.setSalesSaled(true);
@@ -144,7 +143,7 @@ public class MigrationTask {
 
                                     md.setSalesPaymentGift(md.getSalesPaymentLastPrice()==0?true:false);
                                     md.setSalesInventoryName(getString(row.getCell(16)).trim().toUpperCase());
-
+                                    md.setSalesPaymentDescription(getDescription(row, md));
                                     migrationDetailRepository.save(md);
 
                                     log.info(i + ": Migration detailed inserted: InsertID: " + md.getId());
@@ -170,103 +169,6 @@ public class MigrationTask {
             e.printStackTrace();
             log.error(e.getMessage(), e);
         }
-    }
-
-    @Scheduled(fixedDelay = 10000000, initialDelay = 5000)
-    public void writeTableServiceRegulator() {
-        try{
-            log.info("Migration Service Regulator Task Start read data from excel and insert table");
-            List<Migration> migrations = migrationRepository.getMigrationsByActiveTrueAndStatusOrderByUploadDate(0);
-            for(Migration migration: migrations){
-                try {
-                    Path path = Files.write(Paths.get(migration.getFileName()), migration.getFileContent());
-                    XSSFWorkbook wb = new XSSFWorkbook(new FileInputStream(path.toFile()));
-                    XSSFSheet sheet = wb.getSheetAt(0);
-                    XSSFRow row;
-                    Iterator rows = sheet.rowIterator();
-                    int i=1,j = 1;
-                    Organization organization = migration.getOrganization();
-                    while (rows.hasNext()) {
-                        j++;
-                        try{
-                            row=(XSSFRow) rows.next();
-                            if(row.getRowNum()>1){
-                                String customerFullName = getString(row.getCell(0));
-                                if(customerFullName.trim().length()>2){
-                                    i++;
-                                    Sales sales = findSales(customerFullName, organization);
-                                    MigrationDetailServiceRegulator mdsr = new MigrationDetailServiceRegulator();
-                                    mdsr.setMigration(migration);
-                                    mdsr.setSales(sales);
-                                    mdsr.setCustomerFullName(customerFullName);
-                                    mdsr.setStatus(0);
-                                    mdsr.setEmployeeServicer(getString(row.getCell(1)));
-                                    mdsr.setServicer(parseEmployee(row.getCell(1), organization));
-                                    mdsr.setServicedDate(getDate(row.getCell(2)));
-                                    if(getInteger(row.getCell(7))==1){
-                                        mdsr.setPambiq(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sn1", "service-notification"));
-                                    }
-                                    if(getInteger(row.getCell(8))==1){
-                                        mdsr.setKomur(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sn2", "service-notification"));
-                                    }
-                                    if(getInteger(row.getCell(9))==1){
-                                        mdsr.setKristal(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sn3", "service-notification"));
-                                    }
-                                    boolean isMembran=true;
-                                    if(getInteger(row.getCell(10))==1){
-                                        mdsr.setMembran(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sn4", "service-notification"));
-                                        isMembran=false;
-                                    }
-                                    if(getInteger(row.getCell(11))==1 && isMembran){
-                                        mdsr.setMembran(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sn4", "service-notification"));
-                                        isMembran=false;
-                                    }
-                                    if(getInteger(row.getCell(12))==1 && isMembran){
-                                        mdsr.setMembran(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sn4", "service-notification"));
-                                        isMembran=false;
-                                    }
-                                    if(getInteger(row.getCell(13))==1 && isMembran){
-                                        mdsr.setMembran(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sn4", "service-notification"));
-                                    }
-                                    if(getInteger(row.getCell(14))==1){
-                                        mdsr.setKakos(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sn5", "service-notification"));
-                                    }
-                                    if(getInteger(row.getCell(15))==1){
-                                        mdsr.setMineral(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sn5", "service-notification"));
-                                    }
-                                    mdsr.setSalesPaymentLastPrice(getNumeric(row.getCell(69)));
-                                    mdsr.setSalesPaymentDown(getNumeric(row.getCell(70)));
-                                    mdsr.setSalesPaymentDown(Double.parseDouble(row.getCell(71).getRawValue()));
-
-                                    migrationDetailServiceRegulatorRepository.save(mdsr);
-
-                                    log.info(i + ": Migration detailed Service Regulator inserted: InsertID: " + mdsr.getId());
-                                }
-                            }
-                        } catch (Exception e){
-                            e.printStackTrace();
-                            log.error(e.getMessage(), e);
-                        }
-                        if(j-i>10){
-                            break;
-                        }
-                    }
-                } catch (Exception e){
-                    e.printStackTrace();
-                    log.error(e.getMessage(), e);
-                }
-                migration.setStatus(1);
-                migrationRepository.save(migration);
-            }
-            log.info("Migration Service Regulator Task End read data from excel and insert table");
-        } catch (Exception e){
-            e.printStackTrace();
-            log.error(e.getMessage(), e);
-        }
-    }
-
-    public void startMigrationReturnedItems(Migration migration) {
-
     }
 
     public void startMigrationSalesItems(Migration migration) {
@@ -757,12 +659,18 @@ public class MigrationTask {
         }
     }
 
-    private String getDescription(XSSFRow row){
+    private String getDescription(XSSFRow row, MigrationDetail md){
         String description = "";
         try{
              description += getString(row.getCell(2)) + "\n";
              description += getString(row.getCell(3)) + "\n";
              description += "TDS: " + getString(row.getCell(14)) + "\n";
+             description += "Ven Lider: " + md.getEmployeeVanLeader() + "\n";
+             description += "Konsul: " + md.getEmployeeConsole() + "\n";
+             description += "Canavasser: " + md.getEmployeeCanvasser() + "\n";
+             description += "Diller: " + md.getEmployeeDealer() + "\n";
+             description += "Avadanlıq: " + md.getSalesInventoryName() + "\n";
+             description += "Qiymət: " + md.getSalesPaymentLastPrice() + "\n";
              description += getString(row.getCell(115)) + "\n";
              description += "DT: " + getString(row.getCell(18)) + " DM: " + getNumeric(row.getCell(19)) + "\n";
              description += "1. ÖT: " + getString(row.getCell(21)) + " ÖM: " + getNumeric(row.getCell(20)) + "\n";
@@ -943,7 +851,7 @@ public class MigrationTask {
             } else {
                 Date generateDate = DateUtility.generate(date.getDate(), date.getMonth(), today.getYear()+1900);
                 if(generateDate.getTime()>today.getTime()){
-                    return DateUtility.addMonth(generateDate, -12);
+                    return DateUtility.addMonth(generateDate, -11);
                 } else{
                     return generateDate;
                 }
