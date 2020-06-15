@@ -1,4 +1,4 @@
-<%--
+<%@ page import="java.util.Date" %><%--
   Created by IntelliJ IDEA.
   User: irkan.ahmadov
   Date: 01.09.2019
@@ -22,6 +22,7 @@
         <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
         <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
         <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
+        <c:set var="today" value="<%=new Date()%>"/>
         <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
             <thead>
             <tr>
@@ -39,7 +40,7 @@
             </thead>
             <tbody>
             <c:forEach var="t" items="${list}" varStatus="loop">
-                <tr data="<c:out value="${utl:toJson(t)}" />">
+                <tr data="<c:out value="${utl:toJson(t)}" />" class="<c:out value="${t.permissionDateTo.getTime()<today.getTime()?'kt-bg-danger':(t.permissionDateFrom.getTime()>today.getTime()?'kt-bg-warning':'')}" />">
                     <td>${loop.index + 1}</td>
                     <td><c:out value="${t.id}" /></td>
                     <td><c:out value="${t.user.employee.organization.name}" /></td>
@@ -48,7 +49,7 @@
                     <td><fmt:formatDate value = "${t.permissionDateFrom}" pattern = "dd.MM.yyyy" /></td>
                     <td><fmt:formatDate value = "${t.permissionDateTo}" pattern = "dd.MM.yyyy" /></td>
                     <td><fmt:formatDate value = "${t.createdDate}" pattern = "dd.MM.yyyy HH:mm:ss" /></td>
-                    <td><c:out value="${t.description}" /></td>
+                    <td><c:out value="${t.permissionDateTo.getTime()<today.getTime()?'İcazə qüvvədən düşəcək':(t.permissionDateFrom.getTime()>today.getTime()?'İcazə qüvvəyə minəcək':'')}" /> <c:out value="${t.description}" /></td>
                     <td nowrap class="text-center">
                         <c:if test="${view.status}">
                             <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
