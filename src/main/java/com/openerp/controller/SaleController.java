@@ -372,10 +372,12 @@ public class SaleController extends SkeletonController {
         sales = salesRepository.getSalesById(sales.getId());
         Employee employee = sales.getService()?sales.getServicer():sales.getVanLeader();// (sales.getService() && sales.getServicer()!=null)?sales.getServicer():getSessionUser().getEmployee();
         if(sales.getSalesInventories().size()>0){
-            for(SalesInventory salesInventory: sales.getSalesInventories()) {
-                List<Action> oldActions = actionRepository.getActionsByActiveTrueAndInventory_ActiveAndInventoryAndEmployeeAndAction_Attr1AndAmountGreaterThanOrderById(true, salesInventory.getInventory(), employee, "consolidate", 0);
-                if (oldActions.size() == 0) {
-                    FieldError fieldError = new FieldError("", "", salesInventory.getInventory().getBarcode() + " barkodlu " + salesInventory.getInventory().getName() + " " + employee.getPerson().getFullName() + " adına təhkim edilməmişdir");
+
+            Map<Inventory, List<SalesInventory>> salesInventoryMap = Util.groupInventory(sales.getSalesInventories());
+            for(Inventory inventory: salesInventoryMap.keySet()) {
+                List<Action> oldActions = actionRepository.getActionsByActiveTrueAndInventory_ActiveAndInventoryAndEmployeeAndAction_Attr1AndAmountGreaterThanOrderById(true, inventory, employee, "consolidate", 0);
+                if (oldActions.size() == 0 || Util.calculateInventoryAmount(oldActions)<salesInventoryMap.get(inventory).size()) {
+                    FieldError fieldError = new FieldError("", "", inventory.getBarcode() + " barkodlu " + inventory.getName() + " " + employee.getPerson().getFullName() + " adına " + (salesInventoryMap.get(inventory).size()-Util.calculateInventoryAmount(oldActions)) + " ədəd əlavə inventarın təhkim edilməsinə ehtiyyac vardır!");
                     binding.addError(fieldError);
                 }
             }

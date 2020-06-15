@@ -830,4 +830,28 @@ public class Util {
         }
         return lastPaid;
     }
+
+    public static Map<Inventory, List<SalesInventory>> groupInventory(List<SalesInventory> salesInventories) {
+        Map<Inventory, List<SalesInventory>> salesInventoryMap = new HashMap<>();
+        if(salesInventories.size()>0){
+            for(SalesInventory salesInventory: salesInventories){
+                if (!salesInventoryMap.containsKey(salesInventory.getInventory())) {
+                    List<SalesInventory> list = new ArrayList<>();
+                    list.add(salesInventory);
+                    salesInventoryMap.put(salesInventory.getInventory(), list);
+                } else {
+                    salesInventoryMap.get(salesInventory.getInventory()).add(salesInventory);
+                }
+            }
+        }
+        return salesInventoryMap;
+    }
+
+    public static int calculateInventoryAmount(List<Action> actions){
+        int a = 0;
+        for(Action action: actions){
+            a+=action.getAmount();
+        }
+        return a;
+    }
 }
