@@ -292,6 +292,13 @@ public class SaleController extends SkeletonController {
             salesRepository.save(sales);
             log(sales, "sale_sales", "create/edit", sales.getId(), sales.toString());
 
+            if(sales.getService()){
+                List<Sales> salesList = salesRepository.getSalesByActiveTrueAndApproveTrueAndServiceFalseAndCustomerAndOrganizationOrderByIdDesc(sales.getCustomer(), sales.getOrganization());
+                if(salesList.size()>0){
+                    addContactHistory(salesList.get(0), "Servis əlavə edildi: "+((sales.getPayment()!=null && sales.getPayment().getDescription()!=null)?sales.getPayment().getDescription():""), sales);
+                }
+            }
+
             Person person = sales.getCustomer().getPerson();
             Dictionary documentType = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("id card", "document-type");
             personDocumentRepository.deleteInBatch(personDocumentRepository.getPersonDocumentsByPersonAndDocumentType(person, documentType));
@@ -382,7 +389,7 @@ public class SaleController extends SkeletonController {
             binding.addError(fieldError);
         }
 
-        if(!sales.getService() && sales.getVanLeader().getId()!=getSessionUser().getEmployee().getId() && approverExceptionRepository.getApproverExceptionsByUser(getSessionUser()).size()==0){
+        if(!sales.getService() && sales.getVanLeader().getId()!=getSessionUser().getEmployee().getId() && !canApprove(sales.getVanLeader(), null, "sales")){
             FieldError fieldError = new FieldError("", "", "Təsdiq əməliyyatı " + sales.getVanLeader().getPerson().getFullName() + " tərəfindən edilməlidir!");
             binding.addError(fieldError);
         }
@@ -576,6 +583,10 @@ public class SaleController extends SkeletonController {
         if(invc.getApprove()){
             List<Log> logs = logRepository.getLogsByActiveTrueAndTableNameAndRowIdAndOperationOrderByIdDesc("sale_invoice", invc.getId(), "approve");
             FieldError fieldError = new FieldError("", "", "Təsdiq əməliyyatı"+(logs.size()>0?(" "+logs.get(0).getUsername() + " tərəfindən " + DateUtility.getFormattedDateTime(logs.get(0).getOperationDate()) + " tarixində "):" ")+"icra edilmişdir!");
+            binding.addError(fieldError);
+        }
+        if(!canApprove(invc.getOrganization())){
+            FieldError fieldError = new FieldError("", "", "Sizin təsdiq əməliyyatına icazəniz yoxdur!");
             binding.addError(fieldError);
         }
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));

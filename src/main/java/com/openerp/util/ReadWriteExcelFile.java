@@ -2424,6 +2424,12 @@ public class ReadWriteExcelFile {
 		cell = row.createCell(row.getLastCellNum());
 		cell.setCellValue("Əməkdaş");
 		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("Tarixdən");
+		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("Tarixədək");
+		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("İcazə verildi");
+		cell = row.createCell(row.getLastCellNum());
 		cell.setCellValue("Açıqlama");
 		row.setHeightInPoints(30);
 		XSSFCellStyle headerStyle = wb.createCellStyle();
@@ -2439,11 +2445,17 @@ public class ReadWriteExcelFile {
 			cell = row.createCell(0);
 			cell.setCellValue(approverException.getId());
 			cell = row.createCell(row.getLastCellNum());
-			cell.setCellValue(approverException.getOrganization()!=null?approverException.getOrganization().getName():"");
+			cell.setCellValue((approverException.getUser()!=null && approverException.getUser().getEmployee()!=null && approverException.getUser().getEmployee().getOrganization()!=null)?approverException.getUser().getEmployee().getOrganization().getName():"");
 			cell = row.createCell(row.getLastCellNum());
 			cell.setCellValue(approverException.getUser()!=null?approverException.getUser().getUsername():"");
 			cell = row.createCell(row.getLastCellNum());
 			cell.setCellValue((approverException.getUser()!=null && approverException.getUser().getEmployee()!=null && approverException.getUser().getEmployee().getPerson()!=null)?approverException.getUser().getEmployee().getPerson().getFullName():"");
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(approverException.getPermissionDateFrom());
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(approverException.getPermissionDateTo());
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(approverException.getCreatedDate());
 			cell = row.createCell(row.getLastCellNum());
 			cell.setCellValue(approverException.getDescription());
 		}

@@ -38,6 +38,7 @@
                                     <th>Ödənilməlidir</th>
                                     <th>Gecikir</th>
                                     <th>Satış tarixi</th>
+                                    <th>Sonuncu ödəniş</th>
                                     <th>Qrafik</th>
                                     <th>Qiymət</th>
                                     <th>Sonuncu qeyd</th>
@@ -117,6 +118,7 @@
                                                 </c:choose>
                                             </td>
                                             <td><fmt:formatDate value = "${t.saleDate}" pattern = "dd.MM.yyyy" /></td>
+                                            <td><fmt:formatDate value = "${t.payment.lastPaid}" pattern = "dd.MM.yyyy" /></td>
                                             <td>
                                                 <c:if test="${!t.payment.cash}">
                                                     <span class="kt-font-bold"><c:out value="${t.payment.schedule.name}" /> / <c:out value="${t.payment.schedulePrice}" /></span>
@@ -156,7 +158,7 @@
                                                     </a>
                                                 </c:if>
                                                 <c:if test="${transfer.status}">
-                                                    <a href="javascript:transfer($('#transfer-modal-operation'), $('#transfer-form'), '<c:out value="${t.id}" />', '<c:out value="${t.payment.unpaid}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
+                                                    <a href="javascript:transfer($('#transfer-modal-operation'), $('#transfer-form'), '<c:out value="${t.id}" />', '<c:out value="${t.payment.unpaid}" />', 'Gecikmiş ödəniş: <c:out value="${t.payment.latency}" /> gün');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
                                                         <i class="la <c:out value="${transfer.object.icon}"/>"></i>
                                                     </a>
                                                 </c:if>
@@ -293,9 +295,10 @@
         rightAlignNumerics: false
     });
 
-    function transfer(modal, form, salesId, price){
+    function transfer(modal, form, salesId, price, latency){
         $(form).find("input[name='sales']").val(salesId);
         $(form).find("input[name='price']").val(price);
+        $(form).find("textarea[name='description']").val(latency);
         $(modal).modal('toggle');
     }
 </script>

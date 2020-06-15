@@ -295,7 +295,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form:form modelAttribute="form" id="form" method="post" action="/sale/sales" cssClass="form-group">
+                <form:form modelAttribute="form" id="form" method="post" action="/sale/sales" cssClass="form-group" enctype="multipart/form-data">
                     <form:hidden path="id"/>
                     <form:hidden path="organization"/>
                     <form:hidden path="active"/>
@@ -671,7 +671,7 @@
                         error: function() {
                             swal.fire({
                                 title: "Xəta baş verdi!",
-                                html: $("#form").find("input[name='servicer'] option:selected").text() + " adına inventar təhkim edilməyib",
+                                html: "İnventarı yoxlayın!",
                                 type: "error",
                                 cancelButtonText: 'Bağla',
                                 cancelButtonColor: '#c40000',

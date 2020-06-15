@@ -817,4 +817,17 @@ public class Util {
         }
         return 1;
     }
+
+    public static Date getLastPaid(List<Invoice> invoices) {
+        Date lastPaid = null;
+        if(invoices.size()>0){
+            lastPaid = invoices.get(0).getInvoiceDate();
+            for(Invoice invoice: invoices){
+                if(invoice.getApprove() && invoice.getInvoiceDate()!=null && invoice.getInvoiceDate().getTime()>lastPaid.getTime()){
+                    lastPaid = invoice.getInvoiceDate();
+                }
+            }
+        }
+        return lastPaid;
+    }
 }

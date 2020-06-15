@@ -30,6 +30,9 @@
                 <th>Struktur</th>
                 <th>Əməkdaş</th>
                 <th>İstifadəçi</th>
+                <th>Tarixdən</th>
+                <th>Tarixədək</th>
+                <th>İcazə yeniləndi</th>
                 <th>Açıqlama</th>
                 <th>Əməliyyat</th>
             </tr>
@@ -39,9 +42,12 @@
                 <tr data="<c:out value="${utl:toJson(t)}" />">
                     <td>${loop.index + 1}</td>
                     <td><c:out value="${t.id}" /></td>
-                    <td><c:out value="${t.organization.name}" /></td>
+                    <td><c:out value="${t.user.employee.organization.name}" /></td>
                     <td><c:out value="${t.user.employee.person.fullName}" /></td>
                     <td><c:out value="${t.user.username}" /></td>
+                    <td><fmt:formatDate value = "${t.permissionDateFrom}" pattern = "dd.MM.yyyy" /></td>
+                    <td><fmt:formatDate value = "${t.permissionDateTo}" pattern = "dd.MM.yyyy" /></td>
+                    <td><fmt:formatDate value = "${t.createdDate}" pattern = "dd.MM.yyyy HH:mm:ss" /></td>
                     <td><c:out value="${t.description}" /></td>
                     <td nowrap class="text-center">
                         <c:if test="${view.status}">
@@ -77,7 +83,7 @@
 
 
 <div class="modal fade" id="modal-operation" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"></h5>
@@ -88,7 +94,6 @@
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form" method="post" action="/admin/approver-exception" cssClass="form-group">
                     <form:hidden path="id"/>
-                    <form:hidden path="organization"/>
                     <div class="form-group">
                         <form:label path="user">İstifadəçi</form:label>
                         <form:select  path="user" cssClass="custom-select form-control" onchange="getUserModuleOperation($(this).val())">
@@ -96,6 +101,40 @@
                             <form:options items="${users}" itemLabel="employee.person.fullName" itemValue="id"  />
                         </form:select>
                         <form:errors path="user" cssClass="alert-danger control-label"/>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <form:label path="permissionDateFrom">Tarixdən</form:label>
+                                <div class="input-group date">
+                                    <form:input path="permissionDateFrom" autocomplete="off"
+                                                cssClass="form-control datepicker-element" date_="date_"
+                                                placeholder="dd.MM.yyyy"/>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-calendar"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <form:errors path="permissionDateFrom" cssClass="control-label alert-danger"/>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <form:label path="permissionDateTo">Tarixədək</form:label>
+                                <div class="input-group date">
+                                    <form:input path="permissionDateTo" autocomplete="off"
+                                                cssClass="form-control datepicker-element" date_="date_"
+                                                placeholder="dd.MM.yyyy"/>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-calendar"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <form:errors path="permissionDateTo" cssClass="control-label alert-danger"/>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>

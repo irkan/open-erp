@@ -57,6 +57,7 @@ public class CollectController extends SkeletonController {
                     sale.getPayment().setLatency(latency);
                     sale.getPayment().setSumOfInvoice(sumOfInvoices);
                     sale.getPayment().setUnpaid(plannedPayment-sumOfInvoices);
+                    sale.getPayment().setLastPaid(Util.getLastPaid(sale.getInvoices()));
                     if(latency>0){
                         sale.setSalesInventories(salesInventoryRepository.getSalesInventoriesByActiveTrueAndSales_Id(sale.getId()));
                         salesList.add(sale);
@@ -215,6 +216,10 @@ public class CollectController extends SkeletonController {
                 sales.setNotServiceNext(true);
                 sales.setNotServiceNextReason(serviceTask.getSales().getNotServiceNextReason());
                 salesRepository.save(sales);
+
+                log(sales, "sale_sales", "create/edit", sales.getId(), sales.toString(), "Filter dəyişimi ilə bağlı birdaha xəbərdarlıq edilməsin! \n"+sales.getNotServiceNextReason());
+
+                addContactHistory(sales, "Filter dəyişimi ilə bağlı birdaha xəbərdarlıq edilməsin! \n"+sales.getNotServiceNextReason(), null);
             }
 
             serviceTaskRepository.delete(serviceTaskOld);
@@ -236,7 +241,7 @@ public class CollectController extends SkeletonController {
 
                 log(service, "sale_sales", "create/edit", service.getId(), service.toString(), "Servis Requlyatordan Servis yaradıldı");
 
-                addContactHistory(sales, description, service);
+                addContactHistory(sales, "Servis əlavə edildi: "+description, service);
             }
         }
         return mapPost(serviceTask, binding, redirectAttributes, "/collect/service-task");

@@ -249,6 +249,10 @@ public class PayrollController extends SkeletonController {
             FieldError fieldError = new FieldError("", "", "Təsdiq əməliyyatı"+(logs.size()>0?(" "+logs.get(0).getUsername() + " tərəfindən " + DateUtility.getFormattedDateTime(logs.get(0).getOperationDate()) + " tarixində "):" ")+"icra edilmişdir!");
             binding.addError(fieldError);
         }
+        if(!canApprove(adv.getOrganization())){
+            FieldError fieldError = new FieldError("", "", "Sizin təsdiq əməliyyatına icazəniz yoxdur!");
+            binding.addError(fieldError);
+        }
         if(!binding.hasErrors()){
             adv.setDescription(advance.getDescription());
             adv.setPayed(advance.getPayed());

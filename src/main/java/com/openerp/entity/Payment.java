@@ -80,6 +80,9 @@ public class Payment {
     @Transient
     private Double unpaid;
 
+    @Transient
+    private Date lastPaid;
+
     @ToString.Exclude
     @JsonIgnore
     @OneToOne(mappedBy = "payment")

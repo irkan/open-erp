@@ -186,48 +186,46 @@ public class AccountingController extends SkeletonController {
             FieldError fieldError = new FieldError("", "", "Təsdiq əməliyyatı"+(logs.size()>0?(" "+logs.get(0).getUsername() + " tərəfindən " + DateUtility.getFormattedDateTime(logs.get(0).getOperationDate()) + " tarixində "):" ")+"icra edilmişdir!");
             binding.addError(fieldError);
         }
+        if(!canApprove(trn.getOrganization())){
+            FieldError fieldError = new FieldError("", "", "Sizin təsdiq əməliyyatına icazəniz yoxdur!");
+            binding.addError(fieldError);
+        }
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()) {
-            if (trn.getOrganization().getId() == Util.getUserBranch(getSessionUser().getEmployee().getOrganization()).getId()){
-                trn.setApprove(true);
-                trn.setApproveDate(new Date());
-                trn.setPrice(transaction.getPrice());
-                trn.setCurrency(transaction.getCurrency());
-                trn.setRate(Util.getRate(currencyRateRepository.getCurrencyRateByCode(transaction.getCurrency().toUpperCase())));
-                double sumPrice = Util.amountChecker(trn.getAmount()) * transaction.getPrice() * trn.getRate();
-                trn.setSumPrice(sumPrice);
-                trn.setAccount(transaction.getAccount());
-                trn.setAccountable(transaction.getAccountable());
-                transactionRepository.save(trn);
-                log(trn, "accounting_transaction", "approve", trn.getId(), trn.toString());
-                balance(trn);
+            trn.setApprove(true);
+            trn.setApproveDate(new Date());
+            trn.setPrice(transaction.getPrice());
+            trn.setCurrency(transaction.getCurrency());
+            trn.setRate(Util.getRate(currencyRateRepository.getCurrencyRateByCode(transaction.getCurrency().toUpperCase())));
+            double sumPrice = Util.amountChecker(trn.getAmount()) * transaction.getPrice() * trn.getRate();
+            trn.setSumPrice(sumPrice);
+            trn.setAccount(transaction.getAccount());
+            trn.setAccountable(transaction.getAccountable());
+            transactionRepository.save(trn);
+            log(trn, "accounting_transaction", "approve", trn.getId(), trn.toString());
+            balance(trn);
 
-                if (expenses != null) {
-                    for (int expense : expenses) {
-                        Dictionary action = dictionaryRepository.getDictionaryById(expense);
-                        String description = action.getName() + ", " + trn.getDescription();
-                        Transaction transaction1 = new Transaction(trn.getOrganization(), trn.getInventory(), action, description, false, trn);
-                        transactionRepository.save(transaction1);
-                        log(transaction1, "admin_dictionary", "create/edit", transaction1.getId(), transaction1.toString());
-                    }
+            if (expenses != null) {
+                for (int expense : expenses) {
+                    Dictionary action = dictionaryRepository.getDictionaryById(expense);
+                    String description = action.getName() + ", " + trn.getDescription();
+                    Transaction transaction1 = new Transaction(trn.getOrganization(), trn.getInventory(), action, description, false, trn);
+                    transactionRepository.save(transaction1);
+                    log(transaction1, "admin_dictionary", "create/edit", transaction1.getId(), transaction1.toString());
                 }
+            }
 
-                if(trn.getInventory()!=null){
-                    Financing financing = financingRepository.getFinancingByActiveTrueAndInventoryAndOrganization(trn.getInventory(), trn.getOrganization());
-                    Double financingPrice = calculateFinancing(trn, transactionRepository);
-                    if (financing != null) {
-                        financing.setPrice(financingPrice);
-                        financing.setFinancingDate(new Date());
-                    } else {
-                        financing = new Financing(trn.getInventory(), financingPrice, trn.getOrganization());
-                    }
-                    financingRepository.save(financing);
-                    log(financing, "accounting_financing", "approve", financing.getId(), financing.toString());
+            if(trn.getInventory()!=null){
+                Financing financing = financingRepository.getFinancingByActiveTrueAndInventoryAndOrganization(trn.getInventory(), trn.getOrganization());
+                Double financingPrice = calculateFinancing(trn, transactionRepository);
+                if (financing != null) {
+                    financing.setPrice(financingPrice);
+                    financing.setFinancingDate(new Date());
+                } else {
+                    financing = new Financing(trn.getInventory(), financingPrice, trn.getOrganization());
                 }
-            } else {
-                List<String> messages = new ArrayList<>();
-                messages.add("Təsdiqləmə əməliyyatı " + Util.getUserBranch(trn.getOrganization()).getName() + " tərəfindən edilməlidir!");
-                redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, new Response(Constants.STATUS.ERROR, messages));
+                financingRepository.save(financing);
+                log(financing, "accounting_financing", "approve", financing.getId(), financing.toString());
             }
         }
         return mapPost(transaction, binding, redirectAttributes, "/accounting/transaction");

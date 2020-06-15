@@ -611,7 +611,7 @@ public class SkeletonController {
     Invoice invoice(Invoice invoice){
         Invoice invc;
         if(invoice.getId()==null){
-            invoice.setDescription("Satışdan əldə edilən ödəniş " + invoice.getPrice() + " AZN");
+            invoice.setDescription("Satışdan əldə edilən ödəniş " + invoice.getPrice() + " AZN -> " + invoice.getDescription());
             invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
             invoice.setApprove(false);
             invc = invoice;
@@ -667,5 +667,40 @@ public class SkeletonController {
         } catch (Exception e){
             log.error(e.getMessage(), e);
         }
+    }
+
+    boolean canApprove(){
+        return canApprove(null, null, null);
+    }
+
+    boolean canApprove(Organization organization){
+        return canApprove(null, organization, null);
+    }
+
+    boolean canApprove(Employee employee, Organization organization, String type){
+        if(getSessionUser().getEmployee().equals(employee)){
+            return true;
+        }
+        if(organization!=null && organization.getId().intValue()==getUserOrganization().getId().intValue()){
+            return true;
+        }
+        Date today = new Date();
+        List<ApproverException> approverExceptions = approverExceptionRepository.getApproverExceptionsByUserAndActiveTrueAndPermissionDateFromLessThanEqualAndPermissionDateToGreaterThanEqualOrderByPermissionDateToDesc(getSessionUser(), today, today);
+        if(approverExceptions.size()>0){
+            if(getSessionUser().getUserDetail().getAdministrator()){
+                return true;
+            } else {
+                if(getSessionOrganization().getId().intValue()==getUserOrganization().getId().intValue()){
+                    return true;
+                }
+            }
+        } else {
+            if( employee!=null && getSessionOrganization().getId().intValue()==getUserOrganization().getId().intValue()){
+                if(type!=null && !type.equalsIgnoreCase("sales")){ //Sales i ancaq ozu tesdiq ede biler van leader
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
