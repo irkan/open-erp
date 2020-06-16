@@ -115,8 +115,8 @@ public class MigrationTask {
                                     md.setCanvasser(parseEmployee(row.getCell(5), migration.getOrganization()));
                                     md.setEmployeeDealer(getString(row.getCell(6)));
                                     md.setDealer(parseEmployee(row.getCell(6), migration.getOrganization()));
-                                    md.setEmployeeServicer(getString(row.getCell(7)));
-                                    md.setServicer(parseEmployee(row.getCell(7), migration.getOrganization()));
+                                    //md.setEmployeeServicer(getString(row.getCell(7)));
+                                    //md.setServicer(parseEmployee(row.getCell(7), migration.getOrganization()));
                                     md.setSalesPaymentLastPrice(getNumeric(row.getCell(9)));
                                     md.setSalesPaymentDown(getNumeric(row.getCell(10)));
                                     md.setSalesPaymentPayed(getNumeric(row.getCell(12))-md.getSalesPaymentDown());
@@ -249,7 +249,7 @@ public class MigrationTask {
                                 Employee canvasser = md.getCanvasser();
                                 Employee dealer = md.getDealer();
                                 Employee console = md.getDealer();
-                                Employee servicer = md.getServicer();
+                                //Employee servicer = md.getServicer();
                                 Sales sales = new Sales();
                                 SalesInventory si = new SalesInventory();
                                 si.setInventory(inventory);
@@ -264,7 +264,7 @@ public class MigrationTask {
                                 sales.setDealer(dealer);
                                 sales.setConsole(console);
                                 sales.setOrganization(md.getMigration().getOrganization());
-                                sales.setServicer(servicer);
+                                //sales.setServicer(servicer);
                                 sales.setActive(true);
                                 sales.setApprove(true);
                                 sales.setApproveDate(new Date());

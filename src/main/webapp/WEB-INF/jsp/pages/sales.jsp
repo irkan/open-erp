@@ -151,6 +151,20 @@
                                                 <form:errors path="payment.schedule" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="customer.person.firstName">Müştərinin adı</form:label>
+                                                <form:input path="customer.person.firstName" cssClass="form-control" placeholder="Müştərinin adı" />
+                                                <form:errors path="customer.person.firstName" cssClass="alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="customer.person.lastName">Müştərinin soyadı</form:label>
+                                                <form:input path="customer.person.lastName" cssClass="form-control" placeholder="Müştərinin soyadı" />
+                                                <form:errors path="customer.person.lastName" cssClass="alert-danger"/>
+                                            </div>
+                                        </div>
                                         <div class="row" style="padding-top: 30px;">
                                             <div class="col-md-3">
                                                 <div class="form-group">

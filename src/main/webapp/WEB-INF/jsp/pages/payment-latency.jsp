@@ -197,20 +197,7 @@
                     <form:hidden path="id"/>
                     <form:hidden path="active"/>
                     <form:hidden path="organization"/>
-                    <div class="form-group">
-                        <form:label path="sales">Satış nömrəsi</form:label>
-                        <div class="row">
-                            <div class="col-9">
-                                <div class="input-group">
-                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-search"></i></span></div>
-                                    <form:input path="sales" class="form-control" placeholder="Daxil edin..."/>
-                                </div>
-                            </div>
-                            <div class="col-3">
-                                <button class="btn btn-primary" type="button" onclick="checkSales($('form').find('input[name=\'sales\']'))">Yoxla</button>
-                            </div>
-                        </div>
-                    </div>
+                    <form:hidden path="sales"/>
                     <div class="form-group">
                         <form:label path="price">Qiyməti</form:label>
                         <div class="input-group" >

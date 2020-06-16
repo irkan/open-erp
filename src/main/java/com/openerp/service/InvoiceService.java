@@ -75,6 +75,12 @@ public class InvoiceService {
                 if(invoice.getSales()!=null && invoice.getSales().getServicer()!=null && invoice.getSales().getServicer().getId()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("sales").get("servicer"), invoice.getSales().getServicer().getId())));
                 }
+                if(invoice.getSales()!=null && invoice.getSales().getCustomer()!=null && invoice.getSales()!=null && invoice.getSales().getCustomer().getPerson()!=null && invoice.getSales()!=null && invoice.getSales().getCustomer().getPerson().getFirstName()!=null && !invoice.getSales().getCustomer().getPerson().getFirstName().isEmpty()) {
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("sales").get("customer").get("person").get("firstName"), "%"+invoice.getSales().getCustomer().getPerson().getFirstName()+"%")));
+                }
+                if(invoice.getSales()!=null && invoice.getSales().getCustomer()!=null && invoice.getSales()!=null && invoice.getSales().getCustomer().getPerson()!=null && invoice.getSales()!=null && invoice.getSales().getCustomer().getPerson().getLastName()!=null && !invoice.getSales().getCustomer().getPerson().getLastName().isEmpty()){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("sales").get("customer").get("person").get("lastName"), "%"+invoice.getSales().getCustomer().getPerson().getLastName()+"%")));
+                }
                 return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
             }
         }, pageable);

@@ -147,6 +147,20 @@
                                                 <form:errors path="paymentChannel" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="sales.customer.person.firstName">Müştərinin adı</form:label>
+                                                <form:input path="sales.customer.person.firstName" cssClass="form-control" placeholder="Müştərinin adı" />
+                                                <form:errors path="sales.customer.person.firstName" cssClass="alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="sales.customer.person.lastName">Müştərinin soyadı</form:label>
+                                                <form:input path="sales.customer.person.lastName" cssClass="form-control" placeholder="Müştərinin soyadı" />
+                                                <form:errors path="sales.customer.person.lastName" cssClass="alert-danger"/>
+                                            </div>
+                                        </div>
                                         <div class="col-md-2" style="padding-top: 30px;">
                                             <div class="form-group">
                                                 <label class="kt-checkbox kt-checkbox--brand">
@@ -306,7 +320,7 @@
                                                 <div class="dropdown-menu dropdown-menu-right">
                                                     <c:if test="${consolidate.status and !t.approve and !t.sales.service}">
                                                     <a href="javascript:invoice('edit', $('#form-consolidate'), '<c:out value="${t.id}" />', 'consolidate-modal', '<c:out value="${consolidate.object.name}" />');" class="dropdown-item" title="<c:out value="${consolidate.object.name}"/>">
-                                                        <i class="<c:out value="${consolidate.object.icon}"/>"></i> <c:out value="${consolidate.object.name}"/>
+                                                        <i class="<c:out value="${consolidate.object.icon}"/>"></i> Yığımçıya təhkim et
                                                     </a>
                                                     </c:if>
                                                     <c:if test="${edit.status and !t.approve}">

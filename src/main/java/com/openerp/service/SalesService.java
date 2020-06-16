@@ -84,6 +84,12 @@ public class SalesService {
                 if(sales.getConsole()!=null && sales.getConsole().getId()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("console"), sales.getConsole().getId())));
                 }
+                if(sales.getCustomer()!=null && sales.getCustomer().getPerson()!=null && sales.getCustomer().getPerson().getFirstName()!=null && !sales.getCustomer().getPerson().getFirstName().isEmpty()) {
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("customer").get("person").get("firstName"), "%"+sales.getCustomer().getPerson().getFirstName()+"%")));
+                }
+                if(sales.getCustomer()!=null && sales.getCustomer().getPerson()!=null && sales.getCustomer().getPerson().getLastName()!=null && !sales.getCustomer().getPerson().getLastName().isEmpty()){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("customer").get("person").get("lastName"), "%"+sales.getCustomer().getPerson().getLastName()+"%")));
+                }
                 return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
             }
         }, pageable);
