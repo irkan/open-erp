@@ -633,7 +633,7 @@ public class SkeletonController {
     boolean checkContactHistory(Sales sales, SalesSchedule salesSchedule) {
         List<ContactHistory> contactHistories = contactHistoryRepository.getContactHistoriesByActiveTrueAndSalesOrderByIdDesc(sales);
         for(ContactHistory contactHistory: contactHistories){
-            if(contactHistory.getNextContactDate().getTime()>salesSchedule.getScheduleDate().getTime()){
+            if(contactHistory.getNextContactDate()!=null && contactHistory.getNextContactDate().getTime()>salesSchedule.getScheduleDate().getTime()){
                 return true;
             }
         }
