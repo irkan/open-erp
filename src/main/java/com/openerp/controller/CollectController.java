@@ -48,10 +48,6 @@ public class CollectController extends SkeletonController {
                 double sumOfInvoices = Util.calculateInvoice(sale.getInvoices());
                 List<Schedule> schedules = new ArrayList<>();
                 if(sale.getPayment()!=null && !sale.getPayment().getCash()){
-                    System.out.println(sale.getId());
-                    if(sale.getId()==106284){
-                        System.out.println(sale.getId());
-                    }
                     schedules = getSchedulePayment(DateUtility.getFormattedDate(sale.getSaleDate()), sale.getPayment().getSchedule(), sale.getPayment().getPeriod(), sale.getPayment().getLastPrice(), sale.getPayment().getDown());
                 }
                 double plannedPayment = Util.calculatePlannedPayment(sale, schedules);
