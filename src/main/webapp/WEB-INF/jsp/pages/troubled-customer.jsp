@@ -143,7 +143,7 @@
                                                     <c:set var="ch" value="${t.contactHistories.get(t.contactHistories.size()-1)}"/>
                                                     <fmt:formatDate value = "${ch.createdDate}" pattern = "dd.MM.yyyy" /> -
                                                     <fmt:formatDate value = "${ch.nextContactDate}" pattern = "dd.MM.yyyy" /><br/>
-                                                    <c:out value="${ch.description}"/>
+                                                    <c:out value="${fn:substring(ch.description, 0, 80)}" />
                                                 </c:if>
                                             </td>
                                             <td nowrap class="text-center">
