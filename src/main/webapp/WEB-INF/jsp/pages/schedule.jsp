@@ -104,6 +104,7 @@
                                     <th>Ödənilib</th>
                                     <th>Qalıq</th>
                                     <th>Gecikir</th>
+                                    <th>Sonuncu qeyd</th>
                                     <th>Əməliyyat</th>
                                 </tr>
                                 </thead>
@@ -113,8 +114,11 @@
                                     <c:set var="now" value="<%=new Date().getTime()%>"/>
                                     <fmt:parseNumber var = "days" integerOnly = "true" type = "number" value = "${(now-t.scheduleDate.time)/86400000}" />
                                     <tr>
-                                        <th>${loop.index+1}</th>
+                                        <th>${loop1.index+1}</th>
                                         <th style="<c:out value="${p.sales.payment.cash?'background-color: #e6ffe7 !important':'background-color: #ffeaf1 !important'}"/>">
+                                            <c:if test="${not empty p.sales.id}">
+                                                <a href="javascript:copyToClipboard2('<c:out value="${p.sales.id}" />', 'Satış kodu <b><c:out value="${p.sales.id}" /></b> kopyalandı')" class="kt-font-lg kt-font-bold kt-font-info kt-font-hover-danger pl-2 pr-2"><i class="la la-copy"></i></a>
+                                            </c:if>
                                             <c:choose>
                                                 <c:when test="${view1.status}">
                                                     <c:choose>
@@ -139,12 +143,15 @@
                                             </c:choose>
                                         </th>
                                         <th>
+                                            <c:if test="${not empty p.sales.customer.id}">
+                                                <a href="javascript:copyToClipboard2('<c:out value="${p.sales.customer.id}" />', 'Müştəri kodu <b><c:out value="${p.sales.customer.id}" /></b> kopyalandı')" class="kt-font-lg kt-font-bold kt-font-info kt-font-hover-danger pl-2 pr-2"><i class="la la-copy"></i></a>
+                                            </c:if>
                                             <c:choose>
                                                 <c:when test="${view2.status}">
-                                                    <a href="javascript:window.open('/crm/customer/<c:out value="${p.sales.customer.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${p.sales.customer.id}" />: <c:out value="${p.sales.customer.person.fullName}"/></a>
+                                                    <a href="javascript:window.open('/crm/customer/<c:out value="${p.sales.customer.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${p.sales.customer.person.fullName}"/></a>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <c:out value="${p.sales.customer.id}" />: <c:out value="${p.sales.customer.person.fullName}"/>
+                                                    <c:out value="${p.sales.customer.person.fullName}"/>
                                                 </c:otherwise>
                                             </c:choose>
                                         </th>
@@ -169,6 +176,14 @@
                                                 </c:if>
                                             </span>
                                         </th>
+                                        <td style="max-width: 300px">
+                                            <c:if test="${t.sales.contactHistories.size()>0}">
+                                                <c:set var="ch" value="${t.contactHistories.get(t.sales.contactHistories.size()-1)}"/>
+                                                <fmt:formatDate value = "${ch.createdDate}" pattern = "dd.MM.yyyy" /> -
+                                                <fmt:formatDate value = "${ch.nextContactDate}" pattern = "dd.MM.yyyy" /><br/>
+                                                <c:out value="${fn:substring(ch.description, 0, 80)}" />
+                                            </c:if>
+                                        </td>
                                         <td nowrap class="text-center">
                                             <c:if test="${transfer.status}">
                                                 <a href="javascript:transfer($('#form-transfer'), 'transfer-modal-operation', '<c:out value="${p.sales.id}" />', '<c:out value="${t.amount-t.payableAmount}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">

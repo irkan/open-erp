@@ -31,7 +31,6 @@
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
                                 <thead>
                                 <tr>
-                                    <th class="text-right">Tip</th>
                                     <th>Kod</th>
                                     <th>Müştəri</th>
                                     <th>Ödənilmişdir</th>
@@ -49,33 +48,43 @@
                                 <c:forEach var="t" items="${list.content}" varStatus="loop">
                                     <c:if test="${t.payment.latency gt configuration_troubled_customer}">
                                         <tr data="<c:out value="${t.id}" />">
-                                            <td class="text-right <c:out value="${t.service?'kt-bg-light-primary':''}"/>">
-                                                <span class="kt-font-bold "><c:out value="${t.service?'Servis':'Satış'}"/></span>
-                                            </td>
-                                            <td style="<c:out value="${t.payment.cash?'background-color: #e6ffe7 !important':'background-color: #ffeaf1 !important'}"/>">
+                                            <td style="min-width: 120px; <c:out value="${t.payment.cash?'background-color: #e6ffe7 !important':'background-color: #ffeaf1 !important'}"/>">
+                                                <c:if test="${not empty t.id}">
+                                                    <a href="javascript:copyToClipboard2('<c:out value="${t.id}" />', 'Satış kodu <b><c:out value="${t.id}" /></b> kopyalandı')" class="kt-font-lg kt-font-bold kt-font-info kt-font-hover-danger pl-2 pr-2"><i class="la la-copy"></i></a>
+                                                </c:if>
                                                 <c:choose>
                                                     <c:when test="${view3.status}">
                                                         <c:choose>
                                                             <c:when test="${t.service}">
-                                                                <a href="javascript:window.open('/sale/service/<c:out value="${t.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.id}" /></a>
+                                                                <a href="javascript:window.open('/sale/service/<c:out value="${t.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder">Servis: <c:out value="${t.id}" /></a>
                                                             </c:when>
                                                             <c:otherwise>
-                                                                <a href="javascript:window.open('/sale/sales/<c:out value="${t.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.id}" /></a>
+                                                                <a href="javascript:window.open('/sale/sales/<c:out value="${t.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder">Satış: <c:out value="${t.id}" /></a>
                                                             </c:otherwise>
                                                         </c:choose>
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <c:out value="${t.id}" />
+                                                        <c:choose>
+                                                            <c:when test="${t.service}">
+                                                                Servis: <c:out value="${t.id}" />
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                Satış: <c:out value="${t.id}" />
+                                                            </c:otherwise>
+                                                        </c:choose>
                                                     </c:otherwise>
                                                 </c:choose>
                                             </td>
                                             <th>
+                                                <c:if test="${not empty t.payment.sales.customer.id}">
+                                                    <a href="javascript:copyToClipboard2('<c:out value="${t.payment.sales.customer.id}" />', 'Müştəri kodu <b><c:out value="${t.payment.sales.customer.id}" /></b> kopyalandı')" class="kt-font-lg kt-font-bold kt-font-info kt-font-hover-danger pl-2 pr-2"><i class="la la-copy"></i></a>
+                                                </c:if>
                                                 <c:choose>
                                                     <c:when test="${view2.status}">
-                                                        <a href="javascript:window.open('/crm/customer/<c:out value="${t.payment.sales.customer.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.payment.sales.customer.id}"/>: <c:out value="${t.payment.sales.customer.person.fullName}"/></a>
+                                                        <a href="javascript:window.open('/crm/customer/<c:out value="${t.payment.sales.customer.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.payment.sales.customer.person.fullName}"/></a>
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <c:out value="${t.payment.sales.customer.id}"/>: <c:out value="${t.payment.sales.customer.person.fullName}"/>
+                                                        <c:out value="${t.payment.sales.customer.person.fullName}"/>
                                                     </c:otherwise>
                                                 </c:choose>
                                             </th>

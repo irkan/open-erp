@@ -165,35 +165,7 @@
                                                 <form:errors path="customer.person.lastName" cssClass="alert-danger"/>
                                             </div>
                                         </div>
-                                        <div class="row" style="padding-top: 30px;">
-                                            <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label class="kt-checkbox kt-checkbox--brand">
-                                                        <form:checkbox path="payment.cash"/> Nağdlar
-                                                        <span></span>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="kt-checkbox kt-checkbox--brand">
-                                                        <form:checkbox path="approve"/> Təsdiq edilməyənlər
-                                                        <span></span>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <c:if test="${delete.status}">
-                                                <div class="col-md-3">
-                                                    <div class="form-group">
-                                                        <label class="kt-checkbox kt-checkbox--brand">
-                                                            <form:checkbox path="active"/> Aktual
-                                                            <span></span>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </c:if>
-                                        </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <div class="form-group">
                                                 <form:label path="canavasser">Canavasser</form:label>
                                                 <form:select  path="canavasser.id" cssClass="custom-select form-control" multiple="single">
@@ -207,7 +179,7 @@
                                                 <form:errors path="canavasser" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <div class="form-group">
                                                 <form:label path="dealer">Diller</form:label>
                                                 <form:select  path="dealer.id" cssClass="custom-select form-control" multiple="single">
@@ -221,7 +193,7 @@
                                                 <form:errors path="dealer" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <div class="form-group">
                                                 <form:label path="console">Konsul</form:label>
                                                 <form:select  path="console.id" cssClass="custom-select form-control">
@@ -235,7 +207,7 @@
                                                 <form:errors path="console" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <div class="form-group">
                                                 <form:label path="vanLeader">Van lider</form:label>
                                                 <form:select  path="vanLeader.id" cssClass="custom-select form-control" multiple="single">
@@ -247,6 +219,36 @@
                                                     </c:forEach>
                                                 </form:select>
                                                 <form:errors path="vanLeader" cssClass="control-label alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="row" style="padding-top: 30px;">
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label class="kt-checkbox kt-checkbox--brand">
+                                                            <form:checkbox path="payment.cash"/> Nağdlar
+                                                            <span></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="kt-checkbox kt-checkbox--brand">
+                                                            <form:checkbox path="approve"/> Təsdiq edilməyənlər
+                                                            <span></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <c:if test="${delete.status}">
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label class="kt-checkbox kt-checkbox--brand">
+                                                                <form:checkbox path="active"/> Aktual
+                                                                <span></span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </c:if>
                                             </div>
                                         </div>
                                     </div>
@@ -316,12 +318,15 @@
                                         <td><c:out value="${t.organization.name}"/></td>
                                         <td><fmt:formatDate value = "${t.saleDate}" pattern = "dd.MM.yyyy" /></td>
                                         <th>
+                                            <c:if test="${not empty t.customer.id}">
+                                                <a href="javascript:copyToClipboard2('<c:out value="${t.customer.id}" />', 'Müştəri kodu <b><c:out value="${t.customer.id}" /></b> kopyalandı')" class="kt-font-lg kt-font-bold kt-font-info kt-font-hover-danger pl-2 pr-2"><i class="la la-copy"></i></a>
+                                            </c:if>
                                             <c:choose>
                                                 <c:when test="${view4.status}">
-                                                    <a href="javascript:window.open('/crm/customer/<c:out value="${t.customer.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.customer.id}"/>: <c:out value="${t.customer.person.fullName}"/></a>
+                                                    <a href="javascript:window.open('/crm/customer/<c:out value="${t.customer.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.customer.person.fullName}"/></a>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <c:out value="${t.payment.sales.customer.id}"/>: <c:out value="${t.customer.person.fullName}"/>
+                                                    <c:out value="${t.customer.person.fullName}"/>
                                                 </c:otherwise>
                                             </c:choose>
                                         </th>

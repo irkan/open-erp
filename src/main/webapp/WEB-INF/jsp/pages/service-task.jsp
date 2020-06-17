@@ -135,7 +135,10 @@
                                 <c:forEach var="t" items="${list.content}" varStatus="loop">
                                     <tr data="<c:out value="${utl:toJson(t)}" />">
                                         <td><span class="kt-padding-5"><c:out value="${t.id}" /></span></td>
-                                        <td>
+                                        <td style="min-width: 80px">
+                                            <c:if test="${not empty t.sales.id}">
+                                                <a href="javascript:copyToClipboard2('<c:out value="${t.sales.id}" />', 'Satış kodu <b><c:out value="${t.sales.id}" /></b> kopyalandı')" class="kt-font-lg kt-font-bold kt-font-info kt-font-hover-danger pl-2 pr-2"><i class="la la-copy"></i></a>
+                                            </c:if>
                                             <c:choose>
                                                 <c:when test="${t.sales.service}">
                                                     <a href="javascript:window.open('/sale/service/<c:out value="${t.sales.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.sales.id}" /></a>
@@ -154,7 +157,10 @@
                                         <td>
                                             <fmt:formatDate value = "${t.sales.saleDate}" pattern = "dd.MM.yyyy" />
                                         </td>
-                                        <td style="min-width: 185px">
+                                        <td style="min-width: 210px">
+                                            <c:if test="${not empty t.sales.customer.id}">
+                                                <a href="javascript:copyToClipboard2('<c:out value="${t.sales.customer.id}" />', 'Müştəri kodu <b><c:out value="${t.sales.customer.id}" /></b> kopyalandı')" class="kt-font-lg kt-font-bold kt-font-info kt-font-hover-danger pl-2 pr-2"><i class="la la-copy"></i></a>
+                                            </c:if>
                                             <a href="javascript:window.open('/crm/customer/<c:out value="${t.sales.customer.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.sales.customer.person.fullName}"/></a>
                                         </td>
                                         <td>

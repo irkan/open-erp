@@ -373,7 +373,6 @@
     jQuery(document).ready(function() {
         KTSessionTimeoutDemo.init();
     });
-
     function copyToClipboard(data) {
         var textArea = document.createElement("textarea");
         textArea.value = data;
@@ -385,6 +384,28 @@
         swal.fire({
             type: "success",
             text: 'Kopyalandı',
+            allowOutsideClick: false,
+            showCancelButton: false,
+            showConfirmButton:false,
+            width: '200px'
+        });
+
+        setTimeout(function(){
+            swal.close();
+        }, 1100);
+    }
+
+    function copyToClipboard2(data, message) {
+        var textArea = document.createElement("textarea");
+        textArea.value = data;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("Copy");
+        textArea.remove();
+
+        swal.fire({
+            type: "success",
+            html: message,
             allowOutsideClick: false,
             showCancelButton: false,
             showConfirmButton:false,

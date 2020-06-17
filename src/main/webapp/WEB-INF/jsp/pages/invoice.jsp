@@ -244,6 +244,9 @@
                                             <a href="javascript:copyToClipboard('<c:out value="${t.id}" />')" class="kt-link kt-font-lg kt-font-bold kt-margin-t-5"><c:out value="${t.id}"/></a>
                                         </td>
                                         <td style="<c:out value="${t.sales.payment.cash?'background-color: #e6ffe7 !important':'background-color: #ffeaf1 !important'}"/>">
+                                            <c:if test="${not empty t.sales.id}">
+                                                <a href="javascript:copyToClipboard2('<c:out value="${t.sales.id}" />', 'Satış kodu <b><c:out value="${t.sales.id}" /></b> kopyalandı')" class="kt-font-lg kt-font-bold kt-font-info kt-font-hover-danger pl-2 pr-2"><i class="la la-copy"></i></a>
+                                            </c:if>
                                             <c:choose>
                                                 <c:when test="${view1.status}">
                                                     <c:choose>
@@ -278,12 +281,15 @@
                                             </c:choose>
                                         </td>
                                         <td>
+                                            <c:if test="${not empty t.sales.customer.id}">
+                                                <a href="javascript:copyToClipboard2('<c:out value="${t.sales.customer.id}" />', 'Müştəri kodu <b><c:out value="${t.sales.customer.id}" /></b> kopyalandı')" class="kt-font-lg kt-font-bold kt-font-info kt-font-hover-danger pl-2 pr-2"><i class="la la-copy"></i></a>
+                                            </c:if>
                                             <c:choose>
                                                 <c:when test="${view2.status}">
-                                                    <a href="javascript:window.open('/crm/customer/<c:out value="${t.sales.customer.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.sales.customer.id}" />: <c:out value="${t.sales.customer.person.fullName}"/></a>
+                                                    <a href="javascript:window.open('/crm/customer/<c:out value="${t.sales.customer.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.sales.customer.person.fullName}"/></a>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <c:out value="${t.sales.customer.id}" />: <c:out value="${t.sales.customer.person.fullName}"/>
+                                                    <c:out value="${t.sales.customer.person.fullName}"/>
                                                 </c:otherwise>
                                             </c:choose>
                                         </td>

@@ -172,6 +172,9 @@
                                         <td><c:out value="${t.id}"/></td>
                                         <td><c:out value="${t.organization.name}"/></td>
                                         <td>
+                                            <c:if test="${not empty t.sales.id}">
+                                                <a href="javascript:copyToClipboard2('<c:out value="${t.id}" />', 'Satış kodu <b><c:out value="${t.sales.id}" /></b> kopyalandı')" class="kt-font-lg kt-font-bold kt-font-info kt-font-hover-danger pl-2 pr-2"><i class="la la-copy"></i></a>
+                                            </c:if>
                                             <c:choose>
                                                 <c:when test="${view3.status}">
                                                     <c:choose>
@@ -208,7 +211,10 @@
                                                 </c:otherwise>
                                             </c:choose>
                                         </td>
-                                        <td style="max-width: 500px"><c:out value="${t.description}"/></td>
+                                        <td style="max-width: 350px">
+                                            <c:out value="${fn:substring(t.description, 0, 230)}" />
+                                            <c:out value="${t.description.length()>230?' . . . ':''}"/>
+                                        </td>
                                         <td nowrap class="text-center">
                                             <c:if test="${view.status}">
                                                 <a href="javascript:contactHistory('view', $('#form'), '<c:out value="${t.id}" />', 'modal-operation', '<c:out value="${view.object.name}" />', '<c:out value="${t.sales.id}"/>');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
