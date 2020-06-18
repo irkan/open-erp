@@ -580,10 +580,10 @@ public class SaleController extends SkeletonController {
         if(invc.getSales()==null){
             FieldError fieldError = new FieldError("", "", "SATIŞ kodu tapılmadı!");
             binding.addError(fieldError);
-        } else if(!invc.getSales().getService() && invc.getCollector()==null){
+        }/* else if(!invc.getSales().getService() && invc.getCollector()==null){
             FieldError fieldError = new FieldError("", "", "Yığımçı təyin edilməlidir!");
             binding.addError(fieldError);
-        }
+        }*/
         if(invc.getApprove()){
             List<Log> logs = logRepository.getLogsByActiveTrueAndTableNameAndRowIdAndOperationOrderByIdDesc("sale_invoice", invc.getId(), "approve");
             FieldError fieldError = new FieldError("", "", "Təsdiq əməliyyatı"+(logs.size()>0?(" "+logs.get(0).getUsername() + " tərəfindən " + DateUtility.getFormattedDateTime(logs.get(0).getOperationDate()) + " tarixində "):" ")+"icra edilmişdir!");

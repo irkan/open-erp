@@ -40,6 +40,7 @@
             <td><c:out value="${t.attr2}" /></td>
             <td nowrap class="text-center">
                 <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
+<c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
                 <c:choose>
                     <c:when test="${view.status}">
                         <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">

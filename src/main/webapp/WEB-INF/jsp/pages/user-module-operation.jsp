@@ -336,67 +336,55 @@
     });*/
 
 
-    var KTDatatablesBasicScrollable = function() {
-        var initTable2 = function() {
-            var table = $('#group_table');
-            table.DataTable({
-                responsive: true,
-                scrollY: 480,
-                scrollX: true,
-                paging: false,
-                autoWidth: false,
-                drawCallback: function(settings) {
-                    var api = this.api();
-                    var rows = api.rows({page: 'current'}).nodes();
-                    var last = null;
+    $('#group_table').DataTable({
+        responsive: true,
+        scrollY: 480,
+        scrollX: true,
+        paging: false,
+        autoWidth: false,
+        drawCallback: function(settings) {
+            var api = this.api();
+            var rows = api.rows({page: 'current'}).nodes();
+            var last = null;
 
-                    api.column(2, {page: 'current'}).data().each(function(group, i) {
-                        if (last !== group) {
-                            $(rows).eq(i).before(
-                                '<tr class="group"><td colspan="30">' + group + '</td></tr>'
-                            );
-                            last = group;
-                        }
-                    });
-                },
-                columnDefs: [
-                    {targets: 0, orderable: false},
-                    {targets: 2, visible: false},
-                    {targets: 3, orderable: false},
-                    {targets: 4, orderable: false},
-                    {targets: 5, orderable: false},
-                    {targets: 6, orderable: false},
-                    {targets: 7, orderable: false},
-                    {targets: 8, orderable: false},
-                    {targets: 9, orderable: false},
-                    {targets: 10, orderable: false},
-                    {targets: 11, orderable: false},
-                    {targets: 12, orderable: false},
-                    {targets: 13, orderable: false},
-                    {targets: 14, orderable: false},
-                    {targets: 15, orderable: false},
-                    {targets: 16, orderable: false},
-                    {targets: 17, orderable: false},
-                    {targets: 18, orderable: false},
-                    {targets: 19, orderable: false},
-                    {targets: 20, orderable: false},
-                    {targets: 21, orderable: false},
-                    {targets: 22, orderable: false},
-                    {targets: 23, orderable: false},
-                    {targets: 24, orderable: false}
-                ],
-                fixedColumns:   {
-                    leftColumns: 2
-                },
-                order: [[1, 'asc']]
+            api.column(2, {page: 'current'}).data().each(function(group, i) {
+                if (last !== group) {
+                    $(rows).eq(i).before(
+                        '<tr class="group"><td colspan="30">' + group + '</td></tr>'
+                    );
+                    last = group;
+                }
             });
-        };
-        return {
-            init: function() {
-                initTable2();
-            }
-        };
-    }();
-
-    KTDatatablesBasicScrollable.init();
+        },
+        columnDefs: [
+            {targets: 0, orderable: false},
+            {targets: 2, visible: false},
+            {targets: 3, orderable: false},
+            {targets: 4, orderable: false},
+            {targets: 5, orderable: false},
+            {targets: 6, orderable: false},
+            {targets: 7, orderable: false},
+            {targets: 8, orderable: false},
+            {targets: 9, orderable: false},
+            {targets: 10, orderable: false},
+            {targets: 11, orderable: false},
+            {targets: 12, orderable: false},
+            {targets: 13, orderable: false},
+            {targets: 14, orderable: false},
+            {targets: 15, orderable: false},
+            {targets: 16, orderable: false},
+            {targets: 17, orderable: false},
+            {targets: 18, orderable: false},
+            {targets: 19, orderable: false},
+            {targets: 20, orderable: false},
+            {targets: 21, orderable: false},
+            {targets: 22, orderable: false},
+            {targets: 23, orderable: false},
+            {targets: 24, orderable: false}
+        ],
+        fixedColumns:   {
+            leftColumns: 2
+        },
+        order: [[1, 'asc']]
+    });
 </script>

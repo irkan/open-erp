@@ -277,6 +277,7 @@
                     <c:choose>
                         <c:when test="${not empty list}">
                             <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
+                            <c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
                             <c:set var="view1" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'contact-history', 'view')}"/>
                             <c:set var="view2" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'schedule', 'view')}"/>
                             <c:set var="view3" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'service-regulator', 'view')}"/>
@@ -1146,8 +1147,13 @@
 <script src="<c:url value="/assets/vendors/general/typeahead.js/dist/typeahead.jquery.js" />" type="text/javascript"></script>
 
 <script>
-
     $('#group_table').DataTable({
+        <c:if test="${export.status}">
+        dom: 'B<"clear">lfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        </c:if>
         responsive: true,
         pageLength: 100,
         order: [[2, 'asc']],

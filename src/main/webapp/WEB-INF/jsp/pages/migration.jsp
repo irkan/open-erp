@@ -19,6 +19,7 @@
                     <c:choose>
                         <c:when test="${not empty list}">
                             <c:set var="detail" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'detail')}"/>
+                            <c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
                             <c:set var="reload" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'reload')}"/>
                             <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
@@ -181,6 +182,12 @@
     });
 
     $("#datatable").DataTable({
+        <c:if test="${export.status}">
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        </c:if>
         responsive: true,
         lengthMenu: [10, 25, 50, 75, 100, 200, 1000],
         pageLength: 100,

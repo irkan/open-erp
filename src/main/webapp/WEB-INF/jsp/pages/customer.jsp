@@ -198,6 +198,7 @@
                     <c:choose>
                         <c:when test="${not empty list}">
                             <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
+<c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
                             <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable"
                                    id="group_table">

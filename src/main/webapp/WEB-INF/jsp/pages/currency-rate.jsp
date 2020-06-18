@@ -18,6 +18,7 @@
                 <div class="kt-portlet__body">
                     <c:choose>
                         <c:when test="${not empty list}">
+                            <c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="group_table">
                                 <thead>
                                 <tr>
@@ -62,9 +63,38 @@
 </div>
 
 <form  id="reload-form" method="post" action="/admin/currency-rate" style="display: none"></form>
-
-<script src="<c:url value="/assets/js/demo4/pages/crud/datatables/advanced/row-grouping.js" />" type="text/javascript"></script>
 <script>
+    $('#group_table').DataTable({
+        <c:if test="${export.status}">
+        dom: 'B<"clear">lfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        </c:if>
+        responsive: true,
+        pageLength: 100,
+        order: [[2, 'asc']],
+        drawCallback: function(settings) {
+            var api = this.api();
+            var rows = api.rows({page: 'current'}).nodes();
+            var last = null;
+
+            api.column(2, {page: 'current'}).data().each(function(group, i) {
+                if (last !== group) {
+                    $(rows).eq(i).before(
+                        '<tr class="group"><td colspan="30">' + group + '</td></tr>'
+                    );
+                    last = group;
+                }
+            });
+        },
+        columnDefs: [
+            {
+                targets: [2],
+                visible: false
+            }
+        ]
+    });
     function reloadFunction(){
         submit($('#reload-form'));
     }

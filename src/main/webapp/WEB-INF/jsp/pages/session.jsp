@@ -20,6 +20,7 @@
 <c:choose>
     <c:when test="${not empty list}">
         <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
+        <c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
 <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
     <thead>
     <tr>
@@ -69,6 +70,12 @@
 <script>
 
     $("#datatable").DataTable({
+        <c:if test="${export.status}">
+        dom: 'B<"clear">lfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        </c:if>
         responsive: true,
         lengthMenu: [10, 25, 50, 75, 100, 200, 1000],
         pageLength: 100,

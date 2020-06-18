@@ -22,6 +22,7 @@
 <c:choose>
     <c:when test="${not empty list}">
         <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
+        <c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
         <c:set var="payroll" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'payroll')}"/>
         <c:set var="sale" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'sale')}"/>
         <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
@@ -507,6 +508,12 @@
 
 
     $('#group_table').DataTable({
+        <c:if test="${export.status}">
+        dom: 'B<"clear">lfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        </c:if>
         responsive: true,
         pageLength: 100,
         order: [[2, 'asc']],

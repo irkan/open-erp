@@ -169,6 +169,7 @@
 <c:choose>
     <c:when test="${not empty list}">
         <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
+        <c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
         <c:set var="credit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'credit')}"/>
         <c:set var="transfer" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'transfer')}"/>
         <c:set var="approve" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
@@ -482,6 +483,12 @@
     });
 
     $("#datatable").DataTable({
+        <c:if test="${export.status}">
+        dom: 'B<"clear">lfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        </c:if>
         responsive: true,
         lengthMenu: [10, 25, 50, 75, 100, 200, 1000],
         pageLength: 100,
@@ -510,6 +517,9 @@
             },
             advanceDate: {
                 required: true
+            },
+            description: {
+                required: true
             }
         },
         invalidHandler: function(event, validator) {
@@ -521,6 +531,10 @@
     $( "#advance-approve-form" ).validate({
         rules: {
             payed: {
+                required: true,
+                number: true
+            },
+            description: {
                 required: true,
                 number: true
             }

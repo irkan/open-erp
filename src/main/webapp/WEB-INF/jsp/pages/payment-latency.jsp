@@ -22,6 +22,7 @@
                     <c:choose>
                         <c:when test="${not empty list}">
                             <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
+<c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
                             <c:set var="view1" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'invoice', 'view')}"/>
                             <c:set var="view2" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'customer', 'view')}"/>
                             <c:set var="view3" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'sales', 'view')}"/>
@@ -31,10 +32,10 @@
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
                                 <thead>
                                 <tr>
-                                    <th>Tip</th>
-                                    <th>Müştəri</th>
-                                    <th>Ödənilmişdir</th>
-                                    <th>Ödənilməlidir</th>
+                                    <th class="dt-filter-text">Tip</th>
+                                    <th class="dt-filter-text">Müştəri</th>
+                                    <th class="dt-filter-text">Ödənilmişdir</th>
+                                    <th class="dt-filter-text">Ödənilməlidir</th>
                                     <th>Gecikir</th>
                                     <th>Satış tarixi</th>
                                     <th>Sonuncu ödəniş</th>
@@ -241,6 +242,12 @@
 <script>
 
     $("#datatable").DataTable({
+        <c:if test="${export.status}">
+        dom: 'B<"clear">lfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        </c:if>
         responsive: true,
         lengthMenu: [10, 25, 50, 75, 100, 200, 1000],
         pageLength: 100,
@@ -253,6 +260,40 @@
                 orderable: false
             },
         ],
+        initComplete: function () {
+
+            //Apply select search
+            this.api().columns('.dt-filter-select').every(function () {
+                var column = this;
+                var select = $('<select><option value=""></option></select>')
+                    .appendTo($(column.footer()).empty())
+                    .on('change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false)
+                            .draw();
+                    });
+                column.data().unique().sort().each(function (d,j) {
+                    select.append('<option value="'+d+'">'+d+'</option>')
+                });
+            });
+
+            //Apply text search
+            this.api().columns('.dt-filter-text').every(function () {
+                var title = $(this.footer()).text();
+                $(this.footer()).html('<input type="text" placeholder="Search '+title+'" />');
+                var that = this;
+                $('input',this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
+        }
     });
 
     $( "#form" ).validate({

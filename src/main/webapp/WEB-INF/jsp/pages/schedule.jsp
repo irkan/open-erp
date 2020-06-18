@@ -90,6 +90,7 @@
 
                     <c:choose>
                         <c:when test="${not empty list.content}">
+                            <c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
                             <c:set var="transfer" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'transfer')}"/>
                             <c:set var="view1" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'sales', 'view')}"/>
                             <c:set var="view2" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'customer', 'view')}"/>
@@ -245,9 +246,24 @@
 <script>
     $(function(){
         $('#datatable').DataTable({
+            <c:if test="${export.status}">
+            dom: 'B<"clear">lfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            </c:if>
             responsive: true,
+            lengthMenu: [10, 25, 50, 75, 100, 200, 1000],
             pageLength: 100,
-            ordering: false
+            order: [[1, 'desc']],
+            columnDefs: [
+                {
+                    targets: 0,
+                    width: '25px',
+                    className: 'dt-center',
+                    orderable: false
+                },
+            ],
         });
     });
 

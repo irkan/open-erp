@@ -121,9 +121,10 @@
                 </c:choose>
                 <div class="kt-portlet__body">
                     <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
+                    <c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
                     <c:choose>
                         <c:when test="${not empty form.workingHourRecordEmployees}">
-                            <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_3">
+                            <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
                                 <thead>
                                 <tr>
                                     <th rowspan="3">№</th>
@@ -280,33 +281,28 @@
         };
     }();
 
-    var KTDatatablesBasicScrollable = function() {
-        var initTable2 = function() {
-            var table = $('#kt_table_3');
-            table.DataTable({
-                scrollY: 400,
-                scrollX: true,
-                paging: false,
-                autoWidth: false,
-                searching: false,
-                columnDefs: [
-                    {orderable: false, targets: 0}
-                ],
-                fixedColumns:   {
-                    leftColumns: 2
-                },
-                order: [[1, 'asc']]
-            });
-        };
-        return {
-            init: function() {
-                initTable2();
-            }
-        };
-    }();
+    $('#datatable').DataTable({
+        <c:if test="${export.status}">
+        dom: 'B<"clear">lfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        </c:if>
+        scrollY: 400,
+        scrollX: true,
+        paging: false,
+        autoWidth: false,
+        searching: false,
+        columnDefs: [
+            {orderable: false, targets: 0}
+        ],
+        fixedColumns:   {
+            leftColumns: 2
+        },
+        order: [[1, 'asc']]
+    });
 
     KTTypeahead.init();
-    KTDatatablesBasicScrollable.init();
 
     function saveWHR(form){
         $(form).attr("action", "/payroll/working-hour-record/save");

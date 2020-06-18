@@ -97,6 +97,9 @@
                 <div class="kt-portlet__body">
                     <c:choose>
                         <c:when test="${not empty form.salaryEmployees}">
+                            <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
+                            <c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
+                            <c:set var="detail" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'detail')}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
                                 <thead>
                                 <tr>
@@ -167,22 +170,16 @@
                                             </c:forEach>
                                         </th>
                                         <td nowrap class="text-center">
-                                            <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
-                                            <c:choose>
-                                                <c:when test="${view.status}">
-                                                    <a href="javascript:viewData('<c:out value="${utl:toJson(t)}" />')" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
-                                                        <i class="la <c:out value="${view.object.icon}"/>"></i>
-                                                    </a>
-                                                </c:when>
-                                            </c:choose>
-                                            <c:set var="detail" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'detail')}"/>
-                                            <c:choose>
-                                                <c:when test="${detail.status}">
-                                                    <a href="/payroll/salary-employee/<c:out value="${t.employee.id}"/>" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${detail.object.name}"/>">
-                                                        <i class="la <c:out value="${detail.object.icon}"/>"></i>
-                                                    </a>
-                                                </c:when>
-                                            </c:choose>
+                                            <c:if test="${view.status}">
+                                                <a href="javascript:viewData('<c:out value="${utl:toJson(t)}" />')" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
+                                                    <i class="la <c:out value="${view.object.icon}"/>"></i>
+                                                </a>
+                                            </c:if>
+                                            <c:if test="${detail.status}">
+                                                <a href="/payroll/salary-employee/<c:out value="${t.employee.id}"/>" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${detail.object.name}"/>">
+                                                    <i class="la <c:out value="${detail.object.icon}"/>"></i>
+                                                </a>
+                                            </c:if>
                                         </td>
                                     </tr>
                                 </c:forEach>
