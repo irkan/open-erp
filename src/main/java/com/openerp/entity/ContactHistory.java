@@ -67,6 +67,10 @@ public class ContactHistory {
     @Column(name = "created_date", nullable = false)
     private Date createdDate = new Date();
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "admin_user_id")
+    private User user;
+
     public ContactHistory(Sales sales, Organization organization) {
         this.sales = sales;
         this.organization = organization;

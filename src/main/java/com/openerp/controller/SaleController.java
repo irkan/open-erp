@@ -352,6 +352,7 @@ public class SaleController extends SkeletonController {
         contactHistory.setOrganization(sales.getOrganization());
         contactHistory.setDescription(returnForm.getReason());
         contactHistory.setSales(sales);
+        contactHistory.setUser(getSessionUser());
         contactHistoryRepository.save(contactHistory);
         log(contactHistory, "collect_contact_history", "create/edit", contactHistory.getId(), contactHistory.toString());
 
@@ -397,6 +398,10 @@ public class SaleController extends SkeletonController {
         if(sales.getApprove()){
             List<Log> logs = logRepository.getLogsByActiveTrueAndTableNameAndRowIdAndOperationOrderByIdDesc("sale_sales", sales.getId(), "approve");
             FieldError fieldError = new FieldError("", "", "Təsdiq əməliyyatı"+(logs.size()>0?(" "+logs.get(0).getUsername() + " tərəfindən " + DateUtility.getFormattedDateTime(logs.get(0).getOperationDate()) + " tarixində "):" ")+"icra edilmişdir!");
+            binding.addError(fieldError);
+        }
+        if(!checkBackDate(sales.getSaleDate())){
+            FieldError fieldError = new FieldError("", "", "Satış tarixi " + DateUtility.getFormattedDate(sales.getSaleDate()) + " olduğu üçün təsdiqə icazə verilmir!");
             binding.addError(fieldError);
         }
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));

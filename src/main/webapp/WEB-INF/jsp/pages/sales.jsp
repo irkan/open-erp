@@ -529,14 +529,7 @@
                                         <div class="form-group">
                                             <div class="input-group date" >
                                                 <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
-                                                <c:choose>
-                                                    <c:when test="${utl:isAdministrator(sessionScope.user)}">
-                                                        <form:input path="saleDate" autocomplete="off" date_="date_" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <form:input path="saleDate" autocomplete="off" date_="date_" cssClass="form-control" placeholder="dd.MM.yyyy" readonly="true"/>
-                                                    </c:otherwise>
-                                                </c:choose>
+                                                <form:input path="saleDate" autocomplete="off" date_="date_" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
                                             </div>
                                             <form:errors path="saleDate" cssClass="control-label alert-danger" />
                                         </div>
@@ -1762,7 +1755,7 @@
                         error: function() {
                             swal.fire({
                                 title: "Xəta baş verdi!",
-                                html: "<c:out value="${sessionScope.user.employee.person.lastName}"/> <c:out value="${sessionScope.user.employee.person.firstName}"/>  adına inventar təhkim edilməyib",
+                                html: "İnventar tapılmadı və ya "+$(element).val()+" barkodlu inventarın sayı 0 (sıfır)-dır!",
                                 type: "error",
                                 cancelButtonText: 'Bağla',
                                 cancelButtonColor: '#c40000',

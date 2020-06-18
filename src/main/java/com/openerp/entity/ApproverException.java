@@ -32,6 +32,9 @@ public class ApproverException {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "back_operation_days")
+    private Integer backOperationDays;
+
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     @Column(name = "permission_date_from", nullable = false)

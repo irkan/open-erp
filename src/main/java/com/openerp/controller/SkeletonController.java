@@ -662,6 +662,7 @@ public class SkeletonController {
             } else {
                 ch.setOrganization(getSessionOrganization());
             }
+            ch.setUser(getSessionUser());
             contactHistoryRepository.save(ch);
             log(ch, "collect_contact_history", "create/edit", ch.getId(), ch.toString());
         } catch (Exception e){
@@ -700,6 +701,40 @@ public class SkeletonController {
                     return true;
                 }
             }
+        }
+        return false;
+    }
+
+    boolean checkBackDate(Date date){
+        int backDays = 0;
+        try{
+            Date today = new Date();
+            ApproverException approverException = null;
+            List<ApproverException> approverExceptions = approverExceptionRepository.getApproverExceptionsByUserAndActiveTrueAndPermissionDateFromLessThanEqualAndPermissionDateToGreaterThanEqualOrderByPermissionDateToDesc(getSessionUser(), today, today);
+            if(approverExceptions.size()>0){
+                approverException = approverExceptions.get(0);
+            }
+            if(approverException!=null && approverException.getBackOperationDays()!=null && approverException.getBackOperationDays()!=0){
+                backDays = approverException.getBackOperationDays();
+            }
+        } catch (Exception e){
+            log.error(e.getMessage(), e);
+        }
+
+        if(backDays==0){
+            try{
+                Configuration configuration = configurationRepository.getConfigurationByKey("default_back_operation_days_count");
+                if(configuration!=null && configuration.getAttribute()!=null && configuration.getAttribute().matches(Constants.REGEX.REGEX3)){
+                    backDays = Integer.parseInt(configuration.getAttribute());
+                }
+            } catch (Exception e){
+                log.error(e.getMessage(), e);
+            }
+        }
+
+        Date backDate = DateUtility.addDay(-1*backDays);
+        if(backDate.getTime()<=date.getTime()){
+            return true;
         }
         return false;
     }

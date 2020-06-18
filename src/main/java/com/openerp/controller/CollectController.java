@@ -145,6 +145,7 @@ public class CollectController extends SkeletonController {
             ContactHistory contactHistory = new ContactHistory();
             contactHistory.setDescription(desc);
             contactHistory.setSales(sales);
+            contactHistory.setUser(getSessionUser());
             contactHistoryRepository.save(contactHistory);
             log(contactHistory, "collect_payment_regulator_note", "create/edit", contactHistory.getId(), contactHistory.toString());
         }
