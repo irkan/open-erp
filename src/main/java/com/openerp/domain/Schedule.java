@@ -21,6 +21,11 @@ public class Schedule {
 
     private Sales sales;
 
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    private Date invoiceDate;
+
+    private String description;
+
     public Schedule(Double amount, Date scheduleDate) {
         this.amount = amount;
         this.scheduleDate = scheduleDate;

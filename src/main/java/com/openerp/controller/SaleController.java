@@ -506,14 +506,15 @@ public class SaleController extends SkeletonController {
             Invoice invoice = new Invoice();
             invoice.setSales(schedule.getSales());
             invoice.setApprove(false);
+            invoice.setInvoiceDate(schedule.getInvoiceDate()!=null?schedule.getInvoiceDate():invoice.getInvoiceDate());
             invoice.setPrice(schedule.getPayableAmount());
             invoice.setOrganization(schedule.getSales().getOrganization());
-            invoice.setDescription("Satışdan əldə edilən ödəniş " + invoice.getPrice() + " AZN");
+            invoice.setDescription("Satışdan əldə edilən ödəniş " + invoice.getPrice() + " AZN" + (schedule.getDescription()!=null?" " + schedule.getDescription():""));
             invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
             invoiceRepository.save(invoice);
             invoice.setChannelReferenceCode(String.valueOf(invoice.getId()));
             invoiceRepository.save(invoice);
-            log(invoice, "sales_invoice", "create/edit", invoice.getId(), invoice.toString(), "Nümayişdən yaranan avans ödənişi");
+            log(invoice, "sales_invoice", "create/edit", invoice.getId(), invoice.toString(), "Ödəniş qrafikindən yaradılan hesab-faktura");
         }
         Sales filterSales = new Sales(schedule.getSales().getId(), !canViewAll()?getSessionOrganization():null);
         return mapPost(new SalesSchedule(filterSales), binding, redirectAttributes, "/sale/schedule/"+schedule.getSales().getId());

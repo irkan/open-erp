@@ -218,7 +218,7 @@
                                         </td>
                                         <td nowrap class="text-center">
                                             <c:if test="${transfer.status}">
-                                                <a href="javascript:transfer($('#form-transfer'), 'transfer-modal-operation', '<c:out value="${p.sales.id}" />', '<c:out value="${t.amount-t.payableAmount}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
+                                                <a href="javascript:transfer($('#form-transfer'), 'transfer-modal-operation', '<c:out value="${p.sales.id}" />', '<c:out value="${t.amount-t.payableAmount}" />', '<fmt:formatDate value = "${t.scheduleDate}" pattern = "dd.MM.yyyy" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
                                                     <i class="<c:out value="${transfer.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
@@ -264,6 +264,19 @@
                         </div>
                         <form:errors path="payableAmount" cssClass="alert-danger control-label"/>
                     </div>
+                    <div class="form-group">
+                        <form:label path="invoiceDate">Hesab-faktura tarixi</form:label>
+                        <div class="input-group date" >
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
+                            <form:input path="invoiceDate" autocomplete="off" date_="date_" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
+                        </div>
+                        <form:errors path="invoiceDate" cssClass="control-label alert-danger" />
+                    </div>
+                    <div class="form-group">
+                        <form:label path="description">Açıqlama</form:label>
+                        <form:textarea path="description" cssClass="form-control"/>
+                        <form:errors path="description" cssClass="alert-danger control-label"/>
+                    </div>
                 </form:form>
             </div>
             <div class="modal-footer">
@@ -298,10 +311,11 @@
         });
     });
 
-    function transfer(form, modal, salesId, payableAmount){
+    function transfer(form, modal, salesId, payableAmount, invoiceDate){
         try {
             $(form).find("input[name='payableAmount']").val(payableAmount);
             $(form).find("input[name='sales']").val(salesId);
+            $(form).find("input[name='invoiceDate']").val(invoiceDate);
             $('#' + modal).modal('toggle');
         } catch (e) {
             console.error(e);
