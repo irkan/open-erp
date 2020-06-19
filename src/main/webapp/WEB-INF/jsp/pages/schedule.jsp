@@ -101,6 +101,7 @@
                                     <th>№</th>
                                     <th>Satış kodu</th>
                                     <th>Müştəri</th>
+                                    <th>Müştəri ilə əlaqə</th>
                                     <th>Ödəniş tarixi</th>
                                     <th>Qrafik üzrə</th>
                                     <th>Ödənilib</th>
@@ -157,6 +158,19 @@
                                                 </c:otherwise>
                                             </c:choose>
                                         </th>
+                                        <td style="max-width: 280px">
+                                            <div>
+                                                <a href="#" class="kt-link kt-font-bolder kt-font-danger"><c:out value="${p.sales.customer.person.contact.mobilePhone}"/></a>
+                                                <a href="#" class="kt-link kt-font-bolder kt-font-warning"><c:out value="${p.sales.customer.person.contact.homePhone}"/></a>
+                                                <a href="#" class="kt-link kt-font-bolder"><c:out value="${p.sales.customer.person.contact.relationalPhoneNumber1}"/></a>
+                                                <a href="#" class="kt-link kt-font-bolder"><c:out value="${p.sales.customer.person.contact.relationalPhoneNumber2}"/></a>
+                                                <a href="#" class="kt-link kt-font-bolder"><c:out value="${p.sales.customer.person.contact.relationalPhoneNumber3}"/></a>
+                                            </div>
+                                            <div>
+                                                <c:out value="${p.sales.customer.person.contact.city.name}"/>
+                                                <c:out value="${p.sales.customer.person.contact.address}"/>
+                                            </div>
+                                        </td>
                                         <td><fmt:formatDate value = "${t.scheduleDate}" pattern = "dd.MM.yyyy" /></td>
                                         <th><c:out value="${t.amount}" /> AZN</th>
                                         <th>
@@ -181,22 +195,24 @@
                                         <td style="max-width: 270px">
                                             <c:if test="${view3.status}">
                                                 <c:if test="${p.sales.contactHistories.size()>0}">
-                                                    <a href="javascript:window.open('/sale/contact-history/<c:out value="${p.sales.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder">
+                                                    <a href="javascript:window.open('/collect/contact-history/<c:out value="${p.sales.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder">
                                                         <c:set var="ch" value="${p.sales.contactHistories.get(p.sales.contactHistories.size()-1)}"/>
+                                                        <c:out value="${ch.user.username}"/>
                                                         <fmt:formatDate value = "${ch.createdDate}" pattern = "dd.MM.yyyy" /> -
-                                                        <fmt:formatDate value = "${ch.nextContactDate}" pattern = "dd.MM.yyyy" /><br/>
-                                                        <c:out value="${fn:substring(ch.description, 0, 110)}" />
-                                                        <c:out value="${ch.description.length()>110?' . . . ':''}"/>
+                                                        <fmt:formatDate value = "${ch.nextContactDate}" pattern = "dd.MM.yyyy" /> -
+                                                        <c:out value="${fn:substring(ch.description, 0, 94)}" />
+                                                        <c:out value="${ch.description.length()>94?' . . . ':''}"/>
                                                     </a>
                                                 </c:if>
                                             </c:if>
                                             <c:if test="${!view3.status}">
                                                 <c:if test="${p.sales.contactHistories.size()>0}">
                                                     <c:set var="ch" value="${p.sales.contactHistories.get(p.sales.contactHistories.size()-1)}"/>
+                                                    <c:out value="${ch.user.username}"/>
                                                     <fmt:formatDate value = "${ch.createdDate}" pattern = "dd.MM.yyyy" /> -
-                                                    <fmt:formatDate value = "${ch.nextContactDate}" pattern = "dd.MM.yyyy" /><br/>
-                                                    <c:out value="${fn:substring(ch.description, 0, 110)}" />
-                                                    <c:out value="${ch.description.length()>110?' . . . ':''}"/>
+                                                    <fmt:formatDate value = "${ch.nextContactDate}" pattern = "dd.MM.yyyy" /> -
+                                                    <c:out value="${fn:substring(ch.description, 0, 94)}" />
+                                                    <c:out value="${ch.description.length()>94?' . . . ':''}"/>
                                                 </c:if>
                                             </c:if>
                                         </td>

@@ -27,6 +27,7 @@
                             <c:set var="view2" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'customer', 'view')}"/>
                             <c:set var="view3" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'sales', 'view')}"/>
                             <c:set var="view4" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'schedule', 'view')}"/>
+                            <c:set var="view5" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'contact-history', 'view')}"/>
                             <c:set var="detail" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'detail')}"/>
                             <c:set var="transfer" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'transfer')}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
@@ -149,12 +150,27 @@
                                                 </c:if>
                                             </th>
                                             <td style="max-width: 300px">
-                                                <c:if test="${t.contactHistories.size()>0}">
-                                                    <c:set var="ch" value="${t.contactHistories.get(t.contactHistories.size()-1)}"/>
-                                                    <fmt:formatDate value = "${ch.createdDate}" pattern = "dd.MM.yyyy" /> -
-                                                    <fmt:formatDate value = "${ch.nextContactDate}" pattern = "dd.MM.yyyy" /><br/>
-                                                    <c:out value="${fn:substring(ch.description, 0, 125)}" />
-                                                    <c:out value="${ch.description.length()>125?' . . . ':''}"/>
+                                                <c:if test="${view5.status}">
+                                                    <c:if test="${t.contactHistories.size()>0}">
+                                                        <a href="javascript:window.open('/collect/contact-history/<c:out value="${t.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder">
+                                                            <c:set var="ch" value="${t.contactHistories.get(t.contactHistories.size()-1)}"/>
+                                                            <c:out value="${ch.user.username}"/>
+                                                            <fmt:formatDate value = "${ch.createdDate}" pattern = "dd.MM.yyyy" /> -
+                                                            <fmt:formatDate value = "${ch.nextContactDate}" pattern = "dd.MM.yyyy" /> -
+                                                            <c:out value="${fn:substring(ch.description, 0, 94)}" />
+                                                            <c:out value="${ch.description.length()>94?' . . . ':''}"/>
+                                                        </a>
+                                                    </c:if>
+                                                </c:if>
+                                                <c:if test="${!view5.status}">
+                                                    <c:if test="${t.contactHistories.size()>0}">
+                                                        <c:set var="ch" value="${t.contactHistories.get(t.contactHistories.size()-1)}"/>
+                                                        <c:out value="${ch.user.username}"/>
+                                                        <fmt:formatDate value = "${ch.createdDate}" pattern = "dd.MM.yyyy" /> -
+                                                        <fmt:formatDate value = "${ch.nextContactDate}" pattern = "dd.MM.yyyy" /> -
+                                                        <c:out value="${fn:substring(ch.description, 0, 94)}" />
+                                                        <c:out value="${ch.description.length()>94?' . . . ':''}"/>
+                                                    </c:if>
                                                 </c:if>
                                             </td>
                                             <td nowrap class="text-center">

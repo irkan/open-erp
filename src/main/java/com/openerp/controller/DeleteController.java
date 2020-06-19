@@ -39,19 +39,19 @@ public class DeleteController extends SkeletonController {
             DictionaryType dictionaryType = dictionaryTypeRepository.getDictionaryTypeById(Integer.parseInt(id));
             dictionaryType.setActive(false);
             dictionaryTypeRepository.save(dictionaryType);
-            log(dictionaryType, "admin_dictionary_type", "create/edit", dictionaryType.getId(), dictionaryType.toString());
+            log(dictionaryType, "admin_dictionary_type", "delete", dictionaryType.getId(), dictionaryType.toString());
             if(dictionaryType!=null){
                 for(Dictionary dictionary: dictionaryRepository.getDictionariesByDictionaryType_Id(dictionaryType.getId())){
                     dictionary.setActive(false);
                     dictionaryRepository.save(dictionary);
-                    log(dictionary, "admin_dictionary_type", "create/edit", dictionary.getId(), dictionary.toString());
+                    log(dictionary, "admin_dictionary_type", "delete", dictionary.getId(), dictionary.toString());
                 }
             }
         } else if(path.equalsIgnoreCase(Constants.ROUTE.DICTIONARY)){
             Dictionary dictionary = dictionaryRepository.getDictionaryById(Integer.parseInt(id));
             dictionary.setActive(false);
             dictionaryRepository.save(dictionary);
-            log(dictionary, "admin_dictionary", "create/edit", dictionary.getId(), dictionary.toString());
+            log(dictionary, "admin_dictionary", "delete", dictionary.getId(), dictionary.toString());
         } else if(path.equalsIgnoreCase(Constants.ROUTE.MODULE)){
             Module module = moduleRepository.getModuleById(Integer.parseInt(id));
             module.setActive(false);
@@ -106,47 +106,47 @@ public class DeleteController extends SkeletonController {
             Supplier supplier = supplierRepository.getSuppliersById(Integer.parseInt(id));
             supplier.setActive(false);
             supplierRepository.save(supplier);
-            log(supplier, "warehouse_supplier", "create/edit", supplier.getId(), supplier.toString());
+            log(supplier, "warehouse_supplier", "delete", supplier.getId(), supplier.toString());
         } else if(path.equalsIgnoreCase(Constants.ROUTE.ACCOUNT)){
             Account account = accountRepository.getAccountById(Integer.parseInt(id));
             account.setActive(false);
             accountRepository.save(account);
-            log(account, "accounting_account", "create/edit", account.getId(), account.toString());
+            log(account, "accounting_account", "delete", account.getId(), account.toString());
         } else if(path.equalsIgnoreCase(Constants.ROUTE.NON_WORKING_DAY)){
             NonWorkingDay nonWorkingDay = nonWorkingDayRepository.getNonWorkingDayById(Integer.parseInt(id));
             nonWorkingDay.setActive(false);
             nonWorkingDayRepository.save(nonWorkingDay);
-            log(nonWorkingDay, "hr_non_working_day", "create/edit", nonWorkingDay.getId(), nonWorkingDay.toString());
+            log(nonWorkingDay, "hr_non_working_day", "delete", nonWorkingDay.getId(), nonWorkingDay.toString());
         } else if(path.equalsIgnoreCase(Constants.ROUTE.SHORTENED_WORKING_DAY)){
             ShortenedWorkingDay shortenedWorkingDay = shortenedWorkingDayRepository.getShortenedWorkingDayById(Integer.parseInt(id));
             shortenedWorkingDay.setActive(false);
             shortenedWorkingDayRepository.save(shortenedWorkingDay);
-            log(shortenedWorkingDay, "hr_shortened_working_day", "create/edit", shortenedWorkingDay.getId(), shortenedWorkingDay.toString());
+            log(shortenedWorkingDay, "hr_shortened_working_day", "delete", shortenedWorkingDay.getId(), shortenedWorkingDay.toString());
         } else if(path.equalsIgnoreCase(Constants.ROUTE.PAYROLL_CONFIGURATION)){
             PayrollConfiguration payrollConfiguration = payrollConfigurationRepository.getPayrollConfigurationById(Integer.parseInt(id));
             payrollConfiguration.setActive(false);
             payrollConfigurationRepository.save(payrollConfiguration);
-            log(payrollConfiguration, "payroll_configuration", "create/edit", payrollConfiguration.getId(), payrollConfiguration.toString());
+            log(payrollConfiguration, "payroll_configuration", "delete", payrollConfiguration.getId(), payrollConfiguration.toString());
         } else if(path.equalsIgnoreCase(Constants.ROUTE.VACATION)){
             Vacation vacation = vacationRepository.getVacationById(Integer.parseInt(id));
             vacation.setActive(false);
             vacationRepository.save(vacation);
-            log(vacation, "hr_vacation", "create/edit", vacation.getId(), vacation.toString());
+            log(vacation, "hr_vacation", "delete", vacation.getId(), vacation.toString());
         } else if(path.equalsIgnoreCase(Constants.ROUTE.WORKING_HOUR_RECORD)){
             WorkingHourRecord workingHourRecord = workingHourRecordRepository.getWorkingHourRecordById(Integer.parseInt(id));
             workingHourRecord.setActive(false);
             workingHourRecordRepository.save(workingHourRecord);
-            log(workingHourRecord, "payroll_working_hour_record", "create/edit", workingHourRecord.getId(), workingHourRecord.toString());
+            log(workingHourRecord, "payroll_working_hour_record", "delete", workingHourRecord.getId(), workingHourRecord.toString());
         } else if(path.equalsIgnoreCase(Constants.ROUTE.SALARY)){
             Salary salary = salaryRepository.getSalaryById(Integer.parseInt(id));
             salary.setActive(false);
             salaryRepository.save(salary);
-            log(salary, "payroll_salary", "create/edit", salary.getId(), salary.toString());
+            log(salary, "payroll_salary", "delete", salary.getId(), salary.toString());
         } else if(path.equalsIgnoreCase(Constants.ROUTE.ADVANCE)){
             Advance advance = advanceRepository.getAdvanceById(Integer.parseInt(id));
             advance.setActive(false);
             advanceRepository.save(advance);
-            log(advance, "payroll_advance", "create/edit", advance.getId(), advance.toString());
+            log(advance, "payroll_advance", "delete", advance.getId(), advance.toString());
         } else if(path.equalsIgnoreCase(Constants.ROUTE.INVENTORY)){
             Inventory inventory = inventoryRepository.getInventoryById(Integer.parseInt(id));
             int amount = Util.calculateInventoryAmount(inventory.getActions(), getSessionOrganization().getId()).getAllItemsCount();
@@ -204,16 +204,16 @@ public class DeleteController extends SkeletonController {
             Configuration configuration = configurationRepository.getConfigurationById(Integer.parseInt(id));
             configuration.setActive(false);
             configurationRepository.save(configuration);
-            log(configuration, "admin_configuration", "create/edit", configuration.getId(), configuration.toString());
+            log(configuration, "admin_configuration", "delete", configuration.getId(), configuration.toString());
         } else if(path.equalsIgnoreCase(Constants.ROUTE.NOTIFICATION)){
             Notification notification = notificationRepository.getNotificationById(Integer.parseInt(id));
-            log(notification, "admin_configuration", "delete", notification.getId(), notification.toString());
+            log(notification, "admin_notification", "delete", notification.getId(), notification.toString());
             notificationRepository.delete(notification);
         } else if(path.equalsIgnoreCase(Constants.ROUTE.FINANCING)){
             Financing financing = financingRepository.getFinancingById(Integer.parseInt(id));
             financing.setActive(false);
             financingRepository.save(financing);
-            log(financing, "accounting_financing", "create/edit", financing.getId(), financing.toString());
+            log(financing, "accounting_financing", "deletet", financing.getId(), financing.toString());
         } else if(path.equalsIgnoreCase(Constants.ROUTE.SALES)){
             Sales sales = salesRepository.getSalesByIdAndActiveTrue(Integer.parseInt(id));
             sales.setActive(false);

@@ -36,7 +36,7 @@ public class Account {
     private String toCurrency;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_organization_id")
+    @JoinColumn(name = "hr_organization_id", nullable = false)
     private Organization organization;
 
     @Pattern(regexp=".{0,5}",message="Maksimum 5 simvol ola bilər")

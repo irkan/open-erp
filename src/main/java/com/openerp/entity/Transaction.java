@@ -42,7 +42,7 @@ public class Transaction {
     @Column(name = "description")
     private String description;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "accounting_account_id")
     private Account account;
 

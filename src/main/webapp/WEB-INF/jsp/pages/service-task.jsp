@@ -117,6 +117,7 @@
                         <c:when test="${not empty list}">
                             <c:set var="transfer" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'transfer')}"/>
                             <c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
+                            <c:set var="view3" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'contact-history', 'view')}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="group_table">
                                 <thead>
                                 <tr>
@@ -179,11 +180,27 @@
                                         </td>
                                         <td><c:out value="${t.description}" /></td>
                                         <td style="max-width: 300px">
-                                            <c:if test="${t.sales.contactHistories.size()>0}">
-                                                <c:set var="ch" value="${t.sales.contactHistories.get(t.sales.contactHistories.size()-1)}"/>
-                                                <fmt:formatDate value = "${ch.createdDate}" pattern = "dd.MM.yyyy" /> -
-                                                <fmt:formatDate value = "${ch.nextContactDate}" pattern = "dd.MM.yyyy" /><br/>
-                                                <c:out value="${fn:substring(ch.description, 0, 130)}" />
+                                            <c:if test="${view3.status}">
+                                                <c:if test="${t.sales.contactHistories.size()>0}">
+                                                    <a href="javascript:window.open('/collect/contact-history/<c:out value="${t.sales.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder">
+                                                        <c:set var="ch" value="${t.sales.contactHistories.get(t.sales.contactHistories.size()-1)}"/>
+                                                        <c:out value="${ch.user.username}"/>
+                                                        <fmt:formatDate value = "${ch.createdDate}" pattern = "dd.MM.yyyy" /> -
+                                                        <fmt:formatDate value = "${ch.nextContactDate}" pattern = "dd.MM.yyyy" /> -
+                                                        <c:out value="${fn:substring(ch.description, 0, 94)}" />
+                                                        <c:out value="${ch.description.length()>94?' . . . ':''}"/>
+                                                    </a>
+                                                </c:if>
+                                            </c:if>
+                                            <c:if test="${!view3.status}">
+                                                <c:if test="${t.sales.contactHistories.size()>0}">
+                                                    <c:set var="ch" value="${t.sales.contactHistories.get(t.sales.contactHistories.size()-1)}"/>
+                                                    <c:out value="${ch.user.username}"/>
+                                                    <fmt:formatDate value = "${ch.createdDate}" pattern = "dd.MM.yyyy" /> -
+                                                    <fmt:formatDate value = "${ch.nextContactDate}" pattern = "dd.MM.yyyy" /> -
+                                                    <c:out value="${fn:substring(ch.description, 0, 94)}" />
+                                                    <c:out value="${ch.description.length()>94?' . . . ':''}"/>
+                                                </c:if>
                                             </c:if>
                                         </td>
                                         <td nowrap class="text-center">

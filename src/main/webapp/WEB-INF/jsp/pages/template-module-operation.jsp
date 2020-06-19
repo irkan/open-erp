@@ -115,10 +115,13 @@
 </div>
 
 <script>
-    /*$('#group_table').DataTable({
+    $('#group_table').DataTable({
         responsive: true,
-        pageLength: 100,
-        order: [[2, 'asc']],
+        scrollY: 480,
+        scrollX: true,
+        paging: false,
+        autoWidth: false,
+        searching: false,
         drawCallback: function(settings) {
             var api = this.api();
             var rows = api.rows({page: 'current'}).nodes();
@@ -134,14 +137,36 @@
             });
         },
         columnDefs: [
-            {
-                targets: [2],
-                visible: false
-            }
-        ]
-    });*/
-
-    //$('#group_table').destroy();
+            {targets: 0, orderable: false},
+            {targets: 2, visible: false},
+            {targets: 3, orderable: false},
+            {targets: 4, orderable: false},
+            {targets: 5, orderable: false},
+            {targets: 6, orderable: false},
+            {targets: 7, orderable: false},
+            {targets: 8, orderable: false},
+            {targets: 9, orderable: false},
+            {targets: 10, orderable: false},
+            {targets: 11, orderable: false},
+            {targets: 12, orderable: false},
+            {targets: 13, orderable: false},
+            {targets: 14, orderable: false},
+            {targets: 15, orderable: false},
+            {targets: 16, orderable: false},
+            {targets: 17, orderable: false},
+            {targets: 18, orderable: false},
+            {targets: 19, orderable: false},
+            {targets: 20, orderable: false},
+            {targets: 21, orderable: false},
+            {targets: 22, orderable: false},
+            {targets: 23, orderable: false},
+            {targets: 24, orderable: false}
+        ],
+        fixedColumns:   {
+            leftColumns: 2
+        },
+        order: [[1, 'asc']]
+    });
 
     function checkedRow(element){
         var row = $(element).closest("tr");
@@ -214,113 +239,5 @@
             });
         }
     }
-
-    /*var KTDatatablesAdvancedRowGrouping = function() {
-
-        var initTable1 = function() {
-            var table = $('#group_table');
-
-            table.DataTable({
-                responsive: true,
-                pageLength: 100,
-                ordering: false, //bunu elave etdim sorting qarisdi ama yerlesdi baliqlar interfeyse
-                order: [[2, 'asc']],
-                drawCallback: function(settings) {
-                    var api = this.api();
-                    var rows = api.rows({page: 'current'}).nodes();
-                    var last = null;
-
-                    api.column(2, {page: 'current'}).data().each(function(group, i) {
-                        if (last !== group) {
-                            $(rows).eq(i).before(
-                                '<tr class="group"><td colspan="30">' + group + '</td></tr>'
-                            );
-                            last = group;
-                        }
-                    });
-                },
-                columnDefs: [
-                    {
-                        targets: [2],
-                        visible: false
-                    }
-                ]
-            });
-        };
-
-        return {
-            init: function() {
-                initTable1();
-            }
-        };
-    }();
-
-    jQuery(document).ready(function() {
-        KTDatatablesAdvancedRowGrouping.init();
-    });*/
-
-    var KTDatatablesBasicScrollable = function() {
-        var initTable2 = function() {
-            var table = $('#group_table');
-            table.DataTable({
-                responsive: true,
-                scrollY: 480,
-                scrollX: true,
-                paging: false,
-                autoWidth: false,
-                drawCallback: function(settings) {
-                    var api = this.api();
-                    var rows = api.rows({page: 'current'}).nodes();
-                    var last = null;
-
-                    api.column(2, {page: 'current'}).data().each(function(group, i) {
-                        if (last !== group) {
-                            $(rows).eq(i).before(
-                                '<tr class="group"><td colspan="30">' + group + '</td></tr>'
-                            );
-                            last = group;
-                        }
-                    });
-                },
-                columnDefs: [
-                    {targets: 0, orderable: false},
-                    {targets: 2, visible: false},
-                    {targets: 3, orderable: false},
-                    {targets: 4, orderable: false},
-                    {targets: 5, orderable: false},
-                    {targets: 6, orderable: false},
-                    {targets: 7, orderable: false},
-                    {targets: 8, orderable: false},
-                    {targets: 9, orderable: false},
-                    {targets: 10, orderable: false},
-                    {targets: 11, orderable: false},
-                    {targets: 12, orderable: false},
-                    {targets: 13, orderable: false},
-                    {targets: 14, orderable: false},
-                    {targets: 15, orderable: false},
-                    {targets: 16, orderable: false},
-                    {targets: 17, orderable: false},
-                    {targets: 18, orderable: false},
-                    {targets: 19, orderable: false},
-                    {targets: 20, orderable: false},
-                    {targets: 21, orderable: false},
-                    {targets: 22, orderable: false},
-                    {targets: 23, orderable: false},
-                    {targets: 24, orderable: false}
-                ],
-                fixedColumns:   {
-                    leftColumns: 2
-                },
-                order: [[1, 'asc']]
-            });
-        };
-        return {
-            init: function() {
-                initTable2();
-            }
-        };
-    }();
-
-    KTDatatablesBasicScrollable.init();
 
 </script>
