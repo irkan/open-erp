@@ -927,7 +927,7 @@
             'payment.price': {
                 required: true,
                 number: true,
-                min: 1
+                min: 0
             },
             'payment.lastPrice': {
                 required: true,
@@ -937,7 +937,7 @@
             'payment.discount': {
                 required: false,
                 number: true,
-                min: 1
+                min: 0
             },
             'salesInventories[0].inventory.barcode': {
                 required: true

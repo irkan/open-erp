@@ -11,25 +11,6 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="utl" uri="/WEB-INF/tld/Util.tld"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<style>
-
-    td { position: relative; }
-
-    tr.strikeout td:before {
-        content: " ";
-        position: absolute;
-        top: 45%;
-        left: 0;
-        border-bottom: 1px solid #e50f00;
-        width: 100%;
-    }
-
-    tr.strikeout td:after {
-        content: "\00B7";
-        font-size: 1px;
-    }
-
-</style>
 <div class="kt-container  kt-grid__item kt-grid__item--fluid">
     <div class="row">
         <div class="col-lg-12">
@@ -39,59 +20,67 @@
                         <c:when test="${not empty list}">
                             <c:set var="detail" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'detail')}"/>
                             <c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
+                            <c:set var="admin" value="${utl:isAdministrator(sessionScope.user)}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="group_table">
                                 <thead>
                                 <tr>
-                                    <th>HF nömrəsi</th>
-                                    <th>Satış|Servis</th>
-                                    <th>Status</th>
+                                    <th>Satış №</th>
                                     <th>Müştəri</th>
-                                    <th>Məbləğ</th>
+                                    <th>Struktur</th>
+                                    <th>Müştəri ilə əlaqə</th>
+                                    <c:if test="${admin}">
+                                        <th>Servis əməkdaşı</th>
+                                    </c:if>
                                     <th>Tarix</th>
-                                    <th>Yığımçı</th>
-                                    <th>Kanal</th>
-                                    <th>Referans</th>
-                                    <th>Avans</th>
+                                    <th>Sorğu</th>
+                                    <th>Qeyd</th>
                                     <th>Əməliyyat</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${list.content}" varStatus="loop">
-                                    <tr data="<c:out value="${utl:toJson(t)}" />" class="<c:out value="${(t.price lt 0 and t.approve)?'strikeout':''}"/>">
-                                        <td><span class="kt-padding-5"><c:out value="${t.id}" /></span></td>
-                                        <td>
-                                            <c:choose>
-                                                <c:when test="${t.sales.service}">
-                                                    <a href="javascript:window.open('/sale/service/<c:out value="${t.sales.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder">Servis: <c:out value="${t.sales.id}" /></a>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <a href="javascript:window.open('/sale/sales/<c:out value="${t.sales.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder">Satış: <c:out value="${t.sales.id}" /></a>
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </td>
-                                        <td>
-                                            <c:choose>
-                                                <c:when test="${!t.approve}">
-                                                    Təsdiq edilməyənlər
-                                                </c:when>
-                                                <c:otherwise>
-                                                    Təsdiqlənənlər
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </td>
-                                        <td>
-                                            <a href="javascript:window.open('/crm/customer/<c:out value="${t.sales.customer.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.sales.customer.id}" />: <c:out value="${t.sales.customer.person.fullName}"/></a>
-                                        </td>
-                                        <td><c:out value="${t.price}" /> AZN</td>
-                                        <td><fmt:formatDate value = "${t.invoiceDate}" pattern = "dd.MM.yyyy" /></td>
-                                        <td><c:out value="${t.collector.person.fullName}" /></td>
-                                        <td><c:out value="${t.paymentChannel.name}" /></td>
-                                        <td><c:out value="${t.channelReferenceCode}" /></td>
-                                        <td class="text-center">
-                                            <c:if test="${t.advance}">
-                                                <i class="flaticon2-check-mark kt-font-success"></i>
+                                    <tr>
+                                        <td style="min-width: 80px">
+                                            <c:if test="${not empty t.id}">
+                                                <a href="javascript:copyToClipboard2('<c:out value="${t.id}" />', 'Satış kodu <b><c:out value="${t.id}" /></b> kopyalandı')" class="kt-font-lg kt-font-bold kt-font-info kt-font-hover-danger pl-2 pr-2"><i class="la la-copy"></i></a>
                                             </c:if>
+                                            <c:choose>
+                                                <c:when test="${t.service}">
+                                                    <a href="javascript:window.open('/sale/service/<c:out value="${t.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.id}" /></a>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <a href="javascript:window.open('/sale/sales/<c:out value="${t.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.id}" /></a>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </td>
+                                        <td style="min-width: 210px">
+                                            <c:if test="${not empty t.customer.id}">
+                                                <a href="javascript:copyToClipboard2('<c:out value="${t.customer.id}" />', 'Müştəri kodu <b><c:out value="${t.customer.id}" /></b> kopyalandı')" class="kt-font-lg kt-font-bold kt-font-info kt-font-hover-danger pl-2 pr-2"><i class="la la-copy"></i></a>
+                                            </c:if>
+                                            <a href="javascript:window.open('/crm/customer/<c:out value="${t.customer.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.customer.person.fullName}"/></a>
+                                        </td>
+                                        <td style="min-width: 110px">
+                                            <c:out value="${t.organization.name}" />
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <a href="#" class="kt-link kt-font-bolder kt-font-danger"><c:out value="${t.customer.person.contact.mobilePhone}"/></a>
+                                                <a href="#" class="kt-link kt-font-bolder kt-font-warning"><c:out value="${t.customer.person.contact.homePhone}"/></a>
+                                                <a href="#" class="kt-link kt-font-bolder"><c:out value="${t.customer.person.contact.relationalPhoneNumber1}"/></a>
+                                                <a href="#" class="kt-link kt-font-bolder"><c:out value="${t.customer.person.contact.relationalPhoneNumber2}"/></a>
+                                                <a href="#" class="kt-link kt-font-bolder"><c:out value="${t.customer.person.contact.relationalPhoneNumber3}"/></a>
+                                            </div>
+                                            <div>
+                                                <c:out value="${t.customer.person.contact.city.name}"/>
+                                                <c:out value="${t.customer.person.contact.address}"/>
+                                            </div>
+                                        </td>
+                                        <c:if test="${admin}">
+                                            <td><c:out value="${t.servicer.person.fullName}" /></td>
+                                        </c:if>
+                                        <td><fmt:formatDate value = "${t.saleDate}" pattern = "dd.MM.yyyy hh:mm" /></td>
+                                        <td><c:out value="${t.payment.description}" /></td>
+                                        <td style="min-width: 200px;"><c:out value="${t.serviceNotice}" /></td>
                                         <td nowrap class="text-center">
                                             <c:if test="${detail.status}">
                                                 <a href="/warehouse/action/<c:out value="${t.id}"/>" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${detail.object.name}"/>">

@@ -90,13 +90,17 @@ public class CollectController extends SkeletonController {
         } else if (page.equalsIgnoreCase(Constants.ROUTE.SERVICE_EMPLOYEE)){
             if(!model.containsAttribute(Constants.FILTER)){
                 Sales sales = new Sales();
+                sales.setApprove(true);
                 sales.setService(true);
                 if(!canViewAll()){
+                    sales.setOrganization(getSessionOrganization());
+                }
+                if(canViewAll()){
                     sales.setServicer(getSessionUser().getEmployee());
                 }
-                model.addAttribute(Constants.FILTER, new Invoice(null, false, sales));
+                model.addAttribute(Constants.FILTER, sales);
             }
-            model.addAttribute(Constants.LIST, invoiceService.findAll((Invoice) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
+            model.addAttribute(Constants.LIST, salesService.findAll((Sales) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
         } else if(page.equalsIgnoreCase(Constants.ROUTE.SERVICE_TASK)){
             model.addAttribute(Constants.SERVICE_NOTIFICATIONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("service-notification"));
             if(!model.containsAttribute(Constants.FORM)){
@@ -114,13 +118,14 @@ public class CollectController extends SkeletonController {
     public String postShortenedWorkingDay(@ModelAttribute(Constants.FORM) @Validated ContactHistory contactHistory, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
+            contactHistory.setUser(getSessionUser());
             contactHistoryRepository.save(contactHistory);
             log(contactHistory, "collect_contact_history", "create/edit", contactHistory.getId(), contactHistory.toString());
         }
         return mapPost(contactHistory, binding, redirectAttributes);
     }
 
-    @PostMapping(value = {"/payment-latency", "/troubled-customer"})
+    @PostMapping(value = {"/payment-latency", "/troubled-c8ustomer"})
     public String postPaymentRegulatorTransfer(@RequestParam(value = "sale", defaultValue = "0") String sale,
                                                @RequestParam(value = "price", defaultValue = "0") String price,
                                                @RequestParam(value = "description") String description,

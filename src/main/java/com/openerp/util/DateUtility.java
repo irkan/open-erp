@@ -36,6 +36,17 @@ public class DateUtility {
         return utilDate;
     }
 
+    public static Date formattedDate(Date date) {
+        Date utilDate= null;
+        try {
+            utilDate = new SimpleDateFormat("dd.MM.yyyy").parse(new SimpleDateFormat("dd.MM.yyyy").format(date));
+        } catch (ParseException e){
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
+        }
+        return utilDate;
+    }
+
     public static String getYearMonth(Date date) {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
         return dateFormat.format(date);

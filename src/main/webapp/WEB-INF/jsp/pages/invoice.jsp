@@ -229,7 +229,8 @@
                                     <th>Status</th>
                                     <th>Müştəri</th>
                                     <th>Məbləğ</th>
-                                    <th>Tarix</th>
+                                    <th>HF Tarixi</th>
+                                    <th>Təsdiq edilib</th>
                                     <th>Yığımçı|Servis</th>
                                     <th>Kanal</th>
                                     <th>Referans</th>
@@ -244,7 +245,7 @@
                                         <td>
                                             <a href="javascript:copyToClipboard('<c:out value="${t.id}" />')" class="kt-link kt-font-lg kt-font-bold kt-margin-t-5"><c:out value="${t.id}"/></a>
                                         </td>
-                                        <td style="<c:out value="${t.sales.payment.cash?'background-color: #e6ffe7 !important':'background-color: #ffeaf1 !important'}"/>">
+                                        <td style="min-width: 120px; <c:out value="${t.sales.payment.cash?'background-color: #e6ffe7 !important':'background-color: #ffeaf1 !important'}"/>">
                                             <c:if test="${not empty t.sales.id}">
                                                 <a href="javascript:copyToClipboard2('<c:out value="${t.sales.id}" />', 'Satış kodu <b><c:out value="${t.sales.id}" /></b> kopyalandı')" class="kt-font-lg kt-font-bold kt-font-info kt-font-hover-danger pl-2 pr-2"><i class="la la-copy"></i></a>
                                             </c:if>
@@ -281,7 +282,7 @@
                                                 </c:otherwise>
                                             </c:choose>
                                         </td>
-                                        <td>
+                                        <td style="min-width: 220px;">
                                             <c:if test="${not empty t.sales.customer.id}">
                                                 <a href="javascript:copyToClipboard2('<c:out value="${t.sales.customer.id}" />', 'Müştəri kodu <b><c:out value="${t.sales.customer.id}" /></b> kopyalandı')" class="kt-font-lg kt-font-bold kt-font-info kt-font-hover-danger pl-2 pr-2"><i class="la la-copy"></i></a>
                                             </c:if>
@@ -299,6 +300,7 @@
                                             <span class="kt-font-bold font-italic font-size-10px">AZN</span>
                                         </td>
                                         <td><fmt:formatDate value = "${t.invoiceDate}" pattern = "dd.MM.yyyy" /></td>
+                                        <td><fmt:formatDate value = "${t.approveDate}" pattern = "dd.MM.yyyy" /></td>
                                         <td><c:out value="${t.collector.person.fullName}" /> <c:out value="${(not empty t.collector.person.fullName and not empty t.sales.servicer.person.fullName)?',':''}"/>
                                             <c:out value="${t.sales.servicer.person.fullName}"/></td>
                                         <td><c:out value="${t.paymentChannel.name}" /></td>

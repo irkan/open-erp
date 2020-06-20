@@ -120,6 +120,9 @@ public class Sales {
     @Column(name = "not_service_next_reason")
     private String notServiceNextReason;
 
+    @Column(name = "service_notice")
+    private String serviceNotice;
+
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;
 

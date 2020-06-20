@@ -17,7 +17,6 @@ public class UtilJson {
             ObjectMapper mapper = new ObjectMapper();
             returned =  mapper.writeValueAsString(value).replaceAll("'", " ");
         } catch (Exception e){
-            e.printStackTrace();
             log.error(e.getMessage(), e);
         }
         return returned;

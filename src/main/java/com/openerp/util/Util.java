@@ -741,6 +741,13 @@ public class Util {
                 newSchedules.add(schedule);
             }
         }
+        if(newSchedules.size()==0){
+            for(Schedule schedule: schedules){
+                if(schedule.getScheduleDate().getMonth()==scheduleDate.getMonth() && schedule.getScheduleDate().getYear()==scheduleDate.getYear()){
+                    newSchedules.add(schedule);
+                }
+            }
+        }
         return newSchedules;
     }
 
