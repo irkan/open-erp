@@ -421,7 +421,7 @@
                     </div>
                     <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>
-                        <form:textarea path="description" cssClass="form-control"/>
+                        <form:textarea path="description" cssClass="form-control" rows="4"/>
                         <form:errors path="description" cssClass="alert-danger control-label"/>
                     </div>
                 </form:form>
@@ -449,7 +449,7 @@
                     <form:hidden path="advance"/>
                     <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>
-                        <form:textarea path="description" cssClass="form-control"/>
+                        <form:textarea path="description" cssClass="form-control" rows="4"/>
                         <form:errors path="description" cssClass="alert-danger control-label"/>
                     </div>
                 </form:form>
@@ -484,7 +484,7 @@
                     </div>
                     <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>
-                        <form:textarea path="description" cssClass="form-control"/>
+                        <form:textarea path="description" cssClass="form-control" rows="4"/>
                         <form:errors path="description" cssClass="alert-danger control-label"/>
                     </div>
                 </form:form>
@@ -618,6 +618,9 @@
             },
             invoiceDate: {
                 required: true
+            },
+            description: {
+                maxlength: 80
             }
         },
         invalidHandler: function(event, validator) {
@@ -645,6 +648,21 @@
                 required: true,
                 number: true,
                 min: 0
+            },
+            description: {
+                maxlength: 80
+            }
+        },
+        invalidHandler: function(event, validator) {
+            KTUtil.scrollTop();
+            swal.close();
+        },
+    });
+
+    $( "#approve-form" ).validate({
+        rules: {
+            description: {
+                maxlength: 80
             }
         },
         invalidHandler: function(event, validator) {

@@ -939,6 +939,9 @@
                 number: true,
                 min: 0
             },
+            'payment.description': {
+                maxlength: 80
+            },
             'salesInventories[0].inventory.barcode': {
                 required: true
             },
@@ -1047,6 +1050,7 @@
                 min: 0.0
             },
             reason: {
+                maxlength: 80,
                 required: true
             }
         },

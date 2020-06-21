@@ -62,6 +62,7 @@ public class Invoice {
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date invoiceDateFrom;
 
+    @Lob
     @Pattern(regexp=".{0,250}", message="Maksimum 250 simvol ola bilər")
     @Column(name = "description")
     private String description;

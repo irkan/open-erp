@@ -199,6 +199,12 @@ public class Util {
         return df.format(amount).replace(",", ".");
     }
 
+    public static String format2(double amount){
+        DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.DOWN);
+        return df.format(amount).replace(",", ".");
+    }
+
     public static String formatRate(double amount){
         DecimalFormat df = new DecimalFormat("#.####");
         df.setRoundingMode(RoundingMode.CEILING);
@@ -604,10 +610,14 @@ public class Util {
 
     public static Double calculateInvoice(List<Invoice> invoices){
         double price = 0;
-        for(Invoice invoice: invoices){
-            if(invoice.getApprove()){
-                price+=invoice.getPrice();
+        try{
+            for(Invoice invoice: invoices){
+                if(invoice.getApprove()){
+                    price+=invoice.getPrice();
+                }
             }
+        } catch (Exception e){
+            log.error(e.getMessage(), e);
         }
         return price;
     }

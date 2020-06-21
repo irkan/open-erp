@@ -246,7 +246,7 @@
                     </div>
                     <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>
-                        <form:textarea path="description" cssClass="form-control"/>
+                        <form:textarea path="description" cssClass="form-control" rows="4"/>
                         <form:errors path="description" cssClass="alert-danger control-label"/>
                     </div>
                 </form:form>
@@ -309,6 +309,9 @@
                 required: true,
                 digits: true,
                 min: 1
+            },
+            description: {
+                maxlength: 80
             }
         },
         invalidHandler: function(event, validator) {

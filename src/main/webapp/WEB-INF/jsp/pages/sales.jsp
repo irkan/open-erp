@@ -1115,7 +1115,7 @@
                     </div>
                     <div class="form-group">
                         <form:label path="reason">Səbəbi</form:label>
-                        <form:textarea path="reason" cssClass="form-control" placeholder="Daxil edin"/>
+                        <form:textarea path="reason" cssClass="form-control" placeholder="Daxil edin" rows="4"/>
                         <form:errors path="reason" cssClass="alert-danger control-label"/>
                     </div>
                 </form:form>
@@ -1329,6 +1329,18 @@
         $(this).next('.custom-file-label').addClass("selected").html(fileName);
     });
 
+    $("#return-form").validate({
+        rules: {
+            reason: {
+                maxlength: 80
+            }
+        },
+        invalidHandler: function(event, validator) {
+            KTUtil.scrollTop();
+            swal.close();
+        },
+    });
+
     var KTWizard1 = function () {
         var wizardEl;
         var formEl;
@@ -1396,6 +1408,18 @@
                     'salesInventories[0].inventory.barcode': {
                         required: true
                     },
+                    'salesInventories[1].inventory.name': {
+                        required: true
+                    },
+                    'salesInventories[1].inventory.barcode': {
+                        required: true
+                    },
+                    'salesInventories[2].inventory.name': {
+                        required: true
+                    },
+                    'salesInventories[2].inventory.barcode': {
+                        required: true
+                    },
                     'payment.price': {
                         required: false,
                         number: true,
@@ -1413,6 +1437,9 @@
                     },
                     console: {
                         required: true
+                    },
+                    'payment.description': {
+                        maxlength: 80
                     },
                     vanLeader: {
                         required: true

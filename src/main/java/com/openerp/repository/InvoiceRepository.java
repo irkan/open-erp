@@ -14,4 +14,5 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer>, JpaS
     Invoice getInvoiceById(int id);
     List<Invoice> getInvoicesByActiveTrueAndIdIn(List<Integer> ids);
     List<Invoice> getInvoicesByActiveTrueAndApproveTrueAndSales(Sales sales);
+    List<Invoice> getInvoicesByChannelReferenceCode(String channelReferenceCode);
 }

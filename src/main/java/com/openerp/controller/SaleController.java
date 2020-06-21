@@ -435,7 +435,7 @@ public class SaleController extends SkeletonController {
             invoice.setInvoiceDate(schedule.getInvoiceDate()!=null?schedule.getInvoiceDate():invoice.getInvoiceDate());
             invoice.setPrice(schedule.getPayableAmount());
             invoice.setOrganization(schedule.getSales().getOrganization());
-            invoice.setDescription("Satışdan əldə edilən ödəniş " + invoice.getPrice() + " AZN" + (schedule.getDescription()!=null?" " + schedule.getDescription():""));
+            invoice.setDescription("Ödəniş " + invoice.getPrice() + " AZN" + (schedule.getDescription()!=null?" " + schedule.getDescription():""));
             invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
             invoiceRepository.save(invoice);
             invoice.setChannelReferenceCode(String.valueOf(invoice.getId()));
@@ -728,12 +728,7 @@ public class SaleController extends SkeletonController {
 
         salesList.addAll(salesList2);
 
-        System.out.println("size: "+salesList.size());
-
-        LinkedHashSet<Sales> hashSet = new LinkedHashSet<>(salesList);
-        ArrayList<Sales> listWithoutDuplicates = new ArrayList<>(hashSet);
-        System.out.println("listWithoutDuplicates: " + listWithoutDuplicates.size());
-        return listWithoutDuplicates;
+        return new ArrayList<>(new LinkedHashSet<>(salesList));
     }
 
     private List<SalesSchedule> calculateSalesSchedule(SalesSchedule salesSchedule) {

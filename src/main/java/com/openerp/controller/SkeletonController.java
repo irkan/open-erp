@@ -540,6 +540,19 @@ public class SkeletonController {
         sessionLog(log);
     }
 
+    public void log(Object object, String tableName, String operation, Integer rowId, String encapsulate, String description, String username){
+        String json = "";
+        try{
+            json = UtilJson.toJson(object);
+        } catch (Exception e){
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
+        }
+        Log log = new Log(tableName, operation, rowId, encapsulate, getSessionUser()!=null?getSessionUser().getUsername():username, description, json);
+        logRepository.save(log);
+        sessionLog(log);
+    }
+
     public void log(Object object, String type, String tableName, String operation, Integer rowId, String encapsulate, String description){
         String json = "";
         try{
@@ -611,7 +624,7 @@ public class SkeletonController {
     Invoice invoice(Invoice invoice){
         Invoice invc;
         if(invoice.getId()==null){
-            invoice.setDescription("Satışdan əldə edilən ödəniş " + invoice.getPrice() + " AZN -> " + invoice.getDescription());
+            invoice.setDescription("Ödəniş " + invoice.getPrice() + " AZN -> " + invoice.getDescription());
             invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
             invoice.setApprove(false);
             invc = invoice;
