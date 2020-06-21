@@ -68,6 +68,9 @@ public class Payment {
     @Column(name = "is_cash", nullable = false, columnDefinition="boolean default false")
     private Boolean cash = false;
 
+    @Column(name = "grace_period")
+    private Integer gracePeriod = 0;
+
     @Transient
     private Boolean hasDiscount = false;
 

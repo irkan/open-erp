@@ -525,6 +525,10 @@ public class SaleController extends SkeletonController {
             FieldError fieldError = new FieldError("", "", "Sizin təsdiq əməliyyatına icazəniz yoxdur!");
             binding.addError(fieldError);
         }
+        if(!checkBackDate(invc.getInvoiceDate())){
+            FieldError fieldError = new FieldError("", "", "HF tarixi " + DateUtility.getFormattedDate(invc.getInvoiceDate()) + " olduğu üçün təsdiqə icazə verilmir!");
+            binding.addError(fieldError);
+        }
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()) {
             invc.setApprove(true);

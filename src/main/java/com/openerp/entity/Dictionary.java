@@ -19,8 +19,8 @@ import java.io.Serializable;
 @ToString
 public class Dictionary {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "admin_sequence")
-    @SequenceGenerator(sequenceName = "aa_admin_sequence", allocationSize = 1, name = "admin_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "admin_dictionary_sequence")
+    @SequenceGenerator(sequenceName = "aa_admin_dictionary_sequence", initialValue = 500, allocationSize = 1, name = "admin_dictionary_sequence")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 

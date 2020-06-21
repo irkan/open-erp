@@ -27,7 +27,7 @@ public class Advance {
     private Integer id;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_dictionary_advance_id", nullable = false)
+    @JoinColumn(name = "admin_dictionary_advance_id")
     private Dictionary advance;
 
     @OneToOne(fetch = FetchType.EAGER)

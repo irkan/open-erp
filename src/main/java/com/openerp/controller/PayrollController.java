@@ -253,6 +253,14 @@ public class PayrollController extends SkeletonController {
             FieldError fieldError = new FieldError("", "", "Sizin təsdiq əməliyyatına icazəniz yoxdur!");
             binding.addError(fieldError);
         }
+        if(!checkBackDate(adv.getAdvanceDate())){
+            FieldError fieldError = new FieldError("", "", "Avans tarixi " + DateUtility.getFormattedDate(adv.getAdvanceDate()) + " olduğu üçün təsdiqə icazə verilmir!");
+            binding.addError(fieldError);
+        }
+        if(adv.getAdvance()==null){
+            FieldError fieldError = new FieldError("", "", "Avansın tipi seçilməyib!");
+            binding.addError(fieldError);
+        }
         if(!binding.hasErrors()){
             adv.setDescription(advance.getDescription());
             adv.setPayed(advance.getPayed());

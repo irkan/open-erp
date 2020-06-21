@@ -446,16 +446,7 @@
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form-approve" method="post" action="/sale/invoice/approve" cssClass="form-group">
                     <form:hidden path="id"/>
-                    <div class="row">
-                        <div class="col-md-12 text-center">
-                            <div class="form-group">
-                                <label class="kt-checkbox kt-checkbox--brand">
-                                    <input type="checkbox" name="advance"/> Avans hesablansınmı?
-                                    <span></span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
+                    <form:hidden path="advance"/>
                     <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>
                         <form:textarea path="description" cssClass="form-control"/>

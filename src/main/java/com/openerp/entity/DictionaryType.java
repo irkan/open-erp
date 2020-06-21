@@ -19,8 +19,8 @@ import java.util.List;
 @ToString
 public class DictionaryType {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "admin_sequence")
-    @SequenceGenerator(sequenceName = "aa_admin_sequence", allocationSize = 1, name = "admin_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "admin_dictionary_type_sequence")
+    @SequenceGenerator(sequenceName = "aa_admin_dictionary_type_sequence", initialValue = 500, allocationSize = 1, name = "admin_dictionary_type_sequence")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
