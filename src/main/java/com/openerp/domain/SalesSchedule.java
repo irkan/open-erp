@@ -32,4 +32,9 @@ public class SalesSchedule {
     public SalesSchedule(Sales sales) {
         this.sales = sales;
     }
+
+    public SalesSchedule(Sales sales, Date scheduleDate) {
+        this.sales = sales;
+        this.scheduleDate = scheduleDate;
+    }
 }

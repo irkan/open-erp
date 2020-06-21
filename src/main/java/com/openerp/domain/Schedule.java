@@ -30,4 +30,8 @@ public class Schedule {
         this.amount = amount;
         this.scheduleDate = scheduleDate;
     }
+
+    public Schedule(Date scheduleDate) {
+        this.scheduleDate = scheduleDate;
+    }
 }

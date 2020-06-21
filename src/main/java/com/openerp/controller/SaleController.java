@@ -65,13 +65,14 @@ public class SaleController extends SkeletonController {
                 return exportExcel(sales, redirectAttributes, page);
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.SCHEDULE)){
-            if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new Schedule());
-            }
             Sales filterSales = null;
             if(!model.containsAttribute(Constants.FILTER)){
                 filterSales = new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null);
                 model.addAttribute(Constants.FILTER, new SalesSchedule(filterSales));
+            }
+            if(!model.containsAttribute(Constants.FORM)){
+                SalesSchedule salesSchedule = (SalesSchedule) model.asMap().get(Constants.FILTER);
+                model.addAttribute(Constants.FORM, new Schedule(salesSchedule.getScheduleDate()));
             }
             if(filterSales!=null && filterSales.getId()!=null){
                 List<Schedule> schedules = new ArrayList<>();
@@ -441,9 +442,11 @@ public class SaleController extends SkeletonController {
             invoice.setChannelReferenceCode(String.valueOf(invoice.getId()));
             invoiceRepository.save(invoice);
             log(invoice, "sales_invoice", "create/edit", invoice.getId(), invoice.toString(), "Ödəniş qrafikindən yaradılan hesab-faktura");
+
+            addContactHistory(invoice.getSales(), "Hesab-faktura yaradıldı: " + invoice.getId(), null);
         }
         Sales filterSales = new Sales(schedule.getSales().getId(), !canViewAll()?getSessionOrganization():null);
-        return mapPost(new SalesSchedule(filterSales), binding, redirectAttributes, "/sale/schedule/"+schedule.getSales().getId());
+        return mapFilter(new SalesSchedule(filterSales, schedule.getScheduleDate()), binding, redirectAttributes, "/sale/schedule");
     }
 
     @PostMapping(value = "/demonstration")
