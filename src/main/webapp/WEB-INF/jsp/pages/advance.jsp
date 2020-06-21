@@ -177,8 +177,8 @@
         <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
     <thead>
     <tr>
-        <th>№</th>
         <th>ID</th>
+        <th>Avans</th>
         <th>Əməkdaş</th>
         <th>Struktur</th>
         <th>Məbləğ</th>
@@ -193,8 +193,8 @@
     <tbody>
     <c:forEach var="t" items="${list.content}" varStatus="loop">
         <tr data="<c:out value="${utl:toJson(t)}" />" class="<c:out value="${(t.payed lt 0)?'strikeout':''}"/> ">
-            <td>${loop.index + 1}</td>
             <td><c:out value="${t.id}" /></td>
+            <td><c:out value="${t.advance.name}" /></td>
             <td><span style="width: 160px;" class="kt-font-bolder"><c:out value="${t.employee.person.fullName}" /></span></td>
             <td><c:out value="${t.organization.name}" /></td>
             <td>
@@ -535,8 +535,7 @@
                 number: true
             },
             description: {
-                required: true,
-                number: true
+                required: true
             }
         },
         invalidHandler: function(event, validator) {
