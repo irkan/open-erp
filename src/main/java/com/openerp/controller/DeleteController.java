@@ -283,6 +283,11 @@ public class DeleteController extends SkeletonController {
             migration.setActive(false);
             migrationRepository.save(migration);
             log(migration, "admin_migration", "delete", migration.getId(), migration.toString());
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.TAX_CONFIGURATION)){
+            TaxConfiguration taxConfiguration = taxConfigurationRepository.getTaxConfigurationById(Integer.parseInt(id));
+            taxConfiguration.setActive(false);
+            taxConfigurationRepository.save(taxConfiguration);
+            log(taxConfiguration, "accounting_tax_configuration", "delete", taxConfiguration.getId(), taxConfiguration.toString());
         }
         return "redirect:/"+parent+"/"+path;
     }

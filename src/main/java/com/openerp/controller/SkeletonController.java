@@ -232,6 +232,9 @@ public class SkeletonController {
     PersonDocumentRepository personDocumentRepository;
 
     @Autowired
+    TaxConfigurationRepository taxConfigurationRepository;
+
+    @Autowired
     CustomerService customerService;
 
     @Autowired

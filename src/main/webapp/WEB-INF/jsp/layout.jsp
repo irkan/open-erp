@@ -343,7 +343,7 @@
     };
 
     var KTSessionTimeoutDemo = function () {
-        <fmt:parseNumber var = "sessionIddle" integerOnly = "true" type = "number" value = "${pageContext.session.maxInactiveInterval*500}" />
+        <fmt:parseNumber var = "sessionIddle" integerOnly = "true" type = "number" value = "${pageContext.session.maxInactiveInterval*1000}" />
         var initDemo = function () {
             $.sessionTimeout({
                 title: 'Sessiya Zamanı Xəbərdarlığı',
