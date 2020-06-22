@@ -15,6 +15,7 @@
     <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
     <c:set var="filter" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'filter')}"/>
     <c:set var="credit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'credit')}"/>
+    <c:set var="admin" value="${utl:isAdministrator(sessionScope.user)}"/>
     <c:if test="${filter.status}">
         <div class="accordion  accordion-toggle-arrow mb-2" id="accordionFilter">
             <div class="card" style="border-radius: 4px;">
@@ -175,7 +176,9 @@
                                     <th>Kurs</th>
                                     <th>Ümumi qiymət AZN</th>
                                     <th>Hesabda qalıq</th>
-                                    <th>Flial</th>
+                                    <c:if test="${admin}">
+                                        <th>Flial</th>
+                                    </c:if>
                                     <th>Əməliyyat</th>
                                 </tr>
                                 </thead>
@@ -225,7 +228,9 @@
                                                 <span class="kt-font-bold font-italic font-size-10px"><c:out value="${t.account.currency}" /></span>
                                             </div>
                                         </td>
-                                        <td><div style="width: 90px;"><c:out value="${t.organization.name}" /></div></td>
+                                        <c:if test="${admin}">
+                                            <td><div style="width: 90px;"><c:out value="${t.organization.name}" /></div></td>
+                                        </c:if>
                                         <td nowrap class="text-center">
                                             <c:if test="${approve.status}">
                                                 <c:if test="${!t.approve}">

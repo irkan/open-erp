@@ -64,7 +64,7 @@ public class Account {
     private String description;
 
     @Column(name = "price", nullable = false, columnDefinition="Decimal(10,2) default 0")
-    private double balance=0d;
+    private Double balance=0d;
 
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;
@@ -83,7 +83,16 @@ public class Account {
         return currency + " | " + accountNumber;
     }
 
+    public String getAccountNumberWithCurrency2() {
+        return currency + accountNumber;
+    }
+
     public Account(Organization organization) {
         this.organization = organization;
+    }
+
+    public Account(Organization organization, Double balance) {
+        this.organization = organization;
+        this.balance = balance;
     }
 }

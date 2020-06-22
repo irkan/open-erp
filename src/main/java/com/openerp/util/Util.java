@@ -477,6 +477,22 @@ public class Util {
         return convertedEmployees;
     }
 
+    public static Map<String, List<Account>> convertedAccountsByOrganization(List<Account> accounts, List<Organization> organizations){
+        Map<String, List<Account>> convertedAccounts = new HashMap<>();
+        for(Organization organization: organizations){
+            List<Account> items = new ArrayList<>();
+            for(Account account: accounts){
+                if(organization.getId().intValue()==account.getOrganization().getId().intValue()){
+                    items.add(account);
+                }
+            }
+            if(items.size()>0){
+                convertedAccounts.put(organization.getName(), items);
+            }
+        }
+        return convertedAccounts;
+    }
+
     public static Map<String, List<Employee>> convertedEmployeesByOrganization(List<Employee> employees, List<Organization> organizations){
         Map<String, List<Employee>> convertedEmployees = new HashMap<>();
         for(Organization organization: organizations){

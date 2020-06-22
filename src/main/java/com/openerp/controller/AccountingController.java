@@ -55,6 +55,9 @@ public class AccountingController extends SkeletonController {
                 return exportExcel(transactions, redirectAttributes, page);
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.ACCOUNT)) {
+            List<Account> accounts1 = accountRepository.getAccountsByActiveTrue();
+            List<Organization> organizations = organizationRepository.getOrganizationsByActiveTrueAndType_Attr1("branch");
+            model.addAttribute(Constants.ACCOUNTS, Util.convertedAccountsByOrganization(accounts1, organizations));
             model.addAttribute(Constants.CURRENCIES,  dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("currency"));
             List<Account> accounts;
             if(canViewAll()){
@@ -65,6 +68,9 @@ public class AccountingController extends SkeletonController {
             model.addAttribute(Constants.LIST, accounts);
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Account(getSessionOrganization()));
+            }
+            if(!model.containsAttribute(Constants.TRANSFER_FORM)){
+                model.addAttribute(Constants.TRANSFER_FORM, new Account(getSessionOrganization(), 0d));
             }
             if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
                 return exportExcel(accounts, redirectAttributes, page);

@@ -188,7 +188,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form:form modelAttribute="form" id="transfer-form" method="post" action="/accounting/account/transfer" cssClass="form-group">
+                <form:form modelAttribute="transfer_form" id="transfer-form" method="post" action="/accounting/account/transfer" cssClass="form-group">
                     <form:hidden path="id"/>
                     <div class="form-group">
                         <form:label path="accountNumber">Hesabdan</form:label>
@@ -198,11 +198,26 @@
                         </div>
                         <form:errors path="accountNumber" cssClass="alert-danger control-label"/>
                     </div>
-                    <div class="form-group">
+                    <%--<div class="form-group">
                         <form:label path="toAccountNumber">Hesaba</form:label>
                         <div class="input-group" >
                             <div class="input-group-prepend"><span class="input-group-text"><i class="la la-bank"></i></span></div>
                             <form:input path="toAccountNumber" cssClass="form-control account-number2" placeholder="Göndərilən hesab" onchange="getCurrency($('#transfer-form'), $(this))"/>
+                        </div>
+                        <form:errors path="toAccountNumber" cssClass="alert-danger control-label"/>
+                    </div>--%>
+                    <div class="form-group">
+                        <form:label path="toAccountNumber">Hesaba</form:label>
+                        <div class="input-group" >
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-bank"></i></span></div>
+                            <form:select  path="toAccountNumber" cssClass="custom-select form-control select2-single account-number3" multiple="single" onchange="getCurrency($('#transfer-form'), $(this))">
+                                <form:option value=""></form:option>
+                                <c:forEach var="itemGroup" items="${accounts}" varStatus="itemGroupIndex">
+                                    <optgroup label="${itemGroup.key}">
+                                        <form:options items="${itemGroup.value}" itemLabel="accountNumberWithCurrency2" itemValue="accountNumber"/>
+                                    </optgroup>
+                                </c:forEach>
+                            </form:select>
                         </div>
                         <form:errors path="toAccountNumber" cssClass="alert-danger control-label"/>
                     </div>
