@@ -235,6 +235,9 @@ public class SkeletonController {
     TaxConfigurationRepository taxConfigurationRepository;
 
     @Autowired
+    TaxConfigurationDetailRepository taxConfigurationDetailRepository;
+
+    @Autowired
     CustomerService customerService;
 
     @Autowired

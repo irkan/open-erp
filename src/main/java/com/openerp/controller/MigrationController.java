@@ -1,11 +1,13 @@
 package com.openerp.controller;
 
 import com.openerp.domain.Address;
+import com.openerp.domain.Schedule;
 import com.openerp.dummy.DummyContact;
 import com.openerp.dummy.DummyEmployee;
 import com.openerp.dummy.DummyPerson;
 import com.openerp.dummy.DummyUtil;
 import com.openerp.entity.*;
+import com.openerp.util.DateUtility;
 import com.openerp.util.Util;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -259,6 +261,47 @@ public class MigrationController extends SkeletonController {
             }
         }
         return mapPost(redirectAttributes, "/route/sub/admin/migration");
+    }
+
+    @GetMapping("/tax/sales")
+    public String salesTaxMigration() throws Exception {
+        try{
+            for(TaxConfiguration taxConfiguration: taxConfigurationRepository.getTaxConfigurationsByActiveTrue()){
+                List<Integer> ids = new ArrayList<>();
+                for(TaxConfigurationDetail tcd: taxConfigurationDetailRepository.getTaxConfigurationDetailsByActiveTrue()){
+                    if(tcd.getSales()!=null){
+                        ids.add(tcd.getSales().getId());
+                    }
+                }
+                if(ids.size()==0){
+                    ids.add(1);
+                }
+                List<Sales> salesList = salesRepository.getSalesByActiveTrueAndApproveTrueAndSaledFalseAndIdNotInOrderByApproveDateAsc(ids);
+                Double plannedPaymentMonthly = 0d;
+                List<TaxConfigurationDetail> tcds = new ArrayList<>();
+                for(Sales sales: salesList){
+                    if(sales.getPayment()!=null && !sales.getPayment().getCash()){
+                        List<Schedule> schedules = getSchedulePayment(DateUtility.getFormattedDate(sales.getSaleDate()), sales.getPayment().getSchedule(), sales.getPayment().getPeriod(), sales.getPayment().getLastPrice(), sales.getPayment().getDown());
+                        if(schedules.size()>0){
+                            tcds.add(new TaxConfigurationDetail(taxConfiguration, sales, schedules.get(0).getAmount()));
+                            plannedPaymentMonthly+=schedules.get(0).getAmount();
+                        System.out.println(schedules.get(0).getAmount());
+                        }
+                    } else if(sales.getPayment()!=null && sales.getPayment().getCash()){
+
+                    }
+                    if(plannedPaymentMonthly>=taxConfiguration.getMaxLimitMonthly()){
+                        break;
+                    }
+                }
+                taxConfigurationDetailRepository.saveAll(tcds);
+            }
+
+
+        } catch (Exception e){
+            log.error(e.getMessage(), e);
+        }
+        return "redirect:/login";
     }
 
     private Object getCell(HSSFCell cell){
