@@ -1,32 +1,16 @@
 package com.openerp.controller;
 
-import com.openerp.domain.Response;
-import com.openerp.domain.Schedule;
-import com.openerp.domain.WSInfo;
-import com.openerp.domain.WSResponse;
+import com.openerp.domain.*;
 import com.openerp.entity.*;
-import com.openerp.util.Constants;
 import com.openerp.util.DateUtility;
 import com.openerp.util.Util;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.util.DigestUtils;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.regex.Pattern;
 
 @RestController
@@ -34,8 +18,8 @@ import java.util.regex.Pattern;
 public class ApiController extends SkeletonController {
 
     @ResponseBody
-    @GetMapping(value = "/info/{username}/{password}/{sale_no}")
-    public WSResponse getPayment(@PathVariable("username") String username, @PathVariable("password") String password, @PathVariable("sale_no") Integer saleId){
+    @GetMapping(value = "/info/{username}/{password}/{sale_code}")
+    public WSResponse getPayment(@PathVariable("username") String username, @PathVariable("password") String password, @PathVariable("sale_code") Integer saleId){
         WSResponse response = new WSResponse("404", "Xəta baş verdi!");
         try {
             WebServiceAuthenticator webServiceAuthenticator = webServiceAuthenticatorRepository.getWebServiceAuthenticatorByUsernameAndPasswordAndActiveTrue(username, password);
@@ -72,8 +56,8 @@ public class ApiController extends SkeletonController {
 
 
     @ResponseBody
-    @GetMapping(value = "/pay/{username}/{password}/{sale_no}/{amount}/{channel_reference_code}")
-    public WSResponse pay(@PathVariable("username") String username, @PathVariable("password") String password,  @PathVariable("sale_no") Integer saleId, @PathVariable("amount") Double amount, @PathVariable("channel_reference_code") String channelReferenceCode){
+    @GetMapping(value = "/pay/{username}/{password}/{sale_code}/{amount}/{channel_reference_code}")
+    public WSResponse pay(@PathVariable("username") String username, @PathVariable("password") String password,  @PathVariable("sale_code") Integer saleId, @PathVariable("amount") Double amount, @PathVariable("channel_reference_code") String channelReferenceCode){
         WSResponse response = new WSResponse("404", "Xəta baş verdi!");
         try {
             WebServiceAuthenticator webServiceAuthenticator = webServiceAuthenticatorRepository.getWebServiceAuthenticatorByUsernameAndPasswordAndActiveTrue(username, password);
@@ -218,6 +202,29 @@ public class ApiController extends SkeletonController {
             }
         } catch (Exception e){
             log(null, "error", "", "", null, "", e.getMessage());
+            log.error(e.getMessage(), e);
+        }
+        return response;
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/get-voens/{username}/{password}")
+    public WSResponse getVoens(@PathVariable("username") String username, @PathVariable("password") String password){
+        WSResponse response = new WSResponse("404", "Xəta baş verdi!");
+        try {
+            WebServiceAuthenticator webServiceAuthenticator = webServiceAuthenticatorRepository.getWebServiceAuthenticatorByUsernameAndPasswordAndActiveTrue(username, password);
+            if(webServiceAuthenticator!=null){
+                List<TaxConfiguration> taxConfigurations = taxConfigurationRepository.getTaxConfigurationsByActiveTrue();
+                response = new WSResponse("400", "Məlumat tapılmadı!");
+                List<WSGetVoen> getVoens = new ArrayList<>();
+                for(TaxConfiguration tc: taxConfigurations){
+                    getVoens.add(new WSGetVoen(tc.getOrganization().getName(), tc.getId(), tc.getVoen()));
+                }
+                response = new WSResponse("200", "OK", getVoens);
+            }
+        } catch (Exception e){
+            log(null, "error", "", "", null, "", e.getMessage());
+            e.printStackTrace();
             log.error(e.getMessage(), e);
         }
         return response;
