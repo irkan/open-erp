@@ -87,16 +87,6 @@ public class AccountingController extends SkeletonController {
             if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
                 return exportExcel(financings, redirectAttributes, page);
             }
-        } else if (page.equalsIgnoreCase(Constants.ROUTE.TAX_CONFIGURATION)) {
-            model.addAttribute(Constants.CITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("city"));
-            if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new TaxConfiguration());
-            }
-            List<TaxConfiguration> taxConfigurations = taxConfigurationRepository.getTaxConfigurationsByActiveTrue();
-            model.addAttribute(Constants.LIST, taxConfigurations);
-            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
-                return exportExcel(taxConfigurationRepository.findAll(), redirectAttributes, page);
-            }
         }
         return "layout";
     }
@@ -245,16 +235,6 @@ public class AccountingController extends SkeletonController {
             }
         }
         return mapPost(transaction, binding, redirectAttributes, "/accounting/transaction");
-    }
-
-    @PostMapping(value = "/tax-configuration")
-    public String postTaxConfiguration(@ModelAttribute(Constants.FORM) @Validated TaxConfiguration taxConfiguration, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
-        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
-        if(!binding.hasErrors()){
-            taxConfigurationRepository.save(taxConfiguration);
-            log(taxConfiguration, "accounting_tax_configuration", "create/edit", taxConfiguration.getId(), taxConfiguration.toString());
-        }
-        return mapPost(taxConfiguration, binding, redirectAttributes);
     }
 
     @ResponseBody

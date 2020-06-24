@@ -239,8 +239,33 @@ public class AdministratorController extends SkeletonController {
             model.addAttribute(Constants.LIST, migrationDetailRepository.getMigrationDetailsByActiveTrueAndMigrationId(Integer.parseInt(data.get())));
         } else if (page.equalsIgnoreCase(Constants.ROUTE.MIGRATION_DETAIL_SERVICE_REGULATOR)) {
             model.addAttribute(Constants.LIST, migrationDetailServiceRegulatorRepository.getMigrationDetailServiceRegulatorsByMigrationId(Integer.parseInt(data.get())));
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.TAX_CONFIGURATION)) {
+            model.addAttribute(Constants.CITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("city"));
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new TaxConfiguration(getSessionOrganization()));
+            }
+            List<TaxConfiguration> taxConfigurations = taxConfigurationRepository.getTaxConfigurationsByActiveTrue();
+            for(TaxConfiguration taxConfiguration: taxConfigurations){
+                List<Sales> salesList = salesRepository.getSalesByActiveTrueAndApproveTrueAndSaledFalseAndTaxConfiguration(taxConfiguration);
+                taxConfiguration.setSalesCount(salesList.size());
+                taxConfiguration.setPlannedPaymentAmountMonthly(calculatePlannedPaymentMonthly(salesList));
+            }
+            model.addAttribute(Constants.LIST, taxConfigurations);
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(taxConfigurationRepository.findAll(), redirectAttributes, page);
+            }
         }
         return "layout";
+    }
+
+    @PostMapping(value = "/tax-configuration")
+    public String postTaxConfiguration(@ModelAttribute(Constants.FORM) @Validated TaxConfiguration taxConfiguration, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()){
+            taxConfigurationRepository.save(taxConfiguration);
+            log(taxConfiguration, "accounting_tax_configuration", "create/edit", taxConfiguration.getId(), taxConfiguration.toString());
+        }
+        return mapPost(taxConfiguration, binding, redirectAttributes);
     }
 
     @PostMapping(value = "/notification")

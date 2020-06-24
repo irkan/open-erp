@@ -50,7 +50,15 @@ public class ApiController extends SkeletonController {
                     sale.getPayment().setLatency(Util.calculateLatency(schedules, sumOfInvoices, sale));
                     sale.getPayment().setSumOfInvoice(sumOfInvoices);
                     sale.getPayment().setUnpaid(plannedPayment-sumOfInvoices);
-                    response = new WSResponse("200", "OK", new WSInfo(sale.getId(), sale.getCustomer().getPerson().getFullName(), sale.getPayment().getSumOfInvoice(), Double.parseDouble(Util.format(sale.getPayment().getUnpaid())), sale.getService()?"Servis":"Satış", sale.getPayment().getCash()?"Birdəfəlik ödəniş":"Aylıq ödəniş"));
+                    response = new WSResponse("200", "OK", new WSInfo(sale.getId(),
+                            sale.getCustomer().getPerson().getFullName(),
+                            sale.getPayment().getSumOfInvoice(),
+                            Double.parseDouble(Util.format(sale.getPayment().getUnpaid())),
+                            sale.getService()?"Servis":"Satış",
+                            sale.getPayment().getCash()?"Birdəfəlik ödəniş":"Aylıq ödəniş",
+                            sale.getTaxConfiguration()!=null?sale.getTaxConfiguration().getId():null,
+                            sale.getTaxConfiguration()!=null?sale.getTaxConfiguration().getVoen():null
+                    ));
                 }
             }
         } catch (Exception e){
@@ -85,7 +93,7 @@ public class ApiController extends SkeletonController {
                         invc.setOrganization(sale.getOrganization());
                         invc.setSales(sale);
                         invc.setPrice(amount);
-                        invc.setAdvance(Util.calculateInvoice(sale.getInvoices())>0?true:false);
+                        invc.setAdvance(Util.calculateInvoice(sale.getInvoices())>0?false:true);
                         StringBuilder sb = new StringBuilder();
                         invc.setDescription("Ödəniş " + invc.getPrice() + " AZN "+webServiceAuthenticator.getDescription() + ":TERMINAL ilə ödənilib");
                         invc.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("million", "payment-channel"));

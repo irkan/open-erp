@@ -18,13 +18,18 @@ public class WSInfo {
     private Double unpaid;
     private String sale;
     private String payment;
+    @JsonProperty("voen-code")
+    private Integer voenCode;
+    private String voen;
 
-    public WSInfo(Integer salesCode, String customer, Double paid, Double unpaid, String sale, String payment) {
+    public WSInfo(Integer salesCode, String customer, Double paid, Double unpaid, String sale, String payment, Integer voenCode, String voen) {
         this.salesCode = salesCode;
         this.customer = customer;
         this.paid = paid;
         this.unpaid = unpaid;
         this.sale = sale;
         this.payment = payment;
+        this.voenCode = voenCode;
+        this.voen = voen;
     }
 }

@@ -24,10 +24,9 @@
         <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
         <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
         <c:set var="today" value="<%=new Date()%>"/>
-        <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
+        <table class="table table-striped- table-bordered table-hover table-checkable" id="group_table">
             <thead>
             <tr>
-                <th>№</th>
                 <th>ID</th>
                 <th>Struktur</th>
                 <th>Əməkdaş</th>
@@ -35,6 +34,7 @@
                 <th>Tarixdən</th>
                 <th>Tarixədək</th>
                 <th>İcazə yeniləndi</th>
+                <th style="max-width: 100px;">Geriyə əməliyyat günlərinin sayı</th>
                 <th>Açıqlama</th>
                 <th>Əməliyyat</th>
             </tr>
@@ -42,7 +42,6 @@
             <tbody>
             <c:forEach var="t" items="${list}" varStatus="loop">
                 <tr data="<c:out value="${utl:toJson(t)}" />" class="<c:out value="${t.permissionDateTo.getTime()<today.getTime()?'kt-bg-danger':(t.permissionDateFrom.getTime()>today.getTime()?'kt-bg-warning':'')}" />">
-                    <td>${loop.index + 1}</td>
                     <td><c:out value="${t.id}" /></td>
                     <td><c:out value="${t.user.employee.organization.name}" /></td>
                     <td><c:out value="${t.user.employee.person.fullName}" /></td>
@@ -50,11 +49,17 @@
                     <td><fmt:formatDate value = "${t.permissionDateFrom}" pattern = "dd.MM.yyyy" /></td>
                     <td><fmt:formatDate value = "${t.permissionDateTo}" pattern = "dd.MM.yyyy" /></td>
                     <td><fmt:formatDate value = "${t.createdDate}" pattern = "dd.MM.yyyy HH:mm:ss" /></td>
+                    <td><c:out value="${t.backOperationDays}" /></td>
                     <td><c:out value="${t.permissionDateTo.getTime()<today.getTime()?'İcazə qüvvədən düşəcək':(t.permissionDateFrom.getTime()>today.getTime()?'İcazə qüvvəyə minəcək':'')}" /> <c:out value="${t.description}" /></td>
                     <td nowrap class="text-center">
                         <c:if test="${view.status}">
                             <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
                                 <i class="<c:out value="${view.object.icon}"/>"></i>
+                            </a>
+                        </c:if>
+                        <c:if test="${edit.status}">
+                            <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                                <i class="<c:out value="${edit.object.icon}"/>"></i>
                             </a>
                         </c:if>
                         <c:if test="${delete.status}">
@@ -85,7 +90,7 @@
 
 
 <div class="modal fade" id="modal-operation" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"></h5>
@@ -104,43 +109,49 @@
                         </form:select>
                         <form:errors path="user" cssClass="alert-danger control-label"/>
                     </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="form-group">
-                                <form:label path="permissionDateFrom">Tarixdən</form:label>
-                                <div class="input-group date">
-                                    <form:input path="permissionDateFrom" autocomplete="off"
-                                                cssClass="form-control datepicker-element" date_="date_"
-                                                placeholder="dd.MM.yyyy"/>
-                                    <div class="input-group-append">
+                    <div class="form-group">
+                        <form:label path="permissionDateFrom">Tarixdən</form:label>
+                        <div class="input-group date">
+                            <div class="input-group-prepend">
                                         <span class="input-group-text">
                                             <i class="la la-calendar"></i>
                                         </span>
-                                    </div>
-                                </div>
-                                <form:errors path="permissionDateFrom" cssClass="control-label alert-danger"/>
                             </div>
+                            <form:input path="permissionDateFrom" autocomplete="off"
+                                        cssClass="form-control datepicker-element" date_="date_"
+                                        placeholder="dd.MM.yyyy"/>
                         </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                <form:label path="permissionDateTo">Tarixədək</form:label>
-                                <div class="input-group date">
-                                    <form:input path="permissionDateTo" autocomplete="off"
-                                                cssClass="form-control datepicker-element" date_="date_"
-                                                placeholder="dd.MM.yyyy"/>
-                                    <div class="input-group-append">
+                        <form:errors path="permissionDateFrom" cssClass="control-label alert-danger"/>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="permissionDateTo">Tarixədək</form:label>
+                        <div class="input-group date">
+                            <div class="input-group-prepend">
                                         <span class="input-group-text">
                                             <i class="la la-calendar"></i>
                                         </span>
-                                    </div>
-                                </div>
-                                <form:errors path="permissionDateTo" cssClass="control-label alert-danger"/>
                             </div>
+                            <form:input path="permissionDateTo" autocomplete="off"
+                                        cssClass="form-control datepicker-element" date_="date_"
+                                        placeholder="dd.MM.yyyy"/>
                         </div>
+                        <form:errors path="permissionDateTo" cssClass="control-label alert-danger"/>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="backOperationDays">Geriyə əməliyyat günlərinin sayı</form:label>
+                        <div class="input-group date">
+                            <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="la la-calculator"></i>
+                                        </span>
+                            </div>
+                            <form:input path="backOperationDays" cssClass="form-control" placeholder="Daxil edin"/>
+                        </div>
+                        <form:errors path="backOperationDays" cssClass="control-label alert-danger"/>
                     </div>
                     <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>
-                        <form:textarea path="description" cssClass="form-control" placeholder="Açıqlama daxil edin" />
+                        <form:textarea path="description" cssClass="form-control" placeholder="Açıqlama daxil edin" rows="4"/>
                         <form:errors path="description" cssClass="alert alert-danger"/>
                     </div>
                 </form:form>
@@ -154,13 +165,13 @@
 </div>
 
 <script>
-    $('#datatable tbody').on('dblclick', 'tr', function () {
+    $('#group_table tbody').on('dblclick', 'tr', function () {
         <c:if test="${view.status}">
             view($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${view.object.name}" />');
         </c:if>
     });
 
-    $("#datatable").DataTable({
+    $('#group_table').DataTable({
         <c:if test="${export.status}">
         dom: 'B<"clear">lfrtip',
         buttons: [
@@ -168,22 +179,48 @@
         ],
         </c:if>
         responsive: true,
-        lengthMenu: [10, 25, 50, 75, 100, 200, 1000],
         pageLength: 100,
-        order: [[1, 'desc']],
+        order: [[2, 'asc']],
+        drawCallback: function(settings) {
+            var api = this.api();
+            var rows = api.rows({page: 'current'}).nodes();
+            var last = null;
+
+            api.column(2, {page: 'current'}).data().each(function(group, i) {
+                if (last !== group) {
+                    $(rows).eq(i).before(
+                        '<tr class="group"><td colspan="30">' + group + '</td></tr>'
+                    );
+                    last = group;
+                }
+            });
+        },
         columnDefs: [
             {
-                targets: 0,
-                width: '25px',
-                className: 'dt-center',
-                orderable: false
-            },
-        ],
+                targets: [2],
+                visible: false
+            }
+        ]
     });
 
     $( "#form" ).validate({
         rules: {
             user: {
+                required: true
+            },
+            description: {
+                maxlength: 80
+            },
+            backOperationDays: {
+                required: true,
+                number: true,
+                min: 1,
+                max: 1824
+            },
+            permissionDateFrom: {
+                required: true
+            },
+            permissionDateTo: {
                 required: true
             }
         },

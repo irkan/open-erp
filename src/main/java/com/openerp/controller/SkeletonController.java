@@ -235,9 +235,6 @@ public class SkeletonController {
     TaxConfigurationRepository taxConfigurationRepository;
 
     @Autowired
-    TaxConfigurationDetailRepository taxConfigurationDetailRepository;
-
-    @Autowired
     CustomerService customerService;
 
     @Autowired
@@ -756,5 +753,26 @@ public class SkeletonController {
             return true;
         }
         return false;
+    }
+
+    public Double calculatePlannedPaymentMonthly(List<Sales> salesList){
+        Double plannedPaymentMonthly = 0d;
+        for(Sales sales: salesList){
+            Double payed = Util.calculateInvoice(sales.getInvoices());
+            if(sales.getPayment()!=null && !sales.getPayment().getCash()){
+                List<Schedule> schedules = getSchedulePayment(DateUtility.getFormattedDate(sales.getSaleDate()), sales.getPayment().getSchedule(), sales.getPayment().getPeriod(), sales.getPayment().getLastPrice(), sales.getPayment().getDown());
+                if(schedules.size()>0){
+                    plannedPaymentMonthly+=schedules.get(0).getAmount();
+                    if(sales.getPayment().getDown()!=null && sales.getPayment().getDown()>0 && payed<sales.getPayment().getDown()){
+                        plannedPaymentMonthly+=(sales.getPayment().getDown()-payed)>0?(sales.getPayment().getDown()-payed):0;
+                    }
+                }
+            } else if(sales.getPayment()!=null && sales.getPayment().getCash()){
+                if(sales.getPayment().getLastPrice()!=null && sales.getPayment().getLastPrice()>0 && payed<sales.getPayment().getLastPrice()){
+                    plannedPaymentMonthly+=(sales.getPayment().getLastPrice()-payed)>0?(sales.getPayment().getLastPrice()-payed):0;
+                }
+            }
+        }
+        return plannedPaymentMonthly;
     }
 }

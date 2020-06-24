@@ -263,7 +263,7 @@ public class MigrationController extends SkeletonController {
         return mapPost(redirectAttributes, "/route/sub/admin/migration");
     }
 
-    @GetMapping("/tax/sales")
+    /*@GetMapping("/tax/sales")
     public String salesTaxMigration() throws Exception {
         try{
             for(TaxConfiguration taxConfiguration: taxConfigurationRepository.getTaxConfigurationsByActiveTrue()){
@@ -302,7 +302,7 @@ public class MigrationController extends SkeletonController {
             log.error(e.getMessage(), e);
         }
         return "redirect:/login";
-    }
+    }*/
 
     private Object getCell(HSSFCell cell){
         Object object = null;

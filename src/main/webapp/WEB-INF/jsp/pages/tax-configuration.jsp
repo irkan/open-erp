@@ -22,11 +22,12 @@
                             <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
                             <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
                             <c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
-                            <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
+                            <table class="table table-striped- table-bordered table-hover table-checkable" id="group_table">
                                 <thead>
                                 <tr>
                                     <th>№</th>
                                     <th>ID</th>
+                                    <th>Struktur</th>
                                     <th>VÖEN</th>
                                     <th>Şirkət</th>
                                     <th>Açıqlama</th>
@@ -36,8 +37,8 @@
                                     <th>Ofis nömrəsi</th>
                                     <th>Ünvan</th>
                                     <th>Aylıq limit</th>
-                                    <th>Planlaşdırılmış ödəniş məbləği</th>
-                                    <th>Ödənilmiş məbləğ</th>
+                                    <th>Satış sayı</th>
+                                    <th style="max-width: 70px">Planlaşdırılmış ödəniş</th>
                                     <th>Əməliyyat</th>
                                 </tr>
                                 </thead>
@@ -46,6 +47,7 @@
                                     <tr data="<c:out value="${utl:toJson(t)}" />">
                                         <td>${loop.index + 1}</td>
                                         <td><c:out value="${t.id}" /></td>
+                                        <td><c:out value="${t.organization.name}" /></td>
                                         <td><c:out value="${t.voen}" /></td>
                                         <td><c:out value="${t.company}" /></td>
                                         <td><c:out value="${t.description}" /></td>
@@ -55,8 +57,8 @@
                                         <td><c:out value="${t.person.contact.homePhone}" /></td>
                                         <td><c:out value="${t.person.contact.city.name}" />, <c:out value="${t.person.contact.address}" /></td>
                                         <td><c:out value="${t.maxLimitMonthly}" /></td>
-                                        <td><c:out value="${t.plannedPaymentAmountMonthly}" /></td>
-                                        <td><c:out value="${t.payedAmountMonthly}" /></td>
+                                        <td><c:out value="${t.salesCount}" /></td>
+                                        <td><c:out value="${t.plannedPaymentAmountMonthly}" /> AZN</td>
                                         <td nowrap class="text-center">
                                             <c:if test="${view.status}">
                                                 <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
@@ -104,8 +106,9 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form:form modelAttribute="form" id="form" method="post" action="/accounting/tax-configuration" cssClass="form-group">
+                <form:form modelAttribute="form" id="form" method="post" action="/admin/tax-configuration" cssClass="form-group">
                     <form:input path="id" type="hidden"/>
+                    <form:input path="organization" type="hidden"/>
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
@@ -227,14 +230,7 @@
 </div>
 
 <script>
-
-    $('#datatable tbody').on('dblclick', 'tr', function () {
-        <c:if test="${view.status}">
-            view($('#form'), $(this).attr('data'), 'modal-operation', 'Redaktə');
-        </c:if>
-    });
-
-    $("#datatable").DataTable({
+    $('#group_table').DataTable({
         <c:if test="${export.status}">
         dom: 'B<"clear">lfrtip',
         buttons: [
@@ -242,17 +238,34 @@
         ],
         </c:if>
         responsive: true,
-        lengthMenu: [10, 25, 50, 75, 100, 200, 1000],
         pageLength: 100,
-        order: [[1, 'desc']],
+        order: [[2, 'asc']],
+        drawCallback: function(settings) {
+            var api = this.api();
+            var rows = api.rows({page: 'current'}).nodes();
+            var last = null;
+
+            api.column(2, {page: 'current'}).data().each(function(group, i) {
+                if (last !== group) {
+                    $(rows).eq(i).before(
+                        '<tr class="group"><td colspan="30">' + group + '</td></tr>'
+                    );
+                    last = group;
+                }
+            });
+        },
         columnDefs: [
             {
-                targets: 0,
-                width: '25px',
-                className: 'dt-center',
-                orderable: false
-            },
-        ],
+                targets: [2],
+                visible: false
+            }
+        ]
+    });
+
+    $('#group_table tbody').on('dblclick', 'tr', function () {
+        <c:if test="${view.status}">
+        view($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${view.object.name}" />');
+        </c:if>
     });
 
     $( "#form" ).validate({

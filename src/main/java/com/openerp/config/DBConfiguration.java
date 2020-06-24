@@ -823,8 +823,6 @@ public class DBConfiguration {
             modules.add(financing);
             Module taxConfiguration = new Module("VÖEN", "VÖEN Sazlama", "tax-configuration", "flaticon-coins", accounting);
             modules.add(taxConfiguration);
-            Module taxConfigurationDetail = new Module("VÖEN detalı", "VÖEN Sazlama Detalı", "tax-configuration-detail", "flaticon-interface-3", taxConfiguration);
-            modules.add(taxConfigurationDetail);
             Module nonWorkingDay = new Module("Qeyri iş günü", "Qeyri iş günü", "non-working-day", "la la-calendar", module1);
             modules.add(nonWorkingDay);
             Module shortenedWorkingDay = new Module("Qısaldılmış iş günü", "Qısaldılmış iş günü", "shortened-working-day", "la la-calendar-minus-o", nonWorkingDay);
@@ -1016,8 +1014,6 @@ public class DBConfiguration {
             moduleOperations.add(createModuleOperation40);
             ModuleOperation createModuleOperation41 = new ModuleOperation(taxConfiguration, create, null);
             moduleOperations.add(createModuleOperation41);
-            ModuleOperation createModuleOperation42 = new ModuleOperation(taxConfigurationDetail, create, null);
-            moduleOperations.add(createModuleOperation42);
 
             ModuleOperation editModuleOperation1 = new ModuleOperation(subModule1, edit, null);
             moduleOperations.add(editModuleOperation1);
@@ -1178,8 +1174,6 @@ public class DBConfiguration {
             moduleOperations.add(deleteModuleOperation47);
             ModuleOperation deleteModuleOperation48 = new ModuleOperation(taxConfiguration, delete, null);
             moduleOperations.add(deleteModuleOperation48);
-            ModuleOperation deleteModuleOperation49 = new ModuleOperation(taxConfigurationDetail, delete, null);
-            moduleOperations.add(deleteModuleOperation49);
 
             ModuleOperation viewModuleOperation1 = new ModuleOperation(subModule5, view, null);
             moduleOperations.add(viewModuleOperation1);
@@ -1372,8 +1366,6 @@ public class DBConfiguration {
             moduleOperations.add(exportModuleOperation44);
             ModuleOperation exportModuleOperation45 = new ModuleOperation(taxConfiguration, export, null);
             moduleOperations.add(exportModuleOperation45);
-            ModuleOperation exportModuleOperation46 = new ModuleOperation(taxConfigurationDetail, export, null);
-            moduleOperations.add(exportModuleOperation46);
 
             ModuleOperation approveModuleOperation3 = new ModuleOperation(transaction, approve, null);
             moduleOperations.add(approveModuleOperation3);

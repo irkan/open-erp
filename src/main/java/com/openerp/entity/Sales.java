@@ -75,6 +75,10 @@ public class Sales {
     @JoinColumn(name = "hr_employee_servicer_id")
     private Employee servicer;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "admin_tax_configuration_id")
+    private TaxConfiguration taxConfiguration;
+
     @ToString.Exclude
     @JsonIgnore
     @LazyCollection(LazyCollectionOption.FALSE)

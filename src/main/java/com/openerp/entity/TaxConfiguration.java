@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "accounting_tax_configuration")
+@Table(name = "admin_tax_configuration")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -24,10 +24,14 @@ import java.util.List;
 public class TaxConfiguration {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "accounting_tax_configuration_sequence")
-    @SequenceGenerator(sequenceName = "aa_accounting_tax_configuration_sequence", initialValue = 10, allocationSize = 1, name = "accounting_tax_configuration_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "admin_tax_configuration_sequence")
+    @SequenceGenerator(sequenceName = "aa_admin_tax_configuration_sequence", initialValue = 10, allocationSize = 1, name = "admin_tax_configuration_sequence")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "hr_organization_id", nullable = false)
+    private Organization organization;
 
     @Pattern(regexp=".{3,15}",message="Minimum 5 maksimum 15 simvol ola bilər")
     @Column(name = "voen", nullable = false)
@@ -55,6 +59,9 @@ public class TaxConfiguration {
     @Transient
     private Double payedAmountMonthly;
 
+    @Transient
+    private Integer salesCount;
+
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;
 
@@ -62,9 +69,7 @@ public class TaxConfiguration {
     @Column(name = "created_date", nullable = false)
     private Date createdDate = new Date();
 
-    @ToString.Exclude
-    @JsonIgnore
-    @OneToMany(mappedBy = "taxConfiguration", cascade = CascadeType.ALL)
-    private List<TaxConfigurationDetail> taxConfigurationDetails;
-
+    public TaxConfiguration(Organization organization) {
+        this.organization = organization;
+    }
 }
