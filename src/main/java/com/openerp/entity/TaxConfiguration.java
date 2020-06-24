@@ -25,7 +25,7 @@ public class TaxConfiguration {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO, generator = "admin_tax_configuration_sequence")
-    @SequenceGenerator(sequenceName = "aa_admin_tax_configuration_sequence", initialValue = 10, allocationSize = 1, name = "admin_tax_configuration_sequence")
+    @SequenceGenerator(sequenceName = "aa_admin_tax_configuration_sequence", initialValue = 101, allocationSize = 1, name = "admin_tax_configuration_sequence")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
