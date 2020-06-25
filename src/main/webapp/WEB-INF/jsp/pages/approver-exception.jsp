@@ -43,8 +43,8 @@
             <c:forEach var="t" items="${list}" varStatus="loop">
                 <tr data="<c:out value="${utl:toJson(t)}" />" class="<c:out value="${t.permissionDateTo.getTime()<today.getTime()?'kt-bg-danger':(t.permissionDateFrom.getTime()>today.getTime()?'kt-bg-warning':'')}" />">
                     <td><c:out value="${t.id}" /></td>
-                    <td><c:out value="${t.user.employee.organization.name}" /></td>
                     <td><c:out value="${t.user.employee.person.fullName}" /></td>
+                    <td><c:out value="${t.user.employee.organization.name}" /></td>
                     <td><c:out value="${t.user.username}" /></td>
                     <td><fmt:formatDate value = "${t.permissionDateFrom}" pattern = "dd.MM.yyyy" /></td>
                     <td><fmt:formatDate value = "${t.permissionDateTo}" pattern = "dd.MM.yyyy" /></td>
@@ -58,7 +58,7 @@
                             </a>
                         </c:if>
                         <c:if test="${edit.status}">
-                            <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                            <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
                                 <i class="<c:out value="${edit.object.icon}"/>"></i>
                             </a>
                         </c:if>
