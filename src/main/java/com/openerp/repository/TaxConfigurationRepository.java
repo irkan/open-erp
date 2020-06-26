@@ -11,4 +11,5 @@ import java.util.List;
 public interface TaxConfigurationRepository extends JpaRepository<TaxConfiguration, Integer>, JpaSpecificationExecutor<TaxConfiguration> {
     TaxConfiguration getTaxConfigurationById(Integer id);
     List<TaxConfiguration> getTaxConfigurationsByActiveTrue();
+    List<TaxConfiguration> getTaxConfigurationsByActiveTrueAndOrganization(Organization organization);
 }

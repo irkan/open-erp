@@ -237,8 +237,6 @@ public class AdministratorController extends SkeletonController {
             model.addAttribute(Constants.LIST, migrations);
         } else if (page.equalsIgnoreCase(Constants.ROUTE.MIGRATION_DETAIL)) {
             model.addAttribute(Constants.LIST, migrationDetailRepository.getMigrationDetailsByActiveTrueAndMigrationId(Integer.parseInt(data.get())));
-        } else if (page.equalsIgnoreCase(Constants.ROUTE.MIGRATION_DETAIL_SERVICE_REGULATOR)) {
-            model.addAttribute(Constants.LIST, migrationDetailServiceRegulatorRepository.getMigrationDetailServiceRegulatorsByMigrationId(Integer.parseInt(data.get())));
         } else if (page.equalsIgnoreCase(Constants.ROUTE.TAX_CONFIGURATION)) {
             model.addAttribute(Constants.CITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("city"));
             if(!model.containsAttribute(Constants.FORM)){
@@ -648,8 +646,6 @@ public class AdministratorController extends SkeletonController {
         if(mg.getOperationType().equalsIgnoreCase("satış")){
             migrationDetailRepository.deleteAll(migrationDetailRepository.getMigrationDetailsByMigrationId(mg.getId()));
             migrationTask.writeTable();
-        } else if(mg.getOperationType().equalsIgnoreCase("servis")){
-            migrationDetailServiceRegulatorRepository.deleteAll(migrationDetailServiceRegulatorRepository.getMigrationDetailServiceRegulatorsByMigrationId(mg.getId()));
         }
         return mapPost(mg, binding, redirectAttributes, "/admin/migration");
     }

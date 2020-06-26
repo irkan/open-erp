@@ -263,46 +263,39 @@ public class MigrationController extends SkeletonController {
         return mapPost(redirectAttributes, "/route/sub/admin/migration");
     }
 
-    /*@GetMapping("/tax/sales")
+    @GetMapping("/tax/sales")
     public String salesTaxMigration() throws Exception {
         try{
-            for(TaxConfiguration taxConfiguration: taxConfigurationRepository.getTaxConfigurationsByActiveTrue()){
-                List<Integer> ids = new ArrayList<>();
-                for(TaxConfigurationDetail tcd: taxConfigurationDetailRepository.getTaxConfigurationDetailsByActiveTrue()){
-                    if(tcd.getSales()!=null){
-                        ids.add(tcd.getSales().getId());
-                    }
-                }
-                if(ids.size()==0){
-                    ids.add(1);
-                }
-                List<Sales> salesList = salesRepository.getSalesByActiveTrueAndApproveTrueAndSaledFalseAndIdNotInOrderByApproveDateAsc(ids);
-                Double plannedPaymentMonthly = 0d;
-                List<TaxConfigurationDetail> tcds = new ArrayList<>();
-                for(Sales sales: salesList){
-                    if(sales.getPayment()!=null && !sales.getPayment().getCash()){
-                        List<Schedule> schedules = getSchedulePayment(DateUtility.getFormattedDate(sales.getSaleDate()), sales.getPayment().getSchedule(), sales.getPayment().getPeriod(), sales.getPayment().getLastPrice(), sales.getPayment().getDown());
-                        if(schedules.size()>0){
-                            tcds.add(new TaxConfigurationDetail(taxConfiguration, sales, schedules.get(0).getAmount()));
-                            plannedPaymentMonthly+=schedules.get(0).getAmount();
-                        System.out.println(schedules.get(0).getAmount());
+            log.info("Başladı: " + new Date());
+            for(Organization organization: organizationRepository.getOrganizationsByActiveTrue()){
+                List<Sales> salesList = salesRepository.getSalesByActiveTrueAndApproveTrueAndSaledFalseAndOrganization(organization);
+                List<TaxConfiguration> taxConfigurations = taxConfigurationRepository.getTaxConfigurationsByActiveTrueAndOrganization(organization);
+                log.info("\n---------------------------"+organization.getName()+"-----------------------------\n");
+                log.info("\nAktiv muqavilelerin sayi: "+salesList.size());
+                if(salesList.size()>0 && taxConfigurations.size()>0){
+                    for(int i=0; i<salesList.size(); i=i+taxConfigurations.size()){
+                        for(int j=0; j<taxConfigurations.size(); j++){
+                            try{
+                                if(salesList.get(i+j)!=null){
+                                    Sales sales = salesList.get(i+j);
+                                    sales.setTaxConfiguration(taxConfigurations.get(j));
+                                    salesRepository.save(sales);
+                                    log.info(salesList.size() + "/" + (i+j+1));
+                                }
+                            } catch (Exception e){
+
+                            }
                         }
-                    } else if(sales.getPayment()!=null && sales.getPayment().getCash()){
-
-                    }
-                    if(plannedPaymentMonthly>=taxConfiguration.getMaxLimitMonthly()){
-                        break;
                     }
                 }
-                taxConfigurationDetailRepository.saveAll(tcds);
+                log.info("\n--------------------------------------------------------\n");
             }
-
-
+            log.info("Bitdi: " + new Date());
         } catch (Exception e){
             log.error(e.getMessage(), e);
         }
         return "redirect:/login";
-    }*/
+    }
 
     private Object getCell(HSSFCell cell){
         Object object = null;

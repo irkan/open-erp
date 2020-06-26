@@ -1828,6 +1828,8 @@ public class ReadWriteExcelFile {
 		cell.setCellValue("Növbəti servis olacaqmı");
 		cell = row.createCell(row.getLastCellNum());
 		cell.setCellValue("Növbəti servisin olmama səbəbi");
+		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("VÖEN");
 		row.setHeightInPoints(30);
 		XSSFCellStyle headerStyle = wb.createCellStyle();
 		headerStyle.setAlignment(HorizontalAlignment.CENTER);
@@ -1925,6 +1927,8 @@ public class ReadWriteExcelFile {
 			cell.setCellValue(sale.getNotServiceNext()!=null?sale.getNotServiceNext():false);
 			cell = row.createCell(row.getLastCellNum());
 			cell.setCellValue(sale.getNotServiceNextReason()!=null?sale.getNotServiceNextReason():"");
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(sale.getTaxConfiguration()!=null?sale.getTaxConfiguration().getVoen():"");
 			for(SalesInventory salesInventory: sale.getSalesInventories()){
 				cell = row.createCell(row.getLastCellNum());
 				cell.setCellValue(salesInventory.getInventory()!=null?salesInventory.getInventory().getName():"");
@@ -2430,6 +2434,8 @@ public class ReadWriteExcelFile {
 		cell = row.createCell(row.getLastCellNum());
 		cell.setCellValue("İcazə verildi");
 		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("Geriyə əməliyyat günlərinin sayı");
+		cell = row.createCell(row.getLastCellNum());
 		cell.setCellValue("Açıqlama");
 		row.setHeightInPoints(30);
 		XSSFCellStyle headerStyle = wb.createCellStyle();
@@ -2457,7 +2463,82 @@ public class ReadWriteExcelFile {
 			cell = row.createCell(row.getLastCellNum());
 			cell.setCellValue(approverException.getCreatedDate());
 			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(approverException.getBackOperationDays());
+			cell = row.createCell(row.getLastCellNum());
 			cell.setCellValue(approverException.getDescription());
+		}
+		FileOutputStream fileOut = new FileOutputStream(file);
+		wb.write(fileOut);
+		fileOut.flush();
+		fileOut.close();
+		return file;
+	}
+
+	public static File taxConfigurationXLSXFile(List<TaxConfiguration> taxConfigurations, String page) throws IOException {
+		File file = new File(page+".xlsx");
+		XSSFWorkbook wb = new XSSFWorkbook();
+		XSSFSheet sheet = wb.createSheet(page) ;
+		int rownum=0;
+		XSSFRow row = sheet.createRow(rownum++);
+		XSSFCell cell = row.createCell(0);
+		cell.setCellValue("ID");
+		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("VÖEN");
+		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("Şirkət");
+		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("Açıqlama");
+		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("Əlaqəli şəxs");
+		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("Email");
+		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("Mobil nömrə");
+		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("Ofis nömrəsi");
+		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("Ünvan");
+		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("Aylıq limit");
+		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("Satış sayı");
+		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("Planlaşdırılmış ödəniş");
+		row.setHeightInPoints(30);
+		XSSFCellStyle headerStyle = wb.createCellStyle();
+		headerStyle.setAlignment(HorizontalAlignment.CENTER);
+		headerStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+		XSSFFont headerFont= wb.createFont();
+		headerFont.setFontHeightInPoints((short)14);
+		headerFont.setBold(true);
+		headerStyle.setFont(headerFont);
+		row.setRowStyle(headerStyle);
+		for(TaxConfiguration taxConfiguration: taxConfigurations){
+			row = sheet.createRow(rownum++);
+			cell = row.createCell(0);
+			cell.setCellValue(taxConfiguration.getId());
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(taxConfiguration.getCompany());
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(taxConfiguration.getDescription());
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(taxConfiguration.getOrganization()!=null?taxConfiguration.getOrganization().getName():"");
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(taxConfiguration.getPerson()!=null?taxConfiguration.getPerson().getFullName():"");
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue((taxConfiguration.getPerson()!=null && taxConfiguration.getPerson().getContact()!=null && taxConfiguration.getPerson().getContact().getEmail()!=null)?taxConfiguration.getPerson().getContact().getEmail():"");
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue((taxConfiguration.getPerson()!=null && taxConfiguration.getPerson().getContact()!=null && taxConfiguration.getPerson().getContact().getMobilePhone()!=null)?taxConfiguration.getPerson().getContact().getMobilePhone():"");
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue((taxConfiguration.getPerson()!=null && taxConfiguration.getPerson().getContact()!=null && taxConfiguration.getPerson().getContact().getHomePhone()!=null)?taxConfiguration.getPerson().getContact().getHomePhone():"");
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(((taxConfiguration.getPerson()!=null && taxConfiguration.getPerson().getContact()!=null && taxConfiguration.getPerson().getContact().getCity()!=null)?taxConfiguration.getPerson().getContact().getCity().getName():"") + " " + ((taxConfiguration.getPerson()!=null && taxConfiguration.getPerson().getContact()!=null && taxConfiguration.getPerson().getContact().getAddress()!=null)?taxConfiguration.getPerson().getContact().getAddress():""));
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(taxConfiguration.getMaxLimitMonthly());
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(taxConfiguration.getSalesCount());
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(taxConfiguration.getPlannedPaymentAmountMonthly());
 		}
 		FileOutputStream fileOut = new FileOutputStream(file);
 		wb.write(fileOut);

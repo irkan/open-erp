@@ -70,6 +70,7 @@ public class Constants {
     public static final String CONTENTS = "contents";
     public static final String PATH = "path";
     public static final String MODULES_MAP = "modules_map";
+    public static final String TAX_CONFIGURATIONS = "tax_configurations";
 
     public static final class STATUS{
         public static final String RESPONSE = "response";

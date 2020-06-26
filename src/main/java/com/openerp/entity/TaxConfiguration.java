@@ -1,6 +1,7 @@
 package com.openerp.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.openerp.util.Util;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -68,6 +69,10 @@ public class TaxConfiguration {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_date", nullable = false)
     private Date createdDate = new Date();
+
+    public String getLabel() {
+        return voen + " - " + person.getFullName();
+    }
 
     public TaxConfiguration(Organization organization) {
         this.organization = organization;

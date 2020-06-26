@@ -28,8 +28,8 @@
             <thead>
             <tr>
                 <th>ID</th>
-                <th>Struktur</th>
                 <th>Əməkdaş</th>
+                <th>Struktur</th>
                 <th>İstifadəçi</th>
                 <th>Tarixdən</th>
                 <th>Tarixədək</th>

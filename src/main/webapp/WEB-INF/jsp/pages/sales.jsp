@@ -39,96 +39,114 @@
                             <div class="row">
                                 <div class="col-md-11">
                                     <div class="row">
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <form:label path="id">KOD</form:label>
-                                                <form:input path="id" cssClass="form-control" placeholder="######"/>
-                                                <form:errors path="id" cssClass="control-label alert-danger"/>
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <form:label path="id">KOD</form:label>
+                                                        <form:input path="id" cssClass="form-control" placeholder="######"/>
+                                                        <form:errors path="id" cssClass="control-label alert-danger"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <form:label path="customer">Müştəri</form:label>
+                                                        <form:input path="customer" cssClass="form-control" placeholder="Müştəri kodu" />
+                                                        <form:errors path="customer" cssClass="alert-danger"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <form:label path="payment.lastPriceFrom">Qiymətdən</form:label>
+                                                        <form:input path="payment.lastPriceFrom" cssClass="form-control" placeholder="Daxil edin"/>
+                                                        <form:errors path="payment.lastPriceFrom" cssClass="alert-danger control-label"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <form:label path="payment.lastPrice">Qiymətədək</form:label>
+                                                        <form:input path="payment.lastPrice" cssClass="form-control" placeholder="Daxil edin"/>
+                                                        <form:errors path="payment.lastPrice" cssClass="alert-danger control-label"/>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <form:label path="customer">Müştəri</form:label>
-                                                <form:input path="customer" cssClass="form-control" placeholder="Müştəri kodu" />
-                                                <form:errors path="customer" cssClass="alert-danger"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <form:label path="saleDateFrom">Satış tarixindən</form:label>
-                                                <div class="input-group date">
-                                                    <form:input path="saleDateFrom" autocomplete="off"
-                                                                cssClass="form-control datepicker-element" date_="date_"
-                                                                placeholder="dd.MM.yyyy"/>
-                                                    <div class="input-group-append">
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <form:label path="saleDateFrom">Satış tarixindən</form:label>
+                                                        <div class="input-group date">
+                                                            <form:input path="saleDateFrom" autocomplete="off"
+                                                                        cssClass="form-control datepicker-element" date_="date_"
+                                                                        placeholder="dd.MM.yyyy"/>
+                                                            <div class="input-group-append">
                                         <span class="input-group-text">
                                             <i class="la la-calendar"></i>
                                         </span>
+                                                            </div>
+                                                        </div>
+                                                        <form:errors path="saleDateFrom" cssClass="control-label alert-danger"/>
                                                     </div>
                                                 </div>
-                                                <form:errors path="saleDateFrom" cssClass="control-label alert-danger"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <form:label path="saleDate">Tarixədək</form:label>
-                                                <div class="input-group date">
-                                                    <form:input path="saleDate" autocomplete="off"
-                                                                cssClass="form-control datepicker-element" date_="date_"
-                                                                placeholder="dd.MM.yyyy"/>
-                                                    <div class="input-group-append">
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <form:label path="saleDate">Tarixədək</form:label>
+                                                        <div class="input-group date">
+                                                            <form:input path="saleDate" autocomplete="off"
+                                                                        cssClass="form-control datepicker-element" date_="date_"
+                                                                        placeholder="dd.MM.yyyy"/>
+                                                            <div class="input-group-append">
                                         <span class="input-group-text">
                                             <i class="la la-calendar"></i>
                                         </span>
+                                                            </div>
+                                                        </div>
+                                                        <form:errors path="saleDate" cssClass="control-label alert-danger"/>
                                                     </div>
                                                 </div>
-                                                <form:errors path="saleDate" cssClass="control-label alert-danger"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <form:label path="guaranteeExpireFrom">Qarantiya bitir - tarixdən</form:label>
-                                                <div class="input-group date">
-                                                    <form:input path="guaranteeExpireFrom" autocomplete="off"
-                                                                cssClass="form-control datepicker-element" date_="date_"
-                                                                placeholder="dd.MM.yyyy"/>
-                                                    <div class="input-group-append">
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <form:label path="guaranteeExpireFrom">Qarantiya bitir - tarixdən</form:label>
+                                                        <div class="input-group date">
+                                                            <form:input path="guaranteeExpireFrom" autocomplete="off"
+                                                                        cssClass="form-control datepicker-element" date_="date_"
+                                                                        placeholder="dd.MM.yyyy"/>
+                                                            <div class="input-group-append">
                                         <span class="input-group-text">
                                             <i class="la la-calendar"></i>
                                         </span>
+                                                            </div>
+                                                        </div>
+                                                        <form:errors path="guaranteeExpireFrom" cssClass="control-label alert-danger"/>
                                                     </div>
                                                 </div>
-                                                <form:errors path="guaranteeExpireFrom" cssClass="control-label alert-danger"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <form:label path="guaranteeExpire">Tarixədək</form:label>
-                                                <div class="input-group date">
-                                                    <form:input path="guaranteeExpire" autocomplete="off"
-                                                                cssClass="form-control datepicker-element" date_="date_"
-                                                                placeholder="dd.MM.yyyy"/>
-                                                    <div class="input-group-append">
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <form:label path="guaranteeExpire">Tarixədək</form:label>
+                                                        <div class="input-group date">
+                                                            <form:input path="guaranteeExpire" autocomplete="off"
+                                                                        cssClass="form-control datepicker-element" date_="date_"
+                                                                        placeholder="dd.MM.yyyy"/>
+                                                            <div class="input-group-append">
                                         <span class="input-group-text">
                                             <i class="la la-calendar"></i>
                                         </span>
+                                                            </div>
+                                                        </div>
+                                                        <form:errors path="guaranteeExpire" cssClass="control-label alert-danger"/>
                                                     </div>
                                                 </div>
-                                                <form:errors path="guaranteeExpire" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="payment.lastPriceFrom">Qiymətdən</form:label>
-                                                <form:input path="payment.lastPriceFrom" cssClass="form-control" placeholder="Qiyməti daxil edin"/>
-                                                <form:errors path="payment.lastPriceFrom" cssClass="alert-danger control-label"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <form:label path="payment.lastPrice">Qiymətədək</form:label>
-                                                <form:input path="payment.lastPrice" cssClass="form-control" placeholder="Qiyməti daxil edin"/>
-                                                <form:errors path="payment.lastPrice" cssClass="alert-danger control-label"/>
+                                                <form:label path="taxConfiguration">VÖEN</form:label>
+                                                <form:select  path="taxConfiguration.id" cssClass="custom-select form-control">
+                                                    <form:option value=""></form:option>
+                                                    <form:options items="${tax_configurations}" itemLabel="label" itemValue="id" />
+                                                </form:select>
+                                                <form:errors path="taxConfiguration" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -288,6 +306,7 @@
                             <c:set var="return1" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'return')}"/>
                             <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
                             <c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
+                            <c:set var="consolidate" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'consolidate')}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="group_table">
                                 <thead>
                                 <tr>
@@ -362,14 +381,24 @@
                                             <c:if test="${!t.payment.cash}">
                                                 Period: <c:out value="${t.payment.period.name}" /><br/>
                                             </c:if>
-                                            Zəmanət müddəti: <c:out value="${t.guarantee}" /> ay<br/>
-                                            Zəmanət bitir: <fmt:formatDate value = "${t.guaranteeExpire}" pattern = "dd.MM.yyyy" />
+                                            Zəmanət bitir: <fmt:formatDate value = "${t.guaranteeExpire}" pattern = "dd.MM.yyyy" /><br/>
+                                            <c:if test="${not empty t.taxConfiguration.voen}">
+                                                VÖEN: <c:out value="${t.taxConfiguration.voen}" />
+                                            </c:if>
                                         </td>
                                         <td>
-                                            Konsul: <c:out value="${t.console.person.fullName}" /><br/>
-                                            Ven lider: <c:out value="${t.vanLeader.person.fullName}" /><br/>
-                                            Diller: <c:out value="${t.dealer.person.fullName}" /><br/>
-                                            Canvasser: <c:out value="${t.canavasser.person.fullName}" />
+                                            <c:if test="${not empty t.console.person.fullName}">
+                                                Konsul: <c:out value="${t.console.person.fullName}" /><br/>
+                                            </c:if>
+                                            <c:if test="${not empty t.vanLeader.person.fullName}">
+                                                Ven lider: <c:out value="${t.vanLeader.person.fullName}" /><br/>
+                                            </c:if>
+                                            <c:if test="${not empty t.dealer.person.fullName}">
+                                                Diller: <c:out value="${t.dealer.person.fullName}" /><br/>
+                                            </c:if>
+                                            <c:if test="${not empty t.canavasser.person.fullName}">
+                                                Canvasser: <c:out value="${t.canavasser.person.fullName}" />
+                                            </c:if>
                                         </td>
                                         <td nowrap class="text-center">
                                             <c:if test="${approve.status and !t.approve}">
@@ -400,6 +429,11 @@
                                                     <c:if test="${view3.status}">
                                                     <a href="/sale/service-regulator/<c:out value="${t.id}"/>" class="dropdown-item">
                                                         <i class="flaticon-folder-2"></i> Servis requlyatoru
+                                                    </a>
+                                                    </c:if>
+                                                    <c:if test="${consolidate.status}">
+                                                    <a href="javascript:setTaxConfiguration($('#tax-configuration-form'), '<c:out value="${t.id}"/>', '<c:out value="${not empty t.taxConfiguration.id?t.taxConfiguration.id:0}"/>', 'tax-configuration-modal-operation', 'VÖEN təhkim et');" class="dropdown-item" title="<c:out value="${consolidate.object.name}"/>">
+                                                        <i class="<c:out value="${consolidate.object.icon}"/>"></i> VÖEN təhkim et
                                                     </a>
                                                     </c:if>
                                                     <c:if test="${return1.status and t.approve}">
@@ -1122,6 +1156,36 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" onclick="submit($('#return-form'));">Bəli, təsdiq edirəm!</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="tax-configuration-modal-operation" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form:form modelAttribute="form" id="tax-configuration-form" method="post" action="/sale/sales/tax-configuration" cssClass="form-group">
+                    <form:hidden path="id"/>
+                    <div class="form-group">
+                        <form:label path="taxConfiguration">VÖEN</form:label>
+                        <form:select path="taxConfiguration" cssClass="form-control">
+                            <form:option value=""/>
+                            <form:options items="${tax_configurations}" itemValue="id" itemLabel="label"/>
+                        </form:select>
+                        <form:errors path="taxConfiguration" cssClass="alert-danger control-label"/>
+                    </div>
+                </form:form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="submit($('#tax-configuration-form'));">Yadda saxla</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
             </div>
         </div>
@@ -2073,6 +2137,13 @@
         $('#' + modal).modal('toggle');
     }
 
+    function setTaxConfiguration(form, id, taxConfigurationId, modal, title) {
+        $(form).find("input[name='id']").val(id);
+        $(form).find("select[name='taxConfiguration'] option[value="+taxConfigurationId+"]").attr("selected", "selected");
+        $('#' + modal).find(".modal-title").html(title);
+        $('#' + modal).modal('toggle');
+    }
+
     $( "#return-form" ).validate({
         rules: {
             returnPrice: {
@@ -2128,4 +2199,16 @@
             }
         });
     }
+
+    $( "#tax-configuration-form" ).validate({
+        rules: {
+            taxConfiguration: {
+                required: true
+            }
+        },
+        invalidHandler: function(event, validator) {
+            KTUtil.scrollTop();
+            swal.close();
+        },
+    });
 </script>

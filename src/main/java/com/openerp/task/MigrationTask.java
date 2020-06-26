@@ -47,9 +47,6 @@ public class MigrationTask {
     MigrationDetailRepository migrationDetailRepository;
 
     @Autowired
-    MigrationDetailServiceRegulatorRepository migrationDetailServiceRegulatorRepository;
-
-    @Autowired
     InventoryRepository inventoryRepository;
 
     @Autowired

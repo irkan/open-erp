@@ -45,6 +45,7 @@ public class SaleController extends SkeletonController {
             model.addAttribute(Constants.PAYMENT_PERIODS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-period"));
             model.addAttribute(Constants.GUARANTEES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("guarantee"));
             model.addAttribute(Constants.SALES_TYPES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("sales-type"));
+            model.addAttribute(Constants.TAX_CONFIGURATIONS, taxConfigurationRepository.getTaxConfigurationsByActiveTrueAndOrganization(getSessionOrganization()));
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Sales(getSessionOrganization()));
             }
@@ -246,6 +247,21 @@ public class SaleController extends SkeletonController {
         return mapPost(sales, binding, redirectAttributes);
     }
 
+    @PostMapping(value = "/sales/tax-configuration")
+    public String postSalesReturn(@ModelAttribute(Constants.FORM) @Validated Sales sale, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        Sales sales = salesRepository.getSalesById(sale.getId());
+        if(!binding.hasErrors() && sale.getTaxConfiguration()!=null && sale.getTaxConfiguration().getVoen()!=null){
+            sales.setTaxConfiguration(sale.getTaxConfiguration());
+            salesRepository.save(sales);
+
+            log(sales, "sale_sales", "edit", sales.getId(), sales.toString(), "VÖEN əlavə edildi: " + sales.getTaxConfiguration().getVoen());
+        }
+        if(sales.getService()){
+            return mapPost(sales, binding, redirectAttributes, "/sale/service");
+        }
+        return mapPost(sales, binding, redirectAttributes, "/sale/sales");
+    }
+
     @PostMapping(value = "/sales/return")
     public String postSalesReturn(@ModelAttribute(Constants.RETURN_FORM) @Validated Return returnForm, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         Sales sales = salesRepository.getSalesById(returnForm.getSalesId());
@@ -310,6 +326,11 @@ public class SaleController extends SkeletonController {
             }
         } else if(!sales.getService()) {
             FieldError fieldError = new FieldError("", "", "İnventar əlavə edilməyib!");
+            binding.addError(fieldError);
+        }
+
+        if(!sales.getService() && sales.getTaxConfiguration()==null){
+            FieldError fieldError = new FieldError("", "", "VÖEN təhkim edilməyib!");
             binding.addError(fieldError);
         }
 
