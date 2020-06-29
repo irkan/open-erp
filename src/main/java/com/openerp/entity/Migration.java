@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "admin_migration")
+@Table(name = "migration")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,19 +22,19 @@ import java.util.List;
 public class Migration {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "admin_migration_sequence")
-    @SequenceGenerator(sequenceName = "aa_admin_migration_sequence", allocationSize = 1, name = "admin_migration_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "migration_seq")
+    @SequenceGenerator(sequenceName = "migration_seq", allocationSize = 1, name = "migration_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
     @JsonIgnore
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_organization_id")
+    @JoinColumn(name = "organization_id")
     private Organization organization;
 
     @JsonIgnore
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "warehouse_supplier_id")
+    @JoinColumn(name = "supplier_id")
     private Supplier supplier;
 
     @Column(name = "operation_type")

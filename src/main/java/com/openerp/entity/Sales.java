@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "sale_sales")
+@Table(name = "sales")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,8 +22,8 @@ import java.util.List;
 public class Sales {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "sale_sales_sequence")
-    @SequenceGenerator(sequenceName = "aa_sale_sales_sequence", initialValue = 100001, allocationSize = 1, name = "sale_sales_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "sales_seq")
+    @SequenceGenerator(sequenceName = "sales_seq", initialValue = 100001, allocationSize = 1, name = "sales_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
@@ -48,35 +48,35 @@ public class Sales {
     private List<ContactHistory> contactHistories;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_organization_id", nullable = false)
+    @JoinColumn(name = "organization_id", nullable = false)
     private Organization organization;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "sale_payment_id", nullable = false)
+    @JoinColumn(name = "payment_id", nullable = false)
     private Payment payment;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_employee_console_id")
+    @JoinColumn(name = "employee_console_id")
     private Employee console;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_employee_van_leader_id")
+    @JoinColumn(name = "employee_van_leader_id")
     private Employee vanLeader;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_employee_dealer_id")
+    @JoinColumn(name = "employee_dealer_id")
     private Employee dealer;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_employee_canavasser_id")
+    @JoinColumn(name = "employee_canavasser_id")
     private Employee canavasser;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_employee_servicer_id")
+    @JoinColumn(name = "employee_servicer_id")
     private Employee servicer;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_tax_configuration_id")
+    @JoinColumn(name = "tax_configuration_id")
     private TaxConfiguration taxConfiguration;
 
     @ToString.Exclude
@@ -94,7 +94,7 @@ public class Sales {
     private Integer guarantee;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "sale_date", nullable = false)
+    @Column(name = "date", nullable = false)
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date saleDate = new Date();
 

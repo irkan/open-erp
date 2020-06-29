@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "admin_migration_detail")
+@Table(name = "migration_detail")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,13 +21,13 @@ import java.util.List;
 public class MigrationDetail {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "admin_migration_detail_sequence")
-    @SequenceGenerator(sequenceName = "aa_admin_migration_detail_sequence", allocationSize = 1, name = "admin_migration_detail_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "migration_detail_seq")
+    @SequenceGenerator(sequenceName = "migration_detail_seq", allocationSize = 1, name = "migration_detail_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_migration_id")
+    @JoinColumn(name = "migration_id")
     private Migration migration;
 
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
@@ -55,35 +55,35 @@ public class MigrationDetail {
     private String employeeVanLeader;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_employee_van_leader_id")
+    @JoinColumn(name = "employee_van_leader_id")
     private Employee vanLeader;
 
     @Column(name = "employee_console")
     private String employeeConsole;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_employee_console_id")
+    @JoinColumn(name = "employee_console_id")
     private Employee console;
 
     @Column(name = "employee_canvasser")
     private String employeeCanvasser;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_employee_canavasser_id")
+    @JoinColumn(name = "employee_canavasser_id")
     private Employee canvasser;
 
     @Column(name = "employee_dealer")
     private String employeeDealer;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_employee_dealer_id")
+    @JoinColumn(name = "employee_dealer_id")
     private Employee dealer;
 
     @Column(name = "employee_servicer")
     private String employeeServicer;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_employee_servicer_id")
+    @JoinColumn(name = "employee_servicer_id")
     private Employee servicer;
 
     @Column(name = "sales_payment_last_price")
@@ -99,14 +99,14 @@ public class MigrationDetail {
     private Integer salesPaymentPeriod;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_dictionary_payment_period_id")
+    @JoinColumn(name = "dictionary_payment_period_id")
     private Dictionary period;
 
     @Column(name = "sales_payment_schedule")
     private Integer salesPaymentSchedule;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_dictionary_payment_schedule_id")
+    @JoinColumn(name = "dictionary_payment_schedule_id")
     private Dictionary schedule;
 
     @Column(name = "sales_saled")

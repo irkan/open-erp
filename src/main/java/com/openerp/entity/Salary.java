@@ -10,25 +10,25 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "payroll_salary")
+@Table(name = "salary")
 @Getter
 @Setter
 @NoArgsConstructor
 public class Salary {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "payroll_sequence")
-    @SequenceGenerator(sequenceName = "aa_payroll_sequence", allocationSize = 1, name = "payroll_sequence")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "salary_seq")
+    @SequenceGenerator(sequenceName = "salary_seq", allocationSize = 1, name = "salary_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
     @JsonIgnore
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "payroll_working_hour_record_id")
+    @JoinColumn(name = "working_hour_record_id")
     private WorkingHourRecord workingHourRecord;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_organization_id")
+    @JoinColumn(name = "organization_id")
     private Organization organization;
 
     @OneToMany(mappedBy = "salary", cascade = CascadeType.ALL)

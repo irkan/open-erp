@@ -12,15 +12,15 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Table(name = "admin_operation")
+@Table(name = "operation")
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
 public class Operation {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "admin_sequence")
-    @SequenceGenerator(sequenceName = "aa_admin_sequence", allocationSize = 1, name = "admin_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "operation_seq")
+    @SequenceGenerator(sequenceName = "operation_seq", allocationSize = 1, name = "operation_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 

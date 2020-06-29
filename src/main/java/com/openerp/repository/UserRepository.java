@@ -15,4 +15,5 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
     List<User> getUsersByActiveTrue();
     List<User> getUsersByActiveTrueAndEmployee_Organization(Organization organization);
     List<User> getUsersByEmployeeAndActiveTrue(Employee employee);
+    List<User> getUsersByUsernameAndActiveTrue(String username);
 }

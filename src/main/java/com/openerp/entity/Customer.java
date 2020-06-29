@@ -19,17 +19,17 @@ import java.util.Date;
 public class Customer {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "crm_customer_sequence")
-    @SequenceGenerator(sequenceName = "aa_crm_customer_sequence", allocationSize = 3, initialValue = 100001, name = "crm_customer_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "crm_customer_seq")
+    @SequenceGenerator(sequenceName = "crm_customer_seq", allocationSize = 3, initialValue = 100001, name = "crm_customer_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "common_person_id", nullable = false)
+    @JoinColumn(name = "person_id", nullable = false)
     private Person person;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_organization_id", nullable = false)
+    @JoinColumn(name = "organization_id", nullable = false)
     private Organization organization;
 
     @Temporal(TemporalType.DATE)

@@ -38,7 +38,7 @@ public class CbarCurrencyRateTask {
             currencyRateRepository.deleteAll();
             List<CurrencyRate> currencyRates = Util.getCurrenciesRate(cbarCurrenciesEndpoint);
             currencyRateRepository.saveAll(currencyRates);
-            Log logObject = new Log("admin_currency_rate", "reload", null, "", "", "CbarCurrencyRateTask ilə məzənnə yeniləndi", UtilJson.toJson(currencyRates));
+            Log logObject = new Log("currency_rate", "reload", null, "", "", "CbarCurrencyRateTask ilə məzənnə yeniləndi", UtilJson.toJson(currencyRates));
             logRepository.save(logObject);
             log.info("Cbar Currency Rate Task End");
         } catch (Exception e){

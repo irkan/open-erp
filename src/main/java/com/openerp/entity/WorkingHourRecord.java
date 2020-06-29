@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "payroll_working_hour_record")
+@Table(name = "working_hour_record")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,8 +19,8 @@ import java.util.List;
 public class WorkingHourRecord {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "payroll_sequence")
-    @SequenceGenerator(sequenceName = "aa_payroll_sequence", allocationSize = 1, name = "payroll_sequence")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "working_hour_record_seq")
+    @SequenceGenerator(sequenceName = "working_hour_record_seq", allocationSize = 1, name = "working_hour_record_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
@@ -34,7 +34,7 @@ public class WorkingHourRecord {
     private int year=(new Date()).getYear()+1900;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_organization_id")
+    @JoinColumn(name = "organization_id")
     private Organization organization;
 
     @OneToMany(mappedBy = "workingHourRecord")

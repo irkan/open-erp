@@ -12,24 +12,24 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "sale_service_task")
+@Table(name = "service_task")
 @Getter
 @Setter
 @NoArgsConstructor
 public class ServiceTask {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "sale_service_task_sequence")
-    @SequenceGenerator(sequenceName = "aa_sale_service_task_sequence", initialValue = 1, allocationSize = 1, name = "sale_service_task_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "service_task_seq")
+    @SequenceGenerator(sequenceName = "service_task_seq", initialValue = 1, allocationSize = 1, name = "service_task_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "sale_sales_id")
+    @JoinColumn(name = "sales_id")
     private Sales sales;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_organization_id", nullable = false)
+    @JoinColumn(name = "organization_id", nullable = false)
     private Organization organization;
 
     @OneToMany(mappedBy = "serviceTask", cascade = CascadeType.ALL)

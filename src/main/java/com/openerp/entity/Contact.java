@@ -11,7 +11,7 @@ import javax.validation.constraints.Email;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "common_contact")
+@Table(name = "contact")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,8 +19,8 @@ import java.io.Serializable;
 public class Contact {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "common_sequence")
-    @SequenceGenerator(sequenceName = "aa_common_sequence", allocationSize = 1, name = "common_sequence")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "contact_seq")
+    @SequenceGenerator(sequenceName = "contact_seq", allocationSize = 1, name = "contact_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
@@ -50,11 +50,11 @@ public class Contact {
     private String livingAddress;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_dictionary_city_id")
+    @JoinColumn(name = "dictionary_city_id")
     private Dictionary city;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_dictionary_living_city_id")
+    @JoinColumn(name = "dictionary_living_city_id")
     private Dictionary livingCity;
 
     @Column(name = "geolocation")

@@ -8,26 +8,26 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "admin_template_module_operation")
+@Table(name = "template_module_operation")
 @Getter
 @Setter
 @NoArgsConstructor
 public class TemplateModuleOperation {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "admin_sequence")
-    @SequenceGenerator(sequenceName = "aa_admin_sequence", allocationSize = 1, name = "admin_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "template_module_operation_seq")
+    @SequenceGenerator(sequenceName = "template_module_operation_seq", allocationSize = 1, name = "template_module_operation_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_dictionary_template_id")
+    @JoinColumn(name = "dictionary_template_id")
     private Dictionary template;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private ModuleOperation moduleOperation;
 
     @OneToMany(fetch=FetchType.LAZY )
-    @JoinColumn(name = "admin_module_operation_id")
+    @JoinColumn(name = "module_operation_id")
     private List<ModuleOperation> moduleOperations;
 
     public TemplateModuleOperation(Dictionary template, ModuleOperation moduleOperation) {

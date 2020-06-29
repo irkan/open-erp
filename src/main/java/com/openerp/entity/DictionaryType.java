@@ -12,15 +12,15 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Table(name = "admin_dictionary_type")
+@Table(name = "dictionary_type")
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
 public class DictionaryType {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "admin_dictionary_type_sequence")
-    @SequenceGenerator(sequenceName = "aa_admin_dictionary_type_sequence", initialValue = 500, allocationSize = 1, name = "admin_dictionary_type_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "dictionary_type_seq")
+    @SequenceGenerator(sequenceName = "dictionary_type_seq", initialValue = 500, allocationSize = 1, name = "dictionary_type_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 

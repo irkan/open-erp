@@ -13,7 +13,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "hr_employee_payroll_detail")
+@Table(name = "employee_payroll_detail")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,19 +21,19 @@ import java.util.Date;
 public class EmployeePayrollDetail {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "hr_sequence")
-    @SequenceGenerator(sequenceName = "aa_hr_sequence", allocationSize = 1, name = "hr_sequence")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "employee_payroll_detail_seq")
+    @SequenceGenerator(sequenceName = "employee_payroll_detail_seq", allocationSize = 1, name = "employee_payroll_detail_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
     @ToString.Exclude
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_employee_id")
+    @JoinColumn(name = "employee_id")
     private Employee employee;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_dictionary_employee_payroll_field_id")
+    @JoinColumn(name = "dictionary_employee_payroll_field_id")
     private Dictionary employeePayrollField;
 
     @Column(name = "key_field")

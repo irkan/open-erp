@@ -31,6 +31,7 @@
                                     <th>Tipi</th>
                                     <th>Atribut#1</th>
                                     <th>Atribut#2</th>
+                                    <th>Tip atribut#1</th>
                                     <th>Əməliyyat</th>
                                 </tr>
                                 </thead>
@@ -42,6 +43,7 @@
                                         <th><c:out value="${t.dictionaryType.name}" /></th>
                                         <th><c:out value="${t.attr1}" /></th>
                                         <td><c:out value="${t.attr2}" /></td>
+                                        <td><c:out value="${t.dictionaryType.attr1}" /></td>
                                          <td nowrap class="text-center">
                                              <c:if test="${view.status}">
                                                  <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">

@@ -13,15 +13,15 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "hr_organization")
+@Table(name = "organization")
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
 public class Organization {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "hr_sequence")
-    @SequenceGenerator(sequenceName = "aa_hr_sequence", allocationSize = 1, name = "hr_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "organization_seq")
+    @SequenceGenerator(sequenceName = "organization_seq", allocationSize = 1, name = "organization_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
@@ -52,11 +52,11 @@ public class Organization {
     private List<Organization> children;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_dictionary_org_type_id")
+    @JoinColumn(name = "dictionary_org_type_id")
     private Dictionary type;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "common_contact_id")
+    @JoinColumn(name = "contact_id")
     private Contact contact;
 
     public Organization(Contact contact, String name, String description, Organization organization, Dictionary type) {

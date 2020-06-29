@@ -12,20 +12,20 @@ import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 @Entity
-@Table(name = "admin_period")
+@Table(name = "period")
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
 public class Period {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "admin_sequence")
-    @SequenceGenerator(sequenceName = "aa_admin_sequence", allocationSize = 1, name = "admin_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "period_seq")
+    @SequenceGenerator(sequenceName = "period_seq", allocationSize = 1, name = "period_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_user_id", unique = true, nullable = false)
+    @JoinColumn(name = "user_id", unique = true, nullable = false)
     private User user;
 
     @Temporal(TemporalType.DATE)

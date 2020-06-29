@@ -11,24 +11,24 @@ import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 @Entity
-@Table(name = "accounting_financing")
+@Table(name = "financing")
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
 public class Financing {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "accounting_sequence")
-    @SequenceGenerator(sequenceName = "aa_accounting_sequence", allocationSize = 1, name = "accounting_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "financing_seq")
+    @SequenceGenerator(sequenceName = "financing_seq", allocationSize = 1, name = "financing_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "warehouse_inventory_id")
+    @JoinColumn(name = "inventory_id")
     private Inventory inventory;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "warehouse_organization_id")
+    @JoinColumn(name = "organization_id")
     private Organization organization;
 
     @ToString.Exclude

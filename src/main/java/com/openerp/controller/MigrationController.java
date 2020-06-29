@@ -7,6 +7,9 @@ import com.openerp.dummy.DummyEmployee;
 import com.openerp.dummy.DummyPerson;
 import com.openerp.dummy.DummyUtil;
 import com.openerp.entity.*;
+import com.openerp.repository.MigrationEmployeeRepository;
+import com.openerp.repository.MigrationUserModuleOperationRepository;
+import com.openerp.repository.MigrationUserRepository;
 import com.openerp.util.DateUtility;
 import com.openerp.util.Util;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -14,6 +17,7 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,7 +32,210 @@ import java.util.regex.Pattern;
 @Controller
 @RequestMapping("/migration")
 public class MigrationController extends SkeletonController {
-    @GetMapping("/contact")
+
+    @Autowired
+    MigrationEmployeeRepository migrationEmployeeRepository;
+
+    @Autowired
+    MigrationUserRepository migrationUserRepository;
+
+    @Autowired
+    MigrationUserModuleOperationRepository migrationUserModuleOperationRepository;
+
+    /*@GetMapping("/migration-user-module-operation")
+    public String migrationUserModuleOperation() throws Exception {
+        try{
+            List<UserModuleOperation> userModuleOperations = new ArrayList<>();
+            for(MigrationUserModuleOperation mumo: migrationUserModuleOperationRepository.findAll()){
+                List<User> users = userRepository.getUsersByUsernameAndActiveTrue(mumo.getUsername());
+                List<Module> modules = moduleRepository.getModulesByActiveTrueAndPath(mumo.getModulePath());
+                List<Operation> operations = operationRepository.getOperationsByActiveTrueAndName(mumo.getOperation());
+                if(users.size()>0 && modules.size()>0 && operations.size()>0){
+                    List<ModuleOperation> moduleOperations = moduleOperationRepository.getModuleOperationsByModuleAndOperation(modules.get(0), operations.get(0));
+                    if(moduleOperations.size()>0){
+                        ModuleOperation moduleOperation = moduleOperations.get(0);
+                        moduleOperation.setModuleOperations(null);
+                        UserModuleOperation userModuleOperation = new UserModuleOperation(users.get(0), moduleOperation);
+                        userModuleOperationRepository.save(userModuleOperation);
+
+                        log.info(userModuleOperation.getId() + " saved!");
+                        userModuleOperations.add(userModuleOperation);
+                    }
+                }
+            }
+
+            //userRepository.saveAll(users);
+            log.info("saved "+userModuleOperations.size()+" user module operations!");
+        } catch (Exception e){
+            log.error(e.getMessage(), e);
+        }
+        return "redirect:/login";
+    }*/
+
+    /*@GetMapping("/migration-user")
+    public String migrationUser() throws Exception {
+        try{
+            List<User> users = new ArrayList<>();
+            for(MigrationUser mu: migrationUserRepository.findAll()){
+                List<Organization> organizations = organizationRepository.getOrganizationsByName(mu.getOrganization());
+                if(organizations.size()==0){
+                    organizations = organizationRepository.getOrganizationsByName(mu.getOrganization().trim().equalsIgnoreCase("Xırdalan flialı")?"Baş ofis":mu.getOrganization());
+                    if(organizations.size()==0){
+                        log.error(mu.getFirstName() + " " + mu.getLastName() + " - " + mu.getOrganization() + " | organization didnot found!");
+                    }
+                }
+
+
+                if(organizations.size()>0){
+                    List<Employee> employees = employeeRepository.getEmployeesByPersonFirstNameAndPersonLastNameAndPersonFatherNameAndOrganization(mu.getFirstName(), mu.getLastName(), mu.getFatherName(), organizations.get(0));
+                    if(employees.size()==0){
+                        employees = employeeRepository.getEmployeesByPersonFirstNameAndPersonLastNameAndOrganization(mu.getFirstName(), mu.getLastName(), organizations.get(0));
+                        if(employees.size()==0){
+                            log.error(mu.getFirstName() + " " + mu.getLastName() + " - " + mu.getOrganization() + " | employee didnot found!");
+                        }
+                    }
+
+                    if(employees.size()>0){
+                        UserDetail userDetail = new UserDetail();
+                        userDetail.setAdministrator(mu.getIsAdministrator().intValue()==1?true:false);
+                        userDetail.setSmsNotification(mu.getSmsNotification().intValue()==1?true:false);
+                        userDetail.setEmailNotification(mu.getEmailNotification().intValue()==1?true:false);
+                        userDetail.setLanguage(mu.getLanguage());
+                        userDetail.setPaginationSize(mu.getPaginationSize());
+
+                        User user = new User();
+                        user.setPassword(mu.getPassword());
+                        user.setUsername(mu.getUsername());
+                        user.setUserDetail(userDetail);
+                        user.setEmployee(employees.get(0));
+                        userRepository.save(user);
+                        users.add(user);
+                    }
+                }
+            }
+
+            //userRepository.saveAll(users);
+            log.info("saved "+users.size()+" employees!");
+        } catch (Exception e){
+            log.error(e.getMessage(), e);
+        }
+        return "redirect:/login";
+    }*/
+
+/*    @GetMapping("/migration-employee")
+    public String migrationEmployee() throws Exception {
+        try{
+            List<Employee> employees = new ArrayList<>();
+            for(MigrationEmployee me: migrationEmployeeRepository.findAll()){
+                List<Organization> organizations = organizationRepository.getOrganizationsByName(me.getOrganization());
+                if(organizations.size()==0){
+                    organizations = organizationRepository.getOrganizationsByName(me.getOrganization().trim().equalsIgnoreCase("Xırdalan flialı")?"Baş ofis":me.getOrganization());
+                    if(organizations.size()==0){
+                        log.info(me.getFirstName() + " " + me.getLastName() + " - " + me.getOrganization() + " | organization didnot found!");
+                    }
+                }
+
+                if(me.getPosition().trim().equalsIgnoreCase("Ven servis işçisi")){
+                    me.setPosition("Servis işçisi");
+                } else if(me.getPosition().trim().equalsIgnoreCase("Ven sürücü")){
+                    me.setPosition("Sürücü");
+                } else if(me.getPosition().trim().equalsIgnoreCase("HR manager")){
+                    me.setPosition("İnsan qaynaqları");
+                }
+
+                List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndNameAndDictionaryType_Attr1(me.getPosition(), "position");
+                if(positions.size()==0){
+                    log.info(me.getFirstName() + " " + me.getLastName() + " - " + me.getOrganization() + " - " + me.getPosition() + " | position didnot found!");
+                }
+                if(organizations.size()>0 && positions.size()>0){
+                    Contact contact = new Contact();
+                    contact.setEmail(me.getEmail());
+                    contact.setGeolocation(me.getGeolocation());
+                    contact.setMobilePhone(me.getMobilePhone());
+                    contact.setHomePhone(me.getHomePhone());
+                    contact.setAddress(me.getAddress());
+                    List<Dictionary> cities = dictionaryRepository.getDictionariesByActiveTrueAndNameAndDictionaryType_Attr1(me.getCity(), "city");
+                    if(cities.size()>0){
+                        contact.setCity(cities.get(0));
+                    }
+
+                    Person person = new Person();
+                    person.setContact(contact);
+                    person.setFirstName(me.getFirstName());
+                    person.setLastName(me.getLastName());
+                    person.setFatherName((me.getFatherName()!=null && me.getFatherName().trim().equalsIgnoreCase("boş"))?null:me.getFatherName());
+                    person.setVoen(me.getVoen());
+                    person.setBirthday(me.getBirthday());
+                    person.setIdCardPinCode(me.getIdCardPinCode());
+                    person.setIdCardSerialNumber(me.getIdCardSerialNumber());
+                    person.setDisability(me.getIsDisability().intValue()==0?false:true);
+                    List<Dictionary> genders = dictionaryRepository.getDictionariesByActiveTrueAndNameAndDictionaryType_Attr1(me.getGender(), "gender");
+                    if(genders.size()>0){
+                        person.setGender(genders.get(0));
+                    }
+                    List<Dictionary> maritalStatuses = dictionaryRepository.getDictionariesByActiveTrueAndNameAndDictionaryType_Attr1(me.getMarital(), "marital-status");
+                    if(maritalStatuses.size()>0){
+                        person.setMaritalStatus(maritalStatuses.get(0));
+                    }
+                    List<Dictionary> nationalities = dictionaryRepository.getDictionariesByActiveTrueAndNameAndDictionaryType_Attr1(me.getNationality(), "nationality");
+                    if(nationalities.size()>0){
+                        person.setNationality(nationalities.get(0));
+                    }
+
+                    Employee employee = new Employee();
+                    employee.setPerson(person);
+                    employee.setPosition(positions.get(0));
+                    employee.setOrganization(organizations.get(0));
+                    employee.setBankAccountNumber(me.getBankAccountNumber());
+                    employee.setBankCardNumber(me.getBankCardNumber());
+                    employee.setContractStartDate(me.getContractStartDate());
+                    employee.setContractEndDate(me.getContractEndDate());
+                    employee.setDescription(me.getDescription());
+                    employee.setLeaveReason(me.getLeaveReason());
+                    employee.setSocialCardNumber(me.getSocialCardNumber());
+
+                    List<PayrollConfiguration> payrollConfigurations = payrollConfigurationRepository.getPayrollConfigurationsByActiveTrueOrderById();
+                    List<EmployeePayrollDetail> employeePayrollDetails = new ArrayList<>();
+                    for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-payroll-field")){
+                        EmployeePayrollDetail employeeDetailField1 = new EmployeePayrollDetail(employee, dictionary, dictionary.getAttr1(), dictionary.getAttr2());
+                        if(employeeDetailField1.getKey().equalsIgnoreCase("{main_vacation_days}")){
+                            employeeDetailField1.setValue(Util.calculateMainVacationDays(payrollConfigurations, employee));
+                        } else if(employeeDetailField1.getKey().equalsIgnoreCase("{additional_vacation_days}")){
+                            employeeDetailField1.setValue(Util.calculateAdditionalVacationDays(payrollConfigurations, employee, Util.findPreviousWorkExperience(employeePayrollDetails)));
+                        }
+                        employeePayrollDetails.add(employeeDetailField1);
+                    }
+                    employee.setEmployeePayrollDetails(employeePayrollDetails);
+
+                    List<EmployeeSaleDetail> employeeSaleDetails = new ArrayList<>();
+                    for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-sale-field")){
+                        EmployeeSaleDetail employeeDetailField1 = new EmployeeSaleDetail(employee, dictionary, dictionary.getAttr1(), dictionary.getAttr2());
+                        employeeSaleDetails.add(employeeDetailField1);
+                    }
+                    employee.setEmployeeSaleDetails(employeeSaleDetails);
+
+                    List<EmployeeRestDay> employeeRestDays = new ArrayList<>();
+                    List<Dictionary> weekDays = dictionaryRepository.getDictionariesByActiveTrueAndNameAndDictionaryType_Attr1("Bazar Ertəsi", "week-day");
+                    if(weekDays.size()>0){
+                        EmployeeRestDay employeeRestDay = new EmployeeRestDay(employee, weekDays.get(0).getName(), weekDays.get(0).getAttr1(), Integer.parseInt(weekDays.get(0).getAttr2()), weekDays.get(0));
+                        employeeRestDays.add(employeeRestDay);
+                        employee.setEmployeeRestDays(employeeRestDays);
+                    }
+                    employeeRepository.save(employee);
+                    log.info(employee.getId() + " saved!");
+                    employees.add(employee);
+                }
+            }
+
+            //employeeRepository.saveAll(employees);
+            log.info("saved "+employees.size()+" employees!");
+        } catch (Exception e){
+            log.error(e.getMessage(), e);
+        }
+        return "redirect:/login";
+    }*/
+
+    /*@GetMapping("/contact")
     public String contact() throws Exception {
         List<Dictionary> cities = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("city");
         List<Contact> contacts = new ArrayList<>();
@@ -37,7 +244,7 @@ public class MigrationController extends SkeletonController {
             contacts.add(contact);
         }
         contactRepository.saveAll(contacts);
-      //  log("accounting_financing", "create/edit", contacts.getId(), contacts.toString());
+      //  log("financing", "create/edit", contacts.getId(), contacts.toString());
         return "redirect:/login";
     }
 
@@ -54,7 +261,7 @@ public class MigrationController extends SkeletonController {
             persons.add(person);
         }
         personRepository.saveAll(persons);
-       // log("accounting_financing", "create/edit", persons.getId(), persons.toString());
+       // log("financing", "create/edit", persons.getId(), persons.toString());
         return "redirect:/login";
     }
 
@@ -105,7 +312,7 @@ public class MigrationController extends SkeletonController {
 
         }
         employeeRepository.saveAll(employees);
-       // log("accounting_financing", "create/edit", employees.getId(), employees.toString());
+       // log("financing", "create/edit", employees.getId(), employees.toString());
         return "redirect:/login";
     }
 
@@ -543,9 +750,9 @@ public class MigrationController extends SkeletonController {
     }
 
     public static String stripNonDigits(
-            final CharSequence input /* inspired by seh's comment */){
+            final CharSequence input *//* inspired by seh's comment *//*){
         final StringBuilder sb = new StringBuilder(
-                input.length() /* also inspired by seh's comment */);
+                input.length() *//* also inspired by seh's comment *//*);
         for(int i = 0; i < input.length(); i++){
             final char c = input.charAt(i);
             if(c > 47 && c < 58){
@@ -553,5 +760,5 @@ public class MigrationController extends SkeletonController {
             }
         }
         return sb.toString();
-    }
+    }*/
 }

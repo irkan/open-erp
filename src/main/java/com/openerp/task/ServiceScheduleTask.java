@@ -1,6 +1,5 @@
 package com.openerp.task;
 
-import com.openerp.controller.SkeletonController;
 import com.openerp.entity.*;
 import com.openerp.repository.*;
 import com.openerp.util.DateUtility;
@@ -31,7 +30,7 @@ public class ServiceScheduleTask {
     ServiceRegulatorTaskRepository serviceRegulatorTaskRepository;
 
     @Autowired
-    ConfigurationRepository configurationRepository;
+    GlobalConfigurationRepository configurationRepository;
 
     @Scheduled(fixedDelay = 43200000)
     public void service() {
@@ -39,7 +38,7 @@ public class ServiceScheduleTask {
             log.info("Service Schedule Task Start");
             serviceTaskRepository.deleteAllInBatch();
             serviceRegulatorTaskRepository.deleteAllInBatch();
-            Configuration configuration = configurationRepository.getConfigurationByKey("service");
+            GlobalConfiguration configuration = configurationRepository.getGlobalConfigurationByKey("service");
             String defaultValue = configuration!=null?configuration.getAttribute():"6";
             Date today = new Date();
             for(Sales sales: salesRepository.getSalesByActiveTrueAndServiceFalseAndApproveTrueAndNotServiceNextFalseOrderByIdAsc()){

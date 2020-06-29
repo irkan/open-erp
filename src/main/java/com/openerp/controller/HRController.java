@@ -140,7 +140,7 @@ public class HRController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             organizationRepository.save(organization);
-            log(organization, "hr_organization", "create/edit", organization.getId(), organization.toString());
+            log(organization, "organization", "create/edit", organization.getId(), organization.toString());
         }
         return mapPost(organization, binding, redirectAttributes);
     }
@@ -151,7 +151,7 @@ public class HRController extends SkeletonController {
         if (!binding.hasErrors()) {
             if(employee!=null && employee.getId()!=null){
                 employeeRestDayRepository.deleteInBatch(employeeRestDayRepository.getEmployeeRestDaysByEmployee(employee));
-                log(employee, "hr_employee_rest_day", "delete-in-batch", employee.getId(), employee.toString());
+                log(employee, "employee_rest_day", "delete-in-batch", employee.getId(), employee.toString());
             }
             List<EmployeeRestDay> erds = new ArrayList<>();
             if(ids[0]!=0){
@@ -191,7 +191,7 @@ public class HRController extends SkeletonController {
             employee.setEmployeeSaleDetails(employeeSaleDetails);
 
             employeeRepository.save(employee);
-            log(employee, "hr_employee", "create/edit", employee.getId(), employee.toString());
+            log(employee, "employee", "create/edit", employee.getId(), employee.toString());
         }
         return mapPost(employee, binding, redirectAttributes);
     }
@@ -200,7 +200,7 @@ public class HRController extends SkeletonController {
     public String postEmployeePayroll(@ModelAttribute(Constants.FORM) @Validated Employee object, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         Employee employee = employeeRepository.getEmployeeById(object.getId());
         employeePayrollDetailRepository.deleteInBatch(employeePayrollDetailRepository.getEmployeePayrollDetailsByEmployee_Id(employee.getId()));
-       // log("hr_employee", "create/edit", employee.getId(), employee.toString());
+       // log("employee", "create/edit", employee.getId(), employee.toString());
         List<PayrollConfiguration> payrollConfigurations = payrollConfigurationRepository.getPayrollConfigurationsByActiveTrueOrderById();
         List<EmployeePayrollDetail> employeePayrollDetails = new ArrayList<>();
         for(EmployeePayrollDetail epd: object.getEmployeePayrollDetails()){
@@ -219,7 +219,7 @@ public class HRController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             employeePayrollDetailRepository.saveAll(employeePayrollDetails);
-            log(employeePayrollDetails, "hr_employee_payroll_detail", "create/edit", null, employeePayrollDetails.toString());
+            log(employeePayrollDetails, "employee_payroll_detail", "create/edit", null, employeePayrollDetails.toString());
         }
         return mapPost(employee, binding, redirectAttributes, "/hr/employee");
     }
@@ -227,7 +227,7 @@ public class HRController extends SkeletonController {
     @PostMapping(value = "/employee/sale")
     public String postEmployeeSale(@ModelAttribute(Constants.FORM) @Validated Employee employee, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         employeeSaleDetailRepository.deleteInBatch(employeeSaleDetailRepository.getEmployeeSaleDetailsByEmployee_Id(employee.getId()));
-        //log("hr_employee", "create/edit", employee.getId(), employee.toString());
+        //log("employee", "create/edit", employee.getId(), employee.toString());
         List<EmployeeSaleDetail> employeeSaleDetails = new ArrayList<>();
         for(int i=0; i<employee.getEmployeeSaleDetails().size(); i++){
             EmployeeSaleDetail employeeSaleDetail = employee.getEmployeeSaleDetails().get(i);
@@ -241,7 +241,7 @@ public class HRController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             employeeSaleDetailRepository.saveAll(employeeSaleDetails);
-            log(employeeSaleDetails, "hr_employee_sale_detail", "create/edit", null, employeeSaleDetails.toString());
+            log(employeeSaleDetails, "employee_sale_detail", "create/edit", null, employeeSaleDetails.toString());
         }
         return mapPost(employee, binding, redirectAttributes, "/hr/employee");
     }
@@ -251,7 +251,7 @@ public class HRController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             nonWorkingDayRepository.save(nonWorkingDay);
-            log(nonWorkingDay, "hr_non_working_day", "create/edit", nonWorkingDay.getId(), nonWorkingDay.toString());
+            log(nonWorkingDay, "non_working_day", "create/edit", nonWorkingDay.getId(), nonWorkingDay.toString());
         }
         return mapPost(nonWorkingDay, binding, redirectAttributes);
     }
@@ -270,7 +270,7 @@ public class HRController extends SkeletonController {
                 nonWorkingDayRepository.save(nonWorkingDay);
             }
         }
-        log(nonWorkingDays, "hr_non_working_day", "create/edit", null, nonWorkingDays.toString(), "NonWorkingDay upload edildi");
+        log(nonWorkingDays, "non_working_day", "create/edit", null, nonWorkingDays.toString(), "NonWorkingDay upload edildi");
         return mapPost(redirectAttributes, "/hr/non-working-day");
     }
 
@@ -279,7 +279,7 @@ public class HRController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             shortenedWorkingDayRepository.save(shortenedWorkingDay);
-            log(shortenedWorkingDay, "hr_shortened_working_day", "create/edit", shortenedWorkingDay.getId(), shortenedWorkingDay.toString());
+            log(shortenedWorkingDay, "shortened_working_day", "create/edit", shortenedWorkingDay.getId(), shortenedWorkingDay.toString());
         }
         return mapPost(shortenedWorkingDay, binding, redirectAttributes);
     }
@@ -298,7 +298,7 @@ public class HRController extends SkeletonController {
                 shortenedWorkingDayRepository.save(shortenedWorkingDay);
             }
         }
-        log(shortenedWorkingDays, "hr_shortened_working_day", "create/edit", null, shortenedWorkingDays.toString(), "ShortenedWorkingDay upload edildi");
+        log(shortenedWorkingDays, "shortened_working_day", "create/edit", null, shortenedWorkingDays.toString(), "ShortenedWorkingDay upload edildi");
         return mapPost(redirectAttributes, "/hr/shortened-working-day");
     }
 
@@ -318,7 +318,7 @@ public class HRController extends SkeletonController {
                 if(vacation.getStartDate()!=null && vacation.getEndDate()!=null){
                     if(vacation.getId()!=null){
                         vacationDetailRepository.deleteInBatch(vacationDetailRepository.getVacationDetailsByVacation_Id(vacation.getId()));
-                        //log("hr_shortened_working_day", "create/edit", shortenedWorkingDay.getId(), shortenedWorkingDay.toString());
+                        //log("shortened_working_day", "create/edit", shortenedWorkingDay.getId(), shortenedWorkingDay.toString());
                     }
                     Calendar start = Calendar.getInstance();
                     start.setTime(vacation.getStartDate());
@@ -332,11 +332,11 @@ public class HRController extends SkeletonController {
                     }
                     vacation.setVacationDetails(vacationDetails);
                     vacationRepository.save(vacation);
-                    log(vacation, "hr_vacation", "create/edit", vacation.getId(), vacation.toString());
+                    log(vacation, "vacation", "create/edit", vacation.getId(), vacation.toString());
 
                     Advance advance = calculateVacationPrice(vacation);
                     advanceRepository.save(advance);
-                    log(advance, "payroll_advance", "create/edit", advance.getId(), advance.toString());
+                    log(advance, "advance", "create/edit", advance.getId(), advance.toString());
                 }
             }
         }
@@ -361,7 +361,7 @@ public class HRController extends SkeletonController {
             if(businessTrip.getStartDate()!=null && businessTrip.getEndDate()!=null){
                 if(businessTrip.getId()!=null){
                     businessTripDetailRepository.deleteInBatch(businessTripDetailRepository.getBusinessTripDetailsByBusinessTrip_Id(businessTrip.getId()));
-                   // log("payroll_advance", "create/edit", advance.getId(), advance.toString());
+                   // log("advance", "create/edit", advance.getId(), advance.toString());
                 }
                 Calendar start = Calendar.getInstance();
                 start.setTime(businessTrip.getStartDate());
@@ -375,7 +375,7 @@ public class HRController extends SkeletonController {
                 }
                 businessTrip.setBusinessTripDetails(businessTripDetails);
                 businessTripRepository.save(businessTrip);
-                log(businessTrip, "hr_business_trip", "create/edit", businessTrip.getId(), businessTrip.toString());
+                log(businessTrip, "business_trip", "create/edit", businessTrip.getId(), businessTrip.toString());
             }
         }
         return mapPost(businessTrip, binding, redirectAttributes);
@@ -398,7 +398,7 @@ public class HRController extends SkeletonController {
             if(illness.getStartDate()!=null && illness.getEndDate()!=null){
                 if(illness.getId()!=null){
                     illnessDetailRepository.deleteInBatch(illnessDetailRepository.getIllnessDetailsByIllness_Id(illness.getId()));
-                   // log("hr_business_trip", "create/edit", businessTrip.getId(), businessTrip.toString());
+                   // log("business_trip", "create/edit", businessTrip.getId(), businessTrip.toString());
                 }
                 Calendar start = Calendar.getInstance();
                 start.setTime(illness.getStartDate());
@@ -412,7 +412,7 @@ public class HRController extends SkeletonController {
                 }
                 illness.setIllnessDetails(illnessDetails);
                 illnessRepository.save(illness);
-                log(illness, "hr_illness", "create/edit", illness.getId(), illness.toString());
+                log(illness, "illness", "create/edit", illness.getId(), illness.toString());
             }
         }
         return mapPost(illness, binding, redirectAttributes);

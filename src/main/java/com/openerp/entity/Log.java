@@ -12,14 +12,14 @@ import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 @Entity
-@Table(name = "admin_log")
+@Table(name = "log")
 @Getter
 @Setter
 @NoArgsConstructor
 public class Log {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "admin_log_sequence")
-    @SequenceGenerator(sequenceName = "aa_admin_log_sequence", allocationSize = 1, name = "admin_log_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "log_seq")
+    @SequenceGenerator(sequenceName = "log_seq", allocationSize = 1, name = "log_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 

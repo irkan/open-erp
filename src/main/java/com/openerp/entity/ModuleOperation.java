@@ -11,24 +11,24 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Table(name = "admin_module_operation")
+@Table(name = "module_operation")
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
 public class ModuleOperation {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "admin_sequence")
-    @SequenceGenerator(sequenceName = "aa_admin_sequence", allocationSize = 1, name = "admin_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "module_operation_seq")
+    @SequenceGenerator(sequenceName = "module_operation_seq", allocationSize = 1, name = "module_operation_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_module_id")
+    @JoinColumn(name = "module_id")
     private Module module;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_operation_id")
+    @JoinColumn(name = "operation_id")
     private Operation operation;
 
     @JsonIgnore

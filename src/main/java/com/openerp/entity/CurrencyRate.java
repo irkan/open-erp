@@ -10,15 +10,15 @@ import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 @Entity
-@Table(name = "admin_currency_rate")
+@Table(name = "currency_rate")
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
 public class CurrencyRate {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "admin_sequence")
-    @SequenceGenerator(sequenceName = "aa_admin_sequence", allocationSize = 1, name = "admin_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "currency_rate_seq")
+    @SequenceGenerator(sequenceName = "currency_rate_seq", allocationSize = 1, name = "currency_rate_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 

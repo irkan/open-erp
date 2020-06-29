@@ -12,28 +12,28 @@ import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 @Entity
-@Table(name = "warehouse_action")
+@Table(name = "action")
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
 public class Action {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "warehouse_sequence")
-    @SequenceGenerator(sequenceName = "aa_warehouse_sequence", allocationSize = 1, name = "warehouse_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "action_seq")
+    @SequenceGenerator(sequenceName = "action_seq", allocationSize = 1, name = "action_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_dictionary_action_id")
+    @JoinColumn(name = "dictionary_action_id")
     private Dictionary action;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_from_organization_id")
+    @JoinColumn(name = "from_organization_id")
     private Organization fromOrganization;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_organization_id", nullable = false)
+    @JoinColumn(name = "organization_id", nullable = false)
     private Organization organization;
 
     //@Pattern(regexp="\\d+",message="Say daxil edin")
@@ -45,11 +45,11 @@ public class Action {
     private Integer amountFrom;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "warehouse_inventory_id")
+    @JoinColumn(name = "inventory_id")
     private Inventory inventory;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "warehouse_supplier_id")
+    @JoinColumn(name = "supplier_id")
     private Supplier supplier;
 
     @Column(name = "is_approve", nullable = false, columnDefinition="boolean default true")
@@ -60,7 +60,7 @@ public class Action {
     private Date approveDate;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_employee_id")
+    @JoinColumn(name = "employee_id")
     private Employee employee;
 
     @Column(name = "is_old", nullable = false, columnDefinition="boolean default false")

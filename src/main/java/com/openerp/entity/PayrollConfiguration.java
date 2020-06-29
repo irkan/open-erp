@@ -10,7 +10,7 @@ import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 @Entity
-@Table(name = "payroll_configuration")
+@Table(name = "configuration")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,13 +18,13 @@ import java.util.Date;
 public class PayrollConfiguration {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "payroll_sequence")
-    @SequenceGenerator(sequenceName = "aa_payroll_sequence", allocationSize = 1, name = "payroll_sequence")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "configuration_seq")
+    @SequenceGenerator(sequenceName = "configuration_seq", allocationSize = 1, name = "configuration_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_dictionary_formula_type_id")
+    @JoinColumn(name = "dictionary_formula_type_id")
     private Dictionary type;
 
     @Pattern(regexp=".{2,100}",message="Minimum 2 maksimum 100 simvol ola bilər")

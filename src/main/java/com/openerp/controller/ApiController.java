@@ -19,7 +19,7 @@ public class ApiController extends SkeletonController {
 
     @ResponseBody
     @GetMapping(value = "/info/{username}/{password}/{sale_code}")
-    public WSResponse getPayment(@PathVariable("username") String username, @PathVariable("password") String password, @PathVariable("sale_code") Integer saleId){
+    public WSResponse getPayment(@PathVariable("username") String username, @PathVariable("password") String password, @PathVariable("code") Integer saleId){
         WSResponse response = new WSResponse("404", "Xəta baş verdi!");
         try {
             WebServiceAuthenticator webServiceAuthenticator = webServiceAuthenticatorRepository.getWebServiceAuthenticatorByUsernameAndPasswordAndActiveTrue(username, password);
@@ -50,14 +50,14 @@ public class ApiController extends SkeletonController {
             e.printStackTrace();
             log.error(e.getMessage(), e);
         }
-        log(response, "sale_sales", "find", saleId, response.toString(), username);
+        log(response, "sales", "find", saleId, response.toString(), username);
         return response;
     }
 
 
     @ResponseBody
     @GetMapping(value = "/pay/{username}/{password}/{sale_code}/{amount}/{channel_reference_code}")
-    public WSResponse pay(@PathVariable("username") String username, @PathVariable("password") String password,  @PathVariable("sale_code") Integer saleId, @PathVariable("amount") Double amount, @PathVariable("channel_reference_code") String channelReferenceCode){
+    public WSResponse pay(@PathVariable("username") String username, @PathVariable("password") String password,  @PathVariable("code") Integer saleId, @PathVariable("amount") Double amount, @PathVariable("channel_reference_code") String channelReferenceCode){
         WSResponse response = new WSResponse("404", "Xəta baş verdi!");
         try {
             WebServiceAuthenticator webServiceAuthenticator = webServiceAuthenticatorRepository.getWebServiceAuthenticatorByUsernameAndPasswordAndActiveTrue(username, password);
@@ -83,7 +83,7 @@ public class ApiController extends SkeletonController {
                         invc.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("million", "payment-channel"));
                         invoiceRepository.save(invc);
 
-                        log(response,"sale_invoice", "create/edit", invc.getId(), response.toString(), invc.getDescription(), webServiceAuthenticator.getUsername());
+                        log(response,"invoice", "create/edit", invc.getId(), response.toString(), invc.getDescription(), webServiceAuthenticator.getUsername());
 
                         Transaction transaction = new Transaction();
                         transaction.setApprove(false);
@@ -102,7 +102,7 @@ public class ApiController extends SkeletonController {
                                 + " " + invc.getSales().getSalesInventories().get(0).getInventory().getBarcode() + " " + invc.getDescription()
                         );
                         transactionRepository.save(transaction);
-                        log(transaction, "accounting_transaction", "create/edit", transaction.getId(), transaction.toString(), transaction.getDescription(), webServiceAuthenticator.getUsername());
+                        log(transaction, "transaction", "create/edit", transaction.getId(), transaction.toString(), transaction.getDescription(), webServiceAuthenticator.getUsername());
 
                         List<Advance> advances = new ArrayList<>();
                         ScriptEngineManager mgr = new ScriptEngineManager();
@@ -221,27 +221,6 @@ public class ApiController extends SkeletonController {
                     getVoens.add(new WSGetVoen(tc.getOrganization().getName(), tc.getId(), tc.getVoen()));
                 }
                 response = new WSResponse("200", "OK", getVoens);
-            }
-        } catch (Exception e){
-            log(null, "error", "", "", null, "", e.getMessage());
-            e.printStackTrace();
-            log.error(e.getMessage(), e);
-        }
-        return response;
-    }
-
-    @ResponseBody
-    @GetMapping(value = "/iddiscount/{username}/{password}/{boutique}")
-    public WSResponse getDicount(@PathVariable("username") String username, @PathVariable("password") String password,  @PathVariable("boutique") String boutique){
-        WSResponse response = new WSResponse("404", "Xəta baş verdi!");
-        try {
-            WebServiceAuthenticator webServiceAuthenticator = webServiceAuthenticatorRepository.getWebServiceAuthenticatorByUsernameAndPasswordAndActiveTrue(username, password);
-            if(webServiceAuthenticator!=null){
-                response = new WSResponse("400", "Ödəniş tapılmadı!");
-                List<IDDiscount> idDiscounts = iDDiscountRepository.getIDDiscountByCode(boutique);
-                if(idDiscounts!=null && idDiscounts.size()>0){
-                    response = new WSResponse("200", "OK", idDiscounts.get(0));
-                }
             }
         } catch (Exception e){
             log(null, "error", "", "", null, "", e.getMessage());

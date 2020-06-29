@@ -21,23 +21,23 @@ import java.util.Date;
 public class ContactHistory {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "collect_sequence")
-    @SequenceGenerator(sequenceName = "aa_collect_sequence", allocationSize = 1, name = "collect_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "collect_contact_history_seq")
+    @SequenceGenerator(sequenceName = "collect_contact_history_seq", allocationSize = 1, name = "collect_contact_history_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_organization_id")
+    @JoinColumn(name = "organization_id")
     private Organization organization;
 
     @ToString.Exclude
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "sale_sales_id")
+    @JoinColumn(name = "sales_id")
     private Sales sales;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_dictionary_contact_channel_id")
+    @JoinColumn(name = "dictionary_contact_channel_id")
     private Dictionary contactChannel;
 
     @Lob
@@ -57,7 +57,7 @@ public class ContactHistory {
 
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "sale_child_sales_id")
+    @JoinColumn(name = "child_sales_id")
     private Sales childSales;
 
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
@@ -68,7 +68,7 @@ public class ContactHistory {
     private Date createdDate = new Date();
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_user_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     public ContactHistory(Sales sales, Organization organization) {

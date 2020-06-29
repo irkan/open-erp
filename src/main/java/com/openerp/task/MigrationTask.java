@@ -1016,6 +1016,12 @@ public class MigrationTask {
                 if(s.length()>3){
                     address1 = new Address();
                     List<Dictionary> dictionaries = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1AndNameStartingWithIgnoreCase("city", s.trim().substring(0, 3));
+                    if(dictionaries.size()>1 && s.length()>4){
+                        dictionaries = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1AndNameStartingWithIgnoreCase("city", s.trim().substring(0, 4));
+                        if(dictionaries.size()>1 && s.length()>5){
+                            dictionaries = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1AndNameStartingWithIgnoreCase("city", s.trim().substring(0, 5));
+                        }
+                    }
                     if(dictionaries.size()>0){
                         address1.setCity(dictionaries.get(0));
                     }

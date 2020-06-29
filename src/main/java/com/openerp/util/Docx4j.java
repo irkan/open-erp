@@ -8,7 +8,7 @@ import javax.xml.bind.JAXBException;
 
 import com.openerp.entity.Dictionary;
 import com.openerp.entity.Sales;
-import com.openerp.repository.ConfigurationRepository;
+import com.openerp.repository.GlobalConfigurationRepository;
 import com.openerp.repository.DictionaryRepository;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
@@ -42,7 +42,7 @@ public class Docx4j {
         docx4j.writeDocxToStream(template, filePath+"Hello2.docx");
     }
 
-    public static File generateContract(ResourceLoader resourceLoader, Sales sales, ConfigurationRepository configurationRepository, DictionaryRepository dictionaryRepository) throws IOException, Docx4JException {
+    public static File generateContract(ResourceLoader resourceLoader, Sales sales, GlobalConfigurationRepository configurationRepository, DictionaryRepository dictionaryRepository) throws IOException, Docx4JException {
         Resource resource = resourceLoader.getResource("classpath:/template/sale-contract.docx");
         List<Dictionary> months = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("month");
 

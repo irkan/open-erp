@@ -114,19 +114,19 @@ public class WarehouseController extends SkeletonController {
                 inventory.setBarcode(Util.generateBarcode(inventory.getGroup().getId()));
             }
             inventoryRepository.save(inventory);
-            log(inventory, "warehouse_inventory", "create/edit", inventory.getId(), inventory.toString());
+            log(inventory, "inventory", "create/edit", inventory.getId(), inventory.toString());
             Action action = inventory.getActions().get(0);
             action.setInventory(inventory);
             action.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("buy", "action"));
             action.setOrganization(inventory.getOrganization());
             actionRepository.save(action);
-            log(action, "warehouse_action", "create/edit", action.getId(), action.toString());
+            log(action, "action", "create/edit", action.getId(), action.toString());
             String description = action.getAction().getName()+", "+action.getSupplier().getName()+" -> "+action.getOrganization().getName()+", "+inventory.getName()+", Say: " + action.getAmount() + " ədəd";
             Organization organization = organizationRepository.getOrganizationByIdAndActiveTrue(action.getOrganization().getId());
             Transaction transaction = new Transaction(Util.getUserBranch(organization), inventory, action.getAction(), description, false, null);
             transaction.setAmount(inventory.getActions().get(0).getAmount());
             transactionRepository.save(transaction);
-            log(transaction, "accounting_transaction", "create/edit", transaction.getId(), transaction.toString());
+            log(transaction, "transaction", "create/edit", transaction.getId(), transaction.toString());
         }
         return mapPost(inventory, binding, redirectAttributes);
     }
@@ -141,7 +141,7 @@ public class WarehouseController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             supplierRepository.save(supplier);
-            log(supplier, "warehouse_supplier", "create/edit", supplier.getId(), supplier.toString());
+            log(supplier, "supplier", "create/edit", supplier.getId(), supplier.toString());
         }
         return mapPost(supplier, binding, redirectAttributes);
     }
@@ -177,7 +177,7 @@ public class WarehouseController extends SkeletonController {
             if(messages.size()==0){
                 actn.setAmount(actn.getAmount()-action.getAmount());
                 actionRepository.save(actn);
-                log(actn, "warehouse_action", "create/edit", actn.getId(), actn.toString(), "Transfer üçün çıxılan say");
+                log(actn, "action", "create/edit", actn.getId(), actn.toString(), "Transfer üçün çıxılan say");
 
                 Action sendAction = new Action(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("send", "action"),
                         actn.getOrganization(),
@@ -188,7 +188,7 @@ public class WarehouseController extends SkeletonController {
                 sendAction.setFromOrganization(action.getOrganization());
                 actionRepository.save(sendAction);
 
-                log(sendAction, "warehouse_action", "create/edit", sendAction.getId(), sendAction.toString(), "Transfer göndərilmə");
+                log(sendAction, "action", "create/edit", sendAction.getId(), sendAction.toString(), "Transfer göndərilmə");
 
                 List<Inventory> inventories = inventoryRepository.getInventoriesByActiveTrueAndBarcodeAndOrganizationOrderByIdAsc(actn.getInventory().getBarcode(), action.getOrganization());
                 Inventory inventory = new Inventory(inventories.size()>0?inventories.get(0).getId():null);
@@ -199,7 +199,7 @@ public class WarehouseController extends SkeletonController {
                 inventory.setDescription(actn.getInventory().getDescription());
                 inventoryRepository.save(inventory);
 
-                log(inventory, "warehouse_inventory", "create/edit", inventory.getId(), inventory.toString());
+                log(inventory, "inventory", "create/edit", inventory.getId(), inventory.toString());
 
                 Action acceptAction = new Action(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("accept", "action"),
                         action.getOrganization(),
@@ -210,7 +210,7 @@ public class WarehouseController extends SkeletonController {
                 acceptAction.setFromOrganization(sendAction.getOrganization());
                 actionRepository.save(acceptAction);
 
-                log(acceptAction, "warehouse_action", "create/edit", acceptAction.getId(), acceptAction.toString(), "Transfer qəbul edilmə");
+                log(acceptAction, "action", "create/edit", acceptAction.getId(), acceptAction.toString(), "Transfer qəbul edilmə");
             }
         }
         return mapPost(action, binding, redirectAttributes, "/warehouse/action/"+action.getInventory().getId());
@@ -233,7 +233,7 @@ public class WarehouseController extends SkeletonController {
                     action.setApproveDate(new Date());
 
                     actionRepository.save(action);
-                    log(action, "warehouse_action", "create/edit", action.getId(), action.toString());
+                    log(action, "action", "create/edit", action.getId(), action.toString());
 
                     String description = action.getAction().getName()+", "+action.getSupplier().getName()+" -> "+action.getOrganization().getName()+", "+action.getInventory().getName()+", Say: " + action.getAmount() + " ədəd";
                     Transaction transaction = new Transaction(action.getOrganization(), action.getInventory(), action.getAction(), description, false, null);
@@ -243,13 +243,13 @@ public class WarehouseController extends SkeletonController {
                     transaction.setCurrency(financings.size()>0?financings.get(0).getCurrency():"AZN");
                     transaction.setRate(1d);
                     transactionRepository.save(transaction);
-                    log(transaction, "accounting_transaction", "create/edit", transaction.getId(), transaction.toString());
+                    log(transaction, "transaction", "create/edit", transaction.getId(), transaction.toString());
                     balance(transaction);
                 }
                 action.setApprove(true);
                 action.setApproveDate(new Date());
                 actionRepository.save(action);
-                log(action, "warehouse_action", "create/edit", action.getId(), action.toString());
+                log(action, "action", "create/edit", action.getId(), action.toString());
             }
         }
         return mapPost(action, binding, redirectAttributes, "/warehouse/action/"+action.getInventory().getId());
@@ -275,10 +275,10 @@ public class WarehouseController extends SkeletonController {
             action.setSupplier(actn.getSupplier());
             action.setOrganization(actn.getOrganization());
             actionRepository.save(action);
-            log(action, "warehouse_action", "create/edit", action.getId(), action.toString());
+            log(action, "action", "create/edit", action.getId(), action.toString());
             actn.setAmount(actn.getAmount() - action.getAmount());
             actionRepository.save(actn);
-            log(actn, "warehouse_action", "create/edit", actn.getId(), actn.toString());
+            log(actn, "action", "create/edit", actn.getId(), actn.toString());
         }
         return mapPost(action, binding, redirectAttributes, "/warehouse/action/"+actn.getInventory().getId());
     }
@@ -308,7 +308,7 @@ public class WarehouseController extends SkeletonController {
                 Action buy = actions.get(0);
                 buy.setAmount(buy.getAmount()+action.getAmount());
                 actionRepository.save(buy);
-                log(buy, "warehouse_action", "create/edit", buy.getId(), buy.toString(), buy.getId() + " nömrəli Alış hərəkətinə əlavə edildi");
+                log(buy, "action", "create/edit", buy.getId(), buy.toString(), buy.getId() + " nömrəli Alış hərəkətinə əlavə edildi");
                 status = true;
             } else {
                 actions = actionRepository.getActionsByActiveTrueAndInventory_IdAndInventory_ActiveAndActionOrderByIdDesc(actn.getInventory().getId(), true, dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("accept", "action"));
@@ -316,7 +316,7 @@ public class WarehouseController extends SkeletonController {
                     Action accept = actions.get(0);
                     accept.setAmount(accept.getAmount()+action.getAmount());
                     actionRepository.save(accept);
-                    log(accept, "warehouse_action", "create/edit", accept.getId(), accept.toString(), accept.getId() + " nömrəli Qəbuledilmə hərəkətinə əlavə edildi");
+                    log(accept, "action", "create/edit", accept.getId(), accept.toString(), accept.getId() + " nömrəli Qəbuledilmə hərəkətinə əlavə edildi");
                     status = true;
                 }
             }
@@ -324,7 +324,7 @@ public class WarehouseController extends SkeletonController {
             if(status){
                 actn.setAmount(actn.getAmount() - action.getAmount());
                 actionRepository.save(actn);
-                log(actn, "warehouse_action", "create/edit", actn.getId(), actn.toString(), "Qaytarılma əməliyyatı");
+                log(actn, "action", "create/edit", actn.getId(), actn.toString(), "Qaytarılma əməliyyatı");
             }
         }
         return mapPost(action, binding, redirectAttributes, "/warehouse/action/"+actn.getInventory().getId());
@@ -347,10 +347,10 @@ public class WarehouseController extends SkeletonController {
             action.setApprove(true);
             action.setApproveDate(new Date());
             actionRepository.save(action);
-            log(action, "warehouse_action", "create/edit", action.getId(), action.toString());
+            log(action, "action", "create/edit", action.getId(), action.toString());
             actn.setAmount(actn.getAmount() - action.getAmount());
             actionRepository.save(actn);
-            log(actn, "warehouse_action", "cancellation", actn.getId(), actn.toString());
+            log(actn, "action", "cancellation", actn.getId(), actn.toString());
         }
         return mapPost(action, binding, redirectAttributes, "/warehouse/action/"+actn.getInventory().getId());
     }
@@ -372,10 +372,10 @@ public class WarehouseController extends SkeletonController {
             action.setEmployee(actn.getEmployee());
             action.setApprove(false);
             actionRepository.save(action);
-            log(action, "warehouse_action", "create/edit", action.getId(), action.toString());
+            log(action, "action", "create/edit", action.getId(), action.toString());
             actn.setAmount(actn.getAmount() - action.getAmount());
             actionRepository.save(actn);
-            log(actn, "warehouse_action", "create/edit", actn.getId(), actn.toString());
+            log(actn, "action", "create/edit", actn.getId(), actn.toString());
         }
         return mapPost(action, binding, redirectAttributes, "/warehouse/consolidate");
     }
@@ -392,7 +392,7 @@ public class WarehouseController extends SkeletonController {
                 }
             }
         } catch (Exception e){
-            log(null, "error", "warehouse_inventory", "", null, "", "WAREHOUSE API INVENTORY Xəta baş verdi! " + e.getMessage());
+            log(null, "error", "inventory", "", null, "", "WAREHOUSE API INVENTORY Xəta baş verdi! " + e.getMessage());
             e.printStackTrace();
             log.error(e.getMessage(), e);
         }

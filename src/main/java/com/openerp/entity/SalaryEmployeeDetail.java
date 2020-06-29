@@ -8,21 +8,21 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "payroll_salary_employee_detail")
+@Table(name = "salary_employee_detail")
 @Getter
 @Setter
 @NoArgsConstructor
 public class SalaryEmployeeDetail {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "payroll_sequence")
-    @SequenceGenerator(sequenceName = "aa_payroll_sequence", allocationSize = 1, name = "payroll_sequence")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "salary_employee_detail_seq")
+    @SequenceGenerator(sequenceName = "salary_employee_detail_seq", allocationSize = 1, name = "salary_employee_detail_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "payroll_salary_employee_id")
+    @JoinColumn(name = "salary_employee_id")
     private SalaryEmployee salaryEmployee;
 
     @Column(name = "description")

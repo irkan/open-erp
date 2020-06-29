@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "admin_user_detail")
+@Table(name = "user_detail")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,8 +17,8 @@ import java.io.Serializable;
 public class UserDetail {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "admin_sequence")
-    @SequenceGenerator(sequenceName = "aa_admin_sequence", allocationSize = 1, name = "admin_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "user_detail_seq")
+    @SequenceGenerator(sequenceName = "user_detail_seq", allocationSize = 1, name = "user_detail_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
@@ -38,7 +38,7 @@ public class UserDetail {
     private Boolean administrator = false;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_start_module_id")
+    @JoinColumn(name = "start_module_id")
     private Module startModule;
 
     public UserDetail(String language) {

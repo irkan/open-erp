@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "sale_payment")
+@Table(name = "payment")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,8 +21,8 @@ import java.util.List;
 public class Payment {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "sale_sequence")
-    @SequenceGenerator(sequenceName = "aa_sale_sequence", allocationSize = 1, name = "sale_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "payment_seq")
+    @SequenceGenerator(sequenceName = "payment_seq", allocationSize = 1, name = "payment_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
@@ -47,11 +47,11 @@ public class Payment {
     private Double schedulePrice;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_dictionary_payment_schedule_id")
+    @JoinColumn(name = "dictionary_payment_schedule_id")
     private Dictionary schedule;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_dictionary_payment_period_id")
+    @JoinColumn(name = "dictionary_payment_period_id")
     private Dictionary period;
 
     @Pattern(regexp=".{0,10}", message="Maksimum 10 simvol ola bilər")

@@ -12,15 +12,15 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "admin_configuration")
+@Table(name = "global_configuration")
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
-public class Configuration {
+public class GlobalConfiguration {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "admin_sequence")
-    @SequenceGenerator(sequenceName = "aa_admin_sequence", allocationSize = 1, name = "admin_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "global_configuration_seq")
+    @SequenceGenerator(sequenceName = "global_configuration_seq", allocationSize = 1, name = "global_configuration_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
@@ -46,7 +46,7 @@ public class Configuration {
     @Column(name = "created_date", nullable = false)
     private Date createdDate = new Date();
 
-    public Configuration(String name, String key, String attribute, String description) {
+    public GlobalConfiguration(String name, String key, String attribute, String description) {
         this.name = name;
         this.key = key;
         this.attribute = attribute;

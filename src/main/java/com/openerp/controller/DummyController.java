@@ -23,7 +23,7 @@ public class DummyController extends SkeletonController {
             contacts.add(contact);
         }
         contactRepository.saveAll(contacts);
-      //  log("accounting_financing", "create/edit", contacts.getId(), contacts.toString());
+      //  log("financing", "create/edit", contacts.getId(), contacts.toString());
         return "redirect:/login";
     }
 
@@ -40,7 +40,7 @@ public class DummyController extends SkeletonController {
             persons.add(person);
         }
         personRepository.saveAll(persons);
-       // log("accounting_financing", "create/edit", persons.getId(), persons.toString());
+       // log("financing", "create/edit", persons.getId(), persons.toString());
         return "redirect:/login";
     }
 
@@ -91,7 +91,7 @@ public class DummyController extends SkeletonController {
 
         }
         employeeRepository.saveAll(employees);
-       // log("accounting_financing", "create/edit", employees.getId(), employees.toString());
+       // log("financing", "create/edit", employees.getId(), employees.toString());
         return "redirect:/login";
     }
 }

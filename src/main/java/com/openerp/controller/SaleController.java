@@ -178,8 +178,36 @@ public class SaleController extends SkeletonController {
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Sales());
             }
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.TAX_CONFIGURATION)) {
+            model.addAttribute(Constants.CITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("city"));
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new TaxConfiguration(getSessionOrganization()));
+            }
+            List<TaxConfiguration> taxConfigurations = taxConfigurationRepository.getTaxConfigurationsByActiveTrueAndOrganization(getSessionOrganization());
+            if(canViewAll()){
+                taxConfigurations = taxConfigurationRepository.getTaxConfigurationsByActiveTrue();
+            }
+            for(TaxConfiguration taxConfiguration: taxConfigurations){
+                List<Sales> salesList = salesRepository.getSalesByActiveTrueAndApproveTrueAndSaledFalseAndTaxConfiguration(taxConfiguration);
+                taxConfiguration.setSalesCount(salesList.size());
+                taxConfiguration.setPlannedPaymentAmountMonthly(calculatePlannedPaymentMonthly(salesList));
+            }
+            model.addAttribute(Constants.LIST, taxConfigurations);
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(taxConfigurationRepository.findAll(), redirectAttributes, page);
+            }
         }
         return "layout";
+    }
+
+    @PostMapping(value = "/tax-configuration")
+    public String postTaxConfiguration(@ModelAttribute(Constants.FORM) @Validated TaxConfiguration taxConfiguration, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()){
+            taxConfigurationRepository.save(taxConfiguration);
+            log(taxConfiguration, "tax_configuration", "create/edit", taxConfiguration.getId(), taxConfiguration.toString());
+        }
+        return mapPost(taxConfiguration, binding, redirectAttributes);
     }
 
 
@@ -218,7 +246,7 @@ public class SaleController extends SkeletonController {
                 sales.setServiceRegulators(serviceRegulators);
             }
             salesRepository.save(sales);
-            log(sales, "sale_sales", "create/edit", sales.getId(), sales.toString());
+            log(sales, "sales", "create/edit", sales.getId(), sales.toString());
 
             if(sales.getService()){
                 List<Sales> salesList = salesRepository.getSalesByActiveTrueAndApproveTrueAndServiceFalseAndCustomerAndOrganizationOrderByIdDesc(sales.getCustomer(), sales.getOrganization());
@@ -233,12 +261,12 @@ public class SaleController extends SkeletonController {
             if(file1!=null){
                 PersonDocument document1 = new PersonDocument(person, documentType, ImageResizer.compress(file1.getInputStream(), file1.getOriginalFilename()), null, file1.getOriginalFilename());
                 personDocumentRepository.save(document1);
-                log(sales, "common_person_document", "create/edit", document1.getId(), document1.toString());
+                log(sales, "person_document", "create/edit", document1.getId(), document1.toString());
             }
             if(file2!=null){
                 PersonDocument document2 = new PersonDocument(person, documentType, ImageResizer.compress(file2.getInputStream(), file2.getOriginalFilename()), null, file2.getOriginalFilename());
                 personDocumentRepository.save(document2);
-                log(sales, "common_person_document", "create/edit", document2.getId(), document2.toString());
+                log(sales, "person_document", "create/edit", document2.getId(), document2.toString());
             }
         }
         if(sales.getService()){
@@ -254,7 +282,7 @@ public class SaleController extends SkeletonController {
             sales.setTaxConfiguration(sale.getTaxConfiguration());
             salesRepository.save(sales);
 
-            log(sales, "sale_sales", "edit", sales.getId(), sales.toString(), "VÖEN əlavə edildi: " + sales.getTaxConfiguration().getVoen());
+            log(sales, "sales", "edit", sales.getId(), sales.toString(), "VÖEN əlavə edildi: " + sales.getTaxConfiguration().getVoen());
         }
         if(sales.getService()){
             return mapPost(sales, binding, redirectAttributes, "/sale/service");
@@ -274,7 +302,7 @@ public class SaleController extends SkeletonController {
             action.setOrganization(sales.getOrganization());
             actionRepository.save(action);
 
-            log(action, "warehouse_action", "return", action.getId(), action.toString());
+            log(action, "action", "return", action.getId(), action.toString());
         }
 
         if(returnForm.getReturnPrice()>0){
@@ -286,10 +314,10 @@ public class SaleController extends SkeletonController {
             invoice.setDescription("Qaytarılmaya görə müştəriyə ediləcək ödəniş " + returnForm.getReturnPrice() + " AZN");
             invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
             invoiceRepository.save(invoice);
-            log(invoice, "sale_invoice", "create/edit", invoice.getId(), invoice.toString());
+            log(invoice, "invoice", "create/edit", invoice.getId(), invoice.toString());
             invoice.setChannelReferenceCode(String.valueOf(invoice.getId()));
             invoiceRepository.save(invoice);
-            log(invoice, "sale_invoice", "create/edit", invoice.getId(), invoice.toString());
+            log(invoice, "invoice", "create/edit", invoice.getId(), invoice.toString());
         }
 
         ContactHistory contactHistory = new ContactHistory();
@@ -303,7 +331,7 @@ public class SaleController extends SkeletonController {
         sales.setActive(false);
         salesRepository.save(sales);
 
-        log(sales, "sale_sales", "delete", sales.getId(), sales.toString(), "Qaytarılma icra edildi");
+        log(sales, "sales", "delete", sales.getId(), sales.toString(), "Qaytarılma icra edildi");
 
         if(sales.getService()){
             return mapPost(sales, binding, redirectAttributes, "/sale/service");
@@ -344,7 +372,7 @@ public class SaleController extends SkeletonController {
             binding.addError(fieldError);
         }
         if(sales.getApprove()){
-            List<Log> logs = logRepository.getLogsByActiveTrueAndTableNameAndRowIdAndOperationOrderByIdDesc("sale_sales", sales.getId(), "approve");
+            List<Log> logs = logRepository.getLogsByActiveTrueAndTableNameAndRowIdAndOperationOrderByIdDesc("sales", sales.getId(), "approve");
             FieldError fieldError = new FieldError("", "", "Təsdiq əməliyyatı"+(logs.size()>0?(" "+logs.get(0).getUsername() + " tərəfindən " + DateUtility.getFormattedDateTime(logs.get(0).getOperationDate()) + " tarixində "):" ")+"icra edilmişdir!");
             binding.addError(fieldError);
         }
@@ -365,12 +393,12 @@ public class SaleController extends SkeletonController {
                     action.setEmployee(employee);
                     action.setSupplier(oldActions.get(0).getSupplier());
                     actionRepository.save(action);
-                    log(action, "warehouse_action", "create/edit", action.getId(), action.toString());
+                    log(action, "action", "create/edit", action.getId(), action.toString());
 
                     Action oldAction = oldActions.get(0);
                     oldAction.setAmount(oldAction.getAmount()-1);
                     actionRepository.save(oldAction);
-                    log(oldAction, "warehouse_action", "create/edit", oldAction.getId(), oldAction.toString());
+                    log(oldAction, "action", "create/edit", oldAction.getId(), oldAction.toString());
                 }
             }
 
@@ -394,15 +422,15 @@ public class SaleController extends SkeletonController {
                 invoice.setDescription("Satışdan əldə edilən ilkin ödəniş " + invoicePrice + " AZN");
                 invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
                 invoiceRepository.save(invoice);
-                log(invoice, "sale_invoice", "create/edit", invoice.getId(), invoice.toString());
+                log(invoice, "invoice", "create/edit", invoice.getId(), invoice.toString());
                 invoice.setChannelReferenceCode(String.valueOf(invoice.getId()));
                 invoiceRepository.save(invoice);
-                log(invoice, "sale_invoice", "create/edit", invoice.getId(), invoice.toString());
+                log(invoice, "invoice", "create/edit", invoice.getId(), invoice.toString());
             }
             sales.setApprove(true);
             sales.setApproveDate(new Date());
             salesRepository.save(sales);
-            log(sales, "sale_sales", "approve", sales.getId(), sales.toString());
+            log(sales, "sales", "approve", sales.getId(), sales.toString());
         }
         if(sales.getService()){
             return mapPost(sales, binding, redirectAttributes, "/sale/service");
@@ -475,12 +503,12 @@ public class SaleController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             demonstrationRepository.save(demonstration);
-            log(demonstration, "sale_demonstration", "create/edit", demonstration.getId(), demonstration.toString());
+            log(demonstration, "demonstration", "create/edit", demonstration.getId(), demonstration.toString());
             EmployeeSaleDetail demonstrationSaleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(demonstration.getEmployee(), "{demonstration}");
             double price = demonstration.getAmount()*Double.parseDouble(demonstrationSaleDetail.getValue());
             Advance advance = new Advance(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("bonus-demonstration-advance", "advance"), demonstration.getEmployee(), demonstration.getOrganization(), demonstration.getId() + " nömrəli nümayişdən əldə edilən bonus", "", demonstration.getDemonstrateDate(), price);
             advanceRepository.save(advance);
-            log(advance, "payroll_advance", "create/edit", advance.getId(), advance.toString(), "Nümayişdən yaranan avans ödənişi");
+            log(advance, "advance", "create/edit", advance.getId(), advance.toString(), "Nümayişdən yaranan avans ödənişi");
         }
         return mapPost(demonstration, binding, redirectAttributes);
     }
@@ -497,7 +525,7 @@ public class SaleController extends SkeletonController {
         if(!binding.hasErrors()) {
             invc.setCollector(invoice.getCollector());
             invoiceRepository.save(invc);
-            log(invc, "sale_invoice", "consolidate", invc.getId(), invc.toString());
+            log(invc, "invoice", "consolidate", invc.getId(), invc.toString());
         }
         return mapPost(invc, binding, redirectAttributes, "/sale/invoice/");
     }
@@ -512,7 +540,7 @@ public class SaleController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()) {
             serviceRegulatorRepository.save(serviceRegulator);
-            log(serviceRegulator, "sale_service_regulator", "create/edit", serviceRegulator.getId(), serviceRegulator.toString());
+            log(serviceRegulator, "service_regulator", "create/edit", serviceRegulator.getId(), serviceRegulator.toString());
         }
         return mapPost(serviceRegulator, binding, redirectAttributes);
     }
@@ -536,12 +564,12 @@ public class SaleController extends SkeletonController {
         if(invc.getSales()==null){
             FieldError fieldError = new FieldError("", "", "SATIŞ kodu tapılmadı!");
             binding.addError(fieldError);
-        }/* else if(!invc.getSales().getService() && invc.getCollector()==null){
+        } else if(!invc.getSales().getService() && invc.getCollector()==null){
             FieldError fieldError = new FieldError("", "", "Yığımçı təyin edilməlidir!");
             binding.addError(fieldError);
-        }*/
+        }
         if(invc.getApprove()){
-            List<Log> logs = logRepository.getLogsByActiveTrueAndTableNameAndRowIdAndOperationOrderByIdDesc("sale_invoice", invc.getId(), "approve");
+            List<Log> logs = logRepository.getLogsByActiveTrueAndTableNameAndRowIdAndOperationOrderByIdDesc("invoice", invc.getId(), "approve");
             FieldError fieldError = new FieldError("", "", "Təsdiq əməliyyatı"+(logs.size()>0?(" "+logs.get(0).getUsername() + " tərəfindən " + DateUtility.getFormattedDateTime(logs.get(0).getOperationDate()) + " tarixində "):" ")+"icra edilmişdir!");
             binding.addError(fieldError);
         }
@@ -560,7 +588,7 @@ public class SaleController extends SkeletonController {
             invc.setDescription(invoice.getDescription());
             invc.setAdvance(invoice.getAdvance());
             invoiceRepository.save(invc);
-            log(invc, "sale_invoice", "approve", invc.getId(), invc.toString());
+            log(invc, "invoice", "approve", invc.getId(), invc.toString());
 
             Transaction transaction = new Transaction();
             transaction.setApprove(false);
@@ -579,7 +607,7 @@ public class SaleController extends SkeletonController {
                     + " " + invc.getSales().getSalesInventories().get(0).getInventory().getBarcode()
             );
             transactionRepository.save(transaction);
-            log(transaction, "accounting_transaction", "create/edit", transaction.getId(), transaction.toString());
+            log(transaction, "transaction", "create/edit", transaction.getId(), transaction.toString());
 
             List<Advance> advances = new ArrayList<>();
             ScriptEngineManager mgr = new ScriptEngineManager();
@@ -675,7 +703,7 @@ public class SaleController extends SkeletonController {
             }
             advanceRepository.saveAll(advances);
 
-            log(advances, "accounting_advance", "create/edit", null, advances.toString());
+            log(advances, "advance", "create/edit", null, advances.toString());
 
             Sales sales1 = salesRepository.getSalesById(sales.getId());
             if(sales1!=null && sales1.getPayment()!=null && Util.calculateInvoice(sales1.getInvoices())>=sales1.getPayment().getLastPrice()){
@@ -684,7 +712,7 @@ public class SaleController extends SkeletonController {
                 sales1.setSaled(false);
             }
 
-            log(sales1, "sale_sales", "create/edit", sales1.getId(), sales1.toString(), "Satıldı statusu yeniləndi!");
+            log(sales1, "sales", "create/edit", sales1.getId(), sales1.toString(), "Satıldı statusu yeniləndi!");
         }
         return mapPost(invc, binding, redirectAttributes, "/sale/invoice/");
     }
@@ -702,7 +730,7 @@ public class SaleController extends SkeletonController {
             invoice1.setPrice(-1*invc.getPrice());
             invoice1.setApprove(false);
             invoiceRepository.save(invoice1);
-            log(invoice1, "sale_invoice", "create/edit", invoice1.getId(), invoice1.toString());
+            log(invoice1, "invoice", "create/edit", invoice1.getId(), invoice1.toString());
         }
         return mapPost(invc, binding, redirectAttributes, "/sale/invoice/");
     }

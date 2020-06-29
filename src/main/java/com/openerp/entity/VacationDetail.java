@@ -10,14 +10,14 @@ import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 @Entity
-@Table(name = "hr_vacation_detail")
+@Table(name = "vacation_detail")
 @Getter
 @Setter
 @NoArgsConstructor
 public class VacationDetail {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "hr_sequence")
-    @SequenceGenerator(sequenceName = "aa_hr_sequence", allocationSize = 1, name = "hr_sequence")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "vacation_detail_seq")
+    @SequenceGenerator(sequenceName = "vacation_detail_seq", allocationSize = 1, name = "vacation_detail_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
@@ -31,11 +31,11 @@ public class VacationDetail {
     private String identifier;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_vacation_id")
+    @JoinColumn(name = "vacation_id")
     private Vacation vacation;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_employee_id", nullable = false)
+    @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
 
     public VacationDetail(String identifier, Date vacationDate, Vacation vacation, Employee employee) {

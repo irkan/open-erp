@@ -56,7 +56,7 @@
                                         <td><c:out value="${t.person.contact.mobilePhone}" /></td>
                                         <td><c:out value="${t.person.contact.homePhone}" /></td>
                                         <td><c:out value="${t.person.contact.city.name}" />, <c:out value="${t.person.contact.address}" /></td>
-                                        <td><c:out value="${t.maxLimitMonthly}" /></td>
+                                        <td><c:out value="${t.maxLimitMonthly}" /> AZN</td>
                                         <td><c:out value="${t.salesCount}" /></td>
                                         <td><c:out value="${t.plannedPaymentAmountMonthly}" /> AZN</td>
                                         <td nowrap class="text-center">

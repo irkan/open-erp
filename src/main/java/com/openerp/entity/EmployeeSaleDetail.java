@@ -10,7 +10,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "hr_employee_sale_detail")
+@Table(name = "employee_sale_detail")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,19 +18,19 @@ import java.io.Serializable;
 public class EmployeeSaleDetail {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "hr_sequence")
-    @SequenceGenerator(sequenceName = "aa_hr_sequence", allocationSize = 1, name = "hr_sequence")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "employee_sale_detail_seq")
+    @SequenceGenerator(sequenceName = "employee_sale_detail_seq", allocationSize = 1, name = "employee_sale_detail_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
     @ToString.Exclude
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_employee_id")
+    @JoinColumn(name = "employee_id")
     private Employee employee;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_dictionary_employee_sale_field_id")
+    @JoinColumn(name = "dictionary_employee_sale_field_id")
     private Dictionary employeeSaleField;
 
     @Column(name = "key_field")

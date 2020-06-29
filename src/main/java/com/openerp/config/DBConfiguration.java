@@ -69,7 +69,10 @@ public class DBConfiguration {
     EmployeePayrollDetailRepository employeeDetailRepository;
 
     @Autowired
-    ConfigurationRepository configurationRepository;
+    GlobalConfigurationRepository globalConfigurationRepository;
+
+    @Autowired
+    TaxConfigurationRepository taxConfigurationRepository;
 
     @Autowired
     WebServiceAuthenticatorRepository webServiceAuthenticatorRepository;
@@ -107,8 +110,6 @@ public class DBConfiguration {
             types.add(organizationType);
             DictionaryType actionType = new DictionaryType("Hərəkət", "action", null);
             types.add(actionType);
-            DictionaryType reasonType = new DictionaryType("Səbəb", "reason", null);
-            types.add(reasonType);
             DictionaryType inventoryGroupType = new DictionaryType("İnventar qrupu", "inventory-group", null);
             types.add(inventoryGroupType);
             DictionaryType currencyType = new DictionaryType("Valyuta", "currency", null);
@@ -177,6 +178,8 @@ public class DBConfiguration {
             dictionaries.add(shirvan);
             Dictionary khirdalan = new Dictionary("Xırdalan", "Khirdalan", null, cityType);
             dictionaries.add(khirdalan);
+            Dictionary absheron = new Dictionary("Abşeron", "Absheron", null, cityType);
+            dictionaries.add(absheron);
             Dictionary agjabadi = new Dictionary("Ağcabədi", "Agjabadi", null, cityType);
             dictionaries.add(agjabadi);
             Dictionary agdam = new Dictionary("Ağdam", "Agdam", null, cityType);
@@ -223,6 +226,8 @@ public class DBConfiguration {
             dictionaries.add(khachmaz);
             Dictionary khizi = new Dictionary("Xızı", "Khizi", null, cityType);
             dictionaries.add(khizi);
+            Dictionary khudat = new Dictionary("Xudat", "Khudat", null, cityType);
+            dictionaries.add(khudat);
             Dictionary khojaly = new Dictionary("Xocalı ", "Khojaly", null, cityType);
             dictionaries.add(khojaly);
             Dictionary khojavend = new Dictionary("Xocavənd ", "Khojavend", null, cityType);
@@ -339,6 +344,8 @@ public class DBConfiguration {
             dictionaries.add(position15);
             Dictionary position16 = new Dictionary("Servis işçisi", "Servicer", null, positionType);
             dictionaries.add(position16);
+            Dictionary position161 = new Dictionary("Sürücü", "Driver", null, positionType);
+            dictionaries.add(position161);
             Dictionary position17 = new Dictionary("Controller", "Controller", null, positionType);
             dictionaries.add(position17);
             Dictionary position18 = new Dictionary("Xadimə", "Cleaner", null, positionType);
@@ -347,12 +354,16 @@ public class DBConfiguration {
             dictionaries.add(position19);
             Dictionary position20 = new Dictionary("Kuryer", "Courier", null, positionType);
             dictionaries.add(position20);
+            Dictionary position21 = new Dictionary("İnsan qaynaqları", "Human resource", null, positionType);
+            dictionaries.add(position21);
             Dictionary azerbaijanNationality = new Dictionary("Azərbaycan", "Azerbaijan", null, nationalityType);
             dictionaries.add(azerbaijanNationality);
             Dictionary russianNationality = new Dictionary("Rus", "Russian", null, nationalityType);
             dictionaries.add(russianNationality);
             Dictionary englishNationality = new Dictionary("İngilis", "English", null, nationalityType);
             dictionaries.add(englishNationality);
+            Dictionary turkNationality = new Dictionary("Türk", "Turk", null, nationalityType);
+            dictionaries.add(turkNationality);
             Dictionary otherNationality = new Dictionary("Digər", "Other", null, nationalityType);
             dictionaries.add(otherNationality);
             Dictionary profilePicture = new Dictionary("Profil şəkli", "profile picture", null, documentType);
@@ -423,8 +434,6 @@ public class DBConfiguration {
             dictionaries.add(insuranceExpenseAction);
             Dictionary otherExpenseAction = new Dictionary("Digər", "other", "expense", actionType);
             dictionaries.add(otherExpenseAction);
-            Dictionary reason1 = new Dictionary("Xarabdır", "break", null, reasonType);
-            dictionaries.add(reason1);
             Dictionary inventoryGroup1 = new Dictionary("Filterlər", "filters", null, inventoryGroupType);
             dictionaries.add(inventoryGroup1);
             Dictionary inventoryGroup2 = new Dictionary("Avadanlıqlar", "equipments", null, inventoryGroupType);
@@ -433,8 +442,10 @@ public class DBConfiguration {
             dictionaries.add(inventoryGroup3);
             Dictionary inventoryGroup4 = new Dictionary("Ofis ləvazimatları", "office-appliances", null, inventoryGroupType);
             dictionaries.add(inventoryGroup4);
-            Dictionary inventoryGroup5 = new Dictionary("Digər", "other", null, inventoryGroupType);
+            Dictionary inventoryGroup5 = new Dictionary("Hədiyyə", "gift", null, inventoryGroupType);
             dictionaries.add(inventoryGroup5);
+            Dictionary inventoryGroup6 = new Dictionary("Digər", "other", null, inventoryGroupType);
+            dictionaries.add(inventoryGroup6);
             Dictionary AZN = new Dictionary("AZN", "AZN", null, currencyType);
             dictionaries.add(AZN);
             Dictionary USD = new Dictionary("USD", "USD", null, currencyType);
@@ -487,9 +498,9 @@ public class DBConfiguration {
             dictionaries.add(employeeSaleDetail1);
             Dictionary employeeSaleDetail2 = new Dictionary("Diller", "{dealer}", "{sale_price}>1698?120:100", employeeSaleDetailType);
             dictionaries.add(employeeSaleDetail2);
-            Dictionary employeeSaleDetail3 = new Dictionary("Ven lider", "{van_leader}", "{sale_price}>1698?50:40", employeeSaleDetailType);
+            Dictionary employeeSaleDetail3 = new Dictionary("Ven lider", "{van_leader}", "70", employeeSaleDetailType);
             dictionaries.add(employeeSaleDetail3);
-            Dictionary employeeSaleDetail4 = new Dictionary("Konsul", "{consul}", "30", employeeSaleDetailType);
+            Dictionary employeeSaleDetail4 = new Dictionary("Konsul", "{consul}", "40", employeeSaleDetailType);
             dictionaries.add(employeeSaleDetail4);
             Dictionary employeeSaleDetail5 = new Dictionary("Nümayiş", "{demonstration}", "1", employeeSaleDetailType);
             dictionaries.add(employeeSaleDetail5);
@@ -555,6 +566,8 @@ public class DBConfiguration {
             dictionaries.add(salePrice2);
             Dictionary salePrice3 = new Dictionary("1699 AZN", "1699", null, salePriceType);
             dictionaries.add(salePrice3);
+            Dictionary advance0 = new Dictionary("Avans", "advance", null, advanceType);
+            dictionaries.add(advance0);
             Dictionary advance1 = new Dictionary("Məzuniyyət", "vacation-advance", null, advanceType);
             dictionaries.add(advance1);
             Dictionary advance2 = new Dictionary("Ezamiyyət", "business-trip-advance", null, advanceType);
@@ -759,17 +772,17 @@ public class DBConfiguration {
             modules.add(dictionary);
             Module dictionaryType = new Module("Sorğu tipi", "Sorğu tipi", "dictionary-type", "flaticon-layers", dictionary);
             modules.add(dictionaryType);
-            Module configuration = new Module("Sazlama", "Sazlama", "configuration", "flaticon-settings", module);
-            modules.add(configuration);
-            Module currencyRate = new Module("Valyuta kursu", "Valyuta kursu", "currency-rate", "la la-euro", configuration);
+            Module globalConfiguration = new Module("Qlobal sazlama", "Qlobal sazlama", "global-configuration", "flaticon-settings", module);
+            modules.add(globalConfiguration);
+            Module currencyRate = new Module("Valyuta kursu", "Valyuta kursu", "currency-rate", "la la-euro", globalConfiguration);
             modules.add(currencyRate);
-            Module webServiceAuthenticator = new Module("Web servis identifikator", "Web servis identifikator", "web-service-authenticator", "flaticon2-user-1", configuration);
+            Module webServiceAuthenticator = new Module("Web servis identifikator", "Web servis identifikator", "web-service-authenticator", "flaticon2-user-1", globalConfiguration);
             modules.add(webServiceAuthenticator);
-            Module period = new Module("Ay bağlanışı", "Ay bağlanışı", "period", "flaticon2-calendar-8", configuration);
+            Module period = new Module("Ay bağlanışı", "Ay bağlanışı", "period", "flaticon2-calendar-8", globalConfiguration);
             modules.add(period);
-            Module endpoint = new Module("Endpoint", "Endpoint", "endpoint", "flaticon-clock-1", configuration);
+            Module endpoint = new Module("Endpoint", "Endpoint", "endpoint", "flaticon-clock-1", globalConfiguration);
             modules.add(endpoint);
-            Module approverException = new Module("Təsdiq edənlər - istisna", "Təsdiq edənlər - istisna", "approver-exception", "flaticon2-avatar", configuration);
+            Module approverException = new Module("Təsdiq edənlər - istisna", "Təsdiq edənlər - istisna", "approver-exception", "flaticon2-avatar", globalConfiguration);
             modules.add(approverException);
             Module migration = new Module("Baza miqrasiya", "Baza miqrasiya", "migration", "flaticon2-download-2", module);
             modules.add(migration);
@@ -821,8 +834,6 @@ public class DBConfiguration {
             modules.add(account);
             Module financing = new Module("Maliyyətləndirmə", "Maliyyətləndirmə", "financing", "la la-eur", accounting);
             modules.add(financing);
-            Module taxConfiguration = new Module("VÖEN", "VÖEN Sazlama", "tax-configuration", "flaticon-coins", accounting);
-            modules.add(taxConfiguration);
             Module nonWorkingDay = new Module("Qeyri iş günü", "Qeyri iş günü", "non-working-day", "la la-calendar", module1);
             modules.add(nonWorkingDay);
             Module shortenedWorkingDay = new Module("Qısaldılmış iş günü", "Qısaldılmış iş günü", "shortened-working-day", "la la-calendar-minus-o", nonWorkingDay);
@@ -861,6 +872,8 @@ public class DBConfiguration {
             modules.add(calculator);
             Module demonstration = new Module("Nümayiş", "Nümayiş", "demonstration", "flaticon-businesswoman", sale);
             modules.add(demonstration);
+            Module taxConfiguration = new Module("VÖEN", "VÖEN Sazlama", "tax-configuration", "flaticon-coins", sale);
+            modules.add(taxConfiguration);
             Module collect = new Module("Yığım & Servis", "Yığımların idarə edilməsi", "collect", "flaticon2-cardiogram", null);
             modules.add(collect);
             Module paymentLatency = new Module("Gecikmiş ödəniş", "Gecikmiş ödəniş", "payment-latency", "flaticon-book", collect);
@@ -875,12 +888,6 @@ public class DBConfiguration {
             modules.add(serviceEmployee);
             Module serviceTask = new Module("Servis xəbərdarlığı", "Servis xəbərdarlığı", "service-task", "flaticon2-gear", collect);
             modules.add(serviceTask);
-            Module idgroup = new Module("İD Qrup", "Daxili sistem və inteqrasiyalar", "idgroup", "flaticon2-analytics-2", null);
-            modules.add(idgroup);
-            Module iddiscount = new Module("Endirim", "Endirim", "iddiscount", "flaticon2-open-box", idgroup);
-            modules.add(iddiscount);
-            Module emailAnalyzer = new Module("Email analiz", "Email analiz", "email-analyzer", "flaticon-email", idgroup);
-            modules.add(emailAnalyzer);
             Module crm = new Module("CRM", "CRM", "crm", "flaticon-rotate", null);
             modules.add(crm);
             Module customer = new Module("Müştəri", "Müştəri", "customer", "flaticon2-group", crm);
@@ -988,13 +995,11 @@ public class DBConfiguration {
             moduleOperations.add(createModuleOperation24);
             ModuleOperation createModuleOperation25 = new ModuleOperation(sales, create, null);
             moduleOperations.add(createModuleOperation25);
-            ModuleOperation createModuleOperation26 = new ModuleOperation(iddiscount, create, null);
-            moduleOperations.add(createModuleOperation26);
             ModuleOperation createModuleOperation27 = new ModuleOperation(contactHistory, create, null);
             moduleOperations.add(createModuleOperation27);
             ModuleOperation createModuleOperation28 = new ModuleOperation(customer, create, null);
             moduleOperations.add(createModuleOperation28);
-            ModuleOperation createModuleOperation29 = new ModuleOperation(configuration, create, null);
+            ModuleOperation createModuleOperation29 = new ModuleOperation(globalConfiguration, create, null);
             moduleOperations.add(createModuleOperation29);
             ModuleOperation createModuleOperation30 = new ModuleOperation(notification, create, null);
             moduleOperations.add(createModuleOperation30);
@@ -1055,13 +1060,11 @@ public class DBConfiguration {
             moduleOperations.add(editModuleOperation24);
             ModuleOperation editModuleOperation25 = new ModuleOperation(sales, edit, null);
             moduleOperations.add(editModuleOperation25);
-            ModuleOperation editModuleOperation26 = new ModuleOperation(iddiscount, edit, null);
-            moduleOperations.add(editModuleOperation26);
             ModuleOperation editModuleOperation27 = new ModuleOperation(contactHistory, edit, null);
             moduleOperations.add(editModuleOperation27);
             ModuleOperation editModuleOperation28 = new ModuleOperation(customer, edit, null);
             moduleOperations.add(editModuleOperation28);
-            ModuleOperation editModuleOperation29 = new ModuleOperation(configuration, edit, null);
+            ModuleOperation editModuleOperation29 = new ModuleOperation(globalConfiguration, edit, null);
             moduleOperations.add(editModuleOperation29);
             ModuleOperation editModuleOperation30 = new ModuleOperation(financing, edit, null);
             moduleOperations.add(editModuleOperation30);
@@ -1132,13 +1135,11 @@ public class DBConfiguration {
             moduleOperations.add(deleteModuleOperation26);
             ModuleOperation deleteModuleOperation27 = new ModuleOperation(sales, delete, null);
             moduleOperations.add(deleteModuleOperation27);
-            ModuleOperation deleteModuleOperation28 = new ModuleOperation(iddiscount, delete, null);
-            moduleOperations.add(deleteModuleOperation28);
             ModuleOperation deleteModuleOperation29 = new ModuleOperation(contactHistory, delete, null);
             moduleOperations.add(deleteModuleOperation29);
             ModuleOperation deleteModuleOperation30 = new ModuleOperation(customer, delete, null);
             moduleOperations.add(deleteModuleOperation30);
-            ModuleOperation deleteModuleOperation31 = new ModuleOperation(configuration, delete, null);
+            ModuleOperation deleteModuleOperation31 = new ModuleOperation(globalConfiguration, delete, null);
             moduleOperations.add(deleteModuleOperation31);
             ModuleOperation deleteModuleOperation32 = new ModuleOperation(notification, delete, null);
             moduleOperations.add(deleteModuleOperation32);
@@ -1160,8 +1161,6 @@ public class DBConfiguration {
             moduleOperations.add(deleteModuleOperation40);
             ModuleOperation deleteModuleOperation41 = new ModuleOperation(endpoint, delete, null);
             moduleOperations.add(deleteModuleOperation41);
-            ModuleOperation deleteModuleOperation42 = new ModuleOperation(emailAnalyzer, delete, null);
-            moduleOperations.add(deleteModuleOperation42);
             ModuleOperation deleteModuleOperation43 = new ModuleOperation(session, delete, null);
             moduleOperations.add(deleteModuleOperation43);
             ModuleOperation deleteModuleOperation44 = new ModuleOperation(approverException, delete, null);
@@ -1201,7 +1200,7 @@ public class DBConfiguration {
             moduleOperations.add(viewModuleOperation12);
             ModuleOperation viewModuleOperation13 = new ModuleOperation(subModule13, view, null);
             moduleOperations.add(viewModuleOperation13);
-            ModuleOperation viewModuleOperation14 = new ModuleOperation(configuration, view, null);
+            ModuleOperation viewModuleOperation14 = new ModuleOperation(globalConfiguration, view, null);
             moduleOperations.add(viewModuleOperation14);
             ModuleOperation viewModuleOperation15 = new ModuleOperation(currencyRate, view, null);
             moduleOperations.add(viewModuleOperation15);
@@ -1265,8 +1264,6 @@ public class DBConfiguration {
             moduleOperations.add(viewModuleOperation44);
             ModuleOperation viewModuleOperation45 = new ModuleOperation(inventory, view, null);
             moduleOperations.add(viewModuleOperation45);
-            ModuleOperation viewModuleOperation46 = new ModuleOperation(iddiscount, view, null);
-            moduleOperations.add(viewModuleOperation46);
             ModuleOperation viewModuleOperation47 = new ModuleOperation(endpoint, view, null);
             moduleOperations.add(viewModuleOperation47);
             ModuleOperation viewModuleOperation48 = new ModuleOperation(supplier, view, null);
@@ -1322,8 +1319,6 @@ public class DBConfiguration {
             moduleOperations.add(exportModuleOperation22);
             ModuleOperation exportModuleOperation23 = new ModuleOperation(sales, export, null);
             moduleOperations.add(exportModuleOperation23);
-            ModuleOperation exportModuleOperation24 = new ModuleOperation(iddiscount, export, null);
-            moduleOperations.add(exportModuleOperation24);
             ModuleOperation exportModuleOperation25 = new ModuleOperation(customer, export, null);
             moduleOperations.add(exportModuleOperation25);
             ModuleOperation exportModuleOperation26 = new ModuleOperation(notification, export, null);
@@ -1354,8 +1349,6 @@ public class DBConfiguration {
             moduleOperations.add(exportModuleOperation38);
             ModuleOperation exportModuleOperation39 = new ModuleOperation(serviceRegulator, export, null);
             moduleOperations.add(exportModuleOperation39);
-            ModuleOperation exportModuleOperation40 = new ModuleOperation(emailAnalyzer, export, null);
-            moduleOperations.add(exportModuleOperation40);
             ModuleOperation exportModuleOperation41 = new ModuleOperation(session, export, null);
             moduleOperations.add(exportModuleOperation41);
             ModuleOperation exportModuleOperation42 = new ModuleOperation(session, export, null);
@@ -1389,10 +1382,6 @@ public class DBConfiguration {
             moduleOperations.add(uploadModuleOperation1);
             ModuleOperation uploadModuleOperation2 = new ModuleOperation(shortenedWorkingDay, upload, null);
             moduleOperations.add(uploadModuleOperation2);
-            ModuleOperation uploadModuleOperation3 = new ModuleOperation(iddiscount, upload, null);
-            moduleOperations.add(uploadModuleOperation3);
-            ModuleOperation uploadModuleOperation4 = new ModuleOperation(emailAnalyzer, upload, null);
-            moduleOperations.add(uploadModuleOperation4);
             ModuleOperation uploadModuleOperation5 = new ModuleOperation(migration, upload, null);
             moduleOperations.add(uploadModuleOperation5);
 
@@ -1440,6 +1429,8 @@ public class DBConfiguration {
             moduleOperations.add(consolidateModuleOperation1);
             ModuleOperation consolidateModuleOperation2 = new ModuleOperation(invoice, consolidateOperation, null);
             moduleOperations.add(consolidateModuleOperation2);
+            ModuleOperation consolidateModuleOperation3 = new ModuleOperation(sales, consolidateOperation, null);
+            moduleOperations.add(consolidateModuleOperation3);
 
             ModuleOperation returnModuleOperation1 = new ModuleOperation(action, returnOperation, null);
             moduleOperations.add(returnModuleOperation1);
@@ -1468,8 +1459,6 @@ public class DBConfiguration {
             moduleOperations.add(detailModuleOperation7);
             ModuleOperation detailModuleOperation8 = new ModuleOperation(log, detail, null);
             moduleOperations.add(detailModuleOperation8);
-            ModuleOperation detailModuleOperation9 = new ModuleOperation(emailAnalyzer, detail, null);
-            moduleOperations.add(detailModuleOperation9);
             ModuleOperation detailModuleOperation10 = new ModuleOperation(migration, detail, null);
             moduleOperations.add(detailModuleOperation10);
 
@@ -1520,8 +1509,6 @@ public class DBConfiguration {
             moduleOperations.add(filterModuleOperation21);
             ModuleOperation filterModuleOperation22 = new ModuleOperation(endpoint, filter, null); //ok
             moduleOperations.add(filterModuleOperation22);
-            ModuleOperation filterModuleOperation23 = new ModuleOperation(emailAnalyzer, filter, null); //ok
-            moduleOperations.add(filterModuleOperation23);
             ModuleOperation filterModuleOperation24 = new ModuleOperation(schedule, filter, null); //ok
             moduleOperations.add(filterModuleOperation24);
             ModuleOperation filterModuleOperation25 = new ModuleOperation(logFile, filter, null); //ok
@@ -1539,10 +1526,6 @@ public class DBConfiguration {
             Contact headBranchContact = new Contact("(050) 344-2323", "(012) 565-6776", "head.office@sual.az", "M.Xiyəbani 194A", baku);
             Organization headBranch = new Organization(headBranchContact,"Baş ofis", "Baş ofis", null, branchOrganization);
             organizations.add(headBranch);
-
-            Contact khirdalanBranchContact = new Contact("(050) 344-2323", "(012) 565-6776", "khirdalan.office@sual.az", "A.Şaiq 33", khirdalan);
-            Organization khirdalanBranch = new Organization(khirdalanBranchContact, "Xırdalan flialı", "Xırdalan flialı", headBranch, branchOrganization);
-            organizations.add(khirdalanBranch);
 
             Contact lankaranBranchContact = new Contact("(050) 344-2323", "(012) 565-6776", "lankaran.office@sual.az", "X.Natəvan 24B", lankaran);
             Organization lankaranBranch = new Organization(lankaranBranchContact, "Lənkəran flialı", "Lənkəran flialı", headBranch, branchOrganization);
@@ -1607,7 +1590,6 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, createModuleOperation20));
             userModuleOperations.add(new UserModuleOperation(user, createModuleOperation24));
             userModuleOperations.add(new UserModuleOperation(user, createModuleOperation25));
-            userModuleOperations.add(new UserModuleOperation(user, createModuleOperation26));
             userModuleOperations.add(new UserModuleOperation(user, createModuleOperation27));
             userModuleOperations.add(new UserModuleOperation(user, createModuleOperation28));
             userModuleOperations.add(new UserModuleOperation(user, createModuleOperation29));
@@ -1641,7 +1623,6 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation20));
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation24));
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation25));
-            userModuleOperations.add(new UserModuleOperation(user, editModuleOperation26));
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation27));
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation28));
             userModuleOperations.add(new UserModuleOperation(user, editModuleOperation29));
@@ -1680,7 +1661,6 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation25));
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation26));
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation27));
-            userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation28));
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation29));
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation30));
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation31));
@@ -1694,7 +1674,6 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation39));
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation40));
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation41));
-            userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation42));
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation43));
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation44));
             userModuleOperations.add(new UserModuleOperation(user, deleteModuleOperation45));
@@ -1723,7 +1702,6 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation21));
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation22));
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation23));
-            userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation24));
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation25));
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation26));
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation27));
@@ -1739,7 +1717,6 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation37));
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation38));
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation39));
-            userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation40));
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation41));
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation42));
             userModuleOperations.add(new UserModuleOperation(user, exportModuleOperation43));
@@ -1791,7 +1768,6 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation43));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation44));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation45));
-            userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation46));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation47));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation48));
             userModuleOperations.add(new UserModuleOperation(user, viewModuleOperation49));
@@ -1820,7 +1796,6 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation20));
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation21));
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation22));
-            userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation23));
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation24));
             userModuleOperations.add(new UserModuleOperation(user, filterModuleOperation25));
 
@@ -1835,8 +1810,6 @@ public class DBConfiguration {
 
             userModuleOperations.add(new UserModuleOperation(user, uploadModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, uploadModuleOperation2));
-            userModuleOperations.add(new UserModuleOperation(user, uploadModuleOperation3));
-            userModuleOperations.add(new UserModuleOperation(user, uploadModuleOperation4));
             userModuleOperations.add(new UserModuleOperation(user, uploadModuleOperation5));
 
             userModuleOperations.add(new UserModuleOperation(user, reloadModuleOperation1));
@@ -1864,6 +1837,7 @@ public class DBConfiguration {
 
             userModuleOperations.add(new UserModuleOperation(user, consolidateModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, consolidateModuleOperation2));
+            userModuleOperations.add(new UserModuleOperation(user, consolidateModuleOperation3));
 
             userModuleOperations.add(new UserModuleOperation(user, returnModuleOperation1));
             userModuleOperations.add(new UserModuleOperation(user, returnModuleOperation2));
@@ -1880,7 +1854,6 @@ public class DBConfiguration {
             userModuleOperations.add(new UserModuleOperation(user, detailModuleOperation6));
             userModuleOperations.add(new UserModuleOperation(user, detailModuleOperation7));
             userModuleOperations.add(new UserModuleOperation(user, detailModuleOperation8));
-            userModuleOperations.add(new UserModuleOperation(user, detailModuleOperation9));
             userModuleOperations.add(new UserModuleOperation(user, detailModuleOperation10));
 
             userModuleOperations.add(new UserModuleOperation(user, changePasswordModuleOperation1));
@@ -1893,17 +1866,17 @@ public class DBConfiguration {
 
             List<Supplier> suppliers = new ArrayList<>();
 
-            Contact supplier1Contact = new Contact("702046451", null, "aqualine.az@gmail.com", "Keşlə bazarı", baku);
+            Contact supplier1Contact = new Contact("(070) 204-6451", null, "aqualine.az@gmail.com", "Keşlə bazarı", baku);
             Person supplier1Person = new Person(supplier1Contact, "Əli", "Vəliyev", null, null, male, azerbaijanNationality, married, null, null, false);
             Supplier supplier1 = new Supplier("Aqualine MMC", "Sintra təminatçısı", supplier1Person);
             suppliers.add(supplier1);
 
-            Contact supplier2Contact = new Contact("553128122", null, "samir.bagirov@gmail.com", "Tonqal restoranının yanı", baku);
+            Contact supplier2Contact = new Contact("(055) 312-8122", null, "samir.bagirov@gmail.com", "Tonqal restoranının yanı", baku);
             Person supplier2Person = new Person(supplier2Contact, "Samir", "Bağırov", null, null, male, azerbaijanNationality, single, null, null, false);
             Supplier supplier2 = new Supplier("Techflow MMC", "Təminatçı", supplier2Person);
             suppliers.add(supplier2);
 
-            Contact supplier3Contact = new Contact("552263010", null, "sintra.az@gmail.com", "Binəqədi rayonu", baku);
+            Contact supplier3Contact = new Contact("(055) 226-3010", null, "sintra.az@gmail.com", "Binəqədi rayonu", baku);
             Person supplier3Person = new Person(supplier3Contact, "Elmar", "Məmmədov", null, null, male, azerbaijanNationality, single, null, null, false);
             Supplier supplier3 = new Supplier("Sintra MMC", "Təminatçı", supplier3Person);
             suppliers.add(supplier3);
@@ -1918,10 +1891,15 @@ public class DBConfiguration {
             Supplier supplier5 = new Supplier("Anbar qalıq", "Köhnə anbardan qebul", supplier5Person);
             suppliers.add(supplier5);
 
-            Contact supplier6Contact = new Contact(null, null, "other.supplier@gmail.com", null, baku);
-            Person supplier6Person = new Person(supplier5Contact, "Digər", "Təminatçı", null, null, male, azerbaijanNationality, single, null, null, false);
-            Supplier supplier6 = new Supplier("Digər", "Təminatçı", supplier5Person);
+            Contact supplier6Contact = new Contact("(050) 253-5110", null, "irkan.ehmedov@gmail.com", null, baku);
+            Person supplier6Person = new Person(supplier6Contact, "İrkan", "Əhmədov", null, null, male, azerbaijanNationality, single, null, null, false);
+            Supplier supplier6 = new Supplier("Miqrasiya", "Miqrasiya üçün inventar qalığı", supplier6Person);
             suppliers.add(supplier6);
+
+            Contact supplier7Contact = new Contact("(050) 253-5110", null, "other.supplier@gmail.com", null, baku);
+            Person supplier7Person = new Person(supplier7Contact, "Digər", "Təminatçı", null, null, male, azerbaijanNationality, single, null, null, false);
+            Supplier supplier7 = new Supplier("Digər", "Təminatçı", supplier7Person);
+            suppliers.add(supplier7);
 
             supplierRepository.saveAll(suppliers);
 
@@ -1958,28 +1936,58 @@ public class DBConfiguration {
             payrollConfigurations.add(new PayrollConfiguration(formulaType3,"Məzuniyyət haqqı", "{vacation_pay}={one_day_salary}*{taken_vacation_day}", "Məzuniyyət haqqı = Bir günlük əmək haqqı * Məzuniyyət günləri"));
             payrollConfigurationRepository.saveAll(payrollConfigurations);
 
-            List<Configuration> configurations = new ArrayList<>();
-            configurations.add(new Configuration("Problemli müştəri", "troubled_customer", "60", "Gecikmə 60 gündən çox olduqda müştəri problemli sayılır"));
-            configurations.add(new Configuration("Gecikdirmə", "by_year", "-5", "5 il əvvəldən satış qalıqlarının hesablanması: Ödəniş requlyatoru və problemli müştərilər üçün"));
-            configurations.add(new Configuration("Hesab-faktura sayı", "invoice_count", "2", "Eyni hesab-fakturanın çap formasındakı sayı"));
-            configurations.add(new Configuration("Şirkərin adı", "company_name", "Sual", "Şirkətin adı"));
-            configurations.add(new Configuration("Qaynar xətt", "company_hot_line", "+994 55 546 06 61", "Şirkətin qaynar xətt nömrəsi"));
-            configurations.add(new Configuration("Telefon", "company_telephone", "+994 12 480 10 76", "Şirkətin telefon nömrəsi"));
-            configurations.add(new Configuration("Mobil", "company_mobile", "+994 55 546 06 61", "Şirkətin mobil nömrəsi"));
-            configurations.add(new Configuration("Email", "company_email", "sual.office@gmail.com", "Şirkətin email ünvanı"));
-            configurations.add(new Configuration("Servis", "service", "6", "Servis xidməti göstərilmədikdə növbəti xəbərdarlıq 6 ay sonra gələcəkdir"));
-            configurations.add(new Configuration("Endirim faizi", "id_discount", "20", "Susmaya görə endirim faizi - 20%"));
-            configurations.add(new Configuration("Susmaya görə email qəbul edilsin", "default_email_receiver", "irkan.ehmedov@gmail.com", "Susmaya görə email qəbul edilsin"));
-            configurationRepository.saveAll(configurations);
+            List<GlobalConfiguration> globalConfigurations = new ArrayList<>();
+            globalConfigurations.add(new GlobalConfiguration("Susmaya görə geriyə əməliyyat günlərinin sayı", "default_back_operation_days_count", "3", "Təsdiqləmə və s kimi əəməliyyatlarda istifadə edilir. Tarixi yoxlayır icazəsi varsa təsdiq edilir"));
+            globalConfigurations.add(new GlobalConfiguration("Problemli müştəri", "troubled_customer", "60", "Gecikmə 60 gündən çox olduqda müştəri problemli sayılır"));
+            globalConfigurations.add(new GlobalConfiguration("Gecikdirmə", "by_year", "-5", "5 il əvvəldən satış qalıqlarının hesablanması: Ödəniş requlyatoru və problemli müştərilər üçün"));
+            globalConfigurations.add(new GlobalConfiguration("Hesab-faktura sayı", "invoice_count", "2", "Eyni hesab-fakturanın çap formasındakı sayı"));
+            globalConfigurations.add(new GlobalConfiguration("Şirkərin adı", "company_name", "Sual", "Şirkətin adı"));
+            globalConfigurations.add(new GlobalConfiguration("Qaynar xətt", "company_hot_line", "+994 55 546 06 61", "Şirkətin qaynar xətt nömrəsi"));
+            globalConfigurations.add(new GlobalConfiguration("Telefon", "company_telephone", "+994 12 480 10 76", "Şirkətin telefon nömrəsi"));
+            globalConfigurations.add(new GlobalConfiguration("Mobil", "company_mobile", "+994 55 546 06 61", "Şirkətin mobil nömrəsi"));
+            globalConfigurations.add(new GlobalConfiguration("Email", "company_email", "sual.office@gmail.com", "Şirkətin email ünvanı"));
+            globalConfigurations.add(new GlobalConfiguration("Servis", "service", "6", "Servis xidməti göstərilmədikdə növbəti xəbərdarlıq 6 ay sonra gələcəkdir"));
+            globalConfigurations.add(new GlobalConfiguration("Endirim faizi", "id_discount", "20", "Susmaya görə endirim faizi - 20%"));
+            globalConfigurations.add(new GlobalConfiguration("Susmaya görə email qəbul edilsin", "default_email_receiver", "irkan.ehmedov@gmail.com", "Susmaya görə email qəbul edilsin"));
+            globalConfigurationRepository.saveAll(globalConfigurations);
 
             List<WebServiceAuthenticator> webServiceAuthenticators = new ArrayList<>();
-            webServiceAuthenticators.add(new WebServiceAuthenticator("webservice1", "webS3r1cE12019", "MilliÖN web service identifikator"));
-            webServiceAuthenticators.add(new WebServiceAuthenticator("idinternal", "webS3r1cE12019Int3r@!", "ID Internal web service identifikator"));
+            webServiceAuthenticators.add(new WebServiceAuthenticator("webservice1", "webS3r1cE12019", "YOS-TERMINAL"));
             webServiceAuthenticatorRepository.saveAll(webServiceAuthenticators);
 
+            List<TaxConfiguration> taxConfigurations = new ArrayList<>();
+
+            Contact taxConfiguration1Contact = new Contact("(050) 253-5110", null, null, "Nizami 95A", baku);
+            Person taxConfiguration1Person = new Person(taxConfiguration1Contact, "Elnur", "Hacıyev", "Səfiyar", null, male, null, null, null, null, false);
+            taxConfigurations.add(new TaxConfiguration(headBranch, "2905318272", taxConfiguration1Person, 17000d));
+
+            Contact taxConfiguration2Contact = new Contact("(050) 253-5110", null, null, "Nizami 95B", baku);
+            Person taxConfiguration2Person = new Person(taxConfiguration2Contact, "Emil", "Hacıyev", "Arif", null, male, null, null, null, null, false);
+            taxConfigurations.add(new TaxConfiguration(headBranch, "1301201392", taxConfiguration2Person, 17000d));
+
+            Contact taxConfiguration3Contact = new Contact("(050) 253-5110", null, null, "Nizami 95C", baku);
+            Person taxConfiguration3Person = new Person(taxConfiguration3Contact, "Ağakərim", "Cəfərzadə", "Tələt", null, male, null, null, null, null, false);
+            taxConfigurations.add(new TaxConfiguration(headBranch, "3101585262", taxConfiguration3Person, 17000d));
+
+            Contact taxConfiguration4Contact = new Contact("(050) 253-5110", null, null, "Nizami 95A", ganja);
+            Person taxConfiguration4Person = new Person(taxConfiguration4Contact, "Tural", "Əliyev", "Qafar", null, male, null, null, null, null, false);
+            taxConfigurations.add(new TaxConfiguration(ganjaBranch, "2303341972", taxConfiguration4Person, 17000d));
+
+            Contact taxConfiguration5Contact = new Contact("(050) 253-5110", null, null, "Nizami 95B", ganja);
+            Person taxConfiguration5Person = new Person(taxConfiguration5Contact, "Anar", "Abdullayev", "Xanlar", null, male, null, null, null, null, false);
+            taxConfigurations.add(new TaxConfiguration(ganjaBranch, "2303701992", taxConfiguration5Person, 17000d));
+
+            Contact taxConfiguration6Contact = new Contact("(050) 253-5110", null, null, "Nizami 95A", lankaran);
+            Person taxConfiguration6Person = new Person(taxConfiguration6Contact, "İlkin", "Bağırov", "Yusif", null, male, null, null, null, null, false);
+            taxConfigurations.add(new TaxConfiguration(lankaranBranch, "2303447962", taxConfiguration6Person, 17000d));
+
+            Contact taxConfiguration7Contact = new Contact("(050) 253-5110", null, null, "Nizami 95A", yevlakh);
+            Person taxConfiguration7Person = new Person(taxConfiguration7Contact, "Qurban", "Qurbanov", null, null, male, null, null, null, null, false);
+            taxConfigurations.add(new TaxConfiguration(yevlakhBranch, "2905792972", taxConfiguration7Person, 17000d));
+
+            taxConfigurationRepository.saveAll(taxConfigurations);
+
         } catch (Exception e){
-            //skeletonController.log(null, "error", "", "", null, "", e.getMessage());
-            e.printStackTrace();
             log.error(e.getMessage(), e);
         } finally {
             log.info("System was running!");

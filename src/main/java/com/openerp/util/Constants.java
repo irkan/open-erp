@@ -40,7 +40,7 @@ public class Constants {
     public static final String EXPENSES = "expenses";
     public static final String WEEK_DAYS = "week_days";
     public static final String MARITAL_STATUSES = "marital_statuses";
-    public static final String SALE_PRICES = "sale_prices";
+    public static final String SALE_PRICES = "prices";
     public static final String ADVANCES = "advances";
     public static final String PAYMENT_SCHEDULES = "payment_schedules";
     public static final String PAYMENT_PERIODS = "payment_periods";
@@ -134,7 +134,7 @@ public class Constants {
         public static final String INVOICE = "invoice";
         public static final String TROUBLED_CUSTOMER = "troubled-customer";
         public static final String CUSTOMER = "customer";
-        public static final String CONFIGURATION = "configuration";
+        public static final String GLOBAL_CONFIGURATION = "global-configuration";
         public static final String NOTIFICATION = "notification";
         public static final String DEMONSTRATION = "demonstration";
         public static final String LOG = "log";
@@ -147,10 +147,8 @@ public class Constants {
         public static final String SERVICE_EMPLOYEE = "service-employee";
         public static final String SERVICE_REGULATOR = "service-regulator";
         public static final String SERVICE_TASK = "service-task";
-        public static final String IDDISCOUNT = "iddiscount";
         public static final String ENDPOINT = "endpoint";
         public static final String OVERVIEW = "overview";
-        public static final String EMAIL_ANALYZER = "email-analyzer";
         public static final String SESSION = "session";
         public static final String APPROVER_EXCEPTION = "approver-exception";
         public static final String MIGRATION = "migration";

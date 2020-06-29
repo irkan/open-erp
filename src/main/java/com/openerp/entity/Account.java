@@ -12,15 +12,15 @@ import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 @Entity
-@Table(name = "accounting_account")
+@Table(name = "account")
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
 public class Account {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "accounting_sequence")
-    @SequenceGenerator(sequenceName = "aa_accounting_sequence", allocationSize = 1, name = "accounting_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "account_seq")
+    @SequenceGenerator(sequenceName = "account_seq", allocationSize = 1, name = "account_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
@@ -36,7 +36,7 @@ public class Account {
     private String toCurrency;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_organization_id", nullable = false)
+    @JoinColumn(name = "organization_id", nullable = false)
     private Organization organization;
 
     @Pattern(regexp=".{0,5}",message="Maksimum 5 simvol ola bilər")

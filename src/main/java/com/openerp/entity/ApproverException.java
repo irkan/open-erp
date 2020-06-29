@@ -12,20 +12,20 @@ import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 @Entity
-@Table(name = "admin_approver_exception")
+@Table(name = "approver_exception")
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
 public class ApproverException {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "admin_sequence")
-    @SequenceGenerator(sequenceName = "aa_admin_sequence", allocationSize = 1, name = "admin_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "approve_exception_seq")
+    @SequenceGenerator(sequenceName = "approve_exception_seq", allocationSize = 1, name = "approve_exception_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Pattern(regexp=".{0,250}",message="Maksimum 250 simvol ola bilər")

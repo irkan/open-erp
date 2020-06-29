@@ -53,7 +53,7 @@ public class NotificationTask {
                     helper.setText(notification.getMessage(), true);
                     javaMailSender.send(msg);
 
-                    Log logObject = new Log("admin_notification", "send", null, notification.toString(), "", "Email göndərildi: " + notification.getTo(), UtilJson.toJson(notification));
+                    Log logObject = new Log("notification", "send", null, notification.toString(), "", "Email göndərildi: " + notification.getTo(), UtilJson.toJson(notification));
                     logRepository.save(logObject);
 
                     notification.setSend(1);
@@ -86,7 +86,7 @@ public class NotificationTask {
                     helper.setText(notification.getMessage(), true);
                     javaMailSender.send(msg);
 
-                    Log logObject = new Log("admin_notification", "send", null, notification.toString(), "", "Email göndərildi: " + notification.getTo(), UtilJson.toJson(notification));
+                    Log logObject = new Log("notification", "send", null, notification.toString(), "", "Email göndərildi: " + notification.getTo(), UtilJson.toJson(notification));
                     logRepository.save(logObject);
 
                     notification.setSend(1);
@@ -95,7 +95,7 @@ public class NotificationTask {
                     e.printStackTrace();
                     log.error(e.getMessage(), e);
                     notification.setSend(2);
-                    Log logObject = new Log("error", "admin_notification", "send", null, notification.toString(), "", "Email göndərilmədi: " + notification.getTo() + e.getMessage(), UtilJson.toJson(notification));
+                    Log logObject = new Log("error", "notification", "send", null, notification.toString(), "", "Email göndərilmədi: " + notification.getTo() + e.getMessage(), UtilJson.toJson(notification));
                     logRepository.save(logObject);
                 }
                 notificationRepository.save(notification);

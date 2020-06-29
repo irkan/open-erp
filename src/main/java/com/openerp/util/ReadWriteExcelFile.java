@@ -90,26 +90,6 @@ public class ReadWriteExcelFile {
 		fileOut.close();
 	}
 
-	public static List<IDDiscount> readXLSXFileItems(InputStream inputStream) throws IOException {
-		XSSFWorkbook  wb = new XSSFWorkbook(inputStream);
-		XSSFSheet sheet = wb.getSheetAt(0);
-		XSSFRow row;
-		Iterator rows = sheet.rowIterator();
-		List<IDDiscount> items = new ArrayList<>();
-		while (rows.hasNext()) {
-			row=(XSSFRow) rows.next();
-			if(row.getRowNum()>0){
-				IDDiscount item = new IDDiscount();
-				item.setCode(row.getCell(0).getStringCellValue());
-				item.setDiscount((double) row.getCell(1).getNumericCellValue());
-				item.setDescription(row.getCell(2).getStringCellValue());
-
-				items.add(item);
-			}
-		}
-		return items;
-	}
-
 	public static List<ShortenedWorkingDay> readXLSXFileShortenedWorkingDays(InputStream inputStream) throws IOException {
 		XSSFWorkbook  wb = new XSSFWorkbook(inputStream);
 		XSSFSheet sheet = wb.getSheetAt(0);
@@ -2175,55 +2155,6 @@ public class ReadWriteExcelFile {
 		return file;
 	}
 
-	public static File idDiscountXLSXFile(List<IDDiscount> idDiscounts, String page) throws IOException {
-		File file = new File(page+".xlsx");
-		XSSFWorkbook wb = new XSSFWorkbook();
-		XSSFSheet sheet = wb.createSheet(page) ;
-		int rownum=0;
-		XSSFRow row = sheet.createRow(rownum++);
-		XSSFCell cell = row.createCell(0);
-		cell.setCellValue("ID");
-		cell = row.createCell(row.getLastCellNum());
-		cell.setCellValue("Yaradılma tarixi");
-		cell = row.createCell(row.getLastCellNum());
-		cell.setCellValue("Kod");
-		cell = row.createCell(row.getLastCellNum());
-		cell.setCellValue("Endirim");
-		cell = row.createCell(row.getLastCellNum());
-		cell.setCellValue("Açıqlama");
-		cell = row.createCell(row.getLastCellNum());
-		cell.setCellValue("Aktiv");
-		row.setHeightInPoints(30);
-		XSSFCellStyle headerStyle = wb.createCellStyle();
-		headerStyle.setAlignment(HorizontalAlignment.CENTER);
-		headerStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-		XSSFFont headerFont= wb.createFont();
-		headerFont.setFontHeightInPoints((short)14);
-		headerFont.setBold(true);
-		headerStyle.setFont(headerFont);
-		row.setRowStyle(headerStyle);
-		for(IDDiscount idDiscount: idDiscounts){
-			row = sheet.createRow(rownum++);
-			cell = row.createCell(0);
-			cell.setCellValue(idDiscount.getId());
-			cell = row.createCell(row.getLastCellNum());
-			cell.setCellValue(Util.checkNull(idDiscount.getCreatedDate()));
-			cell = row.createCell(row.getLastCellNum());
-			cell.setCellValue(idDiscount.getCode());
-			cell = row.createCell(row.getLastCellNum());
-			cell.setCellValue(idDiscount.getDiscount());
-			cell = row.createCell(row.getLastCellNum());
-			cell.setCellValue(idDiscount.getDescription());
-			cell = row.createCell(row.getLastCellNum());
-			cell.setCellValue(idDiscount.getActive());
-		}
-		FileOutputStream fileOut = new FileOutputStream(file);
-		wb.write(fileOut);
-		fileOut.flush();
-		fileOut.close();
-		return file;
-	}
-
 	public static File endpointXLSXFile(Page<Endpoint> endpoints, String page) throws IOException {
 		File file = new File(page+".xlsx");
 		XSSFWorkbook wb = new XSSFWorkbook();
@@ -2273,97 +2204,6 @@ public class ReadWriteExcelFile {
 			cell.setCellValue(endpoint.getFixedDelay());
 			cell = row.createCell(row.getLastCellNum());
 			cell.setCellValue(endpoint.getLastStatusDate());
-		}
-		FileOutputStream fileOut = new FileOutputStream(file);
-		wb.write(fileOut);
-		fileOut.flush();
-		fileOut.close();
-		return file;
-	}
-
-	public static File emailAnalyzerXLSXFile(Page<EmailAnalyzer> emailAnalyzers, String page) throws IOException {
-		File file = new File(page+".xlsx");
-		XSSFWorkbook wb = new XSSFWorkbook();
-		XSSFSheet sheet = wb.createSheet(page) ;
-		int rownum=0;
-		XSSFRow row = sheet.createRow(rownum++);
-		XSSFCell cell = row.createCell(0);
-		cell.setCellValue("ID");
-		cell = row.createCell(row.getLastCellNum());
-		cell.setCellValue("Əlaqə tipi");
-		cell = row.createCell(row.getLastCellNum());
-		cell.setCellValue("Host");
-		cell = row.createCell(row.getLastCellNum());
-		cell.setCellValue("Port");
-		cell = row.createCell(row.getLastCellNum());
-		cell.setCellValue("URL");
-		cell = row.createCell(row.getLastCellNum());
-		cell.setCellValue("Açıqlama");
-		cell = row.createCell(row.getLastCellNum());
-		cell.setCellValue("Period");
-		cell = row.createCell(row.getLastCellNum());
-		cell.setCellValue("Son status tarixi");
-		cell = row.createCell(row.getLastCellNum());
-		cell.setCellValue("Son status tarixi");
-		cell = row.createCell(row.getLastCellNum());
-		cell.setCellValue("Son status tarixi");
-		cell = row.createCell(row.getLastCellNum());
-		cell.setCellValue("Son status tarixi");
-		cell = row.createCell(row.getLastCellNum());
-		cell.setCellValue("Son status tarixi");
-		cell = row.createCell(row.getLastCellNum());
-		cell.setCellValue("Son status tarixi");
-		cell = row.createCell(row.getLastCellNum());
-		cell.setCellValue("Son status tarixi");
-		cell = row.createCell(row.getLastCellNum());
-		cell.setCellValue("Son status tarixi");
-		cell = row.createCell(row.getLastCellNum());
-		cell.setCellValue("Son status tarixi");
-		cell = row.createCell(row.getLastCellNum());
-		cell.setCellValue("Son status tarixi");
-		cell = row.createCell(row.getLastCellNum());
-		cell.setCellValue("Son status tarixi");
-		cell = row.createCell(row.getLastCellNum());
-		cell.setCellValue("Son status tarixi");
-		row.setHeightInPoints(30);
-		XSSFCellStyle headerStyle = wb.createCellStyle();
-		headerStyle.setAlignment(HorizontalAlignment.CENTER);
-		headerStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-		XSSFFont headerFont= wb.createFont();
-		headerFont.setFontHeightInPoints((short)14);
-		headerFont.setBold(true);
-		headerStyle.setFont(headerFont);
-		row.setRowStyle(headerStyle);
-		for(EmailAnalyzer emailAnalyzer: emailAnalyzers){
-			row = sheet.createRow(rownum++);
-			cell = row.createCell(0);
-			cell.setCellValue(emailAnalyzer.getId());
-			cell = row.createCell(row.getLastCellNum());
-			cell.setCellValue(Util.checkNull(emailAnalyzer.getOperationDate()));
-			cell = row.createCell(row.getLastCellNum());
-			cell.setCellValue(emailAnalyzer.getOperation());
-			cell = row.createCell(row.getLastCellNum());
-			cell.setCellValue(emailAnalyzer.getQueueID());
-			cell = row.createCell(row.getLastCellNum());
-			cell.setCellValue(emailAnalyzer.getFrom());
-			cell = row.createCell(row.getLastCellNum());
-			cell.setCellValue(emailAnalyzer.getTo());
-			cell = row.createCell(row.getLastCellNum());
-			cell.setCellValue(emailAnalyzer.getRecipient());
-			cell = row.createCell(row.getLastCellNum());
-			cell.setCellValue(emailAnalyzer.getRemoteHost());
-			cell = row.createCell(row.getLastCellNum());
-			cell.setCellValue(emailAnalyzer.getSenderHost());
-			cell = row.createCell(row.getLastCellNum());
-			cell.setCellValue(emailAnalyzer.getStatus());
-			cell = row.createCell(row.getLastCellNum());
-			cell.setCellValue(emailAnalyzer.getSubject());
-			cell = row.createCell(row.getLastCellNum());
-			cell.setCellValue(emailAnalyzer.getUser());
-			cell = row.createCell(row.getLastCellNum());
-			cell.setCellValue(emailAnalyzer.getSize());
-			cell = row.createCell(row.getLastCellNum());
-			cell.setCellValue(emailAnalyzer.getMsgId());
 		}
 		FileOutputStream fileOut = new FileOutputStream(file);
 		wb.write(fileOut);

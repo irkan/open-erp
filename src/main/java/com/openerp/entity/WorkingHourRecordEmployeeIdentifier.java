@@ -9,7 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 
 @Entity
-@Table(name = "payroll_working_hour_record_employee_identifier")
+@Table(name = "working_hour_record_employee_identifier")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,14 +17,14 @@ import javax.validation.constraints.Pattern;
 public class WorkingHourRecordEmployeeIdentifier {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "payroll_sequence")
-    @SequenceGenerator(sequenceName = "aa_payroll_sequence", allocationSize = 1, name = "payroll_sequence")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "working_hour_record_employee_identifier_seq")
+    @SequenceGenerator(sequenceName = "working_hour_record_employee_identifier_seq", allocationSize = 1, name = "working_hour_record_employee_identifier_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "hr_working_hour_record_employee_id")
+    @JoinColumn(name = "working_hour_record_employee_id")
     private WorkingHourRecordEmployee workingHourRecordEmployee;
 
     @Pattern(regexp=".{0,8}",message="Maksimum 8 simvol ola bilər")

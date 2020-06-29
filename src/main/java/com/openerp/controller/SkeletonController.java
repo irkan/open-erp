@@ -181,13 +181,10 @@ public class SkeletonController {
     CustomerRepository customerRepository;
 
     @Autowired
-    IDDiscountRepository iDDiscountRepository;
-
-    @Autowired
     InvoiceRepository invoiceRepository;
 
     @Autowired
-    ConfigurationRepository configurationRepository;
+    GlobalConfigurationRepository configurationRepository;
 
     @Autowired
     ApproverExceptionRepository approverExceptionRepository;
@@ -215,9 +212,6 @@ public class SkeletonController {
 
     @Autowired
     EndpointRepository endpointRepository;
-
-    @Autowired
-    EmailAnalyzerRepository emailAnalyzerRepository;
 
     @Autowired
     MigrationRepository migrationRepository;
@@ -290,9 +284,6 @@ public class SkeletonController {
 
     @Autowired
     EndpointService endpointService;
-
-    @Autowired
-    EmailAnalyzerService emailAnalyzerService;
 
     @Autowired
     ReportingDao reportingDao;
@@ -480,7 +471,7 @@ public class SkeletonController {
                 notification.setMessage(message);
                 notificationRepository.save(notification);
 
-                log(notification, "admin_notification", "create/edit", notification.getId(), notification.toString());
+                log(notification, "notification", "create/edit", notification.getId(), notification.toString());
             }
         }
     }
@@ -494,10 +485,10 @@ public class SkeletonController {
             }
             account.setBalance(balance);
             accountRepository.save(account);
-            log(account, "accounting_account", "create/edit", account.getId(), account.toString());
+            log(account, "account", "create/edit", account.getId(), account.toString());
             transaction.setBalance(account.getBalance());
             transactionRepository.save(transaction);
-            log(transaction, "accounting_transaction", "create/edit", transaction.getId(), transaction.toString());
+            log(transaction, "transaction", "create/edit", transaction.getId(), transaction.toString());
         }
     }
 
@@ -636,10 +627,10 @@ public class SkeletonController {
             invc.setDescription(invoice.getDescription());
         }
         invoiceRepository.save(invc);
-        log(invc, "sale_invoice", "create/edit", invc.getId(), invc.toString());
+        log(invc, "invoice", "create/edit", invc.getId(), invc.toString());
         invc.setChannelReferenceCode(String.valueOf(invc.getId()));
         invoiceRepository.save(invc);
-        log(invc, "sale_invoice", "create/edit", invc.getId(), invc.toString(), "Kanal referans kodu update edildi");
+        log(invc, "invoice", "create/edit", invc.getId(), invc.toString(), "Kanal referans kodu update edildi");
         return invc;
     }
 
@@ -736,7 +727,7 @@ public class SkeletonController {
 
         if(backDays==0){
             try{
-                Configuration configuration = configurationRepository.getConfigurationByKey("default_back_operation_days_count");
+                GlobalConfiguration configuration = configurationRepository.getGlobalConfigurationByKey("default_back_operation_days_count");
                 if(configuration!=null && configuration.getAttribute()!=null && configuration.getAttribute().matches(Constants.REGEX.REGEX3)){
                     backDays = Integer.parseInt(configuration.getAttribute());
                 }

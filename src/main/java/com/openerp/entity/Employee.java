@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "hr_employee")
+@Table(name = "employee")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,17 +23,17 @@ import java.util.List;
 public class Employee {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "hr_employee_sequence")
-    @SequenceGenerator(sequenceName = "aa_hr_employee_sequence", allocationSize = 1, initialValue = 100001, name = "hr_employee_sequence")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "employee_seq")
+    @SequenceGenerator(sequenceName = "employee_seq", allocationSize = 1, initialValue = 100001, name = "employee_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "common_person_id")
+    @JoinColumn(name = "person_id")
     private Person person;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_dictionary_position_id", nullable = false)
+    @JoinColumn(name = "dictionary_position_id", nullable = false)
     private Dictionary position;
 
     @Temporal(TemporalType.DATE)
@@ -41,7 +41,7 @@ public class Employee {
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date contractStartDate;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @Column(name = "contract_end_date")
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date contractEndDate;
@@ -51,7 +51,7 @@ public class Employee {
     private String leaveReason;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_organization_id", nullable = false)
+    @JoinColumn(name = "organization_id", nullable = false)
     private Organization organization;
 
     @Column(name = "social_card_number")

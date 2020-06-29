@@ -2,9 +2,6 @@ package com.openerp.util;
 
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
-import com.itextpdf.kernel.colors.Color;
-import com.itextpdf.kernel.colors.DeviceCmyk;
-import com.itextpdf.kernel.colors.DeviceGray;
 import com.itextpdf.kernel.colors.DeviceRgb;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
@@ -22,7 +19,7 @@ import com.itextpdf.layout.property.VerticalAlignment;
 import com.itextpdf.text.pdf.BaseFont;
 import com.openerp.entity.Dictionary;
 import com.openerp.entity.Invoice;
-import com.openerp.repository.ConfigurationRepository;
+import com.openerp.repository.GlobalConfigurationRepository;
 import org.apache.log4j.Logger;
 import org.springframework.core.io.ClassPathResource;
 
@@ -34,12 +31,12 @@ import java.util.List;
 public class GeneratePDFFile {
     private static final Logger log = Logger.getLogger(GeneratePDFFile.class);
 
-    public static File generateInvoice(List<Invoice> invoices, ConfigurationRepository configurationRepository, List<Dictionary> months) throws FileNotFoundException {
-        String invoiceCount = configurationRepository.getConfigurationByKey("invoice_count").getAttribute();
-        String companyName = configurationRepository.getConfigurationByKey("company_name").getAttribute();
-        String companyHotLine = configurationRepository.getConfigurationByKey("company_hot_line").getAttribute();
-        String companyTelephone = configurationRepository.getConfigurationByKey("company_telephone").getAttribute();
-        String companyMobile = configurationRepository.getConfigurationByKey("company_mobile").getAttribute();
+    public static File generateInvoice(List<Invoice> invoices, GlobalConfigurationRepository configurationRepository, List<Dictionary> months) throws FileNotFoundException {
+        String invoiceCount = configurationRepository.getGlobalConfigurationByKey("invoice_count").getAttribute();
+        String companyName = configurationRepository.getGlobalConfigurationByKey("company_name").getAttribute();
+        String companyHotLine = configurationRepository.getGlobalConfigurationByKey("company_hot_line").getAttribute();
+        String companyTelephone = configurationRepository.getGlobalConfigurationByKey("company_telephone").getAttribute();
+        String companyMobile = configurationRepository.getGlobalConfigurationByKey("company_mobile").getAttribute();
         File file = new File("invoice-"+(new Date()).getTime() + ".pdf");
         PdfDocument pdfDocument = new PdfDocument(new PdfWriter(file.getPath()));
         try(Document document = new Document(pdfDocument, PageSize.A4)){

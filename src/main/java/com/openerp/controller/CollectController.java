@@ -30,13 +30,13 @@ public class CollectController extends SkeletonController {
 
         if(page.equalsIgnoreCase(Constants.ROUTE.PAYMENT_LATENCY) ||
                 page.equalsIgnoreCase(Constants.ROUTE.TROUBLED_CUSTOMER)){
-            model.addAttribute(Constants.CONFIGURATION_TROUBLED_CUSTOMER, configurationRepository.getConfigurationByKey("troubled_customer").getAttribute());
+            model.addAttribute(Constants.CONFIGURATION_TROUBLED_CUSTOMER, configurationRepository.getGlobalConfigurationByKey("troubled_customer").getAttribute());
             Sales salesObject = new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null);
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Invoice(salesObject, getSessionOrganization()));
             }
             if(!model.containsAttribute(Constants.FILTER)){
-                salesObject.setSaleDateFrom(DateUtility.addYear(Integer.parseInt(configurationRepository.getConfigurationByKey("by_year").getAttribute())));
+                salesObject.setSaleDateFrom(DateUtility.addYear(Integer.parseInt(configurationRepository.getGlobalConfigurationByKey("by_year").getAttribute())));
                 salesObject.setService(null);
                 salesObject.setApprove(false);
                 model.addAttribute(Constants.FILTER, salesObject);
@@ -141,10 +141,10 @@ public class CollectController extends SkeletonController {
         invoice.setDescription("Ödəniş " + invoice.getPrice() + " AZN");
         invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
         invoiceRepository.save(invoice);
-        log(invoice, "sale_invoice", "transfer", invoice.getId(), invoice.toString());
+        log(invoice, "invoice", "transfer", invoice.getId(), invoice.toString());
         invoice.setChannelReferenceCode(String.valueOf(invoice.getId()));
         invoiceRepository.save(invoice);
-        log(invoice, "sale_invoice", "create/edit", invoice.getId(), invoice.toString());
+        log(invoice, "invoice", "create/edit", invoice.getId(), invoice.toString());
         String desc = "Hesab faktura yaradıldı: " + invoice.getId();
         if(sales!=null){
             ContactHistory contactHistory = new ContactHistory();
@@ -184,7 +184,7 @@ public class CollectController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(null, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             Date today = new Date();
-            Configuration configuration = configurationRepository.getConfigurationByKey("service");
+            GlobalConfiguration configuration = configurationRepository.getGlobalConfigurationByKey("service");
             String defaultValue = configuration!=null?configuration.getAttribute():"6";
             ServiceTask serviceTaskOld = serviceTaskRepository.getServiceTaskById(serviceTask.getId());
             Sales sales = salesRepository.getSalesById(serviceTask.getSales().getId());
@@ -223,7 +223,7 @@ public class CollectController extends SkeletonController {
                 sales.setNotServiceNextReason(serviceTask.getSales().getNotServiceNextReason());
                 salesRepository.save(sales);
 
-                log(sales, "sale_sales", "create/edit", sales.getId(), sales.toString(), "Filter dəyişimi ilə bağlı birdaha xəbərdarlıq edilməsin! \n"+sales.getNotServiceNextReason());
+                log(sales, "sales", "create/edit", sales.getId(), sales.toString(), "Filter dəyişimi ilə bağlı birdaha xəbərdarlıq edilməsin! \n"+sales.getNotServiceNextReason());
 
                 addContactHistory(sales, "Filter dəyişimi ilə bağlı birdaha xəbərdarlıq edilməsin! \n"+sales.getNotServiceNextReason(), null);
             }
@@ -245,7 +245,7 @@ public class CollectController extends SkeletonController {
                 service.setPayment(payment);
                 salesRepository.save(service);
 
-                log(service, "sale_sales", "create/edit", service.getId(), service.toString(), "Servis Requlyatordan Servis yaradıldı");
+                log(service, "sales", "create/edit", service.getId(), service.toString(), "Servis Requlyatordan Servis yaradıldı");
 
                 addContactHistory(sales, "Servis əlavə edildi: "+description, service);
             }

@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "common_person")
+@Table(name = "person")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -24,8 +24,8 @@ import java.util.List;
 public class Person {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "common_sequence")
-    @SequenceGenerator(sequenceName = "aa_common_sequence", allocationSize = 1, name = "common_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "person_seq")
+    @SequenceGenerator(sequenceName = "person_seq", allocationSize = 1, name = "person_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
@@ -46,15 +46,15 @@ public class Person {
     private Date birthday;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_dictionary_gender_id")
+    @JoinColumn(name = "dictionary_gender_id")
     private Dictionary gender;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_dictionary_nationality_id")
+    @JoinColumn(name = "dictionary_nationality_id")
     private Dictionary nationality;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_dictionary_marital_status_id")
+    @JoinColumn(name = "dictionary_marital_status_id")
     private Dictionary maritalStatus;
 
     @Column(name = "id_card_pin_code")
@@ -89,7 +89,7 @@ public class Person {
     private Supplier supplier;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "common_contact_id")
+    @JoinColumn(name = "contact_id")
     private Contact contact;
 
     @ToString.Exclude

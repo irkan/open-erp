@@ -11,24 +11,24 @@ import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 @Entity
-@Table(name = "admin_notification")
+@Table(name = "notification")
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
 public class Notification {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "admin_notification_sequence")
-    @SequenceGenerator(sequenceName = "aa_admin_notification_sequence", allocationSize = 1, name = "admin_notification_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "notification_seq")
+    @SequenceGenerator(sequenceName = "notification_seq", allocationSize = 1, name = "notification_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_organization_id")
+    @JoinColumn(name = "organization_id")
     private Organization organization;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_dictionary_notification_id")
+    @JoinColumn(name = "dictionary_notification_id")
     private Dictionary type;
 
     @Column(name = "message_from")

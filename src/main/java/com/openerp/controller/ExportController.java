@@ -98,12 +98,8 @@ public class ExportController extends SkeletonController {
             file = ReadWriteExcelFile.contactHistoryXLSXFile((Page<ContactHistory>) object, page);
         } else if(page.equalsIgnoreCase(Constants.ROUTE.SERVICE_REGULATOR)){
             file = ReadWriteExcelFile.serviceRegulatorXLSXFile((Page<ServiceRegulator>) object, page);
-        } else if(page.equalsIgnoreCase(Constants.ROUTE.IDDISCOUNT)){
-            file = ReadWriteExcelFile.idDiscountXLSXFile((List<IDDiscount>) object, page);
         } else if(page.equalsIgnoreCase(Constants.ROUTE.ENDPOINT)){
             file = ReadWriteExcelFile.endpointXLSXFile((Page<Endpoint>) object, page);
-        } else if(page.equalsIgnoreCase(Constants.ROUTE.EMAIL_ANALYZER)){
-            file = ReadWriteExcelFile.emailAnalyzerXLSXFile((Page<EmailAnalyzer>) object, page);
         } else if(page.equalsIgnoreCase(Constants.ROUTE.SESSION)){
             file = ReadWriteExcelFile.sessionXLSXFile((List<Session>) object, page);
         } else if(page.equalsIgnoreCase(Constants.ROUTE.APPROVER_EXCEPTION)){

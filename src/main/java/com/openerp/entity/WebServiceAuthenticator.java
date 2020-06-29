@@ -10,15 +10,15 @@ import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 @Entity
-@Table(name = "admin_web_service_authenticator")
+@Table(name = "web_service_authenticator")
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
 public class WebServiceAuthenticator {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "admin_sequence")
-    @SequenceGenerator(sequenceName = "aa_admin_sequence", allocationSize = 1, name = "admin_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "web_service_authenticator_seq")
+    @SequenceGenerator(sequenceName = "web_service_authenticator_seq", allocationSize = 1, name = "web_service_authenticator_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 

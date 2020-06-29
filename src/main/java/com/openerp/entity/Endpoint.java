@@ -11,20 +11,20 @@ import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 @Entity
-@Table(name = "admin_endpoint")
+@Table(name = "endpoint")
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
 public class Endpoint {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "admin_sequence")
-    @SequenceGenerator(sequenceName = "aa_admin_sequence", allocationSize = 1, name = "admin_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "endpoint_seq")
+    @SequenceGenerator(sequenceName = "endpoint_seq", allocationSize = 1, name = "endpoint_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="admin_dictionary_connection_type_id", nullable = false)
+    @JoinColumn(name="dictionary_connection_type_id", nullable = false)
     private Dictionary connectionType;
 
     @Pattern(regexp=".{2,50}",message="Minimum 2 maksimum 100 simvol ola bilər")

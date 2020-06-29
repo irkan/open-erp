@@ -13,24 +13,24 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "warehouse_inventory")
+@Table(name = "inventory")
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
 public class Inventory {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "warehouse_sequence")
-    @SequenceGenerator(sequenceName = "aa_warehouse_sequence", allocationSize = 1, name = "warehouse_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "inventory_seq")
+    @SequenceGenerator(sequenceName = "inventory_seq", allocationSize = 1, name = "inventory_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_organization_id", nullable = false)
+    @JoinColumn(name = "organization_id", nullable = false)
     private Organization organization;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_dictionary_inventory_group_id")
+    @JoinColumn(name = "dictionary_inventory_group_id")
     private Dictionary group;
 
     @Pattern(regexp=".{2,50}",message="Minimum 2 maksimum 50 simvol ola bilər")

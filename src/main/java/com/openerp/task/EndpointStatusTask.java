@@ -80,7 +80,7 @@ public class EndpointStatusTask {
                         input.close();
                     }
                 }
-                skeletonController.log(type, "admin_endpoint", "create/edit", endpoint.getId(), endpoint.toString(), description);
+                skeletonController.log(type, "endpoint", "create/edit", endpoint.getId(), endpoint.toString(), description);
             }
 
             log.info("Endpoint Status Task End");

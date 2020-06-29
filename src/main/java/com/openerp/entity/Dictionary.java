@@ -12,15 +12,15 @@ import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "admin_dictionary")
+@Table(name = "dictionary")
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
 public class Dictionary {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "admin_dictionary_sequence")
-    @SequenceGenerator(sequenceName = "aa_admin_dictionary_sequence", initialValue = 500, allocationSize = 1, name = "admin_dictionary_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "dictionary_seq")
+    @SequenceGenerator(sequenceName = "dictionary_seq", initialValue = 500, allocationSize = 1, name = "dictionary_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
@@ -36,7 +36,7 @@ public class Dictionary {
     private String attr2;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="admin_dictionary_type_id", nullable = false)
+    @JoinColumn(name="dictionary_type_id", nullable = false)
     private DictionaryType dictionaryType;
 
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")

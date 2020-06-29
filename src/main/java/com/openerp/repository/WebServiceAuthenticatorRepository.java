@@ -1,6 +1,6 @@
 package com.openerp.repository;
 
-import com.openerp.entity.Configuration;
+import com.openerp.entity.GlobalConfiguration;
 import com.openerp.entity.WebServiceAuthenticator;
 import org.springframework.data.jpa.repository.JpaRepository;
 

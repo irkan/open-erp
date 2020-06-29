@@ -13,7 +13,7 @@ import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 @Entity
-@Table(name = "payroll_advance")
+@Table(name = "advance")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,21 +21,21 @@ import java.util.Date;
 public class Advance {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "payroll_sequence")
-    @SequenceGenerator(sequenceName = "aa_payroll_sequence", allocationSize = 1, name = "payroll_sequence")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "advance_seq")
+    @SequenceGenerator(sequenceName = "advance_seq", allocationSize = 1, name = "advance_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_dictionary_advance_id")
+    @JoinColumn(name = "dictionary_advance_id")
     private Dictionary advance;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_employee_id", nullable = false)
+    @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_organization_id")
+    @JoinColumn(name = "organization_id")
     private Organization organization;
 
     @Column(name = "payed", columnDefinition="Decimal(10,2) default 0")

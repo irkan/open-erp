@@ -96,7 +96,7 @@ public class AccountingController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             accountRepository.save(account);
-            log(account, "accounting_account", "create/edit", account.getId(), account.toString());
+            log(account, "account", "create/edit", account.getId(), account.toString());
         }
         return mapPost(account, binding, redirectAttributes);
     }
@@ -131,7 +131,7 @@ public class AccountingController extends SkeletonController {
             fromTransaction.setAccount(from);
             fromTransaction.setDescription(to.getOrganization().getName() + " : " + to.getAccountNumber() + " hesabına göndərildi. " + account.getDescription());
             transactionRepository.save(fromTransaction);
-            log(fromTransaction, "accounting_transaction", "create/edit", fromTransaction.getId(), fromTransaction.toString());
+            log(fromTransaction, "transaction", "create/edit", fromTransaction.getId(), fromTransaction.toString());
             balance(fromTransaction);
 
             Transaction toTransaction = new Transaction();
@@ -147,7 +147,7 @@ public class AccountingController extends SkeletonController {
             toTransaction.setDebt(true);
             toTransaction.setDescription(from.getOrganization().getName() + " : " + from.getAccountNumber() + " hesabından köçürmə ilə qəbul edilib. " + account.getDescription());
             transactionRepository.save(toTransaction);
-            log(toTransaction, "accounting_transaction", "create/edit", toTransaction.getId(), toTransaction.toString());
+            log(toTransaction, "transaction", "create/edit", toTransaction.getId(), toTransaction.toString());
             balance(toTransaction);
         }
         return mapPost(account, binding, redirectAttributes, "/accounting/account");
@@ -158,7 +158,7 @@ public class AccountingController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             financingRepository.save(financing);
-            log(financing, "accounting_financing", "create/edit", financing.getId(), financing.toString());
+            log(financing, "financing", "create/edit", financing.getId(), financing.toString());
         }
         return mapPost(financing, binding, redirectAttributes);
     }
@@ -173,7 +173,7 @@ public class AccountingController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             transactionRepository.save(transaction);
-            log(transaction, "accounting_transaction", "create/edit", transaction.getId(), transaction.toString());
+            log(transaction, "transaction", "create/edit", transaction.getId(), transaction.toString());
             balance(transaction);
         }
         return mapPost(transaction, binding, redirectAttributes);
@@ -188,7 +188,7 @@ public class AccountingController extends SkeletonController {
     public String postTransactionApprove(@ModelAttribute(Constants.FORM) @Validated Transaction transaction, BindingResult binding, RedirectAttributes redirectAttributes, @RequestParam(name = "expense", required = false) int[] expenses) throws Exception {
         Transaction trn = transactionRepository.getTransactionById(transaction.getId());
         if(trn.getApprove()){
-            List<Log> logs = logRepository.getLogsByActiveTrueAndTableNameAndRowIdAndOperationOrderByIdDesc("accounting_transaction", trn.getId(), "approve");
+            List<Log> logs = logRepository.getLogsByActiveTrueAndTableNameAndRowIdAndOperationOrderByIdDesc("transaction", trn.getId(), "approve");
             FieldError fieldError = new FieldError("", "", "Təsdiq əməliyyatı"+(logs.size()>0?(" "+logs.get(0).getUsername() + " tərəfindən " + DateUtility.getFormattedDateTime(logs.get(0).getOperationDate()) + " tarixində "):" ")+"icra edilmişdir!");
             binding.addError(fieldError);
         }
@@ -208,7 +208,7 @@ public class AccountingController extends SkeletonController {
             trn.setAccount(transaction.getAccount());
             trn.setAccountable(transaction.getAccountable());
             transactionRepository.save(trn);
-            log(trn, "accounting_transaction", "approve", trn.getId(), trn.toString());
+            log(trn, "transaction", "approve", trn.getId(), trn.toString());
             balance(trn);
 
             if (expenses != null) {
@@ -217,7 +217,7 @@ public class AccountingController extends SkeletonController {
                     String description = action.getName() + ", " + trn.getDescription();
                     Transaction transaction1 = new Transaction(trn.getOrganization(), trn.getInventory(), action, description, false, trn);
                     transactionRepository.save(transaction1);
-                    log(transaction1, "admin_dictionary", "create/edit", transaction1.getId(), transaction1.toString());
+                    log(transaction1, "dictionary", "create/edit", transaction1.getId(), transaction1.toString());
                 }
             }
 
@@ -231,7 +231,7 @@ public class AccountingController extends SkeletonController {
                     financing = new Financing(trn.getInventory(), financingPrice, trn.getOrganization());
                 }
                 financingRepository.save(financing);
-                log(financing, "accounting_financing", "approve", financing.getId(), financing.toString());
+                log(financing, "financing", "approve", financing.getId(), financing.toString());
             }
         }
         return mapPost(transaction, binding, redirectAttributes, "/accounting/transaction");

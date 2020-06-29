@@ -10,7 +10,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "hr_employee_rest_day")
+@Table(name = "employee_rest_day")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,15 +18,15 @@ import java.io.Serializable;
 public class EmployeeRestDay {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "hr_sequence")
-    @SequenceGenerator(sequenceName = "aa_hr_sequence", allocationSize = 1, name = "hr_sequence")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "employee_rest_day_seq")
+    @SequenceGenerator(sequenceName = "employee_rest_day_seq", allocationSize = 1, name = "employee_rest_day_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
     @ToString.Exclude
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_employee_id")
+    @JoinColumn(name = "employee_id")
     private Employee employee;
 
     @Column(name = "description")
@@ -39,7 +39,7 @@ public class EmployeeRestDay {
     private int day;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_dictionary_week_day_id", nullable = false)
+    @JoinColumn(name = "dictionary_week_day_id", nullable = false)
     private Dictionary type;
 
     public EmployeeRestDay(Employee employee, String description, String identifier, int day, Dictionary type) {

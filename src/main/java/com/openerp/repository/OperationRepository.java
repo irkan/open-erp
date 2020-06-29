@@ -8,4 +8,5 @@ import java.util.List;
 public interface OperationRepository extends JpaRepository<Operation, Integer> {
     Operation getOperationById(int id);
     List<Operation> getOperationsByActiveTrue();
+    List<Operation> getOperationsByActiveTrueAndName(String name);
 }

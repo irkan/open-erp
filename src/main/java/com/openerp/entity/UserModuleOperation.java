@@ -9,26 +9,26 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Table(name = "admin_user_module_operation")
+@Table(name = "user_module_operation")
 @Getter
 @Setter
 @NoArgsConstructor
 public class UserModuleOperation {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "admin_access_sequence")
-    @SequenceGenerator(sequenceName = "aa_admin_access_sequence", allocationSize = 1, name = "admin_access_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "user_module_operation_seq")
+    @SequenceGenerator(sequenceName = "user_module_operation_seq", allocationSize = 1, name = "user_module_operation_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_user_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private ModuleOperation moduleOperation;
 
     @OneToMany(fetch=FetchType.LAZY )
-    @JoinColumn(name = "admin_module_operation_id")
+    @JoinColumn(name = "module_operation_id")
     private List<ModuleOperation> moduleOperations;
 
     public UserModuleOperation(User user, ModuleOperation moduleOperation) {

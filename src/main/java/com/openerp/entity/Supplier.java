@@ -12,15 +12,15 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "warehouse_supplier")
+@Table(name = "supplier")
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
 public class Supplier {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "warehouse_sequence")
-    @SequenceGenerator(sequenceName = "aa_warehouse_sequence", allocationSize = 1, name = "warehouse_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "supplier_seq")
+    @SequenceGenerator(sequenceName = "supplier_seq", allocationSize = 1, name = "supplier_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
@@ -33,7 +33,7 @@ public class Supplier {
     private String description;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "common_person_id")
+    @JoinColumn(name = "person_id")
     private Person person;
 
     @Temporal(TemporalType.DATE)

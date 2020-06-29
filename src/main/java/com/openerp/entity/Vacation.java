@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "hr_vacation")
+@Table(name = "vacation")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,21 +21,21 @@ import java.util.List;
 public class Vacation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "hr_sequence")
-    @SequenceGenerator(sequenceName = "aa_hr_sequence", allocationSize = 1, name = "hr_sequence")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "vacation_seq")
+    @SequenceGenerator(sequenceName = "vacation_seq", allocationSize = 1, name = "vacation_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_employee_id", nullable = false)
+    @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_organization_id", nullable = false)
+    @JoinColumn(name = "organization_id", nullable = false)
     private Organization organization;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_dictionary_identifier_id", nullable = false)
+    @JoinColumn(name = "dictionary_identifier_id", nullable = false)
     private Dictionary identifier;
 
     @Temporal(TemporalType.DATE)

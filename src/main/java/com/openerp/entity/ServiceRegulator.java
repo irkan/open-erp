@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "sale_service_regulator")
+@Table(name = "service_regulator")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,19 +20,19 @@ import java.util.List;
 public class ServiceRegulator {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "sale_sequence")
-    @SequenceGenerator(sequenceName = "aa_sale_sequence", initialValue = 1, allocationSize = 1, name = "sale_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "service_regulator_seq")
+    @SequenceGenerator(sequenceName = "service_regulator_seq", initialValue = 1, allocationSize = 1, name = "service_regulator_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
     @ToString.Exclude
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "sale_sales_id")
+    @JoinColumn(name = "sales_id")
     private Sales sales;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_dictionary_service_notification_id")
+    @JoinColumn(name = "dictionary_service_notification_id")
     private Dictionary serviceNotification;
 
     @Temporal(TemporalType.DATE)

@@ -9,7 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 
 @Entity
-@Table(name = "payroll_working_hour_record_employee_day_calculation")
+@Table(name = "working_hour_record_employee_day_calculation")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,14 +17,14 @@ import javax.validation.constraints.Pattern;
 public class WorkingHourRecordEmployeeDayCalculation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "payroll_sequence")
-    @SequenceGenerator(sequenceName = "aa_payroll_sequence", allocationSize = 1, name = "payroll_sequence")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "working_hour_record_employee_day_calculation_seq")
+    @SequenceGenerator(sequenceName = "working_hour_record_employee_day_calculation_seq", allocationSize = 1, name = "working_hour_record_employee_day_calculation_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_working_hour_record_employee_id")
+    @JoinColumn(name = "working_hour_record_employee_id")
     private WorkingHourRecordEmployee workingHourRecordEmployee;
 
     @Pattern(regexp=".{0,255}",message="Maksimum 255 simvol ola bilər")
@@ -39,7 +39,7 @@ public class WorkingHourRecordEmployeeDayCalculation {
     private double value=0d;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_dictionary_identifier_id")
+    @JoinColumn(name = "dictionary_identifier_id")
     private Dictionary identifier;
 
     public WorkingHourRecordEmployeeDayCalculation(WorkingHourRecordEmployee workingHourRecordEmployee, @Pattern(regexp = ".{0,255}", message = "Maksimum 255 simvol ola bilər") String description, @Pattern(regexp = ".{0,100}", message = "Maksimum 100 simvol ola bilər") String key, int value, Dictionary identifier) {

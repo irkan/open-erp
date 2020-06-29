@@ -16,4 +16,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer>, Jp
     List<Employee> getEmployeesByPersonFirstNameStartingWithAndPersonLastNameStartingWithAndActiveTrue(String firstName, String lastName);
     List<Employee> getEmployeesByPersonFirstNameStartingWithAndOrganizationAndActiveTrue(String firstName, Organization organization);
     List<Employee> getEmployeesByPersonFirstNameStartingWithAndActiveTrue(String firstName);
+    List<Employee> getEmployeesByPersonFirstNameAndPersonLastNameAndPersonFatherNameAndOrganization(String firstName, String lastName, String fatherName, Organization organization);
+    List<Employee> getEmployeesByPersonFirstNameAndPersonLastNameAndOrganization(String firstName, String lastName, Organization organization);
 }

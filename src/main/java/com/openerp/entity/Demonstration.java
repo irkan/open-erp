@@ -12,7 +12,7 @@ import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 @Entity
-@Table(name = "sale_demonstration")
+@Table(name = "demonstration")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,13 +20,13 @@ import java.util.Date;
 public class Demonstration {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "sale_sequence")
-    @SequenceGenerator(sequenceName = "aa_sale_sequence", initialValue = 1, allocationSize = 1, name = "sale_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "demonstration_seq")
+    @SequenceGenerator(sequenceName = "demonstration_seq", initialValue = 1, allocationSize = 1, name = "demonstration_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_organization_id", nullable = false)
+    @JoinColumn(name = "organization_id", nullable = false)
     private Organization organization;
 
     @Temporal(TemporalType.DATE)
@@ -41,7 +41,7 @@ public class Demonstration {
     private Date demonstrateDateFrom;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_employee_id")
+    @JoinColumn(name = "employee_id")
     private Employee employee;
 
     @Min(value = 1, message = "Minimum 1 olmalıdır!")

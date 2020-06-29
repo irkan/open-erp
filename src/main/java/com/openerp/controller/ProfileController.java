@@ -80,7 +80,7 @@ public class ProfileController extends SkeletonController {
             User user = getSessionUser();
             user.setPassword(DigestUtils.md5DigestAsHex(changePassword.getNewPassword().getBytes()));
             userRepository.save(user);
-            log(user, "admin_user", "create/edit", user.getId(), user.toString(), "Şifrə dəyişdirildi profildən");
+            log(user, "user", "create/edit", user.getId(), user.toString(), "Şifrə dəyişdirildi profildən");
             model.addAttribute(Constants.FORM, new ChangePassword());
         }
         return mapPost(changePassword, binding, redirectAttributes, "/profile/change-password");
@@ -91,7 +91,7 @@ public class ProfileController extends SkeletonController {
                                      BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         if(!binding.hasErrors()){
             contactRepository.save(contact);
-            log(contact, "common_contact", "create/edit", contact.getId(), contact.toString());
+            log(contact, "contact", "create/edit", contact.getId(), contact.toString());
             User user = getSessionUser();
             Person person = user.getEmployee().getPerson();
             person.setContact(contact);
@@ -105,7 +105,7 @@ public class ProfileController extends SkeletonController {
                                           BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         if(!binding.hasErrors()){
             userDetailRepository.save(userDetail);
-            log(userDetail, "admin_user_detail", "create/edit", userDetail.getId(), userDetail.toString());
+            log(userDetail, "user_detail", "create/edit", userDetail.getId(), userDetail.toString());
             User user = getSessionUser();
             user.setUserDetail(userDetail);
             session.setAttribute(Constants.USER, user);

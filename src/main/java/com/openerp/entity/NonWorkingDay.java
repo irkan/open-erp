@@ -12,7 +12,7 @@ import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 @Entity
-@Table(name = "hr_non_working_day")
+@Table(name = "non_working_day")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,8 +20,8 @@ import java.util.Date;
 public class NonWorkingDay {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "hr_sequence")
-    @SequenceGenerator(sequenceName = "aa_hr_sequence", allocationSize = 1, name = "hr_sequence")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "non_working_day_seq")
+    @SequenceGenerator(sequenceName = "non_working_day_seq", allocationSize = 1, name = "non_working_day_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 

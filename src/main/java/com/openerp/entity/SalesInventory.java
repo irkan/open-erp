@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "sale_sales_inventory")
+@Table(name = "sales_inventory")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,23 +19,23 @@ import java.util.List;
 public class SalesInventory {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "sale_sequence")
-    @SequenceGenerator(sequenceName = "aa_sale_sequence", initialValue = 1, allocationSize = 1, name = "sale_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "sales_inventory_seq")
+    @SequenceGenerator(sequenceName = "sales_inventory_seq", initialValue = 1, allocationSize = 1, name = "sales_inventory_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "warehouse_inventory_id")
+    @JoinColumn(name = "inventory_id")
     private Inventory inventory;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_dictionary_sales_type_id")
+    @JoinColumn(name = "dictionary_sales_type_id")
     private Dictionary salesType;
 
     @ToString.Exclude
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "sale_sales_id")
+    @JoinColumn(name = "sales_id")
     private Sales sales;
 
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")

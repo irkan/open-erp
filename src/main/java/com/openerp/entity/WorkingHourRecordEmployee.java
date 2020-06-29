@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "payroll_working_hour_record_employee")
+@Table(name = "working_hour_record_employee")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,20 +20,20 @@ import java.util.List;
 public class WorkingHourRecordEmployee {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "payroll_sequence")
-    @SequenceGenerator(sequenceName = "aa_payroll_sequence", allocationSize = 1, name = "payroll_sequence")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "working_hour_record_employee_seq")
+    @SequenceGenerator(sequenceName = "working_hour_record_employee_seq", allocationSize = 1, name = "working_hour_record_employee_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
     @ToString.Exclude
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "payroll_working_hour_record_id")
+    @JoinColumn(name = "working_hour_record_id")
     private WorkingHourRecord workingHourRecord;
 
     @JsonIgnore
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_employee_id")
+    @JoinColumn(name = "employee_id")
     private Employee employee;
 
     @JsonIgnore

@@ -25,7 +25,7 @@ public class CommonController extends SkeletonController {
         try {
             return personDocumentRepository.getPersonDocumentsByPersonAndDocumentType(personRepository.getPersonById(id), dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("id card", "document-type"));
         } catch (Exception e){
-            log(null, "error", "common_person_document", "", null, "", "Xəta baş verdi! " + e.getMessage());
+            log(null, "error", "person_document", "", null, "", "Xəta baş verdi! " + e.getMessage());
             e.printStackTrace();
             log.error(e.getMessage(), e);
         }

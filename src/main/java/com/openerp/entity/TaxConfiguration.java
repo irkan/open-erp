@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "admin_tax_configuration")
+@Table(name = "tax_configuration")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -25,13 +25,13 @@ import java.util.List;
 public class TaxConfiguration {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "admin_tax_configuration_sequence")
-    @SequenceGenerator(sequenceName = "aa_admin_tax_configuration_sequence", initialValue = 101, allocationSize = 1, name = "admin_tax_configuration_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "tax_configuration_seq")
+    @SequenceGenerator(sequenceName = "tax_configuration_seq", initialValue = 101, allocationSize = 1, name = "tax_configuration_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_organization_id", nullable = false)
+    @JoinColumn(name = "organization_id", nullable = false)
     private Organization organization;
 
     @Pattern(regexp=".{3,15}",message="Minimum 5 maksimum 15 simvol ola bilər")
@@ -39,7 +39,7 @@ public class TaxConfiguration {
     private String voen;
 
     @Pattern(regexp=".{0,250}",message="Minimum 0 maksimum 250 simvol ola bilər")
-    @Column(name = "company", nullable = false)
+    @Column(name = "company")
     private String company;
 
     @Pattern(regexp=".{0,250}",message="Minimum 0 maksimum 250 simvol ola bilər")
@@ -47,7 +47,7 @@ public class TaxConfiguration {
     private String description;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "common_person_id")
+    @JoinColumn(name = "person_id")
     private Person person;
 
     @DecimalMin(value = "0", message = "Minimum 0 olmalıdır")
@@ -76,5 +76,12 @@ public class TaxConfiguration {
 
     public TaxConfiguration(Organization organization) {
         this.organization = organization;
+    }
+
+    public TaxConfiguration(Organization organization, @Pattern(regexp = ".{3,15}", message = "Minimum 5 maksimum 15 simvol ola bilər") String voen, Person person, @DecimalMin(value = "0", message = "Minimum 0 olmalıdır") Double maxLimitMonthly) {
+        this.organization = organization;
+        this.voen = voen;
+        this.person = person;
+        this.maxLimitMonthly = maxLimitMonthly;
     }
 }

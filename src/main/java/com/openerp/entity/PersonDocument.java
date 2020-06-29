@@ -12,7 +12,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "common_person_document")
+@Table(name = "person_document")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,18 +20,18 @@ import java.util.Date;
 public class PersonDocument {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "common_person_document_sequence")
-    @SequenceGenerator(sequenceName = "aa_common_person_document_sequence", allocationSize = 1, name = "common_person_document_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "person_document_seq")
+    @SequenceGenerator(sequenceName = "person_document_seq", allocationSize = 1, name = "person_document_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "common_person_id", nullable = false)
+    @JoinColumn(name = "person_id", nullable = false)
     private Person person;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_dictionary_document_type_id")
+    @JoinColumn(name = "dictionary_document_type_id")
     private Dictionary documentType;
 
     @Temporal(TemporalType.TIMESTAMP)

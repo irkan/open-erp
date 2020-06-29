@@ -132,10 +132,10 @@ public class AdministratorController extends SkeletonController {
             if (!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)) {
                 return exportExcel(currencyRateRepository.findAll(), redirectAttributes, page);
             }
-        } else if (page.equalsIgnoreCase(Constants.ROUTE.CONFIGURATION)) {
-            model.addAttribute(Constants.LIST, configurationRepository.getConfigurationsByActiveTrue());
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.GLOBAL_CONFIGURATION)) {
+            model.addAttribute(Constants.LIST, configurationRepository.getGlobalConfigurationsByActiveTrue());
             if (!model.containsAttribute(Constants.FORM)) {
-                model.addAttribute(Constants.FORM, new Configuration());
+                model.addAttribute(Constants.FORM, new GlobalConfiguration());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.APPROVER_EXCEPTION)) {
             model.addAttribute(Constants.USERS, canViewAll() ? userRepository.getUsersByActiveTrue() : userRepository.getUsersByActiveTrueAndEmployee_Organization(getSessionOrganization()));
@@ -237,33 +237,8 @@ public class AdministratorController extends SkeletonController {
             model.addAttribute(Constants.LIST, migrations);
         } else if (page.equalsIgnoreCase(Constants.ROUTE.MIGRATION_DETAIL)) {
             model.addAttribute(Constants.LIST, migrationDetailRepository.getMigrationDetailsByActiveTrueAndMigrationId(Integer.parseInt(data.get())));
-        } else if (page.equalsIgnoreCase(Constants.ROUTE.TAX_CONFIGURATION)) {
-            model.addAttribute(Constants.CITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("city"));
-            if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new TaxConfiguration(getSessionOrganization()));
-            }
-            List<TaxConfiguration> taxConfigurations = taxConfigurationRepository.getTaxConfigurationsByActiveTrue();
-            for(TaxConfiguration taxConfiguration: taxConfigurations){
-                List<Sales> salesList = salesRepository.getSalesByActiveTrueAndApproveTrueAndSaledFalseAndTaxConfiguration(taxConfiguration);
-                taxConfiguration.setSalesCount(salesList.size());
-                taxConfiguration.setPlannedPaymentAmountMonthly(calculatePlannedPaymentMonthly(salesList));
-            }
-            model.addAttribute(Constants.LIST, taxConfigurations);
-            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
-                return exportExcel(taxConfigurationRepository.findAll(), redirectAttributes, page);
-            }
         }
         return "layout";
-    }
-
-    @PostMapping(value = "/tax-configuration")
-    public String postTaxConfiguration(@ModelAttribute(Constants.FORM) @Validated TaxConfiguration taxConfiguration, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
-        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
-        if(!binding.hasErrors()){
-            taxConfigurationRepository.save(taxConfiguration);
-            log(taxConfiguration, "accounting_tax_configuration", "create/edit", taxConfiguration.getId(), taxConfiguration.toString());
-        }
-        return mapPost(taxConfiguration, binding, redirectAttributes);
     }
 
     @PostMapping(value = "/notification")
@@ -274,7 +249,7 @@ public class AdministratorController extends SkeletonController {
                 notification.setFrom(springEmailUserName);
             }
             notificationRepository.save(notification);
-            log(notification, "admin_notification", "create/edit", notification.getId(), notification.toString());
+            log(notification, "notification", "create/edit", notification.getId(), notification.toString());
         }
         return mapPost(notification, binding, redirectAttributes);
     }
@@ -289,7 +264,7 @@ public class AdministratorController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if (!binding.hasErrors()) {
             endpointRepository.save(endpoint);
-            log(endpoint, "admin_endpoint", "create/edit", endpoint.getId(), endpoint.toString());
+            log(endpoint, "endpoint", "create/edit", endpoint.getId(), endpoint.toString());
         }
         return mapPost(endpoint, binding, redirectAttributes);
     }
@@ -304,7 +279,7 @@ public class AdministratorController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if (!binding.hasErrors()) {
             moduleRepository.save(module);
-            log(module, "admin_module", "create/edit", module.getId(), module.toString());
+            log(module, "module", "create/edit", module.getId(), module.toString());
             /*File source = new File(request.getRealPath("/WEB-INF/jsp/pages/empty.jsp"));
             File dest = new File(request.getRealPath("/WEB-INF/jsp/pages/"+module.getPath()+".jsp"));
             if(Files.notExists(dest.toPath())){
@@ -321,7 +296,7 @@ public class AdministratorController extends SkeletonController {
         Module sub = moduleRepository.getModuleById(subId);
         parent.setModule(sub);
         moduleRepository.save(parent);
-        log(parent, "admin_module", "move", parent.getId(), parent.toString());
+        log(parent, "module", "move", parent.getId(), parent.toString());
         return "redirect:/admin/module";
     }
 
@@ -330,7 +305,7 @@ public class AdministratorController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if (!binding.hasErrors()) {
             operationRepository.save(operation);
-            log(operation, "admin_operation", "create/edit", operation.getId(), operation.toString());
+            log(operation, "operation", "create/edit", operation.getId(), operation.toString());
         }
         return mapPost(operation, binding, redirectAttributes);
     }
@@ -340,7 +315,7 @@ public class AdministratorController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if (!binding.hasErrors()) {
             dictionaryTypeRepository.save(dictionaryType);
-            log(dictionaryType, "admin_dictionary_type", "create/edit", dictionaryType.getId(), dictionaryType.toString());
+            log(dictionaryType, "dictionary_type", "create/edit", dictionaryType.getId(), dictionaryType.toString());
         }
         return mapPost(dictionaryType, binding, redirectAttributes);
     }
@@ -373,7 +348,7 @@ public class AdministratorController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if (!binding.hasErrors()) {
             dictionaryRepository.save(dictionary);
-            log(dictionary, "admin_dictionary", "create/edit", dictionary.getId(), dictionary.toString());
+            log(dictionary, "dictionary", "create/edit", dictionary.getId(), dictionary.toString());
         }
         return mapPost(dictionary, binding, redirectAttributes);
     }
@@ -413,7 +388,7 @@ public class AdministratorController extends SkeletonController {
                 user.setPassword(userRepository.getUserByActiveTrueAndId(user.getId()).getPassword());
             }
             userRepository.save(user);
-            log(user, "admin_user", "create/edit", user.getId(), user.toString());
+            log(user, "user", "create/edit", user.getId(), user.toString());
 
             try {
                 if (user.getId() == null || user.getId() == 0) {
@@ -429,7 +404,7 @@ public class AdministratorController extends SkeletonController {
                 }
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                log(null, "error", "admin_notification", "", null, "", e.getMessage());
+                log(null, "error", "notification", "", null, "", e.getMessage());
             }
 
 
@@ -440,7 +415,7 @@ public class AdministratorController extends SkeletonController {
                     userModuleOperations.add(new UserModuleOperation(user, mo));
                 }
                 userModuleOperationRepository.saveAll(userModuleOperations);
-                log(userModuleOperations, "admin_user_module_operation", "create/edit", null, null, "Profil yaradıldı");
+                log(userModuleOperations, "user_module_operation", "create/edit", null, null, "Profil yaradıldı");
             }
         }
         return mapPost(user, binding, redirectAttributes);
@@ -453,7 +428,7 @@ public class AdministratorController extends SkeletonController {
             try {
                 User usr = userRepository.getUserByActiveTrueAndId(user.getId());
                 usr.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
-                log(usr, "admin_user", "change-password", usr.getId(), usr.toString());
+                log(usr, "user", "change-password", usr.getId(), usr.toString());
                 String message = "Hörmətli " + usr.getEmployee().getPerson().getFirstName() + ",<br/><br/>" +
                         "Sizin məlumatlarınıza əsasən yeni istifadəçi yaradılmışdır.<br/><br/>" +
                         "İstifadəçi adınız: " + usr.getUsername() + "<br/>" +
@@ -465,7 +440,7 @@ public class AdministratorController extends SkeletonController {
                 );
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                log(null, "error", "admin_notification", "", null, "", e.getMessage());
+                log(null, "error", "notification", "", null, "", e.getMessage());
             }
         }
         return mapPost(user, binding, redirectAttributes, "/admin/user");
@@ -476,7 +451,7 @@ public class AdministratorController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if (!binding.hasErrors()) {
             moduleOperationRepository.save(moduleOperation);
-            log(moduleOperation, "admin_module_operation", "create/edit", moduleOperation.getId(), moduleOperation.toString());
+            log(moduleOperation, "module_operation", "create/edit", moduleOperation.getId(), moduleOperation.toString());
         }
         return mapPost(moduleOperation, binding, redirectAttributes);
     }
@@ -491,7 +466,7 @@ public class AdministratorController extends SkeletonController {
                 userModuleOperationRepository.save(new UserModuleOperation(userModuleOperation.getUser(), mo));
             }
             userDetailRepository.save(userModuleOperation.getUser().getUserDetail());
-            log(userModuleOperation, "admin_user_module_operation", "create/edit", userModuleOperation.getUser().getId(), userModuleOperation.toString(), userModuleOperation.getUser().getUsername() + " icazələri yeniləndi");
+            log(userModuleOperation, "user_module_operation", "create/edit", userModuleOperation.getUser().getId(), userModuleOperation.toString(), userModuleOperation.getUser().getUsername() + " icazələri yeniləndi");
 
             try {
                 String message = "Hörmətli " + userModuleOperation.getUser().getEmployee().getPerson().getFirstName() + ",<br/><br/>" +
@@ -503,7 +478,7 @@ public class AdministratorController extends SkeletonController {
                 );
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                log(null, "error", "admin_notification", "", null, "", e.getMessage());
+                log(null, "error", "notification", "", null, "", e.getMessage());
             }
         }
         return mapPost(userModuleOperation, binding, redirectAttributes);
@@ -537,7 +512,7 @@ public class AdministratorController extends SkeletonController {
                 mo.setModuleOperations(null);
                 templateModuleOperationRepository.save(new TemplateModuleOperation(templateModuleOperation.getTemplate(), mo));
             }
-            log(template, "admin_template_module_operation", "create/edit", template.getId(), "", template.getName() + " şablonu yeniləndi");
+            log(template, "template_module_operation", "create/edit", template.getId(), "", template.getName() + " şablonu yeniləndi");
             model.addAttribute(Constants.FORM, new TemplateModuleOperation());
         }
         return mapPost(templateModuleOperation, binding, redirectAttributes);
@@ -576,16 +551,16 @@ public class AdministratorController extends SkeletonController {
         currencyRateRepository.deleteAll();
         List<CurrencyRate> currencyRates = Util.getCurrenciesRate(cbarCurrenciesEndpoint);
         currencyRateRepository.saveAll(currencyRates);
-        log(currencyRates, "admin_currency_rate", "reload", null, null, "Məzənnə yeniləndi");
+        log(currencyRates, "currency_rate", "reload", null, null, "Məzənnə yeniləndi");
         return mapPost(currencyRate, binding, redirectAttributes);
     }
 
-    @PostMapping(value = "/configuration")
-    public String postConfiguration(@ModelAttribute(Constants.FORM) @Validated Configuration configuration, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+    @PostMapping(value = "/global-configuration")
+    public String postConfiguration(@ModelAttribute(Constants.FORM) @Validated GlobalConfiguration configuration, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if (!binding.hasErrors()) {
             configurationRepository.save(configuration);
-            log(configuration, "admin_configuration", "create/edit", configuration.getId(), configuration.toString());
+            log(configuration, "global_configuration", "create/edit", configuration.getId(), configuration.toString());
         }
         return mapPost(configuration, binding, redirectAttributes);
     }
@@ -595,7 +570,7 @@ public class AdministratorController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if (!binding.hasErrors()) {
             approverExceptionRepository.save(approverException);
-            log(approverException, "admin_approver_exception", "create/edit", approverException.getId(), approverException.toString());
+            log(approverException, "approver_exception", "create/edit", approverException.getId(), approverException.toString());
         }
         return mapPost(approverException, binding, redirectAttributes);
     }
@@ -606,7 +581,7 @@ public class AdministratorController extends SkeletonController {
         if (!binding.hasErrors()) {
             webServiceAuthenticator.setActive(true);
             webServiceAuthenticatorRepository.save(webServiceAuthenticator);
-            log(webServiceAuthenticator, "admin_web_service_authenticator", "create/edit", webServiceAuthenticator.getId(), webServiceAuthenticator.toString());
+            log(webServiceAuthenticator, "web_service_authenticator", "create/edit", webServiceAuthenticator.getId(), webServiceAuthenticator.toString());
         }
         return mapPost(webServiceAuthenticator, binding, redirectAttributes);
     }
@@ -621,7 +596,7 @@ public class AdministratorController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if (!binding.hasErrors()) {
             periodRepository.save(period);
-            log(period, "admin_period", "create/edit", period.getId(), period.toString());
+            log(period, "period", "create/edit", period.getId(), period.toString());
         }
         return mapPost(period, binding, redirectAttributes);
     }
@@ -633,7 +608,7 @@ public class AdministratorController extends SkeletonController {
             migration.setFileName(file.getOriginalFilename());
             migration.setFileContent(file.getBytes());
             migrationRepository.save(migration);
-            log(migration, "admin_migration", "upload", migration.getId(), migration.toString(), migration.getFileName() + " uploaded to server");
+            log(migration, "migration", "upload", migration.getId(), migration.toString(), migration.getFileName() + " uploaded to server");
         }
         return mapPost(migration, binding, redirectAttributes, "/admin/migration");
     }

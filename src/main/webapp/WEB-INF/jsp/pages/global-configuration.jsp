@@ -92,7 +92,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form:form modelAttribute="form" id="form" method="post" action="/admin/configuration" cssClass="form-group">
+                <form:form modelAttribute="form" id="form" method="post" action="/admin/global-configuration" cssClass="form-group">
                     <form:input type="hidden" name="id" path="id"/>
                     <form:input type="hidden" name="active" path="active" value="1"/>
                     <div class="form-group">

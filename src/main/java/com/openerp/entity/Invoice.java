@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "sale_invoice")
+@Table(name = "invoice")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,26 +22,26 @@ import java.util.List;
 public class Invoice {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "invoice_sequence")
-    @SequenceGenerator(sequenceName = "aa_invoice_sequence", initialValue = 100001, allocationSize = 1, name = "invoice_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "invoice_seq")
+    @SequenceGenerator(sequenceName = "invoice_seq", initialValue = 100001, allocationSize = 1, name = "invoice_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
     @JsonIgnore
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_organization_id")
+    @JoinColumn(name = "organization_id")
     private Organization organization;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_dictionary_payment_channel_id")
+    @JoinColumn(name = "dictionary_payment_channel_id")
     private Dictionary paymentChannel;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "sale_sales_id")
+    @JoinColumn(name = "sales_id")
     private Sales sales;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_employee_id")
+    @JoinColumn(name = "employee_id")
     private Employee collector;
 
     @Column(name = "price", nullable = false, columnDefinition="Decimal(10,2) default 0")

@@ -13,29 +13,29 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "accounting_transaction")
+@Table(name = "transaction")
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
 public class Transaction {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "accounting_sequence")
-    @SequenceGenerator(sequenceName = "aa_accounting_sequence", allocationSize = 1, name = "accounting_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "transaction_seq")
+    @SequenceGenerator(sequenceName = "transaction_seq", allocationSize = 1, name = "transaction_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_organization_id")
+    @JoinColumn(name = "organization_id")
     private Organization organization;
 
     @ToString.Exclude
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "warehouse_inventory_id")
+    @JoinColumn(name = "inventory_id")
     private Inventory inventory;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "admin_dictionary_action_id")
+    @JoinColumn(name = "dictionary_action_id")
     private Dictionary action;
 
     @Pattern(regexp=".{0,500}",message="Maksimum 500 simvol ola bilər")
@@ -43,7 +43,7 @@ public class Transaction {
     private String description;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "accounting_account_id")
+    @JoinColumn(name = "account_id")
     private Account account;
 
     @Column(name = "amount")

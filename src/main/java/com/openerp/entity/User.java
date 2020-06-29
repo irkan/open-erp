@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "admin_user")
+@Table(name = "user")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,8 +18,8 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO, generator = "admin_sequence")
-    @SequenceGenerator(sequenceName = "aa_admin_sequence", allocationSize = 1, name = "admin_sequence")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator = "user_seq")
+    @SequenceGenerator(sequenceName = "user_seq", allocationSize = 1, name = "user_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
@@ -55,14 +55,14 @@ public class User {
     private List<UserModuleOperation> userModuleOperations;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "admin_user_detail_id")
+    @JoinColumn(name = "user_detail_id")
     private UserDetail userDetail;
 
     //@UniqueElements(message = "Bu istifadəçi adı mövcuddur")
     //@OneToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     @ToString.Include()
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hr_employee_id", unique = true, nullable = false)
+    @JoinColumn(name = "employee_id", unique = true, nullable = false)
     private Employee employee;
 
     public User(String username, String password, Employee employee, UserDetail userDetail) {
