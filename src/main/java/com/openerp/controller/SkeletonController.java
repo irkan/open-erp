@@ -348,10 +348,7 @@ public class SkeletonController {
 
     boolean canViewAll(){
         Organization organization = (Organization) session.getAttribute(Constants.ORGANIZATION_SELECTED);
-        if(organization==null || organization.getId().intValue()==0){
-            return true;
-        }
-        return false;
+        return Util.canViewAll(organization);
     }
 
     String exportExcel(Object object, RedirectAttributes redirectAttributes, String page){

@@ -106,7 +106,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form:form modelAttribute="form" id="form" method="post" action="/admin/tax-configuration" cssClass="form-group">
+                <form:form modelAttribute="form" id="form" method="post" action="/sale/tax-configuration" cssClass="form-group">
                     <form:input path="id" type="hidden"/>
                     <form:input path="organization" type="hidden"/>
                     <div class="row">

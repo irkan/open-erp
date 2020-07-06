@@ -179,6 +179,7 @@
                                 <tr>
                                     <th>Kod</th>
                                     <th>Servis əməkdaşı</th>
+                                    <th>Struktur</th>
                                     <th>İnventar</th>
                                     <th>Satış tarixi</th>
                                     <th>Müştəri</th>
@@ -195,6 +196,7 @@
                                             <a href="javascript:copyToClipboard('<c:out value="${t.id}" />')" class="kt-link kt-font-lg kt-font-bold kt-margin-t-5"><c:out value="${t.id}"/></a>
                                         </td>
                                         <td><c:out value="${t.servicer.person.fullName}"/></td>
+                                        <td><c:out value="${t.organization.name}"/></td>
                                         <th>
                                             <c:forEach var="p" items="${t.salesInventories}" varStatus="lp">
                                                 <c:out value="${p.inventory.id}" />.&nbsp;
@@ -311,14 +313,7 @@
                                 <form:label path="saleDate">Satış tarixi</form:label>
                                 <div class="input-group date" >
                                     <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
-                                    <c:choose>
-                                        <c:when test="${utl:isAdministrator(sessionScope.user)}">
-                                            <form:input path="saleDate" autocomplete="off" date_="date_" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <form:input path="saleDate" autocomplete="off" date_="date_" cssClass="form-control" placeholder="dd.MM.yyyy" readonly="true"/>
-                                        </c:otherwise>
-                                    </c:choose>
+                                    <form:input path="saleDate" autocomplete="off" date_="date_" cssClass="form-control datepicker-element" placeholder="dd.MM.yyyy"/>
                                 </div>
                                 <form:errors path="saleDate" cssClass="control-label alert-danger" />
                             </div>

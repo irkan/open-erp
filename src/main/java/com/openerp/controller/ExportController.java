@@ -4,6 +4,7 @@ import com.itextpdf.text.DocumentException;
 import com.openerp.domain.Session;
 import com.openerp.entity.*;
 import com.openerp.util.*;
+import org.apache.poi.util.IOUtils;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -20,7 +21,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -158,6 +163,19 @@ public class ExportController extends SkeletonController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=invoice-" + file.getName())
                 .contentLength(file.length())
                 .contentType(MediaType.parseMediaType(MediaType.APPLICATION_OCTET_STREAM_VALUE))
+                .body(resourceIS);
+    }
+
+    @RequestMapping(value = "/migration/{id}", method = RequestMethod.GET)
+    public ResponseEntity<Resource> downloadMigration(@PathVariable("id") Integer id) throws IOException, Docx4JException {
+        Migration migration = migrationRepository.getMigrationById(id);
+        Path path = Files.write(Paths.get(migration.getFileName()), migration.getFileContent());
+        File file = path.toFile();
+        InputStreamResource resourceIS = new InputStreamResource(new FileInputStream(file));
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + migration.getFileName())
+                .contentLength(file.length())
+                .contentType(MediaType.parseMediaType("application/octet-stream"))
                 .body(resourceIS);
     }
 }

@@ -173,25 +173,25 @@
                                             </div>
                                         </td>
                                         <td><fmt:formatDate value = "${t.scheduleDate}" pattern = "dd.MM.yyyy" /></td>
-                                        <th>
+                                        <th data-sort="<c:out value="${t.amount}" />">
                                             <a href="javascript:window.open('/sale/schedule/<c:out value="${p.sales.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.amount}" /> AZN</a>
                                         </th>
-                                        <th>
+                                        <th data-sort="<c:out value="${t.payableAmount gt 0?t.payableAmount:0}" />">
                                             <c:if test="${t.payableAmount>0}">
                                                 <c:out value="${t.payableAmount}" /> AZN
                                             </c:if>
                                         </th>
-                                        <th>
+                                        <th data-sort="<c:out value="${t.payableAmount gt 0?(t.payableAmount-t.amount):0}" />">
                                             <c:if test="${t.payableAmount>0}">
                                                 <span class="kt-font-bold kt-font-danger">
                                                     <c:out value="${t.payableAmount-t.amount}" /> AZN
                                                 </span>
                                             </c:if>
                                         </th>
-                                        <td>
+                                        <td data-sort="<c:out value="${p.sales.payment.unpaid}"/>">
                                             <c:out value="${p.sales.payment.unpaid}"/> AZN
                                         </td>
-                                        <th>
+                                        <th data-sort="<c:out value="${(days>0 && t.payableAmount-t.amount<0)?days:0}"/>">
                                             <span class="kt-font-bold kt-font-info">
                                                 <c:if test="${days>0 && t.payableAmount-t.amount<0}">
                                                     <c:out value = "${days}" /> gün

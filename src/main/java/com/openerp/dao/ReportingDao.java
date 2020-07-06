@@ -25,12 +25,12 @@ public class ReportingDao implements IReportingDao {
     public List<Report> reportLast12MonthAdvance(Integer organizationId, Integer employeeId) throws Exception {
         List<Report> list = new ArrayList<>();
         try(Connection connection = dataSource.getConnection()) {
-            String sql = "select SUM(payed) PAYED, MONTH(advance_date) MONTH, YEAR(advance_date) YEAR from payroll_advance where is_approve=1 and is_active=1 and approve_date>DATE_SUB(CURDATE(), INTERVAL 12 MONTH )";
+            String sql = "select SUM(payed) PAYED, MONTH(advance_date) MONTH, YEAR(advance_date) YEAR from advance where is_approve=1 and is_active=1 and approve_date>DATE_SUB(CURDATE(), INTERVAL 12 MONTH )";
             if(organizationId!=null){
-                sql+=" and hr_organization_id="+organizationId.intValue();
+                sql+=" and organization_id="+organizationId.intValue();
             }
             if(employeeId!=null){
-                sql+=" and hr_employee_id="+employeeId.intValue();
+                sql+=" and employee_id="+employeeId.intValue();
             }
             sql+=" GROUP BY YEAR(advance_date), MONTH(advance_date)";
             try(PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -58,12 +58,12 @@ public class ReportingDao implements IReportingDao {
     public List<Report> reportLast12MonthNonPayedAdvance(Integer organizationId, Integer employeeId) throws Exception {
         List<Report> list = new ArrayList<>();
         try(Connection connection = dataSource.getConnection()) {
-            String sql = "select SUM(payed) PAYED, MONTH(advance_date) MONTH, YEAR(advance_date) YEAR from payroll_advance where is_approve=1 and is_active=1 and is_transaction=0 and approve_date>DATE_SUB(CURDATE(), INTERVAL 12 MONTH )";
+            String sql = "select SUM(payed) PAYED, MONTH(advance_date) MONTH, YEAR(advance_date) YEAR from advance where is_approve=1 and is_active=1 and is_transaction=0 and approve_date>DATE_SUB(CURDATE(), INTERVAL 12 MONTH )";
             if(organizationId!=null){
-                sql+=" and hr_organization_id="+organizationId.intValue();
+                sql+=" and organization_id="+organizationId.intValue();
             }
             if(employeeId!=null){
-                sql+=" and hr_employee_id="+employeeId.intValue();
+                sql+=" and employee_id="+employeeId.intValue();
             }
             sql+=" GROUP BY YEAR(advance_date), MONTH(advance_date)";
             try(PreparedStatement preparedStatement = connection.prepareStatement(sql)) {

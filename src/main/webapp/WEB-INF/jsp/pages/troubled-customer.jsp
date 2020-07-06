@@ -90,7 +90,7 @@
                                                     </c:otherwise>
                                                 </c:choose>
                                             </th>
-                                            <td>
+                                            <td data-sort="<c:out value="${t.payment.sumOfInvoice}" />">
                                                 <c:choose>
                                                     <c:when test="${view1.status}">
                                                         <a href="javascript:window.open('/sale/invoice/<c:out value="${t.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder">
@@ -104,7 +104,7 @@
                                                     </c:otherwise>
                                                 </c:choose>
                                             </td>
-                                            <td>
+                                            <td data-sort="<c:out value="${t.payment.unpaid}" />">
                                                 <c:choose>
                                                     <c:when test="${view4.status}">
                                                         <a href="javascript:window.open('/sale/schedule/<c:out value="${t.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder">
@@ -118,7 +118,7 @@
                                                     </c:otherwise>
                                                 </c:choose>
                                             </td>
-                                            <td>
+                                            <td data-sort="<c:out value="${t.payment.latency}" />">
                                                 <c:choose>
                                                     <c:when test="${view4.status}">
                                                         <a href="javascript:window.open('/sale/schedule/<c:out value="${t.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.payment.latency}" /> gün</a>

@@ -27,6 +27,9 @@ public class ContactHistoryService {
             @Override
             public Predicate toPredicate(Root<ContactHistory> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 List<Predicate> predicates = new ArrayList<>();
+                if(contactHistory.getOrganization()!=null) {
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("organization"), contactHistory.getOrganization().getId())));
+                }
                 if(contactHistory.getId()!=null) {
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("id"), contactHistory.getId())));
                 }

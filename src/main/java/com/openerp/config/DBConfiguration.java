@@ -580,6 +580,8 @@ public class DBConfiguration {
             dictionaries.add(advance5);
             Dictionary advance6 = new Dictionary("Bonus - Nümayişdən", "bonus-demonstration-advance", null, advanceType);
             dictionaries.add(advance6);
+            Dictionary schedulePayment1 = new Dictionary("1 ay", "1", null, schedulePaymentType);
+            dictionaries.add(schedulePayment1);
             Dictionary schedulePayment2 = new Dictionary("2 ay", "2", null, schedulePaymentType);
             dictionaries.add(schedulePayment2);
             Dictionary schedulePayment3 = new Dictionary("3 ay", "3", null, schedulePaymentType);

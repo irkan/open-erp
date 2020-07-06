@@ -47,7 +47,7 @@
                                         <td><c:out value="${t.operationType}" /></td>
                                         <td><c:out value="${t.organization.name}" /></td>
                                         <td><c:out value="${t.supplier.name}" /></td>
-                                        <th><c:out value="${t.fileName}"/></th>
+                                        <th><a href="/export/migration/<c:out value="${t.id}" />" class="kt-font-lg kt-font-bold kt-font-info kt-font-hover-danger"><c:out value="${t.fileName}"/></a></th>
                                         <td><c:out value="${t.dataCount}" /></td>
                                         <td><c:out value="${t.insertedCount}" /></td>
                                         <td><c:out value="${t.errorCount}" /></td>

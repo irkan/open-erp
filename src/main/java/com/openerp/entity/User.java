@@ -58,6 +58,11 @@ public class User {
     @JoinColumn(name = "user_detail_id")
     private UserDetail userDetail;
 
+    @ToString.Exclude
+    @JsonIgnore
+    @OneToOne(mappedBy = "user", fetch = FetchType.EAGER)
+    private ApproverException approverException;
+
     //@UniqueElements(message = "Bu istifadəçi adı mövcuddur")
     //@OneToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     @ToString.Include()

@@ -57,7 +57,7 @@ public class SaleController extends SkeletonController {
                 sales.setApprove(null);
                 model.addAttribute(Constants.FILTER, sales);
             }
-            Page<Sales> sales = salesService.findAll((Sales) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
+            Page<Sales> sales = salesService.findAll((Sales) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("approve").descending().by("id").descending()));
             for(Sales sales1: sales){
                 sales1.setSalesInventories(salesInventoryRepository.getSalesInventoriesByActiveTrueAndSales_Id(sales1.getId()));
             }
@@ -438,6 +438,71 @@ public class SaleController extends SkeletonController {
         return mapPost(sales, binding, redirectAttributes, "/sale/sales");
     }
 
+    @PostMapping(value = "/sales/payment")
+    public String postSalesPayment(@ModelAttribute(Constants.FORM) @Validated Sales sale, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        Sales sales = salesRepository.getSalesById(sale.getId());
+        if(sales.getService()){
+            FieldError fieldError = new FieldError("", "", "Servis dəyişdirilə bilməz!");
+            binding.addError(fieldError);
+        }
+        if(!checkBackDate(sales.getSaleDate())){
+            FieldError fieldError = new FieldError("", "", "Satış tarixi " + DateUtility.getFormattedDate(sales.getSaleDate()) + " olduğu üçün əməliyyata icazə verilmir!");
+            binding.addError(fieldError);
+        }
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()){
+            sales.getPayment().setPrice(sale.getPayment().getPrice());
+            sales.getPayment().setLastPrice(sale.getPayment().getLastPrice());
+            if(sales.getPayment().getCash()){
+                sales.getPayment().setPeriod(null);
+                sales.getPayment().setSchedule(null);
+                sales.getPayment().setSchedulePrice(null);
+                sales.getPayment().setDown(sales.getPayment().getLastPrice());
+            } else {
+                sales.getPayment().setPeriod(sale.getPayment().getPeriod());
+                sales.getPayment().setSchedule(sale.getPayment().getSchedule());
+                sales.getPayment().setSchedulePrice(Util.schedulePrice(sales.getPayment().getSchedule(), sales.getPayment().getLastPrice(), sales.getPayment().getDown()));
+                sales.getPayment().setDown(sale.getPayment().getDown());
+            }
+            sales.setGuarantee(sales.getGuarantee()!=null?sales.getGuarantee():6);
+            sales.setGuaranteeExpire(Util.guarantee(sales.getSaleDate()==null?new Date():sales.getSaleDate(), sales.getGuarantee()));
+            sales.getPayment().setDescription(sale.getPayment().getDescription());
+
+            salesRepository.save(sales);
+
+            log(sales, "sales", "create/edit", sales.getId(), sales.toString(), "Ödəniş qrafiki yeniləndi");
+
+
+            double invoicePrice = 0d;
+            if(sales.getPayment().getCash()){
+                invoicePrice = sales.getPayment().getLastPrice();
+            } else {
+                invoicePrice = sales.getPayment().getDown();
+            }
+
+            if(invoicePrice-Util.calculateInvoice(sales.getInvoices())>0){
+                Invoice invoice = new Invoice();
+                invoice.setSales(sales);
+                invoice.setApprove(false);
+                invoice.setCreditable(true);
+                invoice.setPrice(invoicePrice-Util.calculateInvoice(sales.getInvoices()));
+                invoice.setAdvance((!sales.getService() && Util.calculateInvoice(sales.getInvoices())==0)?true:false);
+                invoice.setOrganization(sales.getOrganization());
+                invoice.setDescription("Satışdan əldə edilən ödəniş " + invoice.getPrice() + " AZN");
+                invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
+                invoiceRepository.save(invoice);
+                log(invoice, "invoice", "create/edit", invoice.getId(), invoice.toString());
+                invoice.setChannelReferenceCode(String.valueOf(invoice.getId()));
+                invoiceRepository.save(invoice);
+                log(invoice, "invoice", "create/edit", invoice.getId(), invoice.toString());
+            }
+        }
+        if(sales.getService()){
+            return mapPost(sales, binding, redirectAttributes, "/sale/service");
+        }
+        return mapPost(sales, binding, redirectAttributes, "/sale/sales");
+    }
+
     @PostMapping(value = "/sales/filter")
     public String postSalesFilter(@ModelAttribute(Constants.FILTER) @Validated Sales sales, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         return mapFilter(sales, binding, redirectAttributes, "/sale/sales");
@@ -450,7 +515,6 @@ public class SaleController extends SkeletonController {
             return getSchedulePayment(saleDate.equalsIgnoreCase("0")?DateUtility.getFormattedDate(new Date()):saleDate, dictionaryRepository.getDictionaryById(scheduleId), dictionaryRepository.getDictionaryById(periodId), lastPrice, down);
         } catch (Exception e){
             log(null, "error", "", "", null, "", e.getMessage());
-            e.printStackTrace();
             log.error(e.getMessage(), e);
         }
         return null;

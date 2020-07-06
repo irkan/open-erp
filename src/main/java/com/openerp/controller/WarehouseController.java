@@ -47,13 +47,16 @@ public class WarehouseController extends SkeletonController {
                 return exportExcel(inventories, redirectAttributes, page);
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.ACTION)) {
+            model.addAttribute(Constants.SUPPLIERS, supplierRepository.getSuppliersByActiveTrue());
             model.addAttribute(Constants.ORGANIZATIONS, organizationRepository.getOrganizationsByActiveTrueAndType_Attr1("branch"));
             List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganizationAndActiveTrue(getSessionOrganization());
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
             model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployeesByPosition(employees, positions));
 
             if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new Action(getSessionOrganization()));
+                Dictionary buy = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("buy", "action");
+                Inventory inventory = new Inventory(!data.equals(Optional.empty())?Integer.parseInt(data.get()):null, true);
+                model.addAttribute(Constants.FORM, new Action(buy, inventory, getSessionOrganization()));
             }
             model.addAttribute(Constants.FILTER, new Action(
                             new Inventory(!data.equals(Optional.empty())?Integer.parseInt(data.get()):null, true),
@@ -122,8 +125,7 @@ public class WarehouseController extends SkeletonController {
             actionRepository.save(action);
             log(action, "action", "create/edit", action.getId(), action.toString());
             String description = action.getAction().getName()+", "+action.getSupplier().getName()+" -> "+action.getOrganization().getName()+", "+inventory.getName()+", Say: " + action.getAmount() + " ədəd";
-            Organization organization = organizationRepository.getOrganizationByIdAndActiveTrue(action.getOrganization().getId());
-            Transaction transaction = new Transaction(Util.getUserBranch(organization), inventory, action.getAction(), description, false, null);
+            Transaction transaction = new Transaction(getSessionOrganization(), inventory, action.getAction(), description, false, null);
             transaction.setAmount(inventory.getActions().get(0).getAmount());
             transactionRepository.save(transaction);
             log(transaction, "transaction", "create/edit", transaction.getId(), transaction.toString());
@@ -251,6 +253,22 @@ public class WarehouseController extends SkeletonController {
                 actionRepository.save(action);
                 log(action, "action", "create/edit", action.getId(), action.toString());
             }
+        }
+        return mapPost(action, binding, redirectAttributes, "/warehouse/action/"+action.getInventory().getId());
+    }
+
+    @PostMapping(value = "/action")
+    public String postAction(@ModelAttribute(Constants.FORM) @Validated Action action, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()) {
+            actionRepository.save(action);
+            log(action, "action", "create/edit", action.getId(), action.toString(), "Alış əməliyyatı " + action.getAmount() + " ədəd");
+
+            String description = action.getAction().getName()+", "+action.getSupplier().getName()+" -> "+action.getOrganization().getName()+", "+action.getInventory().getName()+", Say: " + action.getAmount() + " ədəd";
+            Transaction transaction = new Transaction(action.getOrganization(), action.getInventory(), action.getAction(), description, false, null);
+            transaction.setAmount(action.getAmount());
+            transactionRepository.save(transaction);
+            log(transaction, "transaction", "create/edit", transaction.getId(), transaction.toString());
         }
         return mapPost(action, binding, redirectAttributes, "/warehouse/action/"+action.getInventory().getId());
     }

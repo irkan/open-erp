@@ -87,7 +87,8 @@
                                                         <label class="kt-checkbox kt-checkbox--brand">
                                                             <input type="checkbox" onclick="checkedRow(this)">
                                                             <span style="top: -11px; left: 5px;"></span>
-                                                        </label></td>
+                                                        </label>
+                                                    </td>
                                                     <c:forEach var="o" items="${operations}" varStatus="loop">
                                                         <td class="text-center">
                                                             <c:set var="status" value="${utl:checkAccess(list, user_module_operations, template_module_operations, m.id, o.id)}"/>
@@ -157,7 +158,6 @@
             });
         },
         columnDefs: [
-            {targets: 0, orderable: false},
             {targets: 2, visible: false},
             {targets: 3, orderable: false},
             {targets: 4, orderable: false},
@@ -177,15 +177,12 @@
             {targets: 18, orderable: false},
             {targets: 19, orderable: false},
             {targets: 20, orderable: false},
-            {targets: 21, orderable: false},
-            {targets: 22, orderable: false},
-            {targets: 23, orderable: false},
-            {targets: 24, orderable: false}
+            {targets: 21, orderable: false}
         ],
         fixedColumns:   {
             leftColumns: 2
         },
-        order: [[1, 'asc']]
+        order: [[2, 'asc']]
     });
 
 
@@ -280,8 +277,6 @@
                         $.each(data, function(k, v) {
                             $('input[type=checkbox][value="'+v.moduleOperation.id+'"]').prop('checked', true);
                             $('input[type=checkbox][value="'+v.moduleOperation.id+'"]').parent().find("span").addClass(":after");
-                            console.log(k + ' - ' + v)
-                            console.log(v.moduleOperation.id)
                         });
                         swal.close();
                     },

@@ -31,6 +31,9 @@ public class ModuleOperation {
     @JoinColumn(name = "operation_id")
     private Operation operation;
 
+    @Column(name = "description")
+    private String description;
+
     @JsonIgnore
     @OneToMany(mappedBy = "moduleOperation")
     private List<TemplateModuleOperation> templateModuleOperations;

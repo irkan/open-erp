@@ -798,7 +798,7 @@ public class ReadWriteExcelFile {
 			cell = row.createCell(row.getLastCellNum());
 			cell.setCellValue(employee.getBankCardNumber());
 			cell = row.createCell(row.getLastCellNum());
-			cell.setCellValue((String) Util.check(employee.getContractEndDate()));
+			cell.setCellValue(employee.getContractEndDate()!=null?DateUtility.getFormattedDate(employee.getContractEndDate()):"");
 			cell = row.createCell(row.getLastCellNum());
 			cell.setCellValue(employee.getSocialCardNumber());
 			cell = row.createCell(row.getLastCellNum());

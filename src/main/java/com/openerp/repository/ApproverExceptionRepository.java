@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface ApproverExceptionRepository extends JpaRepository<ApproverException, Integer> {
     ApproverException getApproverExceptionById(Integer id);
+    List<ApproverException> getApproverExceptionsByActiveTrueAndUser(User user);
     List<ApproverException> getApproverExceptionsByActiveTrueOrderByPermissionDateToDesc();
     List<ApproverException> getApproverExceptionsByUserAndActiveTrueAndPermissionDateFromLessThanEqualAndPermissionDateToGreaterThanEqualOrderByPermissionDateToDesc(User user, Date from, Date to);
 }

@@ -31,6 +31,7 @@
         <th>Üst modul</th>
         <th>Modul</th>
         <th>Əməliyyat</th>
+        <th>Açıqlama</th>
         <th>Əməliyyat</th>
     </tr>
     </thead>
@@ -44,6 +45,7 @@
                     <td><c:out value="${t.module.module.name}" /></td>
                     <td><c:out value="${t.module.name}" /></td>
                     <td><c:out value="${t.operation.name}" /></td>
+                    <td><c:out value="${t.description}" /></td>
                     <td nowrap class="text-center">
                         <c:if test="${view.status}">
                             <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
@@ -111,6 +113,11 @@
                             <form:options items="${operations}" itemLabel="name" itemValue="id" />
                         </form:select>
                     </div>
+                    <div class="form-group">
+                        <form:label path="description">Açıqlama</form:label>
+                        <form:textarea path="description" cssClass="form-control" placeholder="Açıqlamanı daxil edin" />
+                        <form:errors path="description" cssClass="alert-danger control-label"/>
+                    </div>
                 </form:form>
             </div>
             <div class="modal-footer">
@@ -155,10 +162,7 @@
     });
 
     $('#group_table tbody').on('dblclick', 'tr', function () {
-        <c:if test="${edit.status}">
-        edit($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${edit.object.name}" />');
-        </c:if>
-        <c:if test="${!edit.status and view.status}">
+        <c:if test="${view.status}">
         view($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${view.object.name}" />');
         </c:if>
     });

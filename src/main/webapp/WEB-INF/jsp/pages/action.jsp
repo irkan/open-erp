@@ -214,7 +214,7 @@
                         </a>
                     </c:if>
                     <c:if test="${transfer.status and t.approve and !(t.action.attr1 eq 'consolidate') and t.amount gt 0}">
-                        <a href="javascript:transfer($('#form'), '<c:out value="${utl:toJson(t)}" />', 'transfer-modal-operation');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
+                        <a href="javascript:transfer($('#transfer-form'), '<c:out value="${utl:toJson(t)}" />', 'transfer-modal-operation');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
                             <i class="<c:out value="${transfer.object.icon}"/>"></i>
                         </a>
                     </c:if>
@@ -257,6 +257,60 @@
     </div>
 </div>
 
+<div class="modal fade" id="modal-operation" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Yeni sorğu yarat</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form:form modelAttribute="form" id="form" method="post" action="/warehouse/action" cssClass="form-group">
+                    <form:hidden path="id"/>
+                    <form:hidden path="organization"/>
+                    <form:hidden path="action"/>
+                    <form:hidden path="active"/>
+                    <form:hidden path="inventory"/>
+                    <div class="form-group text-center">
+                        <form:label path="action" cssStyle="letter-spacing: 6px;" cssClass="card-title"><c:out value="${form.action.name}"/></form:label>
+                    </div>
+                    <c:if test="${empty form.inventory.id}">
+                        <div class="form-group">
+                            <form:label path="inventory.barcode">Barkod</form:label>
+                            <div class="input-group" >
+                                <div class="input-group-prepend"><span class="input-group-text"><i class="la la-search"></i></span></div>
+                                <form:input path="inventory.barcode" cssClass="form-control" placeholder="Say daxil edin"/>
+                            </div>
+                            <form:errors path="inventory.barcode" cssClass="alert-danger control-label"/>
+                        </div>
+                    </c:if>
+                    <div class="form-group">
+                        <form:label path="supplier">Tədarükçü</form:label>
+                        <form:select  path="supplier" cssClass="custom-select form-control">
+                            <form:option value=""></form:option>
+                            <form:options items="${suppliers}" itemLabel="name" itemValue="id" />
+                        </form:select>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="amount">Say</form:label>
+                        <div class="input-group" >
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calculator"></i></span></div>
+                            <form:input path="amount" cssClass="form-control" placeholder="Say daxil edin"/>
+                        </div>
+                        <form:errors path="amount" cssClass="alert-danger control-label"/>
+                    </div>
+                </form:form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="submit($('#form'));">Yadda saxla</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="modal fade" id="transfer-modal-operation" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-sm" role="document">
@@ -268,7 +322,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form:form modelAttribute="form" id="form" method="post" action="/warehouse/action/transfer" cssClass="form-group">
+                <form:form modelAttribute="form" id="transfer-form" method="post" action="/warehouse/action/transfer" cssClass="form-group">
                     <input type="hidden" name="id"/>
                     <input type="hidden" name="inventory"/>
                     <input type="hidden" name="action"/>
@@ -297,7 +351,7 @@
                 </form:form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="submit($('#form'));">Yadda saxla</button>
+                <button type="button" class="btn btn-primary" onclick="submit($('#transfer-form'));">Yadda saxla</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
             </div>
         </div>
@@ -650,9 +704,29 @@
         },
     });
 
+    $( "#transfer-form" ).validate({
+        rules: {
+            organization: {
+                required: true
+            },
+            amount: {
+                required: true,
+                digits: true,
+                min: 1
+            }
+        },
+        invalidHandler: function(event, validator) {
+            KTUtil.scrollTop();
+            swal.close();
+        },
+    });
+
     $( "#form" ).validate({
         rules: {
             organization: {
+                required: true
+            },
+            supplier: {
                 required: true
             },
             amount: {

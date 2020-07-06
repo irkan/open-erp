@@ -28,15 +28,15 @@ import java.util.regex.Pattern;
 
 public class Util {
     private static final Logger log = Logger.getLogger(Util.class);
+
     public static Object check(Object object){
         try{
             if(object!=null)
                 return object;
         } catch (Exception e){
-            e.printStackTrace();
             log.error(e.getMessage(), e);
         }
-        return null;
+        return "";
     }
 
     public static String checkNull(Object object){
@@ -75,6 +75,17 @@ public class Util {
             return organization.getOrganization().getOrganization();
         }
         return null;
+    }
+
+    public static Boolean canViewAll(Organization organization){
+        try{
+            if(organization==null || (organization.getId()!=null && organization.getId().intValue()==0)){
+                return true;
+            }
+        } catch (Exception e){
+            log.error(e.getMessage(), e);
+        }
+        return false;
     }
 
     public static InventoryAmount calculateInventoryAmount(List<Action> actions, int organizationId){
@@ -585,6 +596,17 @@ public class Util {
     public static Boolean isAdministrator(User user){
         try {
             return user.getUserDetail().getAdministrator();
+        } catch (Exception e){
+            log.error(e.getMessage(), e);
+        }
+        return false;
+    }
+
+    public static Boolean checkApprover(User user){
+        try {
+            if(user!=null && user.getApproverException()!=null){
+                return true;
+            }
         } catch (Exception e){
             log.error(e.getMessage(), e);
         }

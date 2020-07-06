@@ -124,4 +124,10 @@ public class Action {
         this.inventory = inventory;
         this.organization = organization;
     }
+
+    public Action(Dictionary action, Inventory inventory, Organization organization) {
+        this.action = action;
+        this.inventory = inventory;
+        this.organization = organization;
+    }
 }

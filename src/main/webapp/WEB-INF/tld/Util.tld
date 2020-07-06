@@ -125,4 +125,18 @@
             java.lang.Boolean isAdministrator(com.openerp.entity.User)
         </function-signature>
     </function>
+    <function>
+        <name>checkApprover</name>
+        <function-class>com.openerp.util.Util</function-class>
+        <function-signature>
+            java.lang.Boolean checkApprover(com.openerp.entity.User)
+        </function-signature>
+    </function>
+    <function>
+        <name>canViewAll</name>
+        <function-class>com.openerp.util.Util</function-class>
+        <function-signature>
+            java.lang.Boolean canViewAll(com.openerp.entity.Organization)
+        </function-signature>
+    </function>
 </taglib>

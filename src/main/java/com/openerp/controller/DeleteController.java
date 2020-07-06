@@ -267,8 +267,8 @@ public class DeleteController extends SkeletonController {
         } else if(path.equalsIgnoreCase(Constants.ROUTE.APPROVER_EXCEPTION)){
             ApproverException approverException = approverExceptionRepository.getApproverExceptionById(Integer.parseInt(id));
             approverException.setActive(false);
-            approverExceptionRepository.save(approverException);
             log(null, "approver_exception", "delete", Integer.parseInt(id), "");
+            approverExceptionRepository.delete(approverException);
         } else if(path.equalsIgnoreCase(Constants.ROUTE.LOG_FILE)){
             File file = new File(id);
             file.delete();
