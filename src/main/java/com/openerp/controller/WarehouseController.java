@@ -49,6 +49,7 @@ public class WarehouseController extends SkeletonController {
         } else if (page.equalsIgnoreCase(Constants.ROUTE.ACTION)) {
             model.addAttribute(Constants.SUPPLIERS, supplierRepository.getSuppliersByActiveTrue());
             model.addAttribute(Constants.ORGANIZATIONS, organizationRepository.getOrganizationsByActiveTrueAndType_Attr1("branch"));
+            model.addAttribute(Constants.ACTIONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("action"));
             List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganizationAndActiveTrue(getSessionOrganization());
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
             model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployeesByPosition(employees, positions));
@@ -58,11 +59,14 @@ public class WarehouseController extends SkeletonController {
                 Inventory inventory = new Inventory(!data.equals(Optional.empty())?Integer.parseInt(data.get()):null, true);
                 model.addAttribute(Constants.FORM, new Action(buy, inventory, getSessionOrganization()));
             }
-            model.addAttribute(Constants.FILTER, new Action(
-                            new Inventory(!data.equals(Optional.empty())?Integer.parseInt(data.get()):null, true),
-                    !canViewAll()?getSessionOrganization():null
-                    )
-            );
+            if(!model.containsAttribute(Constants.FILTER)){
+                model.addAttribute(Constants.FILTER, new Action(
+                                new Inventory(!data.equals(Optional.empty())?Integer.parseInt(data.get()):null, true),
+                                !canViewAll()?getSessionOrganization():null
+                        )
+                );
+            }
+
             Page<Action> actions = actionService.findAll((Action) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
             Page<Action> pageData;
             if(!data.equals(Optional.empty())){

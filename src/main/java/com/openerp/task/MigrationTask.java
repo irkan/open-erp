@@ -203,7 +203,7 @@ public class MigrationTask {
                             if(status){
                                 String inventoryName = (md.getSalesInventoryName()!=null && md.getSalesInventoryName().length()>0)?md.getSalesInventoryName():"AVADANLIQ NONAME";
                                 inventoryName = inventoryName.toUpperCase();
-                                List<Inventory> inventories = inventoryRepository.getInventoriesByNameAndActiveTrue(inventoryName);
+                                List<Inventory> inventories = inventoryRepository.getInventoriesByNameAndActiveTrueOrderByInventoryDateDesc(inventoryName);
                                 Inventory inventory = null;
                                 if(inventories.size()>0){
                                     inventory = inventories.get(0);

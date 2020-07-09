@@ -35,7 +35,7 @@
                     <div class="card-body">
                         <form:form modelAttribute="filter" id="filter" method="post" action="/warehouse/action/filter">
                             <form:hidden path="organization" />
-                            <form:hidden path="inventory.id" />
+                            <form:hidden path="inventory" />
                             <form:hidden path="inventory.active" htmlEscape="true" value="1" />
                             <div class="row">
                                 <div class="col-md-11">
@@ -75,18 +75,32 @@
                                                 <form:errors path="actionDate" cssClass="control-label alert-danger" />
                                             </div>
                                         </div>
-                                        <div class="col-md-1">
-                                            <div class="form-group">
-                                                <form:label path="amountFrom">Saydan</form:label>
-                                                <form:input path="amountFrom" cssClass="form-control" placeholder="Sayı daxil edin"/>
-                                                <form:errors path="amountFrom" cssClass="alert-danger control-label"/>
+                                        <div class="col-md-3">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <form:label path="amountFrom">Saydan</form:label>
+                                                        <form:input path="amountFrom" cssClass="form-control" placeholder="Daxil edin"/>
+                                                        <form:errors path="amountFrom" cssClass="alert-danger control-label"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <form:label path="amount">Sayadək</form:label>
+                                                        <form:input path="amount" cssClass="form-control" placeholder="Daxil edin"/>
+                                                        <form:errors path="amount" cssClass="alert-danger control-label"/>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-1">
+                                        <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="amount">Sayadək</form:label>
-                                                <form:input path="amount" cssClass="form-control" placeholder="Qiyməti daxil edin"/>
-                                                <form:errors path="amount" cssClass="alert-danger control-label"/>
+                                                <form:label path="action">Hərəkət</form:label>
+                                                <form:select  path="action.id" cssClass="custom-select form-control">
+                                                    <form:option value=""></form:option>
+                                                    <form:options items="${actions}" itemLabel="name" itemValue="id" />
+                                                </form:select>
+                                                <form:errors path="action" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
                                         <div class="col-md-2" style="padding-top: 30px;">

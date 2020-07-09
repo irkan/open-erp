@@ -909,4 +909,18 @@ public class Util {
         }
         return a;
     }
+
+    public static List<Schedule> correctLastSchedulePrice(List<Schedule> schedules, Double lastPrice, Double down) {
+        try{
+            if(schedules.size()>0){
+                Double different = schedules.size()*schedules.get(0).getAmount()-lastPrice-down;
+                if(different>0){
+                    schedules.get(schedules.size()-1).setAmount(schedules.get(schedules.size()-1).getAmount()-different);
+                }
+            }
+        } catch (Exception e){
+            log.error(e.getMessage(), e);
+        }
+        return schedules;
+    }
 }

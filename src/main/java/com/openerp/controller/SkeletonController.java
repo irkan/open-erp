@@ -582,6 +582,7 @@ public class SkeletonController {
             Schedule schedule1 = new Schedule(schedulePrice, scheduleDate);
             schedules.add(schedule1);
         }
+        schedules = Util.correctLastSchedulePrice(schedules, lastPrice, down);
         return schedules;
     }
 
