@@ -77,7 +77,7 @@
                                                     </c:otherwise>
                                                 </c:choose>
                                             </td>
-                                            <th>
+                                            <th data-sort="<c:out value="${t.payment.sales.customer.person.fullName}" />">
                                                 <c:if test="${not empty t.payment.sales.customer.id}">
                                                     <a href="javascript:copyToClipboard2('<c:out value="${t.payment.sales.customer.id}" />', 'Müştəri kodu <b><c:out value="${t.payment.sales.customer.id}" /></b> kopyalandı')" class="kt-font-lg kt-font-bold kt-font-info kt-font-hover-danger pl-2 pr-2"><i class="la la-copy"></i></a>
                                                 </c:if>

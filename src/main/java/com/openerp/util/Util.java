@@ -756,6 +756,16 @@ public class Util {
         return 0;
     }
 
+    public static int parseInt(Object object){
+        try {
+            return Integer.parseInt(String.valueOf(object));
+        } catch (Exception e){
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
+        }
+        return 0;
+    }
+
     public static List<ModuleOperation> getModuleOperations(List<UserModuleOperation> userModuleOperations){
         List<ModuleOperation> list = new ArrayList<>();
         for(UserModuleOperation umo: userModuleOperations){

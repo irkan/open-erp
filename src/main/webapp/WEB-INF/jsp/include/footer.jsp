@@ -18,7 +18,7 @@
                     </a>
                     <div class="kt-footer__copyright">
                         2019&nbsp;&copy;&nbsp;
-                        <a href="#" target="_blank">Koranli Tech</a>
+                        <a href="#" target="_blank">KoranTech MMC</a>
                     </div>
                 </div>
                 <div class="kt-footer__menu">

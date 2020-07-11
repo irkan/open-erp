@@ -244,6 +244,9 @@
 <script>
     $("#datatable").DataTable({
         responsive: true,
+fixedHeader: {
+   headerOffset: $('#kt_header').outerHeight()
+},
         lengthMenu: [10, 25, 50, 75, 100, 200, 1000],
         pageLength: 100,
         order: [[1, 'desc']],

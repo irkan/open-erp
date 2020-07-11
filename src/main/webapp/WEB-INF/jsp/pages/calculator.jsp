@@ -15,14 +15,21 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="kt-portlet kt-portlet--mobile">
-                <form:form modelAttribute="form" id="kt_form" cssClass="form-group kt-form">
+                <form:form modelAttribute="form" id="form" cssClass="form-group kt-form">
                     <div class="kt-portlet__body">
                         <div class="row">
-                            <div class="col-sm-4 offset-sm-3">
-                                <form:label path="payment.price">Qiymət</form:label>
+                            <div class="col-sm-3 offset-sm-3">
+                                <%--<form:label path="payment.price">Qiymət</form:label>
                                 <form:select  path="payment.price" onchange="calculate($(this))" cssClass="custom-select form-control">
                                     <form:options items="${sale_prices}" itemLabel="name" itemValue="attr1" />
                                 </form:select>
+                                <form:errors path="payment.price" cssClass="control-label alert-danger"/>--%>
+
+                                <form:label path="payment.price">Qiymət</form:label>
+                                <div class="input-group" >
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
+                                    <form:input path="payment.price" onchange="calculate($('#form'), $(this), 'lastPriceLabel')" cssClass="form-control" placeholder="Qiyməti daxil edin"/>
+                                </div>
                                 <form:errors path="payment.price" cssClass="control-label alert-danger"/>
                             </div>
                             <div class="col-sm-3 text-center">
@@ -68,7 +75,7 @@
                         <div class="row animated zoomIn" id="credit-div">
                             <div class="col-sm-7 offset-sm-1">
                                 <div class="row">
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <div class="form-group">
                                             <form:label path="payment.down">İlkin ödəniş</form:label>
                                             <div class="input-group" >
@@ -82,7 +89,7 @@
                                             <form:errors path="payment.down" cssClass="alert-danger control-label"/>
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <div class="form-group">
                                             <form:label path="payment.schedule">Ödəniş qrafiki</form:label>
                                             <form:select  path="payment.schedule" cssClass="custom-select form-control">
@@ -91,7 +98,7 @@
                                             <form:errors path="payment.schedule" cssClass="control-label alert-danger"/>
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <div class="form-group">
                                             <form:label path="payment.period">Ödəniş edilsin</form:label>
                                             <form:select  path="payment.period" cssClass="custom-select form-control">
@@ -100,10 +107,20 @@
                                             <form:errors path="payment.period" cssClass="control-label alert-danger"/>
                                         </div>
                                     </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <form:label path="payment.gracePeriod">Güzəşt müddəti / AY</form:label>
+                                            <div class="input-group" >
+                                                <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
+                                                <form:input path="payment.gracePeriod" cssClass="form-control" placeholder="Daxil edin"/>
+                                            </div>
+                                            <form:errors path="payment.gracePeriod" cssClass="control-label alert-danger"/>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-sm-3 text-center">
-                                <button type="button" class="btn btn-outline-info btn-tallest" style="font-size: 16px;padding-left: 7px; padding-right: 8px;" onclick="schedule($('input[name=\'payment.lastPrice\']'), $('input[name=\'payment.down\']'), $('select[name=\'payment.schedule\']'), $('select[name=\'payment.period\']'))"><i class="fa fa-play"></i> Ödəniş qrafiki yarat</button>
+                                <button type="button" class="btn btn-outline-info btn-tallest" style="font-size: 16px;padding-left: 7px; padding-right: 8px;" onclick="schedule($('input[name=\'payment.lastPrice\']'), $('input[name=\'payment.down\']'), $('select[name=\'payment.schedule\']'), $('select[name=\'payment.period\']'), $('input[name=\'payment.gracePeriod\']'))"><i class="fa fa-play"></i> Ödəniş qrafiki yarat</button>
                             </div>
                         </div>
                         <div class="row">
@@ -119,7 +136,41 @@
 </div>
 
 <script>
-    function schedule(lastPrice, down, schedule, period){
+
+    $( "#form" ).validate({
+        rules: {
+            'payment.price': {
+                required: true,
+                number: true,
+                pattern: /^(1499|1599|1699)$/
+            },
+            'payment.gracePeriod': {
+                required: true,
+                number: true,
+                pattern: /^(0|1)$/
+            },
+            'payment.down': {
+                required: true,
+                number: true,
+                min: 0
+            },
+            'payment.schedulePrice': {
+                required: false,
+                number: true,
+                min: 0
+            }
+        },
+        messages: {
+            'payment.price': "1499, 1599 və ya 1699 ola bilər",
+            'payment.gracePeriod': "0 və ya 1 (~30 gün) ay ola bilər",
+        },
+        invalidHandler: function(event, validator) {
+            KTUtil.scrollTop();
+            swal.close();
+        },
+    });
+
+    function schedule(lastPrice, down, schedule, period, gracePeriod){
         var table='';
         swal.fire({
             text: 'Proses davam edir...',
@@ -127,7 +178,7 @@
             onOpen: function() {
                 swal.showLoading();
                 $.ajax({
-                    url: '/sale/payment/schedule/' + $(lastPrice).val() + '/' + $(down).val() + '/' + $(schedule).val() + '/' + $(period).val() + '/0',
+                    url: '/sale/payment/schedule/' + $(lastPrice).val() + '/' + $(down).val() + '/' + $(schedule).val() + '/' + $(period).val() + '/' + $(gracePeriod).val() + '/0',
                     type: 'GET',
                     dataType: 'json',
                     beforeSend: function() {
@@ -172,11 +223,12 @@
         });
 
     }
-    function calculate(element){
+
+    function calculate(form, element, lastPriceLabelId){
         var price = $(element).val();
-        var discount = $("input[name='payment.discount']").val();
+        var discount = $(form).find("input[name='payment.discount']").val();
         if(discount.trim().length>0){
-            var discounts = discount.trim().split("%")
+            var discounts = discount.trim().split("%");
             if(discounts.length>1){
                 price = price-price*parseFloat(discounts[0])*0.01;
             } else {
@@ -184,13 +236,29 @@
             }
             price = Math.ceil(price);
         }
-        $("#lastPriceLabel").text(price);
-        $("input[name='payment.lastPrice']").val(price);
+        $("#"+lastPriceLabelId).text(price);
+        $(form).find("input[name='payment.lastPrice']").val(price);
     }
 
     $(function(){
         $("select[name='payment.price']").change();
-    })
+    });
+
+    $("input[name='payment.price']").inputmask('decimal', {
+        rightAlignNumerics: false
+    });
+
+    $("input[name='payment.gracePeriod']").inputmask('decimal', {
+        rightAlignNumerics: false
+    });
+
+    $("input[name='payment.down']").inputmask('decimal', {
+        rightAlignNumerics: false
+    });
+
+    $("input[name='payment.schedulePrice']").inputmask('decimal', {
+        rightAlignNumerics: false
+    });
 
     function doCash(element, defaultCash){
         if($(element).is(":checked")){

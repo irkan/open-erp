@@ -321,6 +321,9 @@
 
             table.DataTable({
                 responsive: true,
+                fixedHeader: {
+                   headerOffset: $('#kt_header').outerHeight()
+                },
                 pageLength: 100,
                 bDestroy: true,
                 data: data,

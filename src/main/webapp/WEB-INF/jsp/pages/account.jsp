@@ -282,6 +282,9 @@
         ],
         </c:if>
         responsive: true,
+        fixedHeader: {
+           headerOffset: $('#kt_header').outerHeight()
+        },
         pageLength: 100,
         order: [[2, 'asc']],
         drawCallback: function(settings) {

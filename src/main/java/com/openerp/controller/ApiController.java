@@ -28,7 +28,7 @@ public class ApiController extends SkeletonController {
                 response = new WSResponse("400", "Məlumat tapılmadı!");
                 if(sale!=null && sale.getPayment()!=null){
                     double sumOfInvoices = Util.calculateInvoice(sale.getInvoices());
-                    List<Schedule> schedules = getSchedulePayment(DateUtility.getFormattedDate(sale.getSaleDate()), sale.getPayment().getSchedule(), sale.getPayment().getPeriod(), sale.getPayment().getLastPrice(), sale.getPayment().getDown());
+                    List<Schedule> schedules = getSchedulePayment(DateUtility.getFormattedDate(sale.getSaleDate()), sale.getPayment().getSchedule(), sale.getPayment().getPeriod(), sale.getPayment().getLastPrice(), sale.getPayment().getDown(), Util.parseInt(sale.getPayment().getGracePeriod()));
                     double plannedPayment = Util.calculatePlannedPayment(sale, schedules);
                     schedules = Util.calculateSchedule(sale, schedules, sumOfInvoices);
                     sale.getPayment().setLatency(Util.calculateLatency(schedules, sumOfInvoices, sale));

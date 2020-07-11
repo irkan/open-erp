@@ -103,6 +103,9 @@
             data: barChartData,
             options: {
                 responsive: true,
+fixedHeader: {
+   headerOffset: $('#kt_header').outerHeight()
+},
                 maintainAspectRatio: false,
                 legend: false,
                 scales: {

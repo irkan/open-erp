@@ -82,7 +82,7 @@ public class SaleController extends SkeletonController {
                     sale = salesRepository.getSalesById(Integer.parseInt(data.get()));
                     double sumOfInvoices = Util.calculateInvoice(sale.getInvoices());
                     if(sale!=null && sale.getPayment()!=null && !sale.getPayment().getCash()){
-                        schedules = getSchedulePayment(DateUtility.getFormattedDate(sale.getSaleDate()), sale.getPayment().getSchedule(), sale.getPayment().getPeriod(), sale.getPayment().getLastPrice(), sale.getPayment().getDown());
+                        schedules = getSchedulePayment(DateUtility.getFormattedDate(sale.getSaleDate()), sale.getPayment().getSchedule(), sale.getPayment().getPeriod(), sale.getPayment().getLastPrice(), sale.getPayment().getDown(), Util.parseInt(sale.getPayment().getGracePeriod()));
                         double plannedPayment = Util.calculatePlannedPayment(sale, schedules);
                         schedules = Util.calculateSchedule(sale, schedules, sumOfInvoices);
                         sale.getPayment().setLatency(Util.calculateLatency(schedules, sumOfInvoices, sale));
@@ -172,7 +172,6 @@ public class SaleController extends SkeletonController {
                 return exportExcel(serviceRegulators, redirectAttributes, page);
             }
         } else if(page.equalsIgnoreCase(Constants.ROUTE.CALCULATOR)){
-            model.addAttribute(Constants.SALE_PRICES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("sale-price"));
             model.addAttribute(Constants.PAYMENT_SCHEDULES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-schedule"));
             model.addAttribute(Constants.PAYMENT_PERIODS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-period"));
             if(!model.containsAttribute(Constants.FORM)){
@@ -509,12 +508,11 @@ public class SaleController extends SkeletonController {
     }
 
     @ResponseBody
-    @GetMapping(value = "/payment/schedule/{lastPrice}/{down}/{schedule}/{period}/{saleDate}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Schedule> getPaymentSchedulePrice(Model model, @PathVariable("lastPrice") double lastPrice, @PathVariable("down") double down, @PathVariable("schedule") int scheduleId, @PathVariable("period") int periodId, @PathVariable(name = "saleDate", value = "") String saleDate){
+    @GetMapping(value = "/payment/schedule/{lastPrice}/{down}/{schedule}/{period}/{gracePeriod}/{saleDate}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Schedule> getPaymentSchedulePrice(Model model, @PathVariable("lastPrice") double lastPrice, @PathVariable("down") double down, @PathVariable("schedule") int scheduleId, @PathVariable("period") int periodId, @PathVariable(name = "gracePeriod",required = false) String gracePeriodStr, @PathVariable(name = "saleDate", value = "") String saleDate){
         try {
-            return getSchedulePayment(saleDate.equalsIgnoreCase("0")?DateUtility.getFormattedDate(new Date()):saleDate, dictionaryRepository.getDictionaryById(scheduleId), dictionaryRepository.getDictionaryById(periodId), lastPrice, down);
+            return getSchedulePayment(saleDate.equalsIgnoreCase("0")?DateUtility.getFormattedDate(new Date()):saleDate, dictionaryRepository.getDictionaryById(scheduleId), dictionaryRepository.getDictionaryById(periodId), lastPrice, down, Util.parseInt(gracePeriodStr));
         } catch (Exception e){
-            log(null, "error", "", "", null, "", e.getMessage());
             log.error(e.getMessage(), e);
         }
         return null;
@@ -854,7 +852,7 @@ public class SaleController extends SkeletonController {
             List<Schedule> schedules = new ArrayList<>();
             double sumOfInvoices = Util.calculateInvoice(sales.getInvoices());
             if(sales.getPayment()!=null && !sales.getPayment().getCash()){
-                schedules = getSchedulePayment(DateUtility.getFormattedDate(sales.getSaleDate()), sales.getPayment().getSchedule(), sales.getPayment().getPeriod(), sales.getPayment().getLastPrice(), sales.getPayment().getDown());
+                schedules = getSchedulePayment(DateUtility.getFormattedDate(sales.getSaleDate()), sales.getPayment().getSchedule(), sales.getPayment().getPeriod(), sales.getPayment().getLastPrice(), sales.getPayment().getDown(), Util.parseInt(sales.getPayment().getGracePeriod()));
                 double plannedPayment = Util.calculatePlannedPayment(sales, schedules);
                 schedules = Util.calculateSchedule(sales, schedules, sumOfInvoices);
                 sales.getPayment().setLatency(Util.calculateLatency(schedules, sumOfInvoices, sales));

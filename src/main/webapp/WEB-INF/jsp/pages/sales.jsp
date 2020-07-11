@@ -493,7 +493,7 @@
 </div>
 
 <div class="modal fade" id="modal-operation" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"></h5>
@@ -707,7 +707,7 @@
                                         <div class="row animated zoomIn" id="credit-div">
                                             <div class="col-sm-9">
                                                 <div class="row">
-                                                    <div class="col-sm-6">
+                                                    <div class="col-sm-4">
                                                         <div class="form-group">
                                                             <form:label path="payment.schedule">Ödəniş qrafiki</form:label>
                                                             <form:select  path="payment.schedule" cssClass="custom-select form-control">
@@ -716,13 +716,23 @@
                                                             <form:errors path="payment.schedule" cssClass="control-label alert-danger"/>
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-6">
+                                                    <div class="col-sm-4">
                                                         <div class="form-group">
                                                             <form:label path="payment.period">Ödəniş edilsin</form:label>
                                                             <form:select  path="payment.period" cssClass="custom-select form-control">
                                                                 <form:options items="${payment_periods}" itemLabel="name" itemValue="id" />
                                                             </form:select>
                                                             <form:errors path="payment.period" cssClass="control-label alert-danger"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <div class="form-group">
+                                                            <form:label path="payment.gracePeriod">Güzəşt müddəti / AY</form:label>
+                                                            <div class="input-group" >
+                                                                <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
+                                                                <form:input path="payment.gracePeriod" cssClass="form-control" placeholder="Daxil edin"/>
+                                                            </div>
+                                                            <form:errors path="payment.gracePeriod" cssClass="control-label alert-danger"/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1262,9 +1272,9 @@
                             </div>
                             <div  id="credit-div-2">
                                 <div class="row animated zoomIn">
-                                    <div class="col-sm-12">
+                                    <div class="col-md-12 offset-md-1">
                                         <div class="row">
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-2">
                                                 <div class="form-group">
                                                     <form:label path="payment.schedule">Ödəniş qrafiki</form:label>
                                                     <form:select  path="payment.schedule" cssClass="custom-select form-control">
@@ -1273,7 +1283,7 @@
                                                     <form:errors path="payment.schedule" cssClass="control-label alert-danger"/>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-2">
                                                 <div class="form-group">
                                                     <form:label path="payment.period">Ödəniş edilsin</form:label>
                                                     <form:select  path="payment.period" cssClass="custom-select form-control">
@@ -1282,7 +1292,17 @@
                                                     <form:errors path="payment.period" cssClass="control-label alert-danger"/>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-2">
+                                                <div class="form-group">
+                                                    <form:label path="payment.gracePeriod">Güzəşt müddəti / AY</form:label>
+                                                    <div class="input-group" >
+                                                        <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
+                                                        <form:input path="payment.gracePeriod" cssClass="form-control" placeholder="Daxil edin"/>
+                                                    </div>
+                                                    <form:errors path="payment.gracePeriod" cssClass="control-label alert-danger"/>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2">
                                                 <div class="form-group">
                                                     <form:label path="payment.down">İlkin ödəniş</form:label>
                                                     <div class="input-group" >
@@ -1292,7 +1312,7 @@
                                                     <form:errors path="payment.down" cssClass="alert-danger control-label"/>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-2">
                                                 <div class="form-group">
                                                     <form:label path="payment.schedulePrice">Qrafik məbləği</form:label>
                                                     <div class="input-group" >
@@ -1418,7 +1438,7 @@
             onOpen: function() {
                 swal.showLoading();
                 $.ajax({
-                    url: '/sale/payment/schedule/' + $(form).find("input[name='payment.lastPrice']").val() + '/' + $(form).find("input[name='payment.down']").val() + '/' + $(form).find("select[name='payment.schedule']").val() + '/' + $(form).find("select[name='payment.period']").val() + '/' + $(form).find("input[name='saleDate']").val(),
+                    url: '/sale/payment/schedule/' + $(form).find("input[name='payment.lastPrice']").val() + '/' + $(form).find("input[name='payment.down']").val() + '/' + $(form).find("select[name='payment.schedule']").val() + '/' + $(form).find("select[name='payment.period']").val() + '/' + $(form).find("input[name='payment.gracePeriod']").val() + '/' + $(form).find("input[name='saleDate']").val(),
                     type: 'GET',
                     dataType: 'json',
                     beforeSend: function() {
@@ -1663,6 +1683,11 @@
                         number: true,
                         pattern: /^(1499|1599|1699)$/
                     },
+                    'payment.gracePeriod': {
+                        required: true,
+                        number: true,
+                        pattern: /^(0|1)$/
+                    },
                     'payment.down': {
                         required: true,
                         number: true,
@@ -1687,7 +1712,8 @@
                     },
                 },
                 messages: {
-                    'payment.price': "Qiymət 1499, 1599 və ya 1699 ola bilər",
+                    'payment.price': "1499, 1599 və ya 1699 ola bilər",
+                    'payment.gracePeriod': "0 və ya 1 (~30 gün) ay ola bilər"
                 },
                 invalidHandler: function(event, validator) {
                     KTUtil.scrollTop();
@@ -2195,6 +2221,10 @@
         rightAlignNumerics: false
     });
 
+    $("input[name='payment.gracePeriod']").inputmask('decimal', {
+        rightAlignNumerics: false
+    });
+
     $("input[name='payment.down']").inputmask('decimal', {
         rightAlignNumerics: false
     });
@@ -2394,7 +2424,15 @@
             },
             saleDate: {
                 required: true
+            },
+            'payment.gracePeriod': {
+                required: true,
+                number: true,
+                pattern: /^(0|1)$/
             }
+        },
+        messages: {
+            'payment.gracePeriod': "0 və ya 1 (~30 gün) ay ola bilər",
         },
         invalidHandler: function(event, validator) {
             KTUtil.scrollTop();

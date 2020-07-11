@@ -138,8 +138,9 @@
 <script>
     $('#group_table').DataTable({
         responsive: true,
-        scrollY: 480,
-        scrollX: true,
+        fixedHeader: {
+            headerOffset: $('#kt_header').outerHeight()
+        },
         paging: false,
         autoWidth: false,
         searching: false,

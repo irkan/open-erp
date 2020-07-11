@@ -569,13 +569,13 @@ public class SkeletonController {
         }
     }
 
-    List<Schedule> getSchedulePayment(String saleDate, Dictionary schedule, Dictionary period, Double lastPrice, Double down){
+    List<Schedule> getSchedulePayment(String saleDate, Dictionary schedule, Dictionary period, Double lastPrice, Double down, Integer gracePeriod){
         lastPrice = lastPrice==null?0:lastPrice;
         int scheduleCount = Integer.parseInt(schedule.getAttr1());
         Date saleDt = saleDate.trim().length()>0? DateUtility.getUtilDate(saleDate):new Date();
         Date startDate = DateUtility.generate(Integer.parseInt(period.getAttr1()), saleDt.getMonth(), saleDt.getYear()+1900);
         List<Schedule> schedules = new ArrayList<>();
-        Date scheduleDate = DateUtils.addMonths(startDate, 1);
+        Date scheduleDate = DateUtils.addMonths(startDate, 1+gracePeriod);
         Double schedulePrice = Util.schedulePrice(schedule, lastPrice, down);
         for(int i=0; i<scheduleCount; i++){
             scheduleDate = DateUtils.addMonths(scheduleDate, 1);
@@ -746,7 +746,7 @@ public class SkeletonController {
         for(Sales sales: salesList){
             Double payed = Util.calculateInvoice(sales.getInvoices());
             if(sales.getPayment()!=null && !sales.getPayment().getCash()){
-                List<Schedule> schedules = getSchedulePayment(DateUtility.getFormattedDate(sales.getSaleDate()), sales.getPayment().getSchedule(), sales.getPayment().getPeriod(), sales.getPayment().getLastPrice(), sales.getPayment().getDown());
+                List<Schedule> schedules = getSchedulePayment(DateUtility.getFormattedDate(sales.getSaleDate()), sales.getPayment().getSchedule(), sales.getPayment().getPeriod(), sales.getPayment().getLastPrice(), sales.getPayment().getDown(), Util.parseInt(sales.getPayment().getGracePeriod()));
                 if(schedules.size()>0){
                     plannedPaymentMonthly+=schedules.get(0).getAmount();
                     if(sales.getPayment().getDown()!=null && sales.getPayment().getDown()>0 && payed<sales.getPayment().getDown()){

@@ -77,7 +77,7 @@
                                                     </c:otherwise>
                                                 </c:choose>
                                             </td>
-                                            <th>
+                                            <th data-sort="<c:out value="${t.payment.sales.customer.person.fullName}" />">
                                                 <c:if test="${not empty t.payment.sales.customer.id}">
                                                     <a href="javascript:copyToClipboard2('<c:out value="${t.payment.sales.customer.id}" />', 'Müştəri kodu <b><c:out value="${t.payment.sales.customer.id}" /></b> kopyalandı')" class="kt-font-lg kt-font-bold kt-font-info kt-font-hover-danger pl-2 pr-2"><i class="la la-copy"></i></a>
                                                 </c:if>
@@ -258,6 +258,29 @@
 
 <script>
 
+   /* $(document).ready(function() {
+        // Setup - add a text input to each footer cell
+        $('#datatable thead tr').clone(false).appendTo( '#datatable thead' );
+        $('#datatable thead tr:eq(1) th').each( function (i) {
+            var title = $(this).text();
+            $(this).html( '<input type="text"  style="width: 100%" placeholder="'+title+'" />' );
+
+            $( 'input', this ).on( 'keyup change', function () {
+                if ( table.column(i).search() !== this.value ) {
+                    table
+                        .column(i)
+                        .search( this.value )
+                        .draw();
+                }
+            } );
+        } );
+
+        var table = $("#datatable").DataTable({
+            orderCellsTop: true,
+            fixedHeader: true,
+        });
+    });*/
+
     $("#datatable").DataTable({
         <c:if test="${export.status}">
         dom: 'B<"clear">lfrtip',
@@ -266,6 +289,9 @@
         ],
         </c:if>
         responsive: true,
+        fixedHeader: {
+            headerOffset: $('#kt_header').outerHeight()
+        },
         lengthMenu: [10, 25, 50, 75, 100, 200, 1000],
         pageLength: 100,
         order: [[1, 'desc']],
@@ -278,6 +304,8 @@
             },
         ],
     });
+
+
 
     $( "#form" ).validate({
         rules: {
