@@ -466,6 +466,7 @@ public class SaleController extends SkeletonController {
             sales.setGuarantee(sales.getGuarantee()!=null?sales.getGuarantee():6);
             sales.setGuaranteeExpire(Util.guarantee(sales.getSaleDate()==null?new Date():sales.getSaleDate(), sales.getGuarantee()));
             sales.getPayment().setDescription(sale.getPayment().getDescription());
+            sales.getPayment().setGracePeriod(sale.getPayment().getGracePeriod());
 
             salesRepository.save(sales);
 

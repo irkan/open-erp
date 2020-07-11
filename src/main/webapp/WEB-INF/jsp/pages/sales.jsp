@@ -391,6 +391,9 @@
                                                 Period: <c:out value="${t.payment.period.name}" /><br/>
                                             </c:if>
                                             Zəmanət bitir: <fmt:formatDate value = "${t.guaranteeExpire}" pattern = "dd.MM.yyyy" /><br/>
+                                            <c:if test="${not empty t.payment.gracePeriod and t.payment.gracePeriod gt 0}">
+                                                Güzəşt müddəti: <c:out value="${t.payment.gracePeriod}" /> AY<br/>
+                                            </c:if>
                                             <c:if test="${not empty t.taxConfiguration.voen}">
                                                 VÖEN: <c:out value="${t.taxConfiguration.voen}" />
                                             </c:if>
@@ -1406,6 +1409,9 @@
         ],
         </c:if>
         responsive: true,
+        fixedHeader: {
+            headerOffset: $('#kt_header').outerHeight()
+        },
         pageLength: 100,
         order: [[2, 'asc']],
         drawCallback: function(settings) {

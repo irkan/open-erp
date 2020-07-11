@@ -35,6 +35,7 @@
                                 <tr>
                                     <th>Kod</th>
                                     <th>Müştəri</th>
+                                    <th>Ödəniş günü</th>
                                     <th>Ödənilmişdir</th>
                                     <th>Ödənilməlidir</th>
                                     <th>Gecikir</th>
@@ -50,7 +51,7 @@
                                 <c:forEach var="t" items="${list.content}" varStatus="loop">
                                     <c:if test="${t.payment.latency gt configuration_troubled_customer}">
                                         <tr data="<c:out value="${t.id}" />">
-                                            <td style="min-width: 120px; <c:out value="${t.payment.cash?'background-color: #e6ffe7 !important':'background-color: #ffeaf1 !important'}"/>">
+                                            <td data-sort="<c:out value="${t.id}" />" style="min-width: 120px; <c:out value="${t.payment.cash?'background-color: #e6ffe7 !important':'background-color: #ffeaf1 !important'}"/>">
                                                 <c:if test="${not empty t.id}">
                                                     <a href="javascript:copyToClipboard2('<c:out value="${t.id}" />', 'Satış kodu <b><c:out value="${t.id}" /></b> kopyalandı')" class="kt-font-lg kt-font-bold kt-font-info kt-font-hover-danger pl-2 pr-2"><i class="la la-copy"></i></a>
                                                 </c:if>
@@ -90,6 +91,9 @@
                                                     </c:otherwise>
                                                 </c:choose>
                                             </th>
+                                            <td data-sort="<c:out value="${t.payment.period.attr1}" />">
+                                                <c:out value="${t.payment.period.name}" />
+                                            </td>
                                             <td data-sort="<c:out value="${t.payment.sumOfInvoice}" />">
                                                 <c:choose>
                                                     <c:when test="${view1.status}">
