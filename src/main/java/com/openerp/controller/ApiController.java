@@ -111,7 +111,7 @@ public class ApiController extends SkeletonController {
                         Dictionary advance = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("bonus-sale-advance", "advance");
                         Sales sales = invc.getSales();
 
-                        if(sales!=null && sales.getServicer()!=null){
+                        /*if(sales!=null && sales.getServicer()!=null){
                             EmployeeSaleDetail saleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getServicer(), "{service}");
                             String advancePrice = saleDetail.getValue().replaceAll(Pattern.quote("%"), percent);
                             advances.add(new Advance(advance,
@@ -134,7 +134,7 @@ public class ApiController extends SkeletonController {
                                     sales.getSaleDate(),
                                     Double.parseDouble(String.valueOf(engine.eval(advancePrice)))
                             ));
-                        }
+                        }*/
                         if(sales!=null && invc.getApprove() && invc.getAdvance()) {
                             if (sales.getCanavasser() != null) {
                                 EmployeeSaleDetail canvasserSaleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getCanavasser(), "{canvasser}");

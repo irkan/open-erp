@@ -678,8 +678,8 @@ public class SaleController extends SkeletonController {
             String percent = "*0.01";
             Dictionary advance = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("bonus-sale-advance", "advance");
             Sales sales = invc.getSales();
-
-            if(sales!=null && sales.getServicer()!=null){
+            //Sabuhinin isteyi ile legv edildi Farid OK verdi 10.07.2020
+            /*if(sales!=null && sales.getServicer()!=null){
                 EmployeeSaleDetail saleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getServicer(), "{service}");
                 String advancePrice = saleDetail.getValue().replaceAll(Pattern.quote("%"), percent);
                 advances.add(new Advance(advance,
@@ -702,7 +702,7 @@ public class SaleController extends SkeletonController {
                         sales.getSaleDate(),
                         Double.parseDouble(String.valueOf(engine.eval(advancePrice)))
                 ));
-            }
+            }*/
             if(sales!=null && invc.getApprove() && invc.getAdvance()){
                 if(sales.getCanavasser()!=null){
                     EmployeeSaleDetail canvasserSaleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getCanavasser(), "{canvasser}");
@@ -829,9 +829,9 @@ public class SaleController extends SkeletonController {
             }
         }
 
-        List<Sales> salesList1 = salesRepository.getSalesByActiveTrueAndApproveTrueAndPayment_CashAndPayment_PeriodAndSaledFalseAndSaleDateGreaterThanEqualAndOrganization(false, paymentPeriod, DateUtility.addMonth(salesSchedule.getScheduleDate(),-30), getSessionOrganization());
+        List<Sales> salesList1 = salesRepository.getSalesByActiveTrueAndApproveTrueAndPayment_CashAndPayment_PeriodAndSaledFalseAndOrganization(false, paymentPeriod, getSessionOrganization());
         if(canViewAll()){
-            salesList1 = salesRepository.getSalesByActiveTrueAndApproveTrueAndPayment_CashAndPayment_PeriodAndSaledFalseAndSaleDateGreaterThanEqual(false, paymentPeriod, DateUtility.addMonth(salesSchedule.getScheduleDate(),-30));
+            salesList1 = salesRepository.getSalesByActiveTrueAndApproveTrueAndPayment_CashAndPayment_PeriodAndSaledFalse(false, paymentPeriod);
         }
 
         salesList.addAll(salesList1);
