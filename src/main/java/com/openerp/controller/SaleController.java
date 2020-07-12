@@ -627,7 +627,7 @@ public class SaleController extends SkeletonController {
         if(invc.getSales()==null){
             FieldError fieldError = new FieldError("", "", "SATIŞ kodu tapılmadı!");
             binding.addError(fieldError);
-        } else if(!invc.getSales().getService() && invc.getCollector()==null){
+        } else if(!invc.getSales().getService() && invc.getCollector()==null && invc.getPrice()>0){
             FieldError fieldError = new FieldError("", "", "Yığımçı təyin edilməlidir!");
             binding.addError(fieldError);
         }

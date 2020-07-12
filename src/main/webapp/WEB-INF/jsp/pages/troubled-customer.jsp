@@ -15,6 +15,181 @@
 <div class="kt-container  kt-grid__item kt-grid__item--fluid">
     <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
     <c:set var="filter" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'filter')}"/>
+    <c:if test="${filter.status}">
+        <div class="accordion  accordion-toggle-arrow mb-2" id="accordionFilter">
+            <div class="card" style="border-radius: 4px;">
+                <div class="card-header">
+                    <div class="card-title w-100" data-toggle="collapse" data-target="#filterContent" aria-expanded="true" aria-controls="collapseOne4">
+                        <div class="row w-100">
+                            <div class="col-3">
+                                <i class="<c:out value="${filter.object.icon}"/>"></i>
+                                <c:out value="${list.totalElements>0?list.totalElements:0} sətr"/>
+                            </div>
+                            <div class="col-6 text-center" style="letter-spacing: 10px;">
+                                <c:out value="${filter.object.name}"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="filterContent" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionFilter">
+                    <div class="card-body">
+                        <form:form modelAttribute="filter" id="filter" method="post" action="/collect/troubled-customer/filter">
+                            <form:hidden path="organization" />
+                            <form:hidden path="service" />
+                            <div class="row">
+                                <div class="col-md-11">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <form:label path="id">KOD</form:label>
+                                                        <form:input path="id" cssClass="form-control" placeholder="######"/>
+                                                        <form:errors path="id" cssClass="control-label alert-danger"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <form:label path="customer">Müştəri</form:label>
+                                                        <form:input path="customer" cssClass="form-control" placeholder="Müştəri kodu" />
+                                                        <form:errors path="customer" cssClass="alert-danger"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <form:label path="payment.lastPriceFrom">Qiymətdən</form:label>
+                                                        <form:input path="payment.lastPriceFrom" cssClass="form-control" placeholder="Daxil edin"/>
+                                                        <form:errors path="payment.lastPriceFrom" cssClass="alert-danger control-label"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <form:label path="payment.lastPrice">Qiymətədək</form:label>
+                                                        <form:input path="payment.lastPrice" cssClass="form-control" placeholder="Daxil edin"/>
+                                                        <form:errors path="payment.lastPrice" cssClass="alert-danger control-label"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <form:label path="saleDateFrom">Satış tarixindən</form:label>
+                                                        <div class="input-group date">
+                                                            <form:input path="saleDateFrom" autocomplete="off"
+                                                                        cssClass="form-control datepicker-element" date_="date_"
+                                                                        placeholder="dd.MM.yyyy"/>
+                                                            <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-calendar"></i>
+                                        </span>
+                                                            </div>
+                                                        </div>
+                                                        <form:errors path="saleDateFrom" cssClass="control-label alert-danger"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <form:label path="saleDate">Tarixədək</form:label>
+                                                        <div class="input-group date">
+                                                            <form:input path="saleDate" autocomplete="off"
+                                                                        cssClass="form-control datepicker-element" date_="date_"
+                                                                        placeholder="dd.MM.yyyy"/>
+                                                            <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-calendar"></i>
+                                        </span>
+                                                            </div>
+                                                        </div>
+                                                        <form:errors path="saleDate" cssClass="control-label alert-danger"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <form:label path="payment.period">Ödəniş günü</form:label>
+                                                        <form:select  path="payment.period.id" cssClass="custom-select form-control">
+                                                            <form:option value=""></form:option>
+                                                            <form:options items="${payment_periods}" itemLabel="name" itemValue="id" />
+                                                        </form:select>
+                                                        <form:errors path="payment.period" cssClass="control-label alert-danger"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <form:label path="payment.schedule">Ödəniş qrafiki</form:label>
+                                                        <form:select  path="payment.schedule.id" cssClass="custom-select form-control">
+                                                            <form:option value=""></form:option>
+                                                            <form:options items="${payment_schedules}" itemLabel="name" itemValue="id" />
+                                                        </form:select>
+                                                        <form:errors path="payment.schedule" cssClass="control-label alert-danger"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="customer.person.firstName">Müştərinin adı</form:label>
+                                                <form:input path="customer.person.firstName" cssClass="form-control" placeholder="Müştərinin adı" />
+                                                <form:errors path="customer.person.firstName" cssClass="alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="customer.person.lastName">Müştərinin soyadı</form:label>
+                                                <form:input path="customer.person.lastName" cssClass="form-control" placeholder="Müştərinin soyadı" />
+                                                <form:errors path="customer.person.lastName" cssClass="alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="row" style="padding-top: 30px;">
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label class="kt-checkbox kt-checkbox--brand">
+                                                            <form:checkbox path="payment.cash"/> Nağdlar
+                                                            <span></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="kt-checkbox kt-checkbox--brand">
+                                                            <form:checkbox path="approve"/> Təsdiq edilməyənlər
+                                                            <span></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <c:if test="${delete.status}">
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label class="kt-checkbox kt-checkbox--brand">
+                                                                <form:checkbox path="active"/> Aktual
+                                                                <span></span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </c:if>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 text-right">
+                                    <div class="form-group">
+                                        <a href="#" onclick="location.reload();" class="btn btn-danger btn-elevate btn-icon-sm btn-block mb-2" style="padding: 0.35rem 0.6rem;">
+                                            <i class="la la-trash"></i> Sil
+                                        </a>
+                                        <a href="#" onclick="submit($('#filter'))" class="btn btn-warning btn-elevate btn-icon-sm btn-block mt-2" style="padding: 0.35rem 0.6rem">
+                                            <i class="la la-search"></i> Axtar
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form:form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </c:if>
     <div class="row">
         <div class="col-lg-12">
             <div class="kt-portlet kt-portlet--mobile">
@@ -261,29 +436,6 @@
 </div>
 
 <script>
-
-   /* $(document).ready(function() {
-        // Setup - add a text input to each footer cell
-        $('#datatable thead tr').clone(false).appendTo( '#datatable thead' );
-        $('#datatable thead tr:eq(1) th').each( function (i) {
-            var title = $(this).text();
-            $(this).html( '<input type="text"  style="width: 100%" placeholder="'+title+'" />' );
-
-            $( 'input', this ).on( 'keyup change', function () {
-                if ( table.column(i).search() !== this.value ) {
-                    table
-                        .column(i)
-                        .search( this.value )
-                        .draw();
-                }
-            } );
-        } );
-
-        var table = $("#datatable").DataTable({
-            orderCellsTop: true,
-            fixedHeader: true,
-        });
-    });*/
 
     $("#datatable").DataTable({
         <c:if test="${export.status}">

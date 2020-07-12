@@ -933,4 +933,25 @@ public class Util {
         }
         return schedules;
     }
+
+    public static String getPeriodDay() {
+        try {
+            Date today = new Date();
+            int day = today.getDate();
+            if(day==28){
+                day = 0;
+            } else if(day==29){
+                day = 1;
+            } else if(day==30){
+                day = 2;
+            } else if(day==31){
+                day = 3;
+            }
+            day++;
+            return Util.checkNull(day);
+        } catch (Exception e){
+            log.error(e.getMessage(), e);
+        }
+        return "1";
+    }
 }

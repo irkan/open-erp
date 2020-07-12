@@ -198,7 +198,7 @@
             <td><c:out value="${t.supplier.name}" /></td>
             <td><c:out value="${t.inventory.name}" /></td>
             <td><c:out value="${t.amount}" /></td>
-            <td><fmt:formatDate value = "${t.createdDate}" pattern = "dd.MM.yyyy" /></td>
+            <td><fmt:formatDate value = "${t.createdDate}" pattern = "dd.MM.yyyy HH:mm" /></td>
             <td><c:out value="${t.employee.person.fullName}" /></td>
             <td>
                 <c:choose>

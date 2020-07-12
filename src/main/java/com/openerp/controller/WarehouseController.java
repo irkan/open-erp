@@ -91,17 +91,21 @@ public class WarehouseController extends SkeletonController {
                 return exportExcel(supplierRepository.findAll(), redirectAttributes, page);
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.CONSOLIDATE)) {
+            List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganizationAndActiveTrue(getSessionOrganization());
+            List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
+            model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployeesByPosition(employees, positions));
+
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Action(getSessionOrganization()));
             }
             if(!model.containsAttribute(Constants.FILTER)){
                 Action action = new Action(
-                        !canViewAll()?getSessionUser().getEmployee():null,
+                        getSessionUser().getEmployee(),
                         dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("consolidate", "action"),
                         null,
-                        1
+                        1,
+                        !canViewAll()?getSessionOrganization():null
                 );
-                action.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("consolidate", "action"));
                 model.addAttribute(Constants.FILTER, action);
             }
             Page<Action> actions = actionService.findAll((Action) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));

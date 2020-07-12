@@ -31,16 +31,21 @@ public class CollectController extends SkeletonController {
         if(page.equalsIgnoreCase(Constants.ROUTE.PAYMENT_LATENCY) ||
                 page.equalsIgnoreCase(Constants.ROUTE.TROUBLED_CUSTOMER)){
             model.addAttribute(Constants.CONFIGURATION_TROUBLED_CUSTOMER, configurationRepository.getGlobalConfigurationByKey("troubled_customer").getAttribute());
+            model.addAttribute(Constants.PAYMENT_PERIODS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-period"));
+            model.addAttribute(Constants.PAYMENT_SCHEDULES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-schedule"));
             Sales salesObject = new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null);
+            salesObject.setService(null);
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Invoice(salesObject, getSessionOrganization()));
             }
             if(!model.containsAttribute(Constants.FILTER)){
-                salesObject.setSaleDateFrom(DateUtility.addYear(Integer.parseInt(configurationRepository.getGlobalConfigurationByKey("by_year").getAttribute())));
-                salesObject.setService(null);
                 salesObject.setApprove(false);
+                Payment paymentObject = new Payment();
+                paymentObject.setPeriod(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1(Util.getPeriodDay(), "payment-period"));
+                salesObject.setPayment(paymentObject);
                 model.addAttribute(Constants.FILTER, salesObject);
             }
+
             Page<Sales> sales = salesService.findAll((Sales) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize()*100, Sort.by("id").descending()));
 
             List<Sales> salesList = new ArrayList<>();
@@ -48,6 +53,10 @@ public class CollectController extends SkeletonController {
                 double sumOfInvoices = Util.calculateInvoice(sale.getInvoices());
                 List<Schedule> schedules = new ArrayList<>();
                 if(sale.getPayment()!=null && !sale.getPayment().getCash()){
+                    System.out.println(sale.getId());
+                    if(sale.getId()==106447){
+                        System.out.println("Xeta burdadi!");
+                    }
                     schedules = getSchedulePayment(DateUtility.getFormattedDate(sale.getSaleDate()), sale.getPayment().getSchedule(), sale.getPayment().getPeriod(), sale.getPayment().getLastPrice(), sale.getPayment().getDown(), Util.parseInt(sale.getPayment().getGracePeriod()));
                 }
                 double plannedPayment = Util.calculatePlannedPayment(sale, schedules);
@@ -262,6 +271,17 @@ public class CollectController extends SkeletonController {
     public String postContactHistoryFilter(@ModelAttribute(Constants.FILTER) @Validated ContactHistory contactHistory, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         return mapFilter(contactHistory, binding, redirectAttributes, "/collect/contact-history");
     }
+
+    @PostMapping(value = "/payment-latency/filter")
+    public String postPaymentLatencyFilter(@ModelAttribute(Constants.FILTER) @Validated Sales sales, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        return mapFilter(sales, binding, redirectAttributes, "/collect/payment-latency");
+    }
+
+    @PostMapping(value = "/troubled-customer/filter")
+    public String postTroubledCustomerFilter(@ModelAttribute(Constants.FILTER) @Validated Sales sales, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        return mapFilter(sales, binding, redirectAttributes, "/collect/troubled-customer");
+    }
+
 
     @ResponseBody
     @GetMapping(value = "/api/contact-history/{dataId}", produces = MediaType.APPLICATION_JSON_VALUE)

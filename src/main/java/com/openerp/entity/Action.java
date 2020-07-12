@@ -120,6 +120,14 @@ public class Action {
         this.amountFrom = amountFrom;
     }
 
+    public Action(Employee employee, Dictionary action, Date actionDate, Integer amountFrom, Organization organization) {
+        this.employee = employee;
+        this.action = action;
+        this.actionDate = actionDate;
+        this.amountFrom = amountFrom;
+        this.organization = organization;
+    }
+
     public Action(Inventory inventory, Organization organization) {
         this.inventory = inventory;
         this.organization = organization;

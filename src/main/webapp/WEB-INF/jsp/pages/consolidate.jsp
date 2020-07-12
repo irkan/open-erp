@@ -48,6 +48,20 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
+                                                <form:label path="employee">Təhkim edilib</form:label>
+                                                <form:select  path="employee.id" cssClass="custom-select form-control" multiple="single">
+                                                    <form:option value=""></form:option>
+                                                    <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
+                                                        <optgroup label="${itemGroup.key}">
+                                                            <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
+                                                        </optgroup>
+                                                    </c:forEach>
+                                                </form:select>
+                                                <form:errors path="employee" cssClass="control-label alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
                                                 <form:label path="actionDateFrom">Tarixdən</form:label>
                                                 <div class="input-group date" >
                                                     <form:input path="actionDateFrom" autocomplete="off" date_="date_" cssClass="form-control datetimepicker-element" placeholder="dd.MM.yyyy HH:mm"/>
@@ -74,14 +88,14 @@
                                                 <form:errors path="actionDate" cssClass="control-label alert-danger" />
                                             </div>
                                         </div>
-                                        <div class="col-md-2">
+                                        <div class="col-md-1">
                                             <div class="form-group">
                                                 <form:label path="amountFrom">Saydan</form:label>
                                                 <form:input path="amountFrom" cssClass="form-control" placeholder="Sayı daxil edin"/>
                                                 <form:errors path="amountFrom" cssClass="alert-danger control-label"/>
                                             </div>
                                         </div>
-                                        <div class="col-md-2">
+                                        <div class="col-md-1">
                                             <div class="form-group">
                                                 <form:label path="amount">Sayadək</form:label>
                                                 <form:input path="amount" cssClass="form-control" placeholder="Qiyməti daxil edin"/>
@@ -167,7 +181,7 @@
                     </c:otherwise>
                 </c:choose>
             </td>
-            <td><fmt:formatDate value = "${t.createdDate}" pattern = "dd.MM.yyyy" /></td>
+            <td><fmt:formatDate value = "${t.createdDate}" pattern = "dd.MM.yyyy HH:mm" /></td>
             <td><c:out value="${t.employee.person.fullName}" /></td>
             <td nowrap class="text-center">
                 <c:set var="return1" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'return')}"/>
