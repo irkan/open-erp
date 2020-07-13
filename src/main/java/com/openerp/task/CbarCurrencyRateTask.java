@@ -35,14 +35,15 @@ public class CbarCurrencyRateTask {
     public void task() {
         try{
             log.info("Cbar Currency Rate Task Start");
-            currencyRateRepository.deleteAll();
             List<CurrencyRate> currencyRates = Util.getCurrenciesRate(cbarCurrenciesEndpoint);
-            currencyRateRepository.saveAll(currencyRates);
-            Log logObject = new Log("currency_rate", "reload", null, "", "", "CbarCurrencyRateTask ilə məzənnə yeniləndi", UtilJson.toJson(currencyRates));
-            logRepository.save(logObject);
+            if(currencyRates.size()>0){
+                currencyRateRepository.deleteAll();
+                currencyRateRepository.saveAll(currencyRates);
+                Log logObject = new Log("currency_rate", "reload", null, "", "", "CbarCurrencyRateTask ilə məzənnə yeniləndi", UtilJson.toJson(currencyRates));
+                logRepository.save(logObject);
+            }
             log.info("Cbar Currency Rate Task End");
         } catch (Exception e){
-            e.printStackTrace();
             log.error(e.getMessage(), e);
         }
     }
