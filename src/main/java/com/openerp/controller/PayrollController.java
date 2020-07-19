@@ -8,6 +8,7 @@ import com.openerp.util.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -716,5 +717,11 @@ public class PayrollController extends SkeletonController {
         salaryRepository.save(salary);
         log(salary, "salary", "approve", salary.getId(), salary.toString());
         return mapPost2(slry, binding, redirectAttributes, "/payroll/salary");
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/api/advance/{dataId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Advance getAdvance(@PathVariable("dataId") Integer dataId){
+        return advanceRepository.getAdvanceById(dataId);
     }
 }

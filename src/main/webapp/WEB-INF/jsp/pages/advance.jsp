@@ -192,7 +192,7 @@
     </thead>
     <tbody>
     <c:forEach var="t" items="${list.content}" varStatus="loop">
-        <tr data="<c:out value="${utl:toJson(t)}" />" class="<c:out value="${(t.payed lt 0)?'strikeout':''}"/> ">
+        <tr data="<c:out value="${t.id}" />" class="<c:out value="${(t.payed lt 0)?'strikeout':''}"/> ">
             <td><c:out value="${t.id}" /></td>
             <td><c:out value="${t.advance.name}" /></td>
             <td><span style="width: 160px;" class="kt-font-bolder"><c:out value="${t.employee.person.fullName}" /></span></td>
@@ -223,7 +223,7 @@
                     </a>
                 </c:if>
                 <c:if test="${view.status}">
-                    <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
+                    <a href="javascript:advance('view', $('#form'), '<c:out value="${t.id}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
                         <i class="<c:out value="${view.object.icon}"/>"></i>
                     </a>
                 </c:if>
@@ -238,7 +238,7 @@
                     </a>
                 </c:if>
                 <c:if test="${edit.status and !t.approve}">
-                    <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                    <a href="javascript:advance('edit', $('#form'), '<c:out value="${t.id}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
                         <i class="<c:out value="${edit.object.icon}"/>"></i>
                     </a>
                 </c:if>
@@ -478,7 +478,7 @@
 
     $('#datatable tbody').on('dblclick', 'tr', function () {
         <c:if test="${view.status}">
-        view($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${view.object.name}" />');
+            advance('view', $('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${view.object.name}" />');
         </c:if>
     });
 
@@ -577,6 +577,42 @@ fixedHeader: {
         rightAlignNumerics: false
     });
 
+    function advance(oper, form, dataId, modal, modal_title){
+        swal.fire({
+            text: 'Proses davam edir...',
+            allowOutsideClick: false,
+            onOpen: function() {
+                swal.showLoading();
+                $.ajax({
+                    url: '/payroll/api/advance/'+dataId,
+                    type: 'GET',
+                    dataType: 'text',
+                    beforeSend: function() {
+
+                    },
+                    success: function(data) {
+                        if(oper==="view"){
+                            view(form, data, modal, modal_title)
+                        } else if(oper==="edit"){
+                            edit(form, data, modal, modal_title)
+                        }
+                        swal.close();
+                    },
+                    error: function() {
+                        swal.fire({
+                            title: "Xəta",
+                            html: "Xəta baş verdi!",
+                            type: "error",
+                            cancelButtonText: 'Bağla',
+                            cancelButtonColor: '#c40000',
+                            cancelButtonClass: 'btn btn-danger',
+                            footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+                        });
+                    }
+                })
+            }
+        });
+    }
 </script>
 
 
