@@ -43,20 +43,32 @@ public class CollectController extends SkeletonController {
                 Payment paymentObject = new Payment();
                 paymentObject.setPeriod(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1(Util.getPeriodDay(), "payment-period"));
                 salesObject.setPayment(paymentObject);
+                salesObject.setSaleDate(null);
                 model.addAttribute(Constants.FILTER, salesObject);
             }
 
-            Page<Sales> sales = salesService.findAll((Sales) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize()*100, Sort.by("id").descending()));
+            salesObject = (Sales) model.asMap().get(Constants.FILTER);
+            Page<Sales> sales = salesService.findAll(salesObject, PageRequest.of(0, paginationSize()*100, Sort.by("id").descending()));
+            List<Sales> salesList2 = new ArrayList<>(sales.getContent());
+            if(salesObject.getPayment()!=null && salesObject.getPayment().getPeriod()!=null){
+                salesObject.getPayment().setPeriod(dictionaryRepository.getDictionaryById(salesObject.getPayment().getPeriod().getId()));
+                Date today = new Date();
+                Date nextContractDate = DateUtility.generate(Util.parseInt(salesObject.getPayment().getPeriod().getAttr1()), today.getMonth()+1, today.getYear()+1900);
+                List<ContactHistory> contactHistories = contactHistoryRepository.getContactHistoriesByActiveTrueAndNextContactDateAndSalesApproveAndOrganizationOrderByIdDesc(nextContractDate, true, getSessionOrganization());
+                if(canViewAll()){
+                    contactHistories = contactHistoryRepository.getContactHistoriesByActiveTrueAndNextContactDateAndSalesApproveOrderByIdDesc(nextContractDate, true);
+                }
+                for(ContactHistory ch: contactHistories){
+                    salesList2.add(ch.getSales());
+                }
+            }
+
 
             List<Sales> salesList = new ArrayList<>();
-            for(Sales sale: sales){
+            for(Sales sale: salesList2){
                 double sumOfInvoices = Util.calculateInvoice(sale.getInvoices());
                 List<Schedule> schedules = new ArrayList<>();
                 if(sale.getPayment()!=null && !sale.getPayment().getCash()){
-                    System.out.println(sale.getId());
-                    if(sale.getId()==106447){
-                        System.out.println("Xeta burdadi!");
-                    }
                     schedules = getSchedulePayment(DateUtility.getFormattedDate(sale.getSaleDate()), sale.getPayment().getSchedule(), sale.getPayment().getPeriod(), sale.getPayment().getLastPrice(), sale.getPayment().getDown(), Util.parseInt(sale.getPayment().getGracePeriod()));
                 }
                 double plannedPayment = Util.calculatePlannedPayment(sale, schedules);

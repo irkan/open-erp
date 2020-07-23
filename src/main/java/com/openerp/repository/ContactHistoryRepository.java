@@ -16,5 +16,8 @@ public interface ContactHistoryRepository extends JpaRepository<ContactHistory, 
     List<ContactHistory> getContactHistoriesByActiveTrueAndSales_Id(int salesId);
     List<ContactHistory> getContactHistoriesByActiveTrueAndSalesOrderByIdDesc(Sales sales);
     List<ContactHistory> getContactHistoriesByActiveTrueAndNextContactDateAndSalesApproveAndSalesSaledAndOrganizationAndNextContactDateIsNotNullOrderByIdDesc(Date nextContactDate, Boolean approve, Boolean saled, Organization organization);
+    List<ContactHistory> getContactHistoriesByActiveTrueAndNextContactDateAndSalesApproveAndOrganizationOrderByIdDesc(Date nextContactDate, Boolean approve, Organization organization);
+    List<ContactHistory> getContactHistoriesByActiveTrueAndNextContactDateOrderByIdDesc(Date nextContactDate);
     List<ContactHistory> getContactHistoriesByActiveTrueAndNextContactDateAndSalesApproveAndSalesSaledAndNextContactDateIsNotNullOrderByIdDesc(Date nextContactDate, Boolean approve, Boolean saled);
+    List<ContactHistory> getContactHistoriesByActiveTrueAndNextContactDateAndSalesApproveOrderByIdDesc(Date nextContactDate, Boolean approve);
 }

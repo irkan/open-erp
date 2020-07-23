@@ -119,7 +119,7 @@
                                     <fmt:parseNumber var = "days" integerOnly = "true" type = "number" value = "${(now-t.scheduleDate.time)/86400000}" />
                                     <tr>
                                         <th>${loop1.index+1}</th>
-                                        <th style="<c:out value="${p.sales.payment.cash?'background-color: #e6ffe7 !important':'background-color: #ffeaf1 !important'}"/>">
+                                        <th style="<c:out value="${p.sales.payment.cash?'background-color: #e6ffe7 !important':'background-color: #ffeaf1 !important'}"/>"  data-sort="<c:out value="${p.sales.id}" />">
                                             <c:if test="${not empty p.sales.id}">
                                                 <a href="javascript:copyToClipboard2('<c:out value="${p.sales.id}" />', 'Satış kodu <b><c:out value="${p.sales.id}" /></b> kopyalandı')" class="kt-font-lg kt-font-bold kt-font-info kt-font-hover-danger pl-2 pr-2"><i class="la la-copy"></i></a>
                                             </c:if>
@@ -146,7 +146,7 @@
                                                 </c:otherwise>
                                             </c:choose>
                                         </th>
-                                        <th>
+                                        <th data-sort="<c:out value="${p.sales.customer.person.fullName}" />" data="<c:out value="${p.sales.customer.person.fullName}" />">
                                             <c:if test="${not empty p.sales.customer.id}">
                                                 <a href="javascript:copyToClipboard2('<c:out value="${p.sales.customer.id}" />', 'Müştəri kodu <b><c:out value="${p.sales.customer.id}" /></b> kopyalandı')" class="kt-font-lg kt-font-bold kt-font-info kt-font-hover-danger pl-2 pr-2"><i class="la la-copy"></i></a>
                                             </c:if>
