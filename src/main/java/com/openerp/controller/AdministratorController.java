@@ -567,8 +567,8 @@ public class AdministratorController extends SkeletonController {
 
     @PostMapping(value = "/approver-exception")
     public String postApproverException(@ModelAttribute(Constants.FORM) @Validated ApproverException approverException, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
-        if(approverException.getUser()!=null && approverExceptionRepository.getApproverExceptionsByActiveTrueAndUser(approverException.getUser()).size()>0){
-            FieldError fieldError = new FieldError("", "", "<" + approverException.getUser().getUsername() + "> | istifadəçi adı ilə məlumat mövcuddur!");
+        if(approverException.getUser()!=null && approverExceptionRepository.getApproverExceptionsByActiveTrueAndUser(approverException.getUser()).size()>1){
+            FieldError fieldError = new FieldError("", "", approverException.getUser().getUsername() + " | istifadəçi adı ilə məlumat mövcuddur!");
             binding.addError(fieldError);
         }
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));

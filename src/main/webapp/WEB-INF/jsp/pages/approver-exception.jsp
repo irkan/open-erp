@@ -103,7 +103,7 @@
                     <form:hidden path="id"/>
                     <div class="form-group">
                         <form:label path="user">İstifadəçi</form:label>
-                        <form:select  path="user" cssClass="custom-select form-control" onchange="getUserModuleOperation($(this).val())">
+                        <form:select  path="user" cssClass="custom-select form-control">
                             <form:option value="" />
                             <form:options items="${users}" itemLabel="employee.person.fullName" itemValue="id"  />
                         </form:select>
