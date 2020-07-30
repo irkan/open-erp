@@ -118,6 +118,14 @@ public class Sales {
     @Column(name = "is_saled", nullable = false, columnDefinition="boolean default false")
     private Boolean saled = false;
 
+    @Column(name = "is_returned", nullable = false, columnDefinition="boolean default false")
+    private Boolean returned = false;
+
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    @Column(name = "returned_date", nullable = false)
+    private Date returnedDate;
+
     @Column(name = "is_not_service_next", nullable = false, columnDefinition="boolean default false")
     private Boolean notServiceNext = false;
 

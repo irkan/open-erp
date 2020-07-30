@@ -306,6 +306,8 @@
                     <form:hidden path="organization"/>
                     <form:hidden path="active"/>
                     <form:hidden path="service"/>
+                    <form:hidden path="returned"/>
+                    <form:hidden path="saled"/>
                     <form:hidden path="payment.cash" value="1"/>
                     <div class="row">
                         <div class="col-md-4 col-6">

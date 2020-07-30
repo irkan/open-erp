@@ -117,119 +117,121 @@
                                 <c:forEach var="t" items="${p.schedules}" varStatus="loop">
                                     <c:set var="now" value="<%=new Date().getTime()%>"/>
                                     <fmt:parseNumber var = "days" integerOnly = "true" type = "number" value = "${(now-t.scheduleDate.time)/86400000}" />
-                                    <tr>
-                                        <th>${loop1.index+1}</th>
-                                        <th style="<c:out value="${p.sales.payment.cash?'background-color: #e6ffe7 !important':'background-color: #ffeaf1 !important'}"/>"  data-sort="<c:out value="${p.sales.id}" />">
-                                            <c:if test="${not empty p.sales.id}">
-                                                <a href="javascript:copyToClipboard2('<c:out value="${p.sales.id}" />', 'Satış kodu <b><c:out value="${p.sales.id}" /></b> kopyalandı')" class="kt-font-lg kt-font-bold kt-font-info kt-font-hover-danger pl-2 pr-2"><i class="la la-copy"></i></a>
-                                            </c:if>
-                                            <c:choose>
-                                                <c:when test="${view1.status}">
-                                                    <c:choose>
-                                                        <c:when test="${p.sales.service}">
-                                                            <a href="javascript:window.open('/sale/service/<c:out value="${p.sales.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder">Servis: <c:out value="${p.sales.id}" /></a>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <a href="javascript:window.open('/sale/sales/<c:out value="${p.sales.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder">Satış: <c:out value="${p.sales.id}" /></a>
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <c:choose>
-                                                        <c:when test="${p.sales.service}">
-                                                            Servis: <c:out value="${p.sales.id}" />
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            Satış: <c:out value="${p.sales.id}" />
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </th>
-                                        <th data-sort="<c:out value="${p.sales.customer.person.fullName}" />" data="<c:out value="${p.sales.customer.person.fullName}" />">
-                                            <c:if test="${not empty p.sales.customer.id}">
-                                                <a href="javascript:copyToClipboard2('<c:out value="${p.sales.customer.id}" />', 'Müştəri kodu <b><c:out value="${p.sales.customer.id}" /></b> kopyalandı')" class="kt-font-lg kt-font-bold kt-font-info kt-font-hover-danger pl-2 pr-2"><i class="la la-copy"></i></a>
-                                            </c:if>
-                                            <c:choose>
-                                                <c:when test="${view2.status}">
-                                                    <a href="javascript:window.open('/crm/customer/<c:out value="${p.sales.customer.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${p.sales.customer.person.fullName}"/></a>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <c:out value="${p.sales.customer.person.fullName}"/>
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </th>
-                                        <td style="max-width: 280px">
-                                            <div>
-                                                <a href="#" class="kt-link kt-font-bolder kt-font-danger"><c:out value="${p.sales.customer.person.contact.mobilePhone}"/></a>
-                                                <a href="#" class="kt-link kt-font-bolder kt-font-warning"><c:out value="${p.sales.customer.person.contact.homePhone}"/></a>
-                                                <a href="#" class="kt-link kt-font-bolder"><c:out value="${p.sales.customer.person.contact.relationalPhoneNumber1}"/></a>
-                                                <a href="#" class="kt-link kt-font-bolder"><c:out value="${p.sales.customer.person.contact.relationalPhoneNumber2}"/></a>
-                                                <a href="#" class="kt-link kt-font-bolder"><c:out value="${p.sales.customer.person.contact.relationalPhoneNumber3}"/></a>
-                                            </div>
-                                            <div>
-                                                <c:out value="${p.sales.customer.person.contact.city.name}"/>
-                                                <c:out value="${p.sales.customer.person.contact.address}"/>
-                                            </div>
-                                        </td>
-                                        <td><fmt:formatDate value = "${t.scheduleDate}" pattern = "dd.MM.yyyy" /></td>
-                                        <th data-sort="<c:out value="${t.amount}" />">
-                                            <a href="javascript:window.open('/sale/schedule/<c:out value="${p.sales.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.amount}" /> AZN</a>
-                                        </th>
-                                        <th data-sort="<c:out value="${t.payableAmount gt 0?t.payableAmount:0}" />">
-                                            <c:if test="${t.payableAmount>0}">
-                                                <c:out value="${t.payableAmount}" /> AZN
-                                            </c:if>
-                                        </th>
-                                        <th data-sort="<c:out value="${t.payableAmount gt 0?(t.payableAmount-t.amount):0}" />">
-                                            <c:if test="${t.payableAmount>0}">
+                                    <c:if test="${(!p.singleContract and p.sales.payment.latency eq 0) or p.singleContract}">
+                                        <tr>
+                                            <th>${loop1.index+1}</th>
+                                            <th style="<c:out value="${p.sales.payment.cash?'background-color: #e6ffe7 !important':'background-color: #ffeaf1 !important'}"/>"  data-sort="<c:out value="${p.sales.id}" />">
+                                                <c:if test="${not empty p.sales.id}">
+                                                    <a href="javascript:copyToClipboard2('<c:out value="${p.sales.id}" />', 'Satış kodu <b><c:out value="${p.sales.id}" /></b> kopyalandı')" class="kt-font-lg kt-font-bold kt-font-info kt-font-hover-danger pl-2 pr-2"><i class="la la-copy"></i></a>
+                                                </c:if>
+                                                <c:choose>
+                                                    <c:when test="${view1.status}">
+                                                        <c:choose>
+                                                            <c:when test="${p.sales.service}">
+                                                                <a href="javascript:window.open('/sale/service/<c:out value="${p.sales.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder">Servis: <c:out value="${p.sales.id}" /></a>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <a href="javascript:window.open('/sale/sales/<c:out value="${p.sales.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder">Satış: <c:out value="${p.sales.id}" /></a>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <c:choose>
+                                                            <c:when test="${p.sales.service}">
+                                                                Servis: <c:out value="${p.sales.id}" />
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                Satış: <c:out value="${p.sales.id}" />
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </th>
+                                            <th data-sort="<c:out value="${p.sales.customer.person.fullName}" />" data="<c:out value="${p.sales.customer.person.fullName}" />">
+                                                <c:if test="${not empty p.sales.customer.id}">
+                                                    <a href="javascript:copyToClipboard2('<c:out value="${p.sales.customer.id}" />', 'Müştəri kodu <b><c:out value="${p.sales.customer.id}" /></b> kopyalandı')" class="kt-font-lg kt-font-bold kt-font-info kt-font-hover-danger pl-2 pr-2"><i class="la la-copy"></i></a>
+                                                </c:if>
+                                                <c:choose>
+                                                    <c:when test="${view2.status}">
+                                                        <a href="javascript:window.open('/crm/customer/<c:out value="${p.sales.customer.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${p.sales.customer.person.fullName}"/></a>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <c:out value="${p.sales.customer.person.fullName}"/>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </th>
+                                            <td style="max-width: 280px">
+                                                <div>
+                                                    <a href="#" class="kt-link kt-font-bolder kt-font-danger"><c:out value="${p.sales.customer.person.contact.mobilePhone}"/></a>
+                                                    <a href="#" class="kt-link kt-font-bolder kt-font-warning"><c:out value="${p.sales.customer.person.contact.homePhone}"/></a>
+                                                    <a href="#" class="kt-link kt-font-bolder"><c:out value="${p.sales.customer.person.contact.relationalPhoneNumber1}"/></a>
+                                                    <a href="#" class="kt-link kt-font-bolder"><c:out value="${p.sales.customer.person.contact.relationalPhoneNumber2}"/></a>
+                                                    <a href="#" class="kt-link kt-font-bolder"><c:out value="${p.sales.customer.person.contact.relationalPhoneNumber3}"/></a>
+                                                </div>
+                                                <div>
+                                                    <c:out value="${p.sales.customer.person.contact.city.name}"/>
+                                                    <c:out value="${p.sales.customer.person.contact.address}"/>
+                                                </div>
+                                            </td>
+                                            <td><fmt:formatDate value = "${t.scheduleDate}" pattern = "dd.MM.yyyy" /></td>
+                                            <th data-sort="<c:out value="${t.amount}" />">
+                                                <a href="javascript:window.open('/sale/schedule/<c:out value="${p.sales.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.amount}" /> AZN</a>
+                                            </th>
+                                            <th data-sort="<c:out value="${t.payableAmount gt 0?t.payableAmount:0}" />">
+                                                <c:if test="${t.payableAmount>0}">
+                                                    <c:out value="${t.payableAmount}" /> AZN
+                                                </c:if>
+                                            </th>
+                                            <th data-sort="<c:out value="${t.payableAmount gt 0?(t.payableAmount-t.amount):0}" />">
+                                                <c:if test="${t.payableAmount>0}">
                                                 <span class="kt-font-bold kt-font-danger">
                                                     <c:out value="${t.payableAmount-t.amount}" /> AZN
                                                 </span>
-                                            </c:if>
-                                        </th>
-                                        <td data-sort="<c:out value="${p.sales.payment.unpaid}"/>">
-                                            <c:out value="${p.sales.payment.unpaid}"/> AZN
-                                        </td>
-                                        <th data-sort="<c:out value="${(days>0 && t.payableAmount-t.amount<0)?days:0}"/>">
+                                                </c:if>
+                                            </th>
+                                            <td data-sort="<c:out value="${p.sales.payment.unpaid}"/>">
+                                                <c:out value="${p.sales.payment.unpaid}"/> AZN
+                                            </td>
+                                            <th data-sort="<c:out value="${(days>0 && t.payableAmount-t.amount<0)?days:0}"/>">
                                             <span class="kt-font-bold kt-font-info">
                                                 <c:if test="${days>0 && t.payableAmount-t.amount<0}">
                                                     <c:out value = "${days}" /> gün
                                                 </c:if>
                                             </span>
-                                        </th>
-                                        <td style="max-width: 270px">
-                                            <c:if test="${view3.status}">
-                                                <c:if test="${p.sales.contactHistories.size()>0}">
-                                                    <a href="javascript:window.open('/collect/contact-history/<c:out value="${p.sales.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder">
+                                            </th>
+                                            <td style="max-width: 270px">
+                                                <c:if test="${view3.status}">
+                                                    <c:if test="${p.sales.contactHistories.size()>0}">
+                                                        <a href="javascript:window.open('/collect/contact-history/<c:out value="${p.sales.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder">
+                                                            <c:set var="ch" value="${p.sales.contactHistories.get(p.sales.contactHistories.size()-1)}"/>
+                                                            <c:out value="${ch.user.username}"/>
+                                                            <fmt:formatDate value = "${ch.createdDate}" pattern = "dd.MM.yyyy" /> -
+                                                            <fmt:formatDate value = "${ch.nextContactDate}" pattern = "dd.MM.yyyy" /> -
+                                                            <c:out value="${fn:substring(ch.description, 0, 94)}" />
+                                                            <c:out value="${ch.description.length()>94?' . . . ':''}"/>
+                                                        </a>
+                                                    </c:if>
+                                                </c:if>
+                                                <c:if test="${!view3.status}">
+                                                    <c:if test="${p.sales.contactHistories.size()>0}">
                                                         <c:set var="ch" value="${p.sales.contactHistories.get(p.sales.contactHistories.size()-1)}"/>
                                                         <c:out value="${ch.user.username}"/>
                                                         <fmt:formatDate value = "${ch.createdDate}" pattern = "dd.MM.yyyy" /> -
                                                         <fmt:formatDate value = "${ch.nextContactDate}" pattern = "dd.MM.yyyy" /> -
                                                         <c:out value="${fn:substring(ch.description, 0, 94)}" />
                                                         <c:out value="${ch.description.length()>94?' . . . ':''}"/>
+                                                    </c:if>
+                                                </c:if>
+                                            </td>
+                                            <td nowrap class="text-center">
+                                                <c:if test="${transfer.status}">
+                                                    <a href="javascript:transfer($('#form-transfer'), 'transfer-modal-operation', '<c:out value="${p.sales.id}" />', '<c:out value="${t.amount-t.payableAmount}" />', '<fmt:formatDate value = "${t.scheduleDate}" pattern = "dd.MM.yyyy" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
+                                                        <i class="<c:out value="${transfer.object.icon}"/>"></i>
                                                     </a>
                                                 </c:if>
-                                            </c:if>
-                                            <c:if test="${!view3.status}">
-                                                <c:if test="${p.sales.contactHistories.size()>0}">
-                                                    <c:set var="ch" value="${p.sales.contactHistories.get(p.sales.contactHistories.size()-1)}"/>
-                                                    <c:out value="${ch.user.username}"/>
-                                                    <fmt:formatDate value = "${ch.createdDate}" pattern = "dd.MM.yyyy" /> -
-                                                    <fmt:formatDate value = "${ch.nextContactDate}" pattern = "dd.MM.yyyy" /> -
-                                                    <c:out value="${fn:substring(ch.description, 0, 94)}" />
-                                                    <c:out value="${ch.description.length()>94?' . . . ':''}"/>
-                                                </c:if>
-                                            </c:if>
-                                        </td>
-                                        <td nowrap class="text-center">
-                                            <c:if test="${transfer.status}">
-                                                <a href="javascript:transfer($('#form-transfer'), 'transfer-modal-operation', '<c:out value="${p.sales.id}" />', '<c:out value="${t.amount-t.payableAmount}" />', '<fmt:formatDate value = "${t.scheduleDate}" pattern = "dd.MM.yyyy" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
-                                                    <i class="<c:out value="${transfer.object.icon}"/>"></i>
-                                                </a>
-                                            </c:if>
-                                        </td>
-                                    </tr>
+                                            </td>
+                                        </tr>
+                                    </c:if>
                                 </c:forEach>
                                 </c:forEach>
                                 </tbody>

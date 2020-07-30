@@ -1733,6 +1733,10 @@ public class ReadWriteExcelFile {
 		cell = row.createCell(row.getLastCellNum());
 		cell.setCellValue("Aktiv");
 		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("Qaytarılıb");
+		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("Qaytarılma tarixi");
+		cell = row.createCell(row.getLastCellNum());
 		cell.setCellValue("Qarantiya bitir");
 		cell = row.createCell(row.getLastCellNum());
 		cell.setCellValue("Struktur");
@@ -1831,6 +1835,10 @@ public class ReadWriteExcelFile {
 			cell.setCellValue(sale.getSaled());
 			cell = row.createCell(row.getLastCellNum());
 			cell.setCellValue(sale.getActive());
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(sale.getReturned());
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(Util.checkNull(sale.getReturnedDate()));
 			cell = row.createCell(row.getLastCellNum());
 			cell.setCellValue(Util.checkNull(sale.getGuaranteeExpire()));
 			cell = row.createCell(row.getLastCellNum());

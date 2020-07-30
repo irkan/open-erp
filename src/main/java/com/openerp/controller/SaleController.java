@@ -91,7 +91,7 @@ public class SaleController extends SkeletonController {
                     }
                 }
                 List<SalesSchedule> salesSchedules = new ArrayList<>();
-                salesSchedules.add(new SalesSchedule(schedules, sale));
+                salesSchedules.add(new SalesSchedule(schedules, sale, true));
                 Page<SalesSchedule> salesSchedulePage = new PageImpl<>(salesSchedules);
                 model.addAttribute(Constants.LIST, salesSchedulePage);
             } else {
@@ -187,7 +187,7 @@ public class SaleController extends SkeletonController {
                 taxConfigurations = taxConfigurationRepository.getTaxConfigurationsByActiveTrue();
             }
             for(TaxConfiguration taxConfiguration: taxConfigurations){
-                List<Sales> salesList = salesRepository.getSalesByActiveTrueAndApproveTrueAndSaledFalseAndTaxConfiguration(taxConfiguration);
+                List<Sales> salesList = salesRepository.getSalesByActiveTrueAndApproveTrueAndSaledFalseAndTaxConfigurationAndReturnedFalse(taxConfiguration);
                 taxConfiguration.setSalesCount(salesList.size());
                 taxConfiguration.setPlannedPaymentAmountMonthly(calculatePlannedPaymentMonthly(salesList));
             }
@@ -248,7 +248,7 @@ public class SaleController extends SkeletonController {
             log(sales, "sales", "create/edit", sales.getId(), sales.toString());
 
             if(sales.getService()){
-                List<Sales> salesList = salesRepository.getSalesByActiveTrueAndApproveTrueAndServiceFalseAndCustomerAndOrganizationOrderByIdDesc(sales.getCustomer(), sales.getOrganization());
+                List<Sales> salesList = salesRepository.getSalesByActiveTrueAndApproveTrueAndServiceFalseAndCustomerAndOrganizationAndReturnedFalseOrderByIdDesc(sales.getCustomer(), sales.getOrganization());
                 if(salesList.size()>0){
                     addContactHistory(salesList.get(0), "Servis əlavə edildi: "+((sales.getPayment()!=null && sales.getPayment().getDescription()!=null)?sales.getPayment().getDescription():""), sales);
                 }
@@ -327,7 +327,8 @@ public class SaleController extends SkeletonController {
         contactHistoryRepository.save(contactHistory);
         log(contactHistory, "collect_contact_history", "create/edit", contactHistory.getId(), contactHistory.toString());
 
-        sales.setActive(false);
+        sales.setReturned(true);
+        sales.setReturnedDate(new Date());
         salesRepository.save(sales);
 
         log(sales, "sales", "delete", sales.getId(), sales.toString(), "Qaytarılma icra edildi");
@@ -829,16 +830,16 @@ public class SaleController extends SkeletonController {
             }
         }
 
-        List<Sales> salesList1 = salesRepository.getSalesByActiveTrueAndApproveTrueAndPayment_CashAndPayment_PeriodAndSaledFalseAndOrganization(false, paymentPeriod, getSessionOrganization());
+        List<Sales> salesList1 = salesRepository.getSalesByActiveTrueAndApproveTrueAndPayment_CashAndPayment_PeriodAndSaledFalseAndOrganizationAndReturnedFalse(false, paymentPeriod, getSessionOrganization());
         if(canViewAll()){
-            salesList1 = salesRepository.getSalesByActiveTrueAndApproveTrueAndPayment_CashAndPayment_PeriodAndSaledFalse(false, paymentPeriod);
+            salesList1 = salesRepository.getSalesByActiveTrueAndApproveTrueAndPayment_CashAndPayment_PeriodAndSaledFalseAndReturnedFalse(false, paymentPeriod);
         }
 
         salesList.addAll(salesList1);
 
-        List<Sales> salesList2 = salesRepository.getSalesByActiveTrueAndApproveTrueAndPayment_CashAndSaleDateAndSaledFalseAndOrganization(true, salesSchedule.getScheduleDate(), getSessionOrganization());
+        List<Sales> salesList2 = salesRepository.getSalesByActiveTrueAndApproveTrueAndPayment_CashAndSaleDateAndSaledFalseAndOrganizationAndReturnedFalse(true, salesSchedule.getScheduleDate(), getSessionOrganization());
         if (canViewAll()){
-            salesList2 = salesRepository.getSalesByActiveTrueAndApproveTrueAndPayment_CashAndSaleDateAndSaledFalse(true, salesSchedule.getScheduleDate());
+            salesList2 = salesRepository.getSalesByActiveTrueAndApproveTrueAndPayment_CashAndSaleDateAndSaledFalseAndReturnedFalse(true, salesSchedule.getScheduleDate());
         }
 
         salesList.addAll(salesList2);

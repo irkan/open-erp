@@ -329,7 +329,7 @@
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${list.content}" varStatus="loop">
-                                    <tr data="<c:out value="${t.id}" />" cash="<c:out value="${t.payment.cash}" />" style="<c:out value="${t.saled?'background-color: rgb(237, 239, 255) !important':''}"/>">
+                                    <tr data="<c:out value="${t.id}" />" cash="<c:out value="${t.payment.cash}" />" style="<c:out value="${t.saled?'background-color: rgb(237, 239, 255) !important':''}"/> <c:out value="${t.returned?'background-color: #FFCABA !important':''}"/>">
                                         <td style="<c:out value="${t.payment.cash?'background-color: #e6ffe7 !important':'background-color: #ffeaf1 !important'}"/>">
                                             <a href="javascript:copyToClipboard('<c:out value="${t.id}" />')" class="kt-link kt-font-lg kt-font-bold kt-margin-t-5"><c:out value="${t.id}"/></a>
                                         </td>
@@ -396,6 +396,12 @@
                                             </c:if>
                                             <c:if test="${not empty t.taxConfiguration.voen}">
                                                 VÖEN: <c:out value="${t.taxConfiguration.voen}" />
+                                                <c:if test="${t.returned and not empty t.returnedDate}">
+                                                    <br/>
+                                                </c:if>
+                                            </c:if>
+                                            <c:if test="${t.returned and not empty t.returnedDate}">
+                                                Qytarılıb: <fmt:formatDate value = "${t.returnedDate}" pattern = "dd.MM.yyyy" />
                                             </c:if>
                                         </td>
                                         <td>
@@ -569,6 +575,8 @@
                     <form:hidden path="id"/>
                     <form:hidden path="active"/>
                     <form:hidden path="service"/>
+                    <form:hidden path="returned"/>
+                    <form:hidden path="saled"/>
                     <form:hidden path="organization"/>
                     <input type="hidden" name="customer.organization" value="<c:out value="${sessionScope.organization.id}"/>"/>
                     <div class="kt-wizard-v1__content" data-ktwizard-type="step-content" data-ktwizard-state="current">

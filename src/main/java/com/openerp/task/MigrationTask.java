@@ -911,7 +911,7 @@ public class MigrationTask {
         try{
             Customer customer = findCustomer(fullName, organization);
             if(customer!=null){
-                List<Sales> salesList = salesRepository.getSalesByActiveTrueAndApproveTrueAndServiceFalseAndCustomerAndOrganizationOrderByIdDesc(customer, organization);
+                List<Sales> salesList = salesRepository.getSalesByActiveTrueAndApproveTrueAndServiceFalseAndCustomerAndOrganizationAndReturnedFalseOrderByIdDesc(customer, organization);
                 if(salesList.size()>0){
                     return salesList.get(0);
                 }

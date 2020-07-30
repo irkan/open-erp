@@ -157,5 +157,8 @@ public class Constants {
         public static final String MIGRATION_DETAIL = "migration-detail";
         public static final String MIGRATION_DETAIL_SERVICE_REGULATOR = "migration-detail-service-regulator";
         public static final String TAX_CONFIGURATION = "tax-configuration";
+        public static final String REPORT_ACCOUNTING = "report-accounting";
+        public static final String SALES_BALANCE = "sales-balance";
+        public static final String SERVICE_BALANCE = "service-balance";
     }
 }

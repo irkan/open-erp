@@ -41,7 +41,7 @@ public class ServiceScheduleTask {
             GlobalConfiguration configuration = configurationRepository.getGlobalConfigurationByKey("service");
             String defaultValue = configuration!=null?configuration.getAttribute():"6";
             Date today = new Date();
-            for(Sales sales: salesRepository.getSalesByActiveTrueAndServiceFalseAndApproveTrueAndNotServiceNextFalseOrderByIdAsc()){
+            for(Sales sales: salesRepository.getSalesByActiveTrueAndServiceFalseAndApproveTrueAndNotServiceNextFalseAndReturnedFalseOrderByIdAsc()){
                 try {
                     ServiceTask serviceTask = new ServiceTask();
                     String description = "";

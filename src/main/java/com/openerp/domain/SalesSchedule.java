@@ -14,6 +14,8 @@ import java.util.List;
 @NoArgsConstructor
 public class SalesSchedule {
 
+    private Boolean singleContract=false;
+
     private List<Schedule> schedules;
 
     private Sales sales;
@@ -36,5 +38,11 @@ public class SalesSchedule {
     public SalesSchedule(Sales sales, Date scheduleDate) {
         this.sales = sales;
         this.scheduleDate = scheduleDate;
+    }
+
+    public SalesSchedule(List<Schedule> schedules, Sales sales, Boolean singleContract) {
+        this.schedules = schedules;
+        this.sales = sales;
+        this.singleContract = singleContract;
     }
 }
