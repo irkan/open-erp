@@ -6,6 +6,7 @@ import com.openerp.entity.Dictionary;
 import net.emaze.dysfunctional.Groups;
 import net.emaze.dysfunctional.dispatching.delegates.Pluck;
 import org.apache.log4j.Logger;
+import org.json.JSONObject;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -22,6 +23,9 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -86,6 +90,38 @@ public class Util {
             log.error(e.getMessage(), e);
         }
         return false;
+    }
+
+    public static List<JSONObject> getFormattedResult(ResultSet rs) {
+        List<JSONObject> resList = new ArrayList<JSONObject>();
+        try {
+            // get column names
+            ResultSetMetaData rsMeta = rs.getMetaData();
+            int columnCnt = rsMeta.getColumnCount();
+            List<String> columnNames = new ArrayList<String>();
+            for(int i=1;i<=columnCnt;i++) {
+                columnNames.add(rsMeta.getColumnName(i).toUpperCase());
+            }
+
+            while(rs.next()) { // convert each object to an human readable JSON object
+                JSONObject obj = new JSONObject();
+                for(int i=1;i<=columnCnt;i++) {
+                    String key = columnNames.get(i - 1);
+                    String value = rs.getString(i);
+                    obj.put(key, value);
+                }
+                resList.add(obj);
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return resList;
     }
 
     public static InventoryAmount calculateInventoryAmount(List<Action> actions, int organizationId){
@@ -750,7 +786,6 @@ public class Util {
         try {
             return Integer.parseInt(value);
         } catch (Exception e){
-            e.printStackTrace();
             log.error(e.getMessage(), e);
         }
         return 0;
@@ -760,7 +795,6 @@ public class Util {
         try {
             return Integer.parseInt(String.valueOf(object));
         } catch (Exception e){
-            e.printStackTrace();
             log.error(e.getMessage(), e);
         }
         return 0;

@@ -13,9 +13,15 @@ public class Report {
     private String string1;
     private String string2;
     private String string3;
+    private String string4;
+    private String string5;
+    private String string6;
+    private String string7;
     private Integer integer1;
     private Integer integer2;
     private Integer integer3;
+    private Integer integer4;
+    private Integer integer5;
     private Long long1;
     private Long long2;
     private Long long3;

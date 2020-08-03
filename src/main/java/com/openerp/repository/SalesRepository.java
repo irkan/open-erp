@@ -21,6 +21,8 @@ public interface SalesRepository extends JpaRepository<Sales, Integer>, JpaSpeci
     List<Sales> getSalesByActiveTrueAndApproveTrueAndPayment_CashAndPayment_PeriodAndSaledFalseAndSaleDateGreaterThanEqual(Boolean cash, Dictionary paymentPeriod, Date saleDate);
     List<Sales> getSalesByActiveTrueAndApproveTrueAndPayment_CashAndPayment_PeriodAndSaledFalseAndOrganizationAndReturnedFalse(Boolean cash, Dictionary paymentPeriod, Organization organization);
     List<Sales> getSalesByActiveTrueAndApproveTrueAndPayment_CashAndPayment_PeriodAndSaledFalseAndSaleDateGreaterThanEqualAndOrganization(Boolean cash, Dictionary paymentPeriod, Date saleDate, Organization organization);
+    List<Sales> getSalesByActiveTrueAndApproveTrueAndPayment_CashAndSaledFalseAndReturnedFalseAndOrganization_Id(Boolean cash, Integer organizationId);
+    List<Sales> getSalesByActiveTrueAndApproveTrueAndPayment_CashAndSaledFalseAndReturnedFalse(Boolean cash);
     List<Sales> getSalesByActiveTrueAndApproveTrueAndPayment_CashAndSaleDateAndSaledFalseAndReturnedFalse(Boolean cash, Date saleDate);
     List<Sales> getSalesByActiveTrueAndApproveTrueAndPayment_CashAndSaleDateAndSaledFalseAndOrganizationAndReturnedFalse(Boolean cash, Date saleDate, Organization organization);
     List<Sales> getSalesByActiveTrueAndApproveTrueAndServiceFalseAndCustomerAndOrganizationAndReturnedFalseOrderByIdDesc(Customer customer, Organization organization);

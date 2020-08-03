@@ -36,3 +36,9 @@ select o.name,
         (select IFNULL(sum(p1.schedule_price), 0) from sales s1, payment p1 where s1.payment_id=p1.id and s1.is_active=1 and s1.is_approve=1 and s1.is_saled=0 and s1.is_returned=0 and p1.is_cash=0 and s1.organization_id=o.id)) planlanlanmis_yigim_meblegi,
        5+5
 from organization o where o.is_active=1;
+
+
+
+
+update invoice i2, sales s2 set invoice.invoice_date=s2.approve_date, i2.approve_date=s2.approve_date where i2.sales_id=s2.id and i2.id in (select i1.id from sales s1, invoice i1 where s1.id=i1.sales_id and i1.approve_date is not null and s1.approve_date is not null and i1.sales_id in (select id from sales s1 where (s1.id>=105786 and s1.id<=106447) or (s1.id>=100001 and s1.id<=105652)) and ((i1.approve_date between '2020-07-09 19:00:30' and '2020-07-09 23:00:25') or (i1.approve_date between '2020-06-29 20:04:22' and '2020-06-30 16:10:41')));
+commit;

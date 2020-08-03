@@ -123,7 +123,7 @@ public class Sales {
 
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd.MM.yyyy")
-    @Column(name = "returned_date", nullable = false)
+    @Column(name = "returned_date")
     private Date returnedDate;
 
     @Column(name = "is_not_service_next", nullable = false, columnDefinition="boolean default false")

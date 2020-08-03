@@ -74,7 +74,7 @@ public class MigrationTask {
     ContactHistoryRepository contactHistoryRepository;
 
 
-    @Scheduled(fixedDelay = 1000000, initialDelay = 5000)
+    @Scheduled(fixedDelay = 100000000, initialDelay = 5000)
     public void writeTable() {
         try{
             log.info("Migration Task Start read data from excel and insert table");

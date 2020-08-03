@@ -160,5 +160,8 @@ public class Constants {
         public static final String REPORT_ACCOUNTING = "report-accounting";
         public static final String SALES_BALANCE = "sales-balance";
         public static final String SERVICE_BALANCE = "service-balance";
+        public static final String DASHBOARD = "dashboard";
+        public static final String REPORT_SALES = "report-sales";
+        public static final String REPORT_COLLECT = "report-collect";
     }
 }

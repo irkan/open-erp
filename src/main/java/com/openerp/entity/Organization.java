@@ -1,6 +1,7 @@
 package com.openerp.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.openerp.util.Util;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -58,6 +59,10 @@ public class Organization {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "contact_id")
     private Contact contact;
+
+    public String getReportCondition() {
+        return " and o.id=" + this.id + " ";
+    }
 
     public Organization(Contact contact, String name, String description, Organization organization, Dictionary type) {
         this.contact = contact;
