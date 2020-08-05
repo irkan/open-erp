@@ -357,6 +357,7 @@ public class SkeletonController {
     }
 
     String mapPost(Object object, BindingResult binding, RedirectAttributes redirectAttributes){
+        //redirectAttributes.addFlashAttribute(Constants.FILTER, filter);
         redirectAttributes.addFlashAttribute(Constants.FORM_RESULT_BINDING, binding);
         redirectAttributes.addFlashAttribute(Constants.FORM, object);
         if(!binding.hasErrors()){
@@ -366,18 +367,25 @@ public class SkeletonController {
     }
 
     String mapPost2(Object object, BindingResult binding, RedirectAttributes redirectAttributes){
+        if(session.getAttribute(Constants.SESSION_FILTER)!=null){
+            redirectAttributes.addFlashAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
+        }
         redirectAttributes.addFlashAttribute(Constants.FORM_RESULT_BINDING, binding);
         redirectAttributes.addFlashAttribute(Constants.FORM, object);
         return "redirect:"+request.getRequestURI();
     }
 
     String mapPost2(Object object, BindingResult binding, RedirectAttributes redirectAttributes, String redirect){
+        if(session.getAttribute(Constants.SESSION_FILTER)!=null){
+            redirectAttributes.addFlashAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
+        }
         redirectAttributes.addFlashAttribute(Constants.FORM_RESULT_BINDING, binding);
         redirectAttributes.addFlashAttribute(Constants.FORM, object);
         return "redirect:"+redirect;
     }
 
     String mapPost(Object object, BindingResult binding, RedirectAttributes redirectAttributes, String redirect){
+        redirectAttributes.addFlashAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
         redirectAttributes.addFlashAttribute(Constants.FORM_RESULT_BINDING, binding);
         redirectAttributes.addFlashAttribute(Constants.FORM, object);
         if(!binding.hasErrors()){
@@ -393,6 +401,9 @@ public class SkeletonController {
     }
 
     String mapPost(RedirectAttributes redirectAttributes, String redirect){
+        if(session.getAttribute(Constants.SESSION_FILTER)!=null){
+            redirectAttributes.addFlashAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
+        }
         redirectAttributes.getFlashAttributes().remove(Constants.FORM);
         return "redirect:"+redirect;
     }

@@ -132,6 +132,7 @@ public class CollectController extends SkeletonController {
             }
             model.addAttribute(Constants.LIST, serviceTaskService.findAll((ServiceTask) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
         }
+        session.setAttribute(Constants.SESSION_FILTER, model.asMap().get(Constants.FILTER));
         return "layout";
     }
 
@@ -179,7 +180,7 @@ public class CollectController extends SkeletonController {
     }
 
     @PostMapping(value = "/troubled-customer/transfer")
-    public String postTroubledCustomerTransfer(@ModelAttribute(Constants.FORM) @Validated Invoice invoice,
+    public String postTroubledCustomerTransfer(Model model, @ModelAttribute(Constants.FORM) @Validated Invoice invoice,
                                                BindingResult binding,
                                                RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(null, Constants.TEXT.SUCCESS));

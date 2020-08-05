@@ -93,6 +93,7 @@ public class AccountingController extends SkeletonController {
                 return exportExcel(financings, redirectAttributes, page);
             }
         }
+        session.setAttribute(Constants.SESSION_FILTER, model.asMap().get(Constants.FILTER));
         return "layout";
     }
 

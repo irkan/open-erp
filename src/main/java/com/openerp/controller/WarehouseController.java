@@ -114,6 +114,7 @@ public class WarehouseController extends SkeletonController {
                 return exportExcel(actions, redirectAttributes, page);
             }
         }
+        session.setAttribute(Constants.SESSION_FILTER, model.asMap().get(Constants.FILTER));
         return "layout";
     }
 

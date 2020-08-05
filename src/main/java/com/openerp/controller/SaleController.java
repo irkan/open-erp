@@ -34,7 +34,6 @@ public class SaleController extends SkeletonController {
 
     @GetMapping(value = {"/{page}", "/{page}/{data}"})
     public String route(Model model, @PathVariable("page") String page, @PathVariable("data") Optional<String> data, RedirectAttributes redirectAttributes) throws Exception {
-
         if (page.equalsIgnoreCase(Constants.ROUTE.SALES)){
             List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganizationAndActiveTrue(getSessionOrganization());
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
@@ -196,6 +195,8 @@ public class SaleController extends SkeletonController {
                 return exportExcel(taxConfigurationRepository.findAll(), redirectAttributes, page);
             }
         }
+        redirectAttributes.addFlashAttribute(Constants.FILTER, model.asMap().get(Constants.FILTER));
+        session.setAttribute(Constants.SESSION_FILTER, model.asMap().get(Constants.FILTER));
         return "layout";
     }
 
