@@ -221,10 +221,10 @@ public class ReportingDao implements IReportingDao {
                     select = " i1.approve_date xaxis, DAY(i1.approve_date) zaxis ";
                     break;
                 case 2:
-                    orderby = "  order by xaxis ";
+                    orderby = "  order by xaxis, zaxis ";
                     groupby = " GROUP BY YEAR(i1.approve_date), MONTH(i1.approve_date) ";
                     condition = " and i1.approve_date>=DATE_SUB(CURDATE(), INTERVAL 13 MONTH) ";
-                    select = " i1.approve_date xaxis, CONCAT_WS('.', MONTH(s1.approve_date), YEAR(s1.approve_date)) zaxis ";
+                    select = " MONTH(i1.approve_date) zaxis, YEAR(i1.approve_date) xaxis ";
                     break;
                 case 3:
                     orderby = "  order by xaxis ";
@@ -272,10 +272,10 @@ public class ReportingDao implements IReportingDao {
                     select = " s1.approve_date xaxis, DAY(s1.approve_date) zaxis ";
                     break;
                 case 2:
-                    orderby = "  order by xaxis ";
+                    orderby = "  order by xaxis, zaxis ";
                     groupby = " GROUP BY YEAR(s1.approve_date), MONTH(s1.approve_date) ";
                     condition = " and s1.approve_date>=DATE_SUB(CURDATE(), INTERVAL 13 MONTH) ";
-                    select = " s1.approve_date xaxis, CONCAT_WS('.', MONTH(s1.approve_date), YEAR(s1.approve_date)) zaxis ";
+                    select = "  MONTH(s1.approve_date) zaxis, YEAR(s1.approve_date) xaxis  ";
                     break;
                 case 3:
                     orderby = "  order by xaxis ";
@@ -324,10 +324,10 @@ public class ReportingDao implements IReportingDao {
                     select = " s1.date xaxis, DAY(s1.date) zaxis ";
                     break;
                 case 2:
-                    orderby = "  order by xaxis ";
+                    orderby = "  order by xaxis, zaxis ";
                     groupby = " GROUP BY YEAR(s1.date), MONTH(s1.date) ";
                     condition = " and s1.date>=DATE_SUB(CURDATE(), INTERVAL 13 MONTH) ";
-                    select = " s1.date xaxis, CONCAT_WS('.', MONTH(s1.date), YEAR(s1.date)) zaxis ";
+                    select = "  MONTH(s1.date) zaxis, YEAR(s1.date) xaxis  ";
                     break;
                 case 3:
                     orderby = "  order by xaxis ";

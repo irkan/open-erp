@@ -56,15 +56,15 @@ public class ReportUtil {
                 for (Date date = start.getTime(); start.before(end); start.add(Calendar.MONTH, 1), date = start.getTime()) {
                     boolean status = false;
                     for(JSONObject jsonObject: objects){
-                        if((Util.checkNull(date.getMonth()+1)+"."+Util.checkNull(date.getYear()+1900)).equalsIgnoreCase(Util.checkNull(jsonObject.getString("ZAXIS")))){
+                        if(date.getMonth()+1==Util.parseInt(jsonObject.getString("ZAXIS")) && date.getYear()+1900==Util.parseInt(jsonObject.getString("XAXIS"))){
                             newList.add(jsonObject);
                             status=true;
                         }
                     }
                     if(!status){
                         JSONObject jsonObj = new JSONObject();
-                        jsonObj.put("XAXIS", Util.checkNull(DateUtility.findMonthName(date.getMonth()+1)));
-                        jsonObj.put("ZAXIS", Util.checkNull(date.getMonth()+1)+"."+Util.checkNull(date.getYear()+1900));
+                        jsonObj.put("ZAXIS", Util.checkNull(DateUtility.findMonthName(date.getMonth()+1)));
+                        jsonObj.put("XAXIS", Util.checkNull(date.getYear()+1900));
                         jsonObj.put("YAXIS", "0");
                         newList.add(jsonObj);
                     }

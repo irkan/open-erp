@@ -19,7 +19,7 @@ public class ApiController extends SkeletonController {
 
     @ResponseBody
     @GetMapping(value = "/info/{username}/{password}/{sale_code}")
-    public WSResponse getPayment(@PathVariable("username") String username, @PathVariable("password") String password, @PathVariable("code") Integer saleId){
+    public WSResponse getPayment(@PathVariable("username") String username, @PathVariable("password") String password, @PathVariable("sale_code") Integer saleId){
         WSResponse response = new WSResponse("404", "Xəta baş verdi!");
         try {
             WebServiceAuthenticator webServiceAuthenticator = webServiceAuthenticatorRepository.getWebServiceAuthenticatorByUsernameAndPasswordAndActiveTrue(username, password);
@@ -28,7 +28,7 @@ public class ApiController extends SkeletonController {
                 response = new WSResponse("400", "Məlumat tapılmadı!");
                 if(sale!=null && sale.getPayment()!=null){
                     double sumOfInvoices = Util.calculateInvoice(sale.getInvoices());
-                    List<Schedule> schedules = getSchedulePayment(DateUtility.getFormattedDate(sale.getSaleDate()), sale.getPayment().getSchedule(), sale.getPayment().getPeriod(), sale.getPayment().getLastPrice(), sale.getPayment().getDown(), Util.parseInt(sale.getPayment().getGracePeriod()));
+                    List<Schedule> schedules = Util.getSchedulePayment(DateUtility.getFormattedDate(sale.getSaleDate()), sale.getPayment().getSchedule(), sale.getPayment().getPeriod(), sale.getPayment().getLastPrice(), sale.getPayment().getDown(), Util.parseInt(sale.getPayment().getGracePeriod()));
                     double plannedPayment = Util.calculatePlannedPayment(sale, schedules);
                     schedules = Util.calculateSchedule(sale, schedules, sumOfInvoices);
                     sale.getPayment().setLatency(Util.calculateLatency(schedules, sumOfInvoices, sale));
@@ -47,7 +47,6 @@ public class ApiController extends SkeletonController {
             }
         } catch (Exception e){
             log(null, "error", "", "", null, "", e.getMessage());
-            e.printStackTrace();
             log.error(e.getMessage(), e);
         }
         log(response, "sales", "find", saleId, response.toString(), username);
@@ -57,7 +56,7 @@ public class ApiController extends SkeletonController {
 
     @ResponseBody
     @GetMapping(value = "/pay/{username}/{password}/{sale_code}/{amount}/{channel_reference_code}")
-    public WSResponse pay(@PathVariable("username") String username, @PathVariable("password") String password,  @PathVariable("code") Integer saleId, @PathVariable("amount") Double amount, @PathVariable("channel_reference_code") String channelReferenceCode){
+    public WSResponse pay(@PathVariable("username") String username, @PathVariable("password") String password,  @PathVariable("sale_code") Integer saleId, @PathVariable("amount") Double amount, @PathVariable("channel_reference_code") String channelReferenceCode){
         WSResponse response = new WSResponse("404", "Xəta baş verdi!");
         try {
             WebServiceAuthenticator webServiceAuthenticator = webServiceAuthenticatorRepository.getWebServiceAuthenticatorByUsernameAndPasswordAndActiveTrue(username, password);
@@ -224,7 +223,6 @@ public class ApiController extends SkeletonController {
             }
         } catch (Exception e){
             log(null, "error", "", "", null, "", e.getMessage());
-            e.printStackTrace();
             log.error(e.getMessage(), e);
         }
         return response;

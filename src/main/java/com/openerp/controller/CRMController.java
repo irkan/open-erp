@@ -43,7 +43,6 @@ public class CRMController extends SkeletonController {
                 return exportExcel(customers, redirectAttributes, page);
             }
         }
-        session.setAttribute(Constants.SESSION_FILTER, model.asMap().get(Constants.FILTER));
         return "layout";
     }
 

@@ -367,25 +367,18 @@ public class SkeletonController {
     }
 
     String mapPost2(Object object, BindingResult binding, RedirectAttributes redirectAttributes){
-        if(session.getAttribute(Constants.SESSION_FILTER)!=null){
-            redirectAttributes.addFlashAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
-        }
         redirectAttributes.addFlashAttribute(Constants.FORM_RESULT_BINDING, binding);
         redirectAttributes.addFlashAttribute(Constants.FORM, object);
         return "redirect:"+request.getRequestURI();
     }
 
     String mapPost2(Object object, BindingResult binding, RedirectAttributes redirectAttributes, String redirect){
-        if(session.getAttribute(Constants.SESSION_FILTER)!=null){
-            redirectAttributes.addFlashAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
-        }
         redirectAttributes.addFlashAttribute(Constants.FORM_RESULT_BINDING, binding);
         redirectAttributes.addFlashAttribute(Constants.FORM, object);
         return "redirect:"+redirect;
     }
 
     String mapPost(Object object, BindingResult binding, RedirectAttributes redirectAttributes, String redirect){
-        redirectAttributes.addFlashAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
         redirectAttributes.addFlashAttribute(Constants.FORM_RESULT_BINDING, binding);
         redirectAttributes.addFlashAttribute(Constants.FORM, object);
         if(!binding.hasErrors()){
@@ -401,9 +394,6 @@ public class SkeletonController {
     }
 
     String mapPost(RedirectAttributes redirectAttributes, String redirect){
-        if(session.getAttribute(Constants.SESSION_FILTER)!=null){
-            redirectAttributes.addFlashAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
-        }
         redirectAttributes.getFlashAttributes().remove(Constants.FORM);
         return "redirect:"+redirect;
     }
@@ -580,23 +570,6 @@ public class SkeletonController {
         }
     }
 
-    List<Schedule> getSchedulePayment(String saleDate, Dictionary schedule, Dictionary period, Double lastPrice, Double down, Integer gracePeriod){
-        lastPrice = lastPrice==null?0:lastPrice;
-        int scheduleCount = Integer.parseInt(schedule.getAttr1());
-        Date saleDt = saleDate.trim().length()>0? DateUtility.getUtilDate(saleDate):new Date();
-        Date startDate = DateUtility.generate(Integer.parseInt(period.getAttr1()), saleDt.getMonth(), saleDt.getYear()+1900);
-        List<Schedule> schedules = new ArrayList<>();
-        Date scheduleDate = DateUtils.addMonths(startDate, 1+gracePeriod);
-        Double schedulePrice = Util.schedulePrice(schedule, lastPrice, down);
-        for(int i=0; i<scheduleCount; i++){
-            scheduleDate = DateUtils.addMonths(scheduleDate, 1);
-            Schedule schedule1 = new Schedule(schedulePrice, scheduleDate);
-            schedules.add(schedule1);
-        }
-        schedules = Util.correctLastSchedulePrice(schedules, lastPrice, down);
-        return schedules;
-    }
-
     BindingResult checkDate(BindingResult binding, Date date){
         Date today = new Date();
         if(!(today.getMonth()!=date.getMonth())){
@@ -750,26 +723,5 @@ public class SkeletonController {
             return true;
         }
         return false;
-    }
-
-    public Double calculatePlannedPaymentMonthly(List<Sales> salesList){
-        Double plannedPaymentMonthly = 0d;
-        for(Sales sales: salesList){
-            Double payed = Util.calculateInvoice(sales.getInvoices());
-            if(sales.getPayment()!=null && !sales.getPayment().getCash()){
-                List<Schedule> schedules = getSchedulePayment(DateUtility.getFormattedDate(sales.getSaleDate()), sales.getPayment().getSchedule(), sales.getPayment().getPeriod(), sales.getPayment().getLastPrice(), sales.getPayment().getDown(), Util.parseInt(sales.getPayment().getGracePeriod()));
-                if(schedules.size()>0){
-                    plannedPaymentMonthly+=schedules.get(0).getAmount();
-                    if(sales.getPayment().getDown()!=null && sales.getPayment().getDown()>0 && payed<sales.getPayment().getDown()){
-                        plannedPaymentMonthly+=(sales.getPayment().getDown()-payed)>0?(sales.getPayment().getDown()-payed):0;
-                    }
-                }
-            } else if(sales.getPayment()!=null && sales.getPayment().getCash()){
-                if(sales.getPayment().getLastPrice()!=null && sales.getPayment().getLastPrice()>0 && payed<sales.getPayment().getLastPrice()){
-                    plannedPaymentMonthly+=(sales.getPayment().getLastPrice()-payed)>0?(sales.getPayment().getLastPrice()-payed):0;
-                }
-            }
-        }
-        return plannedPaymentMonthly;
     }
 }

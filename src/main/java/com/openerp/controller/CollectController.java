@@ -44,11 +44,13 @@ public class CollectController extends SkeletonController {
                 paymentObject.setPeriod(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1(Util.getPeriodDay(), "payment-period"));
                 salesObject.setPayment(paymentObject);
                 salesObject.setSaleDate(null);
+                salesObject.setSaled(false);
+                salesObject.setReturned(false);
                 model.addAttribute(Constants.FILTER, salesObject);
             }
 
             salesObject = (Sales) model.asMap().get(Constants.FILTER);
-            Page<Sales> sales = salesService.findAll(salesObject, PageRequest.of(0, paginationSize()*100, Sort.by("id").descending()));
+            Page<Sales> sales = salesService.findAll(salesObject, PageRequest.of(0, paginationSize()*1000, Sort.by("id").descending()));
             List<Sales> salesList2 = new ArrayList<>(sales.getContent());
             if(salesObject.getPayment()!=null && salesObject.getPayment().getPeriod()!=null){
                 salesObject.getPayment().setPeriod(dictionaryRepository.getDictionaryById(salesObject.getPayment().getPeriod().getId()));
@@ -69,7 +71,7 @@ public class CollectController extends SkeletonController {
                 double sumOfInvoices = Util.calculateInvoice(sale.getInvoices());
                 List<Schedule> schedules = new ArrayList<>();
                 if(sale.getPayment()!=null && !sale.getPayment().getCash()){
-                    schedules = getSchedulePayment(DateUtility.getFormattedDate(sale.getSaleDate()), sale.getPayment().getSchedule(), sale.getPayment().getPeriod(), sale.getPayment().getLastPrice(), sale.getPayment().getDown(), Util.parseInt(sale.getPayment().getGracePeriod()));
+                    schedules = Util.getSchedulePayment(DateUtility.getFormattedDate(sale.getSaleDate()), sale.getPayment().getSchedule(), sale.getPayment().getPeriod(), sale.getPayment().getLastPrice(), sale.getPayment().getDown(), Util.parseInt(sale.getPayment().getGracePeriod()));
                 }
                 double plannedPayment = Util.calculatePlannedPayment(sale, schedules);
                 if(sale.getPayment().getLastPrice()>sumOfInvoices && sumOfInvoices<plannedPayment){
@@ -132,7 +134,6 @@ public class CollectController extends SkeletonController {
             }
             model.addAttribute(Constants.LIST, serviceTaskService.findAll((ServiceTask) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
         }
-        session.setAttribute(Constants.SESSION_FILTER, model.asMap().get(Constants.FILTER));
         return "layout";
     }
 

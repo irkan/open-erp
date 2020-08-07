@@ -5,6 +5,7 @@ import com.openerp.entity.*;
 import com.openerp.entity.Dictionary;
 import net.emaze.dysfunctional.Groups;
 import net.emaze.dysfunctional.dispatching.delegates.Pluck;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -952,6 +953,44 @@ public class Util {
             a+=action.getAmount();
         }
         return a;
+    }
+
+    public static Double calculatePlannedPaymentMonthly(List<Sales> salesList){
+        Double plannedPaymentMonthly = 0d;
+        for(Sales sales: salesList){
+            Double payed = Util.calculateInvoice(sales.getInvoices());
+            if(sales.getPayment()!=null && !sales.getPayment().getCash()){
+                List<Schedule> schedules = Util.getSchedulePayment(DateUtility.getFormattedDate(sales.getSaleDate()), sales.getPayment().getSchedule(), sales.getPayment().getPeriod(), sales.getPayment().getLastPrice(), sales.getPayment().getDown(), Util.parseInt(sales.getPayment().getGracePeriod()));
+                if(schedules.size()>0){
+                    plannedPaymentMonthly+=schedules.get(0).getAmount();
+                    if(sales.getPayment().getDown()!=null && sales.getPayment().getDown()>0 && payed<sales.getPayment().getDown()){
+                        plannedPaymentMonthly+=(sales.getPayment().getDown()-payed)>0?(sales.getPayment().getDown()-payed):0;
+                    }
+                }
+            } else if(sales.getPayment()!=null && sales.getPayment().getCash()){
+                if(sales.getPayment().getLastPrice()!=null && sales.getPayment().getLastPrice()>0 && payed<sales.getPayment().getLastPrice()){
+                    plannedPaymentMonthly+=(sales.getPayment().getLastPrice()-payed)>0?(sales.getPayment().getLastPrice()-payed):0;
+                }
+            }
+        }
+        return plannedPaymentMonthly;
+    }
+
+    public static List<Schedule> getSchedulePayment(String saleDate, Dictionary schedule, Dictionary period, Double lastPrice, Double down, Integer gracePeriod){
+        lastPrice = lastPrice==null?0:lastPrice;
+        int scheduleCount = Integer.parseInt(schedule.getAttr1());
+        Date saleDt = saleDate.trim().length()>0? DateUtility.getUtilDate(saleDate):new Date();
+        Date startDate = DateUtility.generate(Integer.parseInt(period.getAttr1()), saleDt.getMonth(), saleDt.getYear()+1900);
+        List<Schedule> schedules = new ArrayList<>();
+        Date scheduleDate = DateUtils.addMonths(startDate, 1+gracePeriod);
+        Double schedulePrice = Util.schedulePrice(schedule, lastPrice, down);
+        for(int i=0; i<scheduleCount; i++){
+            scheduleDate = DateUtils.addMonths(scheduleDate, 1);
+            Schedule schedule1 = new Schedule(schedulePrice, scheduleDate);
+            schedules.add(schedule1);
+        }
+        schedules = Util.correctLastSchedulePrice(schedules, lastPrice, down);
+        return schedules;
     }
 
     public static List<Schedule> correctLastSchedulePrice(List<Schedule> schedules, Double lastPrice, Double down) {

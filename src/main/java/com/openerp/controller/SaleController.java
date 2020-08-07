@@ -81,7 +81,7 @@ public class SaleController extends SkeletonController {
                     sale = salesRepository.getSalesById(Integer.parseInt(data.get()));
                     double sumOfInvoices = Util.calculateInvoice(sale.getInvoices());
                     if(sale!=null && sale.getPayment()!=null && !sale.getPayment().getCash()){
-                        schedules = getSchedulePayment(DateUtility.getFormattedDate(sale.getSaleDate()), sale.getPayment().getSchedule(), sale.getPayment().getPeriod(), sale.getPayment().getLastPrice(), sale.getPayment().getDown(), Util.parseInt(sale.getPayment().getGracePeriod()));
+                        schedules = Util.getSchedulePayment(DateUtility.getFormattedDate(sale.getSaleDate()), sale.getPayment().getSchedule(), sale.getPayment().getPeriod(), sale.getPayment().getLastPrice(), sale.getPayment().getDown(), Util.parseInt(sale.getPayment().getGracePeriod()));
                         double plannedPayment = Util.calculatePlannedPayment(sale, schedules);
                         schedules = Util.calculateSchedule(sale, schedules, sumOfInvoices);
                         sale.getPayment().setLatency(Util.calculateLatency(schedules, sumOfInvoices, sale));
@@ -188,7 +188,7 @@ public class SaleController extends SkeletonController {
             for(TaxConfiguration taxConfiguration: taxConfigurations){
                 List<Sales> salesList = salesRepository.getSalesByActiveTrueAndApproveTrueAndSaledFalseAndTaxConfigurationAndReturnedFalse(taxConfiguration);
                 taxConfiguration.setSalesCount(salesList.size());
-                taxConfiguration.setPlannedPaymentAmountMonthly(calculatePlannedPaymentMonthly(salesList));
+                taxConfiguration.setPlannedPaymentAmountMonthly(Util.calculatePlannedPaymentMonthly(salesList));
             }
             model.addAttribute(Constants.LIST, taxConfigurations);
             if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
@@ -196,7 +196,6 @@ public class SaleController extends SkeletonController {
             }
         }
         redirectAttributes.addFlashAttribute(Constants.FILTER, model.asMap().get(Constants.FILTER));
-        session.setAttribute(Constants.SESSION_FILTER, model.asMap().get(Constants.FILTER));
         return "layout";
     }
 
@@ -514,7 +513,7 @@ public class SaleController extends SkeletonController {
     @GetMapping(value = "/payment/schedule/{lastPrice}/{down}/{schedule}/{period}/{gracePeriod}/{saleDate}", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Schedule> getPaymentSchedulePrice(Model model, @PathVariable("lastPrice") double lastPrice, @PathVariable("down") double down, @PathVariable("schedule") int scheduleId, @PathVariable("period") int periodId, @PathVariable(name = "gracePeriod",required = false) String gracePeriodStr, @PathVariable(name = "saleDate", value = "") String saleDate){
         try {
-            return getSchedulePayment(saleDate.equalsIgnoreCase("0")?DateUtility.getFormattedDate(new Date()):saleDate, dictionaryRepository.getDictionaryById(scheduleId), dictionaryRepository.getDictionaryById(periodId), lastPrice, down, Util.parseInt(gracePeriodStr));
+            return Util.getSchedulePayment(saleDate.equalsIgnoreCase("0")?DateUtility.getFormattedDate(new Date()):saleDate, dictionaryRepository.getDictionaryById(scheduleId), dictionaryRepository.getDictionaryById(periodId), lastPrice, down, Util.parseInt(gracePeriodStr));
         } catch (Exception e){
             log.error(e.getMessage(), e);
         }
@@ -855,7 +854,7 @@ public class SaleController extends SkeletonController {
             List<Schedule> schedules = new ArrayList<>();
             double sumOfInvoices = Util.calculateInvoice(sales.getInvoices());
             if(sales.getPayment()!=null && !sales.getPayment().getCash()){
-                schedules = getSchedulePayment(DateUtility.getFormattedDate(sales.getSaleDate()), sales.getPayment().getSchedule(), sales.getPayment().getPeriod(), sales.getPayment().getLastPrice(), sales.getPayment().getDown(), Util.parseInt(sales.getPayment().getGracePeriod()));
+                schedules = Util.getSchedulePayment(DateUtility.getFormattedDate(sales.getSaleDate()), sales.getPayment().getSchedule(), sales.getPayment().getPeriod(), sales.getPayment().getLastPrice(), sales.getPayment().getDown(), Util.parseInt(sales.getPayment().getGracePeriod()));
                 double plannedPayment = Util.calculatePlannedPayment(sales, schedules);
                 schedules = Util.calculateSchedule(sales, schedules, sumOfInvoices);
                 sales.getPayment().setLatency(Util.calculateLatency(schedules, sumOfInvoices, sales));

@@ -156,45 +156,47 @@
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${list.content}" varStatus="loop">
-                                    <tr data="<c:out value="${t.id}" />">
-                                        <td>${loop.index + 1}</td>
-                                        <td><c:out value="${t.id}" /></td>
-                                        <td><c:out value="${t.group.name}" /></td>
-                                        <td><c:out value="${t.name}" /></td>
-                                        <td><c:out value="${t.description}" /></td>
-                                        <td>
+                                    <c:set var="ia" value="${utl:calculateInventoryAmount(t.actions, sessionScope.organization.id)}"/>
+                                    <c:if test="${ia.allItemsCount gt 0}">
+                                        <tr data="<c:out value="${t.id}" />">
+                                            <td>${loop.index + 1}</td>
+                                            <td><c:out value="${t.id}" /></td>
+                                            <td><c:out value="${t.group.name}" /></td>
+                                            <td><c:out value="${t.name}" /></td>
+                                            <td><c:out value="${t.description}" /></td>
+                                            <td>
                                             <span class="barcode">
                                             <a href="javascript:copyToClipboard('<c:out value="${t.barcode}" />')" class="kt-link kt-font-lg kt-font-bold kt-margin-t-5"><c:out value="${t.barcode}"/></a>
                                             </span>
-                                        <c:if test="${export.status}">
-                                            <a href="javascript:printBarcode('<c:out value="${t.name}" />', '<c:out value="${t.barcode}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${export.object.name}"/>">
-                                                <i class="la <c:out value="${export.object.icon}"/>"></i>
-                                            </a>
-                                        </c:if>
-                                        </td>
-                                        <td>
-                                            <c:set var="ia" value="${utl:calculateInventoryAmount(t.actions, sessionScope.organization.id)}"/>
-                                            <span class="kt-badge kt-badge--success kt-badge--inline kt-badge--pill"><c:out value="${ia.allItemsCount}"/></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kt-badge kt-badge--danger kt-badge--inline kt-badge--pill"><c:out value="${ia.oldItemsCount}"/></span>
-                                        </td>
-                                        <td class="text-center">
-                                            <c:set var="approveCount" value="${utl:calculateApproveOperationCount(t.actions, sessionScope.organization.id)}"/>
-                                            <c:if test="${approveCount gt 0}">
-                                                <c:out value="${approveCount}"/> əməliyyat
-                                            </c:if>
-                                        </td>
-                                        <td nowrap class="text-center">
-                                            <c:if test="${detail.status}">
-                                                <a href="/warehouse/action/<c:out value="${t.id}"/>" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${detail.object.name}"/>">
-                                                    <i class="la <c:out value="${detail.object.icon}"/>"></i>
-                                                </a>
-                                            </c:if>
-                                            <c:if test="${delete.status}">
-                                                <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
-                                                    <i class="<c:out value="${delete.object.icon}"/>"></i>
-                                                </a>
-                                            </c:if>
-                                        </td>
-                                    </tr>
+                                                <c:if test="${export.status}">
+                                                    <a href="javascript:printBarcode('<c:out value="${t.name}" />', '<c:out value="${t.barcode}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${export.object.name}"/>">
+                                                        <i class="la <c:out value="${export.object.icon}"/>"></i>
+                                                    </a>
+                                                </c:if>
+                                            </td>
+                                            <td>
+                                                <span class="kt-badge kt-badge--success kt-badge--inline kt-badge--pill"><c:out value="${ia.allItemsCount}"/></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kt-badge kt-badge--danger kt-badge--inline kt-badge--pill"><c:out value="${ia.oldItemsCount}"/></span>
+                                            </td>
+                                            <td class="text-center">
+                                                <c:set var="approveCount" value="${utl:calculateApproveOperationCount(t.actions, sessionScope.organization.id)}"/>
+                                                <c:if test="${approveCount gt 0}">
+                                                    <c:out value="${approveCount}"/> əməliyyat
+                                                </c:if>
+                                            </td>
+                                            <td nowrap class="text-center">
+                                                <c:if test="${detail.status}">
+                                                    <a href="/warehouse/action/<c:out value="${t.id}"/>" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${detail.object.name}"/>">
+                                                        <i class="la <c:out value="${detail.object.icon}"/>"></i>
+                                                    </a>
+                                                </c:if>
+                                                <c:if test="${delete.status}">
+                                                    <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
+                                                        <i class="<c:out value="${delete.object.icon}"/>"></i>
+                                                    </a>
+                                                </c:if>
+                                            </td>
+                                        </tr>
+                                    </c:if>
                                 </c:forEach>
                                 </tbody>
                             </table>

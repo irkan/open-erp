@@ -42,6 +42,12 @@ public class SalesService {
                 if(sales.getApprove()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("approve"), !sales.getApprove())));
                 }
+                if(sales.getSaled()!=null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("saled"), sales.getSaled())));
+                }
+                if(sales.getReturned()!=null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("returned"), sales.getReturned())));
+                }
                 if(sales.getService()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("service"), sales.getService())));
                 }

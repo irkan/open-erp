@@ -72,7 +72,6 @@ public class Constants {
     public static final String MODULES_MAP = "modules_map";
     public static final String TAX_CONFIGURATIONS = "tax_configurations";
     public static final String PATH1 = "path1";
-    public static final String SESSION_FILTER = "session_filter";
 
     public static final class STATUS{
         public static final String RESPONSE = "response";

@@ -172,6 +172,7 @@
         <th>Flial#2</th>
         <th>Təchizatçı</th>
         <th>İnventar</th>
+        <th>Barkod</th>
         <th>Miqdar</th>
         <th>Tarix</th>
         <th>Təhkim edilib</th>
@@ -197,6 +198,11 @@
             <td><c:out value="${t.fromOrganization.name}" /></td>
             <td><c:out value="${t.supplier.name}" /></td>
             <td><c:out value="${t.inventory.name}" /></td>
+            <td>
+                <span class="barcode">
+                    <a href="javascript:copyToClipboard('<c:out value="${t.inventory.barcode}" />')" class="kt-link kt-font-md kt-font-bold kt-margin-t-5"><c:out value="${t.inventory.barcode}"/></a>
+                </span>
+            </td>
             <td><c:out value="${t.amount}" /></td>
             <td><fmt:formatDate value = "${t.createdDate}" pattern = "dd.MM.yyyy HH:mm" /></td>
             <td><c:out value="${t.employee.person.fullName}" /></td>

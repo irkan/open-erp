@@ -77,7 +77,6 @@ public class PayrollController extends SkeletonController {
             List<SalaryEmployee> salaryEmployees = salaryEmployeeRepository.getSalaryEmployeesBySalary_ActiveAndEmployee_IdOrderByEmployeeDesc(true, Integer.parseInt(data.get()));
             model.addAttribute(Constants.LIST, salaryEmployees);
         }
-        session.setAttribute(Constants.SESSION_FILTER, model.asMap().get(Constants.FILTER));
         return "layout";
     }
 

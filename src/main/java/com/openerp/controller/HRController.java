@@ -132,7 +132,6 @@ public class HRController extends SkeletonController {
                 return exportExcel(illnesses, redirectAttributes, page);
             }
         }
-        session.setAttribute(Constants.SESSION_FILTER, model.asMap().get(Constants.FILTER));
         return "layout";
     }
 
