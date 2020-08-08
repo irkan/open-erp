@@ -17,10 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 public class PaymentLatencyTask {
@@ -38,11 +35,14 @@ public class PaymentLatencyTask {
     @Autowired
     SalesService salesService;
 
-    @Scheduled(cron="0 0 1 * * *") //hergun seher saat 1 de iwliyecek
+    @Scheduled(fixedDelay = 12000000, initialDelay = 5000)
+    //@Scheduled(cron="0 0 1 * * *") //hergun seher saat 1 de iwliyecek
     public void saled() {
         try{
             log.info("Payment Latency Task Start");
             Date today = new Date();
+            Random random = new Random();
+            today = DateUtility.addDay(-1*random.nextInt(200));
 
             PaymentLatency paymentLatency;
             for(Organization organization: organizationRepository.getOrganizationsByActiveTrue()){

@@ -36,6 +36,7 @@ public class ApiController extends SkeletonController {
                     sale.getPayment().setUnpaid(plannedPayment-sumOfInvoices);
                     response = new WSResponse("200", "OK", new WSInfo(sale.getId(),
                             sale.getCustomer().getPerson().getFullName(),
+                            sale.getPayment().getLastPrice(),
                             sale.getPayment().getSumOfInvoice(),
                             Double.parseDouble(Util.format(sale.getPayment().getUnpaid())),
                             sale.getService()?"Servis":"Satış",

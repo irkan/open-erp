@@ -110,12 +110,20 @@
     </c:if>
 
     <div class="row">
+        <div class="col-lg-12">
+            <div class="kt-portlet kt-portlet--mobile">
+                <div id="chart" class="pl-1 pr-3 pt-2"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 border-0">
             <div class="card border-0 mb-3">
                 <div class="card-body <c:out value="${random.nextInt(5) eq 1 ? 'kt-bg-light-danger' : random.nextInt(5) eq 2 ? 'kt-bg-light-warning' : random.nextInt(5) eq 3 ? 'kt-bg-light-info' : random.nextInt(5) eq 4 ? 'kt-bg-light-success' : random.nextInt(5) eq 5 ? 'kt-bg-light-primary' : 'kt-bg-light-brand'}"/>">
                     <h6 class="card-title font-weight-bolder text-center" style="letter-spacing: 2px">Yığım</h6>
                     <hr/>
-                    <div id="chart" class="d-flex justify-content-center"></div>
+                    <div id="pie-chart" class="d-flex justify-content-center"></div>
                 </div>
             </div>
         </div>
@@ -133,8 +141,138 @@
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
     $(function(){
-        var totalSum=0;
         var options = {
+            series: [{
+                name: 'Aktiv müqavilələrin sayı',
+                type: 'column',
+                data: []
+            }, {
+                name: 'Təsdiq gözləyir',
+                type: 'column',
+                data: []
+            }, {
+                name: 'Yığım',
+                type: 'line',
+                data: []
+            }],
+            chart: {
+                height: $( window ).height()-3*$("#accordionFilter").height()>350?$( window ).height()-2*$("#accordionFilter").height():350,
+                type: 'line',
+                stacked: false
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                width: [1, 1, 4]
+            },
+            title: {
+                text: 'XYZ - 3 ölçülü satış analizi',
+                align: 'left',
+                offsetX: 50
+            },
+            xaxis: {
+                categories: [],
+            },
+            yaxis: [
+                {
+                    axisTicks: {
+                        show: true,
+                    },
+                    axisBorder: {
+                        show: true,
+                        color: '#008FFB'
+                    },
+                    labels: {
+                        style: {
+                            colors: '#008FFB',
+                        }
+                    },
+                    title: {
+                        text: "Aktiv müqavilələrin sayı",
+                        style: {
+                            color: '#008FFB',
+                        }
+                    },
+                    tooltip: {
+                        enabled: true
+                    }
+                },
+                {
+                    seriesName: 'Income',
+                    opposite: true,
+                    axisTicks: {
+                        show: true,
+                    },
+                    axisBorder: {
+                        show: true,
+                        color: '#00E396'
+                    },
+                    labels: {
+                        style: {
+                            colors: '#00E396',
+                        }
+                    },
+                    title: {
+                        text: "Təsdiq gözləyən müqavilələrin sayı",
+                        style: {
+                            color: '#00E396',
+                        }
+                    },
+                    tooltip: {
+                        enabled: true
+                    },
+                },
+                {
+                    seriesName: 'Revenue',
+                    opposite: true,
+                    axisTicks: {
+                        show: true,
+                    },
+                    axisBorder: {
+                        show: true,
+                        color: '#FEB019'
+                    },
+                    labels: {
+                        style: {
+                            colors: '#FEB019',
+                        },
+                    },
+                    title: {
+                        text: "Yığım həcmi (AZN - manatlla ifadədə)",
+                        style: {
+                            color: '#FEB019',
+                        }
+                    },
+                    tooltip: {
+                        enabled: true
+                    }
+                },
+            ],
+            tooltip: {
+                fixed: {
+                    enabled: true,
+                    position: 'topLeft', // topRight, topLeft, bottomRight, bottomLeft
+                    offsetY: 30,
+                    offsetX: 60
+                },
+            },
+            legend: {
+                horizontalAlign: 'left',
+                offsetX: 20
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+
+
+
+
+
+
+        var totalSum=0;
+        var pieoptions = {
             series: [0, 0],
             chart: {type: 'donut'},
             plotOptions: {
@@ -181,8 +319,8 @@
             ]
         };
 
-        var chart = new ApexCharts(document.querySelector("#chart"), options);
-        chart.render();
+        var piechart = new ApexCharts(document.querySelector("#pie-chart"), pieoptions);
+        piechart.render();
 
         const colours = ['#5388f4', '#E91E63', '#9C27B0'];
         var baroptions = {
@@ -231,8 +369,13 @@
             beforeSubmit: function(){
                 swal.showLoading();
 
-                options.labels = [];
-                options.series = [];
+                options.xaxis.categories = [];
+                options.series[0].data = [];
+                options.series[1].data = [];
+                options.series[2].data = [];
+
+                pieoptions.labels = [];
+                pieoptions.series = [];
                 totalSum = 0;
                 baroptions.xaxis.categories = [];
                 baroptions.series[0].data = [];
@@ -240,16 +383,31 @@
             success: function(data){
 
                 $.each(jQuery.parseJSON(data.string1), function(key, val){
-                    options.labels.push("Yığım məbləği");
-                    options.series.push(round(val.UMUMI_YIGILMIS_MEBLEG, 0));
-                    options.labels.push("Qalıq borc");
-                    options.series.push(round(val.UMUMI_QALIQ_BORC, 0));
+                    pieoptions.labels.push("Yığım məbləği");
+                    pieoptions.series.push(round(val.UMUMI_YIGILMIS_MEBLEG, 0));
+                    pieoptions.labels.push("Qalıq borc");
+                    pieoptions.series.push(round(val.UMUMI_QALIQ_BORC, 0));
                     totalSum = round(val.UMUMI_SATIS_HECMI, 0);
                     baroptions.series[0].data.push(round(val.AYLIQ_YIGIM_HECMI, 0));
                     baroptions.xaxis.categories.push("Aylıq yığım həcmi");
                 });
-                chart.updateOptions(options);
+                piechart.updateOptions(pieoptions);
                 barchart.updateOptions(baroptions);
+
+
+                $.each(jQuery.parseJSON(data.string2), function(key, val){
+                    options.xaxis.categories.push(val.ZAXIS);
+                    options.series[0].data.push(round(val.YAXIS, 0));
+                });
+
+                $.each(jQuery.parseJSON(data.string3), function(key, val){
+                    options.series[1].data.push(round(val.YAXIS, 0));
+                });
+
+                $.each(jQuery.parseJSON(data.string4), function(key, val){
+                    options.series[2].data.push(round(val.YAXIS, 0));
+                });
+                chart.updateOptions(options);
 
                 swal.close();
             },

@@ -1353,6 +1353,69 @@
                             </div>
 
 
+                            <div class="row">
+                                <div class="col-md-5 offset-md-1">
+                                    <div class="form-group">
+                                        <form:label path="console">Konsul</form:label>
+                                        <form:select  path="console" cssClass="custom-select form-control">
+                                            <form:option value=""></form:option>
+                                            <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
+                                                <optgroup label="${itemGroup.key}">
+                                                    <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
+                                                </optgroup>
+                                            </c:forEach>
+                                        </form:select>
+                                        <form:errors path="console" cssClass="control-label alert-danger"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <form:label path="vanLeader">Van lider</form:label>
+                                        <form:select  path="vanLeader" cssClass="custom-select form-control" multiple="single">
+                                            <form:option value=""></form:option>
+                                            <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
+                                                <optgroup label="${itemGroup.key}">
+                                                    <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
+                                                </optgroup>
+                                            </c:forEach>
+                                        </form:select>
+                                        <form:errors path="vanLeader" cssClass="control-label alert-danger"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="kt-separator kt-separator--border-dashed kt-separator--space-sm kt-separator--portlet-fit" style="margin: 1rem 0"></div>
+                            <div class="row">
+                                <div class="col-md-5 offset-md-1">
+                                    <div class="form-group">
+                                        <form:label path="dealer">Diller</form:label>
+                                        <form:select  path="dealer" cssClass="custom-select form-control" multiple="single">
+                                            <form:option value=""></form:option>
+                                            <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
+                                                <optgroup label="${itemGroup.key}">
+                                                    <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
+                                                </optgroup>
+                                            </c:forEach>
+                                        </form:select>
+                                        <form:errors path="dealer" cssClass="control-label alert-danger"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <form:label path="canavasser">Canavasser</form:label>
+                                        <form:select  path="canavasser" cssClass="custom-select form-control" multiple="single">
+                                            <form:option value=""></form:option>
+                                            <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
+                                                <optgroup label="${itemGroup.key}">
+                                                    <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
+                                                </optgroup>
+                                            </c:forEach>
+                                        </form:select>
+                                        <form:errors path="canavasser" cssClass="control-label alert-danger"/>
+                                    </div>
+                                </div>
+                            </div>
+
+
                         </div>
                     </div>
 

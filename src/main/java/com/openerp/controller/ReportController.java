@@ -75,6 +75,12 @@ public class ReportController extends SkeletonController {
         Report returnedReport = new Report();
         if(!binding.hasErrors()){
             returnedReport.setString1(Util.checkNull(reportingDao.reportCollectVolume(report)));
+            report.setInteger1(2);
+            returnedReport.setString2(Util.checkNull(reportingDao.reportPaymentLatencyPeriodly(report)));
+            report.setString7(" and pl1.latency_day<=60 ");
+            returnedReport.setString3(Util.checkNull(reportingDao.reportPaymentLatencyPeriodly(report)));
+            report.setString7(" and pl1.latency_day>60 "); // troubled customer
+            returnedReport.setString4(Util.checkNull(reportingDao.reportPaymentLatencyPeriodly(report)));
         }
         return returnedReport;
     }
