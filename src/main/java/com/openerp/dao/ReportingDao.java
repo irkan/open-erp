@@ -402,7 +402,6 @@ public class ReportingDao implements IReportingDao {
                     "  from\n" +
                     "      payment_latency pl1, sales s1, payment p1, organization o\n" +
                     "  where pl1.sales_id=s1.id and s1.payment_id=p1.id and pl1.organization_id=o.id\n" +
-                    "    and pl1.latency_day>60\n" +
                     "    and pl1.task_date>=DATE_SUB(CURDATE(), INTERVAL 400 DAY)\n" +
                     "  and s1.is_approve=1 " +
                     Util.checkNull(report.getString1()) + Util.checkNull(report.getString2()) +

@@ -143,15 +143,15 @@
     $(function(){
         var options = {
             series: [{
-                name: 'Aktiv müqavilələrin sayı',
-                type: 'column',
+                name: 'Ümumi',
+                type: 'line',
                 data: []
             }, {
-                name: 'Təsdiq gözləyir',
-                type: 'column',
+                name: 'Gecikmiş',
+                type: 'line',
                 data: []
             }, {
-                name: 'Yığım',
+                name: 'Problemli',
                 type: 'line',
                 data: []
             }],
