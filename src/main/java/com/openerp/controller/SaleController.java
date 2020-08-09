@@ -937,6 +937,10 @@ public class SaleController extends SkeletonController {
 
     @PostMapping(value = "/service-regulator/filter")
     public String postServiceRegulatorFilter(@ModelAttribute(Constants.FILTER) @Validated ServiceRegulator serviceRegulator, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        if(serviceRegulator.getSales()!=null){
+            serviceRegulator.getSales().setSalesInventories(new ArrayList<>());
+            serviceRegulator.getSales().setContactHistories(new ArrayList<>());
+        }
         return mapFilter(serviceRegulator, binding, redirectAttributes, "/sale/service-regulator");
     }
 

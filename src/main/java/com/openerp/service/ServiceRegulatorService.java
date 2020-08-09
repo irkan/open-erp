@@ -30,10 +30,6 @@ public class ServiceRegulatorService {
                 if(serviceRegulator.getId()!=null) {
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("id"), serviceRegulator.getId())));
                 }
-                if(serviceRegulator.getSales()!=null && serviceRegulator.getSales().getActive()!=null) {
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("sales").get("active"), serviceRegulator.getSales().getActive())));
-                }
-
                 if(serviceRegulator.getSales()!=null && serviceRegulator.getSales().getId()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("sales"), serviceRegulator.getSales().getId())));
                 }

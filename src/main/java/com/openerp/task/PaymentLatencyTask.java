@@ -36,12 +36,10 @@ public class PaymentLatencyTask {
     SalesService salesService;
 
     @Scheduled(cron="0 0 1 * * *") //hergun seher saat 1 de iwliyecek
-    //@Scheduled(fixedDelay = 120000, initialDelay = 5000)
     public void saled() {
         try{
             log.info("Payment Latency Task Start");
             Date today = new Date();
-            //today = DateUtility.addDay(-72);
 
             PaymentLatency paymentLatency;
             for(Organization organization: organizationRepository.getOrganizationsByActiveTrue()){
