@@ -146,6 +146,9 @@
                                     <tr data="<c:out value="${utl:toJson(t)}" />">
                                         <td><span class="kt-padding-5"><c:out value="${t.id}" /></span></td>
                                         <td>
+                                            <c:if test="${not empty t.sales.id}">
+                                                <a href="javascript:copyToClipboard2('<c:out value="${t.sales.id}" />', 'Satış kodu <b><c:out value="${t.sales.id}" /></b> kopyalandı')" class="kt-font-lg kt-font-bold kt-font-info kt-font-hover-danger pl-2 pr-2"><i class="la la-copy"></i></a>
+                                            </c:if>
                                             <c:choose>
                                                 <c:when test="${view1.status}">
                                                     <a href="javascript:window.open('/sale/sales/<c:out value="${t.sales.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.sales.id}" /></a>

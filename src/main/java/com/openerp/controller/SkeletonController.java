@@ -388,6 +388,8 @@ public class SkeletonController {
     }
 
     String mapFilter(Object object, BindingResult binding, RedirectAttributes redirectAttributes, String redirect){
+        session.removeAttribute(Constants.SESSION_FILTER);
+        session.setAttribute(Constants.SESSION_FILTER, object);
         redirectAttributes.addFlashAttribute(Constants.FILTER_FORM_RESULT_BINDING, binding);
         redirectAttributes.addFlashAttribute(Constants.FILTER, object);
         return "redirect:"+redirect;
@@ -609,10 +611,10 @@ public class SkeletonController {
             invc.setDescription(invoice.getDescription());
         }
         invoiceRepository.save(invc);
-        log(invc, "invoice", "create/edit", invc.getId(), invc.toString());
         invc.setChannelReferenceCode(String.valueOf(invc.getId()));
         invoiceRepository.save(invc);
         log(invc, "invoice", "create/edit", invc.getId(), invc.toString(), "Kanal referans kodu update edildi");
+        addContactHistory(invc.getSales(), "Hesab-faktura yaradıldı. H/f №" + invc.getId(), null);
         return invc;
     }
 

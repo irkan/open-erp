@@ -56,6 +56,10 @@ public class SaleController extends SkeletonController {
                 sales.setApprove(null);
                 model.addAttribute(Constants.FILTER, sales);
             }
+            if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
+                    session.getAttribute(Constants.SESSION_FILTER) instanceof Sales){
+                model.addAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
+            }
             Page<Sales> sales = salesService.findAll((Sales) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("approve").descending().by("id").descending()));
             for(Sales sales1: sales){
                 sales1.setSalesInventories(salesInventoryRepository.getSalesInventoriesByActiveTrueAndSales_Id(sales1.getId()));
@@ -69,6 +73,10 @@ public class SaleController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 filterSales = new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null);
                 model.addAttribute(Constants.FILTER, new SalesSchedule(filterSales));
+            }
+            if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
+                    session.getAttribute(Constants.SESSION_FILTER) instanceof SalesSchedule){
+                model.addAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
             }
             if(!model.containsAttribute(Constants.FORM)){
                 SalesSchedule salesSchedule = (SalesSchedule) model.asMap().get(Constants.FILTER);
@@ -116,6 +124,10 @@ public class SaleController extends SkeletonController {
                 sales.setApprove(null);
                 model.addAttribute(Constants.FILTER, sales);
             }
+            if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
+                    session.getAttribute(Constants.SESSION_FILTER) instanceof Sales){
+                model.addAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
+            }
             Page<Sales> sales = salesService.findAll((Sales) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
             model.addAttribute(Constants.LIST, sales);
             if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
@@ -135,6 +147,10 @@ public class SaleController extends SkeletonController {
                 sales.setService(null);
                 model.addAttribute(Constants.FILTER, new Invoice(!canViewAll()?getSessionOrganization():null, null, null, null, sales));
             }
+            if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
+                    session.getAttribute(Constants.SESSION_FILTER) instanceof Invoice){
+                model.addAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
+            }
             Page<Invoice> invoices = invoiceService.findAll((Invoice) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
             model.addAttribute(Constants.LIST, invoices);
             if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
@@ -151,6 +167,10 @@ public class SaleController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Demonstration(!canViewAll()?getSessionOrganization():null, null, null));
             }
+            if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
+                    session.getAttribute(Constants.SESSION_FILTER) instanceof Demonstration){
+                model.addAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
+            }
             Page<Demonstration> demonstrations = demonstrationService.findAll((Demonstration) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
             model.addAttribute(Constants.LIST, demonstrations);
             if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
@@ -164,6 +184,10 @@ public class SaleController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 Sales sales = new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null);
                 model.addAttribute(Constants.FILTER, new ServiceRegulator(sales, null));
+            }
+            if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
+                    session.getAttribute(Constants.SESSION_FILTER) instanceof ServiceRegulator){
+                model.addAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
             }
             Page<ServiceRegulator> serviceRegulators = serviceRegulatorService.findAll((ServiceRegulator) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
             model.addAttribute(Constants.LIST, serviceRegulators);

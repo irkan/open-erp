@@ -68,6 +68,10 @@ public class HRController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new NonWorkingDay());
             }
+            if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
+                    session.getAttribute(Constants.SESSION_FILTER) instanceof NonWorkingDay){
+                model.addAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
+            }
             Page<NonWorkingDay> nonWorkingDays = nonWorkingDayService.findAll((NonWorkingDay) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
             model.addAttribute(Constants.LIST, nonWorkingDays);
             if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
@@ -81,6 +85,10 @@ public class HRController extends SkeletonController {
             }
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new ShortenedWorkingDay());
+            }
+            if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
+                    session.getAttribute(Constants.SESSION_FILTER) instanceof ShortenedWorkingDay){
+                model.addAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
             }
             Page<ShortenedWorkingDay> shortenedWorkingDays = shortenedWorkingDayService.findAll((ShortenedWorkingDay) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
             model.addAttribute(Constants.LIST, shortenedWorkingDays);
@@ -98,6 +106,10 @@ public class HRController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new BusinessTrip(!canViewAll()?getSessionOrganization():null));
             }
+            if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
+                    session.getAttribute(Constants.SESSION_FILTER) instanceof BusinessTrip){
+                model.addAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
+            }
             Page<BusinessTrip> businessTrips = businessTripService.findAll((BusinessTrip) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
             model.addAttribute(Constants.LIST, businessTrips);
             if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
@@ -112,6 +124,10 @@ public class HRController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Vacation(!canViewAll()?getSessionOrganization():null));
             }
+            if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
+                    session.getAttribute(Constants.SESSION_FILTER) instanceof Vacation){
+                model.addAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
+            }
             Page<Vacation> vacations = vacationService.findAll((Vacation) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
             model.addAttribute(Constants.LIST, vacations);
             if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
@@ -125,6 +141,10 @@ public class HRController extends SkeletonController {
             }
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Illness(!canViewAll()?getSessionOrganization():null));
+            }
+            if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
+                    session.getAttribute(Constants.SESSION_FILTER) instanceof Illness){
+                model.addAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
             }
             Page<Illness> illnesses = illnessService.findAll((Illness) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
             model.addAttribute(Constants.LIST, illnesses);

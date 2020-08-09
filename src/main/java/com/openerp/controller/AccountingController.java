@@ -54,6 +54,10 @@ public class AccountingController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Transaction(!canViewAll()?getSessionOrganization():null, null));
             }
+            if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
+                    session.getAttribute(Constants.SESSION_FILTER) instanceof Transaction){
+                model.addAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
+            }
             Page<Transaction> transactions = transactionService.findAll((Transaction) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
             model.addAttribute(Constants.LIST, transactions);
             if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
@@ -86,6 +90,10 @@ public class AccountingController extends SkeletonController {
             }
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Financing(!canViewAll()?getSessionOrganization():null, null, null));
+            }
+            if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
+                    session.getAttribute(Constants.SESSION_FILTER) instanceof Financing){
+                model.addAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
             }
             Page<Financing> financings = financingService.findAll((Financing) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
             model.addAttribute(Constants.LIST, financings);

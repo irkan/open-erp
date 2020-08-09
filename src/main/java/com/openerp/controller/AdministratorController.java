@@ -172,6 +172,10 @@ public class AdministratorController extends SkeletonController {
             if (!model.containsAttribute(Constants.FILTER)) {
                 model.addAttribute(Constants.FILTER, new Notification(!canViewAll() ? getSessionOrganization() : null, null));
             }
+            if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
+                    session.getAttribute(Constants.SESSION_FILTER) instanceof Notification){
+                model.addAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
+            }
             Page<Notification> notifications = notificationService.findAll((Notification) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
             model.addAttribute(Constants.LIST, notifications);
             if (!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)) {
@@ -180,6 +184,10 @@ public class AdministratorController extends SkeletonController {
         } else if (page.equalsIgnoreCase(Constants.ROUTE.LOG)) {
             if (!model.containsAttribute(Constants.FILTER)) {
                 model.addAttribute(Constants.FILTER, new Log(null));
+            }
+            if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
+                    session.getAttribute(Constants.SESSION_FILTER) instanceof Log){
+                model.addAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
             }
             Page<Log> logs = logService.findAll((Log) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
             model.addAttribute(Constants.LIST, logs);
@@ -214,6 +222,10 @@ public class AdministratorController extends SkeletonController {
             model.addAttribute(Constants.CONNECTION_TYPES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("connection-type"));
             if (!model.containsAttribute(Constants.FILTER)) {
                 model.addAttribute(Constants.FILTER, new Endpoint());
+            }
+            if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
+                    session.getAttribute(Constants.SESSION_FILTER) instanceof Endpoint){
+                model.addAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
             }
             Page<Endpoint> endpoints = endpointService.findAll((Endpoint) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
             model.addAttribute(Constants.LIST, endpoints);

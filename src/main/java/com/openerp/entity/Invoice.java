@@ -99,6 +99,12 @@ public class Invoice {
         this.organization = organization;
     }
 
+    public Invoice(Organization organization, Sales sales, Date invoiceDate) {
+        this.organization = organization;
+        this.sales = sales;
+        this.invoiceDate = invoiceDate;
+    }
+
     public Invoice(Organization organization, Double price, Boolean approve, Date invoiceDate, Sales sales) {
         this.organization = organization;
         this.price = price;

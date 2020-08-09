@@ -36,7 +36,7 @@ public class CollectController extends SkeletonController {
             Sales salesObject = new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null);
             salesObject.setService(null);
             if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new Invoice(salesObject, getSessionOrganization()));
+                model.addAttribute(Constants.FORM, new Invoice(getSessionOrganization(), salesObject, calculateInvoiceDate(model)));
             }
             if(!model.containsAttribute(Constants.FILTER)){
                 salesObject.setApprove(false);
@@ -48,9 +48,11 @@ public class CollectController extends SkeletonController {
                 salesObject.setReturned(false);
                 model.addAttribute(Constants.FILTER, salesObject);
             }
-
-            salesObject = (Sales) model.asMap().get(Constants.FILTER);
-            Page<Sales> sales = salesService.findAll(salesObject, PageRequest.of(0, paginationSize()*1000, Sort.by("id").descending()));
+            if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
+                    session.getAttribute(Constants.SESSION_FILTER) instanceof Sales){
+                model.addAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
+            }
+            Page<Sales> sales = salesService.findAll((Sales) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize()*1000, Sort.by("id").descending()));
             List<Sales> salesList2 = new ArrayList<>(sales.getContent());
             if(salesObject.getPayment()!=null && salesObject.getPayment().getPeriod()!=null && salesObject.getPayment().getId()!=null){
                 salesObject.getPayment().setPeriod(dictionaryRepository.getDictionaryById(salesObject.getPayment().getPeriod().getId()));
@@ -100,6 +102,10 @@ public class CollectController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new ContactHistory(new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null), !canViewAll()?getSessionOrganization():null));
             }
+            if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
+                    session.getAttribute(Constants.SESSION_FILTER) instanceof ContactHistory){
+                model.addAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
+            }
             Page<ContactHistory> contactHistories = contactHistoryService.findAll((ContactHistory) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
             model.addAttribute(Constants.LIST, contactHistories);
             if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
@@ -108,6 +114,10 @@ public class CollectController extends SkeletonController {
         } else if(page.equalsIgnoreCase(Constants.ROUTE.COLLECTOR)){
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Invoice(getSessionUser().getEmployee(), null, false));
+            }
+            if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
+                    session.getAttribute(Constants.SESSION_FILTER) instanceof Invoice){
+                model.addAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
             }
             model.addAttribute(Constants.LIST, invoiceService.findAll((Invoice) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
         } else if (page.equalsIgnoreCase(Constants.ROUTE.SERVICE_EMPLOYEE)){
@@ -123,6 +133,10 @@ public class CollectController extends SkeletonController {
                 }
                 model.addAttribute(Constants.FILTER, sales);
             }
+            if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
+                    session.getAttribute(Constants.SESSION_FILTER) instanceof Sales){
+                model.addAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
+            }
             model.addAttribute(Constants.LIST, salesService.findAll((Sales) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
         } else if(page.equalsIgnoreCase(Constants.ROUTE.SERVICE_TASK)){
             model.addAttribute(Constants.SERVICE_NOTIFICATIONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("service-notification"));
@@ -131,6 +145,10 @@ public class CollectController extends SkeletonController {
             }
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new ServiceTask(!canViewAll()?getSessionOrganization():null));
+            }
+            if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
+                    session.getAttribute(Constants.SESSION_FILTER) instanceof ServiceTask){
+                model.addAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
             }
             model.addAttribute(Constants.LIST, serviceTaskService.findAll((ServiceTask) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
         }
@@ -307,5 +325,27 @@ public class CollectController extends SkeletonController {
     @GetMapping(value = "/api/service-task/{dataId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ServiceTask getServiceTask(@PathVariable("dataId") Integer dataId){
         return serviceTaskRepository.getServiceTaskById(dataId);
+    }
+
+    private Date calculateInvoiceDate(Model model){
+        Date today = new Date();
+        try{
+            if(model.containsAttribute(Constants.FILTER) && model.asMap().get(Constants.FILTER) instanceof Sales){
+                Sales sales = (Sales) model.asMap().get(Constants.FILTER);
+                if(sales!=null &&
+                        sales.getPayment()!=null &&
+                        sales.getPayment().getPeriod()!=null
+                ){
+                    Dictionary period = dictionaryRepository.getDictionaryById(sales.getPayment().getPeriod().getId());
+                    return DateUtility.generate(
+                            Util.parseInt(period.getAttr1()),
+                            today.getMonth()+1,
+                            today.getYear()+1900);
+                }
+            }
+        } catch (Exception e){
+            log.error(e.getMessage(), e);
+        }
+        return DateUtility.addDay(1);
     }
 }

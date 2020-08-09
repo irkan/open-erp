@@ -41,6 +41,7 @@ public class RouterController extends SkeletonController {
 
     @GetMapping(value = {"/sub/{path1}/{path2}", "/sub/{path1}/{path2}/{data}", "/sub/{path1}/{path2}/org/{id}", "/sub/{path1}/{path2}/{data}/org/{id}"})
     public String getSubModules(@PathVariable("path1") String path1, @PathVariable("path2") String path2, @PathVariable("data") Optional<String> data, @PathVariable("id") Optional<String> id, RedirectAttributes redirectAttributes) throws Exception {
+        session.removeAttribute(Constants.SESSION_FILTER);
         redirectAttributes.addFlashAttribute(Constants.PAGE, path2);
         String description = "";
         List<Module> moduleList = (List<Module>) session.getAttribute(Constants.MODULES);
