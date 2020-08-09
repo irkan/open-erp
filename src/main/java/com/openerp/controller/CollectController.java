@@ -30,7 +30,7 @@ public class CollectController extends SkeletonController {
 
         if(page.equalsIgnoreCase(Constants.ROUTE.PAYMENT_LATENCY) ||
                 page.equalsIgnoreCase(Constants.ROUTE.TROUBLED_CUSTOMER)){
-            model.addAttribute(Constants.CONFIGURATION_TROUBLED_CUSTOMER, configurationRepository.getGlobalConfigurationByKey("troubled_customer").getAttribute());
+            model.addAttribute(Constants.CONFIGURATION_TROUBLED_CUSTOMER, configurationRepository.getGlobalConfigurationByKeyAndActiveTrue("troubled_customer").getAttribute());
             model.addAttribute(Constants.PAYMENT_PERIODS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-period"));
             model.addAttribute(Constants.PAYMENT_SCHEDULES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-schedule"));
             Sales salesObject = new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null);
@@ -207,7 +207,7 @@ public class CollectController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(null, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             Date today = new Date();
-            GlobalConfiguration configuration = configurationRepository.getGlobalConfigurationByKey("service");
+            GlobalConfiguration configuration = configurationRepository.getGlobalConfigurationByKeyAndActiveTrue("service");
             String defaultValue = configuration!=null?configuration.getAttribute():"6";
             ServiceTask serviceTaskOld = serviceTaskRepository.getServiceTaskById(serviceTask.getId());
             Sales sales = salesRepository.getSalesById(serviceTask.getSales().getId());

@@ -35,14 +35,11 @@ public class PaymentLatencyTask {
     @Autowired
     SalesService salesService;
 
-    @Scheduled(fixedDelay = 12000000, initialDelay = 5000)
-    //@Scheduled(cron="0 0 1 * * *") //hergun seher saat 1 de iwliyecek
+    @Scheduled(cron="0 0 1 * * *") //hergun seher saat 1 de iwliyecek
     public void saled() {
         try{
             log.info("Payment Latency Task Start");
             Date today = new Date();
-            Random random = new Random();
-            today = DateUtility.addDay(-1*random.nextInt(200));
 
             PaymentLatency paymentLatency;
             for(Organization organization: organizationRepository.getOrganizationsByActiveTrue()){

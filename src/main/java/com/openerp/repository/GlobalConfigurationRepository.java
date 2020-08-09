@@ -9,5 +9,5 @@ import java.util.List;
 public interface GlobalConfigurationRepository extends JpaRepository<GlobalConfiguration, Integer> {
     List<GlobalConfiguration> getGlobalConfigurationsByActiveTrue();
     GlobalConfiguration getGlobalConfigurationById(int id);
-    GlobalConfiguration getGlobalConfigurationByKey(String key);
+    GlobalConfiguration getGlobalConfigurationByKeyAndActiveTrue(String key);
 }

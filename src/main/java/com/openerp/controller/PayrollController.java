@@ -319,7 +319,7 @@ public class PayrollController extends SkeletonController {
             credit.setApproveDate(new Date());
             credit.setTransaction(false);
             advanceRepository.save(credit);
-            log(adv, "advance", "create/edit", adv.getId(), adv.toString(), "Kredit əməliyyatı!");
+            log(adv, "advance", "credit", adv.getId(), adv.toString(), "Kredit əməliyyatı!");
         }
         return mapPost(advance, binding, redirectAttributes, "/payroll/advance");
     }

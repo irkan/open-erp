@@ -66,6 +66,7 @@ public class ReportUtil {
                         jsonObj.put("ZAXIS", Util.checkNull(DateUtility.findMonthName(date.getMonth()+1)));
                         jsonObj.put("XAXIS", Util.checkNull(date.getYear()+1900));
                         jsonObj.put("YAXIS", "0");
+                        jsonObj.put("MAXIS", "0");
                         newList.add(jsonObj);
                     }
                 }

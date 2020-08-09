@@ -460,7 +460,7 @@
                                                     </a>
                                                     </c:if>
                                                     <c:if test="${return1.status and t.approve}">
-                                                    <a href="javascript:returnOper($('#return-form'), '<c:out value="${t.id}"/>', 'return-modal-operation', '<c:out value="${return1.object.name}"/>');getInventoriesForReturn('<c:out value="${t.id}" />', $('#return-data-repeater-list'));" class="dropdown-item" title="<c:out value="${return1.object.name}"/>">
+                                                    <a href="javascript:returnOper($('#return-form'), '<c:out value="${t.id}"/>', 'return-modal-operation', '<c:out value="${return1.object.name}"/> - Satış No: <c:out value="${t.id}"/>');getInventoriesForReturn('<c:out value="${t.id}" />', $('#return-data-repeater-list'));" class="dropdown-item" title="<c:out value="${return1.object.name}"/>">
                                                         <i class="<c:out value="${return1.object.icon}"/>"></i> <c:out value="${return1.object.name}"/>
                                                     </a>
                                                     </c:if>
@@ -2500,6 +2500,9 @@
                 required: true
             },
             saleDate: {
+                required: true
+            },
+            vanLeader: {
                 required: true
             },
             'payment.gracePeriod': {

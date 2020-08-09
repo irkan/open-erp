@@ -32,11 +32,11 @@ public class GeneratePDFFile {
     private static final Logger log = Logger.getLogger(GeneratePDFFile.class);
 
     public static File generateInvoice(List<Invoice> invoices, GlobalConfigurationRepository configurationRepository, List<Dictionary> months) throws FileNotFoundException {
-        String invoiceCount = configurationRepository.getGlobalConfigurationByKey("invoice_count").getAttribute();
-        String companyName = configurationRepository.getGlobalConfigurationByKey("company_name").getAttribute();
-        String companyHotLine = configurationRepository.getGlobalConfigurationByKey("company_hot_line").getAttribute();
-        String companyTelephone = configurationRepository.getGlobalConfigurationByKey("company_telephone").getAttribute();
-        String companyMobile = configurationRepository.getGlobalConfigurationByKey("company_mobile").getAttribute();
+        String invoiceCount = configurationRepository.getGlobalConfigurationByKeyAndActiveTrue("invoice_count").getAttribute();
+        String companyName = configurationRepository.getGlobalConfigurationByKeyAndActiveTrue("company_name").getAttribute();
+        String companyHotLine = configurationRepository.getGlobalConfigurationByKeyAndActiveTrue("company_hot_line").getAttribute();
+        String companyTelephone = configurationRepository.getGlobalConfigurationByKeyAndActiveTrue("company_telephone").getAttribute();
+        String companyMobile = configurationRepository.getGlobalConfigurationByKeyAndActiveTrue("company_mobile").getAttribute();
         File file = new File("invoice-"+(new Date()).getTime() + ".pdf");
         PdfDocument pdfDocument = new PdfDocument(new PdfWriter(file.getPath()));
         try(Document document = new Document(pdfDocument, PageSize.A4)){

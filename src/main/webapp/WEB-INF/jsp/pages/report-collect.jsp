@@ -143,16 +143,28 @@
     $(function(){
         var options = {
             series: [{
-                name: 'Ümumi',
+                name: 'Ümumi məbləğ',
                 type: 'line',
                 data: []
             }, {
-                name: 'Gecikmiş',
+                name: 'Gecikmiş məbləğ',
                 type: 'line',
                 data: []
             }, {
-                name: 'Problemli',
+                name: 'Problemli məbləğ',
                 type: 'line',
+                data: []
+            }, {
+                name: 'Ümumi say',
+                type: 'column',
+                data: []
+            }, {
+                name: 'Gecikmiş say',
+                type: 'column',
+                data: []
+            }, {
+                name: 'Problemli say',
+                type: 'column',
                 data: []
             }],
             chart: {
@@ -164,10 +176,10 @@
                 enabled: false
             },
             stroke: {
-                width: [1, 1, 4]
+                width: [4, 4, 4, 1, 1, 1]
             },
             title: {
-                text: 'XYZ - 3 ölçülü satış analizi',
+                text: 'XYZ - 3 ölçülü yığım analizi',
                 align: 'left',
                 offsetX: 50
             },
@@ -176,6 +188,7 @@
             },
             yaxis: [
                 {
+                    seriesName: 'Ümumi məbləğ',
                     axisTicks: {
                         show: true,
                     },
@@ -189,7 +202,6 @@
                         }
                     },
                     title: {
-                        text: "Aktiv müqavilələrin sayı",
                         style: {
                             color: '#008FFB',
                         }
@@ -197,57 +209,47 @@
                     tooltip: {
                         enabled: true
                     }
+                }/*,
+                {
+                    seriesName: 'Gecikmiş məbləğ',
+                    show: false
                 },
                 {
-                    seriesName: 'Income',
+                    seriesName: 'Problemli məbləğ',
+                    show: false
+                },
+                {
+                    seriesName: 'Ümumi say',
                     opposite: true,
                     axisTicks: {
                         show: true,
                     },
                     axisBorder: {
                         show: true,
-                        color: '#00E396'
+                        color: '#fb406b'
                     },
                     labels: {
                         style: {
-                            colors: '#00E396',
+                            colors: '#fb406b',
                         }
                     },
                     title: {
-                        text: "Təsdiq gözləyən müqavilələrin sayı",
                         style: {
-                            color: '#00E396',
-                        }
-                    },
-                    tooltip: {
-                        enabled: true
-                    },
-                },
-                {
-                    seriesName: 'Revenue',
-                    opposite: true,
-                    axisTicks: {
-                        show: true,
-                    },
-                    axisBorder: {
-                        show: true,
-                        color: '#FEB019'
-                    },
-                    labels: {
-                        style: {
-                            colors: '#FEB019',
-                        },
-                    },
-                    title: {
-                        text: "Yığım həcmi (AZN - manatlla ifadədə)",
-                        style: {
-                            color: '#FEB019',
+                            color: '#fb406b',
                         }
                     },
                     tooltip: {
                         enabled: true
                     }
                 },
+                {
+                    seriesName: 'Gecikmiş say',
+                    show: false
+                },
+                {
+                    seriesName: 'Problemli say',
+                    show: false
+                }*/
             ],
             tooltip: {
                 fixed: {
@@ -373,6 +375,9 @@
                 options.series[0].data = [];
                 options.series[1].data = [];
                 options.series[2].data = [];
+                options.series[3].data = [];
+                options.series[4].data = [];
+                options.series[5].data = [];
 
                 pieoptions.labels = [];
                 pieoptions.series = [];
@@ -398,14 +403,17 @@
                 $.each(jQuery.parseJSON(data.string2), function(key, val){
                     options.xaxis.categories.push(val.ZAXIS);
                     options.series[0].data.push(round(val.YAXIS, 0));
+                    options.series[3].data.push(round(val.MAXIS, 0));
                 });
 
                 $.each(jQuery.parseJSON(data.string3), function(key, val){
                     options.series[1].data.push(round(val.YAXIS, 0));
+                    options.series[4].data.push(round(val.MAXIS, 0));
                 });
 
                 $.each(jQuery.parseJSON(data.string4), function(key, val){
                     options.series[2].data.push(round(val.YAXIS, 0));
+                    options.series[5].data.push(round(val.MAXIS, 0));
                 });
                 chart.updateOptions(options);
 

@@ -709,7 +709,7 @@ public class SkeletonController {
 
         if(backDays==0){
             try{
-                GlobalConfiguration configuration = configurationRepository.getGlobalConfigurationByKey("default_back_operation_days_count");
+                GlobalConfiguration configuration = configurationRepository.getGlobalConfigurationByKeyAndActiveTrue("default_back_operation_days_count");
                 if(configuration!=null && configuration.getAttribute()!=null && configuration.getAttribute().matches(Constants.REGEX.REGEX3)){
                     backDays = Integer.parseInt(configuration.getAttribute());
                 }

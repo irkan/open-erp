@@ -38,7 +38,7 @@ public class ServiceScheduleTask {
             log.info("Service Schedule Task Start");
             serviceTaskRepository.deleteAllInBatch();
             serviceRegulatorTaskRepository.deleteAllInBatch();
-            GlobalConfiguration configuration = configurationRepository.getGlobalConfigurationByKey("service");
+            GlobalConfiguration configuration = configurationRepository.getGlobalConfigurationByKeyAndActiveTrue("service");
             String defaultValue = configuration!=null?configuration.getAttribute():"6";
             Date today = new Date();
             for(Sales sales: salesRepository.getSalesByActiveTrueAndServiceFalseAndApproveTrueAndNotServiceNextFalseAndReturnedFalseOrderByIdAsc()){
