@@ -394,9 +394,10 @@ public class ReportingDao implements IReportingDao {
     public List<JSONObject> reportPaymentLatencyPeriodly(Report report) throws Exception {
         List<JSONObject> jsonObjects = new ArrayList<>();
         try(Connection connection = dataSource.getConnection()) {
-            String sql = "select FLOOR(IFNULL(sum(a.ylabel),0)/IFNULL(count(a.mlabel),1)) yaxis,\n" +
-                    "       FLOOR(IFNULL(sum(a.klabel), 0)/IFNULL(count(a.mlabel),1)) maxis,\n" +
-                    "       a.zlabel xaxis, a.xlabel zaxis from (\n" +
+            String sql = "select FLOOR(IFNULL(sum(a.ylabel),0)/IFNULL(count(a.mlabel),1)) as yaxis,\n" +
+                    "       UPPER(a.zlabel) as xaxis, \n" +
+                    "       FLOOR(IFNULL(sum(a.klabel), 0)/IFNULL(count(a.mlabel),1)) as maxis,\n" +
+                    "       UPPER(a.xlabel) as zaxis from (\n" +
                     "  select YEAR(pl1.task_date) zlabel, MONTH(pl1.task_date) xlabel, DAY(pl1.task_date) mlabel,\n" +
                     "         FLOOR(IFNULL(sum(pl1.latency_sum), 0)) ylabel, count(pl1.id) klabel\n" +
                     "  from\n" +
@@ -411,7 +412,7 @@ public class ReportingDao implements IReportingDao {
                     "  GROUP BY YEAR(pl1.task_date), MONTH(pl1.task_date), DAY(pl1.task_date)\n" +
                     "  order by xlabel, zlabel\n" +
                     "  ) a\n" +
-                    " group by a.zlabel, a.xlabel ";
+                    " group by xaxis, zaxis ";
             try(PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
                 try(ResultSet resultSet = preparedStatement.executeQuery()) {
                     jsonObjects = Util.getFormattedResult(resultSet);

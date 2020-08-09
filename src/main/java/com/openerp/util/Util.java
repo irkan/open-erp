@@ -241,6 +241,17 @@ public class Util {
         return null;
     }
 
+    public static String format3(double amount){
+        try{
+            DecimalFormat df = new DecimalFormat("#");
+            df.setRoundingMode(RoundingMode.CEILING);
+            return df.format(amount).replace(",", ".");
+        } catch (Exception e){
+            log.error(e.getMessage(), e);
+        }
+        return "0";
+    }
+
     public static String format(double amount){
         DecimalFormat df = new DecimalFormat("#.##");
         df.setRoundingMode(RoundingMode.CEILING);

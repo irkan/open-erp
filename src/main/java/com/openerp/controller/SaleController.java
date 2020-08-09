@@ -990,7 +990,6 @@ public class SaleController extends SkeletonController {
             transactionRepository.save(transaction);
             log(transaction, "transaction", "create/edit", transaction.getId(), transaction.toString());
 
-            List<Advance> advances = new ArrayList<>();
             ScriptEngineManager mgr = new ScriptEngineManager();
             ScriptEngine engine = mgr.getEngineByName("JavaScript");
             String percent = "*0.01";
@@ -1022,19 +1021,22 @@ public class SaleController extends SkeletonController {
                 ));
             }*/
             if(sales!=null && invc.getApprove() && invc.getAdvance()){
+                Advance advanceO;
                 if(sales.getCanavasser()!=null){
                     EmployeeSaleDetail canvasserSaleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getCanavasser(), "{canvasser}");
                     String calculated_bonus = canvasserSaleDetail.getValue()
                             .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
                             .replaceAll(Pattern.quote("%"), percent);
-                    advances.add(new Advance(advance,
+                    advanceO = new Advance(advance,
                             sales.getCanavasser(),
                             Util.getUserBranch(sales.getCanavasser().getOrganization()),
                             sales.getId() + " nömrəli satış və " + invoice.getId() + " nömrəli hesab fakturadan əldə edilən bonus. "+canvasserSaleDetail.getEmployee().getPerson().getFullName()+" (Canvasser)",
                             calculated_bonus,
                             invc.getApproveDate(),
                             Double.parseDouble(String.valueOf(engine.eval(calculated_bonus)))
-                    ));
+                    );
+                    advanceRepository.save(advanceO);
+                    log(advanceO, "advance", "create/edit", advanceO.getId(), advanceO.toString(), " Satış No: " + invc.getSales().getId());
                 }
 
                 if(sales.getDealer()!=null){
@@ -1042,14 +1044,16 @@ public class SaleController extends SkeletonController {
                     String calculated_bonus = dealerSaleDetail.getValue()
                             .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
                             .replaceAll(Pattern.quote("%"), percent);
-                    advances.add(new Advance(advance,
+                    advanceO = new Advance(advance,
                             sales.getDealer(),
                             Util.getUserBranch(sales.getDealer().getOrganization()),
                             sales.getId() + " nömrəli satış və " + invoice.getId() + " nömrəli hesab fakturadan əldə edilən bonus."+dealerSaleDetail.getEmployee().getPerson().getFullName()+" (Diller)",
                             calculated_bonus,
                             invc.getApproveDate(),
                             Double.parseDouble(String.valueOf(engine.eval(calculated_bonus)))
-                    ));
+                    );
+                    advanceRepository.save(advanceO);
+                    log(advanceO, "advance", "create/edit", advanceO.getId(), advanceO.toString(), " Satış No: " + invc.getSales().getId());
                 }
 
                 if(sales.getVanLeader()!=null){
@@ -1057,14 +1061,17 @@ public class SaleController extends SkeletonController {
                     String calculated_bonus = vanLeaderSaleDetail.getValue()
                             .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
                             .replaceAll(Pattern.quote("%"), percent);
-                    advances.add(new Advance(advance,
+                    advanceO = new Advance(advance,
                             sales.getVanLeader(),
                             Util.getUserBranch(sales.getVanLeader().getOrganization()),
                             sales.getId() + " nömrəli satış və " + invoice.getId() + " nömrəli hesab fakturadan əldə edilən bonus."+vanLeaderSaleDetail.getEmployee().getPerson().getFullName()+" (Ven lider)",
                             calculated_bonus,
                             invc.getApproveDate(),
                             Double.parseDouble(String.valueOf(engine.eval(calculated_bonus)))
-                    ));
+                    );
+
+                    advanceRepository.save(advanceO);
+                    log(advanceO, "advance", "create/edit", advanceO.getId(), advanceO.toString(), " Satış No: " + invc.getSales().getId());
                 }
 
                 if(sales.getConsole()!=null){
@@ -1072,19 +1079,19 @@ public class SaleController extends SkeletonController {
                     String calculated_bonus = consulSaleDetail.getValue()
                             .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
                             .replaceAll(Pattern.quote("%"), percent);
-                    advances.add(new Advance(advance,
+                    advanceO = new Advance(advance,
                             sales.getConsole(),
                             Util.getUserBranch(sales.getConsole().getOrganization()),
                             sales.getId() + " nömrəli satış və " + invoice.getId() + " nömrəli hesab fakturadan əldə edilən bonus."+consulSaleDetail.getEmployee().getPerson().getFullName()+" (Konsul)",
                             calculated_bonus,
                             invc.getApproveDate(),
                             Double.parseDouble(String.valueOf(engine.eval(calculated_bonus)))
-                    ));
+                    );
+
+                    advanceRepository.save(advanceO);
+                    log(advanceO, "advance", "create/edit", advanceO.getId(), advanceO.toString(), " Satış No: " + invc.getSales().getId());
                 }
             }
-            advanceRepository.saveAll(advances);
-
-            log(advances, "advance", "create/edit", null, advances.toString());
 
             Sales sales1 = salesRepository.getSalesById(sales.getId());
             if(sales1!=null && sales1.getPayment()!=null && Util.calculateInvoice(sales1.getInvoices())>=sales1.getPayment().getLastPrice()){

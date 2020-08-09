@@ -1,6 +1,7 @@
 package com.openerp.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.openerp.util.Util;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,6 +25,7 @@ public class WSInfo {
     @JsonProperty("voen-code")
     private Integer voenCode;
     private String voen;
+    private String label;
 
     public WSInfo(Integer salesCode, String customer, Double contractAmount, Double paid, Double unpaid, String sale, String payment, Integer voenCode, String voen) {
         this.salesCode = salesCode;
@@ -36,5 +38,15 @@ public class WSInfo {
         this.payment = payment;
         this.voenCode = voenCode;
         this.voen = voen;
+        String label = "";
+        try {
+            label = this.unpaid>0?("Cari borc: " + Util.format3(this.unpaid) + "₼"):"";
+            label += this.balance>0?(", Ümumi qalıq: " + Util.format3(this.balance) + "₼"):"";
+            label += this.paid>0?(", Ödənilib: " + Util.format3(this.paid) + "₼"):"";
+            label += this.contractAmount>0?(", Müqavilə məbləği: " + Util.format3(this.contractAmount) + "₼"):"";
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        this.label = label;
     }
 }
