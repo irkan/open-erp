@@ -411,6 +411,19 @@
                         </div>
                         <form:errors path="price" cssClass="alert-danger control-label"/>
                     </div>
+                    <c:choose>
+                        <c:when test="${utl:isAdministrator(sessionScope.user)}">
+                            <div class="form-group">
+                                <label class="kt-checkbox kt-checkbox--brand">
+                                    <form:checkbox path="advance" name="advance"/> Avans hesablansınmı?
+                                    <span></span>
+                                </label>
+                            </div>
+                        </c:when>
+                        <c:otherwise>
+                            <form:hidden path="advance"/>
+                        </c:otherwise>
+                    </c:choose>
                     <div class="form-group">
                         <form:label path="invoiceDate">Hesab-faktura tarixi</form:label>
                         <div class="input-group date" >
@@ -446,7 +459,6 @@
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form-approve" method="post" action="/sale/invoice/approve" cssClass="form-group">
                     <form:hidden path="id"/>
-                    <form:hidden path="advance"/>
                     <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>
                         <form:textarea path="description" cssClass="form-control" rows="4"/>

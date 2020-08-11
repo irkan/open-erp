@@ -58,7 +58,7 @@ public class PayrollController extends SkeletonController {
                     session.getAttribute(Constants.SESSION_FILTER) instanceof Advance){
                 model.addAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
             }
-            Page<Advance> advances = advanceService.findAll((Advance) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
+            Page<Advance> advances = advanceService.findAll((Advance) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("approve").ascending().and(Sort.by("approveDate").descending()).and(Sort.by("id").descending())));
             model.addAttribute(Constants.LIST, advances);
             if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
                 return exportExcel(advances, redirectAttributes, page);

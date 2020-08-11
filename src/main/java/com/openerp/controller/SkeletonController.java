@@ -602,6 +602,7 @@ public class SkeletonController {
             invoice.setDescription("Ödəniş " + invoice.getPrice() + " AZN -> " + invoice.getDescription());
             invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
             invoice.setApprove(false);
+            invoice.setAdvance(false);
             invc = invoice;
         } else {
             invc = invoiceRepository.getInvoiceById(invoice.getId());
@@ -609,6 +610,7 @@ public class SkeletonController {
             invc.setPrice(invoice.getPrice());
             invc.setInvoiceDate(invoice.getInvoiceDate());
             invc.setDescription(invoice.getDescription());
+            invc.setAdvance(invoice.getAdvance());
         }
         invoiceRepository.save(invc);
         invc.setChannelReferenceCode(String.valueOf(invc.getId()));

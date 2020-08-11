@@ -60,7 +60,7 @@ public class SaleController extends SkeletonController {
                     session.getAttribute(Constants.SESSION_FILTER) instanceof Sales){
                 model.addAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
             }
-            Page<Sales> sales = salesService.findAll((Sales) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("approve").descending().by("id").descending()));
+            Page<Sales> sales = salesService.findAll((Sales) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("approve").ascending().and(Sort.by("approveDate").descending()).and(Sort.by("id").descending())));
             for(Sales sales1: sales){
                 sales1.setSalesInventories(salesInventoryRepository.getSalesInventoriesByActiveTrueAndSales_Id(sales1.getId()));
             }
@@ -128,7 +128,7 @@ public class SaleController extends SkeletonController {
                     session.getAttribute(Constants.SESSION_FILTER) instanceof Sales){
                 model.addAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
             }
-            Page<Sales> sales = salesService.findAll((Sales) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
+            Page<Sales> sales = salesService.findAll((Sales) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("approve").ascending().and(Sort.by("approveDate").descending()).and(Sort.by("id").descending())));
             model.addAttribute(Constants.LIST, sales);
             if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
                 return exportExcel(sales, redirectAttributes, page);
@@ -151,7 +151,7 @@ public class SaleController extends SkeletonController {
                     session.getAttribute(Constants.SESSION_FILTER) instanceof Invoice){
                 model.addAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
             }
-            Page<Invoice> invoices = invoiceService.findAll((Invoice) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
+            Page<Invoice> invoices = invoiceService.findAll((Invoice) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("approve").ascending().and(Sort.by("approveDate").descending()).and(Sort.by("id").descending())));
             model.addAttribute(Constants.LIST, invoices);
             if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
                 return exportExcel(invoices, redirectAttributes, page);
@@ -995,7 +995,6 @@ public class SaleController extends SkeletonController {
             invc.setApprove(true);
             invc.setApproveDate(new Date());
             invc.setDescription(invoice.getDescription());
-            invc.setAdvance(invoice.getAdvance());
             invoiceRepository.save(invc);
             log(invc, "invoice", "approve", invc.getId(), invc.toString());
 
