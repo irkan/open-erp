@@ -65,6 +65,7 @@ public class Constants {
     public static final String LAST_ADVANCE = "last_advance";
     public static final String ANNUAL_NON_PAYED_ADVANCE = "annual_non_payed_advance";
     public static final String RETURN_FORM = "return_form";
+    public static final String CHANGE_INVENTORY_FORM = "change_inventory_form";
     public static final String TRANSFER_FORM = "transfer_form";
     public static final String FILES = "files";
     public static final String CONTENTS = "contents";

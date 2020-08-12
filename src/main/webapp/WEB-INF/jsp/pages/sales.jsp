@@ -239,7 +239,7 @@
                                                 <form:errors path="vanLeader" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-6">
                                             <div class="row" style="padding-top: 30px;">
                                                 <div class="col-md-3">
                                                     <div class="form-group">
@@ -249,10 +249,18 @@
                                                         </label>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label class="kt-checkbox kt-checkbox--brand">
                                                             <form:checkbox path="approve"/> Təsdiq edilməyənlər
+                                                            <span></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label class="kt-checkbox kt-checkbox--brand">
+                                                            <form:checkbox path="returned"/> Qaytarılanlar
                                                             <span></span>
                                                         </label>
                                                     </div>
@@ -447,6 +455,11 @@
                                                     <c:if test="${edit.status and t.approve and approver}">
                                                     <a href="javascript:sales('edit', $('#payment-form'), '<c:out value="${t.id}" />', 'payment-modal-operation', 'Ödəniş redaktə - Satış No: <c:out value="${t.id}"/>', '<c:out value="${t.customer.person.id}" />');" class="dropdown-item" title="<c:out value="${edit.object.name}"/>">
                                                         <i class="<c:out value="${edit.object.icon}"/>"></i> Ödəniş redaktə
+                                                    </a>
+                                                    </c:if>
+                                                    <c:if test="${edit.status and t.approve and approver}">
+                                                    <a href="javascript:changeInventory($('#change-inventory-form'), 'change-inventory-modal-operation', 'İnventar dəyişimi - Satış No: <c:out value="${t.id}"/>', '<c:out value="${t.id}" />', '<c:out value="${t.salesInventories[0].inventory.barcode}" />', '<c:out value="${t.salesInventories[0].inventory.name}" />');" class="dropdown-item" title="<c:out value="${edit.object.name}"/>">
+                                                        <i class="<c:out value="${edit.object.icon}"/>"></i> İnventarı dəyiş
                                                     </a>
                                                     </c:if>
                                                     <c:if test="${view3.status}">
@@ -1460,6 +1473,46 @@
     </div>
 </div>
 
+<div class="modal fade" id="change-inventory-modal-operation" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form:form modelAttribute="change_inventory_form" id="change-inventory-form" method="post" action="/sale/sales/change-inventory" cssClass="form-group">
+                    <form:hidden path="salesId"/>
+                    <div class="form-group">
+                        <form:label path="oldInventoryBarcode">Köhnə barkod</form:label>
+                        <div class="input-group" >
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
+                            <form:input path="oldInventoryBarcode" cssClass="form-control" placeholder="Daxil edin" onchange="findInventory3($(this), $('#change-inventory-form'), $('#change-inventory-form').find('#oldInventoryName'))"/>
+                        </div>
+                        <form:errors path="oldInventoryBarcode" cssClass="alert-danger control-label"/>
+                        <label id="oldInventoryName" class="font-weight-bold kt-font-danger text-center" style="width: 100%"></label>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="newInventoryBarcode">Yeni barkod</form:label>
+                        <div class="input-group" >
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
+                            <form:input path="newInventoryBarcode" cssClass="form-control" placeholder="Daxil edin" onchange="findInventory3($(this), $('#change-inventory-form'), $('#change-inventory-form').find('#newInventoryName'))"/>
+                        </div>
+                        <form:errors path="newInventoryBarcode" cssClass="alert-danger control-label"/>
+                        <label id="newInventoryName" class="font-weight-bold kt-font-danger text-center" style="width: 100%"></label>
+                    </div>
+                </form:form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="submit($('#change-inventory-form'));">Yadda saxla</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <form id="form-export-contract" method="post" action="/export/sale/contract" style="display: none">
     <input type="hidden" name="data" />
 </form>
@@ -2176,6 +2229,40 @@
         }
     }
 
+    function findInventory3(element, form, label){
+        if($(element).val().trim().length>0){
+            swal.fire({
+                text: 'Proses davam edir...',
+                allowOutsideClick: false,
+                onOpen: function() {
+                    swal.showLoading();
+                    $.ajax({
+                        url: '/warehouse/api/inventory/'+$(element).val(),
+                        type: 'GET',
+                        dataType: 'json',
+                        beforeSend: function() {
+                        },
+                        success: function(inventory) {
+                            $(label).text(inventory.name);
+                            swal.close();
+                        },
+                        error: function() {
+                            swal.fire({
+                                title: "Xəta baş verdi!",
+                                html: "İnventar tapılmadı və ya "+$(element).val()+" barkodlu inventarın sayı 0 (sıfır)-dır!",
+                                type: "error",
+                                cancelButtonText: 'Bağla',
+                                cancelButtonColor: '#c40000',
+                                cancelButtonClass: 'btn btn-danger',
+                                footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+                            });
+                        }
+                    })
+                }
+            });
+        }
+    }
+
     $('#modal-operation').on('shown.bs.modal', function() {
         $(document).off('focusin.modal');
     });
@@ -2476,6 +2563,13 @@
                 })
             }
         });
+    }
+
+    function changeInventory(form, modal, modal_title, salesId, oldInventoryBarcode, oldInventoryName){
+        $(form).find("input[name='salesId']").val(salesId);
+        $(form).find("input[name='oldInventoryBarcode']").val(oldInventoryBarcode);
+        $(form).find("#oldInventoryName").text(oldInventoryName);
+        create(form, modal, modal_title);
     }
 
     $( "#tax-configuration-form" ).validate({

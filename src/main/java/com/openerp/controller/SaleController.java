@@ -1,5 +1,6 @@
 package com.openerp.controller;
 
+import com.openerp.domain.ChangeInventory;
 import com.openerp.domain.Return;
 import com.openerp.domain.SalesSchedule;
 import com.openerp.domain.Schedule;
@@ -50,6 +51,9 @@ public class SaleController extends SkeletonController {
             }
             if(!model.containsAttribute(Constants.RETURN_FORM)){
                 model.addAttribute(Constants.RETURN_FORM, new Return());
+            }
+            if(!model.containsAttribute(Constants.CHANGE_INVENTORY_FORM)){
+                model.addAttribute(Constants.CHANGE_INVENTORY_FORM, new ChangeInventory());
             }
             if(!model.containsAttribute(Constants.FILTER)){
                 Sales sales = new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null);
