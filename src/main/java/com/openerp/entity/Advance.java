@@ -106,4 +106,11 @@ public class Advance {
         this.payed = payed;
         this.advanceDate = advanceDate;
     }
+
+    public Advance(Organization organization, Double payed, Date advanceDate, Boolean approve) {
+        this.organization = organization;
+        this.payed = payed;
+        this.advanceDate = advanceDate;
+        this.approve = approve;
+    }
 }

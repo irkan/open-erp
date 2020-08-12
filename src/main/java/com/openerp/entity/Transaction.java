@@ -135,5 +135,11 @@ public class Transaction {
         this.price = price;
     }
 
+    public Transaction(Organization organization, Double price, Boolean approve, String attribute) {
+        this.organization = organization;
+        this.price = price;
+        this.approve = approve;
+    }
+
 
 }

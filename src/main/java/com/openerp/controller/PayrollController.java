@@ -52,7 +52,7 @@ public class PayrollController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new Advance(getSessionOrganization()));
             }
             if(!model.containsAttribute(Constants.FILTER)){
-                model.addAttribute(Constants.FILTER, new Advance(!canViewAll()?getSessionOrganization():null, null, null));
+                model.addAttribute(Constants.FILTER, new Advance(!canViewAll()?getSessionOrganization():null, null, null, null));
             }
             if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
                     session.getAttribute(Constants.SESSION_FILTER) instanceof Advance){

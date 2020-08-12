@@ -52,7 +52,7 @@ public class AccountingController extends SkeletonController {
                         ));
             }
             if(!model.containsAttribute(Constants.FILTER)){
-                model.addAttribute(Constants.FILTER, new Transaction(!canViewAll()?getSessionOrganization():null, null));
+                model.addAttribute(Constants.FILTER, new Transaction(!canViewAll()?getSessionOrganization():null, null, null, ""));
             }
             if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
                     session.getAttribute(Constants.SESSION_FILTER) instanceof Transaction){

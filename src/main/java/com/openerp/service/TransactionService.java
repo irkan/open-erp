@@ -30,7 +30,7 @@ public class TransactionService {
                 if(transaction.getId()!=null) {
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("id"), transaction.getId())));
                 }
-                if(!transaction.getApprove()){
+                if(transaction.getApprove()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("approve"), transaction.getApprove())));
                 }
                 if(!transaction.getAccountable()){
