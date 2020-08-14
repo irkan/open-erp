@@ -381,8 +381,19 @@ public class SkeletonController {
     String mapPost(Object object, BindingResult binding, RedirectAttributes redirectAttributes, String redirect){
         redirectAttributes.addFlashAttribute(Constants.FORM_RESULT_BINDING, binding);
         redirectAttributes.addFlashAttribute(Constants.FORM, object);
+        redirectAttributes.addFlashAttribute(Constants.CHANGE_INVENTORY_FORM, object);
         if(!binding.hasErrors()){
             redirectAttributes.getFlashAttributes().remove(Constants.FORM);
+            redirectAttributes.getFlashAttributes().remove(Constants.CHANGE_INVENTORY_FORM);
+        }
+        return "redirect:"+redirect;
+    }
+
+    String mapPostCI(Object object, BindingResult binding, RedirectAttributes redirectAttributes, String redirect){
+        redirectAttributes.addFlashAttribute(Constants.FORM_RESULT_BINDING, binding);
+        redirectAttributes.addFlashAttribute(Constants.CHANGE_INVENTORY_FORM, object);
+        if(!binding.hasErrors()){
+            redirectAttributes.getFlashAttributes().remove(Constants.CHANGE_INVENTORY_FORM);
         }
         return "redirect:"+redirect;
     }

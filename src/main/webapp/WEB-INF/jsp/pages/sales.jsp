@@ -634,7 +634,7 @@
                                             <div class="col-sm-6">
                                                 <div class="form-group mt-3 pt-4">
                                                     <label class="kt-checkbox kt-checkbox--brand">
-                                                        <form:checkbox path="payment.hasDiscount" onclick="doDiscount($(this), '10%')"/> Endirim varmı?
+                                                        <form:checkbox path="payment.hasDiscount" onclick="doDiscount($(this), '10%', $('#form'), 1, 'lastPriceLabel')"/> Endirim varmı?
                                                         <span></span>
                                                     </label>
                                                 </div>
@@ -1259,7 +1259,7 @@
                         <div class="col-sm-2">
                             <div class="form-group mt-3 pt-4">
                                 <label class="kt-checkbox kt-checkbox--brand">
-                                    <form:checkbox path="payment.hasDiscount" onclick="doDiscount($(this), '10%')"/> Endirim varmı?
+                                    <form:checkbox path="payment.hasDiscount" onclick="doDiscount($(this), '10%', $('#payment-form'), 2, 'lastPriceLabel2')"/> Endirim varmı?
                                     <span></span>
                                 </label>
                             </div>
@@ -1501,6 +1501,14 @@
                             <form:input path="newInventoryBarcode" cssClass="form-control" placeholder="Daxil edin" onchange="findInventory3($(this), $('#change-inventory-form'), $('#change-inventory-form').find('#newInventoryName'))"/>
                         </div>
                         <form:errors path="newInventoryBarcode" cssClass="alert-danger control-label"/>
+                        <c:if test="${view6.status}">
+                            <div class="text-right">
+                                <a href="javascript:window.open('/warehouse/inventory', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-sm kt-font-bold kt-margin-t-5">
+                                    <i class="la la-question"></i>
+                                    İnventarların siyahısı
+                                </a>
+                            </div>
+                        </c:if>
                         <label id="newInventoryName" class="font-weight-bold kt-font-danger text-center" style="width: 100%"></label>
                     </div>
                 </form:form>
@@ -1643,7 +1651,7 @@
         }
     }
 
-    function doDiscount(element, defaultCash){
+    function doDiscount(element, defaultCash, form, index, lastPriceLabel){
         if($(element).is(":checked")){
             $("#schedule-div").html('');
             swal.fire({
@@ -1666,19 +1674,19 @@
                     maxlength: 10,
                     autocapitalize: 'off',
                     autocorrect: 'off',
-                    id: 'sale-value',
-                    style: 'text-align: -webkit-center; text-align: center; font-weight: bold; letter-spacing: 3px;'
+                    name: 'sale-value-'+index,
+                    style: 'text-align: -webkit-center; text-align: center; font-weight: bold; letter-spacing: 3px; z-index: 1000'
                 },
                 footer: '<a href>Məlumatlar yenilənsinmi?</a>'
             }).then(function(result) {
-                $("input[name='payment.discount']").val('');
-                $("input[name='payment.description']").val('');
+                $(form).find("input[name='payment.discount']").val('');
+                $(form).find("input[name='payment.description']").val('');
                 if (result.value) {
-                    $("input[name='payment.discount']").val($('#sale-value').val());
-                    $("input[name='payment.price']").change();
-                    if($('#sale-value').val()!==defaultCash){
+                    $(form).find("input[name='payment.discount']").val($("input[name='sale-value-"+index+"']").val());
+                    $(form).find("input[name='payment.price']").change();
+                    if($("input[name='sale-value-"+index+"']").val()!==defaultCash){
                         swal.fire({
-                            title: $('#sale-value').val()+' - Səbəbini daxil edin',
+                            title: $("input[name='sale-value-"+index+"']").val()+' - Səbəbini daxil edin',
                             type: 'info',
                             allowEnterKey: true,
                             buttonsStyling: false,
@@ -1696,7 +1704,7 @@
                             footer: '<a href>Məlumatlar yenilənsinmi?</a>'
                         }).then(function(result2){
                             if(result2.value.length>0){
-                                $("input[name='payment.description']").val(result2.value);
+                                $(form).find("textarea[name='payment.description']").val(result2.value);
                             }
                         })
 
@@ -1705,9 +1713,9 @@
             })
 
         } else {
-            var price = $("input[name='payment.price']").val();
-            $("#lastPriceLabel").text(price);
-            $('#form').find("input[name='payment.lastPrice']").val(price);
+            var price = $(form).find("input[name='payment.price']").val();
+            $("#" + lastPriceLabel).text(price);
+            $(form).find("input[name='payment.lastPrice']").val(price);
         }
     }
 
@@ -2607,6 +2615,25 @@
         },
         messages: {
             'payment.gracePeriod': "0 və ya 1 (~30 gün) ay ola bilər",
+        },
+        invalidHandler: function(event, validator) {
+            KTUtil.scrollTop();
+            swal.close();
+        },
+    });
+
+    $( "#change-inventory-form" ).validate({
+        rules: {
+            oldInventoryBarcode: {
+                required: true
+            },
+            newInventoryBarcode: {
+                required: true,
+                notEqualTo: "#oldInventoryBarcode"
+            }
+        },
+        messages: {
+
         },
         invalidHandler: function(event, validator) {
             KTUtil.scrollTop();

@@ -1137,7 +1137,7 @@ $.validator.addMethod( "nisBR", function( value ) {
 
 $.validator.addMethod( "notEqualTo", function( value, element, param ) {
 	return this.optional( element ) || !$.validator.methods.equalTo.call( this, value, element, param );
-}, "Please enter a different value, values must not be the same." );
+}, "Fərqli məlumat daxil edin, məlumat eyni olmamalıdır." );
 
 $.validator.addMethod( "nowhitespace", function( value, element ) {
 	return this.optional( element ) || /^\S+$/i.test( value );

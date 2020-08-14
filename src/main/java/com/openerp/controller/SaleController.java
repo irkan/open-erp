@@ -849,6 +849,88 @@ public class SaleController extends SkeletonController {
         return mapPost(sales, binding, redirectAttributes, "/sale/sales");
     }
 
+
+    @PostMapping(value = "/sales/change-inventory")
+    public String postSalesChangeInventory(@ModelAttribute(Constants.CHANGE_INVENTORY_FORM) @Validated ChangeInventory changeInventory, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        Sales sales = salesRepository.getSalesById(changeInventory.getSalesId());
+        Employee employee = sales.getService()?sales.getServicer():sales.getVanLeader();
+        List<SalesInventory> salesInventories = salesInventoryRepository.getSalesInventoriesByActiveTrueAndSalesIdAndInventoryBarcode(changeInventory.getSalesId(), changeInventory.getOldInventoryBarcode());
+        if(!sales.getService()
+                && changeInventory.getSalesId()!=null
+                && changeInventory.getOldInventoryBarcode()!=null
+                && changeInventory.getOldInventoryBarcode().length()>0
+                && salesInventories.size()==0){
+            FieldError fieldError = new FieldError("oldInventoryBarcode", "oldInventoryBarcode", "Köhnə inventar - " + changeInventory.getSalesId() + " №-li satışda "+changeInventory.getOldInventoryBarcode()+" barkodlu inventar tapılmadı!");
+            binding.addError(fieldError);
+        }
+        List<Inventory> newInventories = inventoryRepository.getInventoriesByActiveTrueAndBarcodeAndOrganizationOrderByIdAsc(changeInventory.getNewInventoryBarcode().trim(), getSessionOrganization());
+        List<Action> actions = new ArrayList<>();
+        if(newInventories.size()>0){
+            actions = actionRepository.getActionsByActiveTrueAndInventory_ActiveAndInventoryAndEmployeeAndAction_Attr1AndAmountGreaterThanOrderById(true, newInventories.get(0), employee, "consolidate", 0);
+            if(!sales.getService()
+                    && changeInventory.getSalesId()!=null
+                    && changeInventory.getNewInventoryBarcode()!=null
+                    && changeInventory.getNewInventoryBarcode().length()>0
+                    && actions.size()==0){
+                FieldError fieldError = new FieldError("newInventoryBarcode", "newInventoryBarcode", "Yeni inventar - " + changeInventory.getSalesId() + " №-li satışda "+changeInventory.getOldInventoryBarcode()+" barkodlu inventar "+employee.getPerson().getFullName()+" adına təhkim edilməmişdir!");
+                binding.addError(fieldError);
+            }
+        } else {
+            FieldError fieldError = new FieldError("newInventoryBarcode", "newInventoryBarcode", "İnventar tapılmadı!");
+            binding.addError(fieldError);
+        }
+
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()){
+
+            if(actions.size()>0){
+                Action action = new Action();
+                action.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("return", "action"));
+                action.setOld(false);
+                action.setInventory(salesInventories.get(0).getInventory());
+                action.setAmount(1);
+                action.setOrganization(sales.getOrganization());
+                actionRepository.save(action);
+
+                log(action, "action", "return", action.getId(), action.toString());
+
+                action = new Action();
+                action.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sell", "action"));
+                action.setAmount(1);
+                action.setInventory(newInventories.get(0));
+                action.setOrganization(sales.getOrganization());
+                action.setEmployee(employee);
+                action.setSupplier(actions.get(0).getSupplier());
+                actionRepository.save(action);
+                log(action, "action", "create/edit", action.getId(), action.toString());
+
+                Action oldAction = actions.get(0);
+                oldAction.setAmount(oldAction.getAmount()-1);
+                actionRepository.save(oldAction);
+                log(oldAction, "action", "create/edit", oldAction.getId(), oldAction.toString());
+            }
+
+            List<SalesInventory> salesInventoryList = new ArrayList<>();
+
+            SalesInventory salesInventory = new SalesInventory();
+            salesInventory.setSales(sales);
+            salesInventory.setInventory(newInventories.get(0));
+            Dictionary salesType = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sales", "sales-type");
+            salesInventory.setSalesType(salesType);
+
+            salesInventoryList.add(salesInventory);
+            salesInventoryList.addAll(salesInventoryRepository.getSalesInventoriesByActiveTrueAndSalesIdAndInventoryBarcodeNot(changeInventory.getSalesId(), changeInventory.getOldInventoryBarcode()));
+
+            salesInventoryRepository.deleteInBatch(salesInventoryRepository.getSalesInventoriesByActiveTrueAndSales_Id(sales.getId()));
+
+            salesInventoryRepository.saveAll(salesInventoryList);
+        }
+        if(sales.getService()){
+            return mapPostCI(changeInventory, binding, redirectAttributes, "/sale/service");
+        }
+        return mapPostCI(changeInventory, binding, redirectAttributes, "/sale/sales");
+    }
+
     @PostMapping(value = "/sales/filter")
     public String postSalesFilter(@ModelAttribute(Constants.FILTER) @Validated Sales sales, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         return mapFilter(sales, binding, redirectAttributes, "/sale/sales");
