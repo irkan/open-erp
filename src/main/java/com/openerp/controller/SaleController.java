@@ -579,10 +579,6 @@ public class SaleController extends SkeletonController {
             FieldError fieldError = new FieldError("", "", "Satış tarixi " + DateUtility.getFormattedDate(sales.getSaleDate()) + " olduğu üçün əməliyyata icazə verilmir!");
             binding.addError(fieldError);
         }
-        if(!sales.getService() && sale.getVanLeader()==null){
-            FieldError fieldError = new FieldError("", "", "Ven lider təyin edilməyib!");
-            binding.addError(fieldError);
-        }
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             sales.getPayment().setPrice(sale.getPayment().getPrice());
@@ -631,8 +627,32 @@ public class SaleController extends SkeletonController {
                 invoiceRepository.save(invoice);
                 log(invoice, "invoice", "create/edit", invoice.getId(), invoice.toString());
             }
+        }
+
+        if(sales.getService()){
+            return mapPost(sales, binding, redirectAttributes, "/sale/service");
+        }
+        return mapPost(sales, binding, redirectAttributes, "/sale/sales");
+    }
 
 
+    @PostMapping(value = "/sales/employee")
+    public String postSalesEmployee(@ModelAttribute(Constants.FORM) @Validated Sales sale, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        Sales sales = salesRepository.getSalesById(sale.getId());
+        if(sales.getService()){
+            FieldError fieldError = new FieldError("", "", "Servis dəyişdirilə bilməz!");
+            binding.addError(fieldError);
+        }
+        if(!checkBackDate(sales.getSaleDate())){
+            FieldError fieldError = new FieldError("", "", "Satış tarixi " + DateUtility.getFormattedDate(sales.getSaleDate()) + " olduğu üçün əməliyyata icazə verilmir!");
+            binding.addError(fieldError);
+        }
+        if(!sales.getService() && sale.getVanLeader()==null){
+            FieldError fieldError = new FieldError("", "", "Ven lider təyin edilməyib!");
+            binding.addError(fieldError);
+        }
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()){
             if(Util.calculateInvoice(sales.getInvoices())>0){
                 ScriptEngineManager mgr = new ScriptEngineManager();
                 ScriptEngine engine = mgr.getEngineByName("JavaScript");
@@ -661,11 +681,11 @@ public class SaleController extends SkeletonController {
                     } catch (Exception e){
                         log.error(e.getMessage(), e);
                     }
-                    
+
                     try{
                         saleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sale.getVanLeader(), "{van_leader}");
                         calculated_bonus = saleDetail.getValue()
-                                .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sale.getPayment().getLastPrice()))
+                                .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
                                 .replaceAll(Pattern.quote("%"), percent);
 
                         advance = new Advance(bonus,
@@ -684,7 +704,7 @@ public class SaleController extends SkeletonController {
                     }
 
                 }
-                
+
                 try{
                     if((sales.getDealer()!=null && sale.getDealer()!=null && sales.getDealer().getId().intValue()!=sale.getDealer().getId().intValue()) ||
                             (sales.getDealer()!=null && sale.getDealer()==null)
@@ -707,15 +727,15 @@ public class SaleController extends SkeletonController {
                     }
                 } catch (Exception e){
                     log.error(e.getMessage(), e);
-                }  
-                
+                }
+
                 try{
                     if((sales.getDealer()!=null && sale.getDealer()!=null && sales.getDealer().getId().intValue()!=sale.getDealer().getId().intValue()) ||
                             (sales.getDealer()==null && sale.getDealer()!=null)
                     ){
                         EmployeeSaleDetail saleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sale.getVanLeader(), "{dealer}");
                         String calculated_bonus = saleDetail.getValue()
-                                .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sale.getPayment().getLastPrice()))
+                                .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
                                 .replaceAll(Pattern.quote("%"), percent);
 
                         Advance advance = new Advance(bonus,
@@ -732,8 +752,8 @@ public class SaleController extends SkeletonController {
                     }
                 } catch (Exception e){
                     log.error(e.getMessage(), e);
-                }   
-                
+                }
+
                 try{
                     if((sales.getCanavasser()!=null && sale.getCanavasser()!=null && sales.getCanavasser().getId().intValue()!=sale.getCanavasser().getId().intValue()) ||
                             (sales.getCanavasser()!=null && sale.getCanavasser()==null)
@@ -756,15 +776,15 @@ public class SaleController extends SkeletonController {
                     }
                 } catch (Exception e){
                     log.error(e.getMessage(), e);
-                }   
-                
+                }
+
                 try{
                     if((sales.getCanavasser()!=null && sale.getCanavasser()!=null && sales.getCanavasser().getId().intValue()!=sale.getCanavasser().getId().intValue()) ||
                             (sales.getCanavasser()==null && sale.getCanavasser()!=null)
                     ){
                         EmployeeSaleDetail saleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sale.getCanavasser(), "{canvasser}");
                         String calculated_bonus = saleDetail.getValue()
-                                .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sale.getPayment().getLastPrice()))
+                                .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
                                 .replaceAll(Pattern.quote("%"), percent);
 
                         Advance advance = new Advance(bonus,
@@ -781,8 +801,8 @@ public class SaleController extends SkeletonController {
                     }
                 } catch (Exception e){
                     log.error(e.getMessage(), e);
-                } 
-                
+                }
+
                 try{
                     if((sales.getConsole()!=null && sale.getConsole()!=null && sales.getConsole().getId().intValue()!=sale.getConsole().getId().intValue()) ||
                             (sales.getConsole()!=null && sale.getConsole()==null)
@@ -805,15 +825,15 @@ public class SaleController extends SkeletonController {
                     }
                 } catch (Exception e){
                     log.error(e.getMessage(), e);
-                }  
-                
+                }
+
                 try{
                     if((sales.getConsole()!=null && sale.getConsole()!=null && sales.getConsole().getId().intValue()!=sale.getConsole().getId().intValue()) ||
                             (sales.getConsole()==null && sale.getConsole()!=null)
                     ){
                         EmployeeSaleDetail saleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sale.getConsole(), "{consul}");
                         String calculated_bonus = saleDetail.getValue()
-                                .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sale.getPayment().getLastPrice()))
+                                .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
                                 .replaceAll(Pattern.quote("%"), percent);
 
                         Advance advance = new Advance(bonus,
@@ -835,19 +855,20 @@ public class SaleController extends SkeletonController {
         }
 
         sales.setVanLeader(sale.getVanLeader());
-        sales.setCanavasser(sale.getCanavasser());
+        sales.setDealer(sale.getDealer());
         sales.setConsole(sale.getConsole());
         sales.setCanavasser(sale.getCanavasser());
         salesRepository.save(sales);
 
         log(sales, "sales", "create/edit", sales.getId(), sales.toString(), "Satış əməkdaşları yeniləndi");
 
-        
+
         if(sales.getService()){
             return mapPost(sales, binding, redirectAttributes, "/sale/service");
         }
         return mapPost(sales, binding, redirectAttributes, "/sale/sales");
     }
+
 
 
     @PostMapping(value = "/sales/change-inventory")
@@ -890,6 +911,7 @@ public class SaleController extends SkeletonController {
                 action.setInventory(salesInventories.get(0).getInventory());
                 action.setAmount(1);
                 action.setOrganization(sales.getOrganization());
+                action.setDescription("Avadanlıq " + newInventories.get(0).getBarcode() + " barkodlu " + newInventories.get(0).getName() + " ilə dəyişdirildi");
                 actionRepository.save(action);
 
                 log(action, "action", "return", action.getId(), action.toString());

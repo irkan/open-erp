@@ -241,10 +241,18 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="row" style="padding-top: 30px;">
-                                                <div class="col-md-3">
+                                                <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label class="kt-checkbox kt-checkbox--brand">
                                                             <form:checkbox path="payment.cash"/> Nağdlar
+                                                            <span></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <label class="kt-checkbox kt-checkbox--brand">
+                                                            <form:checkbox path="saled"/> Satılanlar
                                                             <span></span>
                                                         </label>
                                                     </div>
@@ -266,7 +274,7 @@
                                                     </div>
                                                 </div>
                                                 <c:if test="${delete.status}">
-                                                    <div class="col-md-3">
+                                                    <div class="col-md-2">
                                                         <div class="form-group">
                                                             <label class="kt-checkbox kt-checkbox--brand">
                                                                 <form:checkbox path="active"/> Aktual
@@ -460,6 +468,11 @@
                                                     <c:if test="${edit.status and t.approve and approver}">
                                                     <a href="javascript:changeInventory($('#change-inventory-form'), 'change-inventory-modal-operation', 'İnventar dəyişimi - Satış No: <c:out value="${t.id}"/>', '<c:out value="${t.id}" />', '<c:out value="${t.salesInventories[0].inventory.barcode}" />', '<c:out value="${t.salesInventories[0].inventory.name}" />');" class="dropdown-item" title="<c:out value="${edit.object.name}"/>">
                                                         <i class="<c:out value="${edit.object.icon}"/>"></i> İnventarı dəyiş
+                                                    </a>
+                                                    </c:if>
+                                                    <c:if test="${edit.status and t.approve and approver}">
+                                                    <a href="javascript:sales('edit', $('#sales-employee-form'), '<c:out value="${t.id}" />', 'sales-employee-modal-operation', 'Satış əməkdaşları redaktə - Satış No: <c:out value="${t.id}"/>', '<c:out value="${t.customer.person.id}" />');" class="dropdown-item" title="<c:out value="${edit.object.name}"/>">
+                                                        <i class="<c:out value="${edit.object.icon}"/>"></i> Satış əməkdaşları redaktə
                                                     </a>
                                                     </c:if>
                                                     <c:if test="${view3.status}">
@@ -1362,81 +1375,83 @@
 
                                     </div>
                                 </div>
-
                             </div>
-
-
-                            <div class="row">
-                                <div class="col-md-5 offset-md-1">
-                                    <div class="form-group">
-                                        <form:label path="console">Konsul</form:label>
-                                        <form:select  path="console" cssClass="custom-select form-control">
-                                            <form:option value=""></form:option>
-                                            <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
-                                                <optgroup label="${itemGroup.key}">
-                                                    <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
-                                                </optgroup>
-                                            </c:forEach>
-                                        </form:select>
-                                        <form:errors path="console" cssClass="control-label alert-danger"/>
-                                    </div>
-                                </div>
-                                <div class="col-md-5">
-                                    <div class="form-group">
-                                        <form:label path="vanLeader">Van lider</form:label>
-                                        <form:select  path="vanLeader" cssClass="custom-select form-control" multiple="single">
-                                            <form:option value=""></form:option>
-                                            <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
-                                                <optgroup label="${itemGroup.key}">
-                                                    <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
-                                                </optgroup>
-                                            </c:forEach>
-                                        </form:select>
-                                        <form:errors path="vanLeader" cssClass="control-label alert-danger"/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="kt-separator kt-separator--border-dashed kt-separator--space-sm kt-separator--portlet-fit" style="margin: 1rem 0"></div>
-                            <div class="row">
-                                <div class="col-md-5 offset-md-1">
-                                    <div class="form-group">
-                                        <form:label path="dealer">Diller</form:label>
-                                        <form:select  path="dealer" cssClass="custom-select form-control" multiple="single">
-                                            <form:option value=""></form:option>
-                                            <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
-                                                <optgroup label="${itemGroup.key}">
-                                                    <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
-                                                </optgroup>
-                                            </c:forEach>
-                                        </form:select>
-                                        <form:errors path="dealer" cssClass="control-label alert-danger"/>
-                                    </div>
-                                </div>
-                                <div class="col-md-5">
-                                    <div class="form-group">
-                                        <form:label path="canavasser">Canavasser</form:label>
-                                        <form:select  path="canavasser" cssClass="custom-select form-control" multiple="single">
-                                            <form:option value=""></form:option>
-                                            <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
-                                                <optgroup label="${itemGroup.key}">
-                                                    <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
-                                                </optgroup>
-                                            </c:forEach>
-                                        </form:select>
-                                        <form:errors path="canavasser" cssClass="control-label alert-danger"/>
-                                    </div>
-                                </div>
-                            </div>
-
-
                         </div>
                     </div>
-
-
                 </form:form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" onclick="submit($('#payment-form'));">Yadda saxla</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="sales-employee-modal-operation" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form:form modelAttribute="form" id="sales-employee-form" method="post" action="/sale/sales/employee" cssClass="form-group">
+                    <form:hidden path="id"/>
+                    <div class="form-group">
+                        <form:label path="console">Konsul</form:label>
+                        <form:select  path="console" cssClass="custom-select form-control">
+                            <form:option value=""></form:option>
+                            <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
+                                <optgroup label="${itemGroup.key}">
+                                    <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
+                                </optgroup>
+                            </c:forEach>
+                        </form:select>
+                        <form:errors path="console" cssClass="control-label alert-danger"/>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="vanLeader">Van lider</form:label>
+                        <form:select  path="vanLeader" cssClass="custom-select form-control" multiple="single">
+                            <form:option value=""></form:option>
+                            <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
+                                <optgroup label="${itemGroup.key}">
+                                    <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
+                                </optgroup>
+                            </c:forEach>
+                        </form:select>
+                        <form:errors path="vanLeader" cssClass="control-label alert-danger"/>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="dealer">Diller</form:label>
+                        <form:select  path="dealer" cssClass="custom-select form-control" multiple="single">
+                            <form:option value=""></form:option>
+                            <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
+                                <optgroup label="${itemGroup.key}">
+                                    <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
+                                </optgroup>
+                            </c:forEach>
+                        </form:select>
+                        <form:errors path="dealer" cssClass="control-label alert-danger"/>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="canavasser">Canavasser</form:label>
+                        <form:select  path="canavasser" cssClass="custom-select form-control" multiple="single">
+                            <form:option value=""></form:option>
+                            <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
+                                <optgroup label="${itemGroup.key}">
+                                    <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
+                                </optgroup>
+                            </c:forEach>
+                        </form:select>
+                        <form:errors path="canavasser" cssClass="control-label alert-danger"/>
+                    </div>
+                </form:form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="submit($('#sales-employee-form'));">Yadda saxla</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
             </div>
         </div>
@@ -2604,9 +2619,6 @@
             saleDate: {
                 required: true
             },
-            vanLeader: {
-                required: true
-            },
             'payment.gracePeriod': {
                 required: true,
                 number: true,
@@ -2615,6 +2627,21 @@
         },
         messages: {
             'payment.gracePeriod': "0 və ya 1 (~30 gün) ay ola bilər",
+        },
+        invalidHandler: function(event, validator) {
+            KTUtil.scrollTop();
+            swal.close();
+        },
+    });
+
+    $( "#sales-employee-form" ).validate({
+        rules: {
+            vanLeader: {
+                required: true
+            }
+        },
+        messages: {
+
         },
         invalidHandler: function(event, validator) {
             KTUtil.scrollTop();

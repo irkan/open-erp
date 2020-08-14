@@ -63,6 +63,10 @@ public class Action {
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
+    @Pattern(regexp=".{0,250}",message="Maksimum 250 simvol ola bilər")
+    @Column(name = "description")
+    private String description;
+
     @Column(name = "is_old", nullable = false, columnDefinition="boolean default false")
     private Boolean old = false;
 

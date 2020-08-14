@@ -177,6 +177,7 @@
         <th>Tarix</th>
         <th>Təhkim edilib</th>
         <th>Vəziyyət</th>
+        <th>Açıqlama</th>
         <th>Əməliyyat</th>
     </tr>
     </thead>
@@ -215,6 +216,9 @@
                         <span class="kt-badge kt-badge--success kt-badge--inline kt-badge--pill">Yeni</span>
                     </c:otherwise>
                 </c:choose>
+            </td>
+            <td style="max-width: 200px;">
+                <c:out value="${t.description}"/>
             </td>
             <td nowrap class="text-center">
                 <c:if test="${!(t.action.attr1 eq 'sell') and !(t.action.attr1 eq 'cancellation') and !(t.action.attr1 eq 'send' and t.approve)}">
