@@ -1157,7 +1157,7 @@
                                             <div class="kt-form__control">
                                                 <div class="row">
                                                     <div class="col-7">
-                                                        <input type="text" attr="barcode" name="inventory.barcode" class="form-control" placeholder="Barkodu daxil edin..." onchange="findInventory($(this))">
+                                                        <input type="text" attr="barcode" name="inventory.barcode" class="form-control" placeholder="Barkodu daxil edin..." onchange="findInventory($(this))" readonly>
                                                         <label attr="name" name="inventory.name"></label>
                                                         <input type="hidden" attr="id" name="inventory.id" class="form-control">
                                                     </div>
@@ -1552,7 +1552,21 @@
         <c:if test="${export.status}">
         dom: 'B<"clear">lfrtip',
         buttons: [
-            'copy', 'csv', 'excel', 'pdf', 'print'
+               $.extend( true, {}, buttonCommon, {
+                    extend: 'copyHtml5'
+                } ),
+                $.extend( true, {}, buttonCommon, {
+                    extend: 'csvHtml5'
+                } ),
+                $.extend( true, {}, buttonCommon, {
+                    extend: 'excelHtml5'
+                } ),
+                $.extend( true, {}, buttonCommon, {
+                    extend: 'pdfHtml5'
+                } ),
+                $.extend( true, {}, buttonCommon, {
+                    extend: 'print'
+                } )
         ],
         </c:if>
         responsive: true,
@@ -1738,18 +1752,6 @@
     $('.custom-file-input').on('change', function() {
         var fileName = $(this).val();
         $(this).next('.custom-file-label').addClass("selected").html(fileName);
-    });
-
-    $("#return-form").validate({
-        rules: {
-            reason: {
-                maxlength: 80
-            }
-        },
-        invalidHandler: function(event, validator) {
-            KTUtil.scrollTop();
-            swal.close();
-        },
     });
 
     var KTWizard1 = function () {
@@ -2003,7 +2005,7 @@
                                 '                                                    <div class="kt-form__control">\n' +
                                 '                                                       <div class="row">\n' +
                                 '                                                            <div class="col-5">\n' +
-                                '                                                                <input type="text" attr="barcode" name="barcode" name="salesInventories['+index+'].inventory.barcode" class="form-control" placeholder="Barkodu daxil edin..." onchange="findInventory($(this))" value="'+value.inventory.barcode+'">\n' +
+                                '                                                                <input type="text" attr="barcode" name="barcode" name="salesInventories['+index+'].inventory.barcode" class="form-control" placeholder="Barkodu daxil edin..." onchange="findInventory($(this))" value="'+value.inventory.barcode+'" readonly>\n' +
                                 '                                                                <label attr="name" name="salesInventories['+index+'].inventory.name">'+value.inventory.name+'</label>\n' +
                                 '                                                                <input type="hidden" attr="id" name="salesInventories['+index+'].inventory.id" class="form-control" value="'+value.inventory.id+'">\n' +
                                 '                                                            </div>\n' +

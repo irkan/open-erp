@@ -1,6 +1,7 @@
 package com.openerp.controller;
 
 import com.itextpdf.text.DocumentException;
+import com.openerp.domain.SalesSchedule;
 import com.openerp.domain.Session;
 import com.openerp.entity.*;
 import com.openerp.util.*;
@@ -97,6 +98,8 @@ public class ExportController extends SkeletonController {
             file = ReadWriteExcelFile.salesXLSXFile((Page<Sales>) object, page);
         } else if(page.equalsIgnoreCase(Constants.ROUTE.DEMONSTRATION)){
             file = ReadWriteExcelFile.demonstrationXLSXFile((Page<Demonstration>) object, page);
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.SCHEDULE)){
+            file = ReadWriteExcelFile.scheduleXLSXFile((Page<SalesSchedule>) object, page);
         } else if(page.equalsIgnoreCase(Constants.ROUTE.INVOICE)){
             file = ReadWriteExcelFile.invoiceXLSXFile((Page<Invoice>) object, page);
         } else if(page.equalsIgnoreCase(Constants.ROUTE.CONTACT_HISTORY)){

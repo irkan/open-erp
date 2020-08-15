@@ -145,8 +145,8 @@
                 } else if(tagName.toLowerCase()==="textarea"){
                     $(element).val(value);
                 } else if(tagName.toLowerCase()==="select"){
+                    $("select[name='"+$(element).attr("name")+"'] option:selected").removeAttr("selected");
                     if($(element).attr("multiple")){
-                        $("select[name='"+$(element).attr("name")+"'] option:selected").removeAttr("selected");
                         $(value).each(function(key, item){
                             $("select[name='"+$(element).attr("name")+"'] option[value="+item.type.id+"]").attr("selected", "selected");
                         });
@@ -478,10 +478,6 @@
             $("body").off("mousemove.draggable");
         });
     });
-
-    function round(value, decimals) {
-        return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
-    }
 </script>
 
 </body>

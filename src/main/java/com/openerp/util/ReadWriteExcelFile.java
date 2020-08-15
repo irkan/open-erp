@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.itextpdf.text.Font;
+import com.openerp.domain.SalesSchedule;
+import com.openerp.domain.Schedule;
 import com.openerp.domain.Session;
 import com.openerp.entity.*;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -1976,6 +1978,72 @@ public class ReadWriteExcelFile {
 			cell.setCellValue((demonstration.getEmployee()!=null && demonstration.getEmployee().getPerson()!=null)?demonstration.getEmployee().getPerson().getFullName():"");
 			cell = row.createCell(row.getLastCellNum());
 			cell.setCellValue(demonstration.getOrganization()!=null?demonstration.getOrganization().getName():"");
+		}
+		FileOutputStream fileOut = new FileOutputStream(file);
+		wb.write(fileOut);
+		fileOut.flush();
+		fileOut.close();
+		return file;
+	}
+
+	public static File scheduleXLSXFile(Page<SalesSchedule> salesSchedules, String page) throws IOException {
+		File file = new File(page+".xlsx");
+		XSSFWorkbook wb = new XSSFWorkbook();
+		XSSFSheet sheet = wb.createSheet(page) ;
+		int rownum=0;
+		XSSFRow row = sheet.createRow(rownum++);
+		XSSFCell cell = row.createCell(0);
+		cell.setCellValue("№");
+		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("Satış kodu");
+		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("Müştəri");
+		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("Ödəniş tarixi");
+		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("Qrafik üzrə");
+		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("Ödənilib");
+		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("Qalıq");
+		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("Ümumi borc");
+		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("Gecikir");
+		row.setHeightInPoints(30);
+		XSSFCellStyle headerStyle = wb.createCellStyle();
+		headerStyle.setAlignment(HorizontalAlignment.CENTER);
+		headerStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+		XSSFFont headerFont= wb.createFont();
+		headerFont.setFontHeightInPoints((short)14);
+		headerFont.setBold(true);
+		headerStyle.setFont(headerFont);
+		row.setRowStyle(headerStyle);
+		int rowc = 1;
+		for(SalesSchedule salesSchedule: salesSchedules){
+			Date now = new Date();
+			for(Schedule schedule: salesSchedule.getSchedules()){
+				row = sheet.createRow(rownum++);
+				cell = row.createCell(0);
+				cell.setCellValue(rowc++);
+				cell = row.createCell(row.getLastCellNum());
+				cell.setCellValue(Util.checkNull(salesSchedule.getSales()!=null?salesSchedule.getSales().getId():null));
+				cell = row.createCell(row.getLastCellNum());
+				cell.setCellValue((salesSchedule.getSales()!=null && salesSchedule.getSales().getCustomer()!=null && salesSchedule.getSales().getCustomer().getPerson()!=null)?salesSchedule.getSales().getCustomer().getPerson().getFullName():"");
+				cell = row.createCell(row.getLastCellNum());
+				cell.setCellValue(Util.checkNull(DateUtility.getFormattedDate(schedule.getScheduleDate())));
+				cell = row.createCell(row.getLastCellNum());
+				cell.setCellValue(Util.checkNull(schedule.getAmount()+" AZN"));
+				cell = row.createCell(row.getLastCellNum());
+				cell.setCellValue(Util.checkNull(schedule.getPayableAmount()+" AZN"));
+				cell = row.createCell(row.getLastCellNum());
+				cell.setCellValue(Util.checkNull(schedule.getPayableAmount()>0?((schedule.getPayableAmount()-schedule.getAmount())+" AZN"):null));
+				cell = row.createCell(row.getLastCellNum());
+				cell.setCellValue(Util.checkNull((schedule.getSales()!=null && schedule.getSales().getPayment()!=null)?(schedule.getSales().getPayment().getUnpaid()+" AZN"):null));
+				cell = row.createCell(row.getLastCellNum());
+				long days = (now.getTime()-schedule.getScheduleDate().getTime())/86400000;
+				cell.setCellValue(Util.checkNull((days>0 && schedule.getPayableAmount()-schedule.getAmount()<0)?(days + " gün"):""));
+			}
 		}
 		FileOutputStream fileOut = new FileOutputStream(file);
 		wb.write(fileOut);

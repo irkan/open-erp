@@ -112,6 +112,9 @@ public class SaleController extends SkeletonController {
                 Page<SalesSchedule> salesSchedulePage = new PageImpl<>(salesSchedules);
                 model.addAttribute(Constants.LIST, salesSchedulePage);
             }
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(model.asMap().get(Constants.LIST), redirectAttributes, page);
+            }
         } else if(page.equalsIgnoreCase(Constants.ROUTE.SERVICE)){
             List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganizationAndActiveTrue(getSessionOrganization());
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
@@ -305,6 +308,7 @@ public class SaleController extends SkeletonController {
     @PostMapping(value = "/sales/tax-configuration")
     public String postSalesReturn(@ModelAttribute(Constants.FORM) @Validated Sales sale, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         Sales sales = salesRepository.getSalesById(sale.getId());
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors() && sale.getTaxConfiguration()!=null && sale.getTaxConfiguration().getVoen()!=null){
             sales.setTaxConfiguration(sale.getTaxConfiguration());
             salesRepository.save(sales);
@@ -320,6 +324,11 @@ public class SaleController extends SkeletonController {
     @PostMapping(value = "/sales/return")
     public String postSalesReturn(@ModelAttribute(Constants.RETURN_FORM) @Validated Return returnForm, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         Sales sales = salesRepository.getSalesById(returnForm.getSalesId());
+        if(returnForm.getReturnPrice()<0){
+            FieldError fieldError = new FieldError("returnPrice", "returnPrice", "Məbləğ minus olmamalıdır!");
+            binding.addError(fieldError);
+        }
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             for(SalesInventory salesInventory: returnForm.getSalesInventories()){
                 Action action = new Action();
@@ -363,7 +372,7 @@ public class SaleController extends SkeletonController {
             log(sales, "sales", "delete", sales.getId(), sales.toString(), "Qaytarılma icra edildi");
 
             GlobalConfiguration saleReturnCreditAdvance = configurationRepository.getGlobalConfigurationByKeyAndActiveTrue("sale_return_credit_advance_limit");
-            if(!sales.getService() && Util.calculateInvoice(sales.getInvoices())<=(Util.parseInt(saleReturnCreditAdvance.getAttribute())-Util.parseInt(returnForm.getReturnPrice()))){
+            if(!sales.getService() && Util.calculateInvoice(sales.getInvoices())<=(Util.parseInt(saleReturnCreditAdvance.getAttribute())-Util.parseInt(Util.format3(returnForm.getReturnPrice())))){
                 ScriptEngineManager mgr = new ScriptEngineManager();
                 ScriptEngine engine = mgr.getEngineByName("JavaScript");
                 String percent = "*0.01";

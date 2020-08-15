@@ -449,7 +449,21 @@ $("#datatable").DataTable({
     <c:if test="${export.status}">
     dom: 'B<"clear">lfrtip',
     buttons: [
-        'copy', 'csv', 'excel', 'pdf', 'print'
+           $.extend( true, {}, buttonCommon, {
+                    extend: 'copyHtml5'
+                } ),
+                $.extend( true, {}, buttonCommon, {
+                    extend: 'csvHtml5'
+                } ),
+                $.extend( true, {}, buttonCommon, {
+                    extend: 'excelHtml5'
+                } ),
+                $.extend( true, {}, buttonCommon, {
+                    extend: 'pdfHtml5'
+                } ),
+                $.extend( true, {}, buttonCommon, {
+                    extend: 'print'
+                } )
     ],
     </c:if>
     responsive: true,
