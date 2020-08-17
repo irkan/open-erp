@@ -182,13 +182,16 @@
         <c:set var="transfer" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'transfer')}"/>
         <c:set var="approve" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
         <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
+        <c:set var="canviewall" value="${utl:canViewAll(sessionScope.organization_selected)}"/>
         <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
     <thead>
     <tr>
         <th>ID</th>
         <th>Avans</th>
         <th>Əməkdaş</th>
-        <th>Struktur</th>
+        <c:if test="${canviewall}">
+            <th style="min-width: 70px;">Struktur</th>
+        </c:if>
         <th>Məbləğ</th>
         <th>Tarix</th>
         <th>Açıqlama</th>
@@ -204,7 +207,9 @@
             <td><c:out value="${t.id}" /></td>
             <td><c:out value="${t.advance.name}" /></td>
             <td><span style="width: 160px;" class="kt-font-bolder"><c:out value="${t.employee.person.fullName}" /></span></td>
-            <td><c:out value="${t.organization.name}" /></td>
+            <c:if test="${canviewall}">
+                <td><c:out value="${t.organization.name}" /></td>
+            </c:if>
             <td>
                 <span style="width: 65px;" class="kt-font-bolder">
                     <span><c:out value="${t.payed}" /></span>

@@ -221,12 +221,16 @@
                             <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
                             <c:set var="credit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'credit')}"/>
                             <c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
+                            <c:set var="canviewall" value="${utl:canViewAll(sessionScope.organization_selected)}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="group_table">
                                 <thead>
                                 <tr>
                                     <th>HF nömrəsi</th>
                                     <th>Satış|Servis</th>
                                     <th>Status</th>
+                                    <c:if test="${canviewall}">
+                                        <th style="min-width: 70px;">Struktur</th>
+                                    </c:if>
                                     <th>Müştəri</th>
                                     <th>Məbləğ</th>
                                     <th>HF Tarixi</th>
@@ -282,6 +286,11 @@
                                                 </c:otherwise>
                                             </c:choose>
                                         </td>
+                                        <c:if test="${canviewall}">
+                                            <td>
+                                                <c:out value="${t.organization.name}"/>
+                                            </td>
+                                        </c:if>
                                         <td style="min-width: 220px;">
                                             <c:if test="${not empty t.sales.customer.id}">
                                                 <a href="javascript:copyToClipboard2('<c:out value="${t.sales.customer.id}" />', 'Müştəri kodu <b><c:out value="${t.sales.customer.id}" /></b> kopyalandı')" class="kt-font-lg kt-font-bold kt-font-info kt-font-hover-danger pl-2 pr-2"><i class="la la-copy"></i></a>
@@ -300,7 +309,7 @@
                                             <span class="kt-font-bold font-italic font-size-10px">AZN</span>
                                         </td>
                                         <td><fmt:formatDate value = "${t.invoiceDate}" pattern = "dd.MM.yyyy" /></td>
-                                        <td><fmt:formatDate value = "${t.approveDate}" pattern = "dd.MM.yyyy" /></td>
+                                        <td><fmt:formatDate value = "${t.approveDate}" pattern = "dd.MM.yyyy HH:mm" /></td>
                                         <td><c:out value="${t.collector.person.fullName}" /> <c:out value="${(not empty t.collector.person.fullName and not empty t.sales.servicer.person.fullName)?',':''}"/>
                                             <c:out value="${t.sales.servicer.person.fullName}"/></td>
                                         <td><c:out value="${t.paymentChannel.name}" /></td>

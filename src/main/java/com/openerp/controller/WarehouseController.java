@@ -45,7 +45,7 @@ public class WarehouseController extends SkeletonController {
                     session.getAttribute(Constants.SESSION_FILTER) instanceof Inventory){
                 model.addAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
             }
-            Page<Inventory> inventories = inventoryService.findAll((Inventory) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
+            Page<Inventory> inventories = inventoryService.findAll((Inventory) model.asMap().get(Constants.FILTER), PageRequest.of(0, 3*paginationSize(), Sort.by("id").descending()));
             model.addAttribute(Constants.LIST, inventories);
             if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
                 return exportExcel(inventories, redirectAttributes, page);

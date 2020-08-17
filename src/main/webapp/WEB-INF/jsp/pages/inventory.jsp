@@ -140,13 +140,16 @@
                         <c:when test="${not empty list}">
                             <c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
                             <c:set var="detail" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'detail')}"/>
+                            <c:set var="canviewall" value="${utl:canViewAll(sessionScope.organization_selected)}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="group_table">
                                 <thead>
                                 <tr>
-                                    <th>№</th>
                                     <th>ID</th>
-                                    <th>Qrup</th>
                                     <th>Ad</th>
+                                    <th>Qrup</th>
+                                    <c:if test="${canviewall}">
+                                        <th style="min-width: 70px;">Struktur</th>
+                                    </c:if>
                                     <th>Açıqlama</th>
                                     <th>Barkod</th>
                                     <th>Miqdar</th>
@@ -159,10 +162,12 @@
                                     <c:set var="ia" value="${utl:calculateInventoryAmount(t.actions, sessionScope.organization.id)}"/>
                                     <c:if test="${ia.allItemsCount gt 0}">
                                         <tr data="<c:out value="${t.id}" />">
-                                            <td>${loop.index + 1}</td>
                                             <td><c:out value="${t.id}" /></td>
-                                            <td><c:out value="${t.group.name}" /></td>
                                             <td><c:out value="${t.name}" /></td>
+                                            <td><c:out value="${t.group.name}" /></td>
+                                            <c:if test="${canviewall}">
+                                                <td><c:out value="${t.organization.name}" /></td>
+                                            </c:if>
                                             <td><c:out value="${t.description}" /></td>
                                             <td>
                                             <span class="barcode">
@@ -324,9 +329,9 @@
         ],
         </c:if>
         responsive: true,
-fixedHeader: {
-   headerOffset: $('#kt_header').outerHeight()
-},
+        fixedHeader: {
+           headerOffset: $('#kt_header').outerHeight()
+        },
         pageLength: 100,
         order: [[2, 'asc']],
         drawCallback: function(settings) {
