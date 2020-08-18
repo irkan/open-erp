@@ -737,4 +737,19 @@ public class SkeletonController {
         }
         return false;
     }
+
+    void reactivateReturnedInventory(Inventory inventory){
+        try{
+            if(inventory!=null && inventory.getId()!=null){
+                Inventory inventorySelected = inventoryRepository.getInventoryById(inventory.getId());
+                if(inventorySelected!=null && !inventorySelected.getActive()){
+                    inventorySelected.setActive(true);
+                    inventoryRepository.save(inventorySelected);
+                    log(inventorySelected, "inventory", "create/edit", inventory.getId(), inventory.toString(), "Qaytarılma olduğu üçün silinmiş inventar bərpa edildi avtomatik olaraq");
+                }
+            }
+        } catch (Exception e){
+            log.error(e.getMessage(), e);
+        }
+    }
 }

@@ -414,6 +414,8 @@ public class WarehouseController extends SkeletonController {
             actn.setAmount(actn.getAmount() - action.getAmount());
             actionRepository.save(actn);
             log(actn, "action", "create/edit", actn.getId(), actn.toString());
+
+            reactivateReturnedInventory(action.getInventory());
         }
         return mapPost(action, binding, redirectAttributes, "/warehouse/consolidate");
     }

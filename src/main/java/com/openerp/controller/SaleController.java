@@ -55,12 +55,14 @@ public class SaleController extends SkeletonController {
             if(!model.containsAttribute(Constants.CHANGE_INVENTORY_FORM)){
                 model.addAttribute(Constants.CHANGE_INVENTORY_FORM, new ChangeInventory());
             }
+            Integer salesId = (!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null;
             if(!model.containsAttribute(Constants.FILTER)){
-                Sales sales = new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null);
+                Sales sales = new Sales(salesId, !canViewAll()?getSessionOrganization():null);
                 sales.setApprove(null);
                 model.addAttribute(Constants.FILTER, sales);
             }
             if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
+                    salesId==null &&
                     session.getAttribute(Constants.SESSION_FILTER) instanceof Sales){
                 model.addAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
             }
@@ -340,6 +342,8 @@ public class SaleController extends SkeletonController {
                 actionRepository.save(action);
 
                 log(action, "action", "return", action.getId(), action.toString());
+
+                reactivateReturnedInventory(action.getInventory());
             }
 
             if(returnForm.getReturnPrice()>0){
@@ -541,7 +545,7 @@ public class SaleController extends SkeletonController {
                 }
             }
 
-            double invoicePrice = 0d;
+            /*double invoicePrice = 0d;  //TERMINALDAN GELEN ODENIWLERLE BAGLI FARID ISTEDIKI INVOICE AVTOMATIK YARADILMASIN  18.08.2020
             if(sales.getPayment().getCash()){
                 invoicePrice = sales.getPayment().getLastPrice();
             } else {
@@ -565,7 +569,8 @@ public class SaleController extends SkeletonController {
                 invoice.setChannelReferenceCode(String.valueOf(invoice.getId()));
                 invoiceRepository.save(invoice);
                 log(invoice, "invoice", "create/edit", invoice.getId(), invoice.toString());
-            }
+            }*/
+
             sales.setApprove(true);
             sales.setApproveDate(new Date());
             salesRepository.save(sales);
@@ -924,6 +929,8 @@ public class SaleController extends SkeletonController {
                 actionRepository.save(action);
 
                 log(action, "action", "return", action.getId(), action.toString());
+
+                reactivateReturnedInventory(action.getInventory());
 
                 action = new Action();
                 action.setAction(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sell", "action"));
