@@ -609,7 +609,6 @@ public class SkeletonController {
         Invoice invc;
         if(invoice.getId()==null){
             invoice.setDescription("Ödəniş " + invoice.getPrice() + " AZN -> " + invoice.getDescription());
-            invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
             invoice.setApprove(false);
             invoice.setAdvance(false);
             invc = invoice;
@@ -622,9 +621,6 @@ public class SkeletonController {
             invc.setAdvance(invoice.getAdvance());
         }
         invoiceRepository.save(invc);
-        invc.setChannelReferenceCode(String.valueOf(invc.getId()));
-        invoiceRepository.save(invc);
-        log(invc, "invoice", "create/edit", invc.getId(), invc.toString(), "Kanal referans kodu update edildi");
         addContactHistory(invc.getSales(), "Hesab-faktura yaradıldı. H/f №" + invc.getId(), null);
         return invc;
     }

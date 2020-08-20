@@ -353,10 +353,6 @@ public class SaleController extends SkeletonController {
                 invoice.setPrice(-1*returnForm.getReturnPrice());
                 invoice.setOrganization(sales.getOrganization());
                 invoice.setDescription("Qaytarılmaya görə müştəriyə ediləcək ödəniş " + returnForm.getReturnPrice() + " AZN");
-                invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
-                invoiceRepository.save(invoice);
-                log(invoice, "invoice", "create/edit", invoice.getId(), invoice.toString());
-                invoice.setChannelReferenceCode(String.valueOf(invoice.getId()));
                 invoiceRepository.save(invoice);
                 log(invoice, "invoice", "create/edit", invoice.getId(), invoice.toString());
             }
@@ -545,31 +541,29 @@ public class SaleController extends SkeletonController {
                 }
             }
 
-            /*double invoicePrice = 0d;  //TERMINALDAN GELEN ODENIWLERLE BAGLI FARID ISTEDIKI INVOICE AVTOMATIK YARADILMASIN  18.08.2020
-            if(sales.getPayment().getCash()){
-                invoicePrice = sales.getPayment().getLastPrice();
-            } else {
-                invoicePrice = sales.getPayment().getDown();
-            }
-
-            if(invoicePrice>0){
-                Invoice invoice = new Invoice();
-                invoice.setSales(sales);
-                invoice.setApprove(false);
-                invoice.setCreditable(true);
-                if(!sales.getService()){
-                    invoice.setAdvance(true);
+            if(sales.getService()){
+                double invoicePrice = 0d;  //TERMINALDAN GELEN ODENIWLERLE BAGLI FARID ISTEDIKI INVOICE AVTOMATIK YARADILMASIN  18.08.2020
+                if(sales.getPayment().getCash()){
+                    invoicePrice = sales.getPayment().getLastPrice();
+                } else {
+                    invoicePrice = sales.getPayment().getDown();
                 }
-                invoice.setPrice(invoicePrice);
-                invoice.setOrganization(sales.getOrganization());
-                invoice.setDescription("Satışdan əldə edilən ilkin ödəniş " + invoicePrice + " AZN");
-                invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
-                invoiceRepository.save(invoice);
-                log(invoice, "invoice", "create/edit", invoice.getId(), invoice.toString());
-                invoice.setChannelReferenceCode(String.valueOf(invoice.getId()));
-                invoiceRepository.save(invoice);
-                log(invoice, "invoice", "create/edit", invoice.getId(), invoice.toString());
-            }*/
+
+                if(invoicePrice>0){
+                    Invoice invoice = new Invoice();
+                    invoice.setSales(sales);
+                    invoice.setApprove(false);
+                    invoice.setCreditable(true);
+                    if(!sales.getService()){
+                        invoice.setAdvance(true);
+                    }
+                    invoice.setPrice(invoicePrice);
+                    invoice.setOrganization(sales.getOrganization());
+                    invoice.setDescription("Satışdan əldə edilən ilkin ödəniş " + invoicePrice + " AZN");
+                    invoiceRepository.save(invoice);
+                    log(invoice, "invoice", "create/edit", invoice.getId(), invoice.toString());
+                }
+            }
 
             sales.setApprove(true);
             sales.setApproveDate(new Date());
@@ -634,13 +628,9 @@ public class SaleController extends SkeletonController {
                 invoice.setAdvance((!sales.getService() && Util.calculateInvoice(sales.getInvoices())==0)?true:false);
                 invoice.setOrganization(sales.getOrganization());
                 invoice.setDescription("Satışdan əldə edilən ödəniş " + invoice.getPrice() + " AZN");
-                invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
                 invoiceRepository.save(invoice);
                 log(invoice, "invoice", "create/edit", invoice.getId(), invoice.toString());
-                invoice.setChannelReferenceCode(String.valueOf(invoice.getId()));
-                invoiceRepository.save(invoice);
-                log(invoice, "invoice", "create/edit", invoice.getId(), invoice.toString());
-            }
+           }
         }
 
         if(sales.getService()){
@@ -1015,11 +1005,7 @@ public class SaleController extends SkeletonController {
             invoice.setPrice(schedule.getPayableAmount());
             invoice.setOrganization(schedule.getSales().getOrganization());
             invoice.setDescription("Ödəniş " + invoice.getPrice() + " AZN" + (schedule.getDescription()!=null?" " + schedule.getDescription():""));
-            invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
             invoiceRepository.save(invoice);
-            invoice.setChannelReferenceCode(String.valueOf(invoice.getId()));
-            invoiceRepository.save(invoice);
-            log(invoice, "sales_invoice", "create/edit", invoice.getId(), invoice.toString(), "Ödəniş qrafikindən yaradılan hesab-faktura");
 
             addContactHistory(invoice.getSales(), "Hesab-faktura yaradıldı: " + invoice.getId(), null);
         }
@@ -1119,6 +1105,8 @@ public class SaleController extends SkeletonController {
             invc.setApprove(true);
             invc.setApproveDate(new Date());
             invc.setDescription(invoice.getDescription());
+            invc.setChannelReferenceCode(Util.checkNull(invc.getId()));
+            invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
             invoiceRepository.save(invc);
             log(invc, "invoice", "approve", invc.getId(), invc.toString());
 

@@ -35,7 +35,7 @@ public class PaymentLatencyTask {
     @Autowired
     SalesService salesService;
 
-    @Scheduled(cron="0 0 1 * * *") //hergun seher saat 1 de iwliyecek
+    @Scheduled(cron="0 0 1 1 1/1 *") // her ayin 1 i saat 1 de iwliyecek
     public void saled() {
         try{
             log.info("Payment Latency Task Start");

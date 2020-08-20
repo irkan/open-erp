@@ -180,11 +180,7 @@ public class CollectController extends SkeletonController {
         invoice.setDescription(description);
         invoice.setOrganization(getUserOrganization());
         invoice.setDescription("Ödəniş " + invoice.getPrice() + " AZN");
-        invoice.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("cash", "payment-channel"));
-        invoiceRepository.save(invoice);
-        log(invoice, "invoice", "transfer", invoice.getId(), invoice.toString());
-        invoice.setChannelReferenceCode(String.valueOf(invoice.getId()));
-        invoiceRepository.save(invoice);
+       invoiceRepository.save(invoice);
         log(invoice, "invoice", "create/edit", invoice.getId(), invoice.toString());
         String desc = "Hesab faktura yaradıldı: " + invoice.getId();
         if(sales!=null){
