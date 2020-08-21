@@ -1835,8 +1835,10 @@
                     },
                     'payment.price': {
                         required: false,
-                        number: true,
-                        pattern: /^(1499|1599|1699)$/
+                        number: true
+                        <c:if test="${prices.size() gt 0}">
+                        ,pattern: /^(1499|1599|1699)$/
+                        </c:if>
                     },
                     'payment.gracePeriod': {
                         required: true,
@@ -2235,6 +2237,7 @@
                             $(form).find("input[name='salesInventories[0].inventory.name']").val(inventory.name);
                             $(form).find("input[name='salesInventories[0].inventory.group.name']").val(inventory.group.name);
                             $(form).find("textarea[name='salesInventories[0].inventory.description']").val(inventory.description);
+
                             swal.close();
                         },
                         error: function() {

@@ -67,6 +67,20 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
+                                                <form:label path="salePriceFrom">Satış qiymətindən</form:label>
+                                                <form:input path="salePriceFrom" cssClass="form-control" placeholder="Qiyməti daxil edin"/>
+                                                <form:errors path="salePriceFrom" cssClass="alert-danger control-label"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="salePrice">Satış qiymətinədək</form:label>
+                                                <form:input path="salePrice" cssClass="form-control" placeholder="Qiyməti daxil edin"/>
+                                                <form:errors path="salePrice" cssClass="alert-danger control-label"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
                                                 <form:label path="currency">Valyuta</form:label>
                                                 <form:input path="currency" cssClass="form-control" placeholder="AZN, EUR, USD, GBP" />
                                                 <form:errors path="currency" cssClass="alert alert-danger"/>
@@ -151,6 +165,7 @@
                                     <th>İnventar</th>
                                     <th>Barkod</th>
                                     <th>Qiymət</th>
+                                    <th>Satış qiyməti</th>
                                     <th>Flial</th>
                                     <th>Tarix</th>
                                     <th>Əməliyyat</th>
@@ -165,6 +180,10 @@
                                         <td><c:out value="${t.inventory.barcode}" /></td>
                                         <td>
                                             <span><c:out value="${t.price}" /></span>
+                                            <span class="kt-font-bold font-italic font-size-10px"><c:out value="${t.currency}" /></span>
+                                        </td>
+                                        <td>
+                                            <span><c:out value="${t.salePrice}" /></span>
                                             <span class="kt-font-bold font-italic font-size-10px"><c:out value="${t.currency}" /></span>
                                         </td>
                                         <td><c:out value="${t.organization.name}" /></td>
@@ -240,6 +259,14 @@
                         </div>
                         <form:errors path="price" cssClass="alert-danger control-label"/>
                     </div>
+                    <div class="form-group">
+                        <form:label path="salePrice">Satış qiyməti</form:label>
+                        <div class="input-group" >
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-usd"></i></span></div>
+                            <form:input path="salePrice" autocomplete="off" cssClass="form-control" placeholder="Qiyməti daxil edin"/>
+                        </div>
+                        <form:errors path="salePrice" cssClass="alert-danger control-label"/>
+                    </div>
                 </form:form>
             </div>
             <div class="modal-footer">
@@ -305,6 +332,11 @@ fixedHeader: {
                 required: true,
                 number: true,
                 min: 0
+            },
+            salePrice: {
+                required: true,
+                number: true,
+                min: 0
             }
         },
         invalidHandler: function(event, validator) {
@@ -314,6 +346,9 @@ fixedHeader: {
     });
 
     $("input[name='price']").inputmask('decimal', {
+        rightAlignNumerics: false
+    });
+    $("input[name='salePrice']").inputmask('decimal', {
         rightAlignNumerics: false
     });
 </script>

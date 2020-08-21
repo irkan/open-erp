@@ -15,6 +15,7 @@ import java.util.List;
 public interface FinancingRepository extends JpaRepository<Financing, Integer>, JpaSpecificationExecutor<Financing> {
     List<Financing> getFinancingsByActiveTrueOrderByIdDesc();
     List<Financing> getFinancingsByActiveTrueAndOrganizationOrderByIdDesc(Organization organization);
+    List<Financing> getFinancingsByActiveTrueAndInventoryAndOrganizationOrderByIdDesc(Inventory inventory, Organization organization);
     Financing getFinancingById(int id);
     List<Financing> getFinancingByActiveTrueAndInventory_BarcodeAndOrganizationOrderByIdAsc(String barcode, Organization organization);
     Financing getFinancingByActiveTrueAndInventoryAndOrganization(Inventory inventory, Organization organization);

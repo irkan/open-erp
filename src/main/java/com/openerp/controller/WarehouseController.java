@@ -428,12 +428,15 @@ public class WarehouseController extends SkeletonController {
             for(Inventory inventory: inventories){
                 int amount = Util.calculateInventoryAmount(inventory.getActions(), getSessionOrganization().getId()).getAllItemsCount();
                 if(amount>0){
+                    List<Financing> financings = financingRepository.getFinancingsByActiveTrueAndInventoryAndOrganizationOrderByIdDesc(inventory, getSessionOrganization());
+                    if(financings.size()>0){
+                        inventory.setSalePrice(financings.get(0).getSalePrice()!=null?financings.get(0).getSalePrice():0d);
+                    }
                     return inventory;
                 }
             }
         } catch (Exception e){
             log(null, "error", "inventory", "", null, "", "WAREHOUSE API INVENTORY Xəta baş verdi! " + e.getMessage());
-            e.printStackTrace();
             log.error(e.getMessage(), e);
         }
         return null;

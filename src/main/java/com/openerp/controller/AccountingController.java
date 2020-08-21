@@ -89,7 +89,7 @@ public class AccountingController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new Financing(getSessionOrganization()));
             }
             if(!model.containsAttribute(Constants.FILTER)){
-                model.addAttribute(Constants.FILTER, new Financing(!canViewAll()?getSessionOrganization():null, null, null));
+                model.addAttribute(Constants.FILTER, new Financing(!canViewAll()?getSessionOrganization():null, null, null, null));
             }
             if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
                     session.getAttribute(Constants.SESSION_FILTER) instanceof Financing){
@@ -241,7 +241,7 @@ public class AccountingController extends SkeletonController {
                     financing.setPrice(financingPrice);
                     financing.setFinancingDate(new Date());
                 } else {
-                    financing = new Financing(trn.getInventory(), financingPrice, trn.getOrganization());
+                    financing = new Financing(trn.getInventory(), financingPrice, 0d, trn.getOrganization());
                 }
                 financingRepository.save(financing);
                 log(financing, "financing", "approve", financing.getId(), financing.toString());

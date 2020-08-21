@@ -71,6 +71,10 @@ public class Inventory {
     @OneToMany(mappedBy = "inventory")
     private List<Action> actions;
 
+    @ToString.Exclude
+    @Transient
+    private Double salePrice=0d;
+
     public Inventory(Boolean active) {
         this.active = active;
     }

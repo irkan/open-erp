@@ -38,6 +38,13 @@ public class Financing {
     @Column(name="price")
     private Double price=0d;
 
+    @ToString.Exclude
+    @Transient
+    private Double salePriceFrom;
+
+    @Column(name="sale_price")
+    private Double salePrice=0d;
+
     @Pattern(regexp=".{0,50}",message="Maksimum 5 simvol ola bilər")
     @Column(name = "currency", columnDefinition="varchar(5) default 'AZN'")
     private String currency="AZN";
@@ -61,15 +68,17 @@ public class Financing {
     @Column(name = "created_date", nullable = false)
     private Date createdDate = new Date();
 
-    public Financing(Inventory inventory, double price, Organization organization) {
+    public Financing(Inventory inventory, double price, Double salePrice, Organization organization) {
         this.inventory = inventory;
         this.price = price;
+        this.salePrice = salePrice;
         this.organization = organization;
     }
 
-    public Financing(Organization organization, Double price, @Pattern(regexp = ".{0,50}", message = "Maksimum 5 simvol ola bilər") String currency) {
+    public Financing(Organization organization, Double price, Double salePrice, @Pattern(regexp = ".{0,50}", message = "Maksimum 5 simvol ola bilər") String currency) {
         this.organization = organization;
         this.price = price;
+        this.salePrice = salePrice;
         this.currency = currency;
     }
 

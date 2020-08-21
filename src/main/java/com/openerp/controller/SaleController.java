@@ -46,7 +46,7 @@ public class SaleController extends SkeletonController {
             model.addAttribute(Constants.GUARANTEES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("guarantee"));
             model.addAttribute(Constants.SALES_TYPES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("sales-type"));
             model.addAttribute(Constants.TAX_CONFIGURATIONS, taxConfigurationRepository.getTaxConfigurationsByActiveTrueAndOrganization(getSessionOrganization()));
-            if(!model.containsAttribute(Constants.FORM)){
+           if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Sales(getSessionOrganization()));
             }
             if(!model.containsAttribute(Constants.RETURN_FORM)){

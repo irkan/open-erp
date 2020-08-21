@@ -48,6 +48,12 @@ public class FinancingService {
                 if(financing.getPrice()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.lessThanOrEqualTo(root.get("price"), financing.getPrice())));
                 }
+                if(financing.getSalePriceFrom()!=null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.greaterThanOrEqualTo(root.get("salePrice"), financing.getSalePriceFrom())));
+                }
+                if(financing.getSalePrice()!=null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.lessThanOrEqualTo(root.get("salePrice"), financing.getSalePrice())));
+                }
                 if(financing.getFinancingDateFrom()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.greaterThanOrEqualTo(root.get("financingDate"), financing.getFinancingDateFrom())));
                 }
