@@ -40,6 +40,14 @@ public class Action {
     @Column(name = "amount")
     private Integer amount;
 
+    @Pattern(regexp=".{0,250}",message="Maksimum 250 simvol ola bilər")
+    @Column(name = "location_row")
+    private String row;
+
+    @Pattern(regexp=".{0,250}",message="Maksimum 250 simvol ola bilər")
+    @Column(name = "location_column")
+    private String column;
+
     @ToString.Exclude
     @Transient
     private Integer amountFrom;

@@ -67,9 +67,9 @@
                                                 <div class="input-group date" >
                                                     <form:input path="actionDate" autocomplete="off" date_="date_" cssClass="form-control datetimepicker-element" placeholder="dd.MM.yyyy HH:mm"/>
                                                     <div class="input-group-append">
-                                    <span class="input-group-text">
-                                        <i class="la la-calendar"></i>
-                                    </span>
+                                                    <span class="input-group-text">
+                                                        <i class="la la-calendar"></i>
+                                                    </span>
                                                     </div>
                                                 </div>
                                                 <form:errors path="actionDate" cssClass="control-label alert-danger" />
@@ -89,6 +89,24 @@
                                                         <form:label path="amount">Sayadək</form:label>
                                                         <form:input path="amount" cssClass="form-control" placeholder="Daxil edin"/>
                                                         <form:errors path="amount" cssClass="alert-danger control-label"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <form:label path="row">Sıra</form:label>
+                                                        <form:input path="row" cssClass="form-control" placeholder="Daxil edin"/>
+                                                        <form:errors path="row" cssClass="alert-danger control-label"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <form:label path="column">Sütun</form:label>
+                                                        <form:input path="column" cssClass="form-control" placeholder="Daxil edin"/>
+                                                        <form:errors path="column" cssClass="alert-danger control-label"/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -174,6 +192,7 @@
         <th>İnventar</th>
         <th>Barkod</th>
         <th>Miqdar</th>
+        <th>Sıra\Sütun</th>
         <th>Tarix</th>
         <th>Təhkim edilib</th>
         <th>Vəziyyət</th>
@@ -205,6 +224,7 @@
                 </span>
             </td>
             <td><c:out value="${t.amount}" /></td>
+            <td><c:out value="${t.row}" /> \ <c:out value="${t.column}" /></td>
             <td><fmt:formatDate value = "${t.createdDate}" pattern = "dd.MM.yyyy HH:mm" /></td>
             <td><c:out value="${t.employee.person.fullName}" /></td>
             <td>
@@ -324,6 +344,28 @@
                             <form:input path="amount" cssClass="form-control" placeholder="Say daxil edin"/>
                         </div>
                         <form:errors path="amount" cssClass="alert-danger control-label"/>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <form:label path="row">Sıra</form:label>
+                                <div class="input-group" >
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-map-marker"></i></span></div>
+                                    <form:input path="row" cssClass="form-control" placeholder="Daxil edin"/>
+                                </div>
+                                <form:errors path="row" cssClass="alert-danger control-label"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <form:label path="column">Sütun</form:label>
+                                <div class="input-group" >
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-map-marker"></i></span></div>
+                                    <form:input path="column" cssClass="form-control" placeholder="Daxil edin"/>
+                                </div>
+                                <form:errors path="column" cssClass="alert-danger control-label"/>
+                            </div>
+                        </div>
                     </div>
                 </form:form>
             </div>

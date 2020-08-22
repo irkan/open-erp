@@ -1,4 +1,7 @@
 function round(value, decimals) {
+    if(isNaN(value)){
+        value = 0;
+    }
     return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
 }
 

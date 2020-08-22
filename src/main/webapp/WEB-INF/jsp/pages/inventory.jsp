@@ -289,6 +289,28 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <form:label path="actions[0].row">Sıra</form:label>
+                                <div class="input-group" >
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-map-marker"></i></span></div>
+                                    <form:input path="actions[0].row" cssClass="form-control" placeholder="Daxil edin"/>
+                                </div>
+                                <form:errors path="actions[0].row" cssClass="alert-danger control-label"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <form:label path="actions[0].column">Sütun</form:label>
+                                <div class="input-group" >
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-map-marker"></i></span></div>
+                                    <form:input path="actions[0].column" cssClass="form-control" placeholder="Daxil edin"/>
+                                </div>
+                                <form:errors path="actions[0].column" cssClass="alert-danger control-label"/>
+                            </div>
+                        </div>
+                    </div>
                 </form:form>
             </div>
             <div class="modal-footer">

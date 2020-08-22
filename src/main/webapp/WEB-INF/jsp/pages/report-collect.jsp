@@ -395,6 +395,14 @@
                     totalSum = round(val.UMUMI_SATIS_HECMI, 0);
                     baroptions.series[0].data.push(round(val.AYLIQ_YIGIM_HECMI, 0));
                     baroptions.xaxis.categories.push("Aylıq yığım həcmi");
+                    baroptions.series[0].data.push(round(val.PROBLEMLI_MUSTERI_CEM, 0));
+                    baroptions.xaxis.categories.push("Problemli müştəri qalıq");
+                    baroptions.series[0].data.push(round(val.PROBLEMLI_MUSTERI_SAY, 0));
+                    baroptions.xaxis.categories.push("Problemli müştərilər");
+                    baroptions.series[0].data.push(round(val.GECIKDIRMIS_MUSTERI_CEM, 0));
+                    baroptions.xaxis.categories.push("Gecikmiş müştəri qalıq");
+                    baroptions.series[0].data.push(round(val.GECIKDIRMIS_MUSTERI_SAY, 0));
+                    baroptions.xaxis.categories.push("Gecikmiş müştərilər");
                 });
                 piechart.updateOptions(pieoptions);
                 barchart.updateOptions(baroptions);

@@ -179,12 +179,16 @@
                                         <td><c:out value="${t.inventory.name}" /></td>
                                         <td><c:out value="${t.inventory.barcode}" /></td>
                                         <td>
-                                            <span><c:out value="${t.price}" /></span>
-                                            <span class="kt-font-bold font-italic font-size-10px"><c:out value="${t.currency}" /></span>
+                                            <c:if test="${not empty t.price}">
+                                                <span><c:out value="${t.price}" /></span>
+                                                <span class="kt-font-bold font-italic font-size-10px"><c:out value="${t.currency}" /></span>
+                                            </c:if>
                                         </td>
                                         <td>
-                                            <span><c:out value="${t.salePrice}" /></span>
-                                            <span class="kt-font-bold font-italic font-size-10px"><c:out value="${t.currency}" /></span>
+                                            <c:if test="${not empty t.salePrice}">
+                                                <span><c:out value="${t.salePrice}" /></span>
+                                                <span class="kt-font-bold font-italic font-size-10px"><c:out value="${t.currency}" /></span>
+                                            </c:if>
                                         </td>
                                         <td><c:out value="${t.organization.name}" /></td>
                                         <td><fmt:formatDate value = "${t.createdDate}" pattern = "dd.MM.yyyy" /></td>

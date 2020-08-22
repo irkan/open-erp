@@ -54,6 +54,12 @@ public class ActionService {
                 if(action.getOld()){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("old"), action.getOld())));
                 }
+                if(action.getRow()!=null && !action.getRow().isEmpty()) {
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("row"), "%"+action.getRow()+"%")));
+                }
+                if(action.getColumn()!=null && !action.getColumn().isEmpty()) {
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("column"), "%"+action.getColumn()+"%")));
+                }
                 return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
             }
         }, pageable);

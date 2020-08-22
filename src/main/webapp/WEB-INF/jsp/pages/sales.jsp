@@ -723,7 +723,7 @@
                                     <div class="col-md-7">
                                         <div class="form-group">
                                             <form:label path="payment.description">Açıqlama</form:label>
-                                            <form:textarea path="payment.description" cssClass="form-control" readonly="true" rows="3"/>
+                                            <form:textarea path="payment.description" cssClass="form-control" rows="3"/>
                                             <form:errors path="payment.description" cssClass="control-label alert-danger"/>
                                         </div>
                                         <div class="row">
@@ -1704,7 +1704,7 @@
                     autocapitalize: 'off',
                     autocorrect: 'off',
                     name: 'sale-value-'+index,
-                    style: 'text-align: -webkit-center; text-align: center; font-weight: bold; letter-spacing: 3px; z-index: 1000'
+                    style: 'text-align: -webkit-center; text-align: center; font-weight: bold; letter-spacing: 3px; z-index: 100000'
                 },
                 footer: '<a href>Məlumatlar yenilənsinmi?</a>'
             }).then(function(result) {
@@ -1998,6 +1998,7 @@
                         console.log(data);
 
                         $.each(data, function( index, value ) {
+                            //console.log(value.salesType.id)
                             content='<div data-repeater-item="" class="form-group row align-items-center">\n' +
                                 '                                            <div class="col-9">\n' +
                                 '                                                <div class="kt-form__group--inline">\n' +
@@ -2039,7 +2040,9 @@
                                 '                                            </div>\n' +
                                 '                                        </div>';
                             $(".kt_repeater_1").find(repeater).append(content);
-                            $("select[name='salesInventories["+index+"].salesType'] option[value="+value.salesType.id+"]").attr("selected", "selected");
+                            if(value.salesType!=null){
+                                $("select[name='salesInventories["+index+"].salesType'] option[value="+value.salesType.id+"]").attr("selected", "selected");
+                            }
                         });
 
 
@@ -2194,7 +2197,8 @@
                         success: function(inventory) {
                             $(element).parent().find("input[attr='id']").val(inventory.id);
                             $(element).parent().find("label[attr='name']").text(inventory.name);
-                            console.log(inventory);
+                            $('#form').find("input[name='payment.price']").val(round($('#form').find("input[name='payment.price']").val(), 0) + round(inventory.salePrice, 0));
+                            $('#form').find("input[name='payment.price']").change();
                             swal.close();
                         },
                         error: function() {
@@ -2237,7 +2241,12 @@
                             $(form).find("input[name='salesInventories[0].inventory.name']").val(inventory.name);
                             $(form).find("input[name='salesInventories[0].inventory.group.name']").val(inventory.group.name);
                             $(form).find("textarea[name='salesInventories[0].inventory.description']").val(inventory.description);
+                            /*$(form).find("input[name='payment.price']").val(round($(form).find("input[name='payment.price']").val(), 0) + round(inventory.salePrice, 0));
+                            $(form).find("input[name='payment.price']").change();
 
+                            console.log("2 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+                            console.log(round($(form).find("input[name='payment.price']").val(), 0));
+                            console.log(round(inventory.salePrice, 0));*/
                             swal.close();
                         },
                         error: function() {
@@ -2486,9 +2495,9 @@
                     var elements = $($(this).parent()).find(".align-items-center");
                     var lastBefore = $(elements).eq(-2);
                     var barcode = $(lastBefore).find("input[attr='barcode']");
-                    if(barcode.val().trim().length>0){
+                    /*if(barcode.val().trim().length>0){
                         findInventory(barcode);
-                    }
+                    }*/
                 },
 
                 hide: function (deleteElement) {
