@@ -161,8 +161,16 @@ public class SaleController extends SkeletonController {
                 model.addAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
             }
             Page<Invoice> invoices = invoiceService.findAll((Invoice) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("approve").ascending().and(Sort.by("approveDate").descending()).and(Sort.by("id").descending())));
+
             model.addAttribute(Constants.LIST, invoices);
             if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                Invoice export = new Invoice(!canViewAll()?getSessionOrganization():null);
+                export.setApprove(null);
+                export.setActive(null);
+                export.setAdvance(null);
+                export.setInvoiceDate(null);
+                export.setPrice(null);
+                invoices = invoiceService.findAll(export, PageRequest.of(0, paginationSize()*1000000, Sort.by("approve").ascending().and(Sort.by("approveDate").descending()).and(Sort.by("id").descending())));
                 return exportExcel(invoices, redirectAttributes, page);
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.DEMONSTRATION)){

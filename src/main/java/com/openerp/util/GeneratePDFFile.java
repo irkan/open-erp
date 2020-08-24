@@ -268,7 +268,7 @@ public class GeneratePDFFile {
                                     .setFont(timesbd)
                                     .setBorder(Border.NO_BORDER)
                                     .setUnderline()
-                                    .add(new Paragraph(invoice.getCollector()!=null?"  " + invoice.getCollector().getPerson().getLastName() + " " + invoice.getCollector().getPerson().getFirstName() + " " + invoice.getCollector().getPerson().getFatherName() + "  ":"_______________________"))
+                                    .add(new Paragraph(invoice.getCollector()!=null?"  " + invoice.getCollector().getPerson().getLastName() + " " + invoice.getCollector().getPerson().getFirstName() + " " + Util.checkNull(invoice.getCollector().getPerson().getFatherName())+ "  ":"_______________________"))
                                     .setVerticalAlignment(VerticalAlignment.MIDDLE)
                                     .setHorizontalAlignment(HorizontalAlignment.RIGHT);
                             table.addCell(cell);
