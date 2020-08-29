@@ -101,6 +101,7 @@
     function create(form, data, modal, modal_title){
         $('#' + modal).find(".modal-title").html(modal_title);
         $('#' + modal).modal('toggle');
+        console.log(data);
         fillData(form, data, modal, modal_title);
     }
     function edit(form, data, modal, modal_title){
@@ -140,6 +141,7 @@
                             $(element).val(getFormattedDateTime(new Date(value)));
                         }
                     }  else {
+                        alert($(element).attr("name") + " - " + value);
                         $("input[name='"+$(element).attr("name")+"']").val('');
                         if($.type(value) !== "undefined" && $.type(value.id) !== "undefined"){
                             value = value.id;

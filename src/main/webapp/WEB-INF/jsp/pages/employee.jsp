@@ -129,8 +129,8 @@
             </div>
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form" method="post" action="/hr/employee" cssClass="form-group">
-                    <form:input path="id" type="hidden"/>
-                    <form:input path="organization" type="hidden"/>
+                    <form:hidden path="id"/>
+                    <form:hidden path="organization"/>
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
