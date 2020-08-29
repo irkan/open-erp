@@ -1091,6 +1091,10 @@ fixedHeader: {
                         if(oper==="view"){
                             view(form, data, modal, modal_title)
                         } else if(oper==="edit"){
+                            console.log(form);
+                            console.log(data);
+                            console.log(modal);
+                            console.log(modal_title);
                             edit(form, data, modal, modal_title)
                         }
                         getInventories(dataId, $('#data-repeater-list'));

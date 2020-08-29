@@ -255,7 +255,9 @@ public class SaleController extends SkeletonController {
     public String postSales(@RequestParam(name = "file1", required = false) MultipartFile file1, @RequestParam(name = "file2", required = false) MultipartFile file2, @ModelAttribute(Constants.FORM) @Validated Sales sales, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
-            salesInventoryRepository.deleteInBatch(salesInventoryRepository.getSalesInventoriesByActiveTrueAndSales_Id(sales.getId()));
+            if(sales.getId()!=null && salesInventoryRepository.getSalesInventoriesByActiveTrueAndSales_Id(sales.getId()).size()>0){
+                salesInventoryRepository.deleteInBatch(salesInventoryRepository.getSalesInventoriesByActiveTrueAndSales_Id(sales.getId()));
+            }
             if(sales.getSalesInventories()!=null){
                 List<SalesInventory> salesInventories = new ArrayList<>();
                 for(SalesInventory salesInventory: sales.getSalesInventories()){
@@ -1108,6 +1110,10 @@ public class SaleController extends SkeletonController {
             FieldError fieldError = new FieldError("", "", "HF tarixi " + DateUtility.getFormattedDate(invc.getInvoiceDate()) + " olduğu üçün təsdiqə icazə verilmir!");
             binding.addError(fieldError);
         }
+        /*if(Util.calculateInvoice(invc.getSales().getInvoices())+invoice.getPrice()>500){
+            FieldError fieldError = new FieldError("", "", "HF tarixi " + DateUtility.getFormattedDate(invc.getInvoiceDate()) + " olduğu üçün təsdiqə icazə verilmir!");
+            binding.addError(fieldError);
+        }*/
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()) {
             invc.setApprove(true);

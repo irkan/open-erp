@@ -98,9 +98,10 @@
         submit($(form));*!/
     }*/
 
-    function create(form, modal, modal_title){
+    function create(form, data, modal, modal_title){
         $('#' + modal).find(".modal-title").html(modal_title);
         $('#' + modal).modal('toggle');
+        fillData(form, data, modal, modal_title);
     }
     function edit(form, data, modal, modal_title){
         $('#' + modal).find(".modal-footer").removeClass("kt-hide");
@@ -129,18 +130,23 @@
                     } else if($(element).attr("type")==="radio"){
                         $("input[name='"+$(element).attr("name")+"'][value='"+value.id+"']").prop('checked', true);
                     } else if($(element).attr("date_")==='date_') {
-                        if(value!==null){
+                        $("input[name='"+$(element).attr("name")+"']").val('');
+                        if(value!==null && value.length>0){
                             $(element).val(getFormattedDate(new Date(value)));
                         }
                     } else if($(element).attr("date_")==='datetime_') {
-                        if(value!==null){
+                        $("input[name='"+$(element).attr("name")+"']").val('');
+                        if(value!==null && value.length>0){
                             $(element).val(getFormattedDateTime(new Date(value)));
                         }
                     }  else {
+                        $("input[name='"+$(element).attr("name")+"']").val('');
                         if($.type(value) !== "undefined" && $.type(value.id) !== "undefined"){
                             value = value.id;
                         }
-                        $(element).val(value);
+                        if(value!=null && value.length>0){
+                            $(element).val(value);
+                        }
                     }
                 } else if(tagName.toLowerCase()==="textarea"){
                     $(element).val(value);
@@ -256,6 +262,7 @@
     }
 
     function getFormattedDate(date) {
+        console.log(date);
         var year = date.getFullYear();
 
         var month = (1 + date.getMonth()).toString();

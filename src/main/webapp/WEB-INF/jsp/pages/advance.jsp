@@ -74,20 +74,6 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="employee">Əməkdaş</form:label>
-                                                <form:select  path="employee.id" cssClass="custom-select form-control select2-single" multiple="single">
-                                                    <form:option value=""></form:option>
-                                                    <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
-                                                        <optgroup label="${itemGroup.key}">
-                                                            <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
-                                                        </optgroup>
-                                                    </c:forEach>
-                                                </form:select>
-                                                <form:errors path="employee" cssClass="control-label alert-danger"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group">
                                                 <form:label path="payedFrom">Qiymətdən</form:label>
                                                 <form:input path="payedFrom" cssClass="form-control" placeholder="Məbləği daxil edin"/>
                                                 <form:errors path="payedFrom" cssClass="alert-danger control-label"/>
@@ -130,6 +116,20 @@
                                                     </div>
                                                 </div>
                                                 <form:errors path="advanceDate" cssClass="control-label alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="employee">Əməkdaş</form:label>
+                                                <form:select  path="employee.id" cssClass="custom-select form-control select2-single" multiple="single">
+                                                    <form:option value=""></form:option>
+                                                    <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
+                                                        <optgroup label="${itemGroup.key}">
+                                                            <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
+                                                        </optgroup>
+                                                    </c:forEach>
+                                                </form:select>
+                                                <form:errors path="employee" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
                                         <div class="col-md-2" style="padding-top: 30px;">
