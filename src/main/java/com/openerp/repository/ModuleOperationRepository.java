@@ -13,5 +13,6 @@ public interface ModuleOperationRepository extends JpaRepository<ModuleOperation
     List<ModuleOperation> getModuleOperationsByModule_ActiveAndOperation_Active(boolean moduleActive, boolean operationActive);
     List<ModuleOperation> getModuleOperationsByModuleIn(List<Module> modules);
     List<ModuleOperation> getModuleOperationsByModuleAndOperation(Module module, Operation operation);
+    ModuleOperation getModuleOperationById(Integer id);
 
 }

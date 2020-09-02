@@ -38,16 +38,16 @@
                                     <div class="row">
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="sales">Satış kodu</form:label>
-                                                <form:input path="sales" cssClass="form-control" placeholder="#######" />
-                                                <form:errors path="sales" cssClass="alert-danger"/>
+                                                <form:label path="sales.id">Satış kodu</form:label>
+                                                <form:input path="sales.id" cssClass="form-control" placeholder="#######" />
+                                                <form:errors path="sales.id" cssClass="alert-danger"/>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="sales.customer">Müştəri kodu</form:label>
-                                                <form:input path="sales.customer" cssClass="form-control" placeholder="#######" />
-                                                <form:errors path="sales.customer" cssClass="alert-danger"/>
+                                                <form:label path="sales.customer.id">Müştəri kodu</form:label>
+                                                <form:input path="sales.customer.id" cssClass="form-control" placeholder="#######" />
+                                                <form:errors path="sales.customer.id" cssClass="alert-danger"/>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -256,15 +256,19 @@
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Göndər</h5>
+                <h5 class="modal-title">Hesab-faktura yarat</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form-transfer" method="post" action="/sale/schedule/transfer" cssClass="form-group">
-                    <form:hidden path="sales"/>
                     <form:hidden path="scheduleDate"/>
+                    <div class="form-group">
+                        <form:label path="sales.id">Satış kodu</form:label>
+                        <form:input path="sales.id" cssClass="form-control" readonly="true"/>
+                        <form:errors path="sales.id" cssClass="alert-danger control-label"/>
+                    </div>
                     <div class="form-group">
                         <form:label path="payableAmount">Ödəniləcək məbləğ</form:label>
                         <div class="input-group" >
@@ -340,7 +344,7 @@ fixedHeader: {
     function transfer(form, modal, salesId, payableAmount, invoiceDate){
         try {
             $(form).find("input[name='payableAmount']").val(payableAmount);
-            $(form).find("input[name='sales']").val(salesId);
+            $(form).find("input[name='sales.id']").val(salesId);
             $(form).find("input[name='invoiceDate']").val(invoiceDate);
             $('#' + modal).modal('toggle');
         } catch (e) {
@@ -350,6 +354,9 @@ fixedHeader: {
 
     $( "#form-transfer" ).validate({
         rules: {
+            "sales.id": {
+                required: true
+            },
             payableAmount: {
                 required: true,
                 number: true

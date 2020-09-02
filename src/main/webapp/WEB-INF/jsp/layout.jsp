@@ -101,7 +101,7 @@
     function create(form, data, modal, modal_title){
         $('#' + modal).find(".modal-title").html(modal_title);
         $('#' + modal).modal('toggle');
-        console.log(data);
+        $('#' + modal).find(".modal-footer").removeClass("kt-hide");
         fillData(form, data, modal, modal_title);
     }
     function edit(form, data, modal, modal_title){
@@ -124,44 +124,37 @@
                 var value = findValue(obj, element);
                 if(tagName.toLowerCase()==="input"){
                     if($(element).attr("type")==="checkbox"){
-                        $("input[name='"+$(element).attr("name")+"']").prop('checked', false);
+                        $(form).find("input[name='"+$(element).attr("name")+"']").prop('checked', false);
                         if(value){
-                            $("input[name='"+$(element).attr("name")+"']").prop('checked', true);
+                            $(form).find("input[name='"+$(element).attr("name")+"']").prop('checked', true);
                         }
                     } else if($(element).attr("type")==="radio"){
-                        $("input[name='"+$(element).attr("name")+"'][value='"+value.id+"']").prop('checked', true);
+                        $(form).find("input[name='"+$(element).attr("name")+"'][value='"+value+"']").prop('checked', true);
                     } else if($(element).attr("date_")==='date_') {
-                        $("input[name='"+$(element).attr("name")+"']").val('');
-                        if(value!==null && value.length>0){
-                            $(element).val(getFormattedDate(new Date(value)));
+                        $(form).find("input[name='"+$(element).attr("name")+"']").val('');
+                        if(value!=null){
+                            $(form).find("input[name='"+$(element).attr("name")+"']").val(getFormattedDate(new Date(value)));
                         }
                     } else if($(element).attr("date_")==='datetime_') {
-                        $("input[name='"+$(element).attr("name")+"']").val('');
-                        if(value!==null && value.length>0){
-                            $(element).val(getFormattedDateTime(new Date(value)));
+                        $(form).find("input[name='"+$(element).attr("name")+"']").val('');
+                        if(value!=null){
+                            $(form).find("input[name='"+$(element).attr("name")+"']").val(getFormattedDateTime(new Date(value)));
                         }
                     }  else {
-                        alert($(element).attr("name") + " - " + value);
-                        $("input[name='"+$(element).attr("name")+"']").val('');
-                        if($.type(value) !== "undefined" && $.type(value.id) !== "undefined"){
-                            value = value.id;
-                        }
-                        if(value!=null && value.length>0){
-                            $(element).val(value);
-                        }
+                        $(form).find("input[name='"+$(element).attr("name")+"']").val(value);
                     }
                 } else if(tagName.toLowerCase()==="textarea"){
-                    $(element).val(value);
+                    $(form).find("textarea[name='"+$(element).attr("name")+"']").val(value);
                 } else if(tagName.toLowerCase()==="select"){
-                    $("select[name='"+$(element).attr("name")+"'] option:selected").removeAttr("selected");
+                    $(form).find("select[name='"+$(element).attr("name")+"'] option:selected").removeAttr("selected");
                     if($(element).attr("multiple")){
                         $(value).each(function(key, item){
-                            $("select[name='"+$(element).attr("name")+"'] option[value="+item.type.id+"]").attr("selected", "selected");
+                            $(form).find("select[name='"+$(element).attr("name")+"'] option[value="+item.type.id+"]").attr("selected", "selected");
                         });
-                        $("select[name='"+$(element).attr("name") +"']").select2();
+                        $(form).find("select[name='"+$(element).attr("name") +"']").select2();
                     } else {
                         if(value!=null){
-                            $("select[name='"+$(element).attr("name")+"'] option[value="+value.id+"]").attr("selected", "selected");
+                            $(form).find("select[name='"+$(element).attr("name")+"'] option[value="+value+"]").attr("selected", "selected");
                         }
                     }
                 }
@@ -177,42 +170,60 @@
         var originalName = $(element).attr("name");
         var name = originalName.split(".");
         var value;
-        if(name.length===1){
-            if(getIndex(name[0])!=null){
-                value = obj[name[0]][getIndex(name[0])];
-            } else {
-                value = obj[name[0]]
+        try{
+            if(name.length===1){
+                if(getIndex(name[0])!=null){
+                    value = obj[name[0]][getIndex(name[0])];
+                } else {
+                    value = obj[name[0]]
+                }
+            } else if(name.length===2){
+                if(getIndex(name[0])!=null){
+                    value = obj[getName(name[0])][getIndex(name[0])][name[1]];
+                } else if(getIndex(name[1])!=null){
+                    value = obj[name[0]][getName(name[1])][getIndex(name[1])];
+                } else {
+                    value = obj[name[0]][name[1]];
+                }
+            } else if(name.length===3){
+                if(getIndex(name[0])!=null){
+                    value = obj[getName(name[0])][getIndex(name[0])][name[1]][name[2]];
+                } else if(getIndex(name[1])!=null){
+                    value = obj[name[0]][getName(name[1])][getIndex(name[1])][name[2]];
+                } else if(getIndex(name[2])!=null){
+                    value = obj[name[0]][name[1]][getName(name[2])][getIndex(name[2])];
+                } else {
+                    value = obj[name[0]][name[1]][name[2]];
+                }
+            } else if(name.length===4){
+                if(getIndex(name[0])!=null){
+                    value = obj[getName(name[0])][getIndex(name[0])][name[1]][name[2]][name[3]];
+                } else if(getIndex(name[1])!=null){
+                    value = obj[name[0]][getName(name[1])][getIndex(name[1])][name[2]][name[3]];
+                } else if(getIndex(name[2])!=null){
+                    value = obj[name[0]][name[1]][getName(name[2])][getIndex(name[2])][name[3]];
+                } else if(getIndex(name[3])!=null){
+                    value = obj[name[0]][name[1]][name[2]][getName(name[3])][getIndex(name[3])];
+                } else {
+                    value = obj[name[0]][name[1]][name[2]][name[3]];
+                }
+            } else if(name.length===5){
+                if(getIndex(name[0])!=null){
+                    value = obj[getName(name[0])][getIndex(name[0])][name[1]][name[2]][name[3]][name[4]];
+                } else if(getIndex(name[1])!=null){
+                    value = obj[name[0]][getName(name[1])][getIndex(name[1])][name[2]][name[3]][name[4]];
+                } else if(getIndex(name[2])!=null){
+                    value = obj[name[0]][name[1]][getName(name[2])][getIndex(name[2])][name[3]][name[4]];
+                } else if(getIndex(name[3])!=null){
+                    value = obj[name[0]][name[1]][name[2]][getName(name[3])][getIndex(name[3])][name[4]];
+                } else if(getIndex(name[4])!=null){
+                    value = obj[name[0]][name[1]][name[2]][name[3]][getName(name[4])][getIndex(name[4])];
+                } else {
+                    value = obj[name[0]][name[1]][name[2]][name[3]][name[4]];
+                }
             }
-        } else if(name.length===2){
-            if(getIndex(name[0])!=null){
-                value = obj[getName(name[0])][getIndex(name[0])][name[1]];
-            } else if(getIndex(name[1])!=null){
-                value = obj[name[0]][getName(name[1])][getIndex(name[1])];
-            } else {
-                value = obj[name[0]][name[1]];
-            }
-        } else if(name.length===3){
-            if(getIndex(name[0])!=null){
-                value = obj[getName(name[0])][getIndex(name[0])][name[1]][name[2]];
-            } else if(getIndex(name[1])!=null){
-                value = obj[name[0]][getName(name[1])][getIndex(name[1])][name[2]];
-            } else if(getIndex(name[2])!=null){
-                value = obj[name[0]][name[1]][getName(name[2])][getIndex(name[2])];
-            } else {
-                value = obj[name[0]][name[1]][name[2]];
-            }
-        } else if(name.length===4){
-            if(getIndex(name[0])!=null){
-                value = obj[getName(name[0])][getIndex(name[0])][name[1]][name[2]][name[3]];
-            } else if(getIndex(name[1])!=null){
-                value = obj[name[0]][getName(name[1])][getIndex(name[1])][name[2]][name[3]];
-            } else if(getIndex(name[2])!=null){
-                value = obj[name[0]][name[1]][getName(name[2])][getIndex(name[2])][name[3]];
-            } else if(getIndex(name[3])!=null){
-                value = obj[name[0]][name[1]][name[2]][getName(name[3])][getIndex(name[3])];
-            } else {
-                value = obj[name[0]][name[1]][name[2]][name[3]];
-            }
+        } catch (e) {
+            console.log(e);
         }
         return value;
     }

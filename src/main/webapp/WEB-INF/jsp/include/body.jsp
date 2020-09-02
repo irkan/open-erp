@@ -65,7 +65,7 @@
                         <c:set var="upload" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'upload')}"/>
                         <c:choose>
                             <c:when test="${upload.status}">
-                                <a href="javascript:create($('#upload-form'), 'upload-modal', '<c:out value="${upload.object.name}" />');" class="btn btn-dark">
+                                <a href="javascript:create($('#upload-form'), '<c:out value="${utl:toJson(form)}"/>', 'upload-modal', '<c:out value="${upload.object.name}" />');" class="btn btn-dark">
                                     <i class="la <c:out value="${upload.object.icon}"/>"></i>
                                     <c:out value="${upload.object.name}"/>
                                 </a>

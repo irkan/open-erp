@@ -110,12 +110,12 @@
                         <form:errors path="attr2" cssClass="alert-danger control-label"/>
                     </div>
                     <div class="form-group">
-                        <form:label path="dictionaryType">Tip</form:label>
-                        <form:select  path="dictionaryType" cssClass="custom-select form-control">
+                        <form:label path="dictionaryType.id">Tip</form:label>
+                        <form:select  path="dictionaryType.id" cssClass="custom-select form-control">
                             <form:option value=""></form:option>
                             <form:options items="${dictionary_types}" itemLabel="name" itemValue="id" />
                         </form:select>
-                        <form:errors path="dictionaryType" cssClass="alert-danger control-label"/>
+                        <form:errors path="dictionaryType.id" cssClass="alert-danger control-label"/>
                     </div>
                 </form:form>
             </div>
@@ -194,7 +194,7 @@ fixedHeader: {
             attr1: {
                 required: true
             },
-            dictionaryType: {
+            "dictionaryType.id": {
                 required: true
             },
         },

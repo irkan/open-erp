@@ -34,7 +34,7 @@
                 <div id="filterContent" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionFilter">
                     <div class="card-body">
                         <form:form modelAttribute="filter" id="filter" method="post" action="/crm/customer/filter">
-                            <form:hidden path="organization" />
+                            <form:hidden path="organization.id" />
                             <div class="row">
                                 <div class="col-md-11">
                                     <div class="row">
@@ -282,7 +282,7 @@
                 <form:form modelAttribute="form" id="form" method="post" action="/crm/customer" cssClass="form-group">
                     <form:hidden path="id"/>
                     <form:hidden path="active"/>
-                    <form:hidden path="organization"/>
+                    <form:hidden path="organization.id"/>
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
@@ -420,8 +420,8 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <form:label path="person.contact.city">Şəhər</form:label>
-                                <form:select path="person.contact.city" cssClass="custom-select form-control">
+                                <form:label path="person.contact.city.id">Şəhər</form:label>
+                                <form:select path="person.contact.city.id" onchange="selectLivingCity($('#form'), $(this))" cssClass="custom-select form-control">
                                     <form:option value=""></form:option>
                                     <form:options items="${cities}" itemLabel="name" itemValue="id"/>
                                 </form:select>
@@ -441,8 +441,8 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <form:label path="person.contact.livingCity">Yaşadığı şəhər</form:label>
-                                <form:select path="person.contact.livingCity" cssClass="custom-select form-control">
+                                <form:label path="person.contact.livingCity.id">Yaşadığı şəhər</form:label>
+                                <form:select path="person.contact.livingCity.id" cssClass="custom-select form-control">
                                     <form:option value=""></form:option>
                                     <form:options items="${cities}" itemLabel="name" itemValue="id"/>
                                 </form:select>
@@ -543,12 +543,15 @@
             "person.contact.mobilePhone": {
                 required: true
             },
-            "person.contact.city": {
+            "person.contact.city.id": {
                 required: true
             },
             "person.contact.address": {
                 required: true
-            }
+            },
+            "person.contact.livingCity.id": {
+                required: true
+            },
         },
         invalidHandler: function(event, validator) {
                     KTUtil.scrollTop();
@@ -604,6 +607,10 @@
             navigator.geolocation.getCurrentPosition(showPosition);
         }
     });
+
+    function selectLivingCity(form, element){
+        $(form).find("select[name='person.contact.livingCity.id'] option[value="+$(element).val()+"]").attr("selected", "selected");
+    }
 </script>
 
 

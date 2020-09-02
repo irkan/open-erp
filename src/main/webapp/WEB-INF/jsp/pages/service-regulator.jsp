@@ -33,7 +33,7 @@
                 <div id="filterContent" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionFilter">
                     <div class="card-body">
                         <form:form modelAttribute="filter" id="filter" method="post" action="/sale/service-regulator/filter">
-                            <form:hidden path="sales.organization" />
+                            <form:hidden path="sales.organization.id" />
                             <div class="row">
                                 <div class="col-md-11">
                                     <div class="row">
@@ -46,9 +46,9 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="sales">Satış</form:label>
-                                                <form:input path="sales" cssClass="form-control" placeholder="Satış kodu" />
-                                                <form:errors path="sales" cssClass="alert-danger"/>
+                                                <form:label path="sales.id">Satış</form:label>
+                                                <form:input path="sales.id" cssClass="form-control" placeholder="Satış kodu" />
+                                                <form:errors path="sales.id" cssClass="alert-danger"/>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -85,7 +85,7 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="serviceNotification">Filter</form:label>
+                                                <form:label path="serviceNotification.id">Filter</form:label>
                                                 <form:select path="serviceNotification.id" cssClass="custom-select form-control">
                                                     <form:option value=""></form:option>
                                                     <form:options items="${service_notifications}" itemLabel="name" itemValue="id"/>
@@ -166,12 +166,12 @@
                                         </td>
                                         <td nowrap class="text-center">
                                             <c:if test="${view.status}">
-                                                <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
+                                                <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');setSales($('#form'), <c:out value="${t.sales.id}" />);" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
                                                     <i class="la <c:out value="${view.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
                                             <c:if test="${edit.status}">
-                                                <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                                                <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');setSales($('#form'), <c:out value="${t.sales.id}" />)" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
                                                     <i class="la <c:out value="${edit.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
@@ -213,13 +213,13 @@
                 <form:form modelAttribute="form" id="form" method="post" action="/sale/service-regulator" cssClass="form-group">
                     <form:hidden path="id"/>
                     <div class="form-group">
-                        <form:label path="sales">Satış kodu</form:label>
-                        <form:input path="sales" cssClass="form-control" placeholder="Satış kodu" />
-                        <form:errors path="sales" cssClass="alert-danger"/>
+                        <form:label path="sales.id">Satış kodu</form:label>
+                        <form:input path="sales.id" cssClass="form-control" placeholder="Satış kodu" />
+                        <form:errors path="sales.id" cssClass="alert-danger"/>
                     </div>
                     <div class="form-group">
-                        <form:label path="serviceNotification">Filter</form:label>
-                        <form:select path="serviceNotification" cssClass="custom-select form-control">
+                        <form:label path="serviceNotification.id">Filter</form:label>
+                        <form:select path="serviceNotification.id" cssClass="custom-select form-control">
                             <form:option value=""></form:option>
                             <form:options items="${service_notifications}" itemLabel="name" itemValue="id"/>
                         </form:select>
@@ -283,11 +283,11 @@ fixedHeader: {
 
     $( "#form" ).validate({
         rules: {
-            sales: {
+            "sales.id": {
                 required: true,
                 digits: true
             },
-            serviceNotification: {
+            "serviceNotification.id": {
                 required: true
             },
             servicedDate: {
@@ -305,5 +305,9 @@ fixedHeader: {
         view($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${view.object.name}" />');
     });
     </c:if>
+
+    function setSales(form, id){
+        $(form).find("input[name='sales.id']").val(id);
+    }
 
 </script>

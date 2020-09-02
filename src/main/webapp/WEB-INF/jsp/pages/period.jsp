@@ -86,12 +86,12 @@
                 <form:form modelAttribute="form" id="form" method="post" action="/admin/period" cssClass="form-group">
                     <form:hidden path="id"/>
                     <div class="form-group">
-                        <form:label path="user">İstifadəçi</form:label>
-                        <form:select  path="user" cssClass="custom-select form-control" onchange="getUserModuleOperation($(this).val())">
+                        <form:label path="user.id">İstifadəçi</form:label>
+                        <form:select  path="user.id" cssClass="custom-select form-control" onchange="getUserModuleOperation($(this).val())">
                             <form:option value="" />
                             <form:options items="${users}" itemLabel="employee.person.fullName" itemValue="id"  />
                         </form:select>
-                        <form:errors path="user" cssClass="alert-danger control-label"/>
+                        <form:errors path="user.id" cssClass="alert-danger control-label"/>
                     </div>
                     <div class="row">
                         <div class="col-6">
@@ -157,7 +157,7 @@ fixedHeader: {
 
     $( "#form" ).validate({
         rules: {
-            user: {
+            "user.id": {
                 required: true
             },
             endDate: {

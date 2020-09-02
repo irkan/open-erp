@@ -27,7 +27,6 @@ public class Invoice {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
-    @JsonIgnore
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "organization_id")
     private Organization organization;

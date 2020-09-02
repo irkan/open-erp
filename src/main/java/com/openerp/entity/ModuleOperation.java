@@ -34,6 +34,9 @@ public class ModuleOperation {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
+    private Boolean active = true;
+
     @JsonIgnore
     @OneToMany(mappedBy = "moduleOperation")
     private List<TemplateModuleOperation> templateModuleOperations;

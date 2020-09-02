@@ -49,8 +49,8 @@
                 <form:form modelAttribute="form" id="form" method="post" action="/admin/module" cssClass="form-group">
                     <form:hidden path="id"/>
                     <div class="form-group">
-                        <form:label path="module">Üst modul</form:label>
-                        <form:select  path="module" cssClass="custom-select form-control">
+                        <form:label path="module.id">Üst modul</form:label>
+                        <form:select  path="module.id" cssClass="custom-select form-control">
                             <form:option value=""></form:option>
                             <form:options items="${parents}" itemLabel="name" itemValue="id" />
                         </form:select>
@@ -265,7 +265,7 @@
 
     $( "#form" ).validate({
         rules: {
-            module: {
+            "module.id": {
                 required: true
             },
             name: {

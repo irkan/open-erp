@@ -34,7 +34,7 @@
                 <div id="filterContent" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionFilter">
                     <div class="card-body">
                         <form:form modelAttribute="filter" id="filter" method="post" action="/collect/contact-history/filter">
-                            <form:hidden path="organization" />
+                            <form:hidden path="organization.id" />
                             <div class="row">
                                 <div class="col-md-11">
                                     <div class="row">
@@ -49,28 +49,28 @@
                                                 </div>
                                                 <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <form:label path="sales">Satış kodu</form:label>
-                                                        <form:input path="sales" cssClass="form-control" placeholder="#######" />
-                                                        <form:errors path="sales" cssClass="alert-danger"/>
+                                                        <form:label path="sales.id">Satış kodu</form:label>
+                                                        <form:input path="sales.id" cssClass="form-control" placeholder="#######" />
+                                                        <form:errors path="sales.id" cssClass="alert-danger"/>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <form:label path="childSales">Servis kodu</form:label>
-                                                        <form:input path="childSales" cssClass="form-control" placeholder="#######" />
-                                                        <form:errors path="childSales" cssClass="alert-danger"/>
+                                                        <form:label path="childSales.id">Servis kodu</form:label>
+                                                        <form:input path="childSales.id" cssClass="form-control" placeholder="#######" />
+                                                        <form:errors path="childSales.id" cssClass="alert-danger"/>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="contactChannel">Əlaqə kanalı</form:label>
+                                                <form:label path="contactChannel.id">Əlaqə kanalı</form:label>
                                                 <form:select  path="contactChannel.id" cssClass="custom-select form-control select2-single" multiple="single">
                                                     <form:option value=""></form:option>
                                                     <form:options items="${contact_channels}" itemLabel="name" itemValue="id"/>
                                                 </form:select>
-                                                <form:errors path="contactChannel" cssClass="control-label alert-danger"/>
+                                                <form:errors path="contactChannel.id" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -265,18 +265,18 @@
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form" method="post" action="/collect/contact-history" cssClass="form-group">
                     <form:hidden path="id"/>
-                    <form:hidden path="organization"/>
-                    <form:hidden path="childSales"/>
+                    <form:hidden path="organization.id"/>
+                    <form:hidden path="childSales.id"/>
                     <div class="form-group">
-                        <form:label path="sales">Satış kodu</form:label>
+                        <form:label path="sales.id">Satış kodu</form:label>
                         <div class="input-group date" >
                             <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calculator"></i></span></div>
                             <form:input path="sales" cssClass="form-control" placeholder="Daxil edin"/>
                         </div>
-                        <form:errors path="sales" cssClass="control-label alert-danger" />
+                        <form:errors path="sales.id" cssClass="control-label alert-danger" />
                     </div>
                     <div class="form-group">
-                        <form:label path="contactChannel">Əlaqə yaradılmışdır</form:label><br/>
+                        <form:label path="contactChannel.id">Əlaqə yaradılmışdır</form:label><br/>
                         <c:forEach var="t" items="${contact_channels}" varStatus="loop">
                             <label class="kt-radio kt-radio--brand">
                                 <form:radiobutton path="contactChannel" value="${t.id}"/> <c:out value="${t.name}"/>
@@ -284,7 +284,7 @@
                             </label>
                             &nbsp;&nbsp;&nbsp;&nbsp;
                         </c:forEach>
-                        <form:errors path="contactChannel" cssClass="control-label alert-danger" />
+                        <form:errors path="contactChannel.id" cssClass="control-label alert-danger" />
                     </div>
                     <div class="form-group">
                         <form:label path="nextContactDate">Növbəti əlaqə taixi</form:label>
@@ -356,7 +356,7 @@
 
     $( "#form" ).validate({
         rules: {
-            sales: {
+            "sales.id": {
                 required: true
             },
             description: {
@@ -373,11 +373,11 @@
         rightAlignNumerics: false
     });
 
-    $("input[name='sales']").inputmask('decimal', {
+    $("input[name='sales.id']").inputmask('decimal', {
         rightAlignNumerics: false
     });
 
-    $("input[name='childSales']").inputmask('decimal', {
+    $("input[name='childSales.id']").inputmask('decimal', {
         rightAlignNumerics: false
     });
 
@@ -392,7 +392,7 @@
                     type: 'GET',
                     dataType: 'text',
                     beforeSend: function() {
-                        $(form).find("input[name='sales']").val('');
+                        $(form).find("input[name='sales.id']").val('');
                     },
                     success: function(data) {
                         if(oper==="view"){
@@ -400,7 +400,7 @@
                         } else if(oper==="edit"){
                             edit(form, data, modal, modal_title)
                         }
-                        $(form).find("input[name='sales']").val(salesId);
+                        $(form).find("input[name='sales.id']").val(salesId);
                         swal.close();
                     },
                     error: function() {

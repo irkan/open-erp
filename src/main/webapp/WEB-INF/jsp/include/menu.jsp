@@ -144,19 +144,21 @@
                                             <c:if test="${t.id==sessionScope.organization_selected.id}">
                                                 <c:set var="hover" value="a-link-active"/>
                                             </c:if>
-                                            <a href="/route/sub/admin/<c:out value="${page}" />/org/<c:out value="${t.id}"/>" class="kt-notification-v2__item <c:out value="${hover}"/>">
-                                                <div class="kt-notification-v2__item-icon">
-                                                    <i class="flaticon2-box kt-font-danger"></i>
-                                                </div>
-                                                <div class="kt-notification-v2__itek-wrapper">
-                                                    <div class="kt-notification-v2__item-title">
-                                                        <c:out value="${t.name}"/>
+                                            <c:if test="${t.active}">
+                                                <a href="/route/sub/admin/<c:out value="${page}" />/org/<c:out value="${t.id}"/>" class="kt-notification-v2__item <c:out value="${hover}"/>">
+                                                    <div class="kt-notification-v2__item-icon">
+                                                        <i class="flaticon2-box kt-font-danger"></i>
                                                     </div>
-                                                    <div class="kt-notification-v2__item-desc">
-                                                        <c:out value="${t.description}"/>
+                                                    <div class="kt-notification-v2__itek-wrapper">
+                                                        <div class="kt-notification-v2__item-title">
+                                                            <c:out value="${t.name}"/>
+                                                        </div>
+                                                        <div class="kt-notification-v2__item-desc">
+                                                            <c:out value="${t.description}"/>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </a>
+                                                </a>
+                                            </c:if>
                                         </c:forEach>
                                     </div>
                                 </div>

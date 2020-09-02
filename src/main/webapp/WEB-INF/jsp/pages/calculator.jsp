@@ -205,7 +205,7 @@
                     error: function() {
                         swal.fire({
                             title: "Xəta baş verdi!",
-                            html: "Əlaqə saxlamağınızı xahiş edirik.",
+                            html: "Məlumatları doğru daxil edin.",
                             type: "error",
                             cancelButtonText: 'Bağla',
                             cancelButtonColor: '#c40000',

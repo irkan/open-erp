@@ -76,4 +76,8 @@ public class User {
         this.employee = employee;
         this.userDetail = userDetail;
     }
+
+    public User(UserDetail userDetail) {
+        this.userDetail = userDetail;
+    }
 }

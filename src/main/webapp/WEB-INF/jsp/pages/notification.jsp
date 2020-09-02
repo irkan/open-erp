@@ -33,7 +33,7 @@
                 <div id="filterContent" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionFilter">
                     <div class="card-body">
                         <form:form modelAttribute="filter" id="filter" method="post" action="/admin/notification/filter">
-                            <form:hidden path="organization" />
+                            <form:hidden path="organization.id" />
                             <div class="row">
                                 <div class="col-md-11">
                                     <div class="row">
@@ -46,7 +46,7 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="type">Tip</form:label>
+                                                <form:label path="type.id">Tip</form:label>
                                                 <form:select path="type.id" cssClass="custom-select form-control">
                                                     <form:option value=""></form:option>
                                                     <form:options items="${notifications}" itemLabel="name" itemValue="id"/>
@@ -250,16 +250,16 @@
                 <form:form modelAttribute="form" id="form" method="post" action="/admin/notification" cssClass="form-group">
                     <form:hidden path="id"/>
                     <form:hidden path="active" value="1"/>
-                    <form:hidden path="organization" value="${sessionScope.organization.id}"/>
+                    <form:hidden path="organization.id" value="${sessionScope.organization.id}"/>
                     <div class="form-group">
                         <c:forEach var="t" items="${notifications}" varStatus="loop">
                             <label class="kt-radio kt-radio--brand">
-                                <form:radiobutton path="type" value="${t.id}"/> <c:out value="${t.name}"/>
+                                <form:radiobutton path="type.id" value="${t.id}"/> <c:out value="${t.name}"/>
                                 <span></span>
                             </label>
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         </c:forEach>
-                        <form:errors path="type" cssClass="control-label alert alert-danger" />
+                        <form:errors path="type.id" cssClass="control-label alert alert-danger" />
                     </div>
                     <div class="form-group">
                         <form:label path="to">Kimə?</form:label>
@@ -299,7 +299,7 @@
     });
     $( "#form" ).validate({
         rules: {
-            type: {
+            "type.id": {
                 required: true
             },
             to: {

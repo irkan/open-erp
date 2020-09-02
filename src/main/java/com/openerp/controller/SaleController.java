@@ -47,7 +47,7 @@ public class SaleController extends SkeletonController {
             model.addAttribute(Constants.SALES_TYPES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("sales-type"));
             model.addAttribute(Constants.TAX_CONFIGURATIONS, taxConfigurationRepository.getTaxConfigurationsByActiveTrueAndOrganization(getSessionOrganization()));
            if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new Sales(getSessionOrganization()));
+               model.addAttribute(Constants.FORM, new Sales(getSessionOrganization()));
             }
             if(!model.containsAttribute(Constants.RETURN_FORM)){
                 model.addAttribute(Constants.RETURN_FORM, new Return());
@@ -266,6 +266,9 @@ public class SaleController extends SkeletonController {
                 sales.setSalesInventories(salesInventories);
             }
 
+            if(sales.getService()){
+                sales.getPayment().setCash(true);
+            }
             if(sales.getPayment().getCash()){
                 sales.getPayment().setPeriod(null);
                 sales.getPayment().setSchedule(null);
@@ -1013,10 +1016,11 @@ public class SaleController extends SkeletonController {
             invoice.setApprove(false);
             invoice.setInvoiceDate(schedule.getInvoiceDate()!=null?schedule.getInvoiceDate():invoice.getInvoiceDate());
             invoice.setPrice(schedule.getPayableAmount());
-            invoice.setOrganization(schedule.getSales().getOrganization());
+            Sales sales = salesRepository.getSalesById(schedule.getSales().getId());
+            invoice.setOrganization(sales.getOrganization());
             invoice.setDescription("Ödəniş " + invoice.getPrice() + " AZN" + (schedule.getDescription()!=null?" " + schedule.getDescription():""));
             invoiceRepository.save(invoice);
-
+            log(invoice, "invoice", "create/edit", invoice.getId(), invoice.toString(), "Hesab faktura yaradıldı. Ödəniş qrafikindən göndərmə edildi");
             addContactHistory(invoice.getSales(), "Hesab-faktura yaradıldı: " + invoice.getId(), null);
         }
         Sales filterSales = new Sales(schedule.getSales().getId(), !canViewAll()?getSessionOrganization():null);

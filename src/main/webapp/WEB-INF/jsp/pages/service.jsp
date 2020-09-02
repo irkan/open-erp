@@ -33,7 +33,7 @@
                 <div id="filterContent" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionFilter">
                     <div class="card-body">
                         <form:form modelAttribute="filter" id="filter" method="post" action="/sale/sales/filter">
-                            <form:hidden path="organization" />
+                            <form:hidden path="organization.id" />
                             <form:hidden path="service" />
                             <div class="row">
                                 <div class="col-md-11">
@@ -47,9 +47,9 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="customer">Müştəri</form:label>
-                                                <form:input path="customer" cssClass="form-control" placeholder="Müştəri kodu" />
-                                                <form:errors path="customer" cssClass="alert-danger"/>
+                                                <form:label path="customer.id">Müştəri</form:label>
+                                                <form:input path="customer.id" cssClass="form-control" placeholder="Müştəri kodu" />
+                                                <form:errors path="customer.id" cssClass="alert-danger"/>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -303,7 +303,7 @@
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form" method="post" action="/sale/sales" cssClass="form-group" enctype="multipart/form-data">
                     <form:hidden path="id"/>
-                    <form:hidden path="organization"/>
+                    <form:hidden path="organization.id"/>
                     <form:hidden path="active"/>
                     <form:hidden path="service"/>
                     <form:hidden path="returned"/>
@@ -322,8 +322,8 @@
                         </div>
                         <div class="col-md-4 col-6">
                             <div class="form-group">
-                                <form:label path="servicer">Servis əməkdaşı</form:label>
-                                <form:select  path="servicer" cssClass="custom-select form-control">
+                                <form:label path="servicer.id">Servis əməkdaşı</form:label>
+                                <form:select  path="servicer.id" cssClass="custom-select form-control">
                                     <form:option value=""></form:option>
                                     <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
                                         <optgroup label="${itemGroup.key}">
@@ -331,7 +331,7 @@
                                         </optgroup>
                                     </c:forEach>
                                 </form:select>
-                                <form:errors path="servicer" cssClass="control-label alert-danger"/>
+                                <form:errors path="servicer.id" cssClass="control-label alert-danger"/>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -345,16 +345,16 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <form:label path="customer">Müştəri</form:label>
+                                <form:label path="customer.id">Müştəri</form:label>
                                 <div class="row">
                                     <div class="col-9">
                                         <div class="input-group">
                                             <div class="input-group-prepend"><span class="input-group-text"><i class="la la-user"></i></span></div>
-                                            <form:input path="customer" autocomplete="false" class="form-control" placeholder="Müştəri kodu..."/>
+                                            <form:input path="customer.id" autocomplete="false" class="form-control" placeholder="Müştəri kodu..."/>
                                         </div>
                                     </div>
                                     <div class="col-3">
-                                        <a href="javascript:findCustomer($('#form').find('input[name=\'customer\']').val());" data-repeater-delete="" class="btn-sm btn btn-label-success btn-bold">
+                                        <a href="javascript:findCustomer($('#form').find('input[name=\'customer.id\']').val());" data-repeater-delete="" class="btn-sm btn btn-label-success btn-bold">
                                             Axtar
                                         </a>
                                     </div>
@@ -647,7 +647,7 @@ fixedHeader: {
                             if(customer.person.birthday!=null){
                                 tr += '<tr><td>Doğum tarixi</td><td>'+customer.person.birthday+'</td></tr>';
                             }
-                            if(customer.person.birthday!=null){
+                            if(customer.person.idCardSerialNumber!=null){
                                 tr += '<tr><td>Seriya nömrəsi</td><td>'+customer.person.idCardSerialNumber+'</td></tr>';
                             }
                             if(customer.person.idCardPinCode!=null){
@@ -930,11 +930,11 @@ fixedHeader: {
 
     $( "#form" ).validate({
         rules: {
-            servicer: {
+            'servicer.id': {
                 required: true,
                 digits: true
             },
-            customer: {
+            'customer.id': {
                 required: true,
                 digits: true
             },
@@ -1091,10 +1091,6 @@ fixedHeader: {
                         if(oper==="view"){
                             view(form, data, modal, modal_title)
                         } else if(oper==="edit"){
-                            console.log(form);
-                            console.log(data);
-                            console.log(modal);
-                            console.log(modal_title);
                             edit(form, data, modal, modal_title)
                         }
                         getInventories(dataId, $('#data-repeater-list'));

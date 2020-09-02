@@ -42,8 +42,7 @@ public class Organization {
     private Boolean active = true;
 
     @ToString.Exclude
-    @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "organization_id", referencedColumnName = "id")
     private Organization organization;
 

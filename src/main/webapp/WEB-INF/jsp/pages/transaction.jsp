@@ -35,7 +35,7 @@
                 <div id="filterContent" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionFilter">
                     <div class="card-body">
                         <form:form modelAttribute="filter" id="filter" method="post" action="/accounting/transaction/filter">
-                            <form:hidden path="organization" />
+                            <form:hidden path="organization.id" />
                             <div class="row">
                                 <div class="col-md-11">
                                     <div class="row">
@@ -55,7 +55,7 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="action">Xərc</form:label>
+                                                <form:label path="action.id">Xərc</form:label>
                                                 <form:select path="action.id" cssClass="custom-select form-control">
                                                     <form:option value=""></form:option>
                                                     <form:options items="${actions}" itemLabel="name" itemValue="id"/>
@@ -287,12 +287,12 @@
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form" method="post" action="/accounting/transaction" cssClass="form-group">
                     <form:hidden path="id"/>
-                    <form:hidden path="organization" />
-                    <form:hidden path="inventory" />
+                    <form:hidden path="organization.id" />
+                    <form:hidden path="inventory.id" />
                     <form:hidden path="approve" />
                     <div class="form-group">
-                        <form:label path="action">Xərc</form:label>
-                        <form:select path="action" cssClass="custom-select form-control">
+                        <form:label path="action.id">Xərc</form:label>
+                        <form:select path="action.id" cssClass="custom-select form-control">
                             <form:option value=""></form:option>
                             <form:options items="${actions}" itemLabel="name" itemValue="id"/>
                         </form:select>
@@ -355,12 +355,12 @@
                     <div class="row">
                         <div class="col-8">
                             <div class="form-group">
-                                <form:label path="account">Hesab</form:label>
-                                <form:select  path="account" cssClass="custom-select form-control">
+                                <form:label path="account.id">Hesab</form:label>
+                                <form:select  path="account.id" cssClass="custom-select form-control">
                                     <form:option value=""></form:option>
                                     <form:options items="${accounts}" itemLabel="accountNumberWithCurrency" itemValue="id" />
                                 </form:select>
-                                <form:errors path="account" cssClass="alert-danger control-label"/>
+                                <form:errors path="account.id" cssClass="alert-danger control-label"/>
                             </div>
                         </div>
                         <div class="col-4 pt-4">
@@ -485,7 +485,7 @@ fixedHeader: {
 
 $( "#form" ).validate({
     rules: {
-        action: {
+        "action.id": {
             required: true
         },
         amount: {
@@ -510,10 +510,10 @@ $( "#transaction-approve-form" ).validate({
             number: true,
             min: 0.1
         },
-        account: {
+        "account.id": {
             required: true
         },
-        currency: {
+        "currency": {
             required: true
         }
     },

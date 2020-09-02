@@ -108,7 +108,7 @@
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form" method="post" action="/accounting/account" cssClass="form-group">
                     <form:hidden path="id"/>
-                    <form:hidden path="organization"/>
+                    <form:hidden path="organization.id"/>
                     <form:hidden path="active"/>
                     <div class="row">
                         <div class="col-9">

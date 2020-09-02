@@ -107,8 +107,8 @@
             </div>
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form" method="post" action="/sale/tax-configuration" cssClass="form-group">
-                    <form:input path="id" type="hidden"/>
-                    <form:input path="organization" type="hidden"/>
+                    <form:hidden path="id"/>
+                    <form:hidden path="organization.id"/>
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
@@ -201,8 +201,8 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <form:label path="person.contact.city">Şəhər</form:label>
-                                <form:select  path="person.contact.city" cssClass="custom-select form-control">
+                                <form:label path="person.contact.city.id">Şəhər</form:label>
+                                <form:select  path="person.contact.city.id" cssClass="custom-select form-control">
                                     <form:option value=""></form:option>
                                     <form:options items="${cities}" itemLabel="name" itemValue="id" />
                                 </form:select>
@@ -309,7 +309,7 @@ fixedHeader: {
             "person.contact.mobilePhone": {
                 required: true
             },
-            "person.contact.city": {
+            "person.contact.city.id": {
                 required: true
             },
             "person.contact.address": {

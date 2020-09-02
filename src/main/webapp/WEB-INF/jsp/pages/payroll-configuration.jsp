@@ -93,10 +93,10 @@
             </div>
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form" method="post" action="/payroll/payroll-configuration" cssClass="form-group">
-                    <form:input type="hidden" name="id" path="id"/>
+                    <form:hidden path="id"/>
                     <div class="form-group">
-                        <form:label path="type">Tipi</form:label>
-                        <form:select  path="type" cssClass="custom-select form-control">
+                        <form:label path="type.id">Tipi</form:label>
+                        <form:select  path="type.id" cssClass="custom-select form-control">
                             <form:option value=""></form:option>
                             <form:options items="${formula_types}" itemLabel="name" itemValue="id" />
                         </form:select>
@@ -177,7 +177,7 @@ fixedHeader: {
 
     $( "#form" ).validate({
         rules: {
-            type: {
+            "type.id": {
                 required: true
             },
             name: {

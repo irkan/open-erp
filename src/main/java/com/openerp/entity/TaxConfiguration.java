@@ -70,6 +70,7 @@ public class TaxConfiguration {
     @Column(name = "created_date", nullable = false)
     private Date createdDate = new Date();
 
+    @JsonIgnore
     public String getLabel() {
         return voen + " - " + person.getFullName();
     }

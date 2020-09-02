@@ -33,7 +33,7 @@
                 <div id="filterContent" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionFilter">
                     <div class="card-body">
                         <form:form modelAttribute="filter" id="filter" method="post" action="/hr/vacation/filter">
-                            <form:hidden path="organization" />
+                            <form:hidden path="organization.id" />
                             <div class="row">
                                 <div class="col-md-11">
                                     <div class="row">
@@ -46,19 +46,19 @@
                                         </div>
                                         <div class="col-md-1">
                                             <div class="form-group">
-                                                <form:label path="employee">Əməkdaş</form:label>
-                                                <form:input path="employee" cssClass="form-control" placeholder="Əməkdaşın kodu" />
-                                                <form:errors path="employee" cssClass="alert-danger"/>
+                                                <form:label path="employee.id">Əməkdaş</form:label>
+                                                <form:input path="employee.id" cssClass="form-control" placeholder="Əməkdaşın kodu" />
+                                                <form:errors path="employee.id" cssClass="alert-danger"/>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="identifier">Forma</form:label>
+                                                <form:label path="identifier.id">Forma</form:label>
                                                 <form:select  path="identifier.id" cssClass="custom-select form-control">
                                                     <form:option value=""></form:option>
                                                     <form:options items="${identifiers}" itemLabel="name" itemValue="id" />
                                                 </form:select>
-                                                <form:errors path="identifier" cssClass="control-label alert alert-danger" />
+                                                <form:errors path="identifier.id" cssClass="control-label alert alert-danger" />
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -215,21 +215,21 @@
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form" method="post" action="/hr/vacation" cssClass="form-group">
                     <form:hidden path="id"/>
-                    <form:hidden path="organization" />
+                    <form:hidden path="organization.id" />
                     <div class="form-group">
-                        <form:label path="employee">Əməkdaş</form:label>
-                        <form:select  path="employee" cssClass="custom-select form-control">
+                        <form:label path="employee.id">Əməkdaş</form:label>
+                        <form:select  path="employee.id" cssClass="custom-select form-control">
                             <form:option value=""></form:option>
                             <form:options items="${employees}" itemLabel="person.fullName" itemValue="id" />
                         </form:select>
-                        <form:errors path="employee" cssClass="control-label alert alert-danger" />
+                        <form:errors path="employee.id" cssClass="control-label alert alert-danger" />
                     </div>
                     <div class="form-group">
-                        <form:label path="identifier">Məzuniyyətin forması</form:label>
-                        <form:select  path="identifier" cssClass="custom-select form-control">
+                        <form:label path="identifier.id">Məzuniyyətin forması</form:label>
+                        <form:select  path="identifier.id" cssClass="custom-select form-control">
                             <form:options items="${identifiers}" itemLabel="name" itemValue="id" />
                         </form:select>
-                        <form:errors path="identifier" cssClass="control-label alert alert-danger" />
+                        <form:errors path="identifier.id" cssClass="control-label alert alert-danger" />
                     </div>
                     <div class="form-group">
                         <form:label path="dateRange">Başlama - Bitmə tarixi</form:label>
@@ -314,10 +314,10 @@
 
     $( "#form" ).validate({
         rules: {
-            employee: {
+            "employee.id": {
                 required: true
             },
-            identifier: {
+            "identifier.id": {
                 required: true
             },
             dateRange: {

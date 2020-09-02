@@ -74,15 +74,15 @@ public class Employee {
     private Boolean active = true;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
     private List<EmployeePayrollDetail> employeePayrollDetails;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
     private List<EmployeeSaleDetail> employeeSaleDetails;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
     private List<EmployeeRestDay> employeeRestDays;
 
     @ToString.Exclude

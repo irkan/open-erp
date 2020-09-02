@@ -113,7 +113,7 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="action">Hərəkət</form:label>
+                                                <form:label path="action.id">Hərəkət</form:label>
                                                 <form:select  path="action.id" cssClass="custom-select form-control">
                                                     <form:option value=""></form:option>
                                                     <form:options items="${actions}" itemLabel="name" itemValue="id" />
@@ -313,10 +313,10 @@
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form" method="post" action="/warehouse/action" cssClass="form-group">
                     <form:hidden path="id"/>
-                    <form:hidden path="organization"/>
-                    <form:hidden path="action"/>
+                    <form:hidden path="organization.id"/>
+                    <form:hidden path="action.id"/>
                     <form:hidden path="active"/>
-                    <form:hidden path="inventory"/>
+                    <form:hidden path="inventory.id"/>
                     <div class="form-group text-center">
                         <form:label path="action" cssStyle="letter-spacing: 6px;" cssClass="card-title"><c:out value="${form.action.name}"/></form:label>
                     </div>
@@ -331,8 +331,8 @@
                         </div>
                     </c:if>
                     <div class="form-group">
-                        <form:label path="supplier">Tədarükçü</form:label>
-                        <form:select  path="supplier" cssClass="custom-select form-control">
+                        <form:label path="supplier.id">Tədarükçü</form:label>
+                        <form:select  path="supplier.id" cssClass="custom-select form-control">
                             <form:option value=""></form:option>
                             <form:options items="${suppliers}" itemLabel="name" itemValue="id" />
                         </form:select>
@@ -390,21 +390,21 @@
             <div class="modal-body">
                 <form:form modelAttribute="form" id="transfer-form" method="post" action="/warehouse/action/transfer" cssClass="form-group">
                     <input type="hidden" name="id"/>
-                    <input type="hidden" name="inventory"/>
-                    <input type="hidden" name="action"/>
-                    <input type="hidden" name="supplier"/>
-                    <input type="hidden" name="fromOrganization"/>
+                    <input type="hidden" name="inventory.id"/>
+                    <input type="hidden" name="action.id"/>
+                    <input type="hidden" name="supplier.id"/>
+                    <input type="hidden" name="fromOrganization.id"/>
                     <div class="form-group">
                         <label for="from">Haradan?</label>
                         <input name="from" id="from" class="form-control" readonly/>
                     </div>
                     <div class="form-group">
-                        <form:label path="organization">Haraya?</form:label>
-                        <form:select  path="organization" cssClass="custom-select form-control">
+                        <form:label path="organization.id">Haraya?</form:label>
+                        <form:select  path="organization.id" cssClass="custom-select form-control">
                             <form:option value=""></form:option>
                             <form:options items="${organizations}" itemLabel="name" itemValue="id" />
                         </form:select>
-                        <form:errors path="organization" cssClass="alert-danger"/>
+                        <form:errors path="organization.id" cssClass="alert-danger"/>
                     </div>
                     <div class="form-group">
                         <form:label path="amount">Say</form:label>
@@ -436,7 +436,7 @@
             <div class="modal-body">
                 <form:form modelAttribute="form" id="transfer-approve-form" method="post" action="/warehouse/action/approve" cssClass="form-group">
                     <form:hidden path="id"/>
-                    <form:hidden path="inventory"/>
+                    <form:hidden path="inventory.id"/>
                     <div class="row">
                         <div class="col-sm-12 text-center">
                             <label id="inventory_name" style="font-size: 16px; font-weight: bold;"></label>
@@ -526,8 +526,8 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <form:label path="employee">Əməkdaş</form:label>
-                        <form:select  path="employee" cssClass="custom-select form-control">
+                        <form:label path="employee.id">Əməkdaş</form:label>
+                        <form:select  path="employee.id" cssClass="custom-select form-control">
                             <form:option value=""></form:option>
                             <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
                                 <optgroup label="${itemGroup.key}">
@@ -535,7 +535,7 @@
                                 </optgroup>
                             </c:forEach>
                         </form:select>
-                        <form:errors path="employee" cssClass="alert-danger"/>
+                        <form:errors path="employee.id" cssClass="alert-danger"/>
                     </div>
                     <div class="form-group">
                         <form:label path="amount">Say</form:label>
@@ -665,12 +665,12 @@
             var obj = jQuery.parseJSON(data);
             console.log(obj);
             $(form).find("input[name='from']").val(obj["organization"]["name"]);
-            $(form).find("input[name='fromOrganization']").val(obj["organization"]["id"]);
+            $(form).find("input[name='fromOrganization.id']").val(obj["organization"]["id"]);
             $(form).find("input[name='id']").val(obj["id"]);
-            $(form).find("input[name='inventory']").val(obj["inventory"]["id"]);
-            $(form).find("input[name='action']").val(obj["action"]["id"]);
+            $(form).find("input[name='inventory.id']").val(obj["inventory"]["id"]);
+            $(form).find("input[name='action.id']").val(obj["action"]["id"]);
             if(obj["supplier"]!==null){
-                $(form).find("input[name='supplier']").val(obj["supplier"]["id"]);
+                $(form).find("input[name='supplier.id']").val(obj["supplier"]["id"]);
             }
             $('#' + modal).modal('toggle');
         } catch (e) {
@@ -699,7 +699,7 @@
 
     function approve(form, modal, id, inventory_id, inventory_name, barcode_label, warehouse_label, action_label, supplier_label, amount_label){
         $(form).find("#id").val(id);
-        $(form).find("#inventory").val(inventory_id);
+        $(form).find("#inventory.id").val(inventory_id);
         $(form).find("#inventory_name").text(inventory_name);
         $(form).find("#barcode_label").text(barcode_label);
         $(form).find("#warehouse_label").text(warehouse_label);
@@ -772,7 +772,7 @@
 
     $( "#form-consolidate" ).validate({
         rules: {
-            employee: {
+            "employee.id": {
                 required: true
             },
             amount: {
@@ -789,7 +789,7 @@
 
     $( "#transfer-form" ).validate({
         rules: {
-            organization: {
+            "organization.id": {
                 required: true
             },
             amount: {
@@ -806,10 +806,10 @@
 
     $( "#form" ).validate({
         rules: {
-            organization: {
+            "organization.id": {
                 required: true
             },
-            supplier: {
+            "supplier.id": {
                 required: true
             },
             amount: {
@@ -833,7 +833,7 @@
             id: {
                 required: true
             },
-            inventory: {
+            "inventory.id": {
                 required: true
             },
             amount: {

@@ -34,7 +34,7 @@
                 <div id="filterContent" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionFilter">
                     <div class="card-body">
                         <form:form modelAttribute="filter" id="filter" method="post" action="/sale/sales/filter">
-                            <form:hidden path="organization" />
+                            <form:hidden path="organization.id" />
                             <form:hidden path="service" />
                             <div class="row">
                                 <div class="col-md-11">
@@ -50,9 +50,9 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <form:label path="customer">Müştəri</form:label>
-                                                        <form:input path="customer" cssClass="form-control" placeholder="Müştəri kodu" />
-                                                        <form:errors path="customer" cssClass="alert-danger"/>
+                                                        <form:label path="customer.id">Müştəri</form:label>
+                                                        <form:input path="customer.id" cssClass="form-control" placeholder="Müştəri kodu" />
+                                                        <form:errors path="customer.id" cssClass="alert-danger"/>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
@@ -141,32 +141,32 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="taxConfiguration">VÖEN</form:label>
+                                                <form:label path="taxConfiguration.id">VÖEN</form:label>
                                                 <form:select  path="taxConfiguration.id" cssClass="custom-select form-control">
                                                     <form:option value=""></form:option>
                                                     <form:options items="${tax_configurations}" itemLabel="label" itemValue="id" />
                                                 </form:select>
-                                                <form:errors path="taxConfiguration" cssClass="control-label alert-danger"/>
+                                                <form:errors path="taxConfiguration.id" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="payment.period">Ödəniş edilsin</form:label>
+                                                <form:label path="payment.period.id">Ödəniş edilsin</form:label>
                                                 <form:select  path="payment.period.id" cssClass="custom-select form-control">
                                                     <form:option value=""></form:option>
                                                     <form:options items="${payment_periods}" itemLabel="name" itemValue="id" />
                                                 </form:select>
-                                                <form:errors path="payment.period" cssClass="control-label alert-danger"/>
+                                                <form:errors path="payment.period.id" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="payment.schedule">Ödəniş qrafiki</form:label>
+                                                <form:label path="payment.schedule.id">Ödəniş qrafiki</form:label>
                                                 <form:select  path="payment.schedule.id" cssClass="custom-select form-control">
                                                     <form:option value=""></form:option>
                                                     <form:options items="${payment_schedules}" itemLabel="name" itemValue="id" />
                                                 </form:select>
-                                                <form:errors path="payment.schedule" cssClass="control-label alert-danger"/>
+                                                <form:errors path="payment.schedule.id" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -185,7 +185,7 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="canavasser">Canavasser</form:label>
+                                                <form:label path="canavasser.id">Canavasser</form:label>
                                                 <form:select  path="canavasser.id" cssClass="custom-select form-control" multiple="single">
                                                     <form:option value=""></form:option>
                                                     <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
@@ -194,12 +194,12 @@
                                                         </optgroup>
                                                     </c:forEach>
                                                 </form:select>
-                                                <form:errors path="canavasser" cssClass="control-label alert-danger"/>
+                                                <form:errors path="canavasser.id" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="dealer">Diller</form:label>
+                                                <form:label path="dealer.id">Diller</form:label>
                                                 <form:select  path="dealer.id" cssClass="custom-select form-control" multiple="single">
                                                     <form:option value=""></form:option>
                                                     <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
@@ -208,12 +208,12 @@
                                                         </optgroup>
                                                     </c:forEach>
                                                 </form:select>
-                                                <form:errors path="dealer" cssClass="control-label alert-danger"/>
+                                                <form:errors path="dealer.id" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="console">Konsul</form:label>
+                                                <form:label path="console.id">Konsul</form:label>
                                                 <form:select  path="console.id" cssClass="custom-select form-control">
                                                     <form:option value=""></form:option>
                                                     <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
@@ -222,12 +222,12 @@
                                                         </optgroup>
                                                     </c:forEach>
                                                 </form:select>
-                                                <form:errors path="console" cssClass="control-label alert-danger"/>
+                                                <form:errors path="console.id" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="vanLeader">Van lider</form:label>
+                                                <form:label path="vanLeader.id">Van lider</form:label>
                                                 <form:select  path="vanLeader.id" cssClass="custom-select form-control" multiple="single">
                                                     <form:option value=""></form:option>
                                                     <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
@@ -236,7 +236,7 @@
                                                         </optgroup>
                                                     </c:forEach>
                                                 </form:select>
-                                                <form:errors path="vanLeader" cssClass="control-label alert-danger"/>
+                                                <form:errors path="vanLeader.id" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -528,7 +528,7 @@
 </div>
 
 <div class="modal fade" id="modal-operation" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"></h5>
@@ -539,12 +539,6 @@
             <div class="modal-body" style="padding: 0;">
 
             </div>
-            <%--<div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="submit($('#form'));">Yadda saxla</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
-            </div>--%>
-
-
             <div class="kt-grid  kt-wizard-v1 kt-wizard-v1--white" id="kt_wizard_v1" data-ktwizard-state="step-first">
                 <div class="kt-grid__item">
 
@@ -603,7 +597,7 @@
                     <form:hidden path="service"/>
                     <form:hidden path="returned"/>
                     <form:hidden path="saled"/>
-                    <form:hidden path="organization"/>
+                    <form:hidden path="organization.id"/>
                     <input type="hidden" name="customer.organization" value="<c:out value="${sessionScope.organization.id}"/>"/>
                     <div class="kt-wizard-v1__content" data-ktwizard-type="step-content" data-ktwizard-state="current">
                         <div class="kt-form__section kt-form__section--first">
@@ -746,20 +740,20 @@
                                                 <div class="row">
                                                     <div class="col-sm-4">
                                                         <div class="form-group">
-                                                            <form:label path="payment.schedule">Ödəniş qrafiki</form:label>
-                                                            <form:select  path="payment.schedule" cssClass="custom-select form-control">
+                                                            <form:label path="payment.schedule.id">Ödəniş qrafiki</form:label>
+                                                            <form:select  path="payment.schedule.id" cssClass="custom-select form-control">
                                                                 <form:options items="${payment_schedules}" itemLabel="name" itemValue="id" />
                                                             </form:select>
-                                                            <form:errors path="payment.schedule" cssClass="control-label alert-danger"/>
+                                                            <form:errors path="payment.schedule.id" cssClass="control-label alert-danger"/>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-4">
                                                         <div class="form-group">
-                                                            <form:label path="payment.period">Ödəniş edilsin</form:label>
-                                                            <form:select  path="payment.period" cssClass="custom-select form-control">
+                                                            <form:label path="payment.period.id">Ödəniş edilsin</form:label>
+                                                            <form:select  path="payment.period.id" cssClass="custom-select form-control">
                                                                 <form:options items="${payment_periods}" itemLabel="name" itemValue="id" />
                                                             </form:select>
-                                                            <form:errors path="payment.period" cssClass="control-label alert-danger"/>
+                                                            <form:errors path="payment.period.id" cssClass="control-label alert-danger"/>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-4">
@@ -817,14 +811,14 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <form:label path="customer">Müştəri kodu</form:label>
+                                                <form:label path="customer.id">Müştəri kodu</form:label>
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text" style="background-color: white; border-right: none;"><i class="la la-search"></i></span>
                                                     </div>
-                                                    <form:input path="customer" autocomplete="false" class="form-control" placeholder="Müştəri kodunu daxil edin..." style="border-left: none;" />
+                                                    <form:input path="customer.id" autocomplete="false" class="form-control" placeholder="Müştəri kodunu daxil edin..." style="border-left: none;" />
                                                     <div class="input-group-append">
-                                                        <button class="btn btn-primary" type="button" onclick="findCustomer($('#form'), $('#form').find('input[name=\'customer\']'))">Müştərini axtar</button>
+                                                        <button class="btn btn-primary" type="button" onclick="findCustomer($('#form'), $('#form').find('input[name=\'customer.id\']'))">Müştərini axtar</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1005,8 +999,8 @@
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <form:label path="customer.person.contact.city">Şəhər</form:label>
-                                                <form:select  path="customer.person.contact.city" cssClass="custom-select form-control">
+                                                <form:label path="customer.person.contact.city.id">Şəhər</form:label>
+                                                <form:select  path="customer.person.contact.city.id" onchange="selectLivingCity($('#form'), $(this))" cssClass="custom-select form-control">
                                                     <form:option value=""></form:option>
                                                     <form:options items="${cities}" itemLabel="name" itemValue="id" />
                                                 </form:select>
@@ -1026,8 +1020,8 @@
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <form:label path="customer.person.contact.livingCity">Yaşadığı şəhər</form:label>
-                                                <form:select  path="customer.person.contact.livingCity" cssClass="custom-select form-control">
+                                                <form:label path="customer.person.contact.livingCity.id">Yaşadığı şəhər</form:label>
+                                                <form:select  path="customer.person.contact.livingCity.id" cssClass="custom-select form-control">
                                                     <form:option value=""></form:option>
                                                     <form:options items="${cities}" itemLabel="name" itemValue="id" />
                                                 </form:select>
@@ -1053,8 +1047,8 @@
                                     <div class="row">
                                         <div class="col-md-5 offset-md-1">
                                             <div class="form-group">
-                                                <form:label path="console">Konsul</form:label>
-                                                <form:select  path="console" cssClass="custom-select form-control">
+                                                <form:label path="console.id">Konsul</form:label>
+                                                <form:select  path="console.id" cssClass="custom-select form-control">
                                                     <form:option value=""></form:option>
                                                     <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
                                                         <optgroup label="${itemGroup.key}">
@@ -1062,13 +1056,13 @@
                                                         </optgroup>
                                                     </c:forEach>
                                                 </form:select>
-                                                <form:errors path="console" cssClass="control-label alert-danger"/>
+                                                <form:errors path="console.id" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
                                         <div class="col-md-5">
                                             <div class="form-group">
-                                                <form:label path="vanLeader">Van lider</form:label>
-                                                <form:select  path="vanLeader" cssClass="custom-select form-control" multiple="single">
+                                                <form:label path="vanLeader.id">Van lider</form:label>
+                                                <form:select  path="vanLeader.id" cssClass="custom-select form-control" multiple="single">
                                                     <form:option value=""></form:option>
                                                     <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
                                                         <optgroup label="${itemGroup.key}">
@@ -1076,7 +1070,7 @@
                                                         </optgroup>
                                                     </c:forEach>
                                                 </form:select>
-                                                <form:errors path="vanLeader" cssClass="control-label alert-danger"/>
+                                                <form:errors path="vanLeader.id" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
                                     </div>
@@ -1084,8 +1078,8 @@
                                     <div class="row">
                                         <div class="col-md-5 offset-md-1">
                                             <div class="form-group">
-                                                <form:label path="dealer">Diller</form:label>
-                                                <form:select  path="dealer" cssClass="custom-select form-control" multiple="single">
+                                                <form:label path="dealer.id">Diller</form:label>
+                                                <form:select  path="dealer.id" cssClass="custom-select form-control" multiple="single">
                                                     <form:option value=""></form:option>
                                                     <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
                                                         <optgroup label="${itemGroup.key}">
@@ -1093,13 +1087,13 @@
                                                         </optgroup>
                                                     </c:forEach>
                                                 </form:select>
-                                                <form:errors path="dealer" cssClass="control-label alert-danger"/>
+                                                <form:errors path="dealer.id" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
                                         <div class="col-md-5">
                                             <div class="form-group">
-                                                <form:label path="canavasser">Canavasser</form:label>
-                                                <form:select  path="canavasser" cssClass="custom-select form-control" multiple="single">
+                                                <form:label path="canavasser.id">Canavasser</form:label>
+                                                <form:select  path="canavasser.id" cssClass="custom-select form-control" multiple="single">
                                                     <form:option value=""></form:option>
                                                     <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
                                                         <optgroup label="${itemGroup.key}">
@@ -1107,7 +1101,7 @@
                                                         </optgroup>
                                                     </c:forEach>
                                                 </form:select>
-                                                <form:errors path="canavasser" cssClass="control-label alert-danger"/>
+                                                <form:errors path="canavasser.id" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
                                     </div>
@@ -1313,20 +1307,20 @@
                                         <div class="row">
                                             <div class="col-sm-2">
                                                 <div class="form-group">
-                                                    <form:label path="payment.schedule">Ödəniş qrafiki</form:label>
-                                                    <form:select  path="payment.schedule" cssClass="custom-select form-control">
+                                                    <form:label path="payment.schedule.id">Ödəniş qrafiki</form:label>
+                                                    <form:select  path="payment.schedule.id" cssClass="custom-select form-control">
                                                         <form:options items="${payment_schedules}" itemLabel="name" itemValue="id" />
                                                     </form:select>
-                                                    <form:errors path="payment.schedule" cssClass="control-label alert-danger"/>
+                                                    <form:errors path="payment.schedule.id" cssClass="control-label alert-danger"/>
                                                 </div>
                                             </div>
                                             <div class="col-sm-2">
                                                 <div class="form-group">
-                                                    <form:label path="payment.period">Ödəniş edilsin</form:label>
-                                                    <form:select  path="payment.period" cssClass="custom-select form-control">
+                                                    <form:label path="payment.period.id">Ödəniş edilsin</form:label>
+                                                    <form:select  path="payment.period.id" cssClass="custom-select form-control">
                                                         <form:options items="${payment_periods}" itemLabel="name" itemValue="id" />
                                                     </form:select>
-                                                    <form:errors path="payment.period" cssClass="control-label alert-danger"/>
+                                                    <form:errors path="payment.period.id" cssClass="control-label alert-danger"/>
                                                 </div>
                                             </div>
                                             <div class="col-sm-2">
@@ -1401,8 +1395,8 @@
                 <form:form modelAttribute="form" id="sales-employee-form" method="post" action="/sale/sales/employee" cssClass="form-group">
                     <form:hidden path="id"/>
                     <div class="form-group">
-                        <form:label path="console">Konsul</form:label>
-                        <form:select  path="console" cssClass="custom-select form-control">
+                        <form:label path="console.id">Konsul</form:label>
+                        <form:select  path="console.id" cssClass="custom-select form-control">
                             <form:option value=""></form:option>
                             <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
                                 <optgroup label="${itemGroup.key}">
@@ -1410,11 +1404,11 @@
                                 </optgroup>
                             </c:forEach>
                         </form:select>
-                        <form:errors path="console" cssClass="control-label alert-danger"/>
+                        <form:errors path="console.id" cssClass="control-label alert-danger"/>
                     </div>
                     <div class="form-group">
-                        <form:label path="vanLeader">Van lider</form:label>
-                        <form:select  path="vanLeader" cssClass="custom-select form-control" multiple="single">
+                        <form:label path="vanLeader.id">Van lider</form:label>
+                        <form:select  path="vanLeader.id" cssClass="custom-select form-control" multiple="single">
                             <form:option value=""></form:option>
                             <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
                                 <optgroup label="${itemGroup.key}">
@@ -1422,11 +1416,11 @@
                                 </optgroup>
                             </c:forEach>
                         </form:select>
-                        <form:errors path="vanLeader" cssClass="control-label alert-danger"/>
+                        <form:errors path="vanLeader.id" cssClass="control-label alert-danger"/>
                     </div>
                     <div class="form-group">
-                        <form:label path="dealer">Diller</form:label>
-                        <form:select  path="dealer" cssClass="custom-select form-control" multiple="single">
+                        <form:label path="dealer.id">Diller</form:label>
+                        <form:select  path="dealer.id" cssClass="custom-select form-control" multiple="single">
                             <form:option value=""></form:option>
                             <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
                                 <optgroup label="${itemGroup.key}">
@@ -1434,11 +1428,11 @@
                                 </optgroup>
                             </c:forEach>
                         </form:select>
-                        <form:errors path="dealer" cssClass="control-label alert-danger"/>
+                        <form:errors path="dealer.id" cssClass="control-label alert-danger"/>
                     </div>
                     <div class="form-group">
-                        <form:label path="canavasser">Canavasser</form:label>
-                        <form:select  path="canavasser" cssClass="custom-select form-control" multiple="single">
+                        <form:label path="canavasser.id">Canavasser</form:label>
+                        <form:select  path="canavasser.id" cssClass="custom-select form-control" multiple="single">
                             <form:option value=""></form:option>
                             <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
                                 <optgroup label="${itemGroup.key}">
@@ -1446,7 +1440,7 @@
                                 </optgroup>
                             </c:forEach>
                         </form:select>
-                        <form:errors path="canavasser" cssClass="control-label alert-danger"/>
+                        <form:errors path="canavasser.id" cssClass="control-label alert-danger"/>
                     </div>
                 </form:form>
             </div>
@@ -1471,12 +1465,12 @@
                 <form:form modelAttribute="form" id="tax-configuration-form" method="post" action="/sale/sales/tax-configuration" cssClass="form-group">
                     <form:hidden path="id"/>
                     <div class="form-group">
-                        <form:label path="taxConfiguration">VÖEN</form:label>
-                        <form:select path="taxConfiguration" cssClass="form-control">
+                        <form:label path="taxConfiguration.id">VÖEN</form:label>
+                        <form:select path="taxConfiguration.id" cssClass="form-control">
                             <form:option value=""/>
                             <form:options items="${tax_configurations}" itemValue="id" itemLabel="label"/>
                         </form:select>
-                        <form:errors path="taxConfiguration" cssClass="alert-danger control-label"/>
+                        <form:errors path="taxConfiguration.id" cssClass="alert-danger control-label"/>
                     </div>
                 </form:form>
             </div>
@@ -1605,7 +1599,7 @@
             onOpen: function() {
                 swal.showLoading();
                 $.ajax({
-                    url: '/sale/payment/schedule/' + $(form).find("input[name='payment.lastPrice']").val() + '/' + $(form).find("input[name='payment.down']").val() + '/' + $(form).find("select[name='payment.schedule']").val() + '/' + $(form).find("select[name='payment.period']").val() + '/' + $(form).find("input[name='payment.gracePeriod']").val() + '/' + $(form).find("input[name='saleDate']").val(),
+                    url: '/sale/payment/schedule/' + $(form).find("input[name='payment.lastPrice']").val() + '/' + $(form).find("input[name='payment.down']").val() + '/' + $(form).find("select[name='payment.schedule.id']").val() + '/' + $(form).find("select[name='payment.period.id']").val() + '/' + $(form).find("input[name='payment.gracePeriod']").val() + '/' + $(form).find("input[name='saleDate']").val(),
                     type: 'GET',
                     dataType: 'json',
                     beforeSend: function() {
@@ -1788,7 +1782,7 @@
             validator = formEl.validate({
                 ignore: ":hidden",
                 rules: {
-                    customer: {
+                    'customer.id': {
                         required: false,
                         digits: true
                     },
@@ -1809,7 +1803,10 @@
                     'saleDate': {
                         required: true,
                     },
-                    'customer.person.contact.city': {
+                    'customer.person.contact.city.id': {
+                        required: true
+                    },
+                    'customer.person.contact.livingCity.id': {
                         required: true
                     },
                     'customer.person.contact.address': {
@@ -1855,16 +1852,16 @@
                         number: true,
                         min: 0
                     },
-                    console: {
+                    'console.id': {
                         required: true
                     },
-                    vanLeader: {
+                    'vanLeader.id': {
                         required: true
                     },
-                    dealer: {
+                    'dealer.id': {
                         required: true
                     },
-                    canavasser: {
+                    'canavasser.id': {
                         required: true
                     },
                 },
@@ -1954,11 +1951,11 @@
                             $(form).find("input[name='customer.person.contact.relationalPhoneNumber2']").val(customer.person.contact.relationalPhoneNumber2);
                             $(form).find("input[name='customer.person.contact.relationalPhoneNumber3']").val(customer.person.contact.relationalPhoneNumber3);
                             if(customer.person.contact.city!=null){
-                                $(form).find("select[name='customer.person.contact.city'] option[value="+customer.person.contact.city.id+"]").attr("selected", "selected");
+                                $(form).find("select[name='customer.person.contact.city.id'] option[value="+customer.person.contact.city.id+"]").attr("selected", "selected");
                             }
                             $(form).find("input[name='customer.person.contact.address']").val(customer.person.contact.address);
                             if(customer.person.contact.livingCity!=null){
-                                $(form).find("select[name='customer.person.contact.livingCity'] option[value="+customer.person.contact.livingCity.id+"]").attr("selected", "selected");
+                                $(form).find("select[name='customer.person.contact.livingCity.id'] option[value="+customer.person.contact.livingCity.id+"]").attr("selected", "selected");
                             }
                             $(form).find("input[name='customer.person.contact.livingAddress']").val(customer.person.contact.livingAddress);
                             swal.close();
@@ -2541,7 +2538,7 @@
 
     function setTaxConfiguration(form, id, taxConfigurationId, modal, title) {
         $(form).find("input[name='id']").val(id);
-        $(form).find("select[name='taxConfiguration'] option[value="+taxConfigurationId+"]").attr("selected", "selected");
+        $(form).find("select[name='taxConfiguration.id'] option[value="+taxConfigurationId+"]").attr("selected", "selected");
         $('#' + modal).find(".modal-title").html(title);
         $('#' + modal).modal('toggle');
     }
@@ -2627,7 +2624,7 @@
                 required: true,
                 number: true
             },
-            guarantee: {
+            'guarantee.attr1': {
                 required: true
             },
             saleDate: {
@@ -2650,7 +2647,7 @@
 
     $( "#sales-employee-form" ).validate({
         rules: {
-            vanLeader: {
+            'vanLeader.id': {
                 required: true
             }
         },
@@ -2681,4 +2678,8 @@
             swal.close();
         },
     });
+
+    function selectLivingCity(form, element){
+        $(form).find("select[name='customer.person.contact.livingCity.id'] option[value="+$(element).val()+"]").attr("selected", "selected");
+    }
 </script>

@@ -33,7 +33,7 @@
                 <div id="filterContent" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionFilter">
                     <div class="card-body">
                         <form:form modelAttribute="filter" id="filter" method="post" action="/warehouse/inventory/filter">
-                            <form:hidden path="organization"/>
+                            <form:hidden path="organization.id"/>
                             <form:hidden path="active"/>
                             <div class="row">
                                 <div class="col-md-11">
@@ -47,7 +47,7 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="group">Qrup</form:label>
+                                                <form:label path="group.id">Qrup</form:label>
                                                 <form:select  path="group.id" cssClass="custom-select form-control">
                                                     <form:option value=""></form:option>
                                                     <form:options items="${inventory_groups}" itemLabel="name" itemValue="id" />
@@ -231,13 +231,13 @@
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form" method="post" action="/warehouse/inventory" cssClass="form-group">
                     <form:hidden path="id"/>
-                    <form:hidden path="organization"/>
+                    <form:hidden path="organization.id"/>
                     <form:hidden path="active"/>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <form:label path="group">Qrup</form:label>
-                                <form:select  path="group" cssClass="custom-select form-control">
+                                <form:label path="group.id">Qrup</form:label>
+                                <form:select  path="group.id" cssClass="custom-select form-control">
                                     <form:option value=""></form:option>
                                     <form:options items="${inventory_groups}" itemLabel="name" itemValue="id" />
                                 </form:select>
@@ -245,8 +245,8 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <form:label path="actions[0].supplier">Tədarükçü</form:label>
-                                <form:select  path="actions[0].supplier" cssClass="custom-select form-control">
+                                <form:label path="actions[0].supplier.id">Tədarükçü</form:label>
+                                <form:select  path="actions[0].supplier.id" cssClass="custom-select form-control">
                                     <form:option value=""></form:option>
                                     <form:options items="${suppliers}" itemLabel="name" itemValue="id" />
                                 </form:select>
@@ -413,7 +413,7 @@
 
     $( "#form" ).validate({
         rules: {
-            group: {
+            "group.id": {
                 required: true
             },
             "actions[0].amount": {
@@ -424,7 +424,7 @@
             name: {
                 required: true
             },
-            "actions[0].supplier": {
+            "actions[0].supplier.id": {
                 required: true
             }
         },

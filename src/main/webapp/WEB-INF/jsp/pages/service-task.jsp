@@ -33,7 +33,7 @@
                 <div id="filterContent" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionFilter">
                     <div class="card-body">
                         <form:form modelAttribute="filter" id="filter" method="post" action="/collect/service-task/filter">
-                            <form:hidden path="organization" />
+                            <form:hidden path="organization.id" />
                             <div class="row">
                                 <div class="col-md-11">
                                     <div class="row">
@@ -46,9 +46,9 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="sales">Satış</form:label>
-                                                <form:input path="sales" cssClass="form-control" placeholder="Satış kodu" />
-                                                <form:errors path="sales" cssClass="alert-danger"/>
+                                                <form:label path="sales.id">Satış</form:label>
+                                                <form:input path="sales.id" cssClass="form-control" placeholder="Satış kodu" />
+                                                <form:errors path="sales.id" cssClass="alert-danger"/>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -246,8 +246,8 @@
             <div class="modal-body">
                 <form:form modelAttribute="form" id="transfer-form" method="post" action="/collect/service-task/transfer" cssClass="form-group">
                     <form:hidden path="id"/>
-                    <form:hidden path="sales"/>
-                    <form:hidden path="organization"/>
+                    <form:hidden path="sales.id"/>
+                    <form:hidden path="organization.id"/>
                     <div class="alert alert-info alert-elevate" role="alert">
                         <div class="alert-icon"><i class="flaticon-warning kt-font-brand kt-font-light"></i></div>
                         <div class="alert-text">

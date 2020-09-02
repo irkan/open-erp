@@ -75,9 +75,10 @@ public class DeleteController extends SkeletonController {
                 log(moduleOperation, "module_operation", "delete", moduleOperation.getId(), moduleOperation.toString());
             }
         } else if(path.equalsIgnoreCase(Constants.ROUTE.MODULE_OPERATION)){
-            Module module = moduleRepository.getModuleById(Integer.parseInt(id));
-            log(module, "module_operation", "delete", module.getId(), module.toString());
-            moduleRepository.delete(module);
+            ModuleOperation moduleOperation = moduleOperationRepository.getModuleOperationById(Integer.parseInt(id));
+            moduleOperation.setActive(false);
+            moduleOperationRepository.save(moduleOperation);
+            log(moduleOperation, "module_operation", "delete", moduleOperation.getId(), moduleOperation.toString());
         } else if(path.equalsIgnoreCase(Constants.ROUTE.USER_MODULE_OPERATION)){
             User userObject = userRepository.getUserByActiveTrueAndId(Integer.parseInt(id));
             userRepository.save(userObject);
@@ -98,7 +99,7 @@ public class DeleteController extends SkeletonController {
                 log(employee, "employee", "delete", employee.getId(), employee.toString());
             }
         } else if(path.equalsIgnoreCase(Constants.ROUTE.ORGANIZATION)){
-            Organization organization = organizationRepository.getOrganizationByIdAndActiveTrue(Integer.parseInt(id));
+            Organization organization = organizationRepository.getOrganizationById(Integer.parseInt(id));
             organization.setActive(false);
             organizationRepository.save(organization);
             log(organization, "organization", "delete", organization.getId(), organization.toString());

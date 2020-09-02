@@ -144,9 +144,11 @@ public class WarehouseController extends SkeletonController {
             action.setOrganization(inventory.getOrganization());
             actionRepository.save(action);
             log(action, "action", "create/edit", action.getId(), action.toString());
-            String description = action.getAction().getName()+", "+action.getSupplier().getName()+" -> "+action.getOrganization().getName()+", "+inventory.getName()+", Say: " + action.getAmount() + " ədəd";
+            Supplier supplier = supplierRepository.getSuppliersById(action.getSupplier().getId());
+            Organization organization = organizationRepository.getOrganizationById(action.getOrganization().getId());
+            String description = action.getAction().getName()+", "+supplier.getName()+" -> "+organization.getName()+", "+inventory.getName()+", Say: " + action.getAmount() + " ədəd";
             Transaction transaction = new Transaction(getSessionOrganization(), inventory, action.getAction(), description, false, null);
-            transaction.setAmount(inventory.getActions().get(0).getAmount());
+            transaction.setAmount(action.getAmount());
             transactionRepository.save(transaction);
             log(transaction, "transaction", "create/edit", transaction.getId(), transaction.toString());
         }

@@ -34,7 +34,7 @@
                 <div id="filterContent" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionFilter">
                     <div class="card-body">
                         <form:form modelAttribute="filter" id="filter" method="post" action="/collect/payment-latency/filter">
-                            <form:hidden path="organization" />
+                            <form:hidden path="organization.id" />
                             <form:hidden path="service" />
                             <div class="row">
                                 <div class="col-md-11">
@@ -50,9 +50,9 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <form:label path="customer">Müştəri</form:label>
-                                                        <form:input path="customer" cssClass="form-control" placeholder="Müştəri kodu" />
-                                                        <form:errors path="customer" cssClass="alert-danger"/>
+                                                        <form:label path="customer.id">Müştəri</form:label>
+                                                        <form:input path="customer.id" cssClass="form-control" placeholder="Müştəri kodu" />
+                                                        <form:errors path="customer.id" cssClass="alert-danger"/>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
@@ -107,22 +107,22 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <form:label path="payment.period">Ödəniş günü</form:label>
+                                                        <form:label path="payment.period.id">Ödəniş günü</form:label>
                                                         <form:select  path="payment.period.id" cssClass="custom-select form-control">
                                                             <form:option value=""></form:option>
                                                             <form:options items="${payment_periods}" itemLabel="name" itemValue="id" />
                                                         </form:select>
-                                                        <form:errors path="payment.period" cssClass="control-label alert-danger"/>
+                                                        <form:errors path="payment.period.id" cssClass="control-label alert-danger"/>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <form:label path="payment.schedule">Ödəniş qrafiki</form:label>
+                                                        <form:label path="payment.schedule.id">Ödəniş qrafiki</form:label>
                                                         <form:select  path="payment.schedule.id" cssClass="custom-select form-control">
                                                             <form:option value=""></form:option>
                                                             <form:options items="${payment_schedules}" itemLabel="name" itemValue="id" />
                                                         </form:select>
-                                                        <form:errors path="payment.schedule" cssClass="control-label alert-danger"/>
+                                                        <form:errors path="payment.schedule.id" cssClass="control-label alert-danger"/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -403,8 +403,12 @@
                 <form:form modelAttribute="form" id="transfer-form" method="post" action="/collect/${page}/transfer" cssClass="form-group">
                     <form:hidden path="id"/>
                     <form:hidden path="active"/>
-                    <form:hidden path="organization"/>
-                    <form:hidden path="sales"/>
+                    <form:hidden path="organization.id"/>
+                    <div class="form-group">
+                        <form:label path="sales.id">Satış kodu</form:label>
+                        <form:input path="sales.id" cssClass="form-control" readonly="true"/>
+                        <form:errors path="sales.id" cssClass="alert-danger control-label"/>
+                    </div>
                     <div class="form-group">
                         <form:label path="price">Qiyməti</form:label>
                         <div class="input-group" >
@@ -514,7 +518,7 @@
                 number: true,
                 min: 1
             },
-            sales: {
+            "sales.id": {
                 required: true
             },
             invoiceDate: {
@@ -539,12 +543,12 @@
         rightAlignNumerics: false
     });
 
-    $("input[name='sales']").inputmask('decimal', {
+    $("input[name='sales.id']").inputmask('decimal', {
         rightAlignNumerics: false
     });
 
     function transfer(modal, form, salesId, price, latency){
-        $(form).find("input[name='sales']").val(salesId);
+        $(form).find("input[name='sales.id']").val(salesId);
         $(form).find("input[name='price']").val(price);
         $(form).find("textarea[name='description']").val(latency);
         $(modal).modal('toggle');

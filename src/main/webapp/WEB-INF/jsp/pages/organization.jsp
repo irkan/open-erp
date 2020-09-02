@@ -25,42 +25,50 @@
                                 <c:when test="${not empty list}">
                                     <ul>
                                         <c:forEach var="t" items="${list}" varStatus="loop">
-                                            <li data-jstree='{ "opened" : true }'>
-                                                <a href="javascript:showOrganization('<c:out value="${utl:toJson(t)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');"><c:out value="${t.name}" /></a>
-                                                <c:choose>
-                                                    <c:when test="${not empty t.children}">
-                                                    <ul>
-                                                        <c:forEach var="p" items="${t.children}" varStatus="loop">
-                                                            <li data-jstree='{ "opened" : true }'>
-                                                                <a href="javascript:showOrganization('<c:out value="${utl:toJson(p)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');"><c:out value="${p.name}" /></a>
-                                                                <c:choose>
-                                                                    <c:when test="${not empty p.children}">
-                                                                        <ul>
-                                                                            <c:forEach var="f" items="${p.children}" varStatus="loop">
-                                                                                <li data-jstree='{ "opened" : true }'>
-                                                                                    <a href="javascript:showOrganization('<c:out value="${utl:toJson(f)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');"><c:out value="${f.name}" /></a>
-                                                                                    <c:choose>
-                                                                                        <c:when test="${not empty f.children}">
-                                                                                            <ul>
-                                                                                                <c:forEach var="m" items="${f.children}" varStatus="loop">
-                                                                                                    <li data-jstree='{ "opened" : true }'>
-                                                                                                        <a href="javascript:showOrganization('<c:out value="${utl:toJson(m)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');"><c:out value="${m.name}" /></a>
-                                                                                                    </li>
-                                                                                                </c:forEach>
-                                                                                            </ul>
-                                                                                        </c:when>
-                                                                                    </c:choose>
-                                                                                </li>
-                                                                            </c:forEach>
-                                                                        </ul>
-                                                                    </c:when>
-                                                                </c:choose>
-                                                            </li>
-                                                        </c:forEach>
-                                                    </ul>
-                                                    </c:when>
-                                                </c:choose>
-                                            </li>
+                                            <c:if test="${t.active}">
+                                                <li data-jstree='{ "opened" : true }'>
+                                                    <a href="javascript:showOrganization('<c:out value="${utl:toJson(t)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');"><c:out value="${t.name}" /></a>
+                                                    <c:choose>
+                                                        <c:when test="${not empty t.children}">
+                                                            <ul>
+                                                                <c:forEach var="p" items="${t.children}" varStatus="loop">
+                                                                    <c:if test="${p.active}">
+                                                                        <li data-jstree='{ "opened" : true }'>
+                                                                            <a href="javascript:showOrganization('<c:out value="${utl:toJson(p)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');"><c:out value="${p.name}" /></a>
+                                                                            <c:choose>
+                                                                                <c:when test="${not empty p.children}">
+                                                                                    <ul>
+                                                                                        <c:forEach var="f" items="${p.children}" varStatus="loop">
+                                                                                            <c:if test="${f.active}">
+                                                                                                <li data-jstree='{ "opened" : true }'>
+                                                                                                    <a href="javascript:showOrganization('<c:out value="${utl:toJson(f)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');"><c:out value="${f.name}" /></a>
+                                                                                                    <c:choose>
+                                                                                                        <c:when test="${not empty f.children}">
+                                                                                                            <ul>
+                                                                                                                <c:forEach var="m" items="${f.children}" varStatus="loop">
+                                                                                                                    <c:if test="${m.active}">
+                                                                                                                        <li data-jstree='{ "opened" : true }'>
+                                                                                                                            <a href="javascript:showOrganization('<c:out value="${utl:toJson(m)}" />', '<c:out value="${edit.status}" />', '<c:out value="${edit.object.icon}" />', '<c:out value="${delete.status}" />', '<c:out value="${delete.object.icon}" />');"><c:out value="${m.name}" /></a>
+                                                                                                                        </li>
+                                                                                                                    </c:if>
+                                                                                                                </c:forEach>
+                                                                                                            </ul>
+                                                                                                        </c:when>
+                                                                                                    </c:choose>
+                                                                                                </li>
+                                                                                            </c:if>
+                                                                                        </c:forEach>
+                                                                                    </ul>
+                                                                                </c:when>
+                                                                            </c:choose>
+                                                                        </li>
+                                                                    </c:if>
+                                                                </c:forEach>
+                                                            </ul>
+                                                        </c:when>
+                                                    </c:choose>
+                                                </li>
+                                            </c:if>
                                         </c:forEach>
                                     </ul>
 
@@ -101,22 +109,22 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <form:label path="organization">Yuxarı struktur</form:label>
-                                <form:select  path="organization" cssClass="custom-select form-control">
+                                <form:label path="organization.id">Yuxarı struktur</form:label>
+                                <form:select  path="organization.id" cssClass="custom-select form-control">
                                     <form:option value=""></form:option>
                                     <form:options items="${organizations}" itemLabel="name" itemValue="id" />
                                 </form:select>
-                                <form:errors path="organization" cssClass="control-label alert-danger" />
+                                <form:errors path="organization.id" cssClass="control-label alert-danger" />
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <form:label path="type">Strukturun tipi</form:label>
-                                <form:select  path="type" cssClass="custom-select form-control">
+                                <form:label path="type.id">Strukturun tipi</form:label>
+                                <form:select  path="type.id" cssClass="custom-select form-control">
                                     <form:option value=""></form:option>
                                     <form:options items="${organization_types}" itemLabel="name" itemValue="id" />
                                 </form:select>
-                                <form:errors path="type" cssClass="control-label alert-danger" />
+                                <form:errors path="type.id" cssClass="control-label alert-danger" />
                             </div>
                         </div>
                     </div>
@@ -168,8 +176,8 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <form:label path="contact.city">Şəhər</form:label>
-                                <form:select  path="contact.city" cssClass="custom-select form-control">
+                                <form:label path="contact.city.id">Şəhər</form:label>
+                                <form:select  path="contact.city.id" cssClass="custom-select form-control">
                                     <form:options items="${cities}" itemLabel="name" itemValue="id" />
                                 </form:select>
                             </div>
@@ -253,10 +261,10 @@
 
     $( "#form" ).validate({
         rules: {
-            organization: {
+            "organization.id": {
                 required: true
             },
-            type: {
+            "type.id": {
                 required: true
             },
             name: {

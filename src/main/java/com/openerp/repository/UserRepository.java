@@ -12,6 +12,7 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
     User findByUsernameAndPasswordAndActiveTrue(String username, String password);
     List<User> getUsersByActiveTrueAndUsernameAndPassword(String username, String password);
     User getUserByActiveTrueAndId(int id);
+    User getUserById(Integer id);
     List<User> getUsersByActiveTrue();
     List<User> getUsersByActiveTrueAndEmployee_Organization(Organization organization);
     List<User> getUsersByEmployeeAndActiveTrue(Employee employee);

@@ -197,7 +197,7 @@
             </div>
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form" method="post" action="/hr/non-working-day" cssClass="form-group">
-                    <form:input type="hidden" name="id" path="id"/>
+                    <form:hidden path="id"/>
                     <div class="form-group">
                         <form:label path="nonWorkingDate">Qeyri iş günü</form:label>
                         <div class="input-group date" >
@@ -209,6 +209,7 @@
                     <div class="form-group">
                         <form:label path="identifier">İdentifikator</form:label>
                         <form:select  path="identifier" cssClass="custom-select form-control">
+                            <form:option value=""/>
                             <form:options items="${identifiers}" itemLabel="name" itemValue="attr1" />
                         </form:select>
                         <form:errors path="identifier" cssClass="control-label alert-danger" />
@@ -321,7 +322,7 @@ fixedHeader: {
             nonWorkingDate: {
                 required: true
             },
-            identifier: {
+            "identifier.attr1": {
                 required: true
             }
         },

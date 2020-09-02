@@ -33,9 +33,9 @@
                 <div id="filterContent" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionFilter">
                     <div class="card-body">
                         <form:form modelAttribute="filter" id="filter" method="post" action="/warehouse/consolidate/filter">
-                            <form:hidden path="organization" />
+                            <form:hidden path="organization.id" />
                             <form:hidden path="inventory.active" htmlEscape="true" value="1" />
-                            <form:hidden path="action"/>
+                            <form:hidden path="action.id"/>
                             <div class="row">
                                 <div class="col-md-11">
                                     <div class="row">
@@ -48,7 +48,7 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="employee">Təhkim edilib</form:label>
+                                                <form:label path="employee.id">Təhkim edilib</form:label>
                                                 <form:select  path="employee.id" cssClass="custom-select form-control" multiple="single">
                                                     <form:option value=""></form:option>
                                                     <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
@@ -57,7 +57,7 @@
                                                         </optgroup>
                                                     </c:forEach>
                                                 </form:select>
-                                                <form:errors path="employee" cssClass="control-label alert-danger"/>
+                                                <form:errors path="employee.id" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
                                         <div class="col-md-2">

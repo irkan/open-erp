@@ -162,10 +162,10 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <form:label path="person.gender" cssClass="mb-3">Cins</form:label><br/>
+                                <form:label path="person.gender.id" cssClass="mb-3">Cins</form:label><br/>
                                 <c:forEach var="t" items="${genders}" varStatus="loop">
                                     <label class="kt-radio kt-radio--brand">
-                                        <form:radiobutton path="person.gender" value="${t.id}"/> <c:out value="${t.name}"/>
+                                        <form:radiobutton path="person.gender.id" value="${t.id}"/> <c:out value="${t.name}"/>
                                         <span></span>
                                     </label>
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -174,8 +174,8 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <form:label path="person.nationality">Milliyət</form:label>
-                                <form:select  path="person.nationality" cssClass="custom-select form-control">
+                                <form:label path="person.nationality.id">Milliyət</form:label>
+                                <form:select  path="person.nationality.id" cssClass="custom-select form-control">
                                     <form:option value=""></form:option>
                                     <form:options items="${nationalities}" itemLabel="name" itemValue="id" />
                                 </form:select>
@@ -218,8 +218,8 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <form:label path="person.contact.city">Şəhər</form:label>
-                                <form:select  path="person.contact.city" cssClass="custom-select form-control">
+                                <form:label path="person.contact.city.id">Şəhər</form:label>
+                                <form:select  path="person.contact.city.id" cssClass="custom-select form-control">
                                     <form:option value=""></form:option>
                                     <form:options items="${cities}" itemLabel="name" itemValue="id" />
                                 </form:select>
@@ -306,16 +306,16 @@ fixedHeader: {
             "person.lastName": {
                 required: true
             },
-            "person.gender": {
+            "person.gender.id": {
                 required: true
             },
-            "person.nationality": {
+            "person.nationality.id": {
                 required: true
             },
             "person.contact.mobilePhone": {
                 required: true
             },
-            "person.contact.city": {
+            "person.contact.city.id": {
                 required: true
             }
         },

@@ -130,7 +130,7 @@
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form" method="post" action="/hr/employee" cssClass="form-group">
                     <form:hidden path="id"/>
-                    <form:hidden path="organization"/>
+                    <form:hidden path="organization.id"/>
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
@@ -166,10 +166,10 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <form:label path="person.gender" cssClass="mb-3">Cins</form:label><br/>
+                                <form:label path="person.gender.id" cssClass="mb-3">Cins</form:label><br/>
                                 <c:forEach var="t" items="${genders}" varStatus="loop">
                                     <label class="kt-radio kt-radio--brand">
-                                        <form:radiobutton path="person.gender" value="${t.id}"/> <c:out value="${t.name}"/>
+                                        <form:radiobutton path="person.gender.id" value="${t.id}"/> <c:out value="${t.name}"/>
                                         <span></span>
                                     </label>
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -178,8 +178,8 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <form:label path="person.maritalStatus">Ailə vəziyyəti</form:label>
-                                <form:select  path="person.maritalStatus" cssClass="custom-select form-control">
+                                <form:label path="person.maritalStatus.id">Ailə vəziyyəti</form:label>
+                                <form:select  path="person.maritalStatus.id" cssClass="custom-select form-control">
                                     <form:option value=""></form:option>
                                     <form:options items="${marital_statuses}" itemLabel="name" itemValue="id" />
                                 </form:select>
@@ -187,8 +187,8 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <form:label path="person.nationality">Milliyət</form:label>
-                                <form:select  path="person.nationality" cssClass="custom-select form-control">
+                                <form:label path="person.nationality.id">Milliyət</form:label>
+                                <form:select  path="person.nationality.id" cssClass="custom-select form-control">
                                     <form:option value=""></form:option>
                                     <form:options items="${nationalities}" itemLabel="name" itemValue="id" />
                                 </form:select>
@@ -234,12 +234,12 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <form:label path="position">Vəzifə</form:label>
-                                        <form:select  path="position" cssClass="custom-select form-control">
+                                        <form:label path="position.id">Vəzifə</form:label>
+                                        <form:select  path="position.id" cssClass="custom-select form-control">
                                             <form:option value=""></form:option>
                                             <form:options items="${positions}" itemLabel="name" itemValue="id" />
                                         </form:select>
-                                        <form:errors path="position" cssClass="control-label alert-danger" />
+                                        <form:errors path="position.id" cssClass="control-label alert-danger" />
                                     </div>
                                 </div>
                             </div>
@@ -363,8 +363,8 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <form:label path="person.contact.city">Şəhər</form:label>
-                                <form:select  path="person.contact.city" cssClass="custom-select form-control">
+                                <form:label path="person.contact.city.id">Şəhər</form:label>
+                                <form:select  path="person.contact.city.id" cssClass="custom-select form-control">
                                     <form:option value=""></form:option>
                                     <form:options items="${cities}" itemLabel="name" itemValue="id" />
                                 </form:select>
@@ -418,7 +418,7 @@
                                     <input type="text" class="form-control" name="employeePayrollDetails[${loop.index}].employeePayrollField.name" style="border: none; background: none;  width: 100%" readonly/>
                                 </div>
                                 <div class="col-md-4">
-                                    <input type="hidden" name="employeePayrollDetails[${loop.index}].employeePayrollField" value="${t.id}"/>
+                                    <input type="hidden" name="employeePayrollDetails[${loop.index}].employeePayrollField.id" value="${t.id}"/>
                                     <input type="hidden" name="employeePayrollDetails[${loop.index}].key" value="${t.attr1}"/>
                                     <c:choose>
                                         <c:when test="${t.attr1 eq '{previous_work_experience}'}">
@@ -593,7 +593,7 @@ fixedHeader: {
 
     $( "#form" ).validate({
         rules: {
-            position: {
+            "position.id": {
                 required: true
             },
             contractStartDate: {
@@ -618,13 +618,13 @@ fixedHeader: {
             "person.birthday": {
                 required: true
             },
-            "person.gender": {
+            "person.gender.id": {
                 required: true
             },
-            "person.maritalStatus": {
+            "person.maritalStatus.id": {
                 required: true
             },
-            "person.nationality": {
+            "person.nationality.id": {
                 required: true
             },
             "person.contact.email": {
@@ -633,7 +633,7 @@ fixedHeader: {
             "person.contact.mobilePhone": {
                 required: true
             },
-            "person.contact.city": {
+            "person.contact.city.id": {
                 required: true
             },
             "person.contact.address": {

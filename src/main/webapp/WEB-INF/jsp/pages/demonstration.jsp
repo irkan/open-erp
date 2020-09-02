@@ -33,7 +33,7 @@
                 <div id="filterContent" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionFilter">
                     <div class="card-body">
                         <form:form modelAttribute="filter" id="filter" method="post" action="/sale/demonstration/filter">
-                            <form:hidden path="organization" />
+                            <form:hidden path="organization.id" />
                             <div class="row">
                                 <div class="col-md-11">
                                     <div class="row">
@@ -46,7 +46,7 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="employee">Əməkdaş</form:label>
+                                                <form:label path="employee.id">Əməkdaş</form:label>
                                                 <form:select  path="employee.id" cssClass="custom-select form-control select2-single" multiple="single">
                                                     <form:option value=""></form:option>
                                                     <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
@@ -55,7 +55,7 @@
                                                         </optgroup>
                                                     </c:forEach>
                                                 </form:select>
-                                                <form:errors path="employee" cssClass="control-label alert-danger"/>
+                                                <form:errors path="employee.id" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -202,10 +202,10 @@
                 <form:form modelAttribute="form" id="form" method="post" action="/sale/demonstration" cssClass="form-group">
                     <form:hidden path="id"/>
                     <form:hidden path="active"/>
-                    <form:hidden path="organization"/>
+                    <form:hidden path="organization.id"/>
                     <div class="form-group">
-                        <form:label path="employee">Əməkdaş</form:label>
-                        <form:select  path="employee" cssClass="custom-select form-control select2-single">
+                        <form:label path="employee.id">Əməkdaş</form:label>
+                        <form:select  path="employee.id" cssClass="custom-select form-control select2-single">
                             <form:option value=""></form:option>
                             <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
                                 <optgroup label="${itemGroup.key}">
@@ -213,7 +213,7 @@
                                 </optgroup>
                             </c:forEach>
                         </form:select>
-                        <form:errors path="employee" cssClass="control-label alert-danger"/>
+                        <form:errors path="employee.id" cssClass="control-label alert-danger"/>
                     </div>
                     <div class="row">
                         <div class="col-7">
@@ -316,7 +316,7 @@ fixedHeader: {
 
     $( "#form" ).validate({
         rules: {
-            employee: {
+            "employee.id": {
                 required: true
             },
             demonstrateDate: {

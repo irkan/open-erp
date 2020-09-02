@@ -169,49 +169,64 @@ public class HRController extends SkeletonController {
     public String postEmployee(@ModelAttribute(Constants.FORM) @Validated Employee employee, @RequestParam(name = "employeeRestDays", defaultValue = "0") int[] ids, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if (!binding.hasErrors()) {
-            if(employee!=null && employee.getId()!=null){
-                employeeRestDayRepository.deleteInBatch(employeeRestDayRepository.getEmployeeRestDaysByEmployee(employee));
-                log(employee, "employee_rest_day", "delete-in-batch", employee.getId(), employee.toString());
-            }
-            List<EmployeeRestDay> erds = new ArrayList<>();
-            if(ids[0]!=0){
-                for(int id: ids){
-                    Dictionary weekDay = dictionaryRepository.getDictionaryById(id);
-                    if(weekDay!=null){
-                        EmployeeRestDay erd = new EmployeeRestDay(employee, weekDay.getName(), weekDay.getAttr1(), Integer.parseInt(weekDay.getAttr2()), weekDay);
-                        erds.add(erd);
-                    }
-                }
-            }
-            employee.setEmployeeRestDays(erds);
-            int employeeId = 0;
-            if(employee.getId()!=null){
-                employeeId = employee.getId();
-            }
-            List<PayrollConfiguration> payrollConfigurations = payrollConfigurationRepository.getPayrollConfigurationsByActiveTrueOrderById();
-            employeePayrollDetailRepository.deleteInBatch(employeePayrollDetailRepository.getEmployeePayrollDetailsByEmployee_Id(employeeId));
-            List<EmployeePayrollDetail> employeePayrollDetails = new ArrayList<>();
-            for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-payroll-field")){
-                EmployeePayrollDetail employeeDetailField1 = new EmployeePayrollDetail(employee, dictionary, dictionary.getAttr1(), dictionary.getAttr2());
-                if(employeeDetailField1.getKey().equalsIgnoreCase("{main_vacation_days}")){
-                    employeeDetailField1.setValue(Util.calculateMainVacationDays(payrollConfigurations, employee));
-                } else if(employeeDetailField1.getKey().equalsIgnoreCase("{additional_vacation_days}")){
-                    employeeDetailField1.setValue(Util.calculateAdditionalVacationDays(payrollConfigurations, employee, Util.findPreviousWorkExperience(employeePayrollDetails)));
-                }
-                employeePayrollDetails.add(employeeDetailField1);
-            }
-            employee.setEmployeePayrollDetails(employeePayrollDetails);
-
-            employeeSaleDetailRepository.deleteInBatch(employeeSaleDetailRepository.getEmployeeSaleDetailsByEmployee_Id(employeeId));
-            List<EmployeeSaleDetail> employeeSaleDetails = new ArrayList<>();
-            for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-sale-field")){
-                EmployeeSaleDetail employeeDetailField1 = new EmployeeSaleDetail(employee, dictionary, dictionary.getAttr1(), dictionary.getAttr2());
-                employeeSaleDetails.add(employeeDetailField1);
-            }
-            employee.setEmployeeSaleDetails(employeeSaleDetails);
-
             employeeRepository.save(employee);
             log(employee, "employee", "create/edit", employee.getId(), employee.toString());
+
+            try{
+                if(employee!=null && employee.getId()!=null){
+                    employeeRestDayRepository.deleteInBatch(employeeRestDayRepository.getEmployeeRestDaysByEmployee(employee));
+                    log(employee, "employee_rest_day", "delete-in-batch", employee.getId(), employee.toString());
+                }
+                List<EmployeeRestDay> employeeRestDays = new ArrayList<>();
+                if(ids[0]!=0){
+                    for(int id: ids){
+                        Dictionary weekDay = dictionaryRepository.getDictionaryById(id);
+                        if(weekDay!=null){
+                            employeeRestDays.add(new EmployeeRestDay(employee, weekDay.getName(), weekDay.getAttr1(), Integer.parseInt(weekDay.getAttr2()), weekDay));
+                        }
+                    }
+                    if(employeeRestDays.size()>0){
+                        employeeRestDayRepository.saveAll(employeeRestDays);
+                    }
+                }
+            } catch (Exception e){
+                log.error(e.getMessage(), e);
+            }
+
+            if(employeePayrollDetailRepository.getEmployeePayrollDetailsByEmployee_Id(employee.getId()).size()==0) {
+                try {
+                    List<PayrollConfiguration> payrollConfigurations = payrollConfigurationRepository.getPayrollConfigurationsByActiveTrueOrderById();
+                    List<EmployeePayrollDetail> employeePayrollDetails = new ArrayList<>();
+                    for (Dictionary dictionary : dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-payroll-field")) {
+                        EmployeePayrollDetail employeeDetailField1 = new EmployeePayrollDetail(employee, dictionary, dictionary.getAttr1(), dictionary.getAttr2());
+                        if (employeeDetailField1.getKey().equalsIgnoreCase("{main_vacation_days}")) {
+                            employeeDetailField1.setValue(Util.calculateMainVacationDays(payrollConfigurations, employee));
+                        } else if (employeeDetailField1.getKey().equalsIgnoreCase("{additional_vacation_days}")) {
+                            employeeDetailField1.setValue(Util.calculateAdditionalVacationDays(payrollConfigurations, employee, Util.findPreviousWorkExperience(employeePayrollDetails)));
+                        }
+                        employeePayrollDetails.add(employeeDetailField1);
+                    }
+                    if (employeePayrollDetails.size() > 0) {
+                        employeePayrollDetailRepository.saveAll(employeePayrollDetails);
+                    }
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+
+            if(employeeSaleDetailRepository.getEmployeeSaleDetailsByEmployee_Id(employee.getId()).size()==0){
+                try{
+                    List<EmployeeSaleDetail> employeeSaleDetails = new ArrayList<>();
+                    for(Dictionary dictionary: dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("employee-sale-field")){
+                        employeeSaleDetails.add(new EmployeeSaleDetail(employee, dictionary, dictionary.getAttr1(), dictionary.getAttr2()));
+                    }
+                    if(employeeSaleDetails.size()>0){
+                        employeeSaleDetailRepository.saveAll(employeeSaleDetails);
+                    }
+                } catch (Exception e){
+                    log.error(e.getMessage(), e);
+                }
+            }
         }
         return mapPost(employee, binding, redirectAttributes);
     }
@@ -329,6 +344,7 @@ public class HRController extends SkeletonController {
             String rangeDates[] = vacation.getDateRange().split("-");
             vacation.setStartDate(DateUtility.getUtilDate(rangeDates[0].trim()));
             vacation.setEndDate(DateUtility.getUtilDate(rangeDates[1].trim()));
+            vacation.setEmployee(employeeRepository.getEmployeeById(vacation.getEmployee().getId()));
             if(vacation.getStartDate().getTime() - vacation.getEmployee().getContractStartDate().getTime() < 5253120000l  && (vacation.getIdentifier().getAttr1().equalsIgnoreCase("M"))){
                 FieldError fieldError = new FieldError("dateRange", "dateRange", "İşə başlama tarixindən 2 ayı keçməmişdir!");
                 binding.addError(fieldError);
@@ -377,7 +393,7 @@ public class HRController extends SkeletonController {
             String rangeDates[] = businessTrip.getDateRange().split("-");
             businessTrip.setStartDate(DateUtility.getUtilDate(rangeDates[0].trim()));
             businessTrip.setEndDate(DateUtility.getUtilDate(rangeDates[1].trim()));
-
+            businessTrip.setEmployee(employeeRepository.getEmployeeById(businessTrip.getEmployee().getId()));
             if(businessTrip.getStartDate()!=null && businessTrip.getEndDate()!=null){
                 if(businessTrip.getId()!=null){
                     businessTripDetailRepository.deleteInBatch(businessTripDetailRepository.getBusinessTripDetailsByBusinessTrip_Id(businessTrip.getId()));
@@ -414,7 +430,7 @@ public class HRController extends SkeletonController {
             String rangeDates[] = illness.getDateRange().split("-");
             illness.setStartDate(DateUtility.getUtilDate(rangeDates[0].trim()));
             illness.setEndDate(DateUtility.getUtilDate(rangeDates[1].trim()));
-
+            illness.setEmployee(employeeRepository.getEmployeeById(illness.getEmployee().getId()));
             if(illness.getStartDate()!=null && illness.getEndDate()!=null){
                 if(illness.getId()!=null){
                     illnessDetailRepository.deleteInBatch(illnessDetailRepository.getIllnessDetailsByIllness_Id(illness.getId()));

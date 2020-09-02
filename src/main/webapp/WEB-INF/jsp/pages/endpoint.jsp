@@ -45,12 +45,12 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="connectionType">Bağlanma tipi</form:label>
+                                                <form:label path="connectionType.id">Bağlanma tipi</form:label>
                                                 <form:select path="connectionType.id" cssClass="custom-select form-control">
                                                     <form:option value=""></form:option>
                                                     <form:options items="${connection_types}" itemLabel="name" itemValue="id"/>
                                                 </form:select>
-                                                <form:errors path="connectionType" cssClass="alert-danger"/>
+                                                <form:errors path="connectionType.id" cssClass="alert-danger"/>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -204,12 +204,12 @@
                     <form:hidden path="id"/>
                     <form:hidden path="active"/>
                     <div class="form-group">
-                        <form:label path="connectionType">Bağlanma tipi</form:label>
-                        <form:select path="connectionType" cssClass="custom-select form-control">
+                        <form:label path="connectionType.id">Bağlanma tipi</form:label>
+                        <form:select path="connectionType.id" cssClass="custom-select form-control">
                             <form:option value=""></form:option>
                             <form:options items="${connection_types}" itemLabel="name" itemValue="id"/>
                         </form:select>
-                        <form:errors path="connectionType" cssClass="alert-danger"/>
+                        <form:errors path="connectionType.id" cssClass="alert-danger"/>
                     </div>
                     <div class="form-group">
                         <form:label path="host">Host</form:label>

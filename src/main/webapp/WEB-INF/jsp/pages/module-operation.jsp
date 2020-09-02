@@ -98,17 +98,17 @@
             </div>
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form" method="post" action="/admin/module-operation" cssClass="form-group">
-                    <form:input type="hidden" name="id" path="id"/>
+                    <form:hidden path="id"/>
                     <div class="form-group">
-                        <form:label path="module">Modul</form:label>
-                        <form:select  path="module" cssClass="custom-select form-control">
+                        <form:label path="module.id">Modul</form:label>
+                        <form:select  path="module.id" cssClass="custom-select form-control">
                             <form:option value=""></form:option>
                             <form:options items="${modules}" itemLabel="name" itemValue="id" />
                         </form:select>
                     </div>
                     <div class="form-group">
-                        <form:label path="operation">Əməliyyat</form:label>
-                        <form:select  path="operation" cssClass="custom-select form-control">
+                        <form:label path="operation.id">Əməliyyat</form:label>
+                        <form:select  path="operation.id" cssClass="custom-select form-control">
                             <form:option value=""></form:option>
                             <form:options items="${operations}" itemLabel="name" itemValue="id" />
                         </form:select>
@@ -186,10 +186,10 @@
 
     $( "#form" ).validate({
         rules: {
-            module: {
+            "module.id": {
                 required: true
             },
-            operation: {
+            "operation.id": {
                 required: true
             }
         },

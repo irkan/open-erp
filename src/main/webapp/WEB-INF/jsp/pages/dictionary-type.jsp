@@ -91,8 +91,8 @@
             </div>
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form" method="post" action="/admin/dictionary-type" cssClass="form-group">
-                    <form:input type="hidden" name="id" path="id"/>
-                    <form:input type="hidden" name="active" path="active" value="1"/>
+                    <form:hidden path="id"/>
+                    <form:hidden path="active" value="1"/>
                     <div class="form-group">
                         <form:label path="name">Ad</form:label>
                         <form:input path="name" cssClass="form-control" placeholder="Adı daxil edin"/>

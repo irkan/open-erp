@@ -133,18 +133,16 @@
             <div class="modal-body">
                 <form:form modelAttribute="form" id="form" method="post" action="/admin/user" cssClass="form-group">
                     <form:hidden path="id"/>
-                    <form:hidden path="userDetail.administrator"/>
-                    <form:hidden path="userDetail.startModule"/>
                     <div class="form-group">
-                        <form:label path="employee">Əməkdaş</form:label>
-                        <form:select  path="employee" cssClass="custom-select form-control select2-single" multiple="single">
+                        <form:label path="employee.id">Əməkdaş</form:label>
+                        <form:select  path="employee.id" cssClass="custom-select form-control">
                             <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
                                 <optgroup label="${itemGroup.key}">
                                     <form:options items="${itemGroup.value}" itemLabel="person.fullName" itemValue="id"/>
                                 </optgroup>
                             </c:forEach>
                         </form:select>
-                        <form:errors path="employee" cssClass="control-label alert-danger"/>
+                        <form:errors path="employee.id" cssClass="control-label alert-danger"/>
                     </div>
                     <div class="row">
                         <div class="col-6">
@@ -344,7 +342,7 @@ fixedHeader: {
 
     $( "#form" ).validate({
         rules: {
-            employee: {
+            "employee.id": {
                 required: true
             },
             username: {
@@ -358,8 +356,11 @@ fixedHeader: {
             "userDetail.paginationSize": {
                 required: true,
                 digits: true,
-                min: 10,
+                min: 20,
                 max: 1000
+            },
+            "userDetail.administrator": {
+                required: true
             }
         },
         invalidHandler: function(event, validator) {

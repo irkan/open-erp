@@ -52,7 +52,7 @@
                 <div id="filterContent" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionFilter">
                     <div class="card-body">
                         <form:form modelAttribute="filter" id="filter" method="post" action="/sale/invoice/filter">
-                            <form:hidden path="organization" />
+                            <form:hidden path="organization.id" />
                             <div class="row">
                                 <div class="col-md-11">
                                     <div class="row">
@@ -72,9 +72,9 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="sales.customer">Müştəri kodu</form:label>
-                                                <form:input path="sales.customer" cssClass="form-control" placeholder="#######" />
-                                                <form:errors path="sales.customer" cssClass="alert-danger"/>
+                                                <form:label path="sales.customer.id">Müştəri kodu</form:label>
+                                                <form:input path="sales.customer.id" cssClass="form-control" placeholder="#######" />
+                                                <form:errors path="sales.customer.id" cssClass="alert-danger"/>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -139,12 +139,12 @@
                                         </div>
                                         <div class="col-md-1">
                                             <div class="form-group">
-                                                <form:label path="paymentChannel">Ödəniş kanalı</form:label>
+                                                <form:label path="paymentChannel.id">Ödəniş kanalı</form:label>
                                                 <form:select  path="paymentChannel.id" cssClass="custom-select form-control">
                                                     <form:option value=""></form:option>
                                                     <form:options items="${payment_channels}" itemLabel="name" itemValue="id" />
                                                 </form:select>
-                                                <form:errors path="paymentChannel" cssClass="control-label alert-danger"/>
+                                                <form:errors path="paymentChannel.id" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -397,18 +397,18 @@
                 <form:form modelAttribute="form" id="form" method="post" action="/sale/invoice" cssClass="form-group">
                     <form:hidden path="id"/>
                     <form:hidden path="active"/>
-                    <form:hidden path="organization"/>
+                    <form:hidden path="organization.id"/>
                     <div class="form-group">
                         <form:label path="sales">Satış nömrəsi</form:label>
                         <div class="row">
                             <div class="col-9">
                                 <div class="input-group">
                                     <div class="input-group-prepend"><span class="input-group-text"><i class="la la-search"></i></span></div>
-                                    <form:input path="sales" class="form-control" placeholder="Daxil edin..."/>
+                                    <form:input path="sales.id" class="form-control" placeholder="Daxil edin..."/>
                                 </div>
                             </div>
                             <div class="col-3">
-                                <button class="btn btn-primary" type="button" onclick="checkSales($('form').find('input[name=\'sales\']'))">Yoxla</button>
+                                <button class="btn btn-primary" type="button" onclick="checkSales($('form').find('input[name=\'sales.id\']'))">Yoxla</button>
                             </div>
                         </div>
                     </div>
@@ -531,8 +531,8 @@
                 <form:form modelAttribute="form" id="form-consolidate" method="post" action="/sale/invoice/consolidate" cssClass="form-group">
                     <form:hidden path="id"/>
                     <div class="form-group">
-                        <form:label path="collector">Yığımçı</form:label>
-                        <form:select  path="collector" cssClass="custom-select form-control select2-single" multiple="single">
+                        <form:label path="collector.id">Yığımçı</form:label>
+                        <form:select  path="collector.id" cssClass="custom-select form-control select2-single" multiple="single">
                             <form:option value=""></form:option>
                             <c:forEach var="itemGroup" items="${employees}" varStatus="itemGroupIndex">
                                 <optgroup label="${itemGroup.key}">
@@ -540,7 +540,7 @@
                                 </optgroup>
                             </c:forEach>
                         </form:select>
-                        <form:errors path="collector" cssClass="control-label alert-danger"/>
+                        <form:errors path="collector.id" cssClass="control-label alert-danger"/>
                     </div>
                 </form:form>
             </div>
@@ -651,7 +651,7 @@
                 number: true,
                 min: 1
             },
-            sales: {
+            "sales.id": {
                 required: true
             },
             invoiceDate: {
@@ -713,7 +713,7 @@
         rightAlignNumerics: false
     });
 
-    $("input[name='sales']").inputmask('decimal', {
+    $("input[name='sales.id']").inputmask('decimal', {
         rightAlignNumerics: false
     });
 

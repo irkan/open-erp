@@ -86,7 +86,7 @@ public class AdministratorController extends SkeletonController {
             model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployeesByOrganization(employees, organizations));
             model.addAttribute(Constants.LIST, users);
             if (!model.containsAttribute(Constants.FORM)) {
-                model.addAttribute(Constants.FORM, new User());
+                model.addAttribute(Constants.FORM, new User(new UserDetail()));
             }
             if (!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)) {
                 return exportExcel(userRepository.findAll(), redirectAttributes, page);
@@ -257,8 +257,10 @@ public class AdministratorController extends SkeletonController {
     public String postNotification(@ModelAttribute(Constants.FORM) @Validated Notification notification, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if (!binding.hasErrors()) {
-            if (notification.getType() != null && notification.getType().getAttr1().equalsIgnoreCase("email")) {
-                notification.setFrom(springEmailUserName);
+            if (notification.getType() != null && notification.getType().getId()!=null) {
+                if(dictionaryRepository.getDictionaryById(notification.getType().getId()).getAttr1().equalsIgnoreCase("email")){
+                    notification.setFrom(springEmailUserName);
+                }
             }
             notificationRepository.save(notification);
             log(notification, "notification", "create/edit", notification.getId(), notification.toString());
@@ -367,33 +369,32 @@ public class AdministratorController extends SkeletonController {
 
     @PostMapping(value = "/user")
     public String postUser(@ModelAttribute(Constants.FORM) @Validated User user, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        Employee employee = employeeRepository.getEmployeeById(user.getEmployee().getId());
         if (user.getEmployee() == null) {
             FieldError fieldError = new FieldError("", "", "İstifadəçi yaradılmadı! Əməkdaş tapılmadı!");
             binding.addError(fieldError);
         }
         if (user.getEmployee() != null &&
-                user.getEmployee().getPerson() == null) {
+                employee.getPerson() == null) {
             FieldError fieldError = new FieldError("", "", "İstifadəçi yaradılmadı! Əməkdaşın şəxs məlumatları tapılmadı!");
             binding.addError(fieldError);
         }
         if (user.getEmployee() != null &&
-                user.getEmployee().getPerson() != null &&
-                user.getEmployee().getPerson().getContact() == null) {
+                employee.getPerson() != null &&
+                employee.getPerson().getContact() == null) {
             FieldError fieldError = new FieldError("", "", "İstifadəçi yaradılmadı! " + user.getEmployee().getPerson().getFullName() + " aid laqə məlumatları tapılmadı!");
-            binding.addError(fieldError);
-        }
-        if (user.getEmployee() != null &&
-                user.getEmployee().getPerson() != null &&
-                user.getEmployee().getPerson().getContact() != null &&
-                (user.getEmployee().getPerson().getContact().getEmail() == null ||
-                        user.getEmployee().getPerson().getContact().getEmail().trim().length() < 5 ||
-                        user.getEmployee().getPerson().getContact().getEmail().trim().length() > 249)) {
-            FieldError fieldError = new FieldError("", "", "İstifadəçi yaradılmadı! " + user.getEmployee().getPerson().getFullName() + " - əməkdaşa doğru email təyin edin!");
             binding.addError(fieldError);
         }
 
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if (!binding.hasErrors()) {
+            if(user.getId()!=null){
+                User usr = userRepository.getUserById(user.getId());
+                if(usr!=null){
+                    user.getUserDetail().setAdministrator(usr.getUserDetail().getAdministrator());
+                    user.getUserDetail().setStartModule(usr.getUserDetail().getStartModule());
+                }
+            }
             String password = user.getPassword();
             user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
             if (user.getId() != null) {
@@ -404,11 +405,11 @@ public class AdministratorController extends SkeletonController {
 
             try {
                 if (user.getId() == null || user.getId() == 0) {
-                    String message = "Hörmətli " + user.getEmployee().getPerson().getFirstName() + ",<br/><br/>" +
+                    String message = "Hörmətli " + employee.getPerson().getFirstName() + ",<br/><br/>" +
                             "Sizin məlumatlarınıza əsasən istifadəçi adı və şifrəsi.<br/><br/>" +
                             "İstifadəçi adınız: " + user.getUsername() + "<br/>" +
                             "Şifrəniz: " + password + "<br/><br/>";
-                    sendEmail(user.getEmployee().getOrganization(), user.getEmployee().getPerson().getContact().getEmail(),
+                    sendEmail(employee.getOrganization(), employee.getPerson().getContact().getEmail(),
                             "Yeni istifadəçi!",
                             message,
                             null

@@ -33,7 +33,7 @@
                 <div id="filterContent" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionFilter">
                     <div class="card-body">
                         <form:form modelAttribute="filter" id="filter" method="post" action="/accounting/financing/filter">
-                            <form:hidden path="organization" />
+                            <form:hidden path="organization.id" />
                             <div class="row">
                                 <div class="col-md-11">
                                     <div class="row">
@@ -242,7 +242,7 @@
                 <form:form modelAttribute="form" id="form" method="post" action="/accounting/financing" cssClass="form-group">
                     <form:hidden path="id"/>
                     <form:hidden path="active"/>
-                    <form:hidden path="organization" />
+                    <form:hidden path="organization.id" />
                     <div class="form-group">
                         <form:label path="inventory.name">İnventar</form:label>
                         <form:input path="inventory.name" cssClass="form-control" readonly="true"/>
