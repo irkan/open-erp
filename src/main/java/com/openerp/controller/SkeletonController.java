@@ -771,9 +771,23 @@ public class SkeletonController {
         return advance;
     }
 
-    byte canCalculateAdvance(Double price){ //-1 avansin kredit emeliyyati, 0-hecne, 1 avans emeliyyati
+    byte canCalculateAdvance(Double price, Integer salesId){ //-1 avansin kredit emeliyyati, 0-hecne, 1 avans emeliyyati
         try{
+            Sales sales = salesRepository.getSalesById(salesId);
+            if(sales!=null){
+                if(!sales.getService()){ //servis deyilse yeni satishdirsa
+                    Double payed = Util.calculateInvoice(sales.getInvoices());
+                    if(sales.getPayment()!=null){
+                        if(sales.getPayment().getCash()){ //cash satilib
+                            if(payed>500){
 
+                            }
+                        } else { // kreditle satilib
+
+                        }
+                    }
+                }
+            }
         } catch (Exception e){
             log.error(e.getMessage(), e);
         }

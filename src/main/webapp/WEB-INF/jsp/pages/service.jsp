@@ -554,10 +554,6 @@
     </div>
 </div>
 
-<form id="approve" method="post" action="/sale/sales/approve" style="display: none">
-    <input type="hidden" name="id" />
-</form>
-
 <form id="approve-form" method="post" action="/sale/sales/approve" style="display: none">
     <input type="hidden" name="id" />
 </form>
@@ -590,13 +586,12 @@ fixedHeader: {
 },
         lengthMenu: [10, 25, 50, 75, 100, 200, 1000],
         pageLength: 100,
-        order: [[1, 'desc']],
+        order: [[0, 'desc']],
         columnDefs: [
             {
                 targets: 0,
                 width: '50px',
-                className: 'dt-center',
-                orderable: false
+                className: 'dt-center'
             },
         ],
     });

@@ -137,7 +137,7 @@ public class SaleController extends SkeletonController {
                     session.getAttribute(Constants.SESSION_FILTER) instanceof Sales){
                 model.addAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
             }
-            Page<Sales> sales = salesService.findAll((Sales) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("approve").ascending().and(Sort.by("approveDate").descending()).and(Sort.by("id").descending())));
+            Page<Sales> sales = salesService.findAll((Sales) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("approve").ascending().and(Sort.by("approveDate").descending())));
             model.addAttribute(Constants.LIST, sales);
             if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
                 return exportExcel(sales, redirectAttributes, page);
@@ -160,7 +160,7 @@ public class SaleController extends SkeletonController {
                     session.getAttribute(Constants.SESSION_FILTER) instanceof Invoice){
                 model.addAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
             }
-            Page<Invoice> invoices = invoiceService.findAll((Invoice) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("approve").ascending().and(Sort.by("approveDate").descending()).and(Sort.by("id").descending())));
+            Page<Invoice> invoices = invoiceService.findAll((Invoice) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("approve").ascending().and(Sort.by("approveDate").descending()).and(Sort.by("id").descending()).and(Sort.by("id").descending())));
 
             model.addAttribute(Constants.LIST, invoices);
             if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
@@ -255,17 +255,6 @@ public class SaleController extends SkeletonController {
     public String postSales(@RequestParam(name = "file1", required = false) MultipartFile file1, @RequestParam(name = "file2", required = false) MultipartFile file2, @ModelAttribute(Constants.FORM) @Validated Sales sales, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
-            if(sales.getId()!=null && salesInventoryRepository.getSalesInventoriesByActiveTrueAndSales_Id(sales.getId()).size()>0){
-                salesInventoryRepository.deleteInBatch(salesInventoryRepository.getSalesInventoriesByActiveTrueAndSales_Id(sales.getId()));
-            }
-            if(sales.getSalesInventories()!=null){
-                List<SalesInventory> salesInventories = new ArrayList<>();
-                for(SalesInventory salesInventory: sales.getSalesInventories()){
-                    salesInventories.add(new SalesInventory(salesInventory.getInventory(), sales, salesInventory.getSalesType()));
-                }
-                sales.setSalesInventories(salesInventories);
-            }
-
             if(sales.getService()){
                 sales.getPayment().setCash(true);
             }
@@ -302,6 +291,20 @@ public class SaleController extends SkeletonController {
                 List<Sales> salesList = salesRepository.getSalesByActiveTrueAndApproveTrueAndServiceFalseAndCustomerAndOrganizationAndReturnedFalseOrderByIdDesc(sales.getCustomer(), sales.getOrganization());
                 if(salesList.size()>0){
                     addContactHistory(salesList.get(0), "Servis əlavə edildi: "+((sales.getPayment()!=null && sales.getPayment().getDescription()!=null)?sales.getPayment().getDescription():""), sales);
+                }
+            }
+
+            if(sales.getId()!=null && salesInventoryRepository.getSalesInventoriesByActiveTrueAndSales_Id(sales.getId()).size()>0){
+                salesInventoryRepository.deleteInBatch(salesInventoryRepository.getSalesInventoriesByActiveTrueAndSales_Id(sales.getId()));
+            }
+            if(sales.getSalesInventories()!=null){
+                List<SalesInventory> salesInventories = new ArrayList<>();
+                for(SalesInventory salesInventory: sales.getSalesInventories()){
+                    salesInventories.add(new SalesInventory(salesInventory.getInventory(), sales, salesInventory.getSalesType()));
+                }
+                sales.setSalesInventories(salesInventories);
+                if(salesInventories.size()>0){
+                    salesInventoryRepository.saveAll(salesInventories);
                 }
             }
 
@@ -497,16 +500,17 @@ public class SaleController extends SkeletonController {
     public String postSalesApprove(@ModelAttribute(Constants.FORM) @Validated Sales sales, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         sales = salesRepository.getSalesById(sales.getId());
         Employee employee = sales.getService()?sales.getServicer():sales.getVanLeader();// (sales.getService() && sales.getServicer()!=null)?sales.getServicer():getSessionUser().getEmployee();
-        if(sales.getSalesInventories().size()>0 && !sales.getService()){
+        salesInventoryRepository.getSalesInventoriesByActiveTrueAndSales_Id(sales.getId());
+        if(sales.getSalesInventories().size()>0){
             Map<Inventory, List<SalesInventory>> salesInventoryMap = Util.groupInventory(sales.getSalesInventories());
             for(Inventory inventory: salesInventoryMap.keySet()) {
                 List<Action> oldActions = actionRepository.getActionsByActiveTrueAndInventory_ActiveAndInventoryAndEmployeeAndAction_Attr1AndAmountGreaterThanOrderById(true, inventory, employee, "consolidate", 0);
                 if (oldActions.size() == 0 || Util.calculateInventoryAmount(oldActions)<salesInventoryMap.get(inventory).size()) {
-                    FieldError fieldError = new FieldError("", "", inventory.getBarcode() + " barkodlu " + inventory.getName() + " " + employee.getPerson().getFullName() + " adına " + (salesInventoryMap.get(inventory).size()-Util.calculateInventoryAmount(oldActions)) + " ədəd əlavə inventarın təhkim edilməsinə ehtiyyac vardır!");
+                    FieldError fieldError = new FieldError("", "", inventory.getBarcode() + " barkodlu " + inventory.getName() + " " + employee.getPerson().getFullName() + " adına " + (salesInventoryMap.get(inventory).size()-Util.calculateInventoryAmount(oldActions)) + " ədəd (əlavə) təhkim edilməsinə ehtiyyac vardır!");
                     binding.addError(fieldError);
                 }
             }
-        } else if(!sales.getService()) {
+        } else {
             FieldError fieldError = new FieldError("", "", "İnventar əlavə edilməyib!");
             binding.addError(fieldError);
         }
