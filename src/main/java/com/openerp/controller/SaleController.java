@@ -167,7 +167,6 @@ public class SaleController extends SkeletonController {
                 Invoice export = new Invoice(!canViewAll()?getSessionOrganization():null);
                 export.setApprove(null);
                 export.setActive(null);
-                export.setAdvance(null);
                 export.setInvoiceDate(null);
                 export.setPrice(null);
                 invoices = invoiceService.findAll(export, PageRequest.of(0, paginationSize()*1000000, Sort.by("approve").ascending().and(Sort.by("approveDate").descending()).and(Sort.by("id").descending())));
@@ -230,6 +229,14 @@ public class SaleController extends SkeletonController {
                 List<Sales> salesList = salesRepository.getSalesByActiveTrueAndApproveTrueAndSaledFalseAndTaxConfigurationAndReturnedFalse(taxConfiguration);
                 taxConfiguration.setSalesCount(salesList.size());
                 taxConfiguration.setPlannedPaymentAmountMonthly(Util.calculatePlannedPaymentMonthly(salesList));
+                Double collectCommon = 0d;
+                Double collectMonthly = 0d;
+                for(Sales sales: salesList){
+                    collectCommon+=Util.calculateInvoice(sales.getInvoices());
+                    collectMonthly+=Util.calculateInvoiceCurrentMonth(sales.getInvoices());
+                }
+                taxConfiguration.setCollectCommon(collectCommon);
+                taxConfiguration.setCollectMonthly(collectMonthly);
             }
             model.addAttribute(Constants.LIST, taxConfigurations);
             if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
@@ -500,7 +507,6 @@ public class SaleController extends SkeletonController {
     public String postSalesApprove(@ModelAttribute(Constants.FORM) @Validated Sales sales, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         sales = salesRepository.getSalesById(sales.getId());
         Employee employee = sales.getService()?sales.getServicer():sales.getVanLeader();// (sales.getService() && sales.getServicer()!=null)?sales.getServicer():getSessionUser().getEmployee();
-        salesInventoryRepository.getSalesInventoriesByActiveTrueAndSales_Id(sales.getId());
         if(sales.getSalesInventories().size()>0){
             Map<Inventory, List<SalesInventory>> salesInventoryMap = Util.groupInventory(sales.getSalesInventories());
             for(Inventory inventory: salesInventoryMap.keySet()) {
@@ -576,9 +582,6 @@ public class SaleController extends SkeletonController {
                     invoice.setSales(sales);
                     invoice.setApprove(false);
                     invoice.setCreditable(true);
-                    if(!sales.getService()){
-                        invoice.setAdvance(true);
-                    }
                     invoice.setPrice(invoicePrice);
                     invoice.setOrganization(sales.getOrganization());
                     invoice.setDescription("Satışdan əldə edilən ilkin ödəniş " + invoicePrice + " AZN");
@@ -620,11 +623,11 @@ public class SaleController extends SkeletonController {
                 sales.getPayment().setDown(sales.getPayment().getLastPrice());
             } else {
                 sales.getPayment().setPeriod(sale.getPayment().getPeriod());
-                sales.getPayment().setSchedule(dictionaryRepository.getDictionaryById(sales.getPayment().getSchedule().getId()));
+                sales.getPayment().setSchedule(dictionaryRepository.getDictionaryById(sale.getPayment().getSchedule().getId()));
                 sales.getPayment().setSchedulePrice(Util.schedulePrice(sales.getPayment().getSchedule(), sales.getPayment().getLastPrice(), sales.getPayment().getDown()));
                 sales.getPayment().setDown(sale.getPayment().getDown());
             }
-            sales.setGuarantee(sales.getGuarantee()!=null?sales.getGuarantee():6);
+            sales.setGuarantee(sale.getGuarantee()!=null?sale.getGuarantee():6);
             sales.setGuaranteeExpire(Util.guarantee(sales.getSaleDate()==null?new Date():sales.getSaleDate(), sales.getGuarantee()));
             sales.getPayment().setDescription(sale.getPayment().getDescription());
             sales.getPayment().setGracePeriod(sale.getPayment().getGracePeriod());
@@ -647,7 +650,6 @@ public class SaleController extends SkeletonController {
                 invoice.setApprove(false);
                 invoice.setCreditable(true);
                 invoice.setPrice(invoicePrice-Util.calculateInvoice(sales.getInvoices()));
-                invoice.setAdvance((!sales.getService() && Util.calculateInvoice(sales.getInvoices())==0)?true:false);
                 invoice.setOrganization(sales.getOrganization());
                 invoice.setDescription("Satışdan əldə edilən ödəniş " + invoice.getPrice() + " AZN");
                 invoiceRepository.save(invoice);
@@ -1137,129 +1139,32 @@ public class SaleController extends SkeletonController {
             invoiceRepository.save(invc);
             log(invc, "invoice", "approve", invc.getId(), invc.toString());
 
-            Transaction transaction = new Transaction();
-            transaction.setApprove(false);
-            transaction.setDebt(invc.getPrice()>0?true:false);
-            transaction.setInventory(invc.getSales().getSalesInventories().get(0).getInventory());
-            transaction.setOrganization(invc.getOrganization());
-            transaction.setPrice(Math.abs(invc.getPrice()));
-            transaction.setCurrency("AZN");
-            transaction.setRate(Util.getRate(currencyRateRepository.getCurrencyRateByCode(transaction.getCurrency().toUpperCase())));
-            double sumPrice = Util.amountChecker(transaction.getAmount()) * transaction.getPrice() * transaction.getRate();
-            transaction.setSumPrice(sumPrice);
-            transaction.setAction(invc.getSales().getSalesInventories().get(0).getInventory().getActions().get(0).getAction()); //burda duzelis edilmelidir
-            transaction.setDescription("Satış|Servis, Kod: "+invc.getSales().getId() + " -> "
-                    + invc.getSales().getCustomer().getPerson().getFullName() + " -> "
-                    + " barkod: " + invc.getSales().getSalesInventories().get(0).getInventory().getName()
-                    + " " + invc.getSales().getSalesInventories().get(0).getInventory().getBarcode()
-            );
-            transactionRepository.save(transaction);
-            log(transaction, "transaction", "create/edit", transaction.getId(), transaction.toString());
-
-            ScriptEngineManager mgr = new ScriptEngineManager();
-            ScriptEngine engine = mgr.getEngineByName("JavaScript");
-            String percent = "*0.01";
-            Dictionary advance = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("bonus-sale-advance", "advance");
-            Sales sales = invc.getSales();
-            //Sabuhinin isteyi ile legv edildi Farid OK verdi 10.07.2020
-            /*if(sales!=null && sales.getServicer()!=null){
-                EmployeeSaleDetail saleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getServicer(), "{service}");
-                String advancePrice = saleDetail.getValue().replaceAll(Pattern.quote("%"), percent);
-                advances.add(new Advance(advance,
-                        sales.getServicer(),
-                        Util.getUserBranch(sales.getServicer().getOrganization()),
-                        sales.getId() + " nömrəli satış və " + invoice.getId() + " nömrəli hesab fakturadan əldə edilən bonus. "+sales.getServicer().getPerson().getFullName()+" (Servis işçisi)",
-                        advancePrice,
-                        sales.getSaleDate(),
-                        Double.parseDouble(String.valueOf(engine.eval(advancePrice)))
-                ));
-            }
-            if(sales!=null && invc.getCollector()!=null){
-                EmployeeSaleDetail saleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(invc.getCollector(), "{collect}");
-                String advancePrice = saleDetail.getValue().replaceAll(Pattern.quote("%"), percent);
-                advances.add(new Advance(advance,
-                        invc.getCollector(),
-                        Util.getUserBranch(invc.getCollector().getOrganization()),
-                        sales.getId() + " nömrəli satış və " + invoice.getId() + " nömrəli hesab fakturadan əldə edilən bonus. "+invc.getCollector().getPerson().getFullName()+" (Yığımçı)",
-                        advancePrice,
-                        sales.getSaleDate(),
-                        Double.parseDouble(String.valueOf(engine.eval(advancePrice)))
-                ));
-            }*/
-            if(sales!=null && invc.getApprove() && invc.getAdvance()){
-                Advance advanceO;
-                if(sales.getCanavasser()!=null){
-                    EmployeeSaleDetail canvasserSaleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getCanavasser(), "{canvasser}");
-                    String calculated_bonus = canvasserSaleDetail.getValue()
-                            .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
-                            .replaceAll(Pattern.quote("%"), percent);
-                    advanceO = new Advance(advance,
-                            sales.getCanavasser(),
-                            Util.getUserBranch(sales.getCanavasser().getOrganization()),
-                            sales.getId() + " nömrəli satış və " + invoice.getId() + " nömrəli hesab fakturadan əldə edilən bonus. "+canvasserSaleDetail.getEmployee().getPerson().getFullName()+" (Canvasser)",
-                            calculated_bonus,
-                            invc.getApproveDate(),
-                            Double.parseDouble(String.valueOf(engine.eval(calculated_bonus)))
-                    );
-                    advanceRepository.save(advanceO);
-                    log(advanceO, "advance", "create/edit", advanceO.getId(), advanceO.toString(), " Satış No: " + invc.getSales().getId());
-                }
-
-                if(sales.getDealer()!=null){
-                    EmployeeSaleDetail dealerSaleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getDealer(), "{dealer}");
-                    String calculated_bonus = dealerSaleDetail.getValue()
-                            .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
-                            .replaceAll(Pattern.quote("%"), percent);
-                    advanceO = new Advance(advance,
-                            sales.getDealer(),
-                            Util.getUserBranch(sales.getDealer().getOrganization()),
-                            sales.getId() + " nömrəli satış və " + invoice.getId() + " nömrəli hesab fakturadan əldə edilən bonus."+dealerSaleDetail.getEmployee().getPerson().getFullName()+" (Diller)",
-                            calculated_bonus,
-                            invc.getApproveDate(),
-                            Double.parseDouble(String.valueOf(engine.eval(calculated_bonus)))
-                    );
-                    advanceRepository.save(advanceO);
-                    log(advanceO, "advance", "create/edit", advanceO.getId(), advanceO.toString(), " Satış No: " + invc.getSales().getId());
-                }
-
-                if(sales.getVanLeader()!=null){
-                    EmployeeSaleDetail vanLeaderSaleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getVanLeader(), "{van_leader}");
-                    String calculated_bonus = vanLeaderSaleDetail.getValue()
-                            .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
-                            .replaceAll(Pattern.quote("%"), percent);
-                    advanceO = new Advance(advance,
-                            sales.getVanLeader(),
-                            Util.getUserBranch(sales.getVanLeader().getOrganization()),
-                            sales.getId() + " nömrəli satış və " + invoice.getId() + " nömrəli hesab fakturadan əldə edilən bonus."+vanLeaderSaleDetail.getEmployee().getPerson().getFullName()+" (Ven lider)",
-                            calculated_bonus,
-                            invc.getApproveDate(),
-                            Double.parseDouble(String.valueOf(engine.eval(calculated_bonus)))
-                    );
-
-                    advanceRepository.save(advanceO);
-                    log(advanceO, "advance", "create/edit", advanceO.getId(), advanceO.toString(), " Satış No: " + invc.getSales().getId());
-                }
-
-                if(sales.getConsole()!=null){
-                    EmployeeSaleDetail consulSaleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getConsole(), "{consul}");
-                    String calculated_bonus = consulSaleDetail.getValue()
-                            .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
-                            .replaceAll(Pattern.quote("%"), percent);
-                    advanceO = new Advance(advance,
-                            sales.getConsole(),
-                            Util.getUserBranch(sales.getConsole().getOrganization()),
-                            sales.getId() + " nömrəli satış və " + invoice.getId() + " nömrəli hesab fakturadan əldə edilən bonus."+consulSaleDetail.getEmployee().getPerson().getFullName()+" (Konsul)",
-                            calculated_bonus,
-                            invc.getApproveDate(),
-                            Double.parseDouble(String.valueOf(engine.eval(calculated_bonus)))
-                    );
-
-                    advanceRepository.save(advanceO);
-                    log(advanceO, "advance", "create/edit", advanceO.getId(), advanceO.toString(), " Satış No: " + invc.getSales().getId());
-                }
+            try{
+                Transaction transaction = new Transaction();
+                transaction.setApprove(false);
+                transaction.setDebt(invc.getPrice()>0?true:false);
+                transaction.setInventory(invc.getSales().getSalesInventories().get(0).getInventory());
+                transaction.setOrganization(invc.getOrganization());
+                transaction.setPrice(Math.abs(invc.getPrice()));
+                transaction.setCurrency("AZN");
+                transaction.setRate(Util.getRate(currencyRateRepository.getCurrencyRateByCode(transaction.getCurrency().toUpperCase())));
+                double sumPrice = Util.amountChecker(transaction.getAmount()) * transaction.getPrice() * transaction.getRate();
+                transaction.setSumPrice(sumPrice);
+                transaction.setAction(invc.getSales().getSalesInventories().get(0).getInventory().getActions().get(0).getAction()); //burda duzelis edilmelidir
+                transaction.setDescription("Satış|Servis, Kod: "+invc.getSales().getId() + " -> "
+                        + invc.getSales().getCustomer().getPerson().getFullName() + " -> "
+                        + " barkod: " + invc.getSales().getSalesInventories().get(0).getInventory().getName()
+                        + " " + invc.getSales().getSalesInventories().get(0).getInventory().getBarcode()
+                );
+                transactionRepository.save(transaction);
+                log(transaction, "transaction", "create/edit", transaction.getId(), transaction.toString());
+            } catch (Exception e){
+                log.error(e.getMessage(), e);
             }
 
-            Sales sales1 = salesRepository.getSalesById(sales.getId());
+            saleBonusAdvance(invc);
+
+            Sales sales1 = salesRepository.getSalesById(invc.getSales().getId());
             if(sales1!=null && sales1.getPayment()!=null && Util.calculateInvoice(sales1.getInvoices())>=sales1.getPayment().getLastPrice()){
                 sales1.setSaled(true);
             } else if(sales1!=null && sales1.getPayment()!=null && Util.calculateInvoice(sales1.getInvoices())<sales1.getPayment().getLastPrice()){

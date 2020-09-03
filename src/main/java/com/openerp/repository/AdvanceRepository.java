@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface AdvanceRepository extends JpaRepository<Advance, Integer>, JpaSpecificationExecutor<Advance> {
     List<Advance> getAdvancesByActiveTrueOrderByIdDesc();
+    List<Advance> getAdvancesByActiveTrueAndSalesId(Integer salesId);
     List<Advance> getAdvancesByActiveTrueAndOrganizationOrderByIdDesc(Organization organization);
     Advance getAdvanceById(int id);
     List<Advance> getAdvancesByActiveTrueAndApproveTrueAndTransactionFalseAndAdvanceDateBetweenAndEmployee(Date date1, Date date2, Employee employee);

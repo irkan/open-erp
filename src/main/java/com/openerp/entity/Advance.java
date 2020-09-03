@@ -34,6 +34,10 @@ public class Advance {
     @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "sales_id")
+    private Sales sales;
+
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "organization_id")
     private Organization organization;

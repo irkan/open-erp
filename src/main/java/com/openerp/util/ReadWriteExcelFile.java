@@ -2077,8 +2077,6 @@ public class ReadWriteExcelFile {
 		cell = row.createCell(row.getLastCellNum());
 		cell.setCellValue("Məbləğ");
 		cell = row.createCell(row.getLastCellNum());
-		cell.setCellValue("Avans edilə bilər");
-		cell = row.createCell(row.getLastCellNum());
 		cell.setCellValue("Satış");
 		cell = row.createCell(row.getLastCellNum());
 		cell.setCellValue("Struktur");
@@ -2115,8 +2113,6 @@ public class ReadWriteExcelFile {
 			cell.setCellValue(invoice.getChannelReferenceCode());
 			cell = row.createCell(row.getLastCellNum());
 			cell.setCellValue(invoice.getPrice());
-			cell = row.createCell(row.getLastCellNum());
-			cell.setCellValue(invoice.getAdvance());
 			cell = row.createCell(row.getLastCellNum());
 			cell.setCellValue(invoice.getSales()!=null?Util.checkNull(invoice.getSales().getId()):"");
 			cell = row.createCell(row.getLastCellNum());

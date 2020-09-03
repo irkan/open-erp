@@ -65,7 +65,7 @@
                                         <div class="form-group row">
                                             <label class="col-xl-3 col-lg-3 col-form-label">Sətr sayı</label>
                                             <div class="col-lg-2 col-xl-2">
-                                                <input class="form-control" type="text" value="<c:out value="${sessionScope.user.userDetail.paginationSize}"/>"/>
+                                                <form:input path="paginationSize" cssClass="form-control"/>
                                             </div>
                                         </div>
                                         <div class="form-group row">

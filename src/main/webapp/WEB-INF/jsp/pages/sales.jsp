@@ -1283,7 +1283,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <form:label path="payment.description">Açıqlama</form:label>
-                                <form:textarea path="payment.description" cssClass="form-control" readonly="true" rows="3"/>
+                                <form:textarea path="payment.description" cssClass="form-control" rows="3"/>
                                 <form:errors path="payment.description" cssClass="control-label alert-danger"/>
                             </div>
                             <div class="row">

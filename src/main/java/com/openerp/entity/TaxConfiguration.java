@@ -61,6 +61,12 @@ public class TaxConfiguration {
     private Double payedAmountMonthly;
 
     @Transient
+    private Double collectMonthly;
+
+    @Transient
+    private Double collectCommon;
+
+    @Transient
     private Integer salesCount;
 
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")

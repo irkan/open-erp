@@ -77,125 +77,38 @@ public class ApiController extends SkeletonController {
                         invc.setOrganization(sale.getOrganization());
                         invc.setSales(sale);
                         invc.setPrice(amount);
-                        invc.setAdvance(Util.calculateInvoice(sale.getInvoices())>0?false:true);
-                        StringBuilder sb = new StringBuilder();
                         invc.setDescription("Ödəniş " + invc.getPrice() + " AZN "+webServiceAuthenticator.getDescription() + ":TERMINAL ilə ödənilib");
                         invc.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("million", "payment-channel"));
                         invoiceRepository.save(invc);
 
                         log(response,"invoice", "create/edit", invc.getId(), response.toString(), invc.getDescription(), webServiceAuthenticator.getUsername());
 
-                        Transaction transaction = new Transaction();
-                        transaction.setApprove(false);
-                        transaction.setDebt(invc.getPrice()>0?true:false);
-                        transaction.setInventory(invc.getSales().getSalesInventories().get(0).getInventory());
-                        transaction.setOrganization(invc.getOrganization());
-                        transaction.setPrice(Math.abs(invc.getPrice()));
-                        transaction.setCurrency("AZN");
-                        transaction.setRate(Util.getRate(currencyRateRepository.getCurrencyRateByCode(transaction.getCurrency().toUpperCase())));
-                        double sumPrice = Util.amountChecker(transaction.getAmount()) * transaction.getPrice() * transaction.getRate();
-                        transaction.setSumPrice(sumPrice);
-                        transaction.setAction(invc.getSales().getSalesInventories().get(0).getInventory().getActions().get(0).getAction()); //burda duzelis edilmelidir
-                        transaction.setDescription("TERMINAL Satış|Servis, Kod: "+invc.getSales().getId() + " -> "
-                                + invc.getSales().getCustomer().getPerson().getFullName() + " -> "
-                                + " barkod: " + invc.getSales().getSalesInventories().get(0).getInventory().getName()
-                                + " " + invc.getSales().getSalesInventories().get(0).getInventory().getBarcode() + " " + invc.getDescription()
-                        );
-                        transactionRepository.save(transaction);
-                        log(transaction, "transaction", "create/edit", transaction.getId(), transaction.toString(), transaction.getDescription(), webServiceAuthenticator.getUsername());
+                        try{
+                            Transaction transaction = new Transaction();
+                            transaction.setApprove(false);
+                            transaction.setDebt(invc.getPrice()>0?true:false);
+                            transaction.setInventory(invc.getSales().getSalesInventories().get(0).getInventory());
+                            transaction.setOrganization(invc.getOrganization());
+                            transaction.setPrice(Math.abs(invc.getPrice()));
+                            transaction.setCurrency("AZN");
+                            transaction.setRate(Util.getRate(currencyRateRepository.getCurrencyRateByCode(transaction.getCurrency().toUpperCase())));
+                            double sumPrice = Util.amountChecker(transaction.getAmount()) * transaction.getPrice() * transaction.getRate();
+                            transaction.setSumPrice(sumPrice);
+                            transaction.setAction(invc.getSales().getSalesInventories().get(0).getInventory().getActions().get(0).getAction()); //burda duzelis edilmelidir
+                            transaction.setDescription("TERMINAL Satış|Servis, Kod: "+invc.getSales().getId() + " -> "
+                                    + invc.getSales().getCustomer().getPerson().getFullName() + " -> "
+                                    + " barkod: " + invc.getSales().getSalesInventories().get(0).getInventory().getName()
+                                    + " " + invc.getSales().getSalesInventories().get(0).getInventory().getBarcode() + " " + invc.getDescription()
+                            );
+                            transactionRepository.save(transaction);
+                            log(transaction, "transaction", "create/edit", transaction.getId(), transaction.toString(), transaction.getDescription(), webServiceAuthenticator.getUsername());
 
-                        List<Advance> advances = new ArrayList<>();
-                        ScriptEngineManager mgr = new ScriptEngineManager();
-                        ScriptEngine engine = mgr.getEngineByName("JavaScript");
-                        String percent = "*0.01";
-                        Dictionary advance = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("bonus-sale-advance", "advance");
-                        Sales sales = invc.getSales();
-
-                        /*if(sales!=null && sales.getServicer()!=null){
-                            EmployeeSaleDetail saleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getServicer(), "{service}");
-                            String advancePrice = saleDetail.getValue().replaceAll(Pattern.quote("%"), percent);
-                            advances.add(new Advance(advance,
-                                    sales.getServicer(),
-                                    Util.getUserBranch(sales.getServicer().getOrganization()),
-                                    sales.getId() + " nömrəli satış və " + invc.getId() + " nömrəli hesab fakturadan əldə edilən bonus. "+sales.getServicer().getPerson().getFullName()+" (Servis işçisi)",
-                                    advancePrice,
-                                    sales.getSaleDate(),
-                                    Double.parseDouble(String.valueOf(engine.eval(advancePrice)))
-                            ));
+                        } catch (Exception e){
+                            log.error(e.getMessage(), e);
                         }
-                        if(sales!=null && invc.getCollector()!=null){
-                            EmployeeSaleDetail saleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(invc.getCollector(), "{collect}");
-                            String advancePrice = saleDetail.getValue().replaceAll(Pattern.quote("%"), percent);
-                            advances.add(new Advance(advance,
-                                    invc.getCollector(),
-                                    Util.getUserBranch(invc.getCollector().getOrganization()),
-                                    sales.getId() + " nömrəli satış və " + invc.getId() + " nömrəli hesab fakturadan əldə edilən bonus. "+invc.getCollector().getPerson().getFullName()+" (Yığımçı)",
-                                    advancePrice,
-                                    sales.getSaleDate(),
-                                    Double.parseDouble(String.valueOf(engine.eval(advancePrice)))
-                            ));
-                        }*/
-                        if(sales!=null && invc.getApprove() && invc.getAdvance()) {
-                            if (sales.getCanavasser() != null) {
-                                EmployeeSaleDetail canvasserSaleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getCanavasser(), "{canvasser}");
-                                String calculated_bonus = canvasserSaleDetail.getValue()
-                                        .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
-                                        .replaceAll(Pattern.quote("%"), percent);
-                                advances.add(new Advance(advance,
-                                        sales.getCanavasser(),
-                                        Util.getUserBranch(sales.getCanavasser().getOrganization()),
-                                        sales.getId() + " nömrəli satış və " + invc.getId() + " nömrəli hesab fakturadan əldə edilən bonus. " + canvasserSaleDetail.getEmployee().getPerson().getFullName() + " (Canvasser)",
-                                        calculated_bonus,
-                                        sales.getSaleDate(),
-                                        Double.parseDouble(String.valueOf(engine.eval(calculated_bonus)))
-                                ));
-                            }
 
-                            if (sales.getDealer() != null) {
-                                EmployeeSaleDetail dealerSaleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getDealer(), "{dealer}");
-                                String calculated_bonus = dealerSaleDetail.getValue()
-                                        .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
-                                        .replaceAll(Pattern.quote("%"), percent);
-                                advances.add(new Advance(advance,
-                                        sales.getDealer(),
-                                        Util.getUserBranch(sales.getDealer().getOrganization()),
-                                        sales.getId() + " nömrəli satış və " + invc.getId() + " nömrəli hesab fakturadan əldə edilən bonus." + dealerSaleDetail.getEmployee().getPerson().getFullName() + " (Diller)",
-                                        calculated_bonus,
-                                        sales.getSaleDate(),
-                                        Double.parseDouble(String.valueOf(engine.eval(calculated_bonus)))
-                                ));
-                            }
+                        saleBonusAdvance(invc);
 
-                            if (sales.getVanLeader() != null) {
-                                EmployeeSaleDetail vanLeaderSaleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getVanLeader(), "{van_leader}");
-                                String calculated_bonus = vanLeaderSaleDetail.getValue()
-                                        .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
-                                        .replaceAll(Pattern.quote("%"), percent);
-                                advances.add(new Advance(advance,
-                                        sales.getVanLeader(),
-                                        Util.getUserBranch(sales.getVanLeader().getOrganization()),
-                                        sales.getId() + " nömrəli satış və " + invc.getId() + " nömrəli hesab fakturadan əldə edilən bonus." + vanLeaderSaleDetail.getEmployee().getPerson().getFullName() + " (Ven lider)",
-                                        calculated_bonus,
-                                        sales.getSaleDate(),
-                                        Double.parseDouble(String.valueOf(engine.eval(calculated_bonus)))
-                                ));
-                            }
-
-                            if (sales.getConsole() != null) {
-                                EmployeeSaleDetail consulSaleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getConsole(), "{consul}");
-                                String calculated_bonus = consulSaleDetail.getValue()
-                                        .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
-                                        .replaceAll(Pattern.quote("%"), percent);
-                                advances.add(new Advance(advance,
-                                        sales.getConsole(),
-                                        Util.getUserBranch(sales.getConsole().getOrganization()),
-                                        sales.getId() + " nömrəli satış və " + invc.getId() + " nömrəli hesab fakturadan əldə edilən bonus." + consulSaleDetail.getEmployee().getPerson().getFullName() + " (Konsul)",
-                                        calculated_bonus,
-                                        sales.getSaleDate(),
-                                        Double.parseDouble(String.valueOf(engine.eval(calculated_bonus)))
-                                ));
-                            }
-                        }
                         response = new WSResponse("200", "OK", channelReferenceCode);
                     }
                 }

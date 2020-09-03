@@ -32,13 +32,12 @@
                                     <th>Şirkət</th>
                                     <th>Açıqlama</th>
                                     <th>Əlaqəli şəxs</th>
-                                    <th>Email</th>
-                                    <th>Mobil nömrə</th>
-                                    <th>Ofis nömrəsi</th>
-                                    <th>Ünvan</th>
+                                    <th>Əlaqə vasitəsi</th>
                                     <th>Aylıq limit</th>
                                     <th>Satış sayı</th>
                                     <th style="max-width: 70px">Planlaşdırılmış ödəniş</th>
+                                    <th style="max-width: 70px">Yığım cari aylıq</th>
+                                    <th style="max-width: 70px">Yığım ümumi</th>
                                     <th>Əməliyyat</th>
                                 </tr>
                                 </thead>
@@ -52,13 +51,18 @@
                                         <td><c:out value="${t.company}" /></td>
                                         <td><c:out value="${t.description}" /></td>
                                         <td><c:out value="${t.person.fullName}" /></td>
-                                        <td><c:out value="${t.person.contact.email}" /></td>
-                                        <td><c:out value="${t.person.contact.mobilePhone}" /></td>
-                                        <td><c:out value="${t.person.contact.homePhone}" /></td>
-                                        <td><c:out value="${t.person.contact.city.name}" />, <c:out value="${t.person.contact.address}" /></td>
+                                        <td>
+                                            <c:if test="${not empty t.person.contact.email}">
+                                                <c:out value="${t.person.contact.email}" /> <br/>
+                                            </c:if>
+                                            <c:out value="${t.person.contact.mobilePhone}" /> <c:out value="${t.person.contact.homePhone}" /> <br/>
+                                            <c:out value="${t.person.contact.city.name}" />, <c:out value="${t.person.contact.address}" />
+                                        </td>
                                         <td><c:out value="${t.maxLimitMonthly}" /> AZN</td>
                                         <td><c:out value="${t.salesCount}" /></td>
                                         <td><c:out value="${t.plannedPaymentAmountMonthly}" /> AZN</td>
+                                        <td><c:out value="${t.collectMonthly}" /> AZN</td>
+                                        <td><c:out value="${t.collectCommon}" /> AZN</td>
                                         <td nowrap class="text-center">
                                             <c:if test="${view.status}">
                                                 <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">

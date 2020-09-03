@@ -22,12 +22,15 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.PostConstruct;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Controller
 public class SkeletonController {
@@ -610,7 +613,6 @@ public class SkeletonController {
         if(invoice.getId()==null){
             invoice.setDescription("Ödəniş " + invoice.getPrice() + " AZN -> " + invoice.getDescription());
             invoice.setApprove(false);
-            invoice.setAdvance(false);
             invc = invoice;
         } else {
             invc = invoiceRepository.getInvoiceById(invoice.getId());
@@ -618,7 +620,6 @@ public class SkeletonController {
             invc.setPrice(invoice.getPrice());
             invc.setInvoiceDate(invoice.getInvoiceDate());
             invc.setDescription(invoice.getDescription());
-            invc.setAdvance(invoice.getAdvance());
         }
         invoiceRepository.save(invc);
         addContactHistory(invc.getSales(), "Hesab-faktura yaradıldı. H/f №" + invc.getId(), null);
@@ -773,17 +774,27 @@ public class SkeletonController {
 
     byte canCalculateAdvance(Double price, Integer salesId){ //-1 avansin kredit emeliyyati, 0-hecne, 1 avans emeliyyati
         try{
+            price = Util.ifNullReturn0(price);
             Sales sales = salesRepository.getSalesById(salesId);
             if(sales!=null){
                 if(!sales.getService()){ //servis deyilse yeni satishdirsa
-                    Double payed = Util.calculateInvoice(sales.getInvoices());
+                    Double payed = Util.calculateInvoice(sales.getInvoices())-Util.ifNullReturn0(price);
                     if(sales.getPayment()!=null){
+                        Double sum = Util.ifNullReturn0(sales.getPayment().getPrice())/4;
                         if(sales.getPayment().getCash()){ //cash satilib
-                            if(payed>500){
-
+                            sum = Util.ifNullReturn0(sales.getPayment().getLastPrice())/3;
+                            if(payed<sum && payed+price>=sum){ //invoice odenilib
+                                return 1;
+                            } else if(payed>=sum && payed+price<sum) { //kredit emeliyyati edilib
+                                return -1;
                             }
                         } else { // kreditle satilib
-
+                            sum = Util.ifNullReturn0(sales.getPayment().getDown())+Util.ifNullReturn0(sales.getPayment().getSchedulePrice());
+                            if(payed<sum && payed+price>=sum){
+                                return 1;
+                            } else if(payed>=sum && payed+price<sum) { //kredit emeliyyati edilib
+                                return -1;
+                            }
                         }
                     }
                 }
@@ -792,5 +803,106 @@ public class SkeletonController {
             log.error(e.getMessage(), e);
         }
         return 0;
+    }
+
+    void saleBonusAdvance(Invoice invc){
+        ScriptEngineManager mgr = new ScriptEngineManager();
+        ScriptEngine engine = mgr.getEngineByName("JavaScript");
+        String percent = "*0.01";
+        Dictionary advance = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("bonus-sale-advance", "advance");
+        Sales sales = invc.getSales();
+        List<Advance> advances = advanceRepository.getAdvancesByActiveTrueAndSalesId(invc.getSales().getId());
+        byte cofficent = canCalculateAdvance(invc.getPrice(), invc.getSales().getId());
+        if(sales!=null && !sales.getService() && invc.getApprove() && cofficent!=0 && advances.size()==0){
+            if(cofficent<0){
+                advance = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("credit", "action");
+            }
+            Advance advanceO;
+            try{
+                if(sales.getCanavasser()!=null){
+                    EmployeeSaleDetail canvasserSaleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getCanavasser(), "{canvasser}");
+                    String calculated_bonus = canvasserSaleDetail.getValue()
+                            .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
+                            .replaceAll(Pattern.quote("%"), percent);
+                    advanceO = new Advance(advance,
+                            sales.getCanavasser(),
+                            Util.getUserBranch(sales.getCanavasser().getOrganization()),
+                            sales.getId() + " nömrəli satış və " + invc.getId() + " nömrəli hesab fakturadan əldə edilən bonus. "+canvasserSaleDetail.getEmployee().getPerson().getFullName()+" (Canvasser)",
+                            calculated_bonus,
+                            invc.getApproveDate(),
+                            cofficent*Double.parseDouble(String.valueOf(engine.eval(calculated_bonus)))
+                    );
+                    advanceO.setSales(invc.getSales());
+                    advanceRepository.save(advanceO);
+                    log(advanceO, "advance", "create/edit", advanceO.getId(), advanceO.toString(), " Satış No: " + invc.getSales().getId());
+                }
+            } catch (Exception e){
+                log.error(e.getMessage(), e);
+            }
+
+            try{
+                if(sales.getDealer()!=null){
+                    EmployeeSaleDetail dealerSaleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getDealer(), "{dealer}");
+                    String calculated_bonus = dealerSaleDetail.getValue()
+                            .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
+                            .replaceAll(Pattern.quote("%"), percent);
+                    advanceO = new Advance(advance,
+                            sales.getDealer(),
+                            Util.getUserBranch(sales.getDealer().getOrganization()),
+                            sales.getId() + " nömrəli satış və " + invc.getId() + " nömrəli hesab fakturadan əldə edilən bonus."+dealerSaleDetail.getEmployee().getPerson().getFullName()+" (Diller)",
+                            calculated_bonus,
+                            invc.getApproveDate(),
+                            cofficent*Double.parseDouble(String.valueOf(engine.eval(calculated_bonus)))
+                    );
+                    advanceO.setSales(invc.getSales());
+                    advanceRepository.save(advanceO);
+                    log(advanceO, "advance", "create/edit", advanceO.getId(), advanceO.toString(), " Satış No: " + invc.getSales().getId());
+                }
+            } catch (Exception e){
+                log.error(e.getMessage(), e);
+            }
+            try{
+                if(sales.getVanLeader()!=null){
+                    EmployeeSaleDetail vanLeaderSaleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getVanLeader(), "{van_leader}");
+                    String calculated_bonus = vanLeaderSaleDetail.getValue()
+                            .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
+                            .replaceAll(Pattern.quote("%"), percent);
+                    advanceO = new Advance(advance,
+                            sales.getVanLeader(),
+                            Util.getUserBranch(sales.getVanLeader().getOrganization()),
+                            sales.getId() + " nömrəli satış və " + invc.getId() + " nömrəli hesab fakturadan əldə edilən bonus."+vanLeaderSaleDetail.getEmployee().getPerson().getFullName()+" (Ven lider)",
+                            calculated_bonus,
+                            invc.getApproveDate(),
+                            cofficent*Double.parseDouble(String.valueOf(engine.eval(calculated_bonus)))
+                    );
+                    advanceO.setSales(invc.getSales());
+                    advanceRepository.save(advanceO);
+                    log(advanceO, "advance", "create/edit", advanceO.getId(), advanceO.toString(), " Satış No: " + invc.getSales().getId());
+                }
+            } catch (Exception e){
+                log.error(e.getMessage(), e);
+            }
+            try{
+                if(sales.getConsole()!=null){
+                    EmployeeSaleDetail consulSaleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getConsole(), "{consul}");
+                    String calculated_bonus = consulSaleDetail.getValue()
+                            .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
+                            .replaceAll(Pattern.quote("%"), percent);
+                    advanceO = new Advance(advance,
+                            sales.getConsole(),
+                            Util.getUserBranch(sales.getConsole().getOrganization()),
+                            sales.getId() + " nömrəli satış və " + invc.getId() + " nömrəli hesab fakturadan əldə edilən bonus."+consulSaleDetail.getEmployee().getPerson().getFullName()+" (Konsul)",
+                            calculated_bonus,
+                            invc.getApproveDate(),
+                            cofficent*Double.parseDouble(String.valueOf(engine.eval(calculated_bonus)))
+                    );
+                    advanceO.setSales(invc.getSales());
+                    advanceRepository.save(advanceO);
+                    log(advanceO, "advance", "create/edit", advanceO.getId(), advanceO.toString(), " Satış No: " + invc.getSales().getId());
+                }
+            } catch (Exception e){
+                log.error(e.getMessage(), e);
+            }
+        }
     }
 }

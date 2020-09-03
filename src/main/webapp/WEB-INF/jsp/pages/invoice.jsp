@@ -239,7 +239,6 @@
                                     <th>Kanal</th>
                                     <th>Referans</th>
                                     <th>Açıqlama</th>
-                                    <th>Avans</th>
                                     <th>Əməliyyat</th>
                                 </tr>
                                 </thead>
@@ -315,11 +314,6 @@
                                         <td><c:out value="${t.paymentChannel.name}" /></td>
                                         <td><c:out value="${t.channelReferenceCode}" /></td>
                                         <td><c:out value="${t.description}" /></td>
-                                        <td class="text-center">
-                                            <c:if test="${t.advance}">
-                                                <i class="flaticon2-check-mark kt-font-success"></i>
-                                            </c:if>
-                                        </td>
                                         <th nowrap class="text-center">
                                             <c:if test="${approve.status and !t.approve}">
                                                 <a href="javascript:invoice('edit', $('#form-approve'), '<c:out value="${t.id}" />', 'approve-modal', '<c:out value="${approve.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${approve.object.name}"/>">
@@ -420,19 +414,6 @@
                         </div>
                         <form:errors path="price" cssClass="alert-danger control-label"/>
                     </div>
-                    <c:choose>
-                        <c:when test="${utl:isAdministrator(sessionScope.user)}">
-                            <div class="form-group">
-                                <label class="kt-checkbox kt-checkbox--brand">
-                                    <form:checkbox path="advance" name="advance"/> Avans hesablansınmı?
-                                    <span></span>
-                                </label>
-                            </div>
-                        </c:when>
-                        <c:otherwise>
-                            <form:hidden path="advance"/>
-                        </c:otherwise>
-                    </c:choose>
                     <div class="form-group">
                         <form:label path="invoiceDate">Hesab-faktura tarixi</form:label>
                         <div class="input-group date" >

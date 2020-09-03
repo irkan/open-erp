@@ -333,7 +333,6 @@ public class MigrationTask {
                                     invoice.setSales(sales);
                                     invoice.setApprove(true);
                                     invoice.setApproveDate(new Date());
-                                    invoice.setAdvance(false);
                                     invoice.setCreditable(true);
                                     invoice.setPrice(payment.getDown());
                                     invoice.setOrganization(sales.getOrganization());
@@ -371,9 +370,6 @@ public class MigrationTask {
                                     invoice.setApprove(true);
                                     invoice.setApproveDate(new Date());
                                     invoice.setCreditable(true);
-                                    if(!sales.getService()){
-                                        invoice.setAdvance(true);
-                                    }
                                     invoice.setPrice(md.getSalesPaymentPayed());
                                     invoice.setOrganization(sales.getOrganization());
                                     invoice.setDescription("Satışdan əldə edilən ilkin ödəniş " + md.getSalesPaymentPayed() + " AZN");
@@ -561,7 +557,6 @@ public class MigrationTask {
                                     invoice.setSales(sales);
                                     invoice.setApprove(true);
                                     invoice.setApproveDate(new Date());
-                                    invoice.setAdvance(false);
                                     invoice.setCreditable(true);
                                     invoice.setPrice(payment.getDown());
                                     invoice.setOrganization(sales.getOrganization());
@@ -599,9 +594,6 @@ public class MigrationTask {
                                     invoice.setApprove(true);
                                     invoice.setApproveDate(new Date());
                                     invoice.setCreditable(true);
-                                    if(!sales.getService()){
-                                        invoice.setAdvance(true);
-                                    }
                                     invoice.setPrice(md.getSalesPaymentPayed());
                                     invoice.setOrganization(sales.getOrganization());
                                     invoice.setDescription("Satışdan əldə edilən ilkin ödəniş " + md.getSalesPaymentPayed() + " AZN");

@@ -177,6 +177,7 @@
 <c:choose>
     <c:when test="${not empty list}">
         <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
+        <c:set var="view1" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'sales', 'view')}"/>
         <c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
         <c:set var="credit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'credit')}"/>
         <c:set var="transfer" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'transfer')}"/>
@@ -188,6 +189,7 @@
     <tr>
         <th>ID</th>
         <th>Avans</th>
+        <th>Satış|Servis</th>
         <th>Əməkdaş</th>
         <c:if test="${canviewall}">
             <th style="min-width: 70px;">Struktur</th>
@@ -206,11 +208,38 @@
         <tr data="<c:out value="${t.id}" />" class="<c:out value="${(t.payed lt 0)?'strikeout':''}"/> ">
             <td><c:out value="${t.id}" /></td>
             <td><c:out value="${t.advance.name}" /></td>
+            <td style="min-width: 125px;" data-sort="<c:out value="${t.sales.id}" />">
+                <c:if test="${not empty t.sales.id}">
+                    <a href="javascript:copyToClipboard2('<c:out value="${t.sales.id}" />', 'Satış kodu <b><c:out value="${t.sales.id}" /></b> kopyalandı')" class="kt-font-lg kt-font-bold kt-font-info kt-font-hover-danger pl-2 pr-2"><i class="la la-copy"></i></a>
+                    <c:choose>
+                        <c:when test="${view1.status}">
+                            <c:choose>
+                                <c:when test="${t.sales.service}">
+                                    <a href="javascript:window.open('/sale/service/<c:out value="${t.sales.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder">Servis: <c:out value="${t.sales.id}" /></a>
+                                </c:when>
+                                <c:otherwise>
+                                    <a href="javascript:window.open('/sale/sales/<c:out value="${t.sales.id}" />', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder">Satış: <c:out value="${t.sales.id}" /></a>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:when>
+                        <c:otherwise>
+                            <c:choose>
+                                <c:when test="${t.sales.service}">
+                                    Servis: <c:out value="${t.sales.id}" />
+                                </c:when>
+                                <c:otherwise>
+                                    Satış: <c:out value="${t.sales.id}" />
+                                </c:otherwise>
+                            </c:choose>
+                        </c:otherwise>
+                    </c:choose>
+                </c:if>
+            </td>
             <td><span style="width: 160px;" class="kt-font-bolder"><c:out value="${t.employee.person.fullName}" /></span></td>
             <c:if test="${canviewall}">
                 <td><c:out value="${t.organization.name}" /></td>
             </c:if>
-            <td>
+            <td data-sort="<c:out value="${t.payed}" />">
                 <span style="width: 65px;" class="kt-font-bolder">
                     <span><c:out value="${t.payed}" /></span>
                     <span class="kt-font-bold font-italic font-size-10px">AZN</span>
@@ -219,7 +248,7 @@
             <td><span class="kt-font-bolder"><fmt:formatDate value = "${t.advanceDate}" pattern = "dd.MM.yyyy" /></span></td>
             <td><c:out value="${t.description}" /></td>
             <td><c:out value="${t.formula}" /></td>
-            <td>
+            <td data-sort="<c:out value="${t.approveDate}" />">
                 <c:if test="${t.approve}">
                     <fmt:formatDate value = "${t.approveDate}" pattern = "dd.MM.yyyy HH:mm:ss" />
                 </c:if>

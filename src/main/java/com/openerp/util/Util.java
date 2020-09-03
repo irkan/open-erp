@@ -44,6 +44,17 @@ public class Util {
         return "";
     }
 
+    public static Double ifNullReturn0(Double value){
+        try{
+            if(value!=null){
+                return value;
+            }
+        } catch (Exception e){
+            log.error(e.getMessage(), e);
+        }
+        return 0d;
+    }
+
     public static String checkNull(Object object){
         try{
             if(object!=null)
@@ -699,6 +710,21 @@ public class Util {
         try{
             for(Invoice invoice: invoices){
                 if(invoice.getApprove()){
+                    price+=invoice.getPrice();
+                }
+            }
+        } catch (Exception e){
+            log.error(e.getMessage(), e);
+        }
+        return price;
+    }
+
+    public static Double calculateInvoiceCurrentMonth(List<Invoice> invoices){
+        double price = 0;
+        Date now = new Date();
+        try{
+            for(Invoice invoice: invoices){
+                if(invoice.getApprove() && invoice.getApproveDate().getYear()==now.getYear() && invoice.getApproveDate().getMonth()==now.getMonth()){
                     price+=invoice.getPrice();
                 }
             }
