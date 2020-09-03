@@ -275,6 +275,7 @@ public class SaleController extends SkeletonController {
                 sales.getPayment().setSchedulePrice(null);
                 sales.getPayment().setDown(sales.getPayment().getLastPrice());
             } else {
+                sales.getPayment().setSchedule(dictionaryRepository.getDictionaryById(sales.getPayment().getSchedule().getId()));
                 sales.getPayment().setSchedulePrice(Util.schedulePrice(sales.getPayment().getSchedule(), sales.getPayment().getLastPrice(), sales.getPayment().getDown()));
             }
             sales.setGuarantee(sales.getGuarantee()!=null?sales.getGuarantee():6);
@@ -290,6 +291,7 @@ public class SaleController extends SkeletonController {
                 }
                 sales.setServiceRegulators(serviceRegulators);
             }
+            sales.getCustomer().setOrganization(sales.getOrganization());
             salesRepository.save(sales);
             log(sales, "sales", "create/edit", sales.getId(), sales.toString());
 
@@ -324,7 +326,7 @@ public class SaleController extends SkeletonController {
     public String postSalesReturn(@ModelAttribute(Constants.FORM) @Validated Sales sale, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         Sales sales = salesRepository.getSalesById(sale.getId());
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
-        if(!binding.hasErrors() && sale.getTaxConfiguration()!=null && sale.getTaxConfiguration().getVoen()!=null){
+        if(!binding.hasErrors() && sale.getTaxConfiguration()!=null && sale.getTaxConfiguration().getId()!=null){
             sales.setTaxConfiguration(sale.getTaxConfiguration());
             salesRepository.save(sales);
 
@@ -611,7 +613,7 @@ public class SaleController extends SkeletonController {
                 sales.getPayment().setDown(sales.getPayment().getLastPrice());
             } else {
                 sales.getPayment().setPeriod(sale.getPayment().getPeriod());
-                sales.getPayment().setSchedule(sale.getPayment().getSchedule());
+                sales.getPayment().setSchedule(dictionaryRepository.getDictionaryById(sales.getPayment().getSchedule().getId()));
                 sales.getPayment().setSchedulePrice(Util.schedulePrice(sales.getPayment().getSchedule(), sales.getPayment().getLastPrice(), sales.getPayment().getDown()));
                 sales.getPayment().setDown(sale.getPayment().getDown());
             }

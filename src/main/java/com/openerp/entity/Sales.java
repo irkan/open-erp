@@ -37,7 +37,7 @@ public class Sales {
     @Column(name = "approve_date")
     private Date approveDate;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "crm_customer_id", nullable = false)
     private Customer customer;
 

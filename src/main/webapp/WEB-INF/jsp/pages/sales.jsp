@@ -758,7 +758,7 @@
                                                     </div>
                                                     <div class="col-sm-4">
                                                         <div class="form-group">
-                                                            <form:label path="payment.gracePeriod">Güzəşt müddəti / AY</form:label>
+                                                            <form:label path="payment.gracePeriod">Güzəşt müd./AY</form:label>
                                                             <div class="input-group" >
                                                                 <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
                                                                 <form:input path="payment.gracePeriod" cssClass="form-control" placeholder="Daxil edin"/>
@@ -2603,7 +2603,8 @@
         $(form).find("input[name='salesId']").val(salesId);
         $(form).find("input[name='oldInventoryBarcode']").val(oldInventoryBarcode);
         $(form).find("#oldInventoryName").text(oldInventoryName);
-        create(form, modal, modal_title);
+        $('#' + modal).find(".modal-title").html(modal_title);
+        $('#' + modal).modal('toggle');
     }
 
     $( "#tax-configuration-form" ).validate({

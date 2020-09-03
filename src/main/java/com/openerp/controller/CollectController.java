@@ -104,7 +104,11 @@ public class CollectController extends SkeletonController {
             }
             if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
                     session.getAttribute(Constants.SESSION_FILTER) instanceof ContactHistory){
-                model.addAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
+                ContactHistory contactHistory = (ContactHistory) session.getAttribute(Constants.SESSION_FILTER);
+                if(!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                    contactHistory.getSales().setId(Util.parseInt(data.get()));
+                }
+                model.addAttribute(Constants.FILTER, contactHistory);
             }
             Page<ContactHistory> contactHistories = contactHistoryService.findAll((ContactHistory) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
             model.addAttribute(Constants.LIST, contactHistories);
@@ -160,6 +164,7 @@ public class CollectController extends SkeletonController {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             contactHistory.setUser(getSessionUser());
+            contactHistory.setChildSales(null);
             contactHistoryRepository.save(contactHistory);
             log(contactHistory, "collect_contact_history", "create/edit", contactHistory.getId(), contactHistory.toString());
         }
