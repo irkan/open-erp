@@ -370,7 +370,7 @@ public class HRController extends SkeletonController {
                     vacationRepository.save(vacation);
                     log(vacation, "vacation", "create/edit", vacation.getId(), vacation.toString());
 
-                    Advance advance = calculateVacationPrice(vacation);
+                    Advance advance = calculateVacationPrice(vacation); //mezuniyyet haqqi hesablanir
                     advanceRepository.save(advance);
                     log(advance, "advance", "create/edit", advance.getId(), advance.toString());
                 }
@@ -459,28 +459,6 @@ public class HRController extends SkeletonController {
         return mapFilter(illness, binding, redirectAttributes, "/hr/illness");
     }
 
-    private Advance calculateVacationPrice(Vacation vacation){
-        List<SalaryEmployee> salaryEmployees = salaryEmployeeRepository.getSalaryEmployeesBySalary_ActiveAndEmployee_IdOrderByEmployeeDesc(true, vacation.getEmployee().getId());
-        int count = (salaryEmployees.size()>12?13:salaryEmployees.size())-1;
-        count = count==0?1:count;
-        double sumSalary = 0d;
-
-        String description = vacation.getIdentifier().getName() + " " + DateUtility.getFormattedDate(vacation.getStartDate()) + " - " + DateUtility.getFormattedDate(vacation.getEndDate()) + ". Məzuniyyət günlərinin sayı: " + vacation.getVacationDetails().size();
-        double vacationPrice = (sumSalary/30.4)*vacation.getVacationDetails().size();
-        Advance advance = new Advance(
-                dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("vacation-advance", "advance"),
-                vacation.getEmployee(),
-                Util.getUserBranch(vacation.getEmployee().getOrganization()),
-                description,
-                "",
-                new Date(),
-                vacationPrice
-        );
-        advance.setApprove(true);
-        advance.setApproveDate(new Date());
-        return advance;
-    }
-
     private double lastMonthSalary(SalaryEmployee salaryEmployee){
         for(SalaryEmployeeDetail sed: salaryEmployee.getSalaryEmployeeDetails()){
             if(sed.getKey().equalsIgnoreCase("{total_amount_payable_official}")){
@@ -525,6 +503,12 @@ public class HRController extends SkeletonController {
     @GetMapping(value = "/api/employee/{dataId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Employee getEmployee(@PathVariable("dataId") Integer dataId){
         return employeeRepository.getEmployeeById(dataId);
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/api/organization/{dataId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Organization getOrganization(@PathVariable("dataId") Integer dataId){
+        return organizationRepository.getOrganizationById(dataId);
     }
 
 

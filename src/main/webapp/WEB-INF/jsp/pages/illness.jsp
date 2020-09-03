@@ -171,11 +171,11 @@
                         <i class="<c:out value="${view.object.icon}"/>"></i>
                     </a>
                 </c:if>
-                <c:if test="${edit.status}">
+                <%--<c:if test="${edit.status}">
                     <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
                         <i class="<c:out value="${edit.object.icon}"/>"></i>
                     </a>
-                </c:if>
+                </c:if>--%>
                 <c:if test="${delete.status}">
                     <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.dateRange}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
                         <i class="<c:out value="${delete.object.icon}"/>"></i>
@@ -225,7 +225,7 @@
                         <form:errors path="employee.id" cssClass="control-label alert alert-danger" />
                     </div>
                     <div class="form-group">
-                        <form:label path="identifier.id">Məzuniyyətin forması</form:label>
+                        <form:label path="identifier.id">Forma</form:label>
                         <form:select  path="identifier.id" cssClass="custom-select form-control">
                             <form:options items="${identifiers}" itemLabel="name" itemValue="id" />
                         </form:select>
@@ -266,11 +266,8 @@
 
 <script>
     $('#datatable tbody').on('dblclick', 'tr', function () {
-        <c:if test="${edit.status}">
-        edit($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${edit.object.name}" />');
-        </c:if>
-        <c:if test="${!edit.status and view.status}">
-        view($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${view.object.name}" />');
+        <c:if test="${view.status}">
+            view($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${view.object.name}" />');
         </c:if>
     });
 

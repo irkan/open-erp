@@ -11,6 +11,7 @@ import java.util.List;
 
 public interface CustomerRepository extends JpaRepository<Customer, Integer>, JpaSpecificationExecutor<Customer> {
     Customer getCustomerByIdAndActiveTrue(Integer id);
+    Customer getCustomerById(Integer id);
     Customer getCustomerByIdAndActiveTrueAndOrganization(Integer id, Organization organization);
     List<Customer> getCustomersByActiveTrue();
     List<Customer> getCustomersByActiveTrueAndOrganization(Organization organization);

@@ -292,6 +292,9 @@ public class SaleController extends SkeletonController {
                 sales.setServiceRegulators(serviceRegulators);
             }
             sales.getCustomer().setOrganization(sales.getOrganization());
+            if(sales.getService()){
+                sales.setCustomer(customerRepository.getCustomerById(sales.getCustomer().getId()));
+            }
             salesRepository.save(sales);
             log(sales, "sales", "create/edit", sales.getId(), sales.toString());
 

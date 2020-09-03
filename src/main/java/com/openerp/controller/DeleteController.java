@@ -11,6 +11,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -133,6 +134,26 @@ public class DeleteController extends SkeletonController {
             vacation.setActive(false);
             vacationRepository.save(vacation);
             log(vacation, "vacation", "delete", vacation.getId(), vacation.toString());
+
+            Advance advance = calculateVacationPrice(vacation); //mezuniyyet haqqi hesablanir
+            advance.setAdvance(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("credit", "action"));
+            advance.setPayed(-1*advance.getPayed());
+            advance.setApprove(true);
+            advance.setApproveDate(new Date());
+            advance.setTransaction(false);
+            advance.setDescription(vacation.getEmployee().getId() + " nömrəli və " + vacation.getEmployee().getPerson().getFullName() + " tərəfindən götürülmüş " + vacation.getDateRange() + " - tarixli və " + vacation.getId() + " nömrəli məzuniyyət ləğv edildiyi üçün edilən kredit əməliyyatı. Məzuniyyətin silinməsi zamanı avans kredit əməliyyatı avtomatik edilmişdir");
+            advanceRepository.save(advance);
+            log(advance, "advance", "credit", advance.getId(), advance.toString(), "Kredit əməliyyatı!");
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.BUSINESS_TRIP)){
+            BusinessTrip businessTrip = businessTripRepository.getBusinessTripById(Integer.parseInt(id));
+            businessTrip.setActive(false);
+            businessTripRepository.save(businessTrip);
+            log(businessTrip, "business_trip", "delete", businessTrip.getId(), businessTrip.toString());
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.ILLNESS)){
+            Illness illness = illnessRepository.getIllnessById(Integer.parseInt(id));
+            illness.setActive(false);
+            illnessRepository.save(illness);
+            log(illness, "illness", "delete", illness.getId(), illness.toString());
         } else if(path.equalsIgnoreCase(Constants.ROUTE.WORKING_HOUR_RECORD)){
             WorkingHourRecord workingHourRecord = workingHourRecordRepository.getWorkingHourRecordById(Integer.parseInt(id));
             workingHourRecord.setActive(false);

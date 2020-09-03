@@ -240,7 +240,7 @@
 
         if(edit_status){
             content+='<div class="col-sm-2 text-center">'+
-                '<a href="javascript:edit($(\'#form\'), \''+data+'\', \'modal-operation\', \'Redaktə\')"  class="btn btn-sm btn-clean btn-icon btn-icon-md" >' +
+                '<a href="javascript:organization(\'edit\', $(\'#form\'), \''+obj.id+'\', \'modal-operation\', \'Redaktə\')"  class="btn btn-sm btn-clean btn-icon btn-icon-md" >' +
                 '<i class="'+edit_icon+'" style="font-size: 24px;"></i>' +
                 '</a> ' +
                 '</div>';
@@ -306,5 +306,42 @@
     $("input[name='contact.homePhone']").inputmask("mask", {
         "mask": "(999) 999-9999"
     });
+
+    function organization(oper, form, dataId, modal, modal_title){
+        swal.fire({
+            text: 'Proses davam edir...',
+            allowOutsideClick: false,
+            onOpen: function() {
+                swal.showLoading();
+                $.ajax({
+                    url: '/hr/api/organization/'+dataId,
+                    type: 'GET',
+                    dataType: 'text',
+                    beforeSend: function() {
+
+                    },
+                    success: function(data) {
+                        if(oper==="view"){
+                            view(form, data, modal, modal_title)
+                        } else if(oper==="edit"){
+                            edit(form, data, modal, modal_title)
+                        }
+                        swal.close();
+                    },
+                    error: function() {
+                        swal.fire({
+                            title: "Xəta",
+                            html: "Xəta baş verdi!",
+                            type: "error",
+                            cancelButtonText: 'Bağla',
+                            cancelButtonColor: '#c40000',
+                            cancelButtonClass: 'btn btn-danger',
+                            footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+                        });
+                    }
+                })
+            }
+        });
+    }
 </script>
 

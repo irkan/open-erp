@@ -748,4 +748,35 @@ public class SkeletonController {
             log.error(e.getMessage(), e);
         }
     }
+
+    Advance calculateVacationPrice(Vacation vacation){
+        List<SalaryEmployee> salaryEmployees = salaryEmployeeRepository.getSalaryEmployeesBySalary_ActiveAndEmployee_IdOrderByEmployeeDesc(true, vacation.getEmployee().getId());
+        int count = (salaryEmployees.size()>12?13:salaryEmployees.size())-1;
+        count = count==0?1:count;
+        double sumSalary = 0d;
+
+        String description = vacation.getIdentifier().getName() + " " + DateUtility.getFormattedDate(vacation.getStartDate()) + " - " + DateUtility.getFormattedDate(vacation.getEndDate()) + ". Məzuniyyət günlərinin sayı: " + vacation.getVacationDetails().size();
+        double vacationPrice = (sumSalary/30.4)*vacation.getVacationDetails().size();
+        Advance advance = new Advance(
+                dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("vacation-advance", "advance"),
+                vacation.getEmployee(),
+                Util.getUserBranch(vacation.getEmployee().getOrganization()),
+                description,
+                "",
+                new Date(),
+                vacationPrice
+        );
+        advance.setApprove(true);
+        advance.setApproveDate(new Date());
+        return advance;
+    }
+
+    byte canCalculateAdvance(Double price){ //-1 avansin kredit emeliyyati, 0-hecne, 1 avans emeliyyati
+        try{
+
+        } catch (Exception e){
+            log.error(e.getMessage(), e);
+        }
+        return 0;
+    }
 }
