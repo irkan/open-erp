@@ -67,6 +67,12 @@ public class TaxConfiguration {
     private Double collectCommon;
 
     @Transient
+    private Double collectMonthlyTerminal;
+
+    @Transient
+    private Double collectCommonTerminal;
+
+    @Transient
     private Integer salesCount;
 
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")

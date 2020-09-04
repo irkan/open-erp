@@ -2084,6 +2084,10 @@ public class ReadWriteExcelFile {
 		cell.setCellValue("Ödəniş kanalı");
 		cell = row.createCell(row.getLastCellNum());
 		cell.setCellValue("Yığımçı");
+		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("VÖEN");
+		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("VÖEN Sahibi");
 		row.setHeightInPoints(30);
 		XSSFCellStyle headerStyle = wb.createCellStyle();
 		headerStyle.setAlignment(HorizontalAlignment.CENTER);
@@ -2121,6 +2125,10 @@ public class ReadWriteExcelFile {
 			cell.setCellValue(invoice.getPaymentChannel()!=null?invoice.getPaymentChannel().getName():"");
 			cell = row.createCell(row.getLastCellNum());
 			cell.setCellValue((invoice.getCollector()!=null && invoice.getCollector().getPerson()!=null)?invoice.getCollector().getPerson().getFullName():"");
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue((invoice.getSales()!=null && invoice.getSales().getTaxConfiguration()!=null && invoice.getSales().getTaxConfiguration().getVoen()!=null)?Util.checkNull(invoice.getSales().getTaxConfiguration().getVoen()):"");
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue((invoice.getSales()!=null && invoice.getSales().getTaxConfiguration()!=null && invoice.getSales().getTaxConfiguration().getPerson()!=null)?Util.checkNull(invoice.getSales().getTaxConfiguration().getPerson().getFullName()):"");
 		}
 		FileOutputStream fileOut = new FileOutputStream(file);
 		wb.write(fileOut);

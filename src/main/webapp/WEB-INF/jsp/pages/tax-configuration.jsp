@@ -25,10 +25,9 @@
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="group_table">
                                 <thead>
                                 <tr>
-                                    <th>№</th>
                                     <th>ID</th>
-                                    <th>Struktur</th>
                                     <th>VÖEN</th>
+                                    <th>Struktur</th>
                                     <th>Şirkət</th>
                                     <th>Açıqlama</th>
                                     <th>Əlaqəli şəxs</th>
@@ -36,18 +35,17 @@
                                     <th>Aylıq limit</th>
                                     <th>Satış sayı</th>
                                     <th style="max-width: 70px">Planlaşdırılmış ödəniş</th>
-                                    <th style="max-width: 70px">Yığım cari aylıq</th>
-                                    <th style="max-width: 70px">Yığım ümumi</th>
+                                    <th style="max-width: 150px">Yığım cari aylıq / TERMINAL</th>
+                                    <th style="max-width: 150px">Yığım ümumi / TERMINAL</th>
                                     <th>Əməliyyat</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${list}" varStatus="loop">
                                     <tr data="<c:out value="${utl:toJson(t)}" />">
-                                        <td>${loop.index + 1}</td>
                                         <td><c:out value="${t.id}" /></td>
-                                        <td><c:out value="${t.organization.name}" /></td>
                                         <td><c:out value="${t.voen}" /></td>
+                                        <td><c:out value="${t.organization.name}" /></td>
                                         <td><c:out value="${t.company}" /></td>
                                         <td><c:out value="${t.description}" /></td>
                                         <td><c:out value="${t.person.fullName}" /></td>
@@ -61,8 +59,8 @@
                                         <td><c:out value="${t.maxLimitMonthly}" /> AZN</td>
                                         <td><c:out value="${t.salesCount}" /></td>
                                         <td><c:out value="${t.plannedPaymentAmountMonthly}" /> AZN</td>
-                                        <td><c:out value="${t.collectMonthly}" /> AZN</td>
-                                        <td><c:out value="${t.collectCommon}" /> AZN</td>
+                                        <td><c:out value="${t.collectMonthly}" /> AZN / <c:out value="${t.collectMonthlyTerminal}" /> AZN</td>
+                                        <td><c:out value="${t.collectCommon}" /> AZN / <c:out value="${t.collectCommonTerminal}" /> AZN</td>
                                         <td nowrap class="text-center">
                                             <c:if test="${view.status}">
                                                 <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">

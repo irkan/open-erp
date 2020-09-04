@@ -724,9 +724,48 @@ public class Util {
         Date now = new Date();
         try{
             for(Invoice invoice: invoices){
-                if(invoice.getApprove() && invoice.getApproveDate().getYear()==now.getYear() && invoice.getApproveDate().getMonth()==now.getMonth()){
-                    price+=invoice.getPrice();
-                }
+                try{
+                    if(invoice.getApprove() && invoice.getApproveDate().getYear()==now.getYear() && invoice.getApproveDate().getMonth()==now.getMonth()){
+                        price+=invoice.getPrice();
+                    }
+                } catch (Exception e){}
+            }
+        } catch (Exception e){
+            log.error(e.getMessage(), e);
+        }
+        return price;
+    }
+
+    public static Double calculateInvoiceTerminal1(List<Invoice> invoices){
+        double price = 0;
+        Date now = new Date();
+        try{
+            for(Invoice invoice: invoices){
+                try{
+                    if(invoice.getPaymentChannel()!=null && invoice.getPaymentChannel().getName().trim().equalsIgnoreCase("TERMINAL")){
+                        if(invoice.getApprove() && invoice.getApproveDate().getYear()==now.getYear() && invoice.getApproveDate().getMonth()==now.getMonth()){
+                            price+=invoice.getPrice();
+                        }
+                    }
+                } catch (Exception e){}
+            }
+        } catch (Exception e){
+            log.error(e.getMessage(), e);
+        }
+        return price;
+    }
+
+    public static Double calculateInvoiceTerminal2(List<Invoice> invoices){
+        double price = 0;
+        try{
+            for(Invoice invoice: invoices){
+                try{
+                    if(invoice.getPaymentChannel()!=null && invoice.getPaymentChannel().getName().trim().equalsIgnoreCase("TERMINAL")){
+                        if(invoice.getApprove()){
+                            price+=invoice.getPrice();
+                        }
+                    }
+                } catch (Exception e){}
             }
         } catch (Exception e){
             log.error(e.getMessage(), e);

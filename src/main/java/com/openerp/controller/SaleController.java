@@ -231,12 +231,18 @@ public class SaleController extends SkeletonController {
                 taxConfiguration.setPlannedPaymentAmountMonthly(Util.calculatePlannedPaymentMonthly(salesList));
                 Double collectCommon = 0d;
                 Double collectMonthly = 0d;
+                Double collectCommonTerminal = 0d;
+                Double collectMonthlyTerminal = 0d;
                 for(Sales sales: salesList){
                     collectCommon+=Util.calculateInvoice(sales.getInvoices());
+                    collectMonthlyTerminal+=Util.calculateInvoiceTerminal1(sales.getInvoices());
                     collectMonthly+=Util.calculateInvoiceCurrentMonth(sales.getInvoices());
+                    collectCommonTerminal+=Util.calculateInvoiceTerminal2(sales.getInvoices());
                 }
                 taxConfiguration.setCollectCommon(collectCommon);
                 taxConfiguration.setCollectMonthly(collectMonthly);
+                taxConfiguration.setCollectCommonTerminal(collectCommonTerminal);
+                taxConfiguration.setCollectMonthlyTerminal(collectMonthlyTerminal);
             }
             model.addAttribute(Constants.LIST, taxConfigurations);
             if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){

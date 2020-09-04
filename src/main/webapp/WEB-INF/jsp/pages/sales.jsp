@@ -598,7 +598,8 @@
                     <form:hidden path="returned"/>
                     <form:hidden path="saled"/>
                     <form:hidden path="organization.id"/>
-                    <input type="hidden" name="customer.organization" value="<c:out value="${sessionScope.organization.id}"/>"/>
+                    <form:hidden path="customer.person.id"/>
+                    <form:hidden path="customer.person.contact.id"/>
                     <div class="kt-wizard-v1__content" data-ktwizard-type="step-content" data-ktwizard-state="current">
                         <div class="kt-form__section kt-form__section--first">
                             <div class="kt-wizard-v1__form">
