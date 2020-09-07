@@ -1,5 +1,6 @@
 package com.openerp.controller;
 
+import com.openerp.domain.AdvanceGroup;
 import com.openerp.domain.Response;
 import com.openerp.entity.*;
 import com.openerp.util.Constants;
@@ -43,6 +44,22 @@ public class PayrollController extends SkeletonController {
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new PayrollConfiguration());
             }
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.ADVANCE_GROUP)){
+            List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganizationAndActiveTrue(getSessionOrganization());
+            List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
+            model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployeesByPosition(employees, positions));
+            model.addAttribute(Constants.ADVANCES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("advance"));
+            if(!model.containsAttribute(Constants.FORM)){
+                model.addAttribute(Constants.FORM, new AdvanceGroup());
+            }
+            List<AdvanceGroup> advanceGroups = new ArrayList<>();
+            for(Employee employee: employees){
+                advanceGroups.add(new AdvanceGroup(employee, ReportUtil.calculateAdvance(advanceRepository.getAdvancesByActiveTrueAndEmployee(employee))));
+            }
+            model.addAttribute(Constants.LIST, advanceGroups);
+            if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                return exportExcel(advanceGroups, redirectAttributes, page);
+            }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.ADVANCE)){
             List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganizationAndActiveTrue(getSessionOrganization());
             List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
@@ -52,7 +69,13 @@ public class PayrollController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new Advance(getSessionOrganization()));
             }
             if(!model.containsAttribute(Constants.FILTER)){
-                model.addAttribute(Constants.FILTER, new Advance(!canViewAll()?getSessionOrganization():null, null, null, null));
+                Advance advance = new Advance(!canViewAll()?getSessionOrganization():null, null, null, null);
+                if(!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
+                    Employee employee = new Employee();
+                    employee.setId(Util.parseInt(data.get().trim()));
+                    advance.setEmployee(employee);
+                }
+                model.addAttribute(Constants.FILTER, advance);
             }
             if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
                     session.getAttribute(Constants.SESSION_FILTER) instanceof Advance){
@@ -326,6 +349,31 @@ public class PayrollController extends SkeletonController {
             log(adv, "advance", "credit", adv.getId(), adv.toString(), "Kredit əməliyyatı!");
         }
         return mapPost(advance, binding, redirectAttributes, "/payroll/advance");
+    }
+
+    @PostMapping(value = "/advance-group/approve")
+    public String postAdvanceGroupApprove(@ModelAttribute(Constants.FORM) @Validated AdvanceGroup advanceGroup, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        if(!binding.hasErrors()){
+            List<Advance> advances = advanceRepository.getAdvancesByActiveTrueAndApproveFalseAndEmployee(advanceGroup.getEmployee());
+            if(advances.size()>0){
+                for(Advance advance: advances){
+                    try{
+                        if(advance.getPayed()>0){
+                            advance.setDescription(Util.checkNull(advance.getDescription()) + " -> ümumi təsdiq");
+                            advance.setApprove(true);
+                            advance.setApproveDate(new Date());
+                            advanceRepository.save(advance);
+
+                            log(advance, "advance", "approve", advance.getId(), advance.toString());
+                        }
+                    } catch (Exception e){
+                        log.error(e.getMessage(), e);
+                    }
+
+                }
+            }
+        }
+        return mapPost(advanceGroup, binding, redirectAttributes, "/payroll/advance-group");
     }
 
     @PostMapping(value = "/salary/calculate")

@@ -151,30 +151,34 @@
                             <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
                             <c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
                             <c:set var="view3" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'sales', 'view')}"/>
+                            <c:set var="canviewall" value="${utl:canViewAll(sessionScope.organization_selected)}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
                                 <thead>
                                 <tr>
-                                    <th>№</th>
                                     <th>ID</th>
-                                    <th>Struktur</th>
+                                    <c:if test="${canviewall}">
+                                        <th style="min-width: 70px;">Struktur</th>
+                                    </c:if>
                                     <th>Satış</th>
+                                    <th>Açıqlama</th>
                                     <th>Əlaqə kanalı</th>
                                     <th>Əlaqə tarixi</th>
                                     <th>Növbəti əlaqə tarixi</th>
                                     <th>Servis</th>
-                                    <th>Açıqlama</th>
+                                    <th>Yaratdı</th>
                                     <th>Əməliyyat</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${list.content}" varStatus="loop">
                                     <tr data="<c:out value="${t.id}"/>" sales="<c:out value="${t.sales.id}"/>">
-                                        <td>${loop.index + 1}</td>
                                         <td><c:out value="${t.id}"/></td>
-                                        <td><c:out value="${t.organization.name}"/></td>
+                                        <c:if test="${canviewall}">
+                                            <td><c:out value="${t.organization.name}"/></td>
+                                        </c:if>
                                         <td>
                                             <c:if test="${not empty t.sales.id}">
-                                                <a href="javascript:copyToClipboard2('<c:out value="${t.id}" />', 'Satış kodu <b><c:out value="${t.sales.id}" /></b> kopyalandı')" class="kt-font-lg kt-font-bold kt-font-info kt-font-hover-danger pl-2 pr-2"><i class="la la-copy"></i></a>
+                                                <a href="javascript:copyToClipboard2('<c:out value="${t.sales.id}" />', 'Satış kodu <b><c:out value="${t.sales.id}" /></b> kopyalandı')" class="kt-font-lg kt-font-bold kt-font-info kt-font-hover-danger pl-2 pr-2"><i class="la la-copy"></i></a>
                                             </c:if>
                                             <c:choose>
                                                 <c:when test="${view3.status}">
@@ -191,6 +195,10 @@
                                                     <c:out value="${t.sales.id}" />
                                                 </c:otherwise>
                                             </c:choose>
+                                        </td>
+                                        <td style="max-width: 350px">
+                                            <c:out value="${fn:substring(t.description, 0, 230)}" />
+                                            <c:out value="${t.description.length()>230?' . . . ':''}"/>
                                         </td>
                                         <td><c:out value="${t.contactChannel.name}"/></td>
                                         <td><fmt:formatDate value = "${t.createdDate}" pattern = "dd.MM.yyyy" /></td>
@@ -212,9 +220,8 @@
                                                 </c:otherwise>
                                             </c:choose>
                                         </td>
-                                        <td style="max-width: 350px">
-                                            <c:out value="${fn:substring(t.description, 0, 230)}" />
-                                            <c:out value="${t.description.length()>230?' . . . ':''}"/>
+                                        <td>
+                                            <c:out value="${t.user.username}"/>
                                         </td>
                                         <td nowrap class="text-center">
                                             <c:if test="${view.status}">
@@ -271,7 +278,7 @@
                         <form:label path="sales.id">Satış kodu</form:label>
                         <div class="input-group date" >
                             <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calculator"></i></span></div>
-                            <form:input path="sales" cssClass="form-control" placeholder="Daxil edin"/>
+                            <form:input path="sales.id" cssClass="form-control" placeholder="Daxil edin"/>
                         </div>
                         <form:errors path="sales.id" cssClass="control-label alert-danger" />
                     </div>
@@ -279,7 +286,7 @@
                         <form:label path="contactChannel.id">Əlaqə yaradılmışdır</form:label><br/>
                         <c:forEach var="t" items="${contact_channels}" varStatus="loop">
                             <label class="kt-radio kt-radio--brand">
-                                <form:radiobutton path="contactChannel" value="${t.id}"/> <c:out value="${t.name}"/>
+                                <form:radiobutton path="contactChannel.id" value="${t.id}"/> <c:out value="${t.name}"/>
                                 <span></span>
                             </label>
                             &nbsp;&nbsp;&nbsp;&nbsp;
@@ -347,9 +354,8 @@
         columnDefs: [
             {
                 targets: 0,
-                width: '25px',
-                className: 'dt-center',
-                orderable: false
+                width: '17px',
+                className: 'dt-center'
             },
         ],
     });

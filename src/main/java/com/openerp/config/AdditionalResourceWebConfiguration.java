@@ -9,5 +9,6 @@ public class AdditionalResourceWebConfiguration implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/logs/**").addResourceLocations("file:logs/");
+        registry.addResourceHandler("/upload/**").addResourceLocations("file:upload/");
     }
 }

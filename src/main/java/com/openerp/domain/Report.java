@@ -22,12 +22,16 @@ public class Report {
     private Integer integer3;
     private Integer integer4;
     private Integer integer5;
+    private Integer integer6;
     private Long long1;
     private Long long2;
     private Long long3;
     private Double double1;
     private Double double2;
     private Double double3;
+    private Double double4;
+    private Double double5;
+    private Double double6;
     private Float float1;
     private Float float2;
     private Float float3;
