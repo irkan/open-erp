@@ -45,12 +45,15 @@ public class PayrollController extends SkeletonController {
                 model.addAttribute(Constants.FORM, new PayrollConfiguration());
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.ADVANCE_GROUP)){
-            List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganizationAndActiveTrue(getSessionOrganization());
-            List<Dictionary> positions = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("position");
-            model.addAttribute(Constants.EMPLOYEES, Util.convertedEmployeesByPosition(employees, positions));
-            model.addAttribute(Constants.ADVANCES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("advance"));
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new AdvanceGroup());
+            }
+            List<Employee> employees;
+
+            if(canViewAll()){
+                employees = employeeRepository.getEmployeesByContractEndDateIsNullAndActiveTrue();
+            } else {
+                employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganizationAndActiveTrue(getSessionOrganization());
             }
             List<AdvanceGroup> advanceGroups = new ArrayList<>();
             for(Employee employee: employees){
