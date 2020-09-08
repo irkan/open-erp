@@ -44,6 +44,7 @@ public class Sales {
     @OneToMany(mappedBy = "sales", fetch = FetchType.LAZY)
     private List<SalesInventory> salesInventories;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "sales", fetch = FetchType.LAZY)
     private List<ContactHistory> contactHistories;
 

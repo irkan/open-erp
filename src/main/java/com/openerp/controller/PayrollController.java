@@ -331,6 +331,40 @@ public class PayrollController extends SkeletonController {
         return mapPost(advance, binding, redirectAttributes, "/payroll/advance");
     }
 
+    @PostMapping(value = "/advance-group/transfer")
+    public String postAdvanceGroupTransfer(@ModelAttribute(Constants.FORM) @Validated AdvanceGroup advanceGroup, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        if(!binding.hasErrors()){
+            Advance advance = new Advance();
+            advance.setPayed(-1*advanceGroup.getPrice());
+            advance.setEmployee(advanceGroup.getEmployee());
+            advance.setOrganization(advanceGroup.getEmployee().getOrganization());
+            advance.setApprove(true);
+            advance.setAdvance(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("payed", "advance"));
+            String description = (advanceGroup.getDescription()!=null?(advanceGroup.getDescription() + " -> "):"") + advance.getEmployee().getPerson().getFullName() + " -> " + advanceGroup.getPrice() + " AZN -> avans ödəndi";
+            advance.setDescription(description);
+            advanceRepository.save(advance);
+            log(advance, "advance", "create/edit", advance.getId(), advance.toString(), description);
+
+            Transaction transaction = new Transaction();
+            transaction.setApprove(false);
+            transaction.setAmount(null);
+            transaction.setDebt(false);
+            transaction.setOrganization(advance.getOrganization());
+            transaction.setPrice(Math.abs(advance.getPayed()));
+            transaction.setCurrency("AZN");
+            transaction.setRate(Util.getRate(currencyRateRepository.getCurrencyRateByCode(transaction.getCurrency().toUpperCase())));
+            double sumPrice = Util.amountChecker(transaction.getAmount()) * transaction.getPrice() * transaction.getRate();
+            transaction.setSumPrice(sumPrice);
+            transaction.setAction(advance.getAdvance());
+            transaction.setDescription(transaction.getAction().getName() + ": avans ödənişi, Kod: "+advance.getId() + " -> "
+                    + advance.getEmployee().getPerson().getFullName() + " - - - " + advance.getDescription()
+            );
+            transactionRepository.save(transaction);
+            log(transaction, "transaction", "create/edit", transaction.getId(), transaction.toString());
+        }
+        return mapPost(advanceGroup, binding, redirectAttributes, "/payroll/advance-group");
+    }
+
     @PostMapping(value = "/advance/credit")
     public String postAdvanceCredit(@ModelAttribute(Constants.FORM) @Validated Advance advance, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         if(!binding.hasErrors()){

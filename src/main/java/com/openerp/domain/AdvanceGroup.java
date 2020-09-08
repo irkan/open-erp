@@ -12,6 +12,8 @@ import lombok.Setter;
 public class AdvanceGroup {
     private Employee employee;
     private Report report;
+    private Double price;
+    private String description;
 
     public AdvanceGroup(Employee employee,
                         Report report) {

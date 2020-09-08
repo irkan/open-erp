@@ -31,7 +31,6 @@ public class ContactHistory {
     private Organization organization;
 
     @ToString.Exclude
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sales_id")
     private Sales sales;
