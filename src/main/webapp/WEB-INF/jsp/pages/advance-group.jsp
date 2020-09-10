@@ -42,6 +42,9 @@
                                     <th>Təsdiq edilmiş ümumi məbləğ</th>
                                     <th>Təsdiq edilmiş cari aylıq say</th>
                                     <th>Təsdiq edilmiş cari aylıq məbləğ</th>
+                                    <th style="min-width: 80px;">Qalıq avans</th>
+                                    <th>Ödənilib</th>
+                                    <th>Ödənilib cari ay</th>
                                         <%--<th>Hesablanmış məbləğ</th>
                                         <th>Götürülmüş məbləğ aylıq</th>
                                         <th>Götürülmüş məbləğ</th>
@@ -73,6 +76,12 @@
                                                 value="${t.report.integer4 gt 0 ? t.report.integer4+=' ədəd' : '' }"/></td>
                                         <td data-sort="<c:out value="${t.report.double4}" />"><c:out
                                                 value="${t.report.double4 gt 0 ? t.report.double4+=' AZN' : '' }"/></td>
+                                        <td data-sort="<c:out value="${t.report.double3-t.report.double5}" />"><c:out
+                                                value="${(t.report.double3-t.report.double5)+=' AZN'}"/></td>
+                                        <td data-sort="<c:out value="${t.report.double3}" />"><c:out
+                                                value="${t.report.double5 gt 0 ? t.report.double5+=' AZN' : '' }"/></td>
+                                        <td data-sort="<c:out value="${t.report.double6}" />"><c:out
+                                                value="${t.report.double6 gt 0 ? t.report.double6+=' AZN' : '' }"/></td>
                                         <td nowrap class="text-center">
                                             <c:if test="${approve.status and t.report.integer1 gt 0}">
                                                 <a href="javascript:approveData($('#approve-form'),'<c:out value="${t.report.integer1}" /> sayda əməliyyatın təsdiqi', '<c:out value="${t.employee.id}" />');"
@@ -110,7 +119,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 

@@ -142,6 +142,8 @@ public class ReportUtil {
             Double approveAmount = 0d;
             Integer approveMonthlyCount = 0;
             Double approveMonthlyAmount = 0d;
+            Double payedMonthlyAmount = 0d;
+            Double payedAmount = 0d;
             if(advances.size()>0){
                 for(Advance advance: advances){
                     try{
@@ -153,11 +155,22 @@ public class ReportUtil {
                                 approveMonthlyAmount+=advance.getPayed();
                             }
                         } else {
-                            approveCount++;
-                            approveAmount+=advance.getPayed();
-                            if(advance.getApproveDate()!=null && advance.getApproveDate().getYear()==today.getYear() && advance.getApproveDate().getMonth()==today.getMonth()){
+                            if(advance.getApproveDate()!=null && !advance.getAdvance().getAttr1().equalsIgnoreCase("payed")){
+                                approveCount++;
+                                approveAmount+=advance.getPayed();
+                            }
+
+                            if(advance.getApproveDate()!=null && advance.getApproveDate().getYear()==today.getYear() && advance.getApproveDate().getMonth()==today.getMonth() && !advance.getAdvance().getAttr1().equalsIgnoreCase("payed")){
                                 approveMonthlyCount++;
                                 approveMonthlyAmount+=advance.getPayed();
+                            }
+
+                            if(advance.getApproveDate()!=null && advance.getAdvance().getAttr1().equalsIgnoreCase("payed")){
+                                payedAmount+=Math.abs(advance.getPayed());
+                            }
+
+                            if(advance.getApproveDate()!=null && advance.getApproveDate().getYear()==today.getYear() && advance.getApproveDate().getMonth()==today.getMonth() && advance.getAdvance().getAttr1().equalsIgnoreCase("payed")){
+                                payedMonthlyAmount+=Math.abs(advance.getPayed());
                             }
                         }
                     } catch (Exception e){
@@ -172,6 +185,8 @@ public class ReportUtil {
                 report.setDouble3(approveAmount);
                 report.setInteger4(approveMonthlyCount);
                 report.setDouble4(approveMonthlyAmount);
+                report.setDouble5(payedAmount);
+                report.setDouble6(payedMonthlyAmount);
             }
         } catch (Exception e){
             log.error(e.getMessage(), e);

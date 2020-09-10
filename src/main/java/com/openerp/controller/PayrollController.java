@@ -336,11 +336,12 @@ public class PayrollController extends SkeletonController {
         if(!binding.hasErrors()){
             Advance advance = new Advance();
             advance.setPayed(-1*advanceGroup.getPrice());
-            advance.setEmployee(advanceGroup.getEmployee());
+            Employee employee = employeeRepository.getEmployeeById(advanceGroup.getEmployee().getId());
+            advance.setEmployee(employee);
             advance.setOrganization(advanceGroup.getEmployee().getOrganization());
             advance.setApprove(true);
             advance.setAdvance(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("payed", "advance"));
-            String description = (advanceGroup.getDescription()!=null?(advanceGroup.getDescription() + " -> "):"") + advance.getEmployee().getPerson().getFullName() + " -> " + advanceGroup.getPrice() + " AZN -> avans ödəndi";
+            String description = (advanceGroup.getDescription()!=null?(advanceGroup.getDescription() + " -> "):"") + employee.getPerson().getFullName() + " -> " + advanceGroup.getPrice() + " AZN -> avans ödəndi";
             advance.setDescription(description);
             advanceRepository.save(advance);
             log(advance, "advance", "create/edit", advance.getId(), advance.toString(), description);
