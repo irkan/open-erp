@@ -140,6 +140,7 @@
                         <c:when test="${not empty list}">
                             <c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
                             <c:set var="detail" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'detail')}"/>
+                            <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
                             <c:set var="canviewall" value="${utl:canViewAll(sessionScope.organization_selected)}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="group_table">
                                 <thead>
@@ -191,6 +192,11 @@
                                                 <c:if test="${detail.status}">
                                                     <a href="/warehouse/action/<c:out value="${t.id}"/>" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${detail.object.name}"/>">
                                                         <i class="la <c:out value="${detail.object.icon}"/>"></i>
+                                                    </a>
+                                                </c:if>
+                                                <c:if test="${edit.status}">
+                                                    <a href="javascript:edit($('#edit-form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation-edit', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                                                        <i class="<c:out value="${edit.object.icon}"/>"></i>
                                                     </a>
                                                 </c:if>
                                                 <c:if test="${delete.status}">
@@ -321,6 +327,45 @@
     </div>
 </div>
 
+<div class="modal fade" id="modal-operation-edit" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form:form modelAttribute="form" id="edit-form" method="post" action="/warehouse/inventory/edit" cssClass="form-group">
+                    <form:hidden path="id"/>
+                    <div class="form-group">
+                        <form:label path="group.id">Qrup</form:label>
+                        <form:select  path="group.id" cssClass="custom-select form-control">
+                            <form:option value=""></form:option>
+                            <form:options items="${inventory_groups}" itemLabel="name" itemValue="id" />
+                        </form:select>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="name">Ad</form:label>
+                        <form:input path="name" cssClass="form-control" placeholder="Adı daxil edin"/>
+                        <form:errors path="name" cssClass="alert-danger control-label"/>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="description">Açıqlama</form:label>
+                        <form:textarea path="description" cssClass="form-control" placeholder="Açıqlamanı daxil edin" />
+                        <form:errors path="description" cssClass="alert-danger control-label"/>
+                    </div>
+                </form:form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="submit($('#edit-form'));">Yadda saxla</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="barcodePrint" style="display: none; margin: 10px;">
     <div id="barcodeTarget" style="margin: 10px;"></div>
 </div>
@@ -430,6 +475,21 @@
         },
         invalidHandler: function(event, validator) {
                     KTUtil.scrollTop();
+            swal.close();
+        },
+    });
+
+    $( "#edit-form" ).validate({
+        rules: {
+            "group.id": {
+                required: true
+            },
+            name: {
+                required: true
+            }
+        },
+        invalidHandler: function(event, validator) {
+            KTUtil.scrollTop();
             swal.close();
         },
     });

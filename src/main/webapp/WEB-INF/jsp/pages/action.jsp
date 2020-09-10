@@ -241,6 +241,11 @@
                 <c:out value="${t.description}"/>
             </td>
             <td nowrap class="text-center">
+                <c:if test="${edit.status}">
+                    <a href="javascript:edit($('#edit-form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation-edit', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
+                        <i class="<c:out value="${edit.object.icon}"/>"></i>
+                    </a>
+                </c:if>
                 <c:if test="${!(t.action.attr1 eq 'sell') and !(t.action.attr1 eq 'cancellation') and !(t.action.attr1 eq 'send' and t.approve)}">
                     <c:if test="${return1.status and t.action.attr1 eq 'consolidate'}">
                         <a href="javascript:returnOperation($('#form-return'), '<c:out value="${utl:toJson(t)}" />', 'return-modal');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${return1.object.name}"/>">
@@ -371,6 +376,58 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" onclick="submit($('#form'));">Yadda saxla</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-operation-edit" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Yeni sorğu yarat</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form:form modelAttribute="form" id="edit-form" method="post" action="/warehouse/action/edit" cssClass="form-group">
+                    <form:hidden path="id"/>
+                    <div class="form-group">
+                        <form:label path="supplier.id">Tədarükçü</form:label>
+                        <form:select  path="supplier.id" cssClass="custom-select form-control">
+                            <form:option value=""></form:option>
+                            <form:options items="${suppliers}" itemLabel="label" itemValue="id" />
+                        </form:select>
+                        <form:errors path="supplier.id" cssClass="alert-danger control-label"/>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <form:label path="row">Sıra</form:label>
+                                <div class="input-group" >
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-map-marker"></i></span></div>
+                                    <form:input path="row" cssClass="form-control" placeholder="Daxil edin"/>
+                                </div>
+                                <form:errors path="row" cssClass="alert-danger control-label"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <form:label path="column">Sütun</form:label>
+                                <div class="input-group" >
+                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-map-marker"></i></span></div>
+                                    <form:input path="column" cssClass="form-control" placeholder="Daxil edin"/>
+                                </div>
+                                <form:errors path="column" cssClass="alert-danger control-label"/>
+                            </div>
+                        </div>
+                    </div>
+                </form:form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="submit($('#edit-form'));">Yadda saxla</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
             </div>
         </div>
@@ -648,6 +705,11 @@
                         </div>
                         <form:errors path="amount" cssClass="alert-danger"/>
                     </div>
+                    <div class="form-group">
+                        <form:label path="description">Açıqlama</form:label>
+                        <form:textarea path="description" cssClass="form-control" placeholder="Daxil edin"  />
+                        <form:errors path="description" cssClass="alert-danger"/>
+                    </div>
                 </form:form>
             </div>
             <div class="modal-footer">
@@ -770,6 +832,18 @@
         ],
     });
 
+    $( "#edit-form" ).validate({
+        rules: {
+            "supplier.id": {
+                required: true
+            }
+        },
+        invalidHandler: function(event, validator) {
+            KTUtil.scrollTop();
+            swal.close();
+        },
+    });
+
     $( "#form-consolidate" ).validate({
         rules: {
             "employee.id": {
@@ -834,6 +908,26 @@
                 required: true
             },
             "inventory.id": {
+                required: true
+            },
+            amount: {
+                required: true,
+                digits: true,
+                min: 1
+            }
+        },
+        invalidHandler: function(event, validator) {
+            KTUtil.scrollTop();
+            swal.close();
+        },
+    });
+
+    $( "#form-cancellation" ).validate({
+        rules: {
+            id: {
+                required: true
+            },
+            description: {
                 required: true
             },
             amount: {

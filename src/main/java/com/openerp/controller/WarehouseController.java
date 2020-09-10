@@ -155,6 +155,20 @@ public class WarehouseController extends SkeletonController {
         return mapPost(inventory, binding, redirectAttributes);
     }
 
+    @PostMapping(value = "/inventory/edit")
+    public String postInventoryEdit(@ModelAttribute(Constants.FORM) @Validated Inventory inventory, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        Inventory inv = inventoryRepository.getInventoryById(inventory.getId());
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()){
+            inv.setName(inventory.getName());
+            inv.setDescription(inventory.getDescription());
+            inv.setGroup(inventory.getGroup());
+            inventoryRepository.save(inv);
+            log(inventory, "inventory", "create/edit", inventory.getId(), inventory.toString());
+        }
+        return mapPost(inventory, binding, redirectAttributes, "/warehouse/inventory");
+    }
+
     @PostMapping(value = "/inventory/filter")
     public String postInventoryFilter(@ModelAttribute(Constants.FILTER) @Validated Inventory inventory, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         return mapFilter(inventory, binding, redirectAttributes, "/warehouse/inventory");
@@ -293,6 +307,20 @@ public class WarehouseController extends SkeletonController {
             log(transaction, "transaction", "create/edit", transaction.getId(), transaction.toString());
         }
         return mapPost(action, binding, redirectAttributes, "/warehouse/action/"+action.getInventory().getId());
+    }
+
+    @PostMapping(value = "/action/edit")
+    public String postActionEdit(@ModelAttribute(Constants.FORM) @Validated Action action, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        Action actn = actionRepository.getActionById(action.getId());
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()){
+            actn.setColumn(action.getColumn());
+            actn.setRow(action.getRow());
+            actn.setSupplier(action.getSupplier());
+            actionRepository.save(actn);
+            log(actn, "action", "create/edit", actn.getId(), actn.toString());
+        }
+        return mapPost(actn, binding, redirectAttributes, "/warehouse/action");
     }
 
     @PostMapping(value = "/action/consolidate")
