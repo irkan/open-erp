@@ -1173,11 +1173,10 @@ public class SaleController extends SkeletonController {
             Sales sales1 = salesRepository.getSalesById(invc.getSales().getId());
             if(sales1!=null && sales1.getPayment()!=null && Util.calculateInvoice(sales1.getInvoices())>=sales1.getPayment().getLastPrice()){
                 sales1.setSaled(true);
-            } else if(sales1!=null && sales1.getPayment()!=null && Util.calculateInvoice(sales1.getInvoices())<sales1.getPayment().getLastPrice()){
-                sales1.setSaled(false);
+                salesRepository.save(sales1);
+                log(sales1, "sales", "create/edit", sales1.getId(), sales1.toString(), "Satıldı statusu yeniləndi!");
             }
 
-            log(sales1, "sales", "create/edit", sales1.getId(), sales1.toString(), "Satıldı statusu yeniləndi!");
         }
         return mapPost(invc, binding, redirectAttributes, "/sale/invoice/");
     }
