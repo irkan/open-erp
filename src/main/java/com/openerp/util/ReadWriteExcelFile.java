@@ -1545,10 +1545,6 @@ public class ReadWriteExcelFile {
 		cell = row.createCell(row.getLastCellNum());
 		cell.setCellValue("Təsdiq tarixi");
 		cell = row.createCell(row.getLastCellNum());
-		cell.setCellValue("Tranzaksiya edilib");
-		cell = row.createCell(row.getLastCellNum());
-		cell.setCellValue("Tranzaksiya tarixi");
-		cell = row.createCell(row.getLastCellNum());
 		cell.setCellValue("Formula");
 		cell = row.createCell(row.getLastCellNum());
 		cell.setCellValue("Əməkdaş");
@@ -1579,10 +1575,6 @@ public class ReadWriteExcelFile {
 			cell.setCellValue(advance.getApprove());
 			cell = row.createCell(row.getLastCellNum());
 			cell.setCellValue(Util.checkNull(advance.getApproveDate()));
-			cell = row.createCell(row.getLastCellNum());
-			cell.setCellValue(advance.getTransaction());
-			cell = row.createCell(row.getLastCellNum());
-			cell.setCellValue(Util.checkNull(advance.getTransactionDate()));
 			cell = row.createCell(row.getLastCellNum());
 			cell.setCellValue(advance.getFormula());
 			cell = row.createCell(row.getLastCellNum());

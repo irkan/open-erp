@@ -140,7 +140,6 @@ public class DeleteController extends SkeletonController {
             advance.setPayed(-1*advance.getPayed());
             advance.setApprove(true);
             advance.setApproveDate(new Date());
-            advance.setTransaction(false);
             advance.setDescription(vacation.getEmployee().getId() + " nömrəli və " + vacation.getEmployee().getPerson().getFullName() + " tərəfindən götürülmüş " + vacation.getDateRange() + " - tarixli və " + vacation.getId() + " nömrəli məzuniyyət ləğv edildiyi üçün edilən kredit əməliyyatı. Məzuniyyətin silinməsi zamanı avans kredit əməliyyatı avtomatik edilmişdir");
             advanceRepository.save(advance);
             log(advance, "advance", "credit", advance.getId(), advance.toString(), "Kredit əməliyyatı!");

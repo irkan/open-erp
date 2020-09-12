@@ -52,7 +52,7 @@ public class ProfileController extends SkeletonController {
         } else if (page.equalsIgnoreCase(Constants.ROUTE.OVERVIEW)) {
             List<Report> reports = reportingDao.reportLast12MonthAdvance(getUserOrganization().getId(), getSessionUser().getEmployee().getId());
             List<Report> nonPayedReports = reportingDao.reportLast12MonthNonPayedAdvance(getUserOrganization().getId(), getSessionUser().getEmployee().getId());
-            Advance advance = advanceRepository.findTopByActiveTrueAndApproveTrueAndTransactionTrueAndEmployeeOrderByAdvanceDateDesc(getSessionUser().getEmployee());
+            Advance advance = advanceRepository.findTopByActiveTrueAndApproveTrueAndEmployeeOrderByAdvanceDateDesc(getSessionUser().getEmployee());
             model.addAttribute(Constants.REPORTS, reports);
             model.addAttribute(Constants.ANNUAL_ADVANCE, Util.annualAdvance(reports));
             model.addAttribute(Constants.ANNUAL_NON_PAYED_ADVANCE, Util.annualAdvance(nonPayedReports));

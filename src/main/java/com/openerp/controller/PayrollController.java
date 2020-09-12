@@ -303,34 +303,6 @@ public class PayrollController extends SkeletonController {
         return mapPost(advance, binding, redirectAttributes, "/payroll/advance");
     }
 
-    @PostMapping(value = "/advance/transfer")
-    public String postAdvanceTransfer(@ModelAttribute(Constants.FORM) @Validated Advance advance, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
-        if(!binding.hasErrors()){
-            Advance adv = advanceRepository.getAdvanceById(advance.getId());
-            Transaction transaction = new Transaction();
-            transaction.setApprove(false);
-            transaction.setAmount(null);
-            transaction.setDebt(adv.getPayed()>0?false:true);
-            transaction.setOrganization(adv.getOrganization());
-            transaction.setPrice(Math.abs(adv.getPayed()));
-            transaction.setCurrency("AZN");
-            transaction.setRate(Util.getRate(currencyRateRepository.getCurrencyRateByCode(transaction.getCurrency().toUpperCase())));
-            double sumPrice = Util.amountChecker(transaction.getAmount()) * transaction.getPrice() * transaction.getRate();
-            transaction.setSumPrice(sumPrice);
-            transaction.setAction(adv.getAdvance());
-            transaction.setDescription(transaction.getAction().getName() + ": avans ödənişi, Kod: "+adv.getId() + " -> "
-                    + adv.getEmployee().getPerson().getFullName() + " - - - " + advance.getDescription()
-            );
-            transactionRepository.save(transaction);
-            log(transaction, "transaction", "create/edit", transaction.getId(), transaction.toString());
-            adv.setTransaction(true);
-            adv.setTransactionDate(transaction.getTransactionDate());
-            advanceRepository.save(adv);
-            log(adv, "advance", "transfer", adv.getId(), adv.toString(), "Transaction-a yollandı!");
-        }
-        return mapPost(advance, binding, redirectAttributes, "/payroll/advance");
-    }
-
     @PostMapping(value = "/advance-group/transfer")
     public String postAdvanceGroupTransfer(@ModelAttribute(Constants.FORM) @Validated AdvanceGroup advanceGroup, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         if(!binding.hasErrors()){
@@ -382,7 +354,6 @@ public class PayrollController extends SkeletonController {
 
             credit.setApprove(true);
             credit.setApproveDate(new Date());
-            credit.setTransaction(false);
             advanceRepository.save(credit);
             log(adv, "advance", "credit", adv.getId(), adv.toString(), "Kredit əməliyyatı!");
         }
@@ -709,7 +680,7 @@ public class PayrollController extends SkeletonController {
                             );
 
                             double sum_advance = 0;
-                            for(Advance advance: advanceRepository.getAdvancesByActiveTrueAndApproveTrueAndTransactionFalseAndAdvanceDateBetweenAndEmployee(
+                            for(Advance advance: advanceRepository.getAdvancesByActiveTrueAndApproveTrueAndAdvanceDateBetweenAndEmployee(
                                     DateUtility.generate(1,
                                             se.getWorkingHourRecordEmployee().getWorkingHourRecord().getMonth(),
                                             se.getWorkingHourRecordEmployee().getWorkingHourRecord().getYear()),

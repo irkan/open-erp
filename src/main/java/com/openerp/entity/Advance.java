@@ -76,14 +76,6 @@ public class Advance {
     @Column(name = "approve_date")
     private Date approveDate = new Date();
 
-    @Column(name = "is_transaction", nullable = false, columnDefinition="boolean default false")
-    private Boolean transaction = false;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
-    @Column(name = "transaction_date")
-    private Date transactionDate;
-
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;
 

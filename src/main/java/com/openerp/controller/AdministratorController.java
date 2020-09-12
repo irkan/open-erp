@@ -94,7 +94,7 @@ public class AdministratorController extends SkeletonController {
         } else if (page.equalsIgnoreCase(Constants.ROUTE.MODULE_OPERATION)) {
             model.addAttribute(Constants.MODULES, moduleRepository.getModulesByActiveTrue());
             model.addAttribute(Constants.OPERATIONS, operationRepository.getOperationsByActiveTrue());
-            model.addAttribute(Constants.LIST, moduleOperationRepository.findAll());
+            model.addAttribute(Constants.LIST, moduleOperationRepository.getModuleOperationsByActiveTrue());
             model.addAttribute(Constants.FORM, new ModuleOperation());
             if (!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)) {
                 return exportExcel(moduleOperationRepository.findAll(), redirectAttributes, page);
