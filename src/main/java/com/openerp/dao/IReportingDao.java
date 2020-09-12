@@ -21,4 +21,6 @@ public interface IReportingDao {
     List<JSONObject> reportCollectVolume(Report report) throws Exception;
 
     List<JSONObject>  reportPaymentLatencyPeriodly(Report report) throws Exception;
+
+    List<Report>  reportCorrectInventory() throws Exception;
 }

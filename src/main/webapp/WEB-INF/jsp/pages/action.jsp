@@ -398,7 +398,7 @@
                         <form:label path="supplier.id">Tədarükçü</form:label>
                         <form:select  path="supplier.id" cssClass="custom-select form-control">
                             <form:option value=""></form:option>
-                            <form:options items="${suppliers}" itemLabel="label" itemValue="id" />
+                            <form:options items="${suppliers}" itemLabel="name" itemValue="id" />
                         </form:select>
                         <form:errors path="supplier.id" cssClass="alert-danger control-label"/>
                     </div>

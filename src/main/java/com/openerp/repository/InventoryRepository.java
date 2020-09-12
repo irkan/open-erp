@@ -11,6 +11,7 @@ import java.util.List;
 
 public interface InventoryRepository extends JpaRepository<Inventory, Integer>, JpaSpecificationExecutor<Inventory> {
     List<Inventory> getInventoriesByActiveTrueOrderByIdDesc();
+    List<Inventory> getInventoriesByBarcodeAndOrganization(String barcode, Organization organization);
     List<Inventory> findDistinctByActiveTrueAndActions_Organization_IdOrActions_FromOrganization_IdOrderByIdDesc(int organizationId, int fromOrganizationId);
     List<Inventory> findDistinctByActiveTrueAndActions_FromOrganization_IdOrderByIdDesc(int id);
     Inventory getInventoryById(int id);

@@ -310,7 +310,7 @@ public class PayrollController extends SkeletonController {
             advance.setPayed(-1*advanceGroup.getPrice());
             Employee employee = employeeRepository.getEmployeeById(advanceGroup.getEmployee().getId());
             advance.setEmployee(employee);
-            advance.setOrganization(advanceGroup.getEmployee().getOrganization());
+            advance.setOrganization(employee.getOrganization());
             advance.setApprove(true);
             advance.setAdvance(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("payed", "advance"));
             String description = (advanceGroup.getDescription()!=null?(advanceGroup.getDescription() + " -> "):"") + employee.getPerson().getFullName() + " -> " + advanceGroup.getPrice() + " AZN -> avans ödəndi";

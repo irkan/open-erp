@@ -1,5 +1,6 @@
 package com.openerp.controller;
 
+import com.openerp.domain.Report;
 import com.openerp.domain.Response;
 import com.openerp.entity.*;
 import com.openerp.util.Constants;
@@ -470,5 +471,47 @@ public class WarehouseController extends SkeletonController {
             log.error(e.getMessage(), e);
         }
         return null;
+    }
+
+    @GetMapping(value = "/correct")
+    public String correctInventory(){
+        try {
+            List<Report> reports = reportingDao.reportCorrectInventory();
+            for(Report report: reports){
+                try{
+                    Action action = actionRepository.getActionById(report.getInteger1());
+                    if(action!=null && action.getAmount()!=null && action.getAmount().intValue()>0){
+                        List<Inventory> inventories = inventoryRepository.getInventoriesByBarcodeAndOrganization(action.getInventory().getBarcode(), action.getOrganization());
+                        Inventory inventory;
+                        if(inventories.size()>0){
+                            inventory = inventories.get(0);
+                            inventory.setActive(true);
+                        } else {
+                            inventory = new Inventory();
+                            inventory.setOrganization(action.getOrganization());
+                            if(action.getInventory().getBarcode()!=null){
+                                inventory.setBarcode(action.getInventory().getBarcode());
+                            }
+                            if(action.getInventory().getGroup()!=null){
+                                inventory.setGroup(action.getInventory().getGroup());
+                            }
+                            if(action.getInventory().getName()!=null){
+                                inventory.setName(action.getInventory().getName());
+                            }
+                        }
+                        inventoryRepository.save(inventory);
+                        action.setInventory(inventory);
+                        actionRepository.save(action);
+                        log.info("Struktur: " + action.getOrganization().getName() + " Barkod: " + action.getInventory().getBarcode() + " Inventar: " + action.getInventory().getName() + " Say: " + action.getAmount() + " Qrup: " + inventory.getGroup().getName());
+                    }
+                } catch (Exception e){
+                    log.error(e.getMessage(), e);
+                }
+            }
+        } catch (Exception e){
+            log(null, "error", "inventory", "", null, "", "WAREHOUSE API INVENTORY Xəta baş verdi! " + e.getMessage());
+            log.error(e.getMessage(), e);
+        }
+        return "/";
     }
 }

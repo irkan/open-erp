@@ -43,8 +43,8 @@
                                     <th>Təsdiq edilmiş cari aylıq say</th>
                                     <th>Təsdiq edilmiş cari aylıq məbləğ</th>
                                     <th style="min-width: 80px;">Qalıq avans</th>
-                                    <th>Ödənilib</th>
-                                    <th>Ödənilib cari ay</th>
+                                    <th style="min-width: 70px;">Ödənilib</th>
+                                    <th style="min-width: 70px;">Ödənilib cari ay</th>
                                         <%--<th>Hesablanmış məbləğ</th>
                                         <th>Götürülmüş məbləğ aylıq</th>
                                         <th>Götürülmüş məbləğ</th>

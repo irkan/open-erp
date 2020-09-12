@@ -423,4 +423,30 @@ public class ReportingDao implements IReportingDao {
         }
         return ReportUtil.correct(jsonObjects, report);
     }
+
+    @Override
+    public List<Report> reportCorrectInventory() throws Exception {
+        List<Report> list = new ArrayList<>();
+        try(Connection connection = dataSource.getConnection()) {
+            String sql = "select a.id action_id, a.organization_id organization_id from action a, inventory i where a.dictionary_action_id=633 " +
+                    " and a.inventory_id=i.id and a.amount>0 " +
+                    " and i.organization_id!=a.organization_id and i.organization_id=1 ";
+            try(PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                try(ResultSet resultSet = preparedStatement.executeQuery()) {
+                    Report report = null;
+                    while(resultSet.next()) {
+                        report = new Report();
+                        report.setInteger1(resultSet.getInt("ACTION_ID"));
+                        report.setInteger2(resultSet.getInt("ORGANIZATION_ID"));
+                        list.add(report);
+                    }
+                }
+            }
+            return list;
+        } catch(Exception e){
+            e.printStackTrace();
+            log.error(e.getMessage(), e);
+        }
+        return null;
+    }
 }
