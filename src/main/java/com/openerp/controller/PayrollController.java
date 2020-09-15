@@ -138,7 +138,7 @@ public class PayrollController extends SkeletonController {
                     WorkingHourRecord owhr = workingHourRecordRepository.getWorkingHourRecordByActiveTrueAndMonthAndYearAndOrganization(workingHourRecord.getMonth()-1, workingHourRecord.getYear(), workingHourRecord.getOrganization());
                     workingHourRecord.setId(null);
                     workingHourRecordRepository.save(workingHourRecord);
-                    List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganizationAndActiveTrue(workingHourRecord.getOrganization());
+                    List<Employee> employees = employeeRepository.getEmployeesByContractEndDateIsNullAndOrganizationAndActiveTrueAndSalaryTrue(workingHourRecord.getOrganization());
                     List<WorkingHourRecordEmployee> workingHourRecordEmployees = new ArrayList<>();
                     List<Dictionary> identifiers = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("identifier");
                     for(Employee employee: employees){
@@ -203,14 +203,19 @@ public class PayrollController extends SkeletonController {
             for(WorkingHourRecordEmployee whre: workingHourRecord.getWorkingHourRecordEmployees()){
                 List<WorkingHourRecordEmployeeDayCalculation> owhedcs = workingHourRecordEmployeeDayCalculationRepository.getWorkingHourRecordEmployeeDayCalculationsByKeyAndWorkingHourRecordEmployee_EmployeeOrderByWorkingHourRecordEmployeeDesc("HMQ", whre.getEmployee());
                 double balanceVacationDays = owhedcs.size()>0?owhedcs.get(0).getValue():0;
-                log.info(whre.getEmployee());
-                for(WorkingHourRecordEmployeeIdentifier whrei: whre.getWorkingHourRecordEmployeeIdentifiers()){
-                    workingHourRecordEmployeeIdentifierRepository.save(whrei);
-                }
-                List<WorkingHourRecordEmployeeDayCalculation> workingHourRecordEmployeeDayCalculations = workingHourRecordEmployeeDayCalculationRepository.getWorkingHourRecordEmployeeDayCalculationsByWorkingHourRecordEmployee(whre);
-                whre.setWorkingHourRecordEmployeeDayCalculations(workingHourRecordEmployeeDayCalculations);
-                for(WorkingHourRecordEmployeeDayCalculation whredc: Util.calculateWorkingHourRecordEmployeeDay(whre, identifiers, balanceVacationDays)){
-                    workingHourRecordEmployeeDayCalculationRepository.save(whredc);
+                if(whre.getEmployee()!=null && whre.getEmployee().getId()!=null){
+                    for(WorkingHourRecordEmployeeIdentifier whrei: whre.getWorkingHourRecordEmployeeIdentifiers()){
+                        workingHourRecordEmployeeIdentifierRepository.save(whrei);
+                    }
+                    List<WorkingHourRecordEmployeeDayCalculation> workingHourRecordEmployeeDayCalculations = workingHourRecordEmployeeDayCalculationRepository.getWorkingHourRecordEmployeeDayCalculationsByWorkingHourRecordEmployee(whre);
+                    whre.setWorkingHourRecordEmployeeDayCalculations(workingHourRecordEmployeeDayCalculations);
+                    if(whre.getEmployee().getId()==100782 || whre.getEmployee().getId()==10780){
+                        log.info(whre.getFullName() + " *** " + whre.getEmployee());
+                    }
+                    for(WorkingHourRecordEmployeeDayCalculation whredc: Util.calculateWorkingHourRecordEmployeeDay(whre, identifiers, balanceVacationDays)){
+                        workingHourRecordEmployeeDayCalculationRepository.save(whredc);
+                    }
+                    log.info(whre.getFullName() + " *** " + whre.getEmployee());
                 }
             }
             log(workingHourRecord, "working_hour_record", "create/edit", workingHourRecord.getId(), workingHourRecord.toString());

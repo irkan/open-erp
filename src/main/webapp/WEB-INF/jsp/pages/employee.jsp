@@ -299,7 +299,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-5">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="kt-checkbox kt-checkbox--brand">
                                             <form:checkbox path="person.disability"/> Əlillik var
@@ -307,10 +307,18 @@
                                         </label>
                                     </div>
                                 </div>
-                                <div class="col-md-7">
+                                <div class="col-md-5">
                                     <div class="form-group">
-                                        <label class="kt-checkbox kt-checkbox--brand">
+                                        <label class="kt-checkbox kt-checkbox--danger">
                                             <form:checkbox path="specialistOrManager"/> Mütəxəsis və ya rəhbər
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="kt-checkbox kt-checkbox--warning">
+                                            <form:checkbox path="salary"/> Maaş hesablansın
                                             <span></span>
                                         </label>
                                     </div>

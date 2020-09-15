@@ -427,7 +427,7 @@ public class Util {
     public static int findIdentifierCountInWorkingHourRecordEmployeeIdentifier(List<WorkingHourRecordEmployeeIdentifier> workingHourRecordEmployeeIdentifiers, String identifier){
         int i=0;
         for(WorkingHourRecordEmployeeIdentifier whrei: workingHourRecordEmployeeIdentifiers){
-            if(whrei.getIdentifier().contentEquals(identifier)){
+            if(whrei.getIdentifier()!=null && whrei.getIdentifier().trim().length()>0 && whrei.getIdentifier().contentEquals(identifier)){
                 i=i+1;
             }
         }
@@ -476,7 +476,10 @@ public class Util {
     public static int calculateIdentifier(WorkingHourRecordEmployee workingHourRecordEmployee, String identifier){
         int i=0;
         for(WorkingHourRecordEmployeeIdentifier whrei: workingHourRecordEmployee.getWorkingHourRecordEmployeeIdentifiers()){
-            if(whrei.getIdentifier().contentEquals(identifier)){
+            if(workingHourRecordEmployee.getEmployee().getId()==100780){
+                System.out.println(whrei.getIdentifier() + " identifier: " + identifier);
+            }
+            if(whrei.getIdentifier()!=null && whrei.getIdentifier().trim().length()>0 && whrei.getIdentifier().contentEquals(identifier)){
                 i=i+1;
             }
         }

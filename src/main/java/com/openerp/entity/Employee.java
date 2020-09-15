@@ -73,6 +73,9 @@ public class Employee {
     @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
     private Boolean active = true;
 
+    @Column(name = "is_salary", nullable = false, columnDefinition="boolean default true") //maas hesablansin bu emekdawa
+    private Boolean salary = true;
+
     @ToString.Exclude
     @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
     private List<EmployeePayrollDetail> employeePayrollDetails;

@@ -120,6 +120,7 @@
                     </c:when>
                 </c:choose>
                 <div class="kt-portlet__body">
+                    <c:set var="view1" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'employee', 'view')}"/>
                     <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
                     <c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
                     <c:choose>
@@ -129,20 +130,17 @@
                                 <tr>
                                     <th rowspan="3">№</th>
                                     <th rowspan="3" ><div style="width: 220px !important;">Ad Soyad Ata adı</div></th>
-                                    <th colspan="2" rowspan="2" class="text-center" style="letter-spacing: 4px;">Əməkdaş</th>
-                                    <th colspan="<c:out value="${days_in_month}"/>" class="text-center" style="letter-spacing: 4px;">
+                                    <th colspan="<c:out value="${days_in_month}"/>" class="text-center" style="letter-spacing: 2px; font-size: 16px; font-weight: bolder;">
                                         Ayın və həftənin günləri
                                     </th>
-                                    <th colspan="<c:out value="${identifiers.size()}"/>" rowspan="2" class="text-center" style="letter-spacing: 4px;">Günlər</th>
+                                    <th colspan="<c:out value="${identifiers.size()}"/>" rowspan="2" class="text-center" style="letter-spacing: 2px; font-size: 16px; font-weight: bolder;">Günlər</th>
                                 </tr>
                                 <tr>
                                     <c:forEach var = "i" begin = "1" end = "${days_in_month}">
-                                        <th class="bg-info text-center kt-padding-1" style="border: none; color: white;"><c:out value = "${i}"/></th>
+                                        <th class="bg-warning text-center kt-padding-1" style="border: none; color: white;"><c:out value = "${i}"/></th>
                                     </c:forEach>
                                 </tr>
                                 <tr>
-                                    <th class="bg-warning" style="border: none;"><div style="width: 180px !important;">Vəzifə</div></th>
-                                    <th class="bg-warning" style="border: none;"><div style="width: 120px !important;">Struktur</div></th>
                                     <c:forEach var = "i" begin = "1" end = "${days_in_month}">
                                         <th class="bg-info text-center kt-padding-0" style="border: none; color: white;"><c:out value = "${utl:weekDay(i, form.month, form.year)}"/></th>
                                     </c:forEach>
@@ -163,15 +161,19 @@
                                             <input type="hidden" name="workingHourRecordEmployees[${loop.index}].position" value="<c:out value="${t.position}"/>"/>
                                             <input type="hidden" name="workingHourRecordEmployees[${loop.index}].organization" value="<c:out value="${t.organization}"/>"/>
                                         </td>
-                                        <th>
-                                            <c:out value="${t.fullName}"/>
+                                        <th style="min-width: 220px;" data-sort="<c:out value="${t.employee.person.fullName}"/>">
+                                            <c:if test="${not empty t.employee.id}">
+                                                <a href="javascript:copyToClipboard2('<c:out value="${t.employee.id}" />', 'Əməkdaş kodu <b><c:out value="${t.employee.id}" /></b> kopyalandı')" class="kt-font-lg kt-font-bold kt-font-info kt-font-hover-danger pl-2 pr-2"><i class="la la-copy"></i></a>
+                                            </c:if>
+                                            <c:choose>
+                                                <c:when test="${view1.status}">
+                                                    <a href="javascript:window.open('/hr/employee/<c:out value="${t.employee.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.employee.person.fullName}"/></a>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <c:out value="${t.employee.person.fullName}"/>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </th>
-                                        <td>
-                                            <c:out value="${t.position}"/>
-                                        </td>
-                                        <td>
-                                            <c:out value="${t.organization}"/>
-                                        </td>
                                         <c:forEach var="p" items="${t.workingHourRecordEmployeeIdentifiers}" varStatus="count">
                                             <td class="text-center kt-padding-0">
                                                 <c:choose>
@@ -308,7 +310,56 @@
         autoWidth: false,
         searching: false,
         columnDefs: [
-            {orderable: false, targets: 0}
+            {orderable: false, targets: 0},
+            {orderable: false, targets: 2},
+            {orderable: false, targets: 3},
+            {orderable: false, targets: 4},
+            {orderable: false, targets: 5},
+            {orderable: false, targets: 6},
+            {orderable: false, targets: 7},
+            {orderable: false, targets: 8},
+            {orderable: false, targets: 9},
+            {orderable: false, targets: 10},
+            {orderable: false, targets: 11},
+            {orderable: false, targets: 12},
+            {orderable: false, targets: 13},
+            {orderable: false, targets: 14},
+            {orderable: false, targets: 15},
+            {orderable: false, targets: 16},
+            {orderable: false, targets: 17},
+            {orderable: false, targets: 18},
+            {orderable: false, targets: 19},
+            {orderable: false, targets: 20},
+            {orderable: false, targets: 21},
+            {orderable: false, targets: 22},
+            {orderable: false, targets: 23},
+            {orderable: false, targets: 24},
+            {orderable: false, targets: 25},
+            {orderable: false, targets: 26},
+            {orderable: false, targets: 27},
+            {orderable: false, targets: 28},
+            {orderable: false, targets: 29},
+            {orderable: false, targets: 30},
+            {orderable: false, targets: 31},
+            {orderable: false, targets: 32},
+            {orderable: false, targets: 33},
+            {orderable: false, targets: 34},
+            {orderable: false, targets: 35},
+            {orderable: false, targets: 36},
+            {orderable: false, targets: 37},
+            {orderable: false, targets: 38},
+            {orderable: false, targets: 39},
+            {orderable: false, targets: 40},
+            {orderable: false, targets: 41},
+            {orderable: false, targets: 42},
+            {orderable: false, targets: 43},
+            {orderable: false, targets: 44},
+            {orderable: false, targets: 45},
+            {orderable: false, targets: 46},
+            {orderable: false, targets: 47},
+            {orderable: false, targets: 48},
+            {orderable: false, targets: 49},
+            {orderable: false, targets: 50}
         ],
         fixedColumns:   {
             leftColumns: 2

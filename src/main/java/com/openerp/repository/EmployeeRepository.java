@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Integer>, JpaSpecificationExecutor<Employee> {
     List<Employee> getEmployeesByContractEndDateIsNullAndOrganizationAndActiveTrue(Organization organization);
+    List<Employee> getEmployeesByContractEndDateIsNullAndOrganizationAndActiveTrueAndSalaryTrue(Organization organization);
     List<Employee> getEmployeesByOrganizationAndActiveTrueOrderByContractEndDate(Organization organization);
     List<Employee> getEmployeesByContractEndDateIsNullAndActiveTrue();
     List<Employee> getEmployeesByActiveTrueOrderByContractEndDate();
