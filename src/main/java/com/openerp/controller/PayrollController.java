@@ -1,6 +1,7 @@
 package com.openerp.controller;
 
 import com.openerp.domain.AdvanceGroup;
+import com.openerp.domain.Report;
 import com.openerp.domain.Response;
 import com.openerp.entity.*;
 import com.openerp.util.Constants;
@@ -679,16 +680,26 @@ public class PayrollController extends SkeletonController {
                                     )
                             );
 
-                            double sum_advance = 0;
-                            for(Advance advance: advanceRepository.getAdvancesByActiveTrueAndApproveTrueAndAdvanceDateBetweenAndEmployee(
-                                    DateUtility.generate(1,
-                                            se.getWorkingHourRecordEmployee().getWorkingHourRecord().getMonth(),
-                                            se.getWorkingHourRecordEmployee().getWorkingHourRecord().getYear()),
-                                    DateUtility.generate(31,
-                                            se.getWorkingHourRecordEmployee().getWorkingHourRecord().getMonth(),
-                                            se.getWorkingHourRecordEmployee().getWorkingHourRecord().getYear()),
-                                    se.getEmployee())){
-                                sum_advance += advance.getPayed();
+                            Double sum_advance = 0d;
+                            Report report = ReportUtil.calculateAdvance(advanceRepository.getAdvancesByActiveTrueAndEmployee(se.getEmployee()));
+                            sum_advance = Util.parseDouble(report.getDouble3())-Util.parseDouble(report.getDouble5());
+                            if(sum_advance>0d){
+                                try{
+                                    Advance advance = new Advance();
+                                    advance.setPayed(-1*sum_advance);
+                                    Employee employee = employeeRepository.getEmployeeById(se.getEmployee().getId());
+                                    advance.setEmployee(employee);
+                                    advance.setOrganization(employee.getOrganization());
+                                    advance.setApprove(false);
+                                    advance.setAdvance(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("payed", "advance"));
+                                    String description = "Maaş hesablanması: " + whr.getMonthYear();
+                                    advance.setDescription(description);
+                                    advanceRepository.save(advance);
+                                    log(advance, "advance", "create/edit", advance.getId(), advance.toString(), description);
+
+                                } catch (Exception e){
+                                    log.error(e.getMessage(), e);
+                                }
                             }
 
 

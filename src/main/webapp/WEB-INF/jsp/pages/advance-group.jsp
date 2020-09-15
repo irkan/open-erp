@@ -77,7 +77,7 @@
                                         <td data-sort="<c:out value="${t.report.double4}" />"><c:out
                                                 value="${t.report.double4 gt 0 ? t.report.double4+=' AZN' : '' }"/></td>
                                         <td data-sort="<c:out value="${t.report.double3-t.report.double5}" />"><c:out
-                                                value="${(t.report.double3-t.report.double5)+=' AZN'}"/></td>
+                                                value="${(t.report.double3)+=' AZN'}"/></td>
                                         <td data-sort="<c:out value="${t.report.double3}" />"><c:out
                                                 value="${t.report.double5 gt 0 ? t.report.double5+=' AZN' : '' }"/></td>
                                         <td data-sort="<c:out value="${t.report.double6}" />"><c:out

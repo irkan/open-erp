@@ -1103,4 +1103,15 @@ public class Util {
         }
         return "1";
     }
+
+    public static Double parseDouble(Double value) {
+        try{
+            if(value!=null){
+                return value;
+            }
+        } catch (Exception e){
+            log.error(e.getMessage(), e);
+        }
+        return 0d;
+    }
 }
