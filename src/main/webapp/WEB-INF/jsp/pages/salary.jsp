@@ -98,6 +98,7 @@
                     <c:choose>
                         <c:when test="${not empty form.salaryEmployees}">
                             <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
+                            <c:set var="view1" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'employee', 'view')}"/>
                             <c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
                             <c:set var="detail" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'detail')}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
@@ -119,7 +120,19 @@
                                 <c:forEach var="t" items="${form.salaryEmployees}" varStatus="loop">
                                     <tr valign="middle" class="text-justify" data="<c:out value="${utl:toJson(t)}" />">
                                         <td><c:out value="${t.id}" /></td>
-                                        <th><div style="width: 190px"><c:out value="${t.workingHourRecordEmployee.fullName}" /></div></th>
+                                        <th style="min-width: 220px;">
+                                            <c:if test="${not empty t.workingHourRecordEmployee.employee.id}">
+                                                <a href="javascript:copyToClipboard2('<c:out value="${t.workingHourRecordEmployee.employee.id}" />', 'Əməkdaş kodu <b><c:out value="${t.workingHourRecordEmployee.employee.id}" /></b> kopyalandı')" class="kt-font-lg kt-font-bold kt-font-info kt-font-hover-danger pl-2 pr-2"><i class="la la-copy"></i></a>
+                                            </c:if>
+                                            <c:choose>
+                                                <c:when test="${view1.status}">
+                                                    <a href="javascript:window.open('/hr/employee/<c:out value="${t.workingHourRecordEmployee.employee.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.workingHourRecordEmployee.fullName}"/></a>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <c:out value="${t.workingHourRecordEmployee.fullName}"/>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </th>
                                         <td>
                                             <c:forEach var="p" items="${t.salaryEmployeeDetails}" varStatus="loop">
                                                 <c:if test="${p.key eq '{gross_salary}'}">
