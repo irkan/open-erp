@@ -25,6 +25,8 @@
                            value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
                     <c:set var="transfer"
                            value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'transfer')}"/>
+                    <c:set var="view1"
+                           value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'employee', 'view')}"/>
                     <c:choose>
                         <c:when test="${not empty list}">
                             <table class="table table-striped- table-bordered table-hover table-checkable"
@@ -32,7 +34,7 @@
                                 <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th style="min-width: 160px;">Əməkdaş</th>
+                                    <th style="min-width: 200px;">Əməkdaş</th>
                                     <th>Struktur</th>
                                     <th>Təsdiq edilməmiş ümumi say</th>
                                     <th>Təsdiq edilməmiş ümumi məbləğ</th>
@@ -56,9 +58,19 @@
                                 <c:forEach var="t" items="${list}" varStatus="loop">
                                     <tr data="<c:out value="${t.employee.id}" />">
                                         <td><c:out value="${t.employee.id}"/></td>
-                                        <td data-sort="<c:out value="${t.employee.person.fullName}" />"><span
-                                                style="width: 160px;" class="kt-font-bolder"><c:out
-                                                value="${t.employee.person.fullName}"/></span></td>
+                                        <td data-sort="<c:out value="${t.employee.person.fullName}" />">
+                                            <c:if test="${not empty t.employee.id}">
+                                                <a href="javascript:copyToClipboard2('<c:out value="${t.employee.id}" />', 'Əməkdaş kodu <b><c:out value="${t.employee.id}" /></b> kopyalandı')" class="kt-font-lg kt-font-bold kt-font-info kt-font-hover-danger pl-2 pr-2"><i class="la la-copy"></i></a>
+                                            </c:if>
+                                            <c:choose>
+                                                <c:when test="${view1.status}">
+                                                    <a href="javascript:window.open('/hr/employee/<c:out value="${t.employee.id}"/>', 'mywindow', 'width=1250, height=800')" class="kt-link kt-font-bolder"><c:out value="${t.employee.person.fullName}"/></a>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <c:out value="${t.employee.person.fullName}"/>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </td>
                                         <td><c:out value="${t.employee.organization.name}"/></td>
                                         <td data-sort="<c:out value="${t.report.integer1}" />"><c:out
                                                 value="${t.report.integer1 gt 0 ? t.report.integer1+=' ədəd' : '' }"/></td>
@@ -76,9 +88,9 @@
                                                 value="${t.report.integer4 gt 0 ? t.report.integer4+=' ədəd' : '' }"/></td>
                                         <td data-sort="<c:out value="${t.report.double4}" />"><c:out
                                                 value="${t.report.double4 gt 0 ? t.report.double4+=' AZN' : '' }"/></td>
-                                        <td data-sort="<c:out value="${t.report.double3-t.report.double5}" />"><c:out
-                                                value="${(t.report.double3)+=' AZN'}"/></td>
                                         <td data-sort="<c:out value="${t.report.double3}" />"><c:out
+                                                value="${t.report.double3 gt 0 ? t.report.double3+=' AZN' : '' }"/></td>
+                                        <td data-sort="<c:out value="${t.report.double5}" />"><c:out
                                                 value="${t.report.double5 gt 0 ? t.report.double5+=' AZN' : '' }"/></td>
                                         <td data-sort="<c:out value="${t.report.double6}" />"><c:out
                                                 value="${t.report.double6 gt 0 ? t.report.double6+=' AZN' : '' }"/></td>

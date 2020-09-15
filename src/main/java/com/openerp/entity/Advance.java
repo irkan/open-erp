@@ -71,6 +71,9 @@ public class Advance {
     @Column(name = "is_approve", nullable = false, columnDefinition="boolean default false")
     private Boolean approve = false;
 
+    @Column(name = "is_salary", nullable = false, columnDefinition="boolean default false")
+    private Boolean salary = false;
+
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     @Column(name = "approve_date")

@@ -203,6 +203,7 @@ public class PayrollController extends SkeletonController {
             for(WorkingHourRecordEmployee whre: workingHourRecord.getWorkingHourRecordEmployees()){
                 List<WorkingHourRecordEmployeeDayCalculation> owhedcs = workingHourRecordEmployeeDayCalculationRepository.getWorkingHourRecordEmployeeDayCalculationsByKeyAndWorkingHourRecordEmployee_EmployeeOrderByWorkingHourRecordEmployeeDesc("HMQ", whre.getEmployee());
                 double balanceVacationDays = owhedcs.size()>0?owhedcs.get(0).getValue():0;
+                log.info(whre.getEmployee());
                 for(WorkingHourRecordEmployeeIdentifier whrei: whre.getWorkingHourRecordEmployeeIdentifiers()){
                     workingHourRecordEmployeeIdentifierRepository.save(whrei);
                 }
@@ -682,6 +683,7 @@ public class PayrollController extends SkeletonController {
 
                             Double sum_advance = 0d;
                             Report report = ReportUtil.calculateAdvance(advanceRepository.getAdvancesByActiveTrueAndEmployee(se.getEmployee()));
+                            advanceRepository.deleteInBatch(advanceRepository.getAdvancesByActiveTrueAndApproveFalseAndSalaryTrueAndEmployee(se.getEmployee()));
                             sum_advance = Util.parseDouble(report.getDouble3())-Util.parseDouble(report.getDouble5());
                             if(sum_advance>0d){
                                 try{
@@ -691,6 +693,7 @@ public class PayrollController extends SkeletonController {
                                     advance.setEmployee(employee);
                                     advance.setOrganization(employee.getOrganization());
                                     advance.setApprove(false);
+                                    advance.setSalary(true);
                                     advance.setAdvance(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("payed", "advance"));
                                     String description = "Maaş hesablanması: " + whr.getMonthYear();
                                     advance.setDescription(description);
