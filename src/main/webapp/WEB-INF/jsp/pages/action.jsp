@@ -449,7 +449,6 @@
                     <input type="hidden" name="id"/>
                     <input type="hidden" name="inventory.id"/>
                     <input type="hidden" name="action.id"/>
-                    <input type="hidden" name="supplier.id"/>
                     <input type="hidden" name="fromOrganization.id"/>
                     <div class="form-group">
                         <label for="from">Haradan?</label>

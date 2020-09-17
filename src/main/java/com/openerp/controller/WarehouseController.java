@@ -222,7 +222,7 @@ public class WarehouseController extends SkeletonController {
                         actn.getOrganization(),
                         action.getAmount(),
                         action.getInventory(),
-                        action.getSupplier(),
+                        actn.getSupplier(),
                         true);
                 sendAction.setFromOrganization(action.getOrganization());
                 actionRepository.save(sendAction);
@@ -244,7 +244,7 @@ public class WarehouseController extends SkeletonController {
                         action.getOrganization(),
                         action.getAmount(),
                         inventory,
-                        action.getSupplier(),
+                        actn.getSupplier(),
                         false);
                 acceptAction.setFromOrganization(sendAction.getOrganization());
                 actionRepository.save(acceptAction);
@@ -274,7 +274,7 @@ public class WarehouseController extends SkeletonController {
                     actionRepository.save(action);
                     log(action, "action", "create/edit", action.getId(), action.toString());
 
-                    String description = action.getAction().getName()+", "+action.getSupplier().getName()+" -> "+action.getOrganization().getName()+", "+action.getInventory().getName()+", Say: " + action.getAmount() + " ədəd";
+                    String description = Util.checkNull(action.getAction().getName())+", "+(action.getSupplier()!=null?Util.checkNull(action.getSupplier().getName()):"")+" -> "+Util.checkNull(action.getOrganization().getName())+", "+Util.checkNull(action.getInventory().getName())+", Say: " + Util.checkNull(action.getAmount()) + " ədəd";
                     Transaction transaction = new Transaction(action.getOrganization(), action.getInventory(), action.getAction(), description, false, null);
                     List<Financing> financings = financingRepository.getFinancingByActiveTrueAndInventory_BarcodeAndOrganizationOrderByIdAsc(action.getInventory().getBarcode(), action.getFromOrganization());
                     transaction.setAmount(action.getAmount());
