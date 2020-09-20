@@ -690,16 +690,20 @@ public class PayrollController extends SkeletonController {
                             Report report = ReportUtil.calculateAdvance(advanceRepository.getAdvancesByActiveTrueAndEmployee(se.getEmployee()));
                             advanceRepository.deleteInBatch(advanceRepository.getAdvancesByActiveTrueAndApproveFalseAndSalaryTrueAndEmployee(se.getEmployee()));
                             sum_advance = Util.parseDouble(report.getDouble3())-Util.parseDouble(report.getDouble5());
-                            if(sum_advance>0d){
+                            if(sum_advance!=0d){
                                 try{
                                     Advance advance = new Advance();
-                                    advance.setPayed(-1*sum_advance);
+                                    advance.setPayed(sum_advance>0d?-1*sum_advance:sum_advance);
                                     Employee employee = employeeRepository.getEmployeeById(se.getEmployee().getId());
                                     advance.setEmployee(employee);
                                     advance.setOrganization(employee.getOrganization());
                                     advance.setApprove(false);
                                     advance.setSalary(true);
-                                    advance.setAdvance(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("payed", "advance"));
+                                    Dictionary advanceType = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("payed", "advance");
+                                    if(sum_advance<0d){
+                                        advanceType = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("salary-correction-advance", "advance");
+                                    }
+                                    advance.setAdvance(advanceType);
                                     String description = "Maaş hesablanması: " + whr.getMonthYear();
                                     advance.setDescription(description);
                                     advanceRepository.save(advance);
