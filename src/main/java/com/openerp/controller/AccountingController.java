@@ -45,6 +45,7 @@ public class AccountingController extends SkeletonController {
             model.addAttribute(Constants.ACCOUNTS, accountRepository.getAccountsByActiveTrueAndOrganization(getSessionOrganization()));
             model.addAttribute(Constants.EXPENSES, dictionaryRepository.getDictionariesByActiveTrueAndAttr2AndDictionaryType_Attr1("expense", "action"));
             model.addAttribute(Constants.ACTIONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("action"));
+            model.addAttribute(Constants.CATEGORIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("expense-category"));
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Transaction(getSessionOrganization(),
                         dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("other", "action"),
@@ -187,6 +188,9 @@ public class AccountingController extends SkeletonController {
         if(!binding.hasErrors()){
             if(transaction.getInventory()!=null && transaction.getInventory().getId()==null){
                 transaction.setInventory(null);
+            }
+            if(transaction.getCategory()!=null && transaction.getCategory().getId()==null){
+                transaction.setCategory(null);
             }
             transactionRepository.save(transaction);
             log(transaction, "transaction", "create/edit", transaction.getId(), transaction.toString());

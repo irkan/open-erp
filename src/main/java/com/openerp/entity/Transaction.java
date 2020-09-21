@@ -38,6 +38,10 @@ public class Transaction {
     @JoinColumn(name = "dictionary_action_id")
     private Dictionary action;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "dictionary_category_id")
+    private Dictionary category;
+
     @Pattern(regexp=".{0,500}",message="Maksimum 500 simvol ola bilər")
     @Column(name = "description")
     private String description;

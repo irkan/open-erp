@@ -57,6 +57,12 @@ public class TransactionService {
                 if(transaction.getTransactionDate()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.lessThanOrEqualTo(root.get("transactionDate"), transaction.getTransactionDate())));
                 }
+                if(transaction.getAction()!=null && transaction.getAction().getId()!=null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("action"), transaction.getAction().getId())));
+                }
+                if(transaction.getCategory()!=null && transaction.getCategory().getId()!=null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("category"), transaction.getCategory().getId())));
+                }
                 return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
             }
         }, pageable);

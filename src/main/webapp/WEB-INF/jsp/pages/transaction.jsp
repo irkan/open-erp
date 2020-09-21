@@ -64,6 +64,15 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
+                                                <form:label path="category.id">Kateqoriya</form:label>
+                                                <form:select path="category.id" cssClass="custom-select form-control">
+                                                    <form:option value=""></form:option>
+                                                    <form:options items="${categories}" itemLabel="name" itemValue="id"/>
+                                                </form:select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
                                                 <form:label path="currency">Valyuta</form:label>
                                                 <form:input path="currency" cssClass="form-control" placeholder="AZN, EUR, USD, GBP"/>
                                                 <form:errors path="currency" cssClass="alert-danger control-label"/>
@@ -83,8 +92,6 @@
                                                 <form:errors path="price" cssClass="alert-danger control-label"/>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <form:label path="transactionDateFrom">Tarixdən</form:label>
@@ -168,6 +175,7 @@
                                     <th>№</th>
                                     <th>ID</th>
                                     <th>Nədir?</th>
+                                    <th>Kateqoriya</th>
                                     <th>Hesab nömrəsi</th>
                                     <th>Açıqlama</th>
                                     <th>Tarix/Vaxt</th>
@@ -188,6 +196,7 @@
                                         <td>${loop.index + 1}</td>
                                         <td><c:out value="${t.id}" /></td>
                                         <td><div style="width: 100px;"><c:out value="${t.action.name}" /></div></td>
+                                        <td><div style="width: 80px;"><c:out value="${t.category.name}" /></div></td>
                                         <td><c:out value="${t.account.accountNumber}" /></td>
                                         <td><c:out value="${t.description}" /></td>
                                         <td><fmt:formatDate value = "${t.transactionDate}" pattern = "dd.MM.yyyy HH:mm:ss" /></td>
@@ -295,6 +304,13 @@
                         <form:select path="action.id" cssClass="custom-select form-control">
                             <form:option value=""></form:option>
                             <form:options items="${actions}" itemLabel="name" itemValue="id"/>
+                        </form:select>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="category.id">Kateqoriya</form:label>
+                        <form:select path="category.id" cssClass="custom-select form-control">
+                            <form:option value=""></form:option>
+                            <form:options items="${categories}" itemLabel="name" itemValue="id"/>
                         </form:select>
                     </div>
                     <div class="form-group">
