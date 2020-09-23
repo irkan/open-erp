@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.YearMonth;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -239,5 +240,17 @@ public class DateUtility {
             case 12: return "dekabr";
         }
         return "";
+    }
+
+    public static Date getStartDate(Date date){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return generate(calendar.getActualMinimum(Calendar.DAY_OF_MONTH), date.getMonth()+1, date.getYear()+1900);
+    }
+
+    public static Date getEndDate(Date date){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return generate(calendar.getActualMaximum(Calendar.DAY_OF_MONTH), date.getMonth()+1, date.getYear()+1900);
     }
 }

@@ -413,9 +413,11 @@ public class SaleController extends SkeletonController {
                 Dictionary credit = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("credit", "action");
 
                 if(sales.getVanLeader()!=null){
+                    List<Sales> salesInMonth = salesRepository.getSalesByActiveTrueAndReturnedFalseAndApproveDateBetweenAndVanLeader(DateUtility.getStartDate(sales.getApproveDate()), DateUtility.getEndDate(sales.getApproveDate()), sales.getVanLeader());
                     EmployeeSaleDetail saleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getVanLeader(), "{van_leader}");
                     String calculated_bonus = saleDetail.getValue()
                             .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
+                            .replaceAll(Pattern.quote("{sale_count}"), Util.checkNull(salesInMonth.size()))
                             .replaceAll(Pattern.quote("%"), percent);
                     Advance advance;
                     try{
@@ -437,9 +439,11 @@ public class SaleController extends SkeletonController {
 
                 if(sales.getDealer()!=null){
                     try{
+                        List<Sales> salesInMonth = salesRepository.getSalesByActiveTrueAndReturnedFalseAndApproveDateBetweenAndDealer(DateUtility.getStartDate(sales.getApproveDate()), DateUtility.getEndDate(sales.getApproveDate()), sales.getDealer());
                         EmployeeSaleDetail saleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getDealer(), "{dealer}");
                         String calculated_bonus = saleDetail.getValue()
                                 .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
+                                .replaceAll(Pattern.quote("{sale_count}"), Util.checkNull(salesInMonth.size()))
                                 .replaceAll(Pattern.quote("%"), percent);
                         Advance advance = new Advance(credit,
                                 sales.getDealer(),
@@ -459,9 +463,11 @@ public class SaleController extends SkeletonController {
 
                 if(sales.getCanavasser()!=null){
                     try{
+                        List<Sales> salesInMonth = salesRepository.getSalesByActiveTrueAndReturnedFalseAndApproveDateBetweenAndCanavasser(DateUtility.getStartDate(sales.getApproveDate()), DateUtility.getEndDate(sales.getApproveDate()), sales.getCanavasser());
                         EmployeeSaleDetail saleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getCanavasser(), "{canvasser}");
                         String calculated_bonus = saleDetail.getValue()
                                 .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
+                                .replaceAll(Pattern.quote("{sale_count}"), Util.checkNull(salesInMonth.size()))
                                 .replaceAll(Pattern.quote("%"), percent);
                         Advance advance = new Advance(credit,
                                 sales.getCanavasser(),
@@ -481,9 +487,11 @@ public class SaleController extends SkeletonController {
 
                 if(sales.getConsole()!=null){
                     try{
+                        List<Sales> salesInMonth = salesRepository.getSalesByActiveTrueAndReturnedFalseAndApproveDateBetweenAndConsole(DateUtility.getStartDate(sales.getApproveDate()), DateUtility.getEndDate(sales.getApproveDate()), sales.getConsole());
                         EmployeeSaleDetail saleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getConsole(), "{consul}");
                         String calculated_bonus = saleDetail.getValue()
                                 .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
+                                .replaceAll(Pattern.quote("{sale_count}"), Util.checkNull(salesInMonth.size()))
                                 .replaceAll(Pattern.quote("%"), percent);
                         Advance advance = new Advance(credit,
                                 sales.getConsole(),
@@ -695,9 +703,11 @@ public class SaleController extends SkeletonController {
                 Dictionary credit = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("credit", "action");
 
                 if(sale.getVanLeader()!=null && sale.getVanLeader().getId().intValue()!=sales.getVanLeader().getId().intValue()){
+                    List<Sales> salesInMonth = salesRepository.getSalesByActiveTrueAndReturnedFalseAndApproveDateBetweenAndVanLeader(DateUtility.getStartDate(sales.getApproveDate()), DateUtility.getEndDate(sales.getApproveDate()), sales.getVanLeader());
                     EmployeeSaleDetail saleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getVanLeader(), "{van_leader}");
                     String calculated_bonus = saleDetail.getValue()
                             .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
+                            .replaceAll(Pattern.quote("{sale_count}"), Util.checkNull(salesInMonth.size()))
                             .replaceAll(Pattern.quote("%"), percent);
                     Advance advance;
                     try{
@@ -717,9 +727,11 @@ public class SaleController extends SkeletonController {
                     }
 
                     try{
+                        salesInMonth = salesRepository.getSalesByActiveTrueAndReturnedFalseAndApproveDateBetweenAndVanLeader(DateUtility.getStartDate(sales.getApproveDate()), DateUtility.getEndDate(sales.getApproveDate()), sales.getVanLeader());
                         saleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sale.getVanLeader(), "{van_leader}");
                         calculated_bonus = saleDetail.getValue()
                                 .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
+                                .replaceAll(Pattern.quote("{sale_count}"), Util.checkNull(salesInMonth.size()))
                                 .replaceAll(Pattern.quote("%"), percent);
 
                         advance = new Advance(bonus,
@@ -743,9 +755,11 @@ public class SaleController extends SkeletonController {
                     if((sales.getDealer()!=null && sale.getDealer()!=null && sales.getDealer().getId().intValue()!=sale.getDealer().getId().intValue()) ||
                             (sales.getDealer()!=null && sale.getDealer()==null)
                     ){
+                        List<Sales> salesInMonth = salesRepository.getSalesByActiveTrueAndReturnedFalseAndApproveDateBetweenAndDealer(DateUtility.getStartDate(sales.getApproveDate()), DateUtility.getEndDate(sales.getApproveDate()), sales.getDealer());
                         EmployeeSaleDetail saleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getDealer(), "{dealer}");
                         String calculated_bonus = saleDetail.getValue()
                                 .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
+                                .replaceAll(Pattern.quote("{sale_count}"), Util.checkNull(salesInMonth.size()))
                                 .replaceAll(Pattern.quote("%"), percent);
                         Advance advance = new Advance(credit,
                                 sales.getDealer(),
@@ -767,9 +781,11 @@ public class SaleController extends SkeletonController {
                     if((sales.getDealer()!=null && sale.getDealer()!=null && sales.getDealer().getId().intValue()!=sale.getDealer().getId().intValue()) ||
                             (sales.getDealer()==null && sale.getDealer()!=null)
                     ){
+                        List<Sales> salesInMonth = salesRepository.getSalesByActiveTrueAndReturnedFalseAndApproveDateBetweenAndDealer(DateUtility.getStartDate(sales.getApproveDate()), DateUtility.getEndDate(sales.getApproveDate()), sales.getDealer());
                         EmployeeSaleDetail saleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sale.getVanLeader(), "{dealer}");
                         String calculated_bonus = saleDetail.getValue()
                                 .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
+                                .replaceAll(Pattern.quote("{sale_count}"), Util.checkNull(salesInMonth.size()))
                                 .replaceAll(Pattern.quote("%"), percent);
 
                         Advance advance = new Advance(bonus,
@@ -792,9 +808,11 @@ public class SaleController extends SkeletonController {
                     if((sales.getCanavasser()!=null && sale.getCanavasser()!=null && sales.getCanavasser().getId().intValue()!=sale.getCanavasser().getId().intValue()) ||
                             (sales.getCanavasser()!=null && sale.getCanavasser()==null)
                     ){
+                        List<Sales> salesInMonth = salesRepository.getSalesByActiveTrueAndReturnedFalseAndApproveDateBetweenAndCanavasser(DateUtility.getStartDate(sales.getApproveDate()), DateUtility.getEndDate(sales.getApproveDate()), sales.getCanavasser());
                         EmployeeSaleDetail saleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getCanavasser(), "{canvasser}");
                         String calculated_bonus = saleDetail.getValue()
                                 .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
+                                .replaceAll(Pattern.quote("{sale_count}"), Util.checkNull(salesInMonth.size()))
                                 .replaceAll(Pattern.quote("%"), percent);
                         Advance advance = new Advance(credit,
                                 sales.getCanavasser(),
@@ -816,9 +834,11 @@ public class SaleController extends SkeletonController {
                     if((sales.getCanavasser()!=null && sale.getCanavasser()!=null && sales.getCanavasser().getId().intValue()!=sale.getCanavasser().getId().intValue()) ||
                             (sales.getCanavasser()==null && sale.getCanavasser()!=null)
                     ){
+                        List<Sales> salesInMonth = salesRepository.getSalesByActiveTrueAndReturnedFalseAndApproveDateBetweenAndCanavasser(DateUtility.getStartDate(sales.getApproveDate()), DateUtility.getEndDate(sales.getApproveDate()), sales.getCanavasser());
                         EmployeeSaleDetail saleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sale.getCanavasser(), "{canvasser}");
                         String calculated_bonus = saleDetail.getValue()
                                 .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
+                                .replaceAll(Pattern.quote("{sale_count}"), Util.checkNull(salesInMonth.size()))
                                 .replaceAll(Pattern.quote("%"), percent);
 
                         Advance advance = new Advance(bonus,
@@ -841,9 +861,11 @@ public class SaleController extends SkeletonController {
                     if((sales.getConsole()!=null && sale.getConsole()!=null && sales.getConsole().getId().intValue()!=sale.getConsole().getId().intValue()) ||
                             (sales.getConsole()!=null && sale.getConsole()==null)
                     ){
+                        List<Sales> salesInMonth = salesRepository.getSalesByActiveTrueAndReturnedFalseAndApproveDateBetweenAndConsole(DateUtility.getStartDate(sales.getApproveDate()), DateUtility.getEndDate(sales.getApproveDate()), sales.getConsole());
                         EmployeeSaleDetail saleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getConsole(), "{consul}");
                         String calculated_bonus = saleDetail.getValue()
                                 .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
+                                .replaceAll(Pattern.quote("{sale_count}"), Util.checkNull(salesInMonth.size()))
                                 .replaceAll(Pattern.quote("%"), percent);
                         Advance advance = new Advance(credit,
                                 sales.getConsole(),
@@ -865,9 +887,11 @@ public class SaleController extends SkeletonController {
                     if((sales.getConsole()!=null && sale.getConsole()!=null && sales.getConsole().getId().intValue()!=sale.getConsole().getId().intValue()) ||
                             (sales.getConsole()==null && sale.getConsole()!=null)
                     ){
+                        List<Sales> salesInMonth = salesRepository.getSalesByActiveTrueAndReturnedFalseAndApproveDateBetweenAndConsole(DateUtility.getStartDate(sales.getApproveDate()), DateUtility.getEndDate(sales.getApproveDate()), sales.getConsole());
                         EmployeeSaleDetail saleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sale.getConsole(), "{consul}");
                         String calculated_bonus = saleDetail.getValue()
                                 .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
+                                .replaceAll(Pattern.quote("{sale_count}"), Util.checkNull(salesInMonth.size()))
                                 .replaceAll(Pattern.quote("%"), percent);
 
                         Advance advance = new Advance(bonus,

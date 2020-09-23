@@ -820,9 +820,11 @@ public class SkeletonController {
             Advance advanceO;
             try{
                 if(sales.getCanavasser()!=null){
+                    List<Sales> salesInMonth = salesRepository.getSalesByActiveTrueAndReturnedFalseAndApproveDateBetweenAndCanavasser(DateUtility.getStartDate(sales.getApproveDate()), DateUtility.getEndDate(sales.getApproveDate()), sales.getCanavasser());
                     EmployeeSaleDetail canvasserSaleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getCanavasser(), "{canvasser}");
                     String calculated_bonus = canvasserSaleDetail.getValue()
                             .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
+                            .replaceAll(Pattern.quote("{sale_count}"), Util.checkNull(salesInMonth.size()))
                             .replaceAll(Pattern.quote("%"), percent);
                     advanceO = new Advance(advance,
                             sales.getCanavasser(),
@@ -842,9 +844,11 @@ public class SkeletonController {
 
             try{
                 if(sales.getDealer()!=null){
+                    List<Sales> salesInMonth = salesRepository.getSalesByActiveTrueAndReturnedFalseAndApproveDateBetweenAndDealer(DateUtility.getStartDate(sales.getApproveDate()), DateUtility.getEndDate(sales.getApproveDate()), sales.getDealer());
                     EmployeeSaleDetail dealerSaleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getDealer(), "{dealer}");
                     String calculated_bonus = dealerSaleDetail.getValue()
                             .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
+                            .replaceAll(Pattern.quote("{sale_count}"), Util.checkNull(salesInMonth.size()))
                             .replaceAll(Pattern.quote("%"), percent);
                     advanceO = new Advance(advance,
                             sales.getDealer(),
@@ -863,9 +867,11 @@ public class SkeletonController {
             }
             try{
                 if(sales.getVanLeader()!=null){
+                    List<Sales> salesInMonth = salesRepository.getSalesByActiveTrueAndReturnedFalseAndApproveDateBetweenAndVanLeader(DateUtility.getStartDate(sales.getApproveDate()), DateUtility.getEndDate(sales.getApproveDate()), sales.getVanLeader());
                     EmployeeSaleDetail vanLeaderSaleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getVanLeader(), "{van_leader}");
                     String calculated_bonus = vanLeaderSaleDetail.getValue()
                             .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
+                            .replaceAll(Pattern.quote("{sale_count}"), Util.checkNull(salesInMonth.size()))
                             .replaceAll(Pattern.quote("%"), percent);
                     advanceO = new Advance(advance,
                             sales.getVanLeader(),
@@ -884,9 +890,11 @@ public class SkeletonController {
             }
             try{
                 if(sales.getConsole()!=null){
+                    List<Sales> salesInMonth = salesRepository.getSalesByActiveTrueAndReturnedFalseAndApproveDateBetweenAndConsole(DateUtility.getStartDate(sales.getApproveDate()), DateUtility.getEndDate(sales.getApproveDate()), sales.getConsole());
                     EmployeeSaleDetail consulSaleDetail = employeeSaleDetailRepository.getEmployeeSaleDetailByEmployeeAndKey(sales.getConsole(), "{consul}");
                     String calculated_bonus = consulSaleDetail.getValue()
                             .replaceAll(Pattern.quote("{sale_price}"), String.valueOf(sales.getPayment().getLastPrice()))
+                            .replaceAll(Pattern.quote("{sale_count}"), Util.checkNull(salesInMonth.size()))
                             .replaceAll(Pattern.quote("%"), percent);
                     advanceO = new Advance(advance,
                             sales.getConsole(),
