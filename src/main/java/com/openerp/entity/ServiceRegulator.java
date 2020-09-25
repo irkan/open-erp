@@ -26,7 +26,6 @@ public class ServiceRegulator {
     private Integer id;
 
     @ToString.Exclude
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sales_id")
     private Sales sales;
@@ -40,11 +39,25 @@ public class ServiceRegulator {
     @Column(name = "serviced_date")
     private Date servicedDate=new Date();
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "dictionary_postpone_id")
+    private Dictionary postpone;
+
     @ToString.Exclude
     @Transient
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date servicedDateFrom;
+
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    @Column(name = "last_contact_date")
+    private Date lastContactDate=new Date();
+
+    @ToString.Exclude
+    @Transient
+    @JsonIgnore
+    private String ids;
 
     public ServiceRegulator(Sales sales, Dictionary serviceNotification, Date servicedDate) {
         this.sales = sales;

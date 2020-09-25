@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import java.util.List;
 
 public interface ServiceRegulatorRepository extends JpaRepository<ServiceRegulator, Integer>, JpaSpecificationExecutor<ServiceRegulator> {
+    ServiceRegulator getServiceRegulatorById(Integer id);
     List<ServiceRegulator> getServiceRegulatorsBySales(Sales sales);
     List<ServiceRegulator> getServiceRegulatorsBySalesAndServiceNotification_Id(Sales sales, Integer serviceNotificationId);
 }

@@ -30,6 +30,9 @@ public class ServiceRegulatorService {
                 if(serviceRegulator.getId()!=null) {
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("id"), serviceRegulator.getId())));
                 }
+                if(serviceRegulator.getSales()!=null && serviceRegulator.getSales().getNotServiceNext()!=null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("sales").get("notServiceNext"), serviceRegulator.getSales().getNotServiceNext())));
+                }
                 if(serviceRegulator.getSales()!=null && serviceRegulator.getSales().getId()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("sales"), serviceRegulator.getSales().getId())));
                 }
@@ -44,6 +47,21 @@ public class ServiceRegulatorService {
                 }
                 if(serviceRegulator.getServicedDate()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.lessThanOrEqualTo(root.get("servicedDate"), serviceRegulator.getServicedDate())));
+                }
+                if(serviceRegulator.getServicedDateFrom()!=null && serviceRegulator.getServicedDate()==null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("servicedDate"), serviceRegulator.getServicedDateFrom())));
+                }
+                if(serviceRegulator.getServicedDateFrom()==null && serviceRegulator.getServicedDate()!=null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("servicedDate"), serviceRegulator.getServicedDate())));
+                }
+                if(serviceRegulator.getSales()!=null && serviceRegulator.getSales().getCustomer()!=null && serviceRegulator.getSales().getCustomer().getId()!=null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("sales").get("customer"), serviceRegulator.getSales().getCustomer().getId())));
+                }
+                if(serviceRegulator.getSales()!=null && serviceRegulator.getSales().getCustomer()!=null && serviceRegulator.getSales()!=null && serviceRegulator.getSales().getCustomer().getPerson()!=null && serviceRegulator.getSales()!=null && serviceRegulator.getSales().getCustomer().getPerson().getFirstName()!=null && !serviceRegulator.getSales().getCustomer().getPerson().getFirstName().isEmpty()) {
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("sales").get("customer").get("person").get("firstName"), "%"+serviceRegulator.getSales().getCustomer().getPerson().getFirstName()+"%")));
+                }
+                if(serviceRegulator.getSales()!=null && serviceRegulator.getSales().getCustomer()!=null && serviceRegulator.getSales()!=null && serviceRegulator.getSales().getCustomer().getPerson()!=null && serviceRegulator.getSales()!=null && serviceRegulator.getSales().getCustomer().getPerson().getLastName()!=null && !serviceRegulator.getSales().getCustomer().getPerson().getLastName().isEmpty()){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("sales").get("customer").get("person").get("lastName"), "%"+serviceRegulator.getSales().getCustomer().getPerson().getLastName()+"%")));
                 }
                 return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
             }

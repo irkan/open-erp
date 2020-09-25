@@ -87,6 +87,7 @@ public class Sales {
     private List<Invoice> invoices;
 
     @ToString.Exclude
+    @JsonIgnore
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "sales", cascade = CascadeType.ALL)
     private List<ServiceRegulator> serviceRegulators;

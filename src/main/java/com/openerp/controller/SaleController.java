@@ -194,12 +194,13 @@ public class SaleController extends SkeletonController {
             }
         }  else if (page.equalsIgnoreCase(Constants.ROUTE.SERVICE_REGULATOR)){
             model.addAttribute(Constants.SERVICE_NOTIFICATIONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("service-notification"));
+            model.addAttribute(Constants.POSTPONES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("postpone"));
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new ServiceRegulator(new Sales(getSessionOrganization())));
             }
             if(!model.containsAttribute(Constants.FILTER)){
                 Sales sales = new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null);
-                model.addAttribute(Constants.FILTER, new ServiceRegulator(sales, null));
+                model.addAttribute(Constants.FILTER, new ServiceRegulator(sales, DateUtility.addYear(-1)));
             }
             if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
                     session.getAttribute(Constants.SESSION_FILTER) instanceof ServiceRegulator){
@@ -1223,6 +1224,41 @@ public class SaleController extends SkeletonController {
         return mapPost(invc, binding, redirectAttributes, "/sale/invoice/");
     }
 
+
+    @PostMapping(value = "/service-regulator/transfer")
+    public String postServiceRegulatorTransfer(@ModelAttribute(Constants.FORM) @Validated ServiceRegulator serviceRegulator, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(null, Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()){
+            Date today = new Date();
+
+            if(serviceRegulator.getIds()!=null && serviceRegulator.getIds().trim().length()>0){
+                for(String id: serviceRegulator.getIds().split(",")){
+                    try{
+                        if(id!=null && id.trim().length()>0){
+                            ServiceRegulator sg = serviceRegulatorRepository.getServiceRegulatorById(Util.parseInt(id));
+                            String description = "";
+                            sg.setLastContactDate(today);
+                            if(serviceRegulator.getPostpone()==null){
+                                sg.setServicedDate(today);
+                                description = (sg.getServiceNotification()!=null?sg.getServiceNotification().getName():"") + " (Servis Requlyatoru) servisə əlavə edildi";
+                            } else {
+                                sg.setServicedDate(DateUtility.addDay(sg.getServicedDate(), Util.parseInt(serviceRegulator.getPostpone().getAttr2())));
+                                sg.setPostpone(serviceRegulator.getPostpone());
+                                description = (sg.getServiceNotification()!=null?sg.getServiceNotification().getName():"") + " (Servis Requlyatoru) ertələndi";
+                            }
+                            serviceRegulatorRepository.save(sg);
+                            log(sg, "service_regulator", "create/edit", sg.getId(), sg.toString(), description);
+                            addContactHistory(sg.getSales(), description, null);
+                        }
+                    } catch (Exception e){
+                        log.error(e.getMessage(), e);
+                    }
+                }
+            }
+        }
+        return mapPost(serviceRegulator, binding, redirectAttributes, "/sale/service-regulator");
+    }
+
     @ResponseBody
     @GetMapping(value = "/api/service/inventory/{salesId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<SalesInventory> getSalesInventories(@PathVariable("salesId") Integer salesId){
@@ -1239,6 +1275,12 @@ public class SaleController extends SkeletonController {
     @GetMapping(value = "/api/invoice/{invoiceId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Invoice getInvoice(@PathVariable("invoiceId") Integer invoiceId){
         return invoiceRepository.getInvoiceById(invoiceId);
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/api/service-regulator/{dataId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ServiceRegulator getServiceRegulator(@PathVariable("dataId") Integer dataId){
+        return serviceRegulatorRepository.getServiceRegulatorById(dataId);
     }
 
     public List<Sales> collectSalesList(SalesSchedule salesSchedule) {

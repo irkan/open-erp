@@ -166,6 +166,14 @@ public class DateUtility {
         return cal.getTime();
     }
 
+    public static Date addDay(Date date, int value){
+        Calendar cal = Calendar.getInstance();
+        cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DATE, value);
+        return cal.getTime();
+    }
+
     public static Date addMonth(int date, int month, int year, int value){
         Date today = new Date();
         Calendar cal = Calendar.getInstance();

@@ -75,6 +75,7 @@ public class Constants {
     public static final String PATH1 = "path1";
     public static final String SESSION_FILTER = "session_filter";
     public static final String CATEGORIES = "categories";
+    public static final String POSTPONES = "postpones";
 
     public static final class STATUS{
         public static final String RESPONSE = "response";
