@@ -1231,6 +1231,10 @@ public class SaleController extends SkeletonController {
         if(!binding.hasErrors()){
             Date today = new Date();
 
+            if(serviceRegulator!=null && serviceRegulator.getPostpone()!=null && serviceRegulator.getPostpone().getId()==null){
+                serviceRegulator.setPostpone(null);
+            }
+
             if(serviceRegulator.getIds()!=null && serviceRegulator.getIds().trim().length()>0){
                 for(String id: serviceRegulator.getIds().split(",")){
                     try{
@@ -1242,13 +1246,37 @@ public class SaleController extends SkeletonController {
                                 sg.setServicedDate(today);
                                 description = (sg.getServiceNotification()!=null?sg.getServiceNotification().getName():"") + " (Servis Requlyatoru) servisə əlavə edildi";
                             } else {
-                                sg.setServicedDate(DateUtility.addDay(sg.getServicedDate(), Util.parseInt(serviceRegulator.getPostpone().getAttr2())));
-                                sg.setPostpone(serviceRegulator.getPostpone());
+                                Dictionary postpone = dictionaryRepository.getDictionaryById(serviceRegulator.getPostpone().getId());
+                                sg.setServicedDate(DateUtility.addDay(sg.getServicedDate(), Util.parseInt(postpone.getAttr2())));
+                                sg.setPostpone(postpone);
                                 description = (sg.getServiceNotification()!=null?sg.getServiceNotification().getName():"") + " (Servis Requlyatoru) ertələndi";
                             }
                             serviceRegulatorRepository.save(sg);
                             log(sg, "service_regulator", "create/edit", sg.getId(), sg.toString(), description);
                             addContactHistory(sg.getSales(), description, null);
+
+                            if(serviceRegulator.getPostpone()==null){
+                                description += "filter dəyişimi";
+                                Sales sales = sg.getSales();
+                                Sales service = new Sales();
+                                service.setOrganization(sales.getOrganization());
+                                service.setService(true);
+                                service.setCustomer(sales.getCustomer());
+                                service.setGuarantee(6);
+                                service.setGuaranteeExpire(Util.guarantee(new Date(), service.getGuarantee()));
+                                Payment payment = new Payment();
+                                payment.setCash(true);
+                                payment.setLastPrice(payment.getPrice());
+                                payment.setDescription(description);
+                                service.setPayment(payment);
+                                salesRepository.save(service);
+
+                                log(service, "sales", "create/edit", service.getId(), service.toString(), "Servis Requlyatordan Servis yaradıldı");
+
+                                addContactHistory(sales, "Servis əlavə edildi: "+description, service);
+                            }
+
+
                         }
                     } catch (Exception e){
                         log.error(e.getMessage(), e);

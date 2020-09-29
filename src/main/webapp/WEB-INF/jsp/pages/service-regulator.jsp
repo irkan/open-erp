@@ -364,7 +364,7 @@
                         <form:label path="postpone.id">Ertələmə</form:label>
                         <form:select path="postpone.id" cssClass="custom-select form-control" onchange="postpone($(this))">
                             <form:option value=""></form:option>
-                            <form:options items="${postpones}" itemLabel="name" itemValue="attr1"/>
+                            <form:options items="${postpones}" itemLabel="name" itemValue="id"/>
                         </form:select>
                     </div>
                     <div class="form-group notServiceNextReason kt-hide">
