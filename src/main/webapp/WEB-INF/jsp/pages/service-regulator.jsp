@@ -173,6 +173,7 @@
                                     <th>Müştəri ilə əlaqə</th>
                                     <th>Xəbərdarlıq tarixi</th>
                                     <th>Filter</th>
+                                    <th>Satış</th>
                                     <th>Sonuncu qeyd</th>
                                     <th>Əməliyyat</th>
                                 </tr>
@@ -226,6 +227,9 @@
                                         </td>
                                         <td>
                                             <c:out value="${t.serviceNotification.name}"/>
+                                        </td>
+                                        <td>
+                                            <c:out value="${t.sales.id}" />
                                         </td>
                                         <td style="max-width: 300px">
                                             <c:if test="${view3.status}">
@@ -405,9 +409,9 @@
         ],
         </c:if>
         responsive: true,
-fixedHeader: {
-   headerOffset: $('#kt_header').outerHeight()
-},
+        fixedHeader: {
+           headerOffset: $('#kt_header').outerHeight()
+        },
         lengthMenu: [10, 25, 50, 75, 100, 200, 1000],
         pageLength: 100,
         order: [[1, 'desc']],
@@ -420,7 +424,7 @@ fixedHeader: {
                 render: function(data, type, full, meta) {
                     return `
                         <label class="checkbox checkbox-single" style="margin-bottom: 0;">
-                            <input type="checkbox" value="`+full[1]+`" label="`+full[6]+`" class="checkable" style="width: 20px; height: 20px;"/>
+                            <input type="checkbox" value="`+full[1]+`" label="`+full[6]+`"  sales="`+full[7]+`"  class="checkable" style="width: 20px; height: 20px;"/>
                             <span></span>
                         </label>`;
                 },
@@ -430,6 +434,18 @@ fixedHeader: {
         select: {
             style:    'multi',
             selector: 'td:first-child'
+        }
+    }).on("click", "input[type='checkbox']", function(){
+        var sales = $(this).attr('sales');
+        var status = false;
+        $("input.checkable:checked").each(function() {
+            if(sales!==$(this).attr('sales')){
+                status = true;
+            }
+        });
+        if(status){
+            $("input.checkable:checked").prop('checked', false);
+            $(this).prop('checked', true);
         }
     });
 

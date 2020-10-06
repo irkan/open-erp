@@ -1228,6 +1228,19 @@ public class SaleController extends SkeletonController {
     @PostMapping(value = "/service-regulator/transfer")
     public String postServiceRegulatorTransfer(@ModelAttribute(Constants.FORM) @Validated ServiceRegulator serviceRegulator, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(null, Constants.TEXT.SUCCESS));
+        if(serviceRegulator.getIds()==null){
+            serviceRegulator.setIds(Util.checkNull(serviceRegulator.getId()));
+        }
+
+        /*if(serviceRegulator.getIds().split(",").length>1){
+            String oldId=serviceRegulator.getIds().split(",")[0];
+            for(String id: serviceRegulator.getIds().split(",")){
+                if(!id.equalsIgnoreCase(oldId)){
+
+                }
+            }
+        }*/
+
         if(!binding.hasErrors()){
             Date today = new Date();
 
@@ -1236,11 +1249,11 @@ public class SaleController extends SkeletonController {
             }
 
             if(serviceRegulator.getIds()!=null && serviceRegulator.getIds().trim().length()>0){
+                String description = "";
                 for(String id: serviceRegulator.getIds().split(",")){
                     try{
                         if(id!=null && id.trim().length()>0){
                             ServiceRegulator sg = serviceRegulatorRepository.getServiceRegulatorById(Util.parseInt(id));
-                            String description = "";
                             sg.setLastContactDate(today);
                             if(serviceRegulator.getPostpone()==null){
                                 sg.setServicedDate(today);
@@ -1254,34 +1267,34 @@ public class SaleController extends SkeletonController {
                             serviceRegulatorRepository.save(sg);
                             log(sg, "service_regulator", "create/edit", sg.getId(), sg.toString(), description);
                             addContactHistory(sg.getSales(), description, null);
-
-                            if(serviceRegulator.getPostpone()==null){
-                                description += "filter dəyişimi";
-                                Sales sales = sg.getSales();
-                                Sales service = new Sales();
-                                service.setOrganization(sales.getOrganization());
-                                service.setService(true);
-                                service.setCustomer(sales.getCustomer());
-                                service.setGuarantee(6);
-                                service.setGuaranteeExpire(Util.guarantee(new Date(), service.getGuarantee()));
-                                Payment payment = new Payment();
-                                payment.setCash(true);
-                                payment.setLastPrice(payment.getPrice());
-                                payment.setDescription(description);
-                                service.setPayment(payment);
-                                salesRepository.save(service);
-
-                                log(service, "sales", "create/edit", service.getId(), service.toString(), "Servis Requlyatordan Servis yaradıldı");
-
-                                addContactHistory(sales, "Servis əlavə edildi: "+description, service);
-                            }
-
-
                         }
                     } catch (Exception e){
                         log.error(e.getMessage(), e);
                     }
                 }
+
+/*
+                if(serviceRegulator.getPostpone()==null){
+                    description += "filter dəyişimi";
+                    Sales sales = sg.getSales();
+                    Sales service = new Sales();
+                    service.setOrganization(sales.getOrganization());
+                    service.setService(true);
+                    service.setCustomer(sales.getCustomer());
+                    service.setGuarantee(6);
+                    service.setGuaranteeExpire(Util.guarantee(new Date(), service.getGuarantee()));
+                    Payment payment = new Payment();
+                    payment.setCash(true);
+                    payment.setLastPrice(payment.getPrice());
+                    payment.setDescription(description);
+                    service.setPayment(payment);
+                    salesRepository.save(service);
+
+                    log(service, "sales", "create/edit", service.getId(), service.toString(), "Servis Requlyatordan Servis yaradıldı");
+
+                    addContactHistory(sales, "Servis əlavə edildi: "+description, service);
+                }
+*/
             }
         }
         return mapPost(serviceRegulator, binding, redirectAttributes, "/sale/service-regulator");
