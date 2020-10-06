@@ -208,9 +208,6 @@ public class SkeletonController {
     PeriodRepository periodRepository;
 
     @Autowired
-    ServiceTaskRepository serviceTaskRepository;
-
-    @Autowired
     ServiceRegulatorRepository serviceRegulatorRepository;
 
     @Autowired
@@ -278,9 +275,6 @@ public class SkeletonController {
 
     @Autowired
     ContactHistoryService contactHistoryService;
-
-    @Autowired
-    ServiceTaskService serviceTaskService;
 
     @Autowired
     ServiceRegulatorService serviceRegulatorService;

@@ -73,6 +73,15 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
+                                                <form:label path="account.id">Hesab</form:label>
+                                                <form:select path="account.id" cssClass="custom-select form-control">
+                                                    <form:option value=""></form:option>
+                                                    <form:options items="${accounts}" itemLabel="name" itemValue="id"/>
+                                                </form:select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
                                                 <form:label path="currency">Valyuta</form:label>
                                                 <form:input path="currency" cssClass="form-control" placeholder="AZN, EUR, USD, GBP"/>
                                                 <form:errors path="currency" cssClass="alert-danger control-label"/>
