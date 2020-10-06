@@ -142,19 +142,6 @@ public class CollectController extends SkeletonController {
                 model.addAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
             }
             model.addAttribute(Constants.LIST, salesService.findAll((Sales) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
-        } else if(page.equalsIgnoreCase(Constants.ROUTE.SERVICE_TASK)){
-            model.addAttribute(Constants.SERVICE_NOTIFICATIONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("service-notification"));
-            if(!model.containsAttribute(Constants.FORM)){
-                model.addAttribute(Constants.FORM, new ServiceTask(getSessionOrganization()));
-            }
-            if(!model.containsAttribute(Constants.FILTER)){
-                model.addAttribute(Constants.FILTER, new ServiceTask(!canViewAll()?getSessionOrganization():null));
-            }
-            if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
-                    session.getAttribute(Constants.SESSION_FILTER) instanceof ServiceTask){
-                model.addAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
-            }
-            model.addAttribute(Constants.LIST, serviceTaskService.findAll((ServiceTask) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending())));
         }
         return "layout";
     }
@@ -221,85 +208,6 @@ public class CollectController extends SkeletonController {
         return mapPost(redirectAttributes, "/collect/payment-latency");
     }
 
-    @PostMapping(value = "/service-task/transfer")
-    public String postServiceRegulatorTransfer(@ModelAttribute(Constants.FORM) @Validated ServiceTask serviceTask, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
-        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(null, Constants.TEXT.SUCCESS));
-        if(!binding.hasErrors()){
-            Date today = new Date();
-            GlobalConfiguration configuration = configurationRepository.getGlobalConfigurationByKeyAndActiveTrue("service");
-            String defaultValue = configuration!=null?configuration.getAttribute():"6";
-            ServiceTask serviceTaskOld = serviceTaskRepository.getServiceTaskById(serviceTask.getId());
-            Sales sales = salesRepository.getSalesById(serviceTask.getSales().getId());
-            String description = "";
-            if(!serviceTask.getSales().getNotServiceNext()){
-                for(ServiceRegulatorTask srt: serviceTask.getServiceRegulatorTasks()){
-                    if(serviceTask.getSales()!=null &&
-                            srt.getServiceRegulator()!=null &&
-                            srt.getServiceRegulator().getServiceNotification()!=null &&
-                            srt.getServiceRegulator().getServiceNotification().getId()!=null){
-                        description += dictionaryRepository.getDictionaryById(srt.getServiceRegulator().getServiceNotification().getId()).getName() + " ";
-                        List<ServiceRegulator> serviceRegulators = serviceRegulatorRepository.getServiceRegulatorsBySalesAndServiceNotification_Id(serviceTask.getSales(), srt.getServiceRegulator().getServiceNotification().getId());
-                        for(ServiceRegulator serviceRegulator: serviceRegulators){
-                            serviceRegulator.setServicedDate(today);
-                            serviceRegulatorRepository.save(serviceRegulator);
-                        }
-                    }
-                }
-
-                for(ServiceRegulatorTask srt: serviceTaskOld.getServiceRegulatorTasks()){
-                    if(serviceTaskOld.getSales()!=null &&
-                            srt.getServiceRegulator()!=null &&
-                            srt.getServiceRegulator().getServiceNotification()!=null &&
-                            srt.getServiceRegulator().getServiceNotification().getId()!=null){
-                        List<ServiceRegulator> serviceRegulators = serviceRegulatorRepository.getServiceRegulatorsBySalesAndServiceNotification_Id(serviceTaskOld.getSales(), srt.getServiceRegulator().getServiceNotification().getId());
-                        for(ServiceRegulator serviceRegulator: serviceRegulators){
-                            if(serviceRegulator.getServicedDate().getTime()<today.getTime()){
-                                serviceRegulator.setServicedDate(DateUtility.addMonth(today, -1*Util.parseInt(defaultValue, defaultValue)));
-                                serviceRegulatorRepository.save(serviceRegulator);
-                            }
-                        }
-                    }
-                }
-            } else {
-                sales.setNotServiceNext(true);
-                sales.setNotServiceNextReason(serviceTask.getSales().getNotServiceNextReason());
-                salesRepository.save(sales);
-
-                log(sales, "sales", "create/edit", sales.getId(), sales.toString(), "Filter dəyişimi ilə bağlı birdaha xəbərdarlıq edilməsin! \n"+sales.getNotServiceNextReason());
-
-                addContactHistory(sales, "Filter dəyişimi ilə bağlı birdaha xəbərdarlıq edilməsin! \n"+sales.getNotServiceNextReason(), null);
-            }
-
-            serviceTaskRepository.delete(serviceTaskOld);
-
-            if(description.trim().length()>0){
-                description += "filter dəyişimi";
-                Sales service = new Sales();
-                service.setOrganization(sales.getOrganization());
-                service.setService(true);
-                service.setCustomer(sales.getCustomer());
-                service.setGuarantee(6);
-                service.setGuaranteeExpire(Util.guarantee(new Date(), service.getGuarantee()));
-                Payment payment = new Payment();
-                payment.setCash(true);
-                payment.setLastPrice(payment.getPrice());
-                payment.setDescription(description);
-                service.setPayment(payment);
-                salesRepository.save(service);
-
-                log(service, "sales", "create/edit", service.getId(), service.toString(), "Servis Requlyatordan Servis yaradıldı");
-
-                addContactHistory(sales, "Servis əlavə edildi: "+description, service);
-            }
-        }
-        return mapPost(serviceTask, binding, redirectAttributes, "/collect/service-task");
-    }
-
-    @PostMapping(value = "/service-task/filter")
-    public String postServiceTaskFilter(@ModelAttribute(Constants.FILTER) @Validated ServiceTask serviceTask, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
-        return mapFilter(serviceTask, binding, redirectAttributes, "/collect/service-task");
-    }
-
     @PostMapping(value = "/contact-history/filter")
     public String postContactHistoryFilter(@ModelAttribute(Constants.FILTER) @Validated ContactHistory contactHistory, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         return mapFilter(contactHistory, binding, redirectAttributes, "/collect/contact-history");
@@ -320,12 +228,6 @@ public class CollectController extends SkeletonController {
     @GetMapping(value = "/api/contact-history/{dataId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ContactHistory getContactHistory(@PathVariable("dataId") Integer dataId){
         return contactHistoryRepository.getContactHistoryById(dataId);
-    }
-
-    @ResponseBody
-    @GetMapping(value = "/api/service-task/{dataId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ServiceTask getServiceTask(@PathVariable("dataId") Integer dataId){
-        return serviceTaskRepository.getServiceTaskById(dataId);
     }
 
     private Date calculateInvoiceDate(Model model){

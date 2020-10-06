@@ -1249,12 +1249,14 @@ public class SaleController extends SkeletonController {
             }
 
             if(serviceRegulator.getIds()!=null && serviceRegulator.getIds().trim().length()>0){
+                Integer salesId = null;
                 String description = "";
                 for(String id: serviceRegulator.getIds().split(",")){
                     try{
                         if(id!=null && id.trim().length()>0){
                             ServiceRegulator sg = serviceRegulatorRepository.getServiceRegulatorById(Util.parseInt(id));
                             sg.setLastContactDate(today);
+                            salesId = sg.getSales().getId();
                             if(serviceRegulator.getPostpone()==null){
                                 sg.setServicedDate(today);
                                 description = (sg.getServiceNotification()!=null?sg.getServiceNotification().getName():"") + " (Servis Requlyatoru) servisə əlavə edildi";
@@ -1273,10 +1275,9 @@ public class SaleController extends SkeletonController {
                     }
                 }
 
-/*
-                if(serviceRegulator.getPostpone()==null){
-                    description += "filter dəyişimi";
-                    Sales sales = sg.getSales();
+                if(serviceRegulator.getPostpone()==null && salesId!=null){
+                    description += " filter dəyişimi";
+                    Sales sales = salesRepository.getSalesById(salesId);
                     Sales service = new Sales();
                     service.setOrganization(sales.getOrganization());
                     service.setService(true);
@@ -1294,7 +1295,6 @@ public class SaleController extends SkeletonController {
 
                     addContactHistory(sales, "Servis əlavə edildi: "+description, service);
                 }
-*/
             }
         }
         return mapPost(serviceRegulator, binding, redirectAttributes, "/sale/service-regulator");
