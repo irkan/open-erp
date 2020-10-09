@@ -404,7 +404,13 @@ public class SaleController extends SkeletonController {
             sales.setReturnedDate(new Date());
             salesRepository.save(sales);
 
-            log(sales, "sales", "delete", sales.getId(), sales.toString(), "Qaytarılma icra edildi");
+            log(sales, "sales", "return", sales.getId(), sales.toString(), "Qaytarılma icra edildi");
+
+            try{
+                serviceRegulatorRepository.deleteInBatch(serviceRegulatorRepository.getServiceRegulatorsBySales(sales));
+            } catch (Exception e){
+                log.error(e.getMessage(), e);
+            }
 
             GlobalConfiguration saleReturnCreditAdvance = configurationRepository.getGlobalConfigurationByKeyAndActiveTrue("sale_return_credit_advance_limit");
             if(!sales.getService() && Util.calculateInvoice(sales.getInvoices())<=(Util.parseInt(saleReturnCreditAdvance.getAttribute())-Util.parseInt(Util.format3(returnForm.getReturnPrice())))){
@@ -1232,15 +1238,6 @@ public class SaleController extends SkeletonController {
             serviceRegulator.setIds(Util.checkNull(serviceRegulator.getId()));
         }
 
-        /*if(serviceRegulator.getIds().split(",").length>1){
-            String oldId=serviceRegulator.getIds().split(",")[0];
-            for(String id: serviceRegulator.getIds().split(",")){
-                if(!id.equalsIgnoreCase(oldId)){
-
-                }
-            }
-        }*/
-
         if(!binding.hasErrors()){
             Date today = new Date();
 
@@ -1260,15 +1257,27 @@ public class SaleController extends SkeletonController {
                             if(serviceRegulator.getPostpone()==null){
                                 sg.setServicedDate(today);
                                 description = (sg.getServiceNotification()!=null?sg.getServiceNotification().getName():"") + " (Servis Requlyatoru) servisə əlavə edildi";
+
+                                serviceRegulatorRepository.save(sg);
+                                log(sg, "service_regulator", "create/edit", sg.getId(), sg.toString(), description);
+                                addContactHistory(sg.getSales(), description, null);
                             } else {
                                 Dictionary postpone = dictionaryRepository.getDictionaryById(serviceRegulator.getPostpone().getId());
-                                sg.setServicedDate(DateUtility.addDay(sg.getServicedDate(), Util.parseInt(postpone.getAttr2())));
-                                sg.setPostpone(postpone);
                                 description = (sg.getServiceNotification()!=null?sg.getServiceNotification().getName():"") + " (Servis Requlyatoru) ertələndi";
+                                if(postpone!=null && postpone.getAttr1().equalsIgnoreCase("pp-unlimited")){
+                                    serviceRegulatorRepository.deleteInBatch(serviceRegulatorRepository.getServiceRegulatorsBySales(serviceRegulator.getSales()));
+
+                                    log(sg, "service_regulator", "delete", sg.getId(), sg.toString(), description);
+                                    addContactHistory(sg.getSales(), description, null);
+                                } else if(postpone!=null) {
+                                    sg.setServicedDate(DateUtility.addDay(sg.getServicedDate(), Util.parseInt(postpone.getAttr2())));
+                                    sg.setPostpone(postpone);
+
+                                    serviceRegulatorRepository.save(sg);
+                                    log(sg, "service_regulator", "create/edit", sg.getId(), sg.toString(), description);
+                                    addContactHistory(sg.getSales(), description, null);
+                                }
                             }
-                            serviceRegulatorRepository.save(sg);
-                            log(sg, "service_regulator", "create/edit", sg.getId(), sg.toString(), description);
-                            addContactHistory(sg.getSales(), description, null);
                         }
                     } catch (Exception e){
                         log.error(e.getMessage(), e);
