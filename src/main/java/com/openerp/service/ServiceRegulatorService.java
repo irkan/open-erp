@@ -1,7 +1,6 @@
 package com.openerp.service;
 
 import com.openerp.entity.ServiceRegulator;
-import com.openerp.entity.ServiceTask;
 import com.openerp.repository.ServiceRegulatorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
