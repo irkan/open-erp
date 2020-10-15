@@ -352,34 +352,19 @@
                     <form:hidden path="id"/>
                     <form:hidden path="ids"/>
                     <form:hidden path="servicedDate"/>
-                    <div class="alert alert-info alert-elevate" role="alert">
-                        <div class="alert-text">
-                            Filteri seçərək və servis xidmətinə yolluyaraq yeni servis yaradacaq və növbəti servis tarixi 1 il ertələnəcəkdir!
-                        </div>
-                        <div class="alert-close">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true"><i class="la la-close"></i></span>
-                            </button>
-                        </div>
-                    </div>
                     <div class="form-group text-center">
                         <label class="kt-form__label" id="label-description"></label>
                     </div>
                     <div class="form-group">
                         <form:label path="postpone.id">Ertələmə</form:label>
-                        <%--<form:select  path="postpone.id" cssClass="custom-select form-control select2-single account-number3" multiple="single" onchange="getCurrency($('#transfer-form'), $(this))">
-                            <form:option value=""></form:option>
-                            <c:forEach var="itemGroup" items="${accounts}" varStatus="itemGroupIndex">
-                                <optgroup label="${itemGroup.key}">
-                                    <form:options items="${itemGroup.value}" itemLabel="accountNumberWithCurrency2" itemValue="accountNumber"/>
-                                </optgroup>
+                        <select name="postpone.id" class="custom-select form-control" onchange="postpone($(this), $('#transfer-form').find('input[name=servicedDate]'))">
+                            <option value=""></option>
+                            <c:forEach var="t" items="${postpones}" varStatus="loop">
+                                <option value="<c:out value="${t.id}"/>" attr1="<c:out value="${t.attr1}"/>" attr2="<c:out value="${t.attr2}"/>">
+                                    <c:out value="${t.name}"/>
+                                </option>
                             </c:forEach>
-                        </form:select>--%>
-
-                        <form:select path="postpone.id" cssClass="custom-select form-control" onchange="postpone($(this), $('#transfer-form').find('input[name=\\\"servicedDate\\\"]'))">
-                            <form:option value=""></form:option>
-                            <form:options items="${postpones}" itemLabel="name" itemValue="id"/>
-                        </form:select>
+                        </select>
                     </div>
                     <div class="form-group kt-hide" id="postponeDateGroup">
                         <form:label path="postponeDate">Ertələmə tarixi</form:label>
@@ -506,7 +491,8 @@
 
     function postpone(element, date){
         var dt = new Date($(date).val().replace( /(\d{2}).(\d{2}).(\d{4})/, "$2/$1/$3"));
-        dt.setDate()
+        //dt.setDate()
+        console.log(date);
         console.log(dt);
 
         $("#transfer-form").find("input[name='postponeDate']").val('');
