@@ -262,7 +262,7 @@
                                                 </a>
                                             </c:if>
                                             <c:if test="${transfer.status}">
-                                                <a href="javascript:transfer($('#transfer-form'), '<c:out value="${t.id}" />', 'transfer-modal-operation', '<c:out value="${transfer.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
+                                                <a href="javascript:transfer($('#transfer-form'), '<c:out value="${t.id}" />', '<c:out value="${t.servicedDate}" />', 'transfer-modal-operation', '<c:out value="${transfer.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
                                                     <i class="la <c:out value="${transfer.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
@@ -367,7 +367,16 @@
                     </div>
                     <div class="form-group">
                         <form:label path="postpone.id">Ertələmə</form:label>
-                        <form:select path="postpone.id" cssClass="custom-select form-control" onchange="postpone($(this))">
+                        <%--<form:select  path="postpone.id" cssClass="custom-select form-control select2-single account-number3" multiple="single" onchange="getCurrency($('#transfer-form'), $(this))">
+                            <form:option value=""></form:option>
+                            <c:forEach var="itemGroup" items="${accounts}" varStatus="itemGroupIndex">
+                                <optgroup label="${itemGroup.key}">
+                                    <form:options items="${itemGroup.value}" itemLabel="accountNumberWithCurrency2" itemValue="accountNumber"/>
+                                </optgroup>
+                            </c:forEach>
+                        </form:select>--%>
+
+                        <form:select path="postpone.id" cssClass="custom-select form-control" onchange="postpone($(this), $('#transfer-form').find('input[name=\\\"servicedDate\\\"]'))">
                             <form:option value=""></form:option>
                             <form:options items="${postpones}" itemLabel="name" itemValue="id"/>
                         </form:select>
@@ -495,7 +504,11 @@
         },
     });
 
-    function postpone(element){
+    function postpone(element, date){
+        var dt = new Date($(date).val().replace( /(\d{2}).(\d{2}).(\d{4})/, "$2/$1/$3"));
+        dt.setDate()
+        console.log(dt);
+
         $("#transfer-form").find("input[name='postponeDate']").val('');
         if($(element).val()===""){
             $(".notServiceNextReason").addClass("kt-hide");
@@ -508,8 +521,9 @@
         }
     }
 
-    function transfer(form, id, modal, modal_title){
+    function transfer(form, id, date, modal, modal_title){
         $(form).find("input[name='id']").val(id);
+        $(form).find("input[name='servicedDate']").val(date);
         var ids="";
         var labels="";
         $("#datatable").find("input[type=checkbox]:checked").map(function() {
