@@ -54,6 +54,11 @@ public class ServiceRegulator {
     @Column(name = "last_contact_date")
     private Date lastContactDate=new Date();
 
+    @Transient
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    private Date postponeDate;
+
     @ToString.Exclude
     @Transient
     @JsonIgnore

@@ -351,6 +351,7 @@
                 <form:form modelAttribute="form" id="transfer-form" method="post" action="/sale/service-regulator/transfer" cssClass="form-group">
                     <form:hidden path="id"/>
                     <form:hidden path="ids"/>
+                    <form:hidden path="servicedDate"/>
                     <div class="alert alert-info alert-elevate" role="alert">
                         <div class="alert-text">
                             Filteri seçərək və servis xidmətinə yolluyaraq yeni servis yaradacaq və növbəti servis tarixi 1 il ertələnəcəkdir!
@@ -370,6 +371,14 @@
                             <form:option value=""></form:option>
                             <form:options items="${postpones}" itemLabel="name" itemValue="id"/>
                         </form:select>
+                    </div>
+                    <div class="form-group kt-hide" id="postponeDateGroup">
+                        <form:label path="postponeDate">Ertələmə tarixi</form:label>
+                        <div class="input-group date">
+                            <div class="input-group-prepend"><span class="input-group-text"><i class="la la-calendar"></i></span></div>
+                            <form:input path="postponeDate" autocomplete="off" cssClass="form-control datepicker-element" date_="date_" placeholder="dd.MM.yyyy"/>
+                        </div>
+                        <form:errors path="postponeDate" cssClass="control-label alert-danger"/>
                     </div>
                     <div class="form-group notServiceNextReason kt-hide">
                         <form:label path="sales.notServiceNextReason">Səbəb</form:label>
@@ -487,10 +496,13 @@
     });
 
     function postpone(element){
+        $("#transfer-form").find("input[name='postponeDate']").val('');
         if($(element).val()===""){
             $(".notServiceNextReason").addClass("kt-hide");
+            $("#postponeDateGroup").addClass("kt-hide");
             $("#transfer-modal-save").text("Servis yarat");
         } else {
+            $("#postponeDateGroup").removeClass("kt-hide");
             $(".notServiceNextReason").removeClass("kt-hide");
             $("#transfer-modal-save").text("Ertələ");
         }
