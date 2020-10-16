@@ -262,7 +262,7 @@
                                                 </a>
                                             </c:if>
                                             <c:if test="${transfer.status}">
-                                                <a href="javascript:transfer($('#transfer-form'), '<c:out value="${t.id}" />', '<c:out value="${t.servicedDate}" />', 'transfer-modal-operation', '<c:out value="${transfer.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
+                                                <a href="javascript:transfer($('#transfer-form'), '<c:out value="${t.id}" />', '<fmt:formatDate value = "${t.servicedDate}" pattern = "dd.MM.yyyy" />', 'transfer-modal-operation', '<c:out value="${transfer.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
                                                     <i class="la <c:out value="${transfer.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
@@ -489,13 +489,27 @@
         },
     });
 
+    $.dateFormat = function(dateObject) {
+        var d = new Date(dateObject);
+        var day = d.getDate();
+        var month = d.getMonth() + 1;
+        var year = d.getFullYear();
+        if (day < 10) {
+            day = "0" + day;
+        }
+        if (month < 10) {
+            month = "0" + month;
+        }
+        var date = day + "." + month + "." + year;
+
+        return date;
+    };
+
     function postpone(element, date){
         var dt = new Date($(date).val().replace( /(\d{2}).(\d{2}).(\d{4})/, "$2/$1/$3"));
-        //dt.setDate()
-        console.log(date);
-        console.log(dt);
-
-        $("#transfer-form").find("input[name='postponeDate']").val('');
+        var pp = $(element).find("option:selected").attr("attr2");
+        dt.setDate(dt.getDate()+parseInt(pp));
+        $("#transfer-form").find("input[name='postponeDate']").val($.dateFormat(dt));
         if($(element).val()===""){
             $(".notServiceNextReason").addClass("kt-hide");
             $("#postponeDateGroup").addClass("kt-hide");

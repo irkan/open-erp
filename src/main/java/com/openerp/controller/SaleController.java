@@ -1269,12 +1269,8 @@ public class SaleController extends SkeletonController {
 
                                     log(sg, "service_regulator", "delete", sg.getId(), sg.toString(), description);
                                     addContactHistory(sg.getSales(), description, null);
-                                } else if(postpone!=null) {
-                                    Date sDate = DateUtility.addDay(sg.getServicedDate(), Util.parseInt(postpone.getAttr2()));
-                                    if(serviceRegulator.getPostponeDate()!=null){
-                                        sDate = serviceRegulator.getPostponeDate();
-                                    }
-                                    sg.setServicedDate(sDate);
+                                } else if(postpone!=null && serviceRegulator.getPostponeDate()!=null) {
+                                    sg.setServicedDate(serviceRegulator.getPostponeDate());
                                     sg.setPostpone(postpone);
 
                                     serviceRegulatorRepository.save(sg);
