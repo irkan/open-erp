@@ -76,7 +76,7 @@
                                                 <form:label path="account.id">Hesab</form:label>
                                                 <form:select path="account.id" cssClass="custom-select form-control">
                                                     <form:option value=""></form:option>
-                                                    <form:options items="${accounts}" itemLabel="name" itemValue="id"/>
+                                                    <form:options items="${accounts}" itemLabel="accountNumberWithCurrency" itemValue="id"/>
                                                 </form:select>
                                             </div>
                                         </div>
