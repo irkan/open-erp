@@ -324,13 +324,16 @@ public class SaleController extends SkeletonController {
 
             Person person = sales.getCustomer().getPerson();
             Dictionary documentType = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("id card", "document-type");
-            personDocumentRepository.deleteInBatch(personDocumentRepository.getPersonDocumentsByPersonAndDocumentType(person, documentType));
-            if(file1!=null){
+            List<PersonDocument> personDocuments = personDocumentRepository.getPersonDocumentsByPersonAndDocumentType(person, documentType);
+            if(personDocuments.size()>0 && (file1.getOriginalFilename().trim().length()>0 || file2.getOriginalFilename().trim().length()>0)) {
+                personDocumentRepository.deleteInBatch(personDocuments);
+            }
+            if(file1!=null && file1.getOriginalFilename().trim().length()>0){
                 PersonDocument document1 = new PersonDocument(person, documentType, ImageResizer.compress(file1.getInputStream(), file1.getOriginalFilename()), null, file1.getOriginalFilename());
                 personDocumentRepository.save(document1);
                 log(sales, "person_document", "create/edit", document1.getId(), document1.toString());
             }
-            if(file2!=null){
+            if(file2!=null && file2.getOriginalFilename().trim().length()>0){
                 PersonDocument document2 = new PersonDocument(person, documentType, ImageResizer.compress(file2.getInputStream(), file2.getOriginalFilename()), null, file2.getOriginalFilename());
                 personDocumentRepository.save(document2);
                 log(sales, "person_document", "create/edit", document2.getId(), document2.toString());

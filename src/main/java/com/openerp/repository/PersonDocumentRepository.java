@@ -9,4 +9,5 @@ import java.util.List;
 
 public interface PersonDocumentRepository extends JpaRepository<PersonDocument, Integer> {
     List<PersonDocument> getPersonDocumentsByPersonAndDocumentType(Person person, Dictionary documentType);
+    List<PersonDocument> getPersonDocumentsByPerson(Person person);
 }

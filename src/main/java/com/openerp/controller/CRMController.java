@@ -3,6 +3,7 @@ package com.openerp.controller;
 import com.openerp.entity.*;
 import com.openerp.util.Constants;
 import com.openerp.util.DateUtility;
+import com.openerp.util.ImageResizer;
 import com.openerp.util.Util;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
@@ -51,11 +53,28 @@ public class CRMController extends SkeletonController {
     }
 
     @PostMapping(value = "/customer")
-    public String postCustomer(@ModelAttribute(Constants.FORM) @Validated Customer customer, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+    public String postCustomer(@RequestParam(name = "file1", required = false) MultipartFile file1, @RequestParam(name = "file2", required = false) MultipartFile file2, @ModelAttribute(Constants.FORM) @Validated Customer customer, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding,Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
             customerRepository.save(customer);
             log(customer, "crm_customer", "create/edit", customer.getId(), customer.toString());
+
+            Person person = customer.getPerson();
+            Dictionary documentType = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("id card", "document-type");
+            List<PersonDocument> personDocuments = personDocumentRepository.getPersonDocumentsByPerson(person);
+            if(personDocuments.size()>0 && (file1.getOriginalFilename().trim().length()>0 || file2.getOriginalFilename().trim().length()>0)){
+                personDocumentRepository.deleteInBatch(personDocumentRepository.getPersonDocumentsByPerson(person));
+            }
+            if(file1!=null && file1.getOriginalFilename().trim().length()>0){
+                PersonDocument document1 = new PersonDocument(person, documentType, ImageResizer.compress(file1.getInputStream(), file1.getOriginalFilename()), null, file1.getOriginalFilename());
+                personDocumentRepository.save(document1);
+                log(customer, "person_document", "create/edit", document1.getId(), document1.toString());
+            }
+            if(file2!=null && file2.getOriginalFilename().trim().length()>0){
+                PersonDocument document2 = new PersonDocument(person, documentType, ImageResizer.compress(file2.getInputStream(), file2.getOriginalFilename()), null, file2.getOriginalFilename());
+                personDocumentRepository.save(document2);
+                log(customer, "person_document", "create/edit", document2.getId(), document2.toString());
+            }
         }
         return mapPost(customer, binding, redirectAttributes);
     }

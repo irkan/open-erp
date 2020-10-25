@@ -217,7 +217,7 @@
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${list.content}" varStatus="loop">
-                                    <tr data="<c:out value="${utl:toJson(t)}" />">
+                                    <tr data="<c:out value="${t.id}" />">
                                         <td><a href="javascript:copyToClipboard('<c:out value="${t.id}" />')" class="kt-link kt-font-lg kt-font-bold kt-margin-t-5"><c:out value="${t.id}"/></a></td>
                                         <th>
                                             <c:out value="${t.person.fullName}"/>
@@ -232,12 +232,12 @@
                                         <td><c:out value="${t.person.idCardPinCode}"/></td>
                                         <td nowrap class="text-center">
                                             <c:if test="${view.status}">
-                                                 <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
+                                                 <a href="javascript:customer('view', $('#form'), '<c:out value="${t.id}"/>', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
                                                      <i class="<c:out value="${view.object.icon}"/>"></i>
                                                  </a>
                                             </c:if>
                                             <c:if test="${edit.status}">
-                                                <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');"
+                                                <a href="javascript:customer('edit', $('#form'), '<c:out value="${t.id}"/>', 'modal-operation', '<c:out value="${edit.object.name}" />');"
                                                    class="btn btn-sm btn-clean btn-icon btn-icon-md"
                                                    title="<c:out value="${edit.object.name}"/>">
                                                     <i class="<c:out value="${edit.object.icon}"/>"></i>
@@ -279,10 +279,11 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form:form modelAttribute="form" id="form" method="post" action="/crm/customer" cssClass="form-group">
+                <form:form modelAttribute="form" id="form" method="post" action="/crm/customer" cssClass="form-group" enctype="multipart/form-data">
                     <form:hidden path="id"/>
                     <form:hidden path="active"/>
                     <form:hidden path="organization.id"/>
+                    <form:hidden path="person.id"/>
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
@@ -460,6 +461,31 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Ş.v-nin ön hissəsi</label>
+                                <div></div>
+                                <div class="custom-file">
+                                    <input type="file" name="file1" class="custom-file-input" id="file1" accept="image/*">
+                                    <label class="custom-file-label" for="file1">Şəxsiyyət vəsiqəsi</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Ş.v-nin arxa hissəsi</label>
+                                <div></div>
+                                <div class="custom-file">
+                                    <input type="file" name="file2" class="custom-file-input" id="file2" accept="image/*">
+                                    <label class="custom-file-label" for="file2">Şəxsiyyət vəsiqəsi</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="image-content">
+
+                    </div>
                 </form:form>
             </div>
             <div class="modal-footer">
@@ -523,7 +549,7 @@
 
     $('#group_table tbody').on('dblclick', 'tr', function () {
         <c:if test="${view.status}">
-        view($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${view.object.name}" />');
+            customer('view', $('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${view.object.name}" />');
         </c:if>
     });
 
@@ -611,6 +637,90 @@
     function selectLivingCity(form, element){
         $(form).find("select[name='person.contact.livingCity.id'] option[value="+$(element).val()+"]").attr("selected", "selected");
     }
+
+    function getImages(form, personId){
+        var content = '';
+        swal.fire({
+            text: 'Proses davam edir...',
+            allowOutsideClick: false,
+            onOpen: function() {
+                swal.showLoading();
+                $.ajax({
+                    url: '/common/api/person/document/'+personId,
+                    type: 'GET',
+                    dataType: 'json',
+                    beforeSend: function() {
+                        $(form).find("#image-content").html('');
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        $.each(data, function( index, value ) {
+                            if(value.fileContent!==""){
+                                content+='<div class="col-6 text-center">' +
+                                    '<img style="max-width: 90%; max-height: 240px" src="data:image/jpeg;base64, '+value.fileContent+'" />' +
+                                    '</div>';
+                            }
+                        });
+                        $(form).find("#image-content").html(content);
+                        swal.close();
+                    },
+                    error: function() {
+                        swal.fire({
+                            title: "Xəta baş verdi!",
+                            html: "Şəkil tapılmadı!",
+                            type: "error",
+                            cancelButtonText: 'Bağla',
+                            cancelButtonColor: '#c40000',
+                            cancelButtonClass: 'btn btn-danger',
+                            footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+                        });
+                    }
+                })
+            }
+        });
+    }
+
+    function customer(oper, form, dataId, modal, modal_title){
+        swal.fire({
+            text: 'Proses davam edir...',
+            allowOutsideClick: false,
+            onOpen: function() {
+                swal.showLoading();
+                $.ajax({
+                    url: '/crm/api/customer/'+dataId,
+                    type: 'GET',
+                    dataType: 'text',
+                    beforeSend: function() {
+
+                    },
+                    success: function(data) {
+                        data = data.replace(/\&#034;/g, '"');
+                        var obj = jQuery.parseJSON(data);
+                        console.log(obj);
+                        if(oper==="view"){
+                            view(form, data, modal, modal_title)
+                        } else if(oper==="edit"){
+                            edit(form, data, modal, modal_title)
+                        }
+                        getImages(form, obj.person.id);
+                        swal.close();
+                    },
+                    error: function() {
+                        swal.fire({
+                            title: "Xəta",
+                            html: "Xəta baş verdi!",
+                            type: "error",
+                            cancelButtonText: 'Bağla',
+                            cancelButtonColor: '#c40000',
+                            cancelButtonClass: 'btn btn-danger',
+                            footer: '<a href>Məlumatlar yenilənsinmi?</a>'
+                        });
+                    }
+                })
+            }
+        });
+    }
+
 </script>
 
 
