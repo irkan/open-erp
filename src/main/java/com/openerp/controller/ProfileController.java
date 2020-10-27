@@ -4,6 +4,7 @@ import com.openerp.domain.ChangePassword;
 import com.openerp.domain.Report;
 import com.openerp.entity.*;
 import com.openerp.util.Constants;
+import com.openerp.util.ReportUtil;
 import com.openerp.util.Util;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -57,6 +58,8 @@ public class ProfileController extends SkeletonController {
             model.addAttribute(Constants.ANNUAL_ADVANCE, Util.annualAdvance(reports));
             model.addAttribute(Constants.ANNUAL_NON_PAYED_ADVANCE, Util.annualAdvance(nonPayedReports));
             model.addAttribute(Constants.LAST_ADVANCE, advance);
+            model.addAttribute(Constants.ADVANCE, ReportUtil.calculateAdvance(advanceRepository.getAdvancesByActiveTrueAndEmployee(getSessionUser().getEmployee())));
+
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, getSessionUser().getEmployee().getPerson().getContact());
             }

@@ -28,8 +28,8 @@
                                 <div class="kt-widget12__content">
                                     <div class="kt-widget12__item">
                                         <div class="kt-widget12__info">
-                                            <span class="kt-widget12__desc">İllik avans</span>
-                                            <span class="kt-widget12__value"><fmt:parseNumber value="${annual_advance}" pattern="#,##"/> AZN</span>
+                                            <span class="kt-widget12__desc">Cari ay ödənilib</span>
+                                            <span class="kt-widget12__value"><fmt:parseNumber value="${advance.double6 gt 0 ? advance.double6 : '' }" pattern="#,##"/> AZN</span>
                                         </div>
 
                                         <div class="kt-widget12__info">
@@ -41,16 +41,17 @@
                                     <div class="kt-widget12__item">
                                         <div class="kt-widget12__info">
                                             <span class="kt-widget12__desc">Qalıq avans limiti</span>
-                                            <span class="kt-widget12__value"><fmt:parseNumber value="${annual_non_payed_advance}" pattern="#,##"/> AZN</span>
+                                            <span class="kt-widget12__value"><fmt:parseNumber value="${advance.double3 gt 0 ? (advance.double3-advance.double5) : '' }" pattern="#,##"/> AZN</span>
                                         </div>
                                         <div class="kt-widget12__info">
                                             <span class="kt-widget12__desc">Gəlir marjı</span>
                                             <div class="kt-widget12__progress">
                                                 <div class="progress kt-progress--sm">
-                                                    <div class="progress-bar kt-bg-brand" role="progressbar" style="width: 40%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    <fmt:formatNumber type = "number" maxIntegerDigits = "3" maxFractionDigits="2" value = "${advance.double6*100/(advance.double6+advance.double3-advance.double5)}" var="percent"  />
+                                                    <div class="progress-bar kt-bg-brand" role="progressbar" style="width: ${percent}%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                                                 </div>
                                                 <span class="kt-widget12__stat">
-                                40%
+                                <fmt:parseNumber value="${percent}" pattern="#,##"/>%
                             </span>
                                             </div>
                                         </div>
