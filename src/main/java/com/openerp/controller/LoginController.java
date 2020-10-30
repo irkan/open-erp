@@ -81,7 +81,7 @@ public class LoginController extends SkeletonController {
         List<Organization> organizations = new ArrayList<>();
         if(administrator){
             organizations.add(getUserOrganization());
-            for(Organization organization: getUserOrganization().getChildren()){
+            for(Organization organization: organizationRepository.getOrganizationsByIdNot(getUserOrganization().getId())){
                 organizations.add(organization);
             }
             if(organizations.size()>1){
