@@ -6,6 +6,7 @@ import com.openerp.util.Constants;
 import com.openerp.util.DateUtility;
 import com.openerp.util.ReadWriteExcelFile;
 import com.openerp.util.Util;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.*;
 
+@Slf4j
 @Controller
 @RequestMapping("/hr")
 public class HRController extends SkeletonController {

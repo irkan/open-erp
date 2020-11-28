@@ -3,6 +3,7 @@ package com.openerp.controller;
 import com.openerp.entity.*;
 import com.openerp.util.Constants;
 import com.openerp.util.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -14,6 +15,7 @@ import java.io.File;
 import java.util.Date;
 import java.util.List;
 
+@Slf4j
 @Controller
 @RequestMapping("/delete")
 public class DeleteController extends SkeletonController {

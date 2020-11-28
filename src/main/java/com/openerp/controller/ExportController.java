@@ -5,6 +5,7 @@ import com.openerp.domain.SalesSchedule;
 import com.openerp.domain.Session;
 import com.openerp.entity.*;
 import com.openerp.util.*;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.util.IOUtils;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
+@Slf4j
 @Controller
 @RequestMapping("/export")
 public class ExportController extends SkeletonController {

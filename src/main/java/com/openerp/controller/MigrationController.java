@@ -12,6 +12,7 @@ import com.openerp.repository.MigrationUserModuleOperationRepository;
 import com.openerp.repository.MigrationUserRepository;
 import com.openerp.util.DateUtility;
 import com.openerp.util.Util;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -29,6 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
+@Slf4j
 @Controller
 @RequestMapping("/migration")
 public class MigrationController extends SkeletonController {

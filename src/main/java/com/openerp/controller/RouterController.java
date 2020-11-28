@@ -2,6 +2,7 @@ package com.openerp.controller;
 
 import com.openerp.entity.*;
 import com.openerp.util.Constants;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Controller
 @RequestMapping("/route")
 public class RouterController extends SkeletonController {

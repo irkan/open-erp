@@ -7,6 +7,7 @@ import com.openerp.util.Constants;
 import com.openerp.util.DateUtility;
 import com.openerp.util.Util;
 import com.openerp.util.UtilJson;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,6 +28,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
+@Slf4j
 @Controller
 @RequestMapping("/report")
 public class ReportController extends SkeletonController {

@@ -4,6 +4,7 @@ import com.openerp.domain.*;
 import com.openerp.entity.*;
 import com.openerp.util.DateUtility;
 import com.openerp.util.Util;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.script.ScriptEngine;
@@ -13,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
+@Slf4j
 @RestController
 @RequestMapping("/api")
 public class ApiController extends SkeletonController {

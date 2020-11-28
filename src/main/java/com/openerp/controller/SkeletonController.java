@@ -12,6 +12,7 @@ import com.openerp.repository.*;
 import com.openerp.util.DateUtility;
 import com.openerp.util.Util;
 import com.openerp.util.UtilJson;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +33,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
+@Slf4j
 @Controller
 public class SkeletonController {
-    protected static final Logger log = Logger.getLogger(SkeletonController.class);
 
     @Value("${cbar.currencies.endpoint}")
     String cbarCurrenciesEndpoint;

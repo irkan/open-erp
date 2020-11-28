@@ -6,6 +6,7 @@ import com.openerp.dummy.DummyPerson;
 import com.openerp.dummy.DummyUtil;
 import com.openerp.entity.*;
 import com.openerp.util.DateUtility;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Slf4j
 @Controller
 @RequestMapping("/dummy")
 public class DummyController extends SkeletonController {

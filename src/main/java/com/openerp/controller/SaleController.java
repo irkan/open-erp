@@ -10,6 +10,7 @@ import com.openerp.service.SalesService;
 import com.openerp.util.Constants;
 import com.openerp.util.DateUtility;
 import com.openerp.util.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +30,7 @@ import javax.script.ScriptEngineManager;
 import java.util.*;
 import java.util.regex.Pattern;
 
+@Slf4j
 @Controller
 @RequestMapping("/sale")
 public class SaleController extends SkeletonController {
