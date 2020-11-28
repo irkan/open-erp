@@ -69,7 +69,7 @@
                                             <c:choose>
                                                 <c:when test="${cancel.status}">
                                                     <c:if test="${not empty form.salaryEmployees and form.approve}">
-                                                        <a href="#" onclick="approveData($('#form'), '<c:out value="${form.month}"/>.<c:out value="${form.year}"/> tarixli iş vaxtının uçotu')" class="btn btn-dark btn-elevate btn-icon-sm" title="<c:out value="${cancel.object.name}"/>">
+                                                        <a href="#" onclick="approveData($('#form'), '<c:out value="${form.workingHourRecord.month}"/>.<c:out value="${form.workingHourRecord.year}"/> tarixli hesablanmış əmək haqqı')" class="btn btn-dark btn-elevate btn-icon-sm" title="<c:out value="${cancel.object.name}"/>">
                                                             <i class="la <c:out value="${cancel.object.icon}"/>"></i>
                                                             <c:out value="${cancel.object.name}"/>
                                                         </a>

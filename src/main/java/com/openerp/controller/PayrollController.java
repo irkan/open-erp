@@ -785,21 +785,13 @@ public class PayrollController extends SkeletonController {
     public String postSalaryApprove(@ModelAttribute(Constants.FORM) @Validated Salary slry, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         Date now = new Date();
         Salary salary = salaryRepository.getSalaryById(slry.getId());
-        Transaction transaction = new Transaction(
-                salary.getWorkingHourRecord().getOrganization(),
-                null,
-                dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("salary", "action"),
-                "Əmək haqqı ",
-                false,
-                null
-        );
-        transaction.setPrice(salary.getSumOfCompulsoryHealthInsurance());
-        transactionRepository.save(transaction);
-        log(transaction, "transaction", "credit/edit", transaction.getId(), transaction.toString());
-        salary.setApprove(true);
-        salary.setApproveDate(now);
+        salary.setApprove(!slry.getApprove());
+        if(salary.getApprove()){
+            salary.setApproveDate(now);
+        }
         salaryRepository.save(salary);
         log(salary, "salary", "approve", salary.getId(), salary.toString());
+        slry = salaryRepository.getSalaryById(slry.getId());
         return mapPost2(slry, binding, redirectAttributes, "/payroll/salary");
     }
 

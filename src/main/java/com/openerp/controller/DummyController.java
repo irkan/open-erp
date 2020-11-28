@@ -5,15 +5,60 @@ import com.openerp.dummy.DummyEmployee;
 import com.openerp.dummy.DummyPerson;
 import com.openerp.dummy.DummyUtil;
 import com.openerp.entity.*;
+import com.openerp.util.DateUtility;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Controller
 @RequestMapping("/dummy")
 public class DummyController extends SkeletonController {
+    @GetMapping("/service-regulator")
+    public String serviceRegulator() throws Exception {
+        List<Sales> salesList = salesRepository.getSalesByActiveTrueAndApproveTrueAndSaledFalseAndServiceFalse();
+        List<Dictionary> serviceNotifications = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("service-notification");
+        int i=1;
+        for(Sales sales: salesList){
+            try{
+                if(sales.getServiceRegulators().size()<serviceNotifications.size()){
+                    List<ServiceRegulator> serviceRegulators = new ArrayList<>();
+                    for(Dictionary serviceNotification: serviceNotifications){
+                        if(!checkSR(sales.getServiceRegulators(), serviceNotification)){
+                            Date approveDate = sales.getApproveDate();
+                            approveDate.setYear(DateUtility.addYear(-1).getYear()+1900);
+                            approveDate.setMonth(approveDate.getMonth()+1);
+                            serviceRegulators.add(new ServiceRegulator(sales, serviceNotification, DateUtility.generate(approveDate.getDate(), approveDate.getMonth(), approveDate.getYear())));
+                        }
+                    }
+                    if(serviceRegulators.size()>0){
+                        serviceRegulatorRepository.saveAll(serviceRegulators);
+                        log.info(sales.getId() + " : " + serviceNotifications.size());
+                    }
+                }
+            } catch (Exception e){
+                log.error(e.getMessage(), e);
+            }
+        }
+        return "redirect:/login";
+    }
+
+    private boolean checkSR(List<ServiceRegulator> serviceRegulators, Dictionary serviceNotification){
+        try {
+            for(ServiceRegulator serviceRegulator: serviceRegulators){
+                if(serviceRegulator.getServiceNotification().getId().intValue()==serviceNotification.getId().intValue()){
+                    return true;
+                }
+            }
+        } catch (Exception e){
+            log.error(e.getMessage(), e);
+        }
+        return false;
+    }
+
+
     @GetMapping("/contact")
     public String contact() throws Exception {
         List<Dictionary> cities = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("city");
