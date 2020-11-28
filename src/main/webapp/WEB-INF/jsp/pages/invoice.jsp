@@ -161,6 +161,16 @@
                                                 <form:errors path="sales.customer.person.lastName" cssClass="alert-danger"/>
                                             </div>
                                         </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="sales.customer.person.contact.telephone">Müştərinin telefonu</form:label>
+                                                <div class="input-group">
+                                                    <form:input path="sales.customer.person.contact.telephone" cssClass="form-control" placeholder="Son 4 rəqəm"/>
+                                                    <div class="input-group-append"><span class="input-group-text"><i class="la la-phone"></i></span></div>
+                                                </div>
+                                                <form:errors path="sales.customer.person.contact.telephone" cssClass="control-label alert-danger"/>
+                                            </div>
+                                        </div>
                                         <div class="col-md-2" style="padding-top: 30px;">
                                             <div class="form-group">
                                                 <label class="kt-checkbox kt-checkbox--brand">

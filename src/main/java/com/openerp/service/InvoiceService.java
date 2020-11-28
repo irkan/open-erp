@@ -81,6 +81,20 @@ public class InvoiceService {
                 if(invoice.getSales()!=null && invoice.getSales().getCustomer()!=null && invoice.getSales()!=null && invoice.getSales().getCustomer().getPerson()!=null && invoice.getSales()!=null && invoice.getSales().getCustomer().getPerson().getLastName()!=null && !invoice.getSales().getCustomer().getPerson().getLastName().isEmpty()){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("sales").get("customer").get("person").get("lastName"), "%"+invoice.getSales().getCustomer().getPerson().getLastName()+"%")));
                 }
+                if(invoice.getSales()!=null &&
+                        invoice.getSales().getCustomer()!=null &&
+                        invoice.getSales().getCustomer().getPerson()!=null &&
+                        invoice.getSales().getCustomer().getPerson().getContact()!=null &&
+                        invoice.getSales().getCustomer().getPerson().getContact().getTelephone()!=null &&
+                        !invoice.getSales().getCustomer().getPerson().getContact().getTelephone().isEmpty()){
+                    predicates.add(criteriaBuilder.or(
+                            criteriaBuilder.like(root.get("sales").get("customer").get("person").get("contact").get("mobilePhone"), "%"+invoice.getSales().getCustomer().getPerson().getContact().getTelephone()+"%"),
+                            criteriaBuilder.like(root.get("sales").get("customer").get("person").get("contact").get("homePhone"), "%"+invoice.getSales().getCustomer().getPerson().getContact().getTelephone()+"%"),
+                            criteriaBuilder.like(root.get("sales").get("customer").get("person").get("contact").get("relationalPhoneNumber1"), "%"+invoice.getSales().getCustomer().getPerson().getContact().getTelephone()+"%"),
+                            criteriaBuilder.like(root.get("sales").get("customer").get("person").get("contact").get("relationalPhoneNumber2"), "%"+invoice.getSales().getCustomer().getPerson().getContact().getTelephone()+"%"),
+                            criteriaBuilder.like(root.get("sales").get("customer").get("person").get("contact").get("relationalPhoneNumber3"), "%"+invoice.getSales().getCustomer().getPerson().getContact().getTelephone()+"%")
+                    ));
+                }
                 return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
             }
         }, pageable);

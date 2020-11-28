@@ -185,6 +185,16 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
+                                                <form:label path="customer.person.contact.telephone">Müştərinin telefonu</form:label>
+                                                <div class="input-group">
+                                                    <form:input path="customer.person.contact.telephone" cssClass="form-control" placeholder="Son 4 rəqəm"/>
+                                                    <div class="input-group-append"><span class="input-group-text"><i class="la la-phone"></i></span></div>
+                                                </div>
+                                                <form:errors path="customer.person.contact.telephone" cssClass="control-label alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
                                                 <form:label path="canavasser.id">Canavasser</form:label>
                                                 <form:select  path="canavasser.id" cssClass="custom-select form-control" multiple="single">
                                                     <form:option value=""></form:option>

@@ -99,6 +99,19 @@ public class SalesService {
                 if(sales.getCustomer()!=null && sales.getCustomer().getPerson()!=null && sales.getCustomer().getPerson().getLastName()!=null && !sales.getCustomer().getPerson().getLastName().isEmpty()){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("customer").get("person").get("lastName"), "%"+sales.getCustomer().getPerson().getLastName()+"%")));
                 }
+                if(sales.getCustomer()!=null &&
+                        sales.getCustomer().getPerson()!=null &&
+                        sales.getCustomer().getPerson().getContact()!=null &&
+                        sales.getCustomer().getPerson().getContact().getTelephone()!=null &&
+                        !sales.getCustomer().getPerson().getContact().getTelephone().isEmpty()){
+                    predicates.add(criteriaBuilder.or(
+                            criteriaBuilder.like(root.get("customer").get("person").get("contact").get("mobilePhone"), "%"+sales.getCustomer().getPerson().getContact().getTelephone()+"%"),
+                            criteriaBuilder.like(root.get("customer").get("person").get("contact").get("homePhone"), "%"+sales.getCustomer().getPerson().getContact().getTelephone()+"%"),
+                            criteriaBuilder.like(root.get("customer").get("person").get("contact").get("relationalPhoneNumber1"), "%"+sales.getCustomer().getPerson().getContact().getTelephone()+"%"),
+                            criteriaBuilder.like(root.get("customer").get("person").get("contact").get("relationalPhoneNumber2"), "%"+sales.getCustomer().getPerson().getContact().getTelephone()+"%"),
+                            criteriaBuilder.like(root.get("customer").get("person").get("contact").get("relationalPhoneNumber3"), "%"+sales.getCustomer().getPerson().getContact().getTelephone()+"%")
+                    ));
+                }
                 return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
             }
         }, pageable);

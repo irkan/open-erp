@@ -39,6 +39,10 @@ public class Contact {
     @Column(name = "relational_phone_number_3")
     private String relationalPhoneNumber3;
 
+    @ToString.Exclude
+    @Transient
+    private String telephone;
+
     @Email(message = "Doğru email ünvan daxil edin")
     @Column(name = "email")
     private String email;

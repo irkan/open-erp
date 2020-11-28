@@ -54,6 +54,30 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
+                                                <form:label path="customer.person.firstName">Müştərinin adı</form:label>
+                                                <form:input path="customer.person.firstName" cssClass="form-control" placeholder="Müştərinin adı" />
+                                                <form:errors path="customer.person.firstName" cssClass="alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="customer.person.lastName">Müştərinin soyadı</form:label>
+                                                <form:input path="customer.person.lastName" cssClass="form-control" placeholder="Müştərinin soyadı" />
+                                                <form:errors path="customer.person.lastName" cssClass="alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="customer.person.contact.telephone">Müştərinin telefonu</form:label>
+                                                <div class="input-group">
+                                                    <form:input path="customer.person.contact.telephone" cssClass="form-control" placeholder="Son 4 rəqəm"/>
+                                                    <div class="input-group-append"><span class="input-group-text"><i class="la la-phone"></i></span></div>
+                                                </div>
+                                                <form:errors path="customer.person.contact.telephone" cssClass="control-label alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
                                                 <form:label path="saleDateFrom">Satış tarixdən</form:label>
                                                 <div class="input-group date">
                                                     <form:input path="saleDateFrom" autocomplete="off"
