@@ -213,6 +213,7 @@
                 <form:form modelAttribute="form" id="form" method="post" action="/admin/endpoint" cssClass="form-group">
                     <form:hidden path="id"/>
                     <form:hidden path="active"/>
+                    <form:hidden path="status"/>
                     <div class="form-group">
                         <form:label path="connectionType.id">Bağlanma tipi</form:label>
                         <form:select path="connectionType.id" cssClass="custom-select form-control">
