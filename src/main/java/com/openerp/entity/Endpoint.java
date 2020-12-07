@@ -39,11 +39,17 @@ public class Endpoint {
     private String url;
 
     @Column(name = "fixed_delay_in_second")
-    private Integer fixedDelay;
+    private Integer fixedDelay=30;
 
     @Pattern(regexp=".{2,50}",message="Minimum 2 maksimum 50 simvol ola bilər")
     @Column(name = "description", nullable = false)
     private String description;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
 
     @Transient
     @Temporal(TemporalType.TIMESTAMP)
@@ -56,6 +62,9 @@ public class Endpoint {
     private Date lastStatusDate = new Date();
 
 
-    @Column(name = "is_active", nullable = false, columnDefinition="boolean default true")
-    private Boolean active = true;
+    @Column(name = "is_active", nullable = false, columnDefinition="boolean default false")
+    private Boolean active = false;
+
+    @Column(name = "is_status", nullable = false, columnDefinition="boolean default false")
+    private Boolean status = false;
 }

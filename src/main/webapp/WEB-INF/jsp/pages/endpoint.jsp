@@ -138,7 +138,12 @@
                                     <th>Tarix</th>
                                     <th>Host</th>
                                     <th>Port</th>
+                                    <th>Period san.</th>
                                     <th>Url</th>
+                                    <th>Email</th>
+                                    <th>Telefon</th>
+                                    <th>Status</th>
+                                    <th>Aktiv</th>
                                     <th>Açıqlama</th>
                                     <th>Əməliyyat</th>
                                 </tr>
@@ -151,7 +156,12 @@
                                          <th><fmt:formatDate value = "${t.lastStatusDate}" pattern = "dd.MM.yyyy HH:mm" /></th>
                                          <td><c:out value="${t.host}" /></td>
                                          <td><c:out value="${t.port}" /></td>
+                                         <td><c:out value="${t.fixedDelay}" /></td>
                                          <td><c:out value="${t.url}" /></td>
+                                         <td><c:out value="${t.email}" /></td>
+                                         <td><c:out value="${t.phoneNumber}" /></td>
+                                         <td><c:out value="${t.status}" /></td>
+                                         <td><c:out value="${t.active}" /></td>
                                          <td><c:out value="${t.description}" /></td>
                                          <td nowrap class="text-center">
                                              <c:if test="${view.status}">
@@ -211,20 +221,47 @@
                         </form:select>
                         <form:errors path="connectionType.id" cssClass="alert-danger"/>
                     </div>
-                    <div class="form-group">
-                        <form:label path="host">Host</form:label>
-                        <form:input path="host" cssClass="form-control"/>
-                        <form:errors path="host" cssClass="alert-danger control-label"/>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <form:label path="host">Host</form:label>
+                                <form:input path="host" cssClass="form-control"/>
+                                <form:errors path="host" cssClass="alert-danger control-label"/>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <form:label path="port">Port</form:label>
+                                <form:input path="port" cssClass="form-control"/>
+                                <form:errors path="port" cssClass="alert-danger control-label"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <form:label path="url">URL</form:label>
+                                <form:input path="url" cssClass="form-control"/>
+                                <form:errors path="url" cssClass="alert-danger control-label"/>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <form:label path="fixedDelay">Period</form:label>
+                                <form:input path="fixedDelay" cssClass="form-control"/>
+                                <form:errors path="fixedDelay" cssClass="alert-danger control-label"/>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <form:label path="port">Port</form:label>
-                        <form:input path="port" cssClass="form-control"/>
-                        <form:errors path="port" cssClass="alert-danger control-label"/>
+                        <form:label path="email">Email</form:label>
+                        <form:textarea path="email" cssClass="form-control"/>
+                        <form:errors path="email" cssClass="alert-danger control-label"/>
                     </div>
                     <div class="form-group">
-                        <form:label path="url">URL</form:label>
-                        <form:input path="url" cssClass="form-control"/>
-                        <form:errors path="url" cssClass="alert-danger control-label"/>
+                        <form:label path="phoneNumber">Telefon</form:label>
+                        <form:textarea path="phoneNumber" cssClass="form-control"/>
+                        <form:errors path="phoneNumber" cssClass="alert-danger control-label"/>
                     </div>
                     <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>
@@ -262,7 +299,7 @@ fixedHeader: {
 
     $('#datatable tbody').on('dblclick', 'tr', function () {
         <c:if test="${view.status}">
-        view($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${view.object.name}" />');
+            view($('#form'), $(this).attr('data'), 'modal-operation', '<c:out value="${view.object.name}" />');
         </c:if>
     });
 
@@ -275,12 +312,24 @@ fixedHeader: {
                 required: false,
                 digits: true,
                 min: 1
+            },
+            description: {
+                required: true,
+                minLength: 2
             }
         },
         invalidHandler: function(event, validator) {
             KTUtil.scrollTop();
             swal.close();
         },
+    });
+
+    $("input[name='fixedDelay']").inputmask('decimal', {
+        rightAlignNumerics: false
+    });
+
+    $("input[name='port']").inputmask('decimal', {
+        rightAlignNumerics: false
     });
 
 </script>

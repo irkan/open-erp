@@ -38,11 +38,9 @@ public class NotificationTask {
     @Autowired
     LogRepository logRepository;
 
-    @Scheduled(fixedDelay = 120000, initialDelay = 5000)
+    @Scheduled(fixedDelay = 10000, initialDelay = 5000)
     public void email() {
         try{
-            log.info("Email Notification Task Start");
-            //System.setProperty("java.net.useSystemProxies", "true");
             List<Notification> emails = notificationRepository.getNotificationsByActiveTrueAndSendAndType_Attr1AndType_DictionaryType_Attr1AndType_Active(0,"email", "notification", true);
             for(Notification notification: emails){
                 try {
@@ -59,14 +57,11 @@ public class NotificationTask {
                     notification.setSend(1);
                     notification.setSendingDate(new Date());
                 } catch (Exception e){
-                    e.printStackTrace();
                     log.error(e.getMessage(), e);
                 }
                 notificationRepository.save(notification);
             }
-            log.info("Email Notification Task End");
         } catch (Exception e){
-            e.printStackTrace();
             log.error(e.getMessage(), e);
         }
     }

@@ -3,6 +3,7 @@ package com.openerp.task;
 import com.openerp.controller.SkeletonController;
 import com.openerp.entity.*;
 import com.openerp.repository.*;
+import com.openerp.util.Constants;
 import com.openerp.util.DateUtility;
 import com.openerp.util.Util;
 import org.apache.log4j.Logger;
@@ -16,9 +17,12 @@ import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.io.*;
+import java.net.*;
+import java.util.*;
+import java.util.TimerTask;
+import org.apache.commons.net.telnet.TelnetClient;
 
 @Component
 public class EndpointStatusTask {
@@ -28,65 +32,57 @@ public class EndpointStatusTask {
     EndpointRepository endpointRepository;
 
     @Autowired
+    EndpointDetailRepository endpointDetailRepository;
+
+    @Autowired
     SkeletonController skeletonController;
 
-    @Scheduled(fixedDelay = 300000)
+    @Scheduled(fixedDelay = 10000, initialDelay = 30000)
     public void service() {
         try{
-            log.info("Endpoint Status Task Start");
-
-            for(Endpoint endpoint: endpointRepository.findAll()){
-                String type="info";
-                String description = "";
-                if (endpoint.getConnectionType().getAttr1().equalsIgnoreCase("ping")){
-                    InetAddress address = InetAddress.getByName(endpoint.getHost());
-                    if(address.isReachable(5000)){
-                        endpoint.setLastStatusDate(new Date());
-                        endpointRepository.save(endpoint);
-                    } else {
-                        type="error";
-                        description = endpoint.getHost()+" ping is not reachable";
-                    }
-                } else if (endpoint.getConnectionType().getAttr1().equalsIgnoreCase("telnet")){
-                    InputStream input = null;
-                    InputStreamReader reader = null;
-                    try (Socket socket = new Socket(endpoint.getHost(), endpoint.getPort())) {
-                        input = socket.getInputStream();
-                        reader = new InputStreamReader(input);
-                        int character;
-                        StringBuilder data = new StringBuilder();
-                        while ((character = reader.read()) != -1) {
-                            data.append((char) character);
-                        }
-                        if(data.length()>0){
+            for(Endpoint endpoint: endpointRepository.getEndpointsByActiveTrue()){
+                try{
+                    String type="info";
+                    String description = "";
+                    if (endpoint.getConnectionType().getAttr1().equalsIgnoreCase("ping")){
+                        InetAddress address = InetAddress.getByName(endpoint.getHost());
+                        if(address.isReachable(5000)){
                             endpoint.setLastStatusDate(new Date());
                             endpointRepository.save(endpoint);
+                        } else {
+                            type="error";
+                            description = endpoint.getHost()+" ping is not reachable";
                         }
-                        System.out.println(data);
-                    } catch (UnknownHostException e){
-                        skeletonController.log(null, "error", "", "", null, "", e.getMessage());
-                        e.printStackTrace();
-                        log.error("Server not found: " + e.getMessage());
-                        type="error";
-                        description = "Telnet "+ endpoint.getHost() + ":" + endpoint.getPort() +" server not found: " + e.getMessage();
-                    } catch (IOException e){
-                        skeletonController.log(null, "error", "", "", null, "", e.getMessage());
-                        e.printStackTrace();
-                        log.error("I/O error: " + e.getMessage());
-                        type="error";
-                        description = "Telnet "+ endpoint.getHost() + ":" + endpoint.getPort() +" I/O error: " + e.getMessage();
-                    } finally{
-                        reader.close();
-                        input.close();
-                    }
-                }
-                skeletonController.log(type, "endpoint", "create/edit", endpoint.getId(), endpoint.toString(), description);
-            }
+                    } else if (endpoint.getConnectionType().getAttr1().equalsIgnoreCase("telnet")){
+                        TelnetClient telnet = new TelnetClient();
+                        try{
+                            telnet.connect(endpoint.getHost(),endpoint.getPort());
+                            if(telnet.isConnected()!=endpoint.getStatus()){
+                                endpoint.setLastStatusDate(new Date());
+                                endpoint.setStatus(telnet.isConnected());
+                                endpointRepository.save(endpoint);
+                                description = (endpoint.getHost()!=null?endpoint.getHost():"") +
+                                        (endpoint.getPort()!=null?(":"+endpoint.getPort()):"") + " " +
+                                        (telnet.isConnected()?"- AKTİVLƏŞDİRİLDİ":"- SÖNDÜ") + " " +
+                                        DateUtility.getFormattedDateTime(endpoint.getLastStatusDate());
+                                endpointDetailRepository.save(new EndpointDetail(endpoint, endpoint.getLastStatusDate(), telnet.isConnected(), description));
 
-            log.info("Endpoint Status Task End");
+                                if(endpoint.getEmail()!=null && endpoint.getEmail().trim().length()>3){
+                                    skeletonController.sendEmail(null, endpoint.getEmail(), description, "", "");
+                                }
+                            }
+                        } catch (Exception e){
+                            log.error(e.getMessage(), e);
+                        } finally {
+                            telnet.disconnect();
+                        }
+
+                    }
+                } catch (Exception e){
+                    log.error(e.getMessage(), e);
+                }
+            }
         } catch (Exception e){
-            skeletonController.log(null, "error", "", "", null, "", e.getMessage());
-            e.printStackTrace();
             log.error(e.getMessage(), e);
         }
     }

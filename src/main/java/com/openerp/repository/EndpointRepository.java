@@ -10,4 +10,5 @@ import java.util.List;
 
 public interface EndpointRepository extends JpaRepository<Endpoint, Integer>, JpaSpecificationExecutor<Endpoint> {
     Endpoint getEndpointById(Integer id);
+    List<Endpoint> getEndpointsByActiveTrue();
 }

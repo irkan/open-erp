@@ -465,7 +465,7 @@ public class SkeletonController {
         return "İG";
     }
 
-    void sendEmail(Organization organization, String emails, String subject, String message, String description){
+    public void sendEmail(Organization organization, String emails, String subject, String message, String description){
         for(String email: emails.split(";")){
             if(email.matches(Constants.REGEX.REGEX4)){
                 Notification notification = new Notification();
