@@ -69,6 +69,11 @@ public class DateUtility {
         return dateFormat.format(date);
     }
 
+    public static String getFormattedDateTimeSS(Date date) {
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
+        return dateFormat.format(date);
+    }
+
     public static Date generate(int day, int month, int year){
         String date = (day>9?day:"0"+day) + "."+(month>9?month:"0"+month)+"." + year;
         Date utilDate= null;

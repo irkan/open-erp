@@ -32,7 +32,12 @@ public class EndpointDetail {
     @Column(name = "status_date", nullable = false)
     private Date statusDate=new Date();
 
-    @Pattern(regexp=".{2,50}",message="Minimum 2 maksimum 50 simvol ola bilər")
+    @Transient
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+    private Date statusDateFrom;
+
+    @Pattern(regexp=".{2,250}",message="Minimum 2 maksimum 250 simvol ola bilər")
     @Column(name = "description", nullable = false)
     private String description;
 
@@ -44,6 +49,11 @@ public class EndpointDetail {
         this.statusDate = statusDate;
         this.status = status;
         this.description = description;
+    }
+
+    public EndpointDetail(Boolean status, Endpoint endpoint) {
+        this.status = status;
+        this.endpoint = endpoint;
     }
 
 

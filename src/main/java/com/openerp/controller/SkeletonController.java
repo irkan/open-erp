@@ -284,6 +284,9 @@ public class SkeletonController {
     EndpointService endpointService;
 
     @Autowired
+    EndpointDetailService endpointDetailService;
+
+    @Autowired
     ReportingDao reportingDao;
 
     @Autowired

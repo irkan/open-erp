@@ -77,7 +77,6 @@ public class MigrationTask {
     @Scheduled(fixedDelay = 100000000, initialDelay = 5000)
     public void writeTable() {
         try{
-            log.info("Migration Task Start read data from excel and insert table");
             List<Migration> migrations = migrationRepository.getMigrationsByActiveTrueAndStatusOrderByUploadDate(0);
             for(Migration migration: migrations){
                 try {
@@ -161,7 +160,6 @@ public class MigrationTask {
                 migration.setStatus(1);
                 migrationRepository.save(migration);
             }
-            log.info("Migration Task End read data from excel and insert table");
         } catch (Exception e){
             e.printStackTrace();
             log.error(e.getMessage(), e);
@@ -170,7 +168,6 @@ public class MigrationTask {
 
     public void startMigrationSalesItems(Migration migration) {
         try{
-            log.info("Migration Task Start Sales Migration");
             if (migration.getOperationType().equalsIgnoreCase("satış")){
                 List<Dictionary> serviceNotifications = dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("service-notification");
                 Dictionary sell = dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("sell", "action");
@@ -416,7 +413,6 @@ public class MigrationTask {
                 }
 
             }
-            log.info("Migration Task End Sales Migration");
         } catch (Exception e){
             e.printStackTrace();
             log.error(e.getMessage(), e);
@@ -425,7 +421,6 @@ public class MigrationTask {
 
     public void startMigrationServiceRefreshItems(Migration migration) {
         try{
-            log.info("Migration Task Start Sales Service Migration");
             if (migration.getOperationType().equalsIgnoreCase("satış")){
                 int i = 1;
                 for(MigrationDetail md: migration.getMigrationDetails()){
@@ -641,7 +636,6 @@ public class MigrationTask {
                 }
 
             }
-            log.info("Migration Task End Sales Service Migration");
         } catch (Exception e){
             e.printStackTrace();
             log.error(e.getMessage(), e);

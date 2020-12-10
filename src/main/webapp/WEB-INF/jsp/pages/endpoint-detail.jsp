@@ -136,8 +136,8 @@
                                 <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th style="max-width: 40px;">Bağlanma tipi</th>
-                                    <th style="max-width: 90px;">Tarix</th>
+                                    <th>Bağlanma tipi</th>
+                                    <th>Tarix</th>
                                     <th>Host</th>
                                     <th>Port</th>
                                     <th>Period san.</th>
@@ -155,13 +155,13 @@
                                      <tr data="<c:out value="${utl:toJson(t)}" />">
                                          <td><c:out value="${t.id}" /></td>
                                          <th><c:out value="${t.connectionType.name}" /></th>
-                                         <td><fmt:formatDate value = "${t.lastStatusDate}" pattern = "dd.MM.yyyy HH:mm" /></td>
+                                         <th><fmt:formatDate value = "${t.lastStatusDate}" pattern = "dd.MM.yyyy HH:mm" /></th>
                                          <td><c:out value="${t.host}" /></td>
                                          <td><c:out value="${t.port}" /></td>
                                          <td><c:out value="${t.fixedDelay}" /></td>
                                          <td><c:out value="${t.url}" /></td>
-                                         <td><div style="word-wrap: break-word; max-width: 200px;"><c:out value="${t.email}" /></div></td>
-                                         <td><div style="word-wrap: break-word; max-width: 150px;"><c:out value="${t.phoneNumber}" /></div></td>
+                                         <td><c:out value="${t.email}" /></td>
+                                         <td><c:out value="${t.phoneNumber}" /></td>
                                          <td class="text-center">
                                              <c:choose>
                                                  <c:when test="${t.status}">

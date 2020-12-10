@@ -223,7 +223,9 @@ public class AdministratorController extends SkeletonController {
         } else if (page.equalsIgnoreCase(Constants.ROUTE.ENDPOINT)) {
             model.addAttribute(Constants.CONNECTION_TYPES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("connection-type"));
             if (!model.containsAttribute(Constants.FILTER)) {
-                model.addAttribute(Constants.FILTER, new Endpoint());
+                Endpoint endpoint = new Endpoint();
+                endpoint.setActive(null);
+                model.addAttribute(Constants.FILTER, endpoint);
             }
             if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
                     session.getAttribute(Constants.SESSION_FILTER) instanceof Endpoint){
@@ -236,6 +238,24 @@ public class AdministratorController extends SkeletonController {
             }
             if (!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)) {
                 return exportExcel(endpoints, redirectAttributes, page);
+            }
+        } else if (page.equalsIgnoreCase(Constants.ROUTE.ENDPOINT_DETAIL)) {
+            if (!model.containsAttribute(Constants.FILTER)) {
+                Endpoint endpoint = new Endpoint();
+                endpoint.setId((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null);
+                model.addAttribute(Constants.FILTER, new EndpointDetail(null, endpoint));
+            }
+            if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
+                    session.getAttribute(Constants.SESSION_FILTER) instanceof EndpointDetail){
+                model.addAttribute(Constants.FILTER, session.getAttribute(Constants.SESSION_FILTER));
+            }
+            Page<EndpointDetail> endpointDetails = endpointDetailService.findAll((EndpointDetail) model.asMap().get(Constants.FILTER), PageRequest.of(0, paginationSize(), Sort.by("id").descending()));
+            model.addAttribute(Constants.LIST, endpointDetails);
+            if (!model.containsAttribute(Constants.FORM)) {
+                model.addAttribute(Constants.FORM, new EndpointDetail());
+            }
+            if (!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)) {
+                return exportExcel(endpointDetails, redirectAttributes, page);
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.MIGRATION)) {
             model.addAttribute(Constants.ORGANIZATIONS, organizationRepository.getOrganizationsByActiveTrue());
@@ -291,9 +311,24 @@ public class AdministratorController extends SkeletonController {
         return mapPost(endpoint, binding, redirectAttributes);
     }
 
+    @PostMapping(value = "/endpoint/execute")
+    public String postEndpointExecute(@ModelAttribute(Constants.FORM) @Validated Endpoint endpoint, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(binding, Constants.TEXT.SUCCESS));
+        endpoint = endpointRepository.getEndpointById(endpoint.getId());
+        endpoint.setActive(!endpoint.getActive());
+        endpointRepository.save(endpoint);
+        log(endpoint, "endpoint", "start/stop", endpoint.getId(), endpoint.toString());
+        return mapPost(endpoint, binding, redirectAttributes, "/admin/endpoint");
+    }
+
     @PostMapping(value = "/endpoint/filter")
     public String postEndpointFilter(@ModelAttribute(Constants.FILTER) @Validated Endpoint endpoint, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
         return mapFilter(endpoint, binding, redirectAttributes, "/admin/endpoint");
+    }
+
+    @PostMapping(value = "/endpoint-detail/filter")
+    public String postEndpointDetailFilter(@ModelAttribute(Constants.FILTER) @Validated EndpointDetail endpointDetail, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        return mapFilter(endpointDetail, binding, redirectAttributes, "/admin/endpoint-detail");
     }
 
     @PostMapping(value = "/module")

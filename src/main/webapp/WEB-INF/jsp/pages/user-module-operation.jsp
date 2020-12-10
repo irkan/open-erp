@@ -181,7 +181,9 @@
             {targets: 21, orderable: false},
             {targets: 22, orderable: false},
             {targets: 23, orderable: false},
-            {targets: 24, orderable: false}
+            {targets: 24, orderable: false},
+            {targets: 25, orderable: false},
+            {targets: 26, orderable: false}
         ],
         fixedColumns:   {
             leftColumns: 2
