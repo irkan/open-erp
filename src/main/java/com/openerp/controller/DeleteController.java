@@ -131,6 +131,10 @@ public class DeleteController extends SkeletonController {
             payrollConfiguration.setActive(false);
             payrollConfigurationRepository.save(payrollConfiguration);
             log(payrollConfiguration, "configuration", "delete", payrollConfiguration.getId(), payrollConfiguration.toString());
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.ENDPOINT)){
+            Endpoint endpoint = endpointRepository.getEndpointById(Integer.parseInt(id));
+            log(endpoint, "endpoint", "delete", endpoint.getId(), endpoint.toString());
+            endpointRepository.delete(endpoint);
         } else if(path.equalsIgnoreCase(Constants.ROUTE.VACATION)){
             Vacation vacation = vacationRepository.getVacationById(Integer.parseInt(id));
             vacation.setActive(false);

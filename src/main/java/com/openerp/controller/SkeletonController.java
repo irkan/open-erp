@@ -520,7 +520,6 @@ public class SkeletonController {
         try{
             json = UtilJson.toJson(object);
         } catch (Exception e){
-            e.printStackTrace();
             log.error(e.getMessage(), e);
         }
         Log log = new Log(tableName, operation, rowId, encapsulate, getSessionUser()!=null?getSessionUser().getUsername():"", json);
@@ -574,12 +573,15 @@ public class SkeletonController {
     }
 
     private void sessionLog(Log log){
-        List<Log> logs = (ArrayList<Log>)session.getAttribute(Constants.LOGS);
-        if(logs!=null){
-            logs.add(log);
-            Collections.reverse(logs);
-            session.setAttribute(Constants.LOGS, logs);
+        if(session.getAttribute(Constants.LOGS)!=null){
+            List<Log> logs = (ArrayList<Log>)session.getAttribute(Constants.LOGS);
+            if(logs!=null){
+                logs.add(log);
+                Collections.reverse(logs);
+                session.setAttribute(Constants.LOGS, logs);
+            }
         }
+
     }
 
     BindingResult checkDate(BindingResult binding, Date date){
