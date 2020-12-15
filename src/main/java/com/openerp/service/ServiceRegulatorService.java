@@ -61,6 +61,20 @@ public class ServiceRegulatorService {
                 if(serviceRegulator.getSales()!=null && serviceRegulator.getSales().getCustomer()!=null && serviceRegulator.getSales()!=null && serviceRegulator.getSales().getCustomer().getPerson()!=null && serviceRegulator.getSales()!=null && serviceRegulator.getSales().getCustomer().getPerson().getLastName()!=null && !serviceRegulator.getSales().getCustomer().getPerson().getLastName().isEmpty()){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("sales").get("customer").get("person").get("lastName"), "%"+serviceRegulator.getSales().getCustomer().getPerson().getLastName()+"%")));
                 }
+                if(serviceRegulator.getSales()!=null &&
+                        serviceRegulator.getSales().getCustomer()!=null &&
+                        serviceRegulator.getSales().getCustomer().getPerson()!=null &&
+                        serviceRegulator.getSales().getCustomer().getPerson().getContact()!=null &&
+                        serviceRegulator.getSales().getCustomer().getPerson().getContact().getTelephone()!=null &&
+                        !serviceRegulator.getSales().getCustomer().getPerson().getContact().getTelephone().isEmpty()){
+                    predicates.add(criteriaBuilder.or(
+                            criteriaBuilder.like(root.get("sales").get("customer").get("person").get("contact").get("mobilePhone"), "%"+serviceRegulator.getSales().getCustomer().getPerson().getContact().getTelephone()+"%"),
+                            criteriaBuilder.like(root.get("sales").get("customer").get("person").get("contact").get("homePhone"), "%"+serviceRegulator.getSales().getCustomer().getPerson().getContact().getTelephone()+"%"),
+                            criteriaBuilder.like(root.get("sales").get("customer").get("person").get("contact").get("relationalPhoneNumber1"), "%"+serviceRegulator.getSales().getCustomer().getPerson().getContact().getTelephone()+"%"),
+                            criteriaBuilder.like(root.get("sales").get("customer").get("person").get("contact").get("relationalPhoneNumber2"), "%"+serviceRegulator.getSales().getCustomer().getPerson().getContact().getTelephone()+"%"),
+                            criteriaBuilder.like(root.get("sales").get("customer").get("person").get("contact").get("relationalPhoneNumber3"), "%"+serviceRegulator.getSales().getCustomer().getPerson().getContact().getTelephone()+"%")
+                    ));
+                }
                 return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
             }
         }, pageable);

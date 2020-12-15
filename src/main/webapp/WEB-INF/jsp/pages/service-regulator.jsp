@@ -60,6 +60,30 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
+                                                <form:label path="sales.customer.person.firstName">Müştərinin adı</form:label>
+                                                <form:input path="sales.customer.person.firstName" cssClass="form-control" placeholder="Müştərinin adı" />
+                                                <form:errors path="sales.customer.person.firstName" cssClass="alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="sales.customer.person.lastName">Müştərinin soyadı</form:label>
+                                                <form:input path="sales.customer.person.lastName" cssClass="form-control" placeholder="Müştərinin soyadı" />
+                                                <form:errors path="sales.customer.person.lastName" cssClass="alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="sales.customer.person.contact.telephone">Müştərinin telefonu</form:label>
+                                                <div class="input-group">
+                                                    <form:input path="sales.customer.person.contact.telephone" cssClass="form-control" placeholder="Son 4 rəqəm"/>
+                                                    <div class="input-group-append"><span class="input-group-text"><i class="la la-phone"></i></span></div>
+                                                </div>
+                                                <form:errors path="sales.customer.person.contact.telephone" cssClass="control-label alert-danger"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
                                                 <form:label path="servicedDateFrom">Tarixdən</form:label>
                                                 <div class="input-group date">
                                                     <form:input path="servicedDateFrom" autocomplete="off"
@@ -97,20 +121,6 @@
                                                     <form:option value=""></form:option>
                                                     <form:options items="${service_notifications}" itemLabel="name" itemValue="id"/>
                                                 </form:select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <form:label path="sales.customer.person.firstName">Müştərinin adı</form:label>
-                                                <form:input path="sales.customer.person.firstName" cssClass="form-control" placeholder="Müştərinin adı" />
-                                                <form:errors path="sales.customer.person.firstName" cssClass="alert-danger"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <form:label path="sales.customer.person.lastName">Müştərinin soyadı</form:label>
-                                                <form:input path="sales.customer.person.lastName" cssClass="form-control" placeholder="Müştərinin soyadı" />
-                                                <form:errors path="sales.customer.person.lastName" cssClass="alert-danger"/>
                                             </div>
                                         </div>
                                         <div class="col-md-2" style="padding-top: 30px;">
