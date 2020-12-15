@@ -10,5 +10,7 @@ public class AdditionalResourceWebConfiguration implements WebMvcConfigurer {
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/logs/**").addResourceLocations("file:logs/");
         registry.addResourceHandler("/upload/**").addResourceLocations("file:upload/");
+        registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
+        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 }

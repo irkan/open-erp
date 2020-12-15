@@ -26,7 +26,8 @@ public class FilterConfiguration {
             "/profile/*",
             "/export/*",
             "/delete/*",
-            "/route/*"
+            "/route/*",
+            "/swagger-ui/*"
     );
     registration.setOrder(1);
     return registration;
