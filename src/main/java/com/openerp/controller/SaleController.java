@@ -193,6 +193,7 @@ public class SaleController extends SkeletonController {
             }
         }  else if (page.equalsIgnoreCase(Constants.ROUTE.SERVICE_REGULATOR)){
             model.addAttribute(Constants.SERVICE_NOTIFICATIONS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("service-notification"));
+            model.addAttribute(Constants.CITIES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("city"));
             model.addAttribute(Constants.POSTPONES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("postpone"));
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new ServiceRegulator(new Sales(getSessionOrganization())));

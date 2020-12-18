@@ -74,6 +74,15 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
+                                                <form:label path="sales.customer.person.contact.city">Şəhər</form:label>
+                                                <form:select path="sales.customer.person.contact.city.id" cssClass="custom-select form-control">
+                                                    <form:option value=""></form:option>
+                                                    <form:options items="${cities}" itemLabel="name" itemValue="id"/>
+                                                </form:select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
                                                 <form:label path="sales.customer.person.contact.telephone">Müştərinin telefonu</form:label>
                                                 <div class="input-group">
                                                     <form:input path="sales.customer.person.contact.telephone" cssClass="form-control" placeholder="Son 4 rəqəm"/>

@@ -55,11 +55,14 @@ public class ServiceRegulatorService {
                 if(serviceRegulator.getSales()!=null && serviceRegulator.getSales().getCustomer()!=null && serviceRegulator.getSales().getCustomer().getId()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("sales").get("customer"), serviceRegulator.getSales().getCustomer().getId())));
                 }
-                if(serviceRegulator.getSales()!=null && serviceRegulator.getSales().getCustomer()!=null && serviceRegulator.getSales()!=null && serviceRegulator.getSales().getCustomer().getPerson()!=null && serviceRegulator.getSales()!=null && serviceRegulator.getSales().getCustomer().getPerson().getFirstName()!=null && !serviceRegulator.getSales().getCustomer().getPerson().getFirstName().isEmpty()) {
+                if(serviceRegulator.getSales()!=null && serviceRegulator.getSales().getCustomer()!=null && serviceRegulator.getSales().getCustomer().getPerson()!=null && serviceRegulator.getSales().getCustomer().getPerson().getFirstName()!=null && !serviceRegulator.getSales().getCustomer().getPerson().getFirstName().isEmpty()) {
                     predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("sales").get("customer").get("person").get("firstName"), "%"+serviceRegulator.getSales().getCustomer().getPerson().getFirstName()+"%")));
                 }
-                if(serviceRegulator.getSales()!=null && serviceRegulator.getSales().getCustomer()!=null && serviceRegulator.getSales()!=null && serviceRegulator.getSales().getCustomer().getPerson()!=null && serviceRegulator.getSales()!=null && serviceRegulator.getSales().getCustomer().getPerson().getLastName()!=null && !serviceRegulator.getSales().getCustomer().getPerson().getLastName().isEmpty()){
+                if(serviceRegulator.getSales()!=null && serviceRegulator.getSales().getCustomer()!=null && serviceRegulator.getSales().getCustomer().getPerson()!=null && serviceRegulator.getSales().getCustomer().getPerson().getLastName()!=null && !serviceRegulator.getSales().getCustomer().getPerson().getLastName().isEmpty()){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("sales").get("customer").get("person").get("lastName"), "%"+serviceRegulator.getSales().getCustomer().getPerson().getLastName()+"%")));
+                }
+                if(serviceRegulator.getSales()!=null && serviceRegulator.getSales().getCustomer()!=null && serviceRegulator.getSales().getCustomer().getPerson()!=null && serviceRegulator.getSales().getCustomer().getPerson().getContact()!=null && serviceRegulator.getSales().getCustomer().getPerson().getContact().getCity()!=null && serviceRegulator.getSales().getCustomer().getPerson().getContact().getCity().getId()!=null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("sales").get("customer").get("person").get("contact").get("city"), serviceRegulator.getSales().getCustomer().getPerson().getContact().getCity().getId())));
                 }
                 if(serviceRegulator.getSales()!=null &&
                         serviceRegulator.getSales().getCustomer()!=null &&
