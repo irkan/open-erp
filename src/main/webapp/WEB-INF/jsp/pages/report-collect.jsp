@@ -118,7 +118,7 @@
     </div>
 
     <div class="row">
-        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 border-0">
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 border-0">
             <div class="card border-0 mb-3">
                 <div class="card-body <c:out value="${random.nextInt(5) eq 1 ? 'kt-bg-light-danger' : random.nextInt(5) eq 2 ? 'kt-bg-light-warning' : random.nextInt(5) eq 3 ? 'kt-bg-light-info' : random.nextInt(5) eq 4 ? 'kt-bg-light-success' : random.nextInt(5) eq 5 ? 'kt-bg-light-primary' : 'kt-bg-light-brand'}"/>">
                     <h6 class="card-title font-weight-bolder text-center" style="letter-spacing: 2px">Yığım</h6>
@@ -127,7 +127,16 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12 border-0">
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 border-0">
+            <div class="card border-0 mb-3">
+                <div class="card-body <c:out value="${random.nextInt(5) eq 1 ? 'kt-bg-light-danger' : random.nextInt(5) eq 2 ? 'kt-bg-light-warning' : random.nextInt(5) eq 3 ? 'kt-bg-light-info' : random.nextInt(5) eq 4 ? 'kt-bg-light-success' : random.nextInt(5) eq 5 ? 'kt-bg-light-primary' : 'kt-bg-light-brand'}"/>">
+                    <h6 class="card-title font-weight-bolder text-center" style="letter-spacing: 2px">Yığım</h6>
+                    <hr/>
+                    <div id="pie-chart2" class="d-flex justify-content-center"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 border-0">
             <div class="card border-0 mb-3">
                 <div class="card-body <c:out value="${random.nextInt(5) eq 1 ? 'kt-bg-light-danger' : random.nextInt(5) eq 2 ? 'kt-bg-light-warning' : random.nextInt(5) eq 3 ? 'kt-bg-light-info' : random.nextInt(5) eq 4 ? 'kt-bg-light-success' : random.nextInt(5) eq 5 ? 'kt-bg-light-primary' : 'kt-bg-light-brand'}"/>">
                     <h6 class="card-title font-weight-bolder text-center" style="letter-spacing: 2px">Yığım</h6>
@@ -324,6 +333,57 @@
         var piechart = new ApexCharts(document.querySelector("#pie-chart"), pieoptions);
         piechart.render();
 
+        var totalSum2=0;
+        var pieoptions2 = {
+            series: [0, 0],
+            chart: {type: 'donut'},
+            plotOptions: {
+                pie: {
+                    donut: {
+                        labels: {
+                            show: true,
+                            name: {
+                                fontSize: '22px',
+                                fontWeight: 'bold',
+                                color: '#088fd7'
+                            },
+                            value: {
+                                fontSize: '16px',
+                                fontWeight: 'bold',
+                                color: '#FF325B'
+                            },
+                            total: {
+                                show: true,
+                                label: 'Cəmi',
+                                formatter: function (w) {
+                                    return totalSum2;
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            labels: ['Yığım məbləği', 'Qalıq borc'],
+            legend: {
+                position: 'bottom'
+            },
+            responsive: [
+                {
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 200
+                        }, legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            ]
+        };
+
+        var piechart2 = new ApexCharts(document.querySelector("#pie-chart2"), pieoptions2);
+        piechart2.render();
+
         const colours = ['#5388f4', '#E91E63', '#9C27B0'];
         var baroptions = {
             series: [{
@@ -382,6 +442,11 @@
                 pieoptions.labels = [];
                 pieoptions.series = [];
                 totalSum = 0;
+
+                pieoptions2.labels = [];
+                pieoptions2.series = [];
+                totalSum2 = 0;
+
                 baroptions.xaxis.categories = [];
                 baroptions.series[0].data = [];
             },
@@ -407,6 +472,14 @@
                 piechart.updateOptions(pieoptions);
                 barchart.updateOptions(baroptions);
 
+                $.each(jQuery.parseJSON(data.string5), function(key, val){
+                    pieoptions2.labels.push("Yığım məbləği");
+                    pieoptions2.series.push(round(val.LAST_PRICE, 0));
+                    pieoptions2.labels.push("Qalıq borc");
+                    pieoptions2.series.push(round(val.INVOICES, 0));
+                    totalSum2 = round(val.TOTAL_SUM, 0);
+                });
+                piechart2.updateOptions(pieoptions2);
 
                 $.each(jQuery.parseJSON(data.string2), function(key, val){
                     options.xaxis.categories.push(val.ZAXIS);
@@ -454,5 +527,4 @@
             }
         })
     }
-
 </script>

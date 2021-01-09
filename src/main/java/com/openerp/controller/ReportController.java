@@ -90,6 +90,7 @@ public class ReportController extends SkeletonController {
             returnedReport.setString3(Util.checkNull(reportingDao.reportPaymentLatencyPeriodly(report)));
             report.setString7(" and pl1.latency_day>"+latencyDay+" "); // troubled customer
             returnedReport.setString4(Util.checkNull(reportingDao.reportPaymentLatencyPeriodly(report)));
+            returnedReport.setString5(Util.checkNull(reportingDao.reportSales(report)));
         }
         return returnedReport;
     }

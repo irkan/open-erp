@@ -375,8 +375,8 @@ public class ReportingDao implements IReportingDao {
                     " where s1.payment_id=p1.id and s1.organization_id=o.id " +
                     "  and s1.is_approve=1 " +
                     Util.checkNull(report.getString1()) + Util.checkNull(report.getString2()) +
-                    Util.checkNull(report.getString3()) + Util.checkNull(report.getString4())
-                    + Util.checkNull(report.getString5()) + Util.checkNull(report.getString6()) +
+                    Util.checkNull(report.getString3()) + Util.checkNull(report.getString4()) +
+                    Util.checkNull(report.getString5()) + Util.checkNull(report.getString6()) +
                     " ) k1 ";
 
             try(PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -422,6 +422,42 @@ public class ReportingDao implements IReportingDao {
             log.error(e.getMessage(), e);
         }
         return ReportUtil.correct(jsonObjects, report);
+    }
+
+    @Override
+    public List<JSONObject> reportSales(Report report) throws Exception {
+        List<JSONObject> jsonObjects = new ArrayList<>();
+        try(Connection connection = dataSource.getConnection()) {
+            String sql = "select sum(k1.last_price) total_sum, sum(k1.last_price-k1.invoices) last_price, sum(k1.invoices) invoices\n" +
+                    "from (\n" +
+                    "         select IFNULL(p1.last_price, 0)           last_price,\n" +
+                    "                IFNULL(sum(IFNULL(i1.price, 0)), 0) invoices\n" +
+                    "         from invoice i1,\n" +
+                    "              sales s1,\n" +
+                    "              payment p1,\n" +
+                    "              organization o\n" +
+                    "         where s1.payment_id = p1.id\n" +
+                    "           and i1.sales_id = s1.id\n" +
+                    "           and i1.organization_id = o.id\n" +
+                    "           and i1.is_active = 1\n" +
+                    "           and s1.is_active = 1\n" +
+                    "           and s1.is_approve = 1\n" +
+                    "           and i1.is_approve = 1\n" +
+                    Util.checkNull(report.getString1()) + Util.checkNull(report.getString2()) +
+                    Util.checkNull(report.getString3()) + Util.checkNull(report.getString4()) +
+                    Util.checkNull(report.getString5()) + Util.checkNull(report.getString6()) +
+                    "         group by i1.sales_id\n" +
+                    "     ) k1";
+
+            try(PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                try(ResultSet resultSet = preparedStatement.executeQuery()) {
+                    jsonObjects = Util.getFormattedResult(resultSet);
+                }
+            }
+        } catch(Exception e){
+            log.error(e.getMessage(), e);
+        }
+        return jsonObjects;
     }
 
     @Override

@@ -107,7 +107,6 @@ public class Util {
     public static List<JSONObject> getFormattedResult(ResultSet rs) {
         List<JSONObject> resList = new ArrayList<JSONObject>();
         try {
-            // get column names
             ResultSetMetaData rsMeta = rs.getMetaData();
             int columnCnt = rsMeta.getColumnCount();
             List<String> columnNames = new ArrayList<String>();
@@ -115,7 +114,7 @@ public class Util {
                 columnNames.add(rsMeta.getColumnName(i).toUpperCase());
             }
 
-            while(rs.next()) { // convert each object to an human readable JSON object
+            while(rs.next()) {
                 JSONObject obj = new JSONObject();
                 for(int i=1;i<=columnCnt;i++) {
                     String key = columnNames.get(i - 1);
