@@ -330,6 +330,7 @@
                             <c:set var="view6" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'inventory', 'view')}"/>
                             <c:set var="approve" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'approve')}"/>
                             <c:set var="return1" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'return')}"/>
+                            <c:set var="transfer" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'transfer')}"/>
                             <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
                             <c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
                             <c:set var="consolidate" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'consolidate')}"/>
@@ -498,6 +499,11 @@
                                                     <c:if test="${return1.status and t.approve}">
                                                     <a href="javascript:returnOper($('#return-form'), '<c:out value="${t.id}"/>', 'return-modal-operation', '<c:out value="${return1.object.name}"/> - Satış No: <c:out value="${t.id}"/>');getInventoriesForReturn('<c:out value="${t.id}" />', $('#return-data-repeater-list'));" class="dropdown-item" title="<c:out value="${return1.object.name}"/>">
                                                         <i class="<c:out value="${return1.object.icon}"/>"></i> <c:out value="${return1.object.name}"/>
+                                                    </a>
+                                                    </c:if>
+                                                    <c:if test="${return1.status and t.approve}">
+                                                    <a href="javascript:transfer($('#transfer-form'), '<c:out value="${t.id}"/>', 'transfer-modal-operation', '<c:out value="${transfer.object.name}"/> - Satış No: <c:out value="${t.id}"/>');" class="dropdown-item" title="<c:out value="${transfer.object.name}"/>">
+                                                        <i class="<c:out value="${transfer.object.icon}"/>"></i> <c:out value="${transfer.object.name}"/>
                                                     </a>
                                                     </c:if>
                                                     <c:if test="${edit.status and !t.approve}">
@@ -1222,6 +1228,33 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" onclick="submit($('#return-form'));">Bəli, təsdiq edirəm!</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="transfer-modal-operation" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Məhkəməyə yolla</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form:form modelAttribute="form" id="transfer-form" method="post" action="/sale/sales/transfer" cssClass="form-group">
+                    <form:hidden path="id"/>
+                    <div class="form-group">
+                        <form:label path="description">Açıqlama</form:label>
+                        <form:textarea path="description" cssClass="form-control"/>
+                        <form:errors path="description" cssClass="alert-danger control-label"/>
+                    </div>
+                </form:form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="submit($('#transfer-form'));">Yadda saxla</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
             </div>
         </div>

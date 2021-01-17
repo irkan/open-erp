@@ -31,7 +31,8 @@ public class CollectController extends SkeletonController {
     public String route(Model model, @PathVariable("page") String page, @PathVariable("data") Optional<String> data, RedirectAttributes redirectAttributes) throws Exception {
 
         if(page.equalsIgnoreCase(Constants.ROUTE.PAYMENT_LATENCY) ||
-                page.equalsIgnoreCase(Constants.ROUTE.TROUBLED_CUSTOMER)){
+                page.equalsIgnoreCase(Constants.ROUTE.TROUBLED_CUSTOMER) ||
+                page.equalsIgnoreCase(Constants.ROUTE.COURT)){
             model.addAttribute(Constants.CONFIGURATION_TROUBLED_CUSTOMER, configurationRepository.getGlobalConfigurationByKeyAndActiveTrue("troubled_customer").getAttribute());
             model.addAttribute(Constants.PAYMENT_PERIODS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-period"));
             model.addAttribute(Constants.PAYMENT_SCHEDULES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-schedule"));
@@ -42,12 +43,16 @@ public class CollectController extends SkeletonController {
             }
             if(!model.containsAttribute(Constants.FILTER)){
                 salesObject.setApprove(false);
-                Payment paymentObject = new Payment();
-                paymentObject.setPeriod(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1(Util.getPeriodDay(), "payment-period"));
-                salesObject.setPayment(paymentObject);
+                boolean isCourt = isCourt(page);
+                if(isCourt){
+                    Payment paymentObject = new Payment();
+                    paymentObject.setPeriod(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1(Util.getPeriodDay(), "payment-period"));
+                    salesObject.setPayment(paymentObject);
+                }
                 salesObject.setSaleDate(null);
                 salesObject.setSaled(false);
                 salesObject.setReturned(false);
+                salesObject.setCourt(isCourt);
                 model.addAttribute(Constants.FILTER, salesObject);
             }
             if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
@@ -160,7 +165,7 @@ public class CollectController extends SkeletonController {
         return mapPost(contactHistory, binding, redirectAttributes);
     }
 
-    @PostMapping(value = {"/payment-latency", "/troubled-c8ustomer"})
+    @PostMapping(value = {"/payment-latency", "/troubled-customer", "/court"})
     public String postPaymentRegulatorTransfer(@RequestParam(value = "sale", defaultValue = "0") String sale,
                                                @RequestParam(value = "price", defaultValue = "0") String price,
                                                @RequestParam(value = "description") String description,
@@ -174,7 +179,7 @@ public class CollectController extends SkeletonController {
         invoice.setDescription(description);
         invoice.setOrganization(getUserOrganization());
         invoice.setDescription("Ödəniş " + invoice.getPrice() + " AZN");
-       invoiceRepository.save(invoice);
+        invoiceRepository.save(invoice);
         log(invoice, "invoice", "create/edit", invoice.getId(), invoice.toString());
         String desc = "Hesab faktura yaradıldı: " + invoice.getId();
         if(sales!=null){
@@ -186,6 +191,17 @@ public class CollectController extends SkeletonController {
             log(contactHistory, "collect_payment_regulator_note", "create/edit", contactHistory.getId(), contactHistory.toString());
         }
         return mapPost(redirectAttributes, "/collect/payment-regulator");
+    }
+
+    @PostMapping(value = "/court/transfer")
+    public String postCourtTransfer(Model model, @ModelAttribute(Constants.FORM) @Validated Invoice invoice,
+                                               BindingResult binding,
+                                               RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(null, Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()){
+            invoice(invoice);
+        }
+        return mapPost(redirectAttributes, "/collect/court");
     }
 
     @PostMapping(value = "/troubled-customer/transfer")
@@ -225,6 +241,10 @@ public class CollectController extends SkeletonController {
         return mapFilter(sales, binding, redirectAttributes, "/collect/troubled-customer");
     }
 
+    @PostMapping(value = "/court/filter")
+    public String postCourtFilter(@ModelAttribute(Constants.FILTER) @Validated Sales sales, BindingResult binding, RedirectAttributes redirectAttributes) throws Exception {
+        return mapFilter(sales, binding, redirectAttributes, "/collect/court");
+    }
 
     @ResponseBody
     @GetMapping(value = "/api/contact-history/{dataId}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -252,5 +272,12 @@ public class CollectController extends SkeletonController {
             log.error(e.getMessage(), e);
         }
         return DateUtility.addDay(1);
+    }
+
+    private boolean isCourt(String page){
+        if(page.equalsIgnoreCase(Constants.ROUTE.COURT)){
+            return true;
+        }
+        return false;
     }
 }

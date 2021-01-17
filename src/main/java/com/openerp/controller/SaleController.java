@@ -1312,6 +1312,17 @@ public class SaleController extends SkeletonController {
         return mapPost(serviceRegulator, binding, redirectAttributes, "/sale/service-regulator");
     }
 
+    @PostMapping(value = "/sales/transfer")
+    public String postPaymentLatencyTransfer(@ModelAttribute(Constants.FORM) @Validated Sales sales,
+                                             BindingResult binding,
+                                             RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(null, Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()){
+            //transfer oper
+        }
+        return mapPost(redirectAttributes, "/sale/sales");
+    }
+
     @ResponseBody
     @GetMapping(value = "/api/service/inventory/{salesId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<SalesInventory> getSalesInventories(@PathVariable("salesId") Integer salesId){

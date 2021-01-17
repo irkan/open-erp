@@ -170,5 +170,6 @@ public class Constants {
         public static final String REPORT_COLLECT = "report-collect";
         public static final String ADVANCE_GROUP = "advance-group";
         public static final String ENDPOINT_DETAIL = "endpoint-detail";
+        public static final String COURT = "court";
     }
 }

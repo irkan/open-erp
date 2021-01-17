@@ -128,6 +128,13 @@ public class Sales {
     @Column(name = "returned_date")
     private Date returnedDate;
 
+    @Column(name = "is_court", nullable = false, columnDefinition="boolean default false")
+    private Boolean court = false;
+
+    @ToString.Exclude
+    @Transient
+    private String description;
+
     @Column(name = "is_not_service_next", nullable = false, columnDefinition="boolean default false")
     private Boolean notServiceNext = false;
 
