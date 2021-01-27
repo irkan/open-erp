@@ -71,6 +71,7 @@ public class ApiController extends SkeletonController {
                     if(channelReferenceCode!=null && channelReferenceCode.trim().length()>0){
                         List<Invoice> invoices = invoiceRepository.getInvoicesByChannelReferenceCode(channelReferenceCode.trim());
                         status = invoices.size()>0?false:true;
+                        response = new WSResponse("400", channelReferenceCode + " - referans nömrəsi mövcuddur!");
                     }
                     if(status){
                         Invoice invc = new Invoice();
@@ -83,7 +84,7 @@ public class ApiController extends SkeletonController {
                         invc.setPaymentChannel(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1("million", "payment-channel"));
                         invoiceRepository.save(invc);
 
-                        log(response,"invoice", "create/edit", invc.getId(), response.toString(), invc.getDescription(), webServiceAuthenticator.getUsername());
+                        log(invc,"invoice", "create/edit", invc.getId(), invc.toString(), invc.getDescription(), webServiceAuthenticator.getUsername());
 
                         try{
                             Transaction transaction = new Transaction();
@@ -123,6 +124,8 @@ public class ApiController extends SkeletonController {
                         }
 
                         response = new WSResponse("200", "OK", channelReferenceCode);
+                        log(response, "transaction", "create/edit", null, response.toString(), username+" ödəniş uğurla həyata keçdi!", webServiceAuthenticator.getUsername());
+
                     }
                 }
             }
