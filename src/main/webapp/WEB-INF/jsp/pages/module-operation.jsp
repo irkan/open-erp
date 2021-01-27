@@ -103,7 +103,7 @@
                         <form:label path="module.id">Modul</form:label>
                         <form:select  path="module.id" cssClass="custom-select form-control">
                             <form:option value=""></form:option>
-                            <form:options items="${modules}" itemLabel="name" itemValue="id" />
+                            <form:options items="${modules}" itemLabel="label" itemValue="id" />
                         </form:select>
                     </div>
                     <div class="form-group">

@@ -1318,7 +1318,13 @@ public class SaleController extends SkeletonController {
                                              RedirectAttributes redirectAttributes) throws Exception {
         redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(null, Constants.TEXT.SUCCESS));
         if(!binding.hasErrors()){
-            //transfer oper
+            Sales sale = salesRepository.getSalesById(sales.getId());
+            sale.setCourt(true);
+            salesRepository.save(sale);
+
+            log(sale, "sales", "create/edit", sale.getId(), sale.toString(), "Məhkəməyə göndərildi");
+
+            addContactHistory(sale, "Məhkəmə:" + Util.checkNull(sales.getDescription()), null);
         }
         return mapPost(redirectAttributes, "/sale/sales");
     }

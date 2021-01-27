@@ -3,6 +3,7 @@ package com.openerp.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.openerp.util.Util;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -56,6 +57,14 @@ public class Module {
     @JsonIgnore
     @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="module")
     private List<Module> children;
+
+    public String getLabel() {
+        String label = "";
+        if(module!=null && module.getName()!=null){
+            label=" - " + module.getName();
+        }
+        return name+label;
+    }
 
     public Module(String name, String description, String path, String icon, Module module) {
         this.name = name;

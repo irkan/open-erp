@@ -501,7 +501,7 @@
                                                         <i class="<c:out value="${return1.object.icon}"/>"></i> <c:out value="${return1.object.name}"/>
                                                     </a>
                                                     </c:if>
-                                                    <c:if test="${return1.status and t.approve}">
+                                                    <c:if test="${transfer.status and t.approve and !t.court}">
                                                     <a href="javascript:transfer($('#transfer-form'), '<c:out value="${t.id}"/>', 'transfer-modal-operation', '<c:out value="${transfer.object.name}"/> - Satış No: <c:out value="${t.id}"/>');" class="dropdown-item" title="<c:out value="${transfer.object.name}"/>">
                                                         <i class="<c:out value="${transfer.object.icon}"/>"></i> <c:out value="${transfer.object.name}"/>
                                                     </a>
@@ -2726,5 +2726,11 @@
 
     function selectLivingCity(form, element){
         $(form).find("select[name='customer.person.contact.livingCity.id'] option[value="+$(element).val()+"]").attr("selected", "selected");
+    }
+
+    function transfer(form, id, modal, modal_title){
+        $(form).find("input[name='id']").val(id);
+        $('#' + modal).find(".modal-title").html(modal_title);
+        $('#' + modal).modal('toggle');
     }
 </script>
