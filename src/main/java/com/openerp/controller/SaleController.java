@@ -58,6 +58,7 @@ public class SaleController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 Sales sales = new Sales(salesId, !canViewAll()?getSessionOrganization():null);
                 sales.setApprove(null);
+                sales.setCourt(null);
                 model.addAttribute(Constants.FILTER, sales);
             }
             if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
@@ -130,6 +131,7 @@ public class SaleController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 Sales sales = new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null, true, null);
                 sales.setApprove(null);
+                sales.setCourt(null);
                 model.addAttribute(Constants.FILTER, sales);
             }
             if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
@@ -1326,7 +1328,10 @@ public class SaleController extends SkeletonController {
 
             addContactHistory(sale, "Məhkəmə:" + Util.checkNull(sales.getDescription()), null);
         }
-        return mapPost(redirectAttributes, "/sale/sales");
+        if(sales.getService()){
+            return mapPost(sales, binding, redirectAttributes, "/sale/service");
+        }
+        return mapPost(sales, binding, redirectAttributes, "/sale/sales");
     }
 
     @ResponseBody

@@ -51,6 +51,9 @@ public class SalesService {
                 if(sales.getService()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("service"), sales.getService())));
                 }
+                if(sales.getCourt()!=null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("court"), sales.getCourt())));
+                }
                 if(sales.getSaleDateFrom()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.greaterThanOrEqualTo(root.get("saleDate"), sales.getSaleDateFrom())));
                 }

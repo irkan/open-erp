@@ -428,7 +428,10 @@
                                                 </c:if>
                                             </c:if>
                                             <c:if test="${t.returned and not empty t.returnedDate}">
-                                                Qytarılıb: <fmt:formatDate value = "${t.returnedDate}" pattern = "dd.MM.yyyy" />
+                                                Qytarılıb: <fmt:formatDate value = "${t.returnedDate}" pattern = "dd.MM.yyyy" /><br/>
+                                            </c:if>
+                                            <c:if test="${t.court}">
+                                                Məhkəmə
                                             </c:if>
                                         </td>
                                         <td>
@@ -502,8 +505,8 @@
                                                     </a>
                                                     </c:if>
                                                     <c:if test="${transfer.status and t.approve and !t.court}">
-                                                    <a href="javascript:transfer($('#transfer-form'), '<c:out value="${t.id}"/>', 'transfer-modal-operation', '<c:out value="${transfer.object.name}"/> - Satış No: <c:out value="${t.id}"/>');" class="dropdown-item" title="<c:out value="${transfer.object.name}"/>">
-                                                        <i class="<c:out value="${transfer.object.icon}"/>"></i> <c:out value="${transfer.object.name}"/>
+                                                    <a href="javascript:transfer($('#transfer-form'), '<c:out value="${t.id}"/>', 'transfer-modal-operation', 'Məhkəməyə <c:out value="${transfer.object.name}"/>-Satış: <c:out value="${t.id}"/>');" class="dropdown-item" title="<c:out value="${transfer.object.name}"/>">
+                                                        <i class="<c:out value="${transfer.object.icon}"/>"></i> Məhkəməyə <c:out value="${transfer.object.name}"/>
                                                     </a>
                                                     </c:if>
                                                     <c:if test="${edit.status and !t.approve}">

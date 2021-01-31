@@ -296,6 +296,11 @@
                                                     <i class="<c:out value="${delete.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
+                                            <c:if test="${transfer.status and t.approve and !t.court}">
+                                                <a href="javascript:transfer($('#transfer-form'), '<c:out value="${t.id}"/>', 'transfer-modal-operation', 'Məhkəməyə <c:out value="${transfer.object.name}"/>-Servis: <c:out value="${t.id}"/>');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Məhkəməyə <c:out value="${transfer.object.name}"/>">
+                                                    <i class="<c:out value="${transfer.object.icon}"/>"></i>
+                                                </a>
+                                            </c:if>
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -483,6 +488,33 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" onclick="submit($('#form'));">Yadda saxla</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="transfer-modal-operation" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Məhkəməyə yolla</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form:form modelAttribute="form" id="transfer-form" method="post" action="/sale/sales/transfer" cssClass="form-group">
+                    <form:hidden path="id"/>
+                    <div class="form-group">
+                        <form:label path="description">Açıqlama</form:label>
+                        <form:textarea path="description" cssClass="form-control"/>
+                        <form:errors path="description" cssClass="alert-danger control-label"/>
+                    </div>
+                </form:form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="submit($('#transfer-form'));">Yadda saxla</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
             </div>
         </div>
@@ -1131,5 +1163,11 @@ fixedHeader: {
                 })
             }
         });
+    }
+
+    function transfer(form, id, modal, modal_title){
+        $(form).find("input[name='id']").val(id);
+        $('#' + modal).find(".modal-title").html(modal_title);
+        $('#' + modal).modal('toggle');
     }
 </script>

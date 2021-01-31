@@ -66,6 +66,7 @@ public class ContactHistory {
     @Column(name = "created_date", nullable = false)
     private Date createdDate = new Date();
 
+    @ToString.Exclude
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;

@@ -44,7 +44,7 @@ public class CollectController extends SkeletonController {
             if(!model.containsAttribute(Constants.FILTER)){
                 salesObject.setApprove(false);
                 boolean isCourt = isCourt(page);
-                if(isCourt){
+                if(!isCourt){
                     Payment paymentObject = new Payment();
                     paymentObject.setPeriod(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1(Util.getPeriodDay(), "payment-period"));
                     salesObject.setPayment(paymentObject);
