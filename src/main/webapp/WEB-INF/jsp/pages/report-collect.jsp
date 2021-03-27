@@ -164,6 +164,10 @@
                 type: 'line',
                 data: []
             }, {
+                name: 'Məhkəmədə məbləğ',
+                type: 'line',
+                data: []
+            }, {
                 name: 'Ümumi say',
                 type: 'column',
                 data: []
@@ -173,6 +177,10 @@
                 data: []
             }, {
                 name: 'Problemli say',
+                type: 'column',
+                data: []
+            }, {
+                name: 'Məhkəmədə say',
                 type: 'column',
                 data: []
             }],
@@ -185,7 +193,7 @@
                 enabled: false
             },
             stroke: {
-                width: [4, 4, 4, 1, 1, 1]
+                width: [4, 4, 4, 4, 1, 1, 1, 1]
             },
             title: {
                 text: 'XYZ - 3 ölçülü yığım analizi',
@@ -304,7 +312,7 @@
                             total: {
                                 show: true,
                                 label: 'Cəmi',
-                                formatter: function (w) {
+                                formatter: function () {
                                     return totalSum;
                                 }
                             }
@@ -355,7 +363,7 @@
                             total: {
                                 show: true,
                                 label: 'Cəmi',
-                                formatter: function (w) {
+                                formatter: function () {
                                     return totalSum2;
                                 }
                             }
@@ -438,6 +446,8 @@
                 options.series[3].data = [];
                 options.series[4].data = [];
                 options.series[5].data = [];
+                options.series[6].data = [];
+                options.series[7].data = [];
 
                 pieoptions.labels = [];
                 pieoptions.series = [];
@@ -472,7 +482,7 @@
                 piechart.updateOptions(pieoptions);
                 barchart.updateOptions(baroptions);
 
-                $.each(jQuery.parseJSON(data.string5), function(key, val){
+                $.each(jQuery.parseJSON(data.string6), function(key, val){
                     pieoptions2.labels.push("Yığım məbləği");
                     pieoptions2.series.push(round(val.LAST_PRICE, 0));
                     pieoptions2.labels.push("Qalıq borc");
@@ -484,17 +494,22 @@
                 $.each(jQuery.parseJSON(data.string2), function(key, val){
                     options.xaxis.categories.push(val.ZAXIS);
                     options.series[0].data.push(round(val.YAXIS, 0));
-                    options.series[3].data.push(round(val.MAXIS, 0));
+                    options.series[4].data.push(round(val.MAXIS, 0));
                 });
 
                 $.each(jQuery.parseJSON(data.string3), function(key, val){
                     options.series[1].data.push(round(val.YAXIS, 0));
-                    options.series[4].data.push(round(val.MAXIS, 0));
+                    options.series[5].data.push(round(val.MAXIS, 0));
                 });
 
                 $.each(jQuery.parseJSON(data.string4), function(key, val){
                     options.series[2].data.push(round(val.YAXIS, 0));
-                    options.series[5].data.push(round(val.MAXIS, 0));
+                    options.series[6].data.push(round(val.MAXIS, 0));
+                });
+
+                $.each(jQuery.parseJSON(data.string5), function(key, val){
+                    options.series[3].data.push(round(val.YAXIS, 0));
+                    options.series[7].data.push(round(val.MAXIS, 0));
                 });
                 chart.updateOptions(options);
 

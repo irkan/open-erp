@@ -35,14 +35,10 @@ public class ReportController extends SkeletonController {
 
     @GetMapping(value = {"/{page}", "/{page}/{data}"})
     public String route(Model model, @PathVariable("page") String page, @PathVariable("data") Optional<String> data, RedirectAttributes redirectAttributes) throws Exception {
-        if(page.equalsIgnoreCase(Constants.ROUTE.REPORT_ACCOUNTING)){
-
-        } else if(page.equalsIgnoreCase(Constants.ROUTE.SALES_BALANCE)){
+        if(page.equalsIgnoreCase(Constants.ROUTE.SALES_BALANCE)){
             if(!model.containsAttribute(Constants.FILTER)){
                 model.addAttribute(Constants.FILTER, new Report());
             }
-        } else if(page.equalsIgnoreCase(Constants.ROUTE.SERVICE_BALANCE)){
-
         } else if(page.equalsIgnoreCase(Constants.ROUTE.DASHBOARD)){
             model.addAttribute(Constants.ORGANIZATIONS, organizationRepository.getOrganizationsByActiveTrue());
             model.addAttribute(Constants.FILTER, new Report());
@@ -86,11 +82,13 @@ public class ReportController extends SkeletonController {
             returnedReport.setString1(Util.checkNull(jsonObjects));
             report.setInteger1(2);
             returnedReport.setString2(Util.checkNull(reportingDao.reportPaymentLatencyPeriodly(report)));
-            report.setString7(" and pl1.latency_day<="+latencyDay+" ");
+            report.setString7(" and pl1.latency_day<="+latencyDay+" and s1.is_court=0 "); //latency customer
             returnedReport.setString3(Util.checkNull(reportingDao.reportPaymentLatencyPeriodly(report)));
-            report.setString7(" and pl1.latency_day>"+latencyDay+" "); // troubled customer
+            report.setString7(" and pl1.latency_day>"+latencyDay+" and s1.is_court=0 "); // troubled customer
             returnedReport.setString4(Util.checkNull(reportingDao.reportPaymentLatencyPeriodly(report)));
-            returnedReport.setString5(Util.checkNull(reportingDao.reportSales(report)));
+            report.setString7(" and s1.is_court=1 "); // Court customer
+            returnedReport.setString5(Util.checkNull(reportingDao.reportPaymentLatencyPeriodly(report)));
+            returnedReport.setString6(Util.checkNull(reportingDao.reportSales(report)));
         }
         return returnedReport;
     }
