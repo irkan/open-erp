@@ -164,14 +164,14 @@
 			<artifactId>spring-boot-starter-jdbc</artifactId>
 			<exclusions>
 				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-log4j12</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>log4j</groupId>
-					<artifactId>log4j</artifactId>
+					<groupId>com.zaxxer</groupId>
+					<artifactId>HikariCP</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-jdbc</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
@@ -265,7 +265,11 @@
 			<artifactId>springfox-bean-validators</artifactId>
 			<version>2.9.2</version>
 		</dependency>
-
+		<dependency>
+			<groupId>net.bull.javamelody</groupId>
+			<artifactId>javamelody-spring-boot-starter</artifactId>
+			<version>1.81.0</version>
+		</dependency>
 	</dependencies>
 
 	<scm>
