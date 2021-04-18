@@ -8,6 +8,9 @@ import com.openerp.util.DateUtility;
 import com.openerp.util.Util;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -23,6 +26,8 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.util.TimerTask;
+import java.util.regex.Pattern;
+
 import org.apache.commons.net.telnet.TelnetClient;
 
 @Component
@@ -41,94 +46,113 @@ public class EndpointStatusTask {
     @Scheduled(fixedDelay = 10000, initialDelay = 30000)
     public void service() {
         try{
-            for(Endpoint endpoint: endpointRepository.getEndpointsByActiveTrue()){
-                try{
-                    String type="info";
-                    String description = "";
-                    if (endpoint.getConnectionType().getAttr1().equalsIgnoreCase("ping")){
-                        InetAddress address = InetAddress.getByName(endpoint.getHost());
-                        if(address.isReachable(5000)){
-                            endpoint.setLastStatusDate(new Date());
-                            endpointRepository.save(endpoint);
-                        } else {
-                            type="error";
-                            description = endpoint.getHost()+" ping is not reachable";
-                        }
-                    } else if (endpoint.getConnectionType().getAttr1().equalsIgnoreCase("telnet")){
-                        TelnetClient telnet = new TelnetClient();
-                        try{
-                            boolean telnetStatus = false;
-                            try{
-                                telnet.connect(endpoint.getHost(),endpoint.getPort());
-                                telnetStatus = telnet.isConnected();
-                                telnet.disconnect();
-                            } catch (Exception e){}
-                            if(telnetStatus!=endpoint.getStatus()) {
-                                for (int i = 0; i < 3; i++) {
-                                    try{
-                                        telnet.connect(endpoint.getHost(),endpoint.getPort());
-                                        telnetStatus = telnet.isConnected();
-                                        telnet.disconnect();
-                                    } catch (Exception e){}
-                                }
-                            }
-                            if(telnetStatus!=endpoint.getStatus()){
+            TelnetClient telnet = new TelnetClient();
+            boolean telnetStatus = false;
+            try{
+                telnet.connect("google.com",443);
+                telnetStatus = telnet.isConnected();
+                telnet.disconnect();
+            } catch (Exception e){}
+
+            if(telnetStatus){
+                for(Endpoint endpoint: endpointRepository.getEndpointsByActiveTrue()){
+                    try{
+                        String type="info";
+                        String description = "";
+                        if (endpoint.getConnectionType().getAttr1().equalsIgnoreCase("ping")){
+                            InetAddress address = InetAddress.getByName(endpoint.getHost());
+                            if(address.isReachable(5000)){
                                 endpoint.setLastStatusDate(new Date());
-                                endpoint.setStatus(telnetStatus);
                                 endpointRepository.save(endpoint);
-                                description = (endpoint.getHost()!=null?endpoint.getHost():"") +
-                                        (endpoint.getPort()!=null?(":"+endpoint.getPort()):"") + " " +
-                                        (telnetStatus?"- AKTİVLƏŞDİRİLDİ":"- SÖNDÜ") + " / " +
-                                        DateUtility.getFormattedDateTimeSS(endpoint.getLastStatusDate());
-                                endpointDetailRepository.save(new EndpointDetail(endpoint, endpoint.getLastStatusDate(), telnet.isConnected(), description));
-
-                                if(endpoint.getEmail()!=null && endpoint.getEmail().trim().length()>3){
-                                    skeletonController.sendEmail(null, endpoint.getEmail(), description, description, description);
-                                }
+                            } else {
+                                type="error";
+                                description = endpoint.getHost()+" ping is not reachable";
                             }
-                        } catch (Exception e){
-                            log.error(e.getMessage(), e);
-                        } finally {
-                            telnet.disconnect();
-                        }
-
-                    } else if (endpoint.getConnectionType().getAttr1().equalsIgnoreCase("http")){
-                        try{
-                            boolean httpStatus = false;
+                        } else if (endpoint.getConnectionType().getAttr1().equalsIgnoreCase("telnet")){
                             try{
-                                Jsoup.connect(endpoint.getUrl()).ignoreHttpErrors(true).get();
-                                httpStatus = true;
-                            } catch (Exception e){}
-                            if(httpStatus!=endpoint.getStatus()) {
-                                for (int i = 0; i < 1; i++) {
-                                    try{
-                                        Jsoup.connect(endpoint.getUrl()).ignoreHttpErrors(true).get();
-                                        httpStatus = true;
-                                    } catch (Exception e){
-                                        httpStatus = false;
+                                telnetStatus = false;
+                                try{
+                                    telnet.connect(endpoint.getHost(),endpoint.getPort());
+                                    telnetStatus = telnet.isConnected();
+                                    telnet.disconnect();
+                                } catch (Exception e){}
+                                if(telnetStatus!=endpoint.getStatus()) {
+                                    for (int i = 0; i < 3; i++) {
+                                        try{
+                                            telnet.connect(endpoint.getHost(),endpoint.getPort());
+                                            telnetStatus = telnet.isConnected();
+                                            telnet.disconnect();
+                                        } catch (Exception e){}
                                     }
                                 }
-                            }
-                            if(httpStatus!=endpoint.getStatus()){
-                                endpoint.setLastStatusDate(new Date());
-                                endpoint.setStatus(httpStatus);
-                                endpointRepository.save(endpoint);
-                                description = endpoint.getUrl() + " " +
-                                        (httpStatus?"- AKTİVLƏŞDİRİLDİ":"- SÖNDÜ") + " / " +
-                                        DateUtility.getFormattedDateTimeSS(endpoint.getLastStatusDate());
-                                endpointDetailRepository.save(new EndpointDetail(endpoint, endpoint.getLastStatusDate(), httpStatus, description));
+                                if(telnetStatus!=endpoint.getStatus()){
+                                    endpoint.setLastStatusDate(new Date());
+                                    endpoint.setStatus(telnetStatus);
+                                    endpointRepository.save(endpoint);
+                                    description = (endpoint.getHost()!=null?endpoint.getHost():"") +
+                                            (endpoint.getPort()!=null?(":"+endpoint.getPort()):"") + " " +
+                                            (telnetStatus?"- AKTİVLƏŞDİRİLDİ":"- SÖNDÜ") + " / " +
+                                            DateUtility.getFormattedDateTimeSS(endpoint.getLastStatusDate());
+                                    endpointDetailRepository.save(new EndpointDetail(endpoint, endpoint.getLastStatusDate(), telnet.isConnected(), description));
 
-                                if(endpoint.getEmail()!=null && endpoint.getEmail().trim().length()>3){
-                                    skeletonController.sendEmail(null, endpoint.getEmail(), description, description, description);
+                                    if(endpoint.getEmail()!=null && endpoint.getEmail().trim().length()>3){
+                                        skeletonController.sendEmail(null, endpoint.getEmail(), description, description, description);
+                                    }
                                 }
+                            } catch (Exception e){
+                                log.error(e.getMessage(), e);
+                            } finally {
+                                telnet.disconnect();
                             }
-                        } catch (Exception e){
-                            log.error(e.getMessage(), e);
-                        }
 
+                        } else if (endpoint.getConnectionType().getAttr1().equalsIgnoreCase("http")){
+                            try{
+                                boolean httpStatus = false;
+                                try{
+                                    Jsoup.connect(endpoint.getUrl()).ignoreHttpErrors(true).get();
+                                    httpStatus = true;
+                                } catch (Exception e){}
+                                if(httpStatus!=endpoint.getStatus()) {
+                                    for (int i = 0; i < 1; i++) {
+                                        try{
+                                            Document document = Jsoup.connect(endpoint.getUrl()).ignoreHttpErrors(true).get();
+                                            Elements logins = document.body().getElementsByClass("login");
+                                            if(logins.size()>0){
+                                                httpStatus = true;
+                                            } else {
+                                                httpStatus = false;
+                                            }
+                                        } catch (Exception e){
+                                            httpStatus = false;
+                                        }
+                                    }
+                                }
+                                if(httpStatus!=endpoint.getStatus()){
+                                    endpoint.setLastStatusDate(new Date());
+                                    endpoint.setStatus(httpStatus);
+                                    endpointRepository.save(endpoint);
+                                    description = endpoint.getUrl() + " " +
+                                            (httpStatus?"- AKTİVLƏŞDİRİLDİ":"- SÖNDÜ") + " / " +
+                                            DateUtility.getFormattedDateTimeSS(endpoint.getLastStatusDate());
+                                    endpointDetailRepository.save(new EndpointDetail(endpoint, endpoint.getLastStatusDate(), httpStatus, description));
+
+                                    if(endpoint.getEmail()!=null && endpoint.getEmail().trim().length()>3){
+                                        if(endpoint.getEmail().trim().length()>0){
+                                            for(String email: endpoint.getEmail().trim().split(Pattern.quote(";"))){
+                                                if(email.matches(Constants.REGEX.REGEX4)){
+                                                    skeletonController.sendEmail(null, endpoint.getEmail(), description, description, description);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            } catch (Exception e){
+                                log.error(e.getMessage(), e);
+                            }
+                        }
+                    } catch (Exception e){
+                        log.error(e.getMessage(), e);
                     }
-                } catch (Exception e){
-                    log.error(e.getMessage(), e);
                 }
             }
         } catch (Exception e){
