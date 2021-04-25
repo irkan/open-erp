@@ -1727,6 +1727,8 @@ public class ReadWriteExcelFile {
 		cell = row.createCell(row.getLastCellNum());
 		cell.setCellValue("Aktiv");
 		cell = row.createCell(row.getLastCellNum());
+		cell.setCellValue("Məhkəmədədir");
+		cell = row.createCell(row.getLastCellNum());
 		cell.setCellValue("Qaytarılıb");
 		cell = row.createCell(row.getLastCellNum());
 		cell.setCellValue("Qaytarılma tarixi");
@@ -1829,6 +1831,8 @@ public class ReadWriteExcelFile {
 			cell.setCellValue(sale.getSaled());
 			cell = row.createCell(row.getLastCellNum());
 			cell.setCellValue(sale.getActive());
+			cell = row.createCell(row.getLastCellNum());
+			cell.setCellValue(sale.getCourt());
 			cell = row.createCell(row.getLastCellNum());
 			cell.setCellValue(sale.getReturned());
 			cell = row.createCell(row.getLastCellNum());

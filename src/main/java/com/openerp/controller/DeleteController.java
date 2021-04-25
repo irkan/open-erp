@@ -135,6 +135,10 @@ public class DeleteController extends SkeletonController {
             Endpoint endpoint = endpointRepository.getEndpointById(Integer.parseInt(id));
             log(endpoint, "endpoint", "delete", endpoint.getId(), endpoint.toString());
             endpointRepository.delete(endpoint);
+        } else if(path.equalsIgnoreCase(Constants.ROUTE.ENDPOINT_DETAIL)){
+            Endpoint endpoint = endpointRepository.getEndpointById(Integer.parseInt(id));
+            log(endpoint, "endpoint", "delete", endpoint.getId(), endpoint.toString());
+            endpointRepository.delete(endpoint);
         } else if(path.equalsIgnoreCase(Constants.ROUTE.COURT)){
             Sales sales = salesRepository.getSalesById(Integer.parseInt(id));
             sales.setCourt(!sales.getCourt());

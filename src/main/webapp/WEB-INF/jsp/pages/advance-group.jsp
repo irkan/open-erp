@@ -27,6 +27,8 @@
                            value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'transfer')}"/>
                     <c:set var="view1"
                            value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'employee', 'view')}"/>
+                    <c:set var="view2"
+                           value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'advance', 'view')}"/>
                     <c:choose>
                         <c:when test="${not empty list}">
                             <table class="table table-striped- table-bordered table-hover table-checkable"
@@ -57,7 +59,17 @@
                                 <tbody>
                                 <c:forEach var="t" items="${list}" varStatus="loop">
                                     <tr data="<c:out value="${t.employee.id}" />">
-                                        <td><c:out value="${t.employee.id}"/></td>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${view2.status}">
+                                                    <a href="/payroll/advance/<c:out value="${t.employee.id}"/>" class="kt-link kt-font-bolder"><c:out value="${t.employee.id}"/></a>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <c:out value="${t.employee.id}"/>
+                                                </c:otherwise>
+                                            </c:choose>
+
+                                        </td>
                                         <td data-sort="<c:out value="${t.employee.person.fullName}" />">
                                             <c:if test="${not empty t.employee.id}">
                                                 <a href="javascript:copyToClipboard2('<c:out value="${t.employee.id}" />', 'Əməkdaş kodu <b><c:out value="${t.employee.id}" /></b> kopyalandı')" class="kt-font-lg kt-font-bold kt-font-info kt-font-hover-danger pl-2 pr-2"><i class="la la-copy"></i></a>
@@ -102,11 +114,11 @@
                                                     <i class="<c:out value="${approve.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
-                                            <c:if test="${detail.status}">
+                                            <c:if test="${view2.status}">
                                                 <a href="/payroll/advance/<c:out value="${t.employee.id}"/>"
                                                    class="btn btn-sm btn-clean btn-icon btn-icon-md"
-                                                   title="<c:out value="${detail.object.name}"/>">
-                                                    <i class="la <c:out value="${detail.object.icon}"/>"></i>
+                                                   title="<c:out value="${view2.object.name}"/>">
+                                                    <i class="la <c:out value="${view2.object.icon}"/>"></i>
                                                 </a>
                                             </c:if>
                                             <c:if test="${transfer.status}">
@@ -180,7 +192,7 @@
 <script>
 
     $('#group_table tbody').on('dblclick', 'tr', function () {
-        <c:if test="${detail.status}">
+        <c:if test="${view2.status}">
         swal.showLoading();
         location.href = '/payroll/advance/' + $(this).attr('data');
         window.reload();

@@ -77,6 +77,7 @@ public class Constants {
     public static final String CATEGORIES = "categories";
     public static final String POSTPONES = "postpones";
     public static final String ADVANCE = "advance";
+    public static final String ENDPOINTS = "endpoints";
 
     public static final class STATUS{
         public static final String RESPONSE = "response";
@@ -171,5 +172,6 @@ public class Constants {
         public static final String ADVANCE_GROUP = "advance-group";
         public static final String ENDPOINT_DETAIL = "endpoint-detail";
         public static final String COURT = "court";
+        public static final String REPORT_ENDPOINT = "report-endpoint";
     }
 }

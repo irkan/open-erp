@@ -486,4 +486,80 @@ public class ReportingDao implements IReportingDao {
         }
         return null;
     }
+
+    @Override
+    public List<JSONObject> reportCalculateDownTimeLine(Report report) throws Exception {
+        List<JSONObject> jsonObjects = new ArrayList<>();
+        try(Connection connection = dataSource.getConnection()) {
+            String orderby = "";
+            String groupby = "";
+            String condition = "";
+            String select = "";
+            switch (Util.parseInt(report.getInteger1())){
+                case 1:
+                    orderby = "  order by xaxis ";
+                    groupby = " GROUP BY MONTH(ed.down_date), DAY(ed.down_date) ";
+                    condition = " and ed.down_date>=DATE_SUB(CURDATE(), INTERVAL 1 MONTH) ";
+                    select = " ed.down_date xaxis, DAY(ed.down_date) zaxis ";
+                    break;
+                case 2:
+                    orderby = "  order by xaxis, zaxis ";
+                    groupby = " GROUP BY YEAR(ed.down_date), MONTH(ed.down_date) ";
+                    condition = " and ed.down_date>=DATE_SUB(CURDATE(), INTERVAL 13 MONTH) ";
+                    select = " MONTH(ed.down_date) zaxis, YEAR(ed.down_date) xaxis ";
+                    break;
+                case 3:
+                    orderby = "  order by xaxis ";
+                    groupby = " GROUP BY YEAR(ed.down_date) ";
+                    condition = " and ed.down_date>=DATE_SUB(CURDATE(), INTERVAL 10 YEAR) ";
+                    select = " YEAR(ed.down_date) xaxis, YEAR(ed.down_date) zaxis ";
+                    break;
+                default:
+                    orderby = "  order by xaxis ";
+                    groupby = " GROUP BY MONTH(ed.down_date), DAY(ed.down_date) ";
+                    condition = " and ed.down_date>=DATE_SUB(CURDATE(), INTERVAL 8 DAY) ";
+                    select = " DAY(ed.down_date) xaxis, DAY(ed.down_date) zaxis ";
+                    break;
+            }
+            String sql = "select " + select + ", CEIL(IFNULL(sum(ed.different), 0)/(1000*60)) yaxis " +
+                    " from endpoint_detail ed, endpoint e " +
+                    " where e.id = ed.endpoint_id and ed.up_date is not null and ed.down_date is not null " +
+                    " and ed.is_active=1 " +
+                    condition + Util.checkNull(report.getString1()) + Util.checkNull(report.getString2()) +
+                    Util.checkNull(report.getString3()) + groupby + orderby;
+            try(PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                try(ResultSet resultSet = preparedStatement.executeQuery()) {
+                    jsonObjects = Util.getFormattedResult(resultSet);
+                }
+            }
+        } catch(Exception e){
+            log.error(e.getMessage(), e);
+        }
+        return ReportUtil.correct(jsonObjects, report);
+    }
+
+    @Override
+    public List<JSONObject> reportCalculateDownTimePie(Report report) throws Exception {
+        List<JSONObject> jsonObjects = new ArrayList<>();
+        try(Connection connection = dataSource.getConnection()) {
+
+            String sql = " select a.ALL_TIME, a.DOWN_TIME, (a.ALL_TIME-a.DOWN_TIME) UP_TIME from " +
+                    " (select CEIL(TIMESTAMPDIFF(MINUTE, STR_TO_DATE('"+report.getString2()+"', '%d.%m.%Y'),STR_TO_DATE('"+report.getString3()+"', '%d.%m.%Y'))) ALL_TIME, " +
+                    "       CEIL(sum(ed.different)/(1000*60)) DOWN_TIME " +
+                    " from endpoint_detail ed, endpoint e " +
+                    " where e.id = ed.endpoint_id and ed.up_date is not null " +
+                    "  and ed.down_date is not null and ed.is_active=1 " +
+                    Util.checkNull(report.getString1()) +
+                    "  and ed.down_date between STR_TO_DATE('"+report.getString2()+"', '%d.%m.%Y') and STR_TO_DATE('"+report.getString3()+"', '%d.%m.%Y')) a ";
+
+            try(PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                try(ResultSet resultSet = preparedStatement.executeQuery()) {
+                    jsonObjects = Util.getFormattedResult(resultSet);
+                }
+            }
+        } catch(Exception e){
+            log.error(e.getMessage(), e);
+        }
+        return jsonObjects;
+    }
 }

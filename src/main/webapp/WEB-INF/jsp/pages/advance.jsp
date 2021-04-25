@@ -186,6 +186,7 @@
         <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
     <thead>
     <tr>
+        <th style="min-width: 40px;"></th>
         <th>ID</th>
         <th>Avans</th>
         <th>Satış|Servis</th>
@@ -204,6 +205,14 @@
     <tbody>
     <c:forEach var="t" items="${list.content}" varStatus="loop">
         <tr data="<c:out value="${t.id}" />" class="<c:out value="${(t.payed lt 0)?'strikeout':''}"/> ">
+            <td>
+                <c:if test="${!t.approve}">
+                    <label class="checkbox checkbox-single" style="margin-bottom: 0;">
+                        <input type="checkbox" value="<c:out value="${t.id}" />" label="<c:out value="${t.advance.name}" /> / <c:out value="${t.employee.person.fullName}" /> / <fmt:formatDate value = "${t.advanceDate}" pattern = "dd.MM.yyyy" /> / <c:out value="${t.payed}" /> AZN" class="checkable" style="width: 20px; height: 20px;"/>
+                        <span></span>
+                    </label>
+                </c:if>
+            </td>
             <td><c:out value="${t.id}" /></td>
             <td><c:out value="${t.advance.name}" /></td>
             <td style="min-width: 125px;" data-sort="<c:out value="${t.sales.id}" />">
@@ -388,6 +397,7 @@
             <div class="modal-body">
                 <form:form modelAttribute="form" id="advance-approve-form" method="post" action="/payroll/advance/approve" cssClass="form-group">
                     <form:hidden path="id"/>
+                    <form:hidden path="ids"/>
                     <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>
                         <form:textarea path="description" cssClass="form-control"/>
@@ -402,6 +412,7 @@
                         <form:errors path="payed" cssClass="alert-danger control-label"/>
                     </div>
                 </form:form>
+                <div id="label-description"></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" onclick="submit($('#advance-approve-form'));">Bəli, təsdiq edirəm!</button>
@@ -450,6 +461,20 @@
         $(form).find("#id").val(id);
         $(form).find("#payed").val(payed);
         $(form).find("#description").val(description);
+        if($("#datatable").find("input[type=checkbox]:checked").length>1){
+            var ids="";
+            var labels="";
+            $("#datatable").find("input[type=checkbox]:checked").map(function(index) {
+                ids+=$(this).val()+",";
+                labels+=(index+1) + ". " + $(this).attr('label')+"<br\><br\>";
+            });
+            $(form).hide();
+            $(form).find("input[name='ids']").val(ids);
+            $("#label-description").html(labels);
+        } else {
+            $(form).show();
+            $("#label-description").html('');
+        }
 
         $(modal).find(".modal-title").html('Təsdiq et!');
         $(modal).modal('toggle');
@@ -500,11 +525,23 @@ fixedHeader: {
         columnDefs: [
             {
                 targets: 0,
-                width: '25px',
-                className: 'dt-center',
-                orderable: false
+                width: '30px',
+                className: 'text-center pt-3',
+                orderable: false,
+                selectRow: true
             },
         ],
+        select: {
+            style:    'multi',
+            selector: 'td:first-child'
+        }
+    }).on("click", "input[type='checkbox']", function(){
+        var sales = $(this).attr('sales');
+        var status = false;
+        if(status){
+            $("input.checkable:checked").prop('checked', false);
+            $(this).prop('checked', true);
+        }
     });
 
     $( "#form" ).validate({

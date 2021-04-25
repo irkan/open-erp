@@ -26,6 +26,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import org.apache.commons.net.telnet.TelnetClient;
@@ -68,7 +69,62 @@ public class EndpointStatusTask {
                                 type="error";
                                 description = endpoint.getHost()+" ping is not reachable";
                             }
-                        } else if (endpoint.getConnectionType().getAttr1().equalsIgnoreCase("telnet")){
+                        } else if (endpoint.getConnectionType().getAttr1().equalsIgnoreCase("http")){
+                            try{
+                                boolean httpStatus = false;
+                                try{
+                                    Document document = Jsoup.connect(endpoint.getUrl()).ignoreHttpErrors(true).get();
+                                    Elements logins = document.body().getElementsByClass(endpoint.getCssClass());
+                                    if(logins.size()>0){
+                                        httpStatus = true;
+                                    } else {
+                                        httpStatus = false;
+                                    }
+                                } catch (Exception e){
+                                    httpStatus = false;
+                                }
+                                if(httpStatus!=endpoint.getStatus()){
+                                    endpoint.setLastStatusDate(new Date());
+                                    endpoint.setStatus(httpStatus);
+                                    endpointRepository.save(endpoint);
+
+                                    description = endpoint.getUrl() + " " +
+                                            (httpStatus?"- AKTİVLƏŞDİRİLDİ":"- SÖNDÜ") + " / " +
+                                            DateUtility.getFormattedDateTimeSS(endpoint.getLastStatusDate());
+                                    EndpointDetail endpointDetail=null;
+                                    if(!httpStatus){
+                                        endpointDetail = new EndpointDetail();
+                                        endpointDetail.setEndpoint(endpoint);
+                                        endpointDetail.setDescription(description);
+                                        endpointDetail.setDownDate(endpoint.getLastStatusDate());
+                                    } else {
+                                        List<EndpointDetail> endpointDetails = endpointDetailRepository.getEndpointDetailsByDownDateIsNotNullAndUpDateIsNullAndActiveTrueOrderByDownDateDesc();
+                                        if(endpointDetails.size()>0){
+                                            endpointDetail = endpointDetails.get(0);
+                                            endpointDetail.setUpDate(endpoint.getLastStatusDate());
+                                            endpointDetail.setDescription(endpointDetail.getDescription()+";  " + description);
+                                            endpointDetail.setDifferent(TimeUnit.SECONDS.convert(endpointDetail.getUpDate().getTime()-endpointDetail.getDownDate().getTime(), TimeUnit.SECONDS));
+                                        }
+                                    }
+                                    if(endpointDetail!=null){
+                                        endpointDetailRepository.save(endpointDetail);
+                                    }
+
+
+                                    if(endpoint.getEmail()!=null && endpoint.getEmail().trim().length()>3){
+                                        if(endpoint.getEmail().trim().length()>0){
+                                            for(String email: endpoint.getEmail().trim().split(Pattern.quote(";"))){
+                                                if(email.matches(Constants.REGEX.REGEX4)){
+                                                    skeletonController.sendEmail(null, endpoint.getEmail(), description, description, description);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            } catch (Exception e){
+                                log.error(e.getMessage(), e);
+                            }
+                        } /*else if (endpoint.getConnectionType().getAttr1().equalsIgnoreCase("telnet")){
                             try{
                                 telnetStatus = false;
                                 try{
@@ -86,14 +142,11 @@ public class EndpointStatusTask {
                                     }
                                 }
                                 if(telnetStatus!=endpoint.getStatus()){
-                                    endpoint.setLastStatusDate(new Date());
-                                    endpoint.setStatus(telnetStatus);
-                                    endpointRepository.save(endpoint);
                                     description = (endpoint.getHost()!=null?endpoint.getHost():"") +
                                             (endpoint.getPort()!=null?(":"+endpoint.getPort()):"") + " " +
                                             (telnetStatus?"- AKTİVLƏŞDİRİLDİ":"- SÖNDÜ") + " / " +
                                             DateUtility.getFormattedDateTimeSS(endpoint.getLastStatusDate());
-                                    endpointDetailRepository.save(new EndpointDetail(endpoint, endpoint.getLastStatusDate(), telnet.isConnected(), description));
+                                    endpointDetailRepository.save(new EndpointDetail(endpoint, description));
 
                                     if(endpoint.getEmail()!=null && endpoint.getEmail().trim().length()>3){
                                         skeletonController.sendEmail(null, endpoint.getEmail(), description, description, description);
@@ -105,51 +158,7 @@ public class EndpointStatusTask {
                                 telnet.disconnect();
                             }
 
-                        } else if (endpoint.getConnectionType().getAttr1().equalsIgnoreCase("http")){
-                            try{
-                                boolean httpStatus = false;
-                                try{
-                                    Jsoup.connect(endpoint.getUrl()).ignoreHttpErrors(true).get();
-                                    httpStatus = true;
-                                } catch (Exception e){}
-                                if(httpStatus!=endpoint.getStatus()) {
-                                    for (int i = 0; i < 1; i++) {
-                                        try{
-                                            Document document = Jsoup.connect(endpoint.getUrl()).ignoreHttpErrors(true).get();
-                                            Elements logins = document.body().getElementsByClass("login");
-                                            if(logins.size()>0){
-                                                httpStatus = true;
-                                            } else {
-                                                httpStatus = false;
-                                            }
-                                        } catch (Exception e){
-                                            httpStatus = false;
-                                        }
-                                    }
-                                }
-                                if(httpStatus!=endpoint.getStatus()){
-                                    endpoint.setLastStatusDate(new Date());
-                                    endpoint.setStatus(httpStatus);
-                                    endpointRepository.save(endpoint);
-                                    description = endpoint.getUrl() + " " +
-                                            (httpStatus?"- AKTİVLƏŞDİRİLDİ":"- SÖNDÜ") + " / " +
-                                            DateUtility.getFormattedDateTimeSS(endpoint.getLastStatusDate());
-                                    endpointDetailRepository.save(new EndpointDetail(endpoint, endpoint.getLastStatusDate(), httpStatus, description));
-
-                                    if(endpoint.getEmail()!=null && endpoint.getEmail().trim().length()>3){
-                                        if(endpoint.getEmail().trim().length()>0){
-                                            for(String email: endpoint.getEmail().trim().split(Pattern.quote(";"))){
-                                                if(email.matches(Constants.REGEX.REGEX4)){
-                                                    skeletonController.sendEmail(null, endpoint.getEmail(), description, description, description);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            } catch (Exception e){
-                                log.error(e.getMessage(), e);
-                            }
-                        }
+                        }*/
                     } catch (Exception e){
                         log.error(e.getMessage(), e);
                     }

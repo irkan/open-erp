@@ -240,10 +240,11 @@ public class AdministratorController extends SkeletonController {
                 return exportExcel(endpoints, redirectAttributes, page);
             }
         } else if (page.equalsIgnoreCase(Constants.ROUTE.ENDPOINT_DETAIL)) {
+            model.addAttribute(Constants.CONNECTION_TYPES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("connection-type"));
             if (!model.containsAttribute(Constants.FILTER)) {
                 Endpoint endpoint = new Endpoint();
                 endpoint.setId((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null);
-                model.addAttribute(Constants.FILTER, new EndpointDetail(null, endpoint));
+                model.addAttribute(Constants.FILTER, new EndpointDetail(endpoint, null));
             }
             if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
                     session.getAttribute(Constants.SESSION_FILTER) instanceof EndpointDetail){

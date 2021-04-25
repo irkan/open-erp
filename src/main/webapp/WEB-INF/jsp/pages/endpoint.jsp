@@ -13,7 +13,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <div class="kt-container  kt-grid__item kt-grid__item--fluid">
     <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
-    <c:set var="filter" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'filter')}"/>
+    <c:set var="view1" value="${utl:checkOperation(sessionScope.user.userModuleOperations, 'endpoint-detail', 'view')}"/>
     <c:if test="${filter.status}">
         <div class="accordion  accordion-toggle-arrow mb-2" id="accordionFilter">
             <div class="card" style="border-radius: 4px;">
@@ -142,6 +142,7 @@
                                     <th>Port</th>
                                     <th>Period san.</th>
                                     <th>Url</th>
+                                    <th>Css Class</th>
                                     <th>Email</th>
                                     <th>Telefon</th>
                                     <th>Status</th>
@@ -156,10 +157,20 @@
                                          <td><c:out value="${t.id}" /></td>
                                          <th><c:out value="${t.connectionType.name}" /></th>
                                          <td><fmt:formatDate value = "${t.lastStatusDate}" pattern = "dd.MM.yyyy HH:mm" /></td>
-                                         <td><c:out value="${t.host}" /></td>
+                                         <td>
+                                             <c:choose>
+                                                 <c:when test="${view1.status}">
+                                                     <a href="/admin/endpoint-detail/<c:out value="${t.id}" />" class="kt-link kt-font-bolder"><c:out value="${t.host}" /></a>
+                                                 </c:when>
+                                                 <c:otherwise>
+                                                     <c:out value="${t.host}" />
+                                                 </c:otherwise>
+                                             </c:choose>
+                                         </td>
                                          <td><c:out value="${t.port}" /></td>
                                          <td><c:out value="${t.fixedDelay}" /></td>
                                          <td><c:out value="${t.url}" /></td>
+                                         <td><c:out value="${t.cssClass}" /></td>
                                          <td><div style="word-wrap: break-word; max-width: 200px;"><c:out value="${t.email}" /></div></td>
                                          <td><div style="word-wrap: break-word; max-width: 150px;"><c:out value="${t.phoneNumber}" /></div></td>
                                          <td class="text-center">
@@ -268,12 +279,17 @@
                             </div>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <form:label path="url">URL</form:label>
+                        <form:input path="url" cssClass="form-control"/>
+                        <form:errors path="url" cssClass="alert-danger control-label"/>
+                    </div>
                     <div class="row">
                         <div class="col-md-8">
                             <div class="form-group">
-                                <form:label path="url">URL</form:label>
-                                <form:input path="url" cssClass="form-control"/>
-                                <form:errors path="url" cssClass="alert-danger control-label"/>
+                                <form:label path="cssClass">CSS Class</form:label>
+                                <form:input path="cssClass" cssClass="form-control"/>
+                                <form:errors path="cssClass" cssClass="alert-danger control-label"/>
                             </div>
                         </div>
                         <div class="col-md-4">

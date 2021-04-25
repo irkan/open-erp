@@ -302,12 +302,31 @@ public class PayrollController extends SkeletonController {
             binding.addError(fieldError);
         }
         if(!binding.hasErrors()){
-            adv.setDescription(advance.getDescription());
-            adv.setPayed(advance.getPayed());
-            adv.setApprove(true);
-            adv.setApproveDate(new Date());
-            advanceRepository.save(adv);
-            log(adv, "advance", "approve", adv.getId(), adv.toString());
+            if(advance.getIds()!=null && advance.getIds().trim().length()>0){
+                String[] ids = advance.getIds().split(",");
+                List<Advance> advances = new ArrayList<>();
+                for(String id: ids){
+                    if(id!=null && id.trim().length()>0 && id.matches(Constants.REGEX.REGEX3)){
+                        adv = advanceRepository.getAdvanceById(Integer.parseInt(id));
+                        if(adv!=null && adv.getId()!=null){
+                            adv.setApprove(true);
+                            adv.setApproveDate(new Date());
+                            advances.add(adv);
+                        }
+                    }
+                }
+                advanceRepository.saveAll(advances);
+                for (Advance advance1 : advances) {
+                    log(advance1, "advance", "approve", advance1.getId(), advance1.toString());
+                }
+            } else {
+                adv.setDescription(advance.getDescription());
+                adv.setPayed(advance.getPayed());
+                adv.setApprove(true);
+                adv.setApproveDate(new Date());
+                advanceRepository.save(adv);
+                log(adv, "advance", "approve", adv.getId(), adv.toString());
+            }
         }
         return mapPost(advance, binding, redirectAttributes, "/payroll/advance");
     }

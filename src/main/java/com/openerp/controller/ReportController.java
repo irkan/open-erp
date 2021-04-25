@@ -48,8 +48,31 @@ public class ReportController extends SkeletonController {
         } else if(page.equalsIgnoreCase(Constants.ROUTE.REPORT_COLLECT)){
             model.addAttribute(Constants.ORGANIZATIONS, organizationRepository.getOrganizationsByActiveTrue());
             model.addAttribute(Constants.FILTER, new Report());
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.REPORT_ENDPOINT)){
+            model.addAttribute(Constants.ENDPOINTS, endpointRepository.getEndpointsByActiveTrue());
+            model.addAttribute(Constants.FILTER, new Report());
         }
         return "layout";
+    }
+
+    @ResponseBody
+    @PostMapping(value = "/api/report-endpoint-line", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Report postReportEndpoint(@ModelAttribute(Constants.FILTER) @Validated Report report, BindingResult binding) throws Exception {
+        Report returnedReport = new Report();
+        if(!binding.hasErrors()){
+            returnedReport.setString1(Util.checkNull(reportingDao.reportCalculateDownTimeLine(report)));
+        }
+        return returnedReport;
+    }
+
+    @ResponseBody
+    @PostMapping(value = "/api/report-endpoint-pie", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Report postReportPie(@ModelAttribute(Constants.FILTER) @Validated Report report, BindingResult binding) throws Exception {
+        Report returnedReport = new Report();
+        if(!binding.hasErrors()){
+            returnedReport.setString1(Util.checkNull(reportingDao.reportCalculateDownTimePie(report)));
+        }
+        return returnedReport;
     }
 
     @ResponseBody

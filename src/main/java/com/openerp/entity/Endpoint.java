@@ -48,6 +48,9 @@ public class Endpoint {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Column(name = "css_class")
+    private String cssClass;
+
     @Transient
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
@@ -64,4 +67,9 @@ public class Endpoint {
 
     @Column(name = "is_status", nullable = false, columnDefinition="boolean default false")
     private Boolean status = false;
+
+    @Transient
+    public String getReportCondition() {
+        return " and e.id=" + this.id + " ";
+    }
 }

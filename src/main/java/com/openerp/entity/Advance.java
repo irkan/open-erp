@@ -1,5 +1,6 @@
 package com.openerp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.javafaker.Bool;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,6 +26,11 @@ public class Advance {
     @SequenceGenerator(sequenceName = "advance_seq", allocationSize = 1, name = "advance_seq")
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
+
+    @ToString.Exclude
+    @Transient
+    @JsonIgnore
+    private String ids;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "dictionary_advance_id")

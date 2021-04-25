@@ -32,7 +32,7 @@
                 </div>
                 <div id="filterContent" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionFilter">
                     <div class="card-body">
-                        <form:form modelAttribute="filter" id="filter" method="post" action="/admin/endpoint/filter">
+                        <form:form modelAttribute="filter" id="filter" method="post" action="/admin/endpoint-detail/filter">
                             <div class="row">
                                 <div class="col-md-11">
                                     <div class="row">
@@ -45,12 +45,12 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="connectionType.id">Bağlanma tipi</form:label>
-                                                <form:select path="connectionType.id" cssClass="custom-select form-control">
+                                                <form:label path="endpoint.connectionType.id">Bağlanma tipi</form:label>
+                                                <form:select path="endpoint.connectionType.id" cssClass="custom-select form-control">
                                                     <form:option value=""></form:option>
                                                     <form:options items="${connection_types}" itemLabel="name" itemValue="id"/>
                                                 </form:select>
-                                                <form:errors path="connectionType.id" cssClass="alert-danger"/>
+                                                <form:errors path="endpoint.connectionType.id" cssClass="alert-danger"/>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
@@ -62,9 +62,9 @@
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="lastStatusDateFrom">Tarixdən</form:label>
+                                                <form:label path="downDateFrom">Tarixdən</form:label>
                                                 <div class="input-group date">
-                                                    <form:input path="lastStatusDateFrom" autocomplete="off"
+                                                    <form:input path="downDateFrom" autocomplete="off"
                                                                 cssClass="form-control datepicker-element" date_="date_"
                                                                 placeholder="dd.MM.yyyy"/>
                                                     <div class="input-group-append">
@@ -73,14 +73,14 @@
                                         </span>
                                                     </div>
                                                 </div>
-                                                <form:errors path="lastStatusDateFrom" cssClass="control-label alert-danger"/>
+                                                <form:errors path="downDateFrom" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="form-group">
-                                                <form:label path="lastStatusDate">Tarixədək</form:label>
+                                                <form:label path="downDate">Tarixədək</form:label>
                                                 <div class="input-group date">
-                                                    <form:input path="lastStatusDate" autocomplete="off"
+                                                    <form:input path="downDate" autocomplete="off"
                                                                 cssClass="form-control datepicker-element" date_="date_"
                                                                 placeholder="dd.MM.yyyy"/>
                                                     <div class="input-group-append">
@@ -89,7 +89,7 @@
                                         </span>
                                                     </div>
                                                 </div>
-                                                <form:errors path="lastStatusDate" cssClass="control-label alert-danger"/>
+                                                <form:errors path="downDate" cssClass="control-label alert-danger"/>
                                             </div>
                                         </div>
                                         <c:if test="${delete.status}">
@@ -127,85 +127,40 @@
                 <div class="kt-portlet__body">
                     <c:choose>
                         <c:when test="${not empty list}">
-                            <c:set var="edit" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'edit')}"/>
                             <c:set var="view" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'view')}"/>
-                            <c:set var="start" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'start')}"/>
-                            <c:set var="stop" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'stop')}"/>
                             <c:set var="export" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'export')}"/>
+                            <c:set var="delete" value="${utl:checkOperation(sessionScope.user.userModuleOperations, page, 'delete')}"/>
                             <table class="table table-striped- table-bordered table-hover table-checkable" id="datatable">
                                 <thead>
                                 <tr>
                                     <th>ID</th>
                                     <th>Bağlanma tipi</th>
-                                    <th>Tarix</th>
                                     <th>Host</th>
-                                    <th>Port</th>
-                                    <th>Period san.</th>
-                                    <th>Url</th>
-                                    <th>Email</th>
-                                    <th>Telefon</th>
-                                    <th>Status</th>
-                                    <th>Aktiv</th>
                                     <th>Açıqlama</th>
+                                    <th>Down</th>
+                                    <th>UP</th>
+                                    <th>Vaxt</th>
                                     <th>Əməliyyat</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <c:forEach var="t" items="${list.content}" varStatus="loop">
-                                     <tr data="<c:out value="${utl:toJson(t)}" />">
+                                     <tr data="<c:out value="${t.id}" />">
                                          <td><c:out value="${t.id}" /></td>
-                                         <th><c:out value="${t.connectionType.name}" /></th>
-                                         <th><fmt:formatDate value = "${t.lastStatusDate}" pattern = "dd.MM.yyyy HH:mm" /></th>
-                                         <td><c:out value="${t.host}" /></td>
-                                         <td><c:out value="${t.port}" /></td>
-                                         <td><c:out value="${t.fixedDelay}" /></td>
-                                         <td><c:out value="${t.url}" /></td>
-                                         <td><c:out value="${t.email}" /></td>
-                                         <td><c:out value="${t.phoneNumber}" /></td>
-                                         <td class="text-center">
-                                             <c:choose>
-                                                 <c:when test="${t.status}">
-                                                     <span class="kt-badge kt-badge--success kt-badge--inline kt-badge--pill"></span>
-                                                 </c:when>
-                                                 <c:otherwise>
-                                                     <span class="kt-badge kt-badge--danger kt-badge--inline kt-badge--pill"></span>
-                                                 </c:otherwise>
-                                             </c:choose>
-                                         </td>
-                                         <td>
-                                             <c:choose>
-                                                 <c:when test="${t.active}">
-                                                     <span class="kt-badge kt-badge--success kt-badge--inline kt-badge--pill">Aktivdir</span>
-                                                 </c:when>
-                                                 <c:otherwise>
-                                                     <span class="kt-badge kt-badge--danger kt-badge--inline kt-badge--pill">Aktiv deyil</span>
-                                                 </c:otherwise>
-                                             </c:choose>
-                                         </td>
+                                         <th><c:out value="${t.endpoint.connectionType.name}" /></th>
+                                         <td><c:out value="${t.endpoint.host}" /></td>
                                          <td><c:out value="${t.description}" /></td>
+                                         <th><fmt:formatDate value = "${t.downDate}" pattern = "dd.MM.yyyy HH:mm:ss" /></th>
+                                         <th><fmt:formatDate value = "${t.upDate}" pattern = "dd.MM.yyyy HH:mm:ss" /></th>
+                                         <td><c:out value="${t.different}" /></td>
                                          <td nowrap class="text-center">
-                                             <c:if test="${start.status and !t.active}">
-                                                 <a href="javascript:execute($('#execute-form'), '<c:out value="${utl:toJson(t)}" />', 'execute-modal-operation', '<c:out value="${start.object.name}" />', 'AKTİVLƏŞDİRİLİR');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${start.object.name}"/>">
-                                                     <i class="<c:out value="${start.object.icon}"/>"></i>
-                                                 </a>
-                                             </c:if>
-                                             <c:if test="${stop.status and t.active}">
-                                                 <a href="javascript:execute($('#execute-form'), '<c:out value="${utl:toJson(t)}" />', 'execute-modal-operation', '<c:out value="${stop.object.name}" />', 'DAYANDIRILIR');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${stop.object.name}"/>">
-                                                     <i class="<c:out value="${stop.object.icon}"/>"></i>
-                                                 </a>
-                                             </c:if>
                                              <c:if test="${view.status}">
                                                  <a href="javascript:view($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${view.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${view.object.name}"/>">
                                                      <i class="<c:out value="${view.object.icon}"/>"></i>
                                                  </a>
                                              </c:if>
-                                             <c:if test="${edit.status}">
-                                                 <a href="javascript:edit($('#form'), '<c:out value="${utl:toJson(t)}" />', 'modal-operation', '<c:out value="${edit.object.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${edit.object.name}"/>">
-                                                     <i class="<c:out value="${edit.object.icon}"/>"></i>
-                                                 </a>
-                                             </c:if>
                                              <c:if test="${delete.status}">
-                                                 <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.connectionType.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
+                                                 <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.endpoint.connectionType.name}" />');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
                                                      <i class="<c:out value="${delete.object.icon}"/>"></i>
                                                  </a>
                                              </c:if>
@@ -240,59 +195,59 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form:form modelAttribute="form" id="form" method="post" action="/admin/endpoint" cssClass="form-group">
+                <form:form modelAttribute="form" id="form" method="post" action="/admin/endpoint2" cssClass="form-group">
                     <form:hidden path="id"/>
                     <form:hidden path="active"/>
-                    <form:hidden path="status"/>
+                    <form:hidden path="endpoint.status"/>
                     <div class="form-group">
-                        <form:label path="connectionType.id">Bağlanma tipi</form:label>
-                        <form:select path="connectionType.id" cssClass="custom-select form-control">
+                        <form:label path="endpoint.connectionType.id">Bağlanma tipi</form:label>
+                        <form:select path="endpoint.connectionType.id" cssClass="custom-select form-control">
                             <form:option value=""></form:option>
                             <form:options items="${connection_types}" itemLabel="name" itemValue="id"/>
                         </form:select>
-                        <form:errors path="connectionType.id" cssClass="alert-danger"/>
+                        <form:errors path="endpoint.connectionType.id" cssClass="alert-danger"/>
                     </div>
                     <div class="row">
                         <div class="col-md-8">
                             <div class="form-group">
-                                <form:label path="host">Host</form:label>
-                                <form:input path="host" cssClass="form-control"/>
-                                <form:errors path="host" cssClass="alert-danger control-label"/>
+                                <form:label path="endpoint.host">Host</form:label>
+                                <form:input path="endpoint.host" cssClass="form-control"/>
+                                <form:errors path="endpoint.host" cssClass="alert-danger control-label"/>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <form:label path="port">Port</form:label>
-                                <form:input path="port" cssClass="form-control"/>
-                                <form:errors path="port" cssClass="alert-danger control-label"/>
+                                <form:label path="endpoint.port">Port</form:label>
+                                <form:input path="endpoint.port" cssClass="form-control"/>
+                                <form:errors path="endpoint.port" cssClass="alert-danger control-label"/>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-8">
                             <div class="form-group">
-                                <form:label path="url">URL</form:label>
-                                <form:input path="url" cssClass="form-control"/>
-                                <form:errors path="url" cssClass="alert-danger control-label"/>
+                                <form:label path="endpoint.url">URL</form:label>
+                                <form:input path="endpoint.url" cssClass="form-control"/>
+                                <form:errors path="endpoint.url" cssClass="alert-danger control-label"/>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <form:label path="fixedDelay">Period</form:label>
-                                <form:input path="fixedDelay" cssClass="form-control"/>
-                                <form:errors path="fixedDelay" cssClass="alert-danger control-label"/>
+                                <form:label path="endpoint.fixedDelay">Period</form:label>
+                                <form:input path="endpoint.fixedDelay" cssClass="form-control"/>
+                                <form:errors path="endpoint.fixedDelay" cssClass="alert-danger control-label"/>
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
-                        <form:label path="email">Email</form:label>
-                        <form:textarea path="email" cssClass="form-control"/>
-                        <form:errors path="email" cssClass="alert-danger control-label"/>
+                        <form:label path="endpoint.email">Email</form:label>
+                        <form:textarea path="endpoint.email" cssClass="form-control"/>
+                        <form:errors path="endpoint.email" cssClass="alert-danger control-label"/>
                     </div>
                     <div class="form-group">
-                        <form:label path="phoneNumber">Telefon</form:label>
-                        <form:textarea path="phoneNumber" cssClass="form-control"/>
-                        <form:errors path="phoneNumber" cssClass="alert-danger control-label"/>
+                        <form:label path="endpoint.phoneNumber">Telefon</form:label>
+                        <form:textarea path="endpoint.phoneNumber" cssClass="form-control"/>
+                        <form:errors path="endpoint.phoneNumber" cssClass="alert-danger control-label"/>
                     </div>
                     <div class="form-group">
                         <form:label path="description">Açıqlama</form:label>
@@ -314,7 +269,7 @@
     <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body">
-                <form:form modelAttribute="form" id="execute-form" method="post" action="/admin/endpoint/execute" cssClass="form-group">
+                <form:form modelAttribute="form" id="execute-form" method="post" action="/admin/endpoint/execute2" cssClass="form-group">
                     <form:hidden path="id"/>
                     <div class="form-group mt-5 mb-5 text-center">
                         <label id="info-label"></label>

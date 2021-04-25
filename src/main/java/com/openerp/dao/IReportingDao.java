@@ -25,4 +25,8 @@ public interface IReportingDao {
     List<JSONObject>  reportSales(Report report) throws Exception;
 
     List<Report>  reportCorrectInventory() throws Exception;
+
+    List<JSONObject>  reportCalculateDownTimeLine(Report report) throws Exception;
+
+    List<JSONObject>  reportCalculateDownTimePie(Report report) throws Exception;
 }

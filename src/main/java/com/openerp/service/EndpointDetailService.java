@@ -33,17 +33,17 @@ public class EndpointDetailService {
                 if(endpointDetail.getEndpoint()!=null && endpointDetail.getEndpoint().getId()!=null) {
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("endpoint"), endpointDetail.getEndpoint().getId())));
                 }
+                if(endpointDetail.getEndpoint()!=null && endpointDetail.getEndpoint().getConnectionType()!=null && endpointDetail.getEndpoint().getConnectionType().getId()!=null) {
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("endpoint").get("connectionType"), endpointDetail.getEndpoint().getConnectionType().getId())));
+                }
                 if(endpointDetail.getDescription()!=null && !endpointDetail.getDescription().isEmpty()) {
                     predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("description"), "%"+endpointDetail.getDescription()+"%")));
                 }
-                if(endpointDetail.getStatusDateFrom()!=null){
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.greaterThanOrEqualTo(root.get("statusDate"), endpointDetail.getStatusDateFrom())));
+                if(endpointDetail.getDownDateFrom()!=null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.greaterThanOrEqualTo(root.get("downDate"), endpointDetail.getDownDateFrom())));
                 }
-                if(endpointDetail.getStatusDate()!=null){
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.lessThanOrEqualTo(root.get("statusDate"), endpointDetail.getStatusDate())));
-                }
-                if(endpointDetail.getStatus()!=null){
-                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("status"), endpointDetail.getStatus())));
+                if(endpointDetail.getDownDate()!=null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.lessThanOrEqualTo(root.get("downDate"), endpointDetail.getDownDate())));
                 }
                 return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
             }
