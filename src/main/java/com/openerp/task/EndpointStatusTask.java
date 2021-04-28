@@ -106,16 +106,16 @@ public class EndpointStatusTask {
                                             endpointDetail.setDifferent(TimeUnit.SECONDS.convert(endpointDetail.getUpDate().getTime()-endpointDetail.getDownDate().getTime(), TimeUnit.SECONDS));
                                         }
                                     }
+
                                     if(endpointDetail!=null){
                                         endpointDetailRepository.save(endpointDetail);
-                                    }
 
-
-                                    if(endpoint.getEmail()!=null && endpoint.getEmail().trim().length()>3){
-                                        if(endpoint.getEmail().trim().length()>0){
-                                            for(String email: endpoint.getEmail().trim().split(Pattern.quote(";"))){
-                                                if(email.matches(Constants.REGEX.REGEX4)){
-                                                    skeletonController.sendEmail(null, endpoint.getEmail(), description, description, description);
+                                        if(endpoint.getEmail()!=null && endpoint.getEmail().trim().length()>3){
+                                            if(endpoint.getEmail().trim().length()>0){
+                                                for(String email: endpoint.getEmail().trim().split(Pattern.quote(";"))){
+                                                    if(email!=null && email.trim().length()>0 && email.matches(Constants.REGEX.REGEX4)){
+                                                        skeletonController.sendEmail(null, email, description, description, description);
+                                                    }
                                                 }
                                             }
                                         }
