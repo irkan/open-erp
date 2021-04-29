@@ -262,7 +262,7 @@
                             },
                             total: {
                                 show: true,
-                                label: 'DowTime',
+                                label: 'DownTime',
                                 formatter: function () {
                                     return totalSum + ' dəqiqə';
                                 }
