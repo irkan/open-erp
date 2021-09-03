@@ -92,6 +92,16 @@
                                                 </form:select>
                                             </div>
                                         </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="string8">Məhkəmə statusu</form:label>
+                                                <form:select path="string8" cssClass="custom-select form-control">
+                                                    <form:option value=" ">Bütün</form:option>
+                                                    <form:option value=" and s1.is_court=1 ">Məhkəmədədir</form:option>
+                                                    <form:option value=" and s1.is_court=0 ">Məhkəmədə deyil</form:option>
+                                                </form:select>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-2 text-right">
@@ -136,12 +146,30 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 border-0">
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4 border-0">
             <div class="card border-0 mb-3">
                 <div class="card-body <c:out value="${random.nextInt(5) eq 1 ? 'kt-bg-light-danger' : random.nextInt(5) eq 2 ? 'kt-bg-light-warning' : random.nextInt(5) eq 3 ? 'kt-bg-light-info' : random.nextInt(5) eq 4 ? 'kt-bg-light-success' : random.nextInt(5) eq 5 ? 'kt-bg-light-primary' : 'kt-bg-light-brand'}"/>">
                     <h6 class="card-title font-weight-bolder text-center" style="letter-spacing: 2px">Yığım</h6>
                     <hr/>
                     <div id="bar-chart" class="d-flex justify-content-center"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-5 col-lg-5 col-md-5 col-sm-5 col-5 border-0">
+            <div class="card border-0 mb-3">
+                <div class="card-body <c:out value="${random.nextInt(5) eq 1 ? 'kt-bg-light-danger' : random.nextInt(5) eq 2 ? 'kt-bg-light-warning' : random.nextInt(5) eq 3 ? 'kt-bg-light-info' : random.nextInt(5) eq 4 ? 'kt-bg-light-success' : random.nextInt(5) eq 5 ? 'kt-bg-light-primary' : 'kt-bg-light-brand'}"/>">
+                    <h6 class="card-title font-weight-bolder text-center" style="letter-spacing: 2px">Yığım həcmləri</h6>
+                    <hr/>
+                    <div id="bar-chart-2" class="d-flex justify-content-center"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-3 border-0">
+            <div class="card border-0 mb-3">
+                <div class="card-body <c:out value="${random.nextInt(5) eq 1 ? 'kt-bg-light-danger' : random.nextInt(5) eq 2 ? 'kt-bg-light-warning' : random.nextInt(5) eq 3 ? 'kt-bg-light-info' : random.nextInt(5) eq 4 ? 'kt-bg-light-success' : random.nextInt(5) eq 5 ? 'kt-bg-light-primary' : 'kt-bg-light-brand'}"/>">
+                    <h6 class="card-title font-weight-bolder text-center" style="letter-spacing: 2px">Yığım sayları</h6>
+                    <hr/>
+                    <div id="bar-chart-3" class="d-flex justify-content-center"></div>
                 </div>
             </div>
         </div>
@@ -432,8 +460,92 @@
             }
         };
 
+        var baroptions2 = {
+            series: [{
+                data: [0]
+            }],
+            chart: {
+                height: 350,
+                type: 'bar',
+                events: {
+                    click: function(chart, w, e) {
+                        // console.log(chart, w, e)
+                    }
+                }
+            },
+            colors: colours,
+            plotOptions: {
+                bar: {
+                    columnWidth: '45%',
+                    distributed: true
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            legend: {
+                show: false
+            },
+            xaxis: {
+                categories: [
+                    'Satış və yığım həcmi',
+                ],
+                labels: {
+                    style: {
+                        colors: colours,
+                        fontSize: '12px'
+                    }
+                }
+            }
+        };
+
+        var baroptions3 = {
+            series: [{
+                data: [0]
+            }],
+            chart: {
+                height: 350,
+                type: 'bar',
+                events: {
+                    click: function(chart, w, e) {
+                        // console.log(chart, w, e)
+                    }
+                }
+            },
+            colors: colours,
+            plotOptions: {
+                bar: {
+                    columnWidth: '45%',
+                    distributed: true
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            legend: {
+                show: false
+            },
+            xaxis: {
+                categories: [
+                    'Satış və yığım say',
+                ],
+                labels: {
+                    style: {
+                        colors: colours,
+                        fontSize: '12px'
+                    }
+                }
+            }
+        };
+
         var barchart = new ApexCharts(document.querySelector("#bar-chart"), baroptions);
         barchart.render();
+
+        var barchart2 = new ApexCharts(document.querySelector("#bar-chart-2"), baroptions2);
+        barchart2.render();
+
+        var barchart3 = new ApexCharts(document.querySelector("#bar-chart-3"), baroptions3);
+        barchart3.render();
 
         $("#filter").ajaxForm({
             beforeSubmit: function(){
@@ -459,6 +571,12 @@
 
                 baroptions.xaxis.categories = [];
                 baroptions.series[0].data = [];
+
+                baroptions2.xaxis.categories = [];
+                baroptions2.series[0].data = [];
+
+                baroptions3.xaxis.categories = [];
+                baroptions3.series[0].data = [];
             },
             success: function(data){
 
@@ -472,15 +590,29 @@
                     baroptions.xaxis.categories.push("Aylıq yığım həcmi");
                     baroptions.series[0].data.push(round(val.PROBLEMLI_MUSTERI_CEM, 0));
                     baroptions.xaxis.categories.push("Problemli müştəri qalıq");
-                    baroptions.series[0].data.push(round(val.PROBLEMLI_MUSTERI_SAY, 0));
-                    baroptions.xaxis.categories.push("Problemli müştərilər");
+                    baroptions3.series[0].data.push(round(val.PROBLEMLI_MUSTERI_SAY, 0));
+                    baroptions3.xaxis.categories.push("Problemli müştərilər");
                     baroptions.series[0].data.push(round(val.GECIKDIRMIS_MUSTERI_CEM, 0));
                     baroptions.xaxis.categories.push("Gecikmiş müştəri qalıq");
-                    baroptions.series[0].data.push(round(val.GECIKDIRMIS_MUSTERI_SAY, 0));
-                    baroptions.xaxis.categories.push("Gecikmiş müştərilər");
+                    baroptions3.series[0].data.push(round(val.GECIKDIRMIS_MUSTERI_SAY, 0));
+                    baroptions3.xaxis.categories.push("Gecikmiş müştərilər");
                 });
                 piechart.updateOptions(pieoptions);
                 barchart.updateOptions(baroptions);
+                barchart3.updateOptions(baroptions3);
+
+                $.each(jQuery.parseJSON(data.string8), function(key, val){
+                    baroptions2.series[0].data.push(round(val.AYLIQ_YIGIM_HECMI, 0));
+                    baroptions2.xaxis.categories.push("Aylıq yığım həcmi");
+                    baroptions2.series[0].data.push(round(val.UMUMI_YIGILMIS_MEBLEG, 0));
+                    baroptions2.xaxis.categories.push("Ümumi yığılmış məbləğ");
+                    baroptions2.series[0].data.push(round(val.UMUMI_QALIQ_BORC, 0));
+                    baroptions2.xaxis.categories.push("Ümumi qalıq borc");
+                    baroptions2.series[0].data.push(round(val.UMUMI_SATIS_HECMI, 0));
+                    baroptions2.xaxis.categories.push("Ümumi satış həcmi");
+                });
+
+                barchart2.updateOptions(baroptions2);
 
                 $.each(jQuery.parseJSON(data.string6), function(key, val){
                     pieoptions2.labels.push("Yığım məbləği");

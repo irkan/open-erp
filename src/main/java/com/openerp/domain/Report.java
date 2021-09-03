@@ -17,6 +17,7 @@ public class Report {
     private String string5;
     private String string6;
     private String string7;
+    private String string8;
     private Integer integer1;
     private Integer integer2;
     private Integer integer3;

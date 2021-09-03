@@ -101,6 +101,7 @@ public class ReportController extends SkeletonController {
             GlobalConfiguration troubledCustomer = configurationRepository.getGlobalConfigurationByKeyAndActiveTrue("troubled_customer");
             int latencyDay = Util.parseInt(troubledCustomer.getAttribute(), "60");
             List<JSONObject> jsonObjects = reportingDao.reportCollectVolume(report);
+            returnedReport.setString8(Util.checkNull(jsonObjects));
             jsonObjects = getCurrentLatencyPosition(jsonObjects, latencyDay, report);
             returnedReport.setString1(Util.checkNull(jsonObjects));
             report.setInteger1(2);
