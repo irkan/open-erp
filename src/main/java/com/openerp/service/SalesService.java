@@ -60,6 +60,12 @@ public class SalesService {
                 if(sales.getSaleDate()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.lessThanOrEqualTo(root.get("saleDate"), sales.getSaleDate())));
                 }
+                if(sales.getApproveDateFrom()!=null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.greaterThanOrEqualTo(root.get("approveDate"), sales.getApproveDateFrom())));
+                }
+                if(sales.getApproveDate()!=null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.lessThanOrEqualTo(root.get("approveDate"), sales.getApproveDate())));
+                }
                 if(sales.getGuaranteeExpireFrom()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.greaterThanOrEqualTo(root.get("guaranteeExpire"), sales.getGuaranteeExpireFrom())));
                 }

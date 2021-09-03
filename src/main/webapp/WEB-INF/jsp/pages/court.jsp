@@ -37,6 +37,7 @@
                         <form:form modelAttribute="filter" id="filter" method="post" action="/collect/court/filter">
                             <form:hidden path="organization.id" />
                             <form:hidden path="service" />
+                            <form:hidden path="court" />
                             <div class="row">
                                 <div class="col-md-11">
                                     <div class="row">
@@ -76,9 +77,9 @@
                                             <div class="row">
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <form:label path="saleDateFrom">Satış tarixindən</form:label>
+                                                        <form:label path="approveDateFrom">Satış tarixindən</form:label>
                                                         <div class="input-group date">
-                                                            <form:input path="saleDateFrom" autocomplete="off"
+                                                            <form:input path="approveDateFrom" autocomplete="off"
                                                                         cssClass="form-control datepicker-element" date_="date_"
                                                                         placeholder="dd.MM.yyyy"/>
                                                             <div class="input-group-append">
@@ -87,14 +88,14 @@
                                         </span>
                                                             </div>
                                                         </div>
-                                                        <form:errors path="saleDateFrom" cssClass="control-label alert-danger"/>
+                                                        <form:errors path="approveDateFrom" cssClass="control-label alert-danger"/>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <form:label path="saleDate">Tarixədək</form:label>
+                                                        <form:label path="approveDate">Tarixədək</form:label>
                                                         <div class="input-group date">
-                                                            <form:input path="saleDate" autocomplete="off"
+                                                            <form:input path="approveDate" autocomplete="off"
                                                                         cssClass="form-control datepicker-element" date_="date_"
                                                                         placeholder="dd.MM.yyyy"/>
                                                             <div class="input-group-append">
@@ -103,7 +104,7 @@
                                         </span>
                                                             </div>
                                                         </div>
-                                                        <form:errors path="saleDate" cssClass="control-label alert-danger"/>
+                                                        <form:errors path="approveDate" cssClass="control-label alert-danger"/>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
@@ -297,7 +298,7 @@
                                                 </c:otherwise>
                                             </c:choose>
                                         </td>
-                                        <td><fmt:formatDate value = "${t.saleDate}" pattern = "dd.MM.yyyy" /></td>
+                                        <td data-sort="<c:out value="${t.approveDate}" />"><fmt:formatDate value = "${t.approveDate}" pattern = "dd.MM.yyyy" /></td>
                                         <td><fmt:formatDate value = "${t.payment.lastPaid}" pattern = "dd.MM.yyyy" /></td>
                                         <td>
                                             <c:if test="${!t.payment.cash}">

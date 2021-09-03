@@ -37,6 +37,12 @@ public class Sales {
     @Column(name = "approve_date")
     private Date approveDate;
 
+    @ToString.Exclude
+    @Transient
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    private Date approveDateFrom;
+
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "crm_customer_id", nullable = false)
     private Customer customer;
