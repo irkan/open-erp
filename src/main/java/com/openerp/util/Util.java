@@ -2,9 +2,8 @@ package com.openerp.util;
 
 import com.openerp.domain.*;
 import com.openerp.entity.*;
+import com.openerp.entity.Module;
 import com.openerp.entity.Dictionary;
-import net.emaze.dysfunctional.Groups;
-import net.emaze.dysfunctional.dispatching.delegates.Pluck;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;

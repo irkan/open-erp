@@ -3,7 +3,7 @@ package com.openerp.controller;
 import com.openerp.domain.LogFile;
 import com.openerp.domain.Session;
 import com.openerp.entity.*;
-import com.openerp.task.MigrationTask;
+import com.openerp.entity.Module;
 import com.openerp.util.Constants;
 import com.openerp.util.Tail;
 import com.openerp.util.Util;
@@ -24,9 +24,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

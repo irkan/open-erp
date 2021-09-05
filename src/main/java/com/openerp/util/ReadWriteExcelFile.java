@@ -11,6 +11,7 @@ import com.openerp.domain.SalesSchedule;
 import com.openerp.domain.Schedule;
 import com.openerp.domain.Session;
 import com.openerp.entity.*;
+import com.openerp.entity.Module;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;

@@ -1,11 +1,10 @@
 package com.openerp.controller;
 
-import com.openerp.config.HttpSessionConfig;
 import com.openerp.entity.*;
+import com.openerp.entity.Module;
 import com.openerp.util.Constants;
 import com.openerp.util.Util;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.DigestUtils;
