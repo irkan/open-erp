@@ -1,5 +1,3 @@
-@Library('shared-libs-microservices')_
-
 def PipelineMethods = new PipelineMethods(this)
 def globalMethods = new GlobalMethods(this)
 
