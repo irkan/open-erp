@@ -17,16 +17,20 @@ pipeline {
         CONTAINER_NAME = "$PROJECT_NAME-$MS_NAME"
         DOCKER_IMG_NAME = "nexus.kblab.local:8083/v1/repositories/$DOCKER_REPO/$PROJECT_NAME/$DEPLOY_ENV/$MS_NAME:$BUILD_TIMESTAMP"
         APP_PORT = "7782"
-		EXPOSED_PORT = "8080"
-		DEVELOP_ENV_HOST = '10.0.32.201'
-		PREPROD_ENV_HOST = '10.0.4.81'
-		MASTER_ENV_HOST = '10.0.6.181'
+	EXPOSED_PORT = "8080"
+	DEVELOP_ENV_HOST = '10.0.32.201'
+	PREPROD_ENV_HOST = '10.0.4.81'
+	MASTER_ENV_HOST = '10.0.6.181'
     }
 
     stages {
         stage ("Setup Jenkins Jobs name"){
             steps {
                 script {
+		    echo "Start condition check"
+    		    build job: 'printuser'
+                    def slaveJob = build job: 'printuser'
+                    println slaveJob.rawBuild.log  
                     currentBuild.displayName = "${GIT_BRANCH}-${BUILD_NUMBER}"
                 }
             }
