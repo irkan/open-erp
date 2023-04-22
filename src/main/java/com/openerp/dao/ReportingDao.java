@@ -369,7 +369,7 @@ public class ReportingDao implements IReportingDao {
                     "       IFNULL(sum(IF(IFNULL(k1.ALL_BALANCE, 0)>0,IFNULL(k1.ALL_BALANCE, 0),0)),0) UMUMI_QALIQ_BORC, " +
                     "    (IFNULL(sum(IFNULL(k1.SALES_VOLUME, 0)),0)-IFNULL(sum(IF(IFNULL(k1.ALL_BALANCE, 0)>0,IFNULL(k1.ALL_BALANCE, 0),0)),0)) UMUMI_YIGILMIS_MEBLEG " +
                     " from ( " +
-                    "    select p1.last_price SALES_VOLUME, p1.schedule_price MONTHLY_VOLUME, p1.last_price - (select sum(i1.price) " +
+                    "    select p1.last_price SALES_VOLUME, p1.schedule_price MONTHLY_VOLUME, p1.last_price - (select IFNULL(sum(i1.price),0) " +
                     "    from invoice i1 where i1.is_active=1 and i1.is_approve=1 and i1.sales_id=s1.id) ALL_BALANCE " +
                     " from sales s1, payment p1, organization o " +
                     " where s1.payment_id=p1.id and s1.organization_id=o.id " +
