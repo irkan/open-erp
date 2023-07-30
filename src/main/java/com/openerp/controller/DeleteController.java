@@ -146,6 +146,13 @@ public class DeleteController extends SkeletonController {
             salesRepository.save(sales);
             log(sales, "sales", "create/update", sales.getId(), sales.toString(), "Məhkəmə statusu ləğv edildi!");
             addContactHistory(sales, "Məhkəmə statusu ləğv edildi!", null);
+        }  else if(path.equalsIgnoreCase(Constants.ROUTE.EXECUTE)){
+            Sales sales = salesRepository.getSalesById(Integer.parseInt(id));
+            sales.setExecute(!sales.getExecute());
+            sales.setExecuteDate(new Date());
+            salesRepository.save(sales);
+            log(sales, "sales", "create/update", sales.getId(), sales.toString(), "Məhkəmə statusu ləğv edildi!");
+            addContactHistory(sales, "Icra statusu ləğv edildi!", null);
         } else if(path.equalsIgnoreCase(Constants.ROUTE.VACATION)){
             Vacation vacation = vacationRepository.getVacationById(Integer.parseInt(id));
             vacation.setActive(false);

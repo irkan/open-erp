@@ -1,7 +1,7 @@
 <%--
   Created by IntelliJ IDEA.
   User: irkan.ahmadov
-  Date: 20.09.2019
+  Date: 03.07.2021
   Time: 1:22
   To change this template use File | Settings | File Templates.
 --%>
@@ -37,7 +37,6 @@
                         <form:form modelAttribute="filter" id="filter" method="post" action="/collect/court/filter">
                             <form:hidden path="organization.id" />
                             <form:hidden path="service" />
-                            <form:hidden path="court" />
                             <form:hidden path="execute" />
                             <div class="row">
                                 <div class="col-md-11">
@@ -359,9 +358,6 @@
                                                 <a href="javascript:transfer($('#transfer-modal-operation'), $('#transfer-form'), '<c:out value="${t.id}" />', '<c:out value="${t.payment.unpaid}" />', 'Problemli müştəri: <c:out value="${t.payment.latency}" /> gün');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${transfer.object.name}"/>">
                                                     <i class="la <c:out value="${transfer.object.icon}"/>"></i>
                                                 </a>
-                                                <a href="javascript:transfer($('#send-execute-modal-operation'), $('#send-execute-form'), '<c:out value="${t.id}" />', '<c:out value="${t.payment.unpaid}" />', 'Problemli müştəri: <c:out value="${t.payment.latency}" /> gün');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${t.execute?'İcranın ləğvi':'İcraya yolla'}" />">
-                                                    <i class="la <c:out value="${t.execute?'flaticon2-cross':'flaticon2-next'}" />"></i>
-                                                </a>
                                             </c:if>
                                             <c:if test="${delete.status}">
                                                 <a href="javascript:deleteData('<c:out value="${t.id}" />', '<c:out value="${t.id}" /> no satış və <c:out value="${t.payment.sales.customer.person.fullName}"/> <br/>müştərinin məhkəmədə statusu ləğv ediləcək!');" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="<c:out value="${delete.object.name}"/>">
@@ -438,61 +434,27 @@
     </div>
 </div>
 
-<div class="modal fade" id="send-execute-modal-operation" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-sm" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">İcraya yolla</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form:form modelAttribute="form" id="send-execute-form" method="post" action="/collect/${page}/send-execute" cssClass="form-group">
-                    <form:hidden path="id"/>
-                    <form:hidden path="active"/>
-                    <form:hidden path="organization.id"/>
-                    <div class="form-group">
-                        <form:label path="sales.id">Satış kodu</form:label>
-                        <form:input path="sales.id" cssClass="form-control" readonly="true"/>
-                        <form:errors path="sales.id" cssClass="alert-danger control-label"/>
-                    </div>
-                    <div class="form-group">
-                        <form:label path="description">Açıqlama</form:label>
-                        <form:textarea path="description" cssClass="form-control"/>
-                        <form:errors path="description" cssClass="alert-danger control-label"/>
-                    </div>
-                </form:form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="submit($('#send-execute-form'));">İcraya yolla</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Bağla</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script>
 
     $("#datatable").DataTable({
         <c:if test="${export.status}">
         dom: 'B<"clear">lfrtip',
         buttons: [
-               $.extend( true, {}, buttonCommon, {
-                    extend: 'copyHtml5'
-                } ),
-                $.extend( true, {}, buttonCommon, {
-                    extend: 'csvHtml5'
-                } ),
-                $.extend( true, {}, buttonCommon, {
-                    extend: 'excelHtml5'
-                } ),
-                $.extend( true, {}, buttonCommon, {
-                    extend: 'pdfHtml5'
-                } ),
-                $.extend( true, {}, buttonCommon, {
-                    extend: 'print'
-                } )
+            $.extend( true, {}, buttonCommon, {
+                extend: 'copyHtml5'
+            } ),
+            $.extend( true, {}, buttonCommon, {
+                extend: 'csvHtml5'
+            } ),
+            $.extend( true, {}, buttonCommon, {
+                extend: 'excelHtml5'
+            } ),
+            $.extend( true, {}, buttonCommon, {
+                extend: 'pdfHtml5'
+            } ),
+            $.extend( true, {}, buttonCommon, {
+                extend: 'print'
+            } )
         ],
         </c:if>
         responsive: true,

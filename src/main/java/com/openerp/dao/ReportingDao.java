@@ -378,6 +378,7 @@ public class ReportingDao implements IReportingDao {
                     Util.checkNull(report.getString3()) + Util.checkNull(report.getString4()) +
                     Util.checkNull(report.getString5()) + Util.checkNull(report.getString6()) +
                     Util.checkNull(report.getString7()) + Util.checkNull(report.getString8()) +
+                    Util.checkNull(report.getString9()) +
                     " ) k1 ";
 
             try(PreparedStatement preparedStatement = connection.prepareStatement(sql)) {

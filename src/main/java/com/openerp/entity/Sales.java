@@ -137,6 +137,20 @@ public class Sales {
     @Column(name = "is_court", nullable = false, columnDefinition="boolean default false")
     private Boolean court = false;
 
+    @Column(name = "is_execute", nullable = false, columnDefinition="boolean default false")
+    private Boolean execute = false;
+
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    @Column(name = "execute_date")
+    private Date executeDate;
+
+    @ToString.Exclude
+    @Transient
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    private Date executeDateFrom;
+
     @ToString.Exclude
     @Transient
     private String description;

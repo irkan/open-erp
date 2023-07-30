@@ -173,5 +173,6 @@ public class Constants {
         public static final String ENDPOINT_DETAIL = "endpoint-detail";
         public static final String COURT = "court";
         public static final String REPORT_ENDPOINT = "report-endpoint";
+        public static final String EXECUTE = "execute";
     }
 }

@@ -96,6 +96,8 @@ public class ExportController extends SkeletonController {
         } else if(page.equalsIgnoreCase(Constants.ROUTE.SALES)
                 || page.equalsIgnoreCase(Constants.ROUTE.TROUBLED_CUSTOMER)
                 || page.equalsIgnoreCase(Constants.ROUTE.PAYMENT_LATENCY)
+                || page.equalsIgnoreCase(Constants.ROUTE.COURT)
+                || page.equalsIgnoreCase(Constants.ROUTE.EXECUTE)
                 || page.equalsIgnoreCase(Constants.ROUTE.SERVICE)){
             file = ReadWriteExcelFile.salesXLSXFile((Page<Sales>) object, page);
         } else if(page.equalsIgnoreCase(Constants.ROUTE.DEMONSTRATION)){

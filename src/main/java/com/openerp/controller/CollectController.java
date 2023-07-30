@@ -32,19 +32,22 @@ public class CollectController extends SkeletonController {
 
         if(page.equalsIgnoreCase(Constants.ROUTE.PAYMENT_LATENCY) ||
                 page.equalsIgnoreCase(Constants.ROUTE.TROUBLED_CUSTOMER) ||
-                page.equalsIgnoreCase(Constants.ROUTE.COURT)){
+                page.equalsIgnoreCase(Constants.ROUTE.COURT) ||
+                page.equalsIgnoreCase(Constants.ROUTE.EXECUTE)){
             model.addAttribute(Constants.CONFIGURATION_TROUBLED_CUSTOMER, configurationRepository.getGlobalConfigurationByKeyAndActiveTrue("troubled_customer").getAttribute());
             model.addAttribute(Constants.PAYMENT_PERIODS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-period"));
             model.addAttribute(Constants.PAYMENT_SCHEDULES, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("payment-schedule"));
             Sales salesObject = new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null, !canViewAll()?getSessionOrganization():null);
             salesObject.setService(null);
+            boolean isExecute = isExecute(page);
+            salesObject.setExecute(isExecute?isExecute:null);
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new Invoice(getSessionOrganization(), salesObject, calculateInvoiceDate(model)));
             }
             if(!model.containsAttribute(Constants.FILTER)){
                 salesObject.setApprove(false);
                 boolean isCourt = isCourt(page);
-                if(!isCourt){
+                if(!(isCourt || isExecute)){
                     Payment paymentObject = new Payment();
                     paymentObject.setPeriod(dictionaryRepository.getDictionaryByAttr1AndActiveTrueAndDictionaryType_Attr1(Util.getPeriodDay(), "payment-period"));
                     salesObject.setPayment(paymentObject);
@@ -52,7 +55,11 @@ public class CollectController extends SkeletonController {
                 salesObject.setSaleDate(null);
                 salesObject.setSaled(false);
                 salesObject.setReturned(false);
-                salesObject.setCourt(isCourt);
+                salesObject.setCourt(isCourt?isCourt:null);
+                if(isCourt){
+                    salesObject.setExecute(!isCourt);
+                }
+
                 model.addAttribute(Constants.FILTER, salesObject);
             }
             if(session.getAttribute(Constants.SESSION_FILTER)!=null &&
@@ -101,7 +108,7 @@ public class CollectController extends SkeletonController {
             if(!data.equals(Optional.empty()) && data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT)){
                 return exportExcel(salesPage, redirectAttributes, page);
             }
-        } if(page.equalsIgnoreCase(Constants.ROUTE.CONTACT_HISTORY)){
+        } else if(page.equalsIgnoreCase(Constants.ROUTE.CONTACT_HISTORY)){
             model.addAttribute(Constants.CONTACT_CHANNELS, dictionaryRepository.getDictionariesByActiveTrueAndDictionaryType_Attr1("contact-channel"));
             if(!model.containsAttribute(Constants.FORM)){
                 model.addAttribute(Constants.FORM, new ContactHistory(new Sales((!data.equals(Optional.empty()) && !data.get().equalsIgnoreCase(Constants.ROUTE.EXPORT))?Integer.parseInt(data.get()):null), getSessionOrganization()));
@@ -204,6 +211,33 @@ public class CollectController extends SkeletonController {
         return mapPost(redirectAttributes, "/collect/court");
     }
 
+    @PostMapping(value = "/court/send-execute")
+    public String postCourtSendExecute(Model model, @ModelAttribute(Constants.FORM) @Validated Invoice invoice,
+                                    BindingResult binding,
+                                    RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(null, Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()){
+            Sales sales = salesRepository.getSalesById(invoice.getSales().getId());
+            sales.setExecute(true);
+            sales.setExecuteDate(new Date());
+            salesRepository.save(sales);
+            addContactHistory(sales, "Satış icraya əlavə edildi. Satış №" + sales.getId(), null);
+
+        }
+        return mapPost(redirectAttributes, "/collect/court");
+    }
+
+    @PostMapping(value = "/execute/transfer")
+    public String postExecuteTransfer(Model model, @ModelAttribute(Constants.FORM) @Validated Invoice invoice,
+                                    BindingResult binding,
+                                    RedirectAttributes redirectAttributes) throws Exception {
+        redirectAttributes.addFlashAttribute(Constants.STATUS.RESPONSE, Util.response(null, Constants.TEXT.SUCCESS));
+        if(!binding.hasErrors()){
+            invoice(invoice);
+        }
+        return mapPost(redirectAttributes, "/collect/execute");
+    }
+
     @PostMapping(value = "/troubled-customer/transfer")
     public String postTroubledCustomerTransfer(Model model, @ModelAttribute(Constants.FORM) @Validated Invoice invoice,
                                                BindingResult binding,
@@ -276,6 +310,13 @@ public class CollectController extends SkeletonController {
 
     private boolean isCourt(String page){
         if(page.equalsIgnoreCase(Constants.ROUTE.COURT)){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isExecute(String page){
+        if(page.equalsIgnoreCase(Constants.ROUTE.EXECUTE)){
             return true;
         }
         return false;

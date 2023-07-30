@@ -54,6 +54,15 @@ public class SalesService {
                 if(sales.getCourt()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("court"), sales.getCourt())));
                 }
+                if(sales.getExecute()!=null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("execute"), sales.getExecute())));
+                }
+                if(sales.getExecuteDateFrom()!=null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.greaterThanOrEqualTo(root.get("executeDate"), sales.getExecuteDateFrom())));
+                }
+                if(sales.getExecuteDate()!=null){
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.lessThanOrEqualTo(root.get("executeDate"), sales.getExecuteDate())));
+                }
                 if(sales.getSaleDateFrom()!=null){
                     predicates.add(criteriaBuilder.and(criteriaBuilder.greaterThanOrEqualTo(root.get("saleDate"), sales.getSaleDateFrom())));
                 }

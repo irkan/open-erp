@@ -102,6 +102,16 @@
                                                 </form:select>
                                             </div>
                                         </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <form:label path="string9">İcra statusu</form:label>
+                                                <form:select path="string9" cssClass="custom-select form-control">
+                                                    <form:option value=" ">Bütün</form:option>
+                                                    <form:option value=" and s1.is_execute=1 ">İcradadır</form:option>
+                                                    <form:option value=" and s1.is_execute=0 ">İcrada deyil</form:option>
+                                                </form:select>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-2 text-right">
@@ -211,6 +221,10 @@
                 name: 'Məhkəmədə say',
                 type: 'column',
                 data: []
+            }, {
+                name: 'İcrada say',
+                type: 'column',
+                data: []
             }],
             chart: {
                 height: $( window ).height()-3*$("#accordionFilter").height()>350?$( window ).height()-2*$("#accordionFilter").height():350,
@@ -221,7 +235,7 @@
                 enabled: false
             },
             stroke: {
-                width: [4, 4, 4, 4, 1, 1, 1, 1]
+                width: [4, 4, 4, 4, 1, 1, 1, 1, 1]
             },
             title: {
                 text: 'XYZ - 3 ölçülü yığım analizi',
@@ -560,6 +574,7 @@
                 options.series[5].data = [];
                 options.series[6].data = [];
                 options.series[7].data = [];
+                options.series[8].data = [];
 
                 pieoptions.labels = [];
                 pieoptions.series = [];
